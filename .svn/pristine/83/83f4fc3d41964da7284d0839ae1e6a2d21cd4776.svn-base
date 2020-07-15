@@ -1,0 +1,4364 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.report.rptQTLnkDetail.dao.RptQTLnkDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.report.rptQTLnkDetail.model.RptQTLnkDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="yearly" property="yearly" jdbcType="VARCHAR" />
+    <result column="accountProject" property="accountProject" jdbcType="VARCHAR" />
+    <result column="accountProjectNo" property="accountProjectNo" jdbcType="VARCHAR" />
+    <result column="yjgsqyName" property="yjgsqyName" jdbcType="VARCHAR" />
+    <result column="yjgsqyCode" property="yjgsqyCode" jdbcType="VARCHAR" />
+    <result column="yjgsareaName" property="yjgsareaName" jdbcType="VARCHAR" />
+    <result column="yjgsareaCode" property="yjgsareaCode" jdbcType="VARCHAR" />
+    <result column="yjgssybName" property="yjgssybName" jdbcType="VARCHAR" />
+    <result column="yjgssybCode" property="yjgssybCode" jdbcType="VARCHAR" />
+    <result column="yjgscsName" property="yjgscsName" jdbcType="VARCHAR" />
+    <result column="yjgscsCode" property="yjgscsCode" jdbcType="VARCHAR" />
+    <result column="yjszcsName" property="yjszcsName" jdbcType="VARCHAR" />
+    <result column="yjszcsid" property="yjszcsid" jdbcType="VARCHAR" />
+    <result column="yjgszxName" property="yjgszxName" jdbcType="VARCHAR" />
+    <result column="yjgszxid" property="yjgszxid" jdbcType="VARCHAR" />
+    <result column="srgscsName" property="srgscsName" jdbcType="VARCHAR" />
+    <result column="srgscsCode" property="srgscsCode" jdbcType="VARCHAR" />
+    <result column="srgszxName" property="srgszxName" jdbcType="VARCHAR" />
+    <result column="srgsbmName" property="srgsbmName" jdbcType="VARCHAR" />
+    <result column="kfsName" property="kfsName" jdbcType="VARCHAR" />
+    <result column="htjfName" property="htjfName" jdbcType="VARCHAR" />
+    <result column="reportNo" property="reportNo" jdbcType="VARCHAR" />
+    <result column="projectNo" property="projectNo" jdbcType="VARCHAR" />
+    <result column="estateName" property="estateName" jdbcType="VARCHAR" />
+    <result column="reportDate" property="reportDate" jdbcType="VARCHAR" />
+    <result column="dealDate" property="dealDate" jdbcType="VARCHAR" />
+    <result column="qkdzrq" property="qkdzrq" jdbcType="VARCHAR" />
+    <result column="srlxName" property="srlxName" jdbcType="VARCHAR" />
+    <result column="kscqfyje" property="kscqfyje" jdbcType="VARCHAR" />
+    <result column="fysc" property="fysc" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="obj01" property="obj01" jdbcType="VARCHAR" />
+    <result column="obj02" property="obj02" jdbcType="VARCHAR" />
+    <result column="obj03" property="obj03" jdbcType="VARCHAR" />
+    <result column="obj04" property="obj04" jdbcType="VARCHAR" />
+    <result column="obj05" property="obj05" jdbcType="VARCHAR" />
+    <result column="obj06" property="obj06" jdbcType="VARCHAR" />
+    <result column="obj07" property="obj07" jdbcType="VARCHAR" />
+    <result column="obj08" property="obj08" jdbcType="VARCHAR" />
+    <result column="obj09" property="obj09" jdbcType="VARCHAR" />
+    <result column="obj10" property="obj10" jdbcType="VARCHAR" />
+    <result column="obj11" property="obj11" jdbcType="VARCHAR" />
+    <result column="obj12" property="obj12" jdbcType="VARCHAR" />
+    <result column="obj13" property="obj13" jdbcType="VARCHAR" />
+    <result column="obj14" property="obj14" jdbcType="VARCHAR" />
+    <result column="obj15" property="obj15" jdbcType="VARCHAR" />
+    <result column="obj16" property="obj16" jdbcType="VARCHAR" />
+    <result column="obj17" property="obj17" jdbcType="VARCHAR" />
+    <result column="obj18" property="obj18" jdbcType="VARCHAR" />
+    <result column="obj19" property="obj19" jdbcType="VARCHAR" />
+    <result column="obj20" property="obj20" jdbcType="VARCHAR" />
+    <result column="yjsrtotal_sq" property="yjsrtotal_sq" jdbcType="DECIMAL" />
+    <result column="yjsrtotal_sh" property="yjsrtotal_sh" jdbcType="DECIMAL" />
+    <result column="yjfytotal_sq" property="yjfytotal_sq" jdbcType="DECIMAL" />
+    <result column="yjfytotal_sh" property="yjfytotal_sh" jdbcType="DECIMAL" />
+    <result column="cxjstotal_sq" property="cxjstotal_sq" jdbcType="DECIMAL" />
+    <result column="cxjstotal_sh" property="cxjstotal_sh" jdbcType="DECIMAL" />
+    <result column="yjsrbef_sq" property="yjsrbef_sq" jdbcType="DECIMAL" />
+    <result column="yjsrbef_sh" property="yjsrbef_sh" jdbcType="DECIMAL" />
+    <result column="yjfybef_sq" property="yjfybef_sq" jdbcType="DECIMAL" />
+    <result column="yjfybef_sh" property="yjfybef_sh" jdbcType="DECIMAL" />
+    <result column="cxjsbef_sq" property="cxjsbef_sq" jdbcType="DECIMAL" />
+    <result column="cxjsbef_sh" property="cxjsbef_sh" jdbcType="DECIMAL" />
+    <result column="yjsrthis_sq" property="yjsrthis_sq" jdbcType="DECIMAL" />
+    <result column="yjsrthis_sh" property="yjsrthis_sh" jdbcType="DECIMAL" />
+    <result column="yjfythis_sq" property="yjfythis_sq" jdbcType="DECIMAL" />
+    <result column="yjfythis_sh" property="yjfythis_sh" jdbcType="DECIMAL" />
+    <result column="cxjsthis_sq" property="cxjsthis_sq" jdbcType="DECIMAL" />
+    <result column="cxjsthis_sh" property="cxjsthis_sh" jdbcType="DECIMAL" />
+    <result column="yjsrjan_sq" property="yjsrjan_sq" jdbcType="DECIMAL" />
+    <result column="yjsrjan_sh" property="yjsrjan_sh" jdbcType="DECIMAL" />
+    <result column="yjfyjan_sq" property="yjfyjan_sq" jdbcType="DECIMAL" />
+    <result column="yjfyjan_sh" property="yjfyjan_sh" jdbcType="DECIMAL" />
+    <result column="cxjsjan_sq" property="cxjsjan_sq" jdbcType="DECIMAL" />
+    <result column="cxjsjan_sh" property="cxjsjan_sh" jdbcType="DECIMAL" />
+    <result column="yjsrfeb_sq" property="yjsrfeb_sq" jdbcType="DECIMAL" />
+    <result column="yjsrfeb_sh" property="yjsrfeb_sh" jdbcType="DECIMAL" />
+    <result column="yjfyfeb_sq" property="yjfyfeb_sq" jdbcType="DECIMAL" />
+    <result column="yjfyfeb_sh" property="yjfyfeb_sh" jdbcType="DECIMAL" />
+    <result column="cxjsfeb_sq" property="cxjsfeb_sq" jdbcType="DECIMAL" />
+    <result column="cxjsfeb_sh" property="cxjsfeb_sh" jdbcType="DECIMAL" />
+    <result column="yjsrmar_sq" property="yjsrmar_sq" jdbcType="DECIMAL" />
+    <result column="yjsrmar_sh" property="yjsrmar_sh" jdbcType="DECIMAL" />
+    <result column="yjfymar_sq" property="yjfymar_sq" jdbcType="DECIMAL" />
+    <result column="yjfymar_sh" property="yjfymar_sh" jdbcType="DECIMAL" />
+    <result column="cxjsmar_sq" property="cxjsmar_sq" jdbcType="DECIMAL" />
+    <result column="cxjsmar_sh" property="cxjsmar_sh" jdbcType="DECIMAL" />
+    <result column="yjsrapr_sq" property="yjsrapr_sq" jdbcType="DECIMAL" />
+    <result column="yjsrapr_sh" property="yjsrapr_sh" jdbcType="DECIMAL" />
+    <result column="yjfyapr_sq" property="yjfyapr_sq" jdbcType="DECIMAL" />
+    <result column="yjfyapr_sh" property="yjfyapr_sh" jdbcType="DECIMAL" />
+    <result column="cxjsapr_sq" property="cxjsapr_sq" jdbcType="DECIMAL" />
+    <result column="cxjsapr_sh" property="cxjsapr_sh" jdbcType="DECIMAL" />
+    <result column="yjsrmay_sq" property="yjsrmay_sq" jdbcType="DECIMAL" />
+    <result column="yjsrmay_sh" property="yjsrmay_sh" jdbcType="DECIMAL" />
+    <result column="yjfymay_sq" property="yjfymay_sq" jdbcType="DECIMAL" />
+    <result column="yjfymay_sh" property="yjfymay_sh" jdbcType="DECIMAL" />
+    <result column="cxjsmay_sq" property="cxjsmay_sq" jdbcType="DECIMAL" />
+    <result column="cxjsmay_sh" property="cxjsmay_sh" jdbcType="DECIMAL" />
+    <result column="yjsrjun_sq" property="yjsrjun_sq" jdbcType="DECIMAL" />
+    <result column="yjsrjun_sh" property="yjsrjun_sh" jdbcType="DECIMAL" />
+    <result column="yjfyjun_sq" property="yjfyjun_sq" jdbcType="DECIMAL" />
+    <result column="yjfyjun_sh" property="yjfyjun_sh" jdbcType="DECIMAL" />
+    <result column="cxjsjun_sq" property="cxjsjun_sq" jdbcType="DECIMAL" />
+    <result column="cxjsjun_sh" property="cxjsjun_sh" jdbcType="DECIMAL" />
+    <result column="yjsrjul_sq" property="yjsrjul_sq" jdbcType="DECIMAL" />
+    <result column="yjsrjul_sh" property="yjsrjul_sh" jdbcType="DECIMAL" />
+    <result column="yjfyjul_sq" property="yjfyjul_sq" jdbcType="DECIMAL" />
+    <result column="yjfyjul_sh" property="yjfyjul_sh" jdbcType="DECIMAL" />
+    <result column="cxjsjul_sq" property="cxjsjul_sq" jdbcType="DECIMAL" />
+    <result column="cxjsjul_sh" property="cxjsjul_sh" jdbcType="DECIMAL" />
+    <result column="yjsraug_sq" property="yjsraug_sq" jdbcType="DECIMAL" />
+    <result column="yjsraug_sh" property="yjsraug_sh" jdbcType="DECIMAL" />
+    <result column="yjfyaug_sq" property="yjfyaug_sq" jdbcType="DECIMAL" />
+    <result column="yjfyaug_sh" property="yjfyaug_sh" jdbcType="DECIMAL" />
+    <result column="cxjsaug_sq" property="cxjsaug_sq" jdbcType="DECIMAL" />
+    <result column="cxjsaug_sh" property="cxjsaug_sh" jdbcType="DECIMAL" />
+    <result column="yjsrsep_sq" property="yjsrsep_sq" jdbcType="DECIMAL" />
+    <result column="yjsrsep_sh" property="yjsrsep_sh" jdbcType="DECIMAL" />
+    <result column="yjfysep_sq" property="yjfysep_sq" jdbcType="DECIMAL" />
+    <result column="yjfysep_sh" property="yjfysep_sh" jdbcType="DECIMAL" />
+    <result column="cxjssep_sq" property="cxjssep_sq" jdbcType="DECIMAL" />
+    <result column="cxjssep_sh" property="cxjssep_sh" jdbcType="DECIMAL" />
+    <result column="yjsroct_sq" property="yjsroct_sq" jdbcType="DECIMAL" />
+    <result column="yjsroct_sh" property="yjsroct_sh" jdbcType="DECIMAL" />
+    <result column="yjfyoct_sq" property="yjfyoct_sq" jdbcType="DECIMAL" />
+    <result column="yjfyoct_sh" property="yjfyoct_sh" jdbcType="DECIMAL" />
+    <result column="cxjsoct_sq" property="cxjsoct_sq" jdbcType="DECIMAL" />
+    <result column="cxjsoct_sh" property="cxjsoct_sh" jdbcType="DECIMAL" />
+    <result column="yjsrnov_sq" property="yjsrnov_sq" jdbcType="DECIMAL" />
+    <result column="yjsrnov_sh" property="yjsrnov_sh" jdbcType="DECIMAL" />
+    <result column="yjfynov_sq" property="yjfynov_sq" jdbcType="DECIMAL" />
+    <result column="yjfynov_sh" property="yjfynov_sh" jdbcType="DECIMAL" />
+    <result column="cxjsnov_sq" property="cxjsnov_sq" jdbcType="DECIMAL" />
+    <result column="cxjsnov_sh" property="cxjsnov_sh" jdbcType="DECIMAL" />
+    <result column="yjsrdec_sq" property="yjsrdec_sq" jdbcType="DECIMAL" />
+    <result column="yjsrdec_sh" property="yjsrdec_sh" jdbcType="DECIMAL" />
+    <result column="yjfydec_sq" property="yjfydec_sq" jdbcType="DECIMAL" />
+    <result column="yjfydec_sh" property="yjfydec_sh" jdbcType="DECIMAL" />
+    <result column="cxjsdec_sq" property="cxjsdec_sq" jdbcType="DECIMAL" />
+    <result column="cxjsdec_sh" property="cxjsdec_sh" jdbcType="DECIMAL" />
+    <result column="yssrtotal_sq" property="yssrtotal_sq" jdbcType="DECIMAL" />
+    <result column="yssrtotal_sh" property="yssrtotal_sh" jdbcType="DECIMAL" />
+    <result column="yffytotal_sq" property="yffytotal_sq" jdbcType="DECIMAL" />
+    <result column="yffytotal_sh" property="yffytotal_sh" jdbcType="DECIMAL" />
+    <result column="yfjstotal_sq" property="yfjstotal_sq" jdbcType="DECIMAL" />
+    <result column="yfjstotal_sh" property="yfjstotal_sh" jdbcType="DECIMAL" />
+    <result column="yssrbef_sq" property="yssrbef_sq" jdbcType="DECIMAL" />
+    <result column="yssrbef_sh" property="yssrbef_sh" jdbcType="DECIMAL" />
+    <result column="yffybef_sq" property="yffybef_sq" jdbcType="DECIMAL" />
+    <result column="yffybef_sh" property="yffybef_sh" jdbcType="DECIMAL" />
+    <result column="yfjsbef_sq" property="yfjsbef_sq" jdbcType="DECIMAL" />
+    <result column="yfjsbef_sh" property="yfjsbef_sh" jdbcType="DECIMAL" />
+    <result column="yssrthis_sq" property="yssrthis_sq" jdbcType="DECIMAL" />
+    <result column="yssrthis_sh" property="yssrthis_sh" jdbcType="DECIMAL" />
+    <result column="yffythis_sq" property="yffythis_sq" jdbcType="DECIMAL" />
+    <result column="yffythis_sh" property="yffythis_sh" jdbcType="DECIMAL" />
+    <result column="yfjsthis_sq" property="yfjsthis_sq" jdbcType="DECIMAL" />
+    <result column="yfjsthis_sh" property="yfjsthis_sh" jdbcType="DECIMAL" />
+    <result column="yssrjan_sq" property="yssrjan_sq" jdbcType="DECIMAL" />
+    <result column="yssrjan_sh" property="yssrjan_sh" jdbcType="DECIMAL" />
+    <result column="yffyjan_sq" property="yffyjan_sq" jdbcType="DECIMAL" />
+    <result column="yffyjan_sh" property="yffyjan_sh" jdbcType="DECIMAL" />
+    <result column="yfjsjan_sq" property="yfjsjan_sq" jdbcType="DECIMAL" />
+    <result column="yfjsjan_sh" property="yfjsjan_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_jan" property="yssrqryj_jan" jdbcType="VARCHAR" />
+    <result column="jssfcsj_jan" property="jssfcsj_jan" jdbcType="VARCHAR" />
+    <result column="jssshsj_jan" property="jssshsj_jan" jdbcType="VARCHAR" />
+    <result column="yssrfeb_sq" property="yssrfeb_sq" jdbcType="DECIMAL" />
+    <result column="yssrfeb_sh" property="yssrfeb_sh" jdbcType="DECIMAL" />
+    <result column="yffyfeb_sq" property="yffyfeb_sq" jdbcType="DECIMAL" />
+    <result column="yffyfeb_sh" property="yffyfeb_sh" jdbcType="DECIMAL" />
+    <result column="yfjsfeb_sq" property="yfjsfeb_sq" jdbcType="DECIMAL" />
+    <result column="yfjsfeb_sh" property="yfjsfeb_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_feb" property="yssrqryj_feb" jdbcType="VARCHAR" />
+    <result column="jssfcsj_feb" property="jssfcsj_feb" jdbcType="VARCHAR" />
+    <result column="jssshsj_feb" property="jssshsj_feb" jdbcType="VARCHAR" />
+    <result column="yssrmar_sq" property="yssrmar_sq" jdbcType="DECIMAL" />
+    <result column="yssrmar_sh" property="yssrmar_sh" jdbcType="DECIMAL" />
+    <result column="yffymar_sq" property="yffymar_sq" jdbcType="DECIMAL" />
+    <result column="yffymar_sh" property="yffymar_sh" jdbcType="DECIMAL" />
+    <result column="yfjsmar_sq" property="yfjsmar_sq" jdbcType="DECIMAL" />
+    <result column="yfjsmar_sh" property="yfjsmar_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_mar" property="yssrqryj_mar" jdbcType="VARCHAR" />
+    <result column="jssfcsj_mar" property="jssfcsj_mar" jdbcType="VARCHAR" />
+    <result column="jssshsj_mar" property="jssshsj_mar" jdbcType="VARCHAR" />
+    <result column="yssrapr_sq" property="yssrapr_sq" jdbcType="DECIMAL" />
+    <result column="yssrapr_sh" property="yssrapr_sh" jdbcType="DECIMAL" />
+    <result column="yffyapr_sq" property="yffyapr_sq" jdbcType="DECIMAL" />
+    <result column="yffyapr_sh" property="yffyapr_sh" jdbcType="DECIMAL" />
+    <result column="yfjsapr_sq" property="yfjsapr_sq" jdbcType="DECIMAL" />
+    <result column="yfjsapr_sh" property="yfjsapr_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_apr" property="yssrqryj_apr" jdbcType="VARCHAR" />
+    <result column="jssfcsj_apr" property="jssfcsj_apr" jdbcType="VARCHAR" />
+    <result column="jssshsj_apr" property="jssshsj_apr" jdbcType="VARCHAR" />
+    <result column="yssrmay_sq" property="yssrmay_sq" jdbcType="DECIMAL" />
+    <result column="yssrmay_sh" property="yssrmay_sh" jdbcType="DECIMAL" />
+    <result column="yffymay_sq" property="yffymay_sq" jdbcType="DECIMAL" />
+    <result column="yffymay_sh" property="yffymay_sh" jdbcType="DECIMAL" />
+    <result column="yfjsmay_sq" property="yfjsmay_sq" jdbcType="DECIMAL" />
+    <result column="yfjsmay_sh" property="yfjsmay_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_may" property="yssrqryj_may" jdbcType="VARCHAR" />
+    <result column="jssfcsj_may" property="jssfcsj_may" jdbcType="VARCHAR" />
+    <result column="jssshsj_may" property="jssshsj_may" jdbcType="VARCHAR" />
+    <result column="yssrjun_sq" property="yssrjun_sq" jdbcType="DECIMAL" />
+    <result column="yssrjun_sh" property="yssrjun_sh" jdbcType="DECIMAL" />
+    <result column="yffyjun_sq" property="yffyjun_sq" jdbcType="DECIMAL" />
+    <result column="yffyjun_sh" property="yffyjun_sh" jdbcType="DECIMAL" />
+    <result column="yfjsjun_sq" property="yfjsjun_sq" jdbcType="DECIMAL" />
+    <result column="yfjsjun_sh" property="yfjsjun_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_jun" property="yssrqryj_jun" jdbcType="VARCHAR" />
+    <result column="jssfcsj_jun" property="jssfcsj_jun" jdbcType="VARCHAR" />
+    <result column="jssshsj_jun" property="jssshsj_jun" jdbcType="VARCHAR" />
+    <result column="yssrjul_sq" property="yssrjul_sq" jdbcType="DECIMAL" />
+    <result column="yssrjul_sh" property="yssrjul_sh" jdbcType="DECIMAL" />
+    <result column="yffyjul_sq" property="yffyjul_sq" jdbcType="DECIMAL" />
+    <result column="yffyjul_sh" property="yffyjul_sh" jdbcType="DECIMAL" />
+    <result column="yfjsjul_sq" property="yfjsjul_sq" jdbcType="DECIMAL" />
+    <result column="yfjsjul_sh" property="yfjsjul_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_jul" property="yssrqryj_jul" jdbcType="VARCHAR" />
+    <result column="jssfcsj_jul" property="jssfcsj_jul" jdbcType="VARCHAR" />
+    <result column="jssshsj_jul" property="jssshsj_jul" jdbcType="VARCHAR" />
+    <result column="yssraug_sq" property="yssraug_sq" jdbcType="DECIMAL" />
+    <result column="yssraug_sh" property="yssraug_sh" jdbcType="DECIMAL" />
+    <result column="yffyaug_sq" property="yffyaug_sq" jdbcType="DECIMAL" />
+    <result column="yffyaug_sh" property="yffyaug_sh" jdbcType="DECIMAL" />
+    <result column="yfjsaug_sq" property="yfjsaug_sq" jdbcType="DECIMAL" />
+    <result column="yfjsaug_sh" property="yfjsaug_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_aug" property="yssrqryj_aug" jdbcType="VARCHAR" />
+    <result column="jssfcsj_aug" property="jssfcsj_aug" jdbcType="VARCHAR" />
+    <result column="jssshsj_aug" property="jssshsj_aug" jdbcType="VARCHAR" />
+    <result column="yssrsep_sq" property="yssrsep_sq" jdbcType="DECIMAL" />
+    <result column="yssrsep_sh" property="yssrsep_sh" jdbcType="DECIMAL" />
+    <result column="yffysep_sq" property="yffysep_sq" jdbcType="DECIMAL" />
+    <result column="yffysep_sh" property="yffysep_sh" jdbcType="DECIMAL" />
+    <result column="yfjssep_sq" property="yfjssep_sq" jdbcType="DECIMAL" />
+    <result column="yfjssep_sh" property="yfjssep_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_sep" property="yssrqryj_sep" jdbcType="VARCHAR" />
+    <result column="jssfcsj_sep" property="jssfcsj_sep" jdbcType="VARCHAR" />
+    <result column="jssshsj_sep" property="jssshsj_sep" jdbcType="VARCHAR" />
+    <result column="yssroct_sq" property="yssroct_sq" jdbcType="DECIMAL" />
+    <result column="yssroct_sh" property="yssroct_sh" jdbcType="DECIMAL" />
+    <result column="yffyoct_sq" property="yffyoct_sq" jdbcType="DECIMAL" />
+    <result column="yffyoct_sh" property="yffyoct_sh" jdbcType="DECIMAL" />
+    <result column="yfjsoct_sq" property="yfjsoct_sq" jdbcType="DECIMAL" />
+    <result column="yfjsoct_sh" property="yfjsoct_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_oct" property="yssrqryj_oct" jdbcType="VARCHAR" />
+    <result column="jssfcsj_oct" property="jssfcsj_oct" jdbcType="VARCHAR" />
+    <result column="jssshsj_oct" property="jssshsj_oct" jdbcType="VARCHAR" />
+    <result column="yssrnov_sq" property="yssrnov_sq" jdbcType="DECIMAL" />
+    <result column="yssrnov_sh" property="yssrnov_sh" jdbcType="DECIMAL" />
+    <result column="yffynov_sq" property="yffynov_sq" jdbcType="DECIMAL" />
+    <result column="yffynov_sh" property="yffynov_sh" jdbcType="DECIMAL" />
+    <result column="yfjsnov_sq" property="yfjsnov_sq" jdbcType="DECIMAL" />
+    <result column="yfjsnov_sh" property="yfjsnov_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_nov" property="yssrqryj_nov" jdbcType="VARCHAR" />
+    <result column="jssfcsj_nov" property="jssfcsj_nov" jdbcType="VARCHAR" />
+    <result column="jssshsj_nov" property="jssshsj_nov" jdbcType="VARCHAR" />
+    <result column="yssrdec_sq" property="yssrdec_sq" jdbcType="DECIMAL" />
+    <result column="yssrdec_sh" property="yssrdec_sh" jdbcType="DECIMAL" />
+    <result column="yffydec_sq" property="yffydec_sq" jdbcType="DECIMAL" />
+    <result column="yffydec_sh" property="yffydec_sh" jdbcType="DECIMAL" />
+    <result column="yfjsdec_sq" property="yfjsdec_sq" jdbcType="DECIMAL" />
+    <result column="yfjsdec_sh" property="yfjsdec_sh" jdbcType="DECIMAL" />
+    <result column="yssrqryj_dec" property="yssrqryj_dec" jdbcType="VARCHAR" />
+    <result column="jssfcsj_dec" property="jssfcsj_dec" jdbcType="VARCHAR" />
+    <result column="jssshsj_dec" property="jssshsj_dec" jdbcType="VARCHAR" />
+    <result column="yjsstotal_sq" property="yjsstotal_sq" jdbcType="DECIMAL" />
+    <result column="yjsstotal_sh" property="yjsstotal_sh" jdbcType="DECIMAL" />
+    <result column="sjfytotal_sq" property="sjfytotal_sq" jdbcType="DECIMAL" />
+    <result column="sjfytotal_sh" property="sjfytotal_sh" jdbcType="DECIMAL" />
+    <result column="sjjstotal_sq" property="sjjstotal_sq" jdbcType="DECIMAL" />
+    <result column="sjjstotal_sh" property="sjjstotal_sh" jdbcType="DECIMAL" />
+    <result column="yjssbef_sq" property="yjssbef_sq" jdbcType="DECIMAL" />
+    <result column="yjssbef_sh" property="yjssbef_sh" jdbcType="DECIMAL" />
+    <result column="sjfybef_sq" property="sjfybef_sq" jdbcType="DECIMAL" />
+    <result column="sjfybef_sh" property="sjfybef_sh" jdbcType="DECIMAL" />
+    <result column="sjjsbef_sq" property="sjjsbef_sq" jdbcType="DECIMAL" />
+    <result column="sjjsbef_sh" property="sjjsbef_sh" jdbcType="DECIMAL" />
+    <result column="yjssthis_sq" property="yjssthis_sq" jdbcType="DECIMAL" />
+    <result column="yjssthis_sh" property="yjssthis_sh" jdbcType="DECIMAL" />
+    <result column="sjfythis_sq" property="sjfythis_sq" jdbcType="DECIMAL" />
+    <result column="sjfythis_sh" property="sjfythis_sh" jdbcType="DECIMAL" />
+    <result column="sjjsthis_sq" property="sjjsthis_sq" jdbcType="DECIMAL" />
+    <result column="sjjsthis_sh" property="sjjsthis_sh" jdbcType="DECIMAL" />
+    <result column="yjssjan_sq" property="yjssjan_sq" jdbcType="DECIMAL" />
+    <result column="yjssjan_sh" property="yjssjan_sh" jdbcType="DECIMAL" />
+    <result column="sjfyjan_sq" property="sjfyjan_sq" jdbcType="DECIMAL" />
+    <result column="sjfyjan_sh" property="sjfyjan_sh" jdbcType="DECIMAL" />
+    <result column="sjjsjan_sq" property="sjjsjan_sq" jdbcType="DECIMAL" />
+    <result column="sjjsjan_sh" property="sjjsjan_sh" jdbcType="DECIMAL" />
+    <result column="yjssfeb_sq" property="yjssfeb_sq" jdbcType="DECIMAL" />
+    <result column="yjssfeb_sh" property="yjssfeb_sh" jdbcType="DECIMAL" />
+    <result column="sjfyfeb_sq" property="sjfyfeb_sq" jdbcType="DECIMAL" />
+    <result column="sjfyfeb_sh" property="sjfyfeb_sh" jdbcType="DECIMAL" />
+    <result column="sjjsfeb_sq" property="sjjsfeb_sq" jdbcType="DECIMAL" />
+    <result column="sjjsfeb_sh" property="sjjsfeb_sh" jdbcType="DECIMAL" />
+    <result column="yjssmar_sq" property="yjssmar_sq" jdbcType="DECIMAL" />
+    <result column="yjssmar_sh" property="yjssmar_sh" jdbcType="DECIMAL" />
+    <result column="sjfymar_sq" property="sjfymar_sq" jdbcType="DECIMAL" />
+    <result column="sjfymar_sh" property="sjfymar_sh" jdbcType="DECIMAL" />
+    <result column="sjjsmar_sq" property="sjjsmar_sq" jdbcType="DECIMAL" />
+    <result column="sjjsmar_sh" property="sjjsmar_sh" jdbcType="DECIMAL" />
+    <result column="yjssapr_sq" property="yjssapr_sq" jdbcType="DECIMAL" />
+    <result column="yjssapr_sh" property="yjssapr_sh" jdbcType="DECIMAL" />
+    <result column="sjfyapr_sq" property="sjfyapr_sq" jdbcType="DECIMAL" />
+    <result column="sjfyapr_sh" property="sjfyapr_sh" jdbcType="DECIMAL" />
+    <result column="sjjsapr_sq" property="sjjsapr_sq" jdbcType="DECIMAL" />
+    <result column="sjjsapr_sh" property="sjjsapr_sh" jdbcType="DECIMAL" />
+    <result column="yjssmay_sq" property="yjssmay_sq" jdbcType="DECIMAL" />
+    <result column="yjssmay_sh" property="yjssmay_sh" jdbcType="DECIMAL" />
+    <result column="sjfymay_sq" property="sjfymay_sq" jdbcType="DECIMAL" />
+    <result column="sjfymay_sh" property="sjfymay_sh" jdbcType="DECIMAL" />
+    <result column="sjjsmay_sq" property="sjjsmay_sq" jdbcType="DECIMAL" />
+    <result column="sjjsmay_sh" property="sjjsmay_sh" jdbcType="DECIMAL" />
+    <result column="yjssjun_sq" property="yjssjun_sq" jdbcType="DECIMAL" />
+    <result column="yjssjun_sh" property="yjssjun_sh" jdbcType="DECIMAL" />
+    <result column="sjfyjun_sq" property="sjfyjun_sq" jdbcType="DECIMAL" />
+    <result column="sjfyjun_sh" property="sjfyjun_sh" jdbcType="DECIMAL" />
+    <result column="sjjsjun_sq" property="sjjsjun_sq" jdbcType="DECIMAL" />
+    <result column="sjjsjun_sh" property="sjjsjun_sh" jdbcType="DECIMAL" />
+    <result column="yjssjul_sq" property="yjssjul_sq" jdbcType="DECIMAL" />
+    <result column="yjssjul_sh" property="yjssjul_sh" jdbcType="DECIMAL" />
+    <result column="sjfyjul_sq" property="sjfyjul_sq" jdbcType="DECIMAL" />
+    <result column="sjfyjul_sh" property="sjfyjul_sh" jdbcType="DECIMAL" />
+    <result column="sjjsjul_sq" property="sjjsjul_sq" jdbcType="DECIMAL" />
+    <result column="sjjsjul_sh" property="sjjsjul_sh" jdbcType="DECIMAL" />
+    <result column="yjssaug_sq" property="yjssaug_sq" jdbcType="DECIMAL" />
+    <result column="yjssaug_sh" property="yjssaug_sh" jdbcType="DECIMAL" />
+    <result column="sjfyaug_sq" property="sjfyaug_sq" jdbcType="DECIMAL" />
+    <result column="sjfyaug_sh" property="sjfyaug_sh" jdbcType="DECIMAL" />
+    <result column="sjjsaug_sq" property="sjjsaug_sq" jdbcType="DECIMAL" />
+    <result column="sjjsaug_sh" property="sjjsaug_sh" jdbcType="DECIMAL" />
+    <result column="yjsssep_sq" property="yjsssep_sq" jdbcType="DECIMAL" />
+    <result column="yjsssep_sh" property="yjsssep_sh" jdbcType="DECIMAL" />
+    <result column="sjfysep_sq" property="sjfysep_sq" jdbcType="DECIMAL" />
+    <result column="sjfysep_sh" property="sjfysep_sh" jdbcType="DECIMAL" />
+    <result column="sjjssep_sq" property="sjjssep_sq" jdbcType="DECIMAL" />
+    <result column="sjjssep_sh" property="sjjssep_sh" jdbcType="DECIMAL" />
+    <result column="yjssoct_sq" property="yjssoct_sq" jdbcType="DECIMAL" />
+    <result column="yjssoct_sh" property="yjssoct_sh" jdbcType="DECIMAL" />
+    <result column="sjfyoct_sq" property="sjfyoct_sq" jdbcType="DECIMAL" />
+    <result column="sjfyoct_sh" property="sjfyoct_sh" jdbcType="DECIMAL" />
+    <result column="sjjsoct_sq" property="sjjsoct_sq" jdbcType="DECIMAL" />
+    <result column="sjjsoct_sh" property="sjjsoct_sh" jdbcType="DECIMAL" />
+    <result column="yjssnov_sq" property="yjssnov_sq" jdbcType="DECIMAL" />
+    <result column="yjssnov_sh" property="yjssnov_sh" jdbcType="DECIMAL" />
+    <result column="sjfynov_sq" property="sjfynov_sq" jdbcType="DECIMAL" />
+    <result column="sjfynov_sh" property="sjfynov_sh" jdbcType="DECIMAL" />
+    <result column="sjjsnov_sq" property="sjjsnov_sq" jdbcType="DECIMAL" />
+    <result column="sjjsnov_sh" property="sjjsnov_sh" jdbcType="DECIMAL" />
+    <result column="yjssdec_sq" property="yjssdec_sq" jdbcType="DECIMAL" />
+    <result column="yjssdec_sh" property="yjssdec_sh" jdbcType="DECIMAL" />
+    <result column="sjfydec_sq" property="sjfydec_sq" jdbcType="DECIMAL" />
+    <result column="sjfydec_sh" property="sjfydec_sh" jdbcType="DECIMAL" />
+    <result column="sjjsdec_sq" property="sjjsdec_sq" jdbcType="DECIMAL" />
+    <result column="sjjsdec_sh" property="sjjsdec_sh" jdbcType="DECIMAL" />
+    <result column="gwyjtotal" property="gwyjtotal" jdbcType="DECIMAL" />
+    <result column="tjyjtotal" property="tjyjtotal" jdbcType="DECIMAL" />
+    <result column="datecreate" property="datecreate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, yearly, accountProject, accountProjectNo, yjgsqyName, yjgsqyCode, yjgsareaName,
+    yjgsareaCode, yjgssybName, yjgssybCode, yjgscsName, yjgscsCode, yjszcsName, yjszcsid,
+    yjgszxName, yjgszxid, srgscsName, srgscsCode, srgszxName, srgsbmName, kfsName, htjfName,
+    reportNo, projectNo, estateName, reportDate, dealDate, qkdzrq, srlxName, kscqfyje,
+    fysc, num, obj01, obj02, obj03, obj04, obj05, obj06, obj07, obj08, obj09, obj10,
+    obj11, obj12, obj13, obj14, obj15, obj16, obj17, obj18, obj19, obj20, yjsrtotal_sq,
+    yjsrtotal_sh, yjfytotal_sq, yjfytotal_sh, cxjstotal_sq, cxjstotal_sh, yjsrbef_sq,
+    yjsrbef_sh, yjfybef_sq, yjfybef_sh, cxjsbef_sq, cxjsbef_sh, yjsrthis_sq, yjsrthis_sh,
+    yjfythis_sq, yjfythis_sh, cxjsthis_sq, cxjsthis_sh, yjsrjan_sq, yjsrjan_sh, yjfyjan_sq,
+    yjfyjan_sh, cxjsjan_sq, cxjsjan_sh, yjsrfeb_sq, yjsrfeb_sh, yjfyfeb_sq, yjfyfeb_sh,
+    cxjsfeb_sq, cxjsfeb_sh, yjsrmar_sq, yjsrmar_sh, yjfymar_sq, yjfymar_sh, cxjsmar_sq,
+    cxjsmar_sh, yjsrapr_sq, yjsrapr_sh, yjfyapr_sq, yjfyapr_sh, cxjsapr_sq, cxjsapr_sh,
+    yjsrmay_sq, yjsrmay_sh, yjfymay_sq, yjfymay_sh, cxjsmay_sq, cxjsmay_sh, yjsrjun_sq,
+    yjsrjun_sh, yjfyjun_sq, yjfyjun_sh, cxjsjun_sq, cxjsjun_sh, yjsrjul_sq, yjsrjul_sh,
+    yjfyjul_sq, yjfyjul_sh, cxjsjul_sq, cxjsjul_sh, yjsraug_sq, yjsraug_sh, yjfyaug_sq,
+    yjfyaug_sh, cxjsaug_sq, cxjsaug_sh, yjsrsep_sq, yjsrsep_sh, yjfysep_sq, yjfysep_sh,
+    cxjssep_sq, cxjssep_sh, yjsroct_sq, yjsroct_sh, yjfyoct_sq, yjfyoct_sh, cxjsoct_sq,
+    cxjsoct_sh, yjsrnov_sq, yjsrnov_sh, yjfynov_sq, yjfynov_sh, cxjsnov_sq, cxjsnov_sh,
+    yjsrdec_sq, yjsrdec_sh, yjfydec_sq, yjfydec_sh, cxjsdec_sq, cxjsdec_sh, yssrtotal_sq,
+    yssrtotal_sh, yffytotal_sq, yffytotal_sh, yfjstotal_sq, yfjstotal_sh, yssrbef_sq,
+    yssrbef_sh, yffybef_sq, yffybef_sh, yfjsbef_sq, yfjsbef_sh, yssrthis_sq, yssrthis_sh,
+    yffythis_sq, yffythis_sh, yfjsthis_sq, yfjsthis_sh, yssrjan_sq, yssrjan_sh, yffyjan_sq,
+    yffyjan_sh, yfjsjan_sq, yfjsjan_sh, yssrqryj_jan, jssfcsj_jan, jssshsj_jan, yssrfeb_sq,
+    yssrfeb_sh, yffyfeb_sq, yffyfeb_sh, yfjsfeb_sq, yfjsfeb_sh, yssrqryj_feb, jssfcsj_feb,
+    jssshsj_feb, yssrmar_sq, yssrmar_sh, yffymar_sq, yffymar_sh, yfjsmar_sq, yfjsmar_sh,
+    yssrqryj_mar, jssfcsj_mar, jssshsj_mar, yssrapr_sq, yssrapr_sh, yffyapr_sq, yffyapr_sh,
+    yfjsapr_sq, yfjsapr_sh, yssrqryj_apr, jssfcsj_apr, jssshsj_apr, yssrmay_sq, yssrmay_sh,
+    yffymay_sq, yffymay_sh, yfjsmay_sq, yfjsmay_sh, yssrqryj_may, jssfcsj_may, jssshsj_may,
+    yssrjun_sq, yssrjun_sh, yffyjun_sq, yffyjun_sh, yfjsjun_sq, yfjsjun_sh, yssrqryj_jun,
+    jssfcsj_jun, jssshsj_jun, yssrjul_sq, yssrjul_sh, yffyjul_sq, yffyjul_sh, yfjsjul_sq,
+    yfjsjul_sh, yssrqryj_jul, jssfcsj_jul, jssshsj_jul, yssraug_sq, yssraug_sh, yffyaug_sq,
+    yffyaug_sh, yfjsaug_sq, yfjsaug_sh, yssrqryj_aug, jssfcsj_aug, jssshsj_aug, yssrsep_sq,
+    yssrsep_sh, yffysep_sq, yffysep_sh, yfjssep_sq, yfjssep_sh, yssrqryj_sep, jssfcsj_sep,
+    jssshsj_sep, yssroct_sq, yssroct_sh, yffyoct_sq, yffyoct_sh, yfjsoct_sq, yfjsoct_sh,
+    yssrqryj_oct, jssfcsj_oct, jssshsj_oct, yssrnov_sq, yssrnov_sh, yffynov_sq, yffynov_sh,
+    yfjsnov_sq, yfjsnov_sh, yssrqryj_nov, jssfcsj_nov, jssshsj_nov, yssrdec_sq, yssrdec_sh,
+    yffydec_sq, yffydec_sh, yfjsdec_sq, yfjsdec_sh, yssrqryj_dec, jssfcsj_dec, jssshsj_dec,
+    yjsstotal_sq, yjsstotal_sh, sjfytotal_sq, sjfytotal_sh, sjjstotal_sq, sjjstotal_sh,
+    yjssbef_sq, yjssbef_sh, sjfybef_sq, sjfybef_sh, sjjsbef_sq, sjjsbef_sh, yjssthis_sq,
+    yjssthis_sh, sjfythis_sq, sjfythis_sh, sjjsthis_sq, sjjsthis_sh, yjssjan_sq, yjssjan_sh,
+    sjfyjan_sq, sjfyjan_sh, sjjsjan_sq, sjjsjan_sh, yjssfeb_sq, yjssfeb_sh, sjfyfeb_sq,
+    sjfyfeb_sh, sjjsfeb_sq, sjjsfeb_sh, yjssmar_sq, yjssmar_sh, sjfymar_sq, sjfymar_sh,
+    sjjsmar_sq, sjjsmar_sh, yjssapr_sq, yjssapr_sh, sjfyapr_sq, sjfyapr_sh, sjjsapr_sq,
+    sjjsapr_sh, yjssmay_sq, yjssmay_sh, sjfymay_sq, sjfymay_sh, sjjsmay_sq, sjjsmay_sh,
+    yjssjun_sq, yjssjun_sh, sjfyjun_sq, sjfyjun_sh, sjjsjun_sq, sjjsjun_sh, yjssjul_sq,
+    yjssjul_sh, sjfyjul_sq, sjfyjul_sh, sjjsjul_sq, sjjsjul_sh, yjssaug_sq, yjssaug_sh,
+    sjfyaug_sq, sjfyaug_sh, sjjsaug_sq, sjjsaug_sh, yjsssep_sq, yjsssep_sh, sjfysep_sq,
+    sjfysep_sh, sjjssep_sq, sjjssep_sh, yjssoct_sq, yjssoct_sh, sjfyoct_sq, sjfyoct_sh,
+    sjjsoct_sq, sjjsoct_sh, yjssnov_sq, yjssnov_sh, sjfynov_sq, sjfynov_sh, sjjsnov_sq,
+    sjjsnov_sh, yjssdec_sq, yjssdec_sh, sjfydec_sq, sjfydec_sh, sjjsdec_sq, sjjsdec_sh,
+    gwyjtotal, tjyjtotal, datecreate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from RPT_QT_LnkDetail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from RPT_QT_LnkDetail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.report.rptQTLnkDetail.model.RptQTLnkDetail" >
+    insert into RPT_QT_LnkDetail (id, yearly, accountProject,
+    accountProjectNo, yjgsqyName, yjgsqyCode,
+    yjgsareaName, yjgsareaCode, yjgssybName,
+    yjgssybCode, yjgscsName, yjgscsCode,
+    yjszcsName, yjszcsid, yjgszxName,
+    yjgszxid, srgscsName, srgscsCode,
+    srgszxName, srgsbmName, kfsName,
+    htjfName, reportNo, projectNo,
+    estateName, reportDate, dealDate,
+    qkdzrq, srlxName, kscqfyje,
+    fysc, num, obj01, obj02,
+    obj03, obj04, obj05,
+    obj06, obj07, obj08,
+    obj09, obj10, obj11,
+    obj12, obj13, obj14,
+    obj15, obj16, obj17,
+    obj18, obj19, obj20,
+    yjsrtotal_sq, yjsrtotal_sh, yjfytotal_sq,
+    yjfytotal_sh, cxjstotal_sq, cxjstotal_sh,
+    yjsrbef_sq, yjsrbef_sh, yjfybef_sq,
+    yjfybef_sh, cxjsbef_sq, cxjsbef_sh,
+    yjsrthis_sq, yjsrthis_sh, yjfythis_sq,
+    yjfythis_sh, cxjsthis_sq, cxjsthis_sh,
+    yjsrjan_sq, yjsrjan_sh, yjfyjan_sq,
+    yjfyjan_sh, cxjsjan_sq, cxjsjan_sh,
+    yjsrfeb_sq, yjsrfeb_sh, yjfyfeb_sq,
+    yjfyfeb_sh, cxjsfeb_sq, cxjsfeb_sh,
+    yjsrmar_sq, yjsrmar_sh, yjfymar_sq,
+    yjfymar_sh, cxjsmar_sq, cxjsmar_sh,
+    yjsrapr_sq, yjsrapr_sh, yjfyapr_sq,
+    yjfyapr_sh, cxjsapr_sq, cxjsapr_sh,
+    yjsrmay_sq, yjsrmay_sh, yjfymay_sq,
+    yjfymay_sh, cxjsmay_sq, cxjsmay_sh,
+    yjsrjun_sq, yjsrjun_sh, yjfyjun_sq,
+    yjfyjun_sh, cxjsjun_sq, cxjsjun_sh,
+    yjsrjul_sq, yjsrjul_sh, yjfyjul_sq,
+    yjfyjul_sh, cxjsjul_sq, cxjsjul_sh,
+    yjsraug_sq, yjsraug_sh, yjfyaug_sq,
+    yjfyaug_sh, cxjsaug_sq, cxjsaug_sh,
+    yjsrsep_sq, yjsrsep_sh, yjfysep_sq,
+    yjfysep_sh, cxjssep_sq, cxjssep_sh,
+    yjsroct_sq, yjsroct_sh, yjfyoct_sq,
+    yjfyoct_sh, cxjsoct_sq, cxjsoct_sh,
+    yjsrnov_sq, yjsrnov_sh, yjfynov_sq,
+    yjfynov_sh, cxjsnov_sq, cxjsnov_sh,
+    yjsrdec_sq, yjsrdec_sh, yjfydec_sq,
+    yjfydec_sh, cxjsdec_sq, cxjsdec_sh,
+    yssrtotal_sq, yssrtotal_sh, yffytotal_sq,
+    yffytotal_sh, yfjstotal_sq, yfjstotal_sh,
+    yssrbef_sq, yssrbef_sh, yffybef_sq,
+    yffybef_sh, yfjsbef_sq, yfjsbef_sh,
+    yssrthis_sq, yssrthis_sh, yffythis_sq,
+    yffythis_sh, yfjsthis_sq, yfjsthis_sh,
+    yssrjan_sq, yssrjan_sh, yffyjan_sq,
+    yffyjan_sh, yfjsjan_sq, yfjsjan_sh,
+    yssrqryj_jan, jssfcsj_jan, jssshsj_jan,
+    yssrfeb_sq, yssrfeb_sh, yffyfeb_sq,
+    yffyfeb_sh, yfjsfeb_sq, yfjsfeb_sh,
+    yssrqryj_feb, jssfcsj_feb, jssshsj_feb,
+    yssrmar_sq, yssrmar_sh, yffymar_sq,
+    yffymar_sh, yfjsmar_sq, yfjsmar_sh,
+    yssrqryj_mar, jssfcsj_mar, jssshsj_mar,
+    yssrapr_sq, yssrapr_sh, yffyapr_sq,
+    yffyapr_sh, yfjsapr_sq, yfjsapr_sh,
+    yssrqryj_apr, jssfcsj_apr, jssshsj_apr,
+    yssrmay_sq, yssrmay_sh, yffymay_sq,
+    yffymay_sh, yfjsmay_sq, yfjsmay_sh,
+    yssrqryj_may, jssfcsj_may, jssshsj_may,
+    yssrjun_sq, yssrjun_sh, yffyjun_sq,
+    yffyjun_sh, yfjsjun_sq, yfjsjun_sh,
+    yssrqryj_jun, jssfcsj_jun, jssshsj_jun,
+    yssrjul_sq, yssrjul_sh, yffyjul_sq,
+    yffyjul_sh, yfjsjul_sq, yfjsjul_sh,
+    yssrqryj_jul, jssfcsj_jul, jssshsj_jul,
+    yssraug_sq, yssraug_sh, yffyaug_sq,
+    yffyaug_sh, yfjsaug_sq, yfjsaug_sh,
+    yssrqryj_aug, jssfcsj_aug, jssshsj_aug,
+    yssrsep_sq, yssrsep_sh, yffysep_sq,
+    yffysep_sh, yfjssep_sq, yfjssep_sh,
+    yssrqryj_sep, jssfcsj_sep, jssshsj_sep,
+    yssroct_sq, yssroct_sh, yffyoct_sq,
+    yffyoct_sh, yfjsoct_sq, yfjsoct_sh,
+    yssrqryj_oct, jssfcsj_oct, jssshsj_oct,
+    yssrnov_sq, yssrnov_sh, yffynov_sq,
+    yffynov_sh, yfjsnov_sq, yfjsnov_sh,
+    yssrqryj_nov, jssfcsj_nov, jssshsj_nov,
+    yssrdec_sq, yssrdec_sh, yffydec_sq,
+    yffydec_sh, yfjsdec_sq, yfjsdec_sh,
+    yssrqryj_dec, jssfcsj_dec, jssshsj_dec,
+    yjsstotal_sq, yjsstotal_sh, sjfytotal_sq,
+    sjfytotal_sh, sjjstotal_sq, sjjstotal_sh,
+    yjssbef_sq, yjssbef_sh, sjfybef_sq,
+    sjfybef_sh, sjjsbef_sq, sjjsbef_sh,
+    yjssthis_sq, yjssthis_sh, sjfythis_sq,
+    sjfythis_sh, sjjsthis_sq, sjjsthis_sh,
+    yjssjan_sq, yjssjan_sh, sjfyjan_sq,
+    sjfyjan_sh, sjjsjan_sq, sjjsjan_sh,
+    yjssfeb_sq, yjssfeb_sh, sjfyfeb_sq,
+    sjfyfeb_sh, sjjsfeb_sq, sjjsfeb_sh,
+    yjssmar_sq, yjssmar_sh, sjfymar_sq,
+    sjfymar_sh, sjjsmar_sq, sjjsmar_sh,
+    yjssapr_sq, yjssapr_sh, sjfyapr_sq,
+    sjfyapr_sh, sjjsapr_sq, sjjsapr_sh,
+    yjssmay_sq, yjssmay_sh, sjfymay_sq,
+    sjfymay_sh, sjjsmay_sq, sjjsmay_sh,
+    yjssjun_sq, yjssjun_sh, sjfyjun_sq,
+    sjfyjun_sh, sjjsjun_sq, sjjsjun_sh,
+    yjssjul_sq, yjssjul_sh, sjfyjul_sq,
+    sjfyjul_sh, sjjsjul_sq, sjjsjul_sh,
+    yjssaug_sq, yjssaug_sh, sjfyaug_sq,
+    sjfyaug_sh, sjjsaug_sq, sjjsaug_sh,
+    yjsssep_sq, yjsssep_sh, sjfysep_sq,
+    sjfysep_sh, sjjssep_sq, sjjssep_sh,
+    yjssoct_sq, yjssoct_sh, sjfyoct_sq,
+    sjfyoct_sh, sjjsoct_sq, sjjsoct_sh,
+    yjssnov_sq, yjssnov_sh, sjfynov_sq,
+    sjfynov_sh, sjjsnov_sq, sjjsnov_sh,
+    yjssdec_sq, yjssdec_sh, sjfydec_sq,
+    sjfydec_sh, sjjsdec_sq, sjjsdec_sh,
+    gwyjtotal, tjyjtotal, datecreate
+    )
+    values (#{id,jdbcType=INTEGER}, #{yearly,jdbcType=VARCHAR}, #{accountProject,jdbcType=VARCHAR},
+    #{accountProjectNo,jdbcType=VARCHAR}, #{yjgsqyName,jdbcType=VARCHAR}, #{yjgsqyCode,jdbcType=VARCHAR},
+    #{yjgsareaName,jdbcType=VARCHAR}, #{yjgsareaCode,jdbcType=VARCHAR}, #{yjgssybName,jdbcType=VARCHAR},
+    #{yjgssybCode,jdbcType=VARCHAR}, #{yjgscsName,jdbcType=VARCHAR}, #{yjgscsCode,jdbcType=VARCHAR},
+    #{yjszcsName,jdbcType=VARCHAR}, #{yjszcsid,jdbcType=VARCHAR}, #{yjgszxName,jdbcType=VARCHAR},
+    #{yjgszxid,jdbcType=VARCHAR}, #{srgscsName,jdbcType=VARCHAR}, #{srgscsCode,jdbcType=VARCHAR},
+    #{srgszxName,jdbcType=VARCHAR}, #{srgsbmName,jdbcType=VARCHAR}, #{kfsName,jdbcType=VARCHAR},
+    #{htjfName,jdbcType=VARCHAR}, #{reportNo,jdbcType=VARCHAR}, #{projectNo,jdbcType=VARCHAR},
+    #{estateName,jdbcType=VARCHAR}, #{reportDate,jdbcType=VARCHAR}, #{dealDate,jdbcType=VARCHAR},
+    #{qkdzrq,jdbcType=VARCHAR}, #{srlxName,jdbcType=VARCHAR}, #{kscqfyje,jdbcType=VARCHAR},
+    #{fysc,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR}, #{obj01,jdbcType=VARCHAR}, #{obj02,jdbcType=VARCHAR},
+    #{obj03,jdbcType=VARCHAR}, #{obj04,jdbcType=VARCHAR}, #{obj05,jdbcType=VARCHAR},
+    #{obj06,jdbcType=VARCHAR}, #{obj07,jdbcType=VARCHAR}, #{obj08,jdbcType=VARCHAR},
+    #{obj09,jdbcType=VARCHAR}, #{obj10,jdbcType=VARCHAR}, #{obj11,jdbcType=VARCHAR},
+    #{obj12,jdbcType=VARCHAR}, #{obj13,jdbcType=VARCHAR}, #{obj14,jdbcType=VARCHAR},
+    #{obj15,jdbcType=VARCHAR}, #{obj16,jdbcType=VARCHAR}, #{obj17,jdbcType=VARCHAR},
+    #{obj18,jdbcType=VARCHAR}, #{obj19,jdbcType=VARCHAR}, #{obj20,jdbcType=VARCHAR},
+    #{yjsrtotal_sq,jdbcType=DECIMAL}, #{yjsrtotal_sh,jdbcType=DECIMAL}, #{yjfytotal_sq,jdbcType=DECIMAL},
+    #{yjfytotal_sh,jdbcType=DECIMAL}, #{cxjstotal_sq,jdbcType=DECIMAL}, #{cxjstotal_sh,jdbcType=DECIMAL},
+    #{yjsrbef_sq,jdbcType=DECIMAL}, #{yjsrbef_sh,jdbcType=DECIMAL}, #{yjfybef_sq,jdbcType=DECIMAL},
+    #{yjfybef_sh,jdbcType=DECIMAL}, #{cxjsbef_sq,jdbcType=DECIMAL}, #{cxjsbef_sh,jdbcType=DECIMAL},
+    #{yjsrthis_sq,jdbcType=DECIMAL}, #{yjsrthis_sh,jdbcType=DECIMAL}, #{yjfythis_sq,jdbcType=DECIMAL},
+    #{yjfythis_sh,jdbcType=DECIMAL}, #{cxjsthis_sq,jdbcType=DECIMAL}, #{cxjsthis_sh,jdbcType=DECIMAL},
+    #{yjsrjan_sq,jdbcType=DECIMAL}, #{yjsrjan_sh,jdbcType=DECIMAL}, #{yjfyjan_sq,jdbcType=DECIMAL},
+    #{yjfyjan_sh,jdbcType=DECIMAL}, #{cxjsjan_sq,jdbcType=DECIMAL}, #{cxjsjan_sh,jdbcType=DECIMAL},
+    #{yjsrfeb_sq,jdbcType=DECIMAL}, #{yjsrfeb_sh,jdbcType=DECIMAL}, #{yjfyfeb_sq,jdbcType=DECIMAL},
+    #{yjfyfeb_sh,jdbcType=DECIMAL}, #{cxjsfeb_sq,jdbcType=DECIMAL}, #{cxjsfeb_sh,jdbcType=DECIMAL},
+    #{yjsrmar_sq,jdbcType=DECIMAL}, #{yjsrmar_sh,jdbcType=DECIMAL}, #{yjfymar_sq,jdbcType=DECIMAL},
+    #{yjfymar_sh,jdbcType=DECIMAL}, #{cxjsmar_sq,jdbcType=DECIMAL}, #{cxjsmar_sh,jdbcType=DECIMAL},
+    #{yjsrapr_sq,jdbcType=DECIMAL}, #{yjsrapr_sh,jdbcType=DECIMAL}, #{yjfyapr_sq,jdbcType=DECIMAL},
+    #{yjfyapr_sh,jdbcType=DECIMAL}, #{cxjsapr_sq,jdbcType=DECIMAL}, #{cxjsapr_sh,jdbcType=DECIMAL},
+    #{yjsrmay_sq,jdbcType=DECIMAL}, #{yjsrmay_sh,jdbcType=DECIMAL}, #{yjfymay_sq,jdbcType=DECIMAL},
+    #{yjfymay_sh,jdbcType=DECIMAL}, #{cxjsmay_sq,jdbcType=DECIMAL}, #{cxjsmay_sh,jdbcType=DECIMAL},
+    #{yjsrjun_sq,jdbcType=DECIMAL}, #{yjsrjun_sh,jdbcType=DECIMAL}, #{yjfyjun_sq,jdbcType=DECIMAL},
+    #{yjfyjun_sh,jdbcType=DECIMAL}, #{cxjsjun_sq,jdbcType=DECIMAL}, #{cxjsjun_sh,jdbcType=DECIMAL},
+    #{yjsrjul_sq,jdbcType=DECIMAL}, #{yjsrjul_sh,jdbcType=DECIMAL}, #{yjfyjul_sq,jdbcType=DECIMAL},
+    #{yjfyjul_sh,jdbcType=DECIMAL}, #{cxjsjul_sq,jdbcType=DECIMAL}, #{cxjsjul_sh,jdbcType=DECIMAL},
+    #{yjsraug_sq,jdbcType=DECIMAL}, #{yjsraug_sh,jdbcType=DECIMAL}, #{yjfyaug_sq,jdbcType=DECIMAL},
+    #{yjfyaug_sh,jdbcType=DECIMAL}, #{cxjsaug_sq,jdbcType=DECIMAL}, #{cxjsaug_sh,jdbcType=DECIMAL},
+    #{yjsrsep_sq,jdbcType=DECIMAL}, #{yjsrsep_sh,jdbcType=DECIMAL}, #{yjfysep_sq,jdbcType=DECIMAL},
+    #{yjfysep_sh,jdbcType=DECIMAL}, #{cxjssep_sq,jdbcType=DECIMAL}, #{cxjssep_sh,jdbcType=DECIMAL},
+    #{yjsroct_sq,jdbcType=DECIMAL}, #{yjsroct_sh,jdbcType=DECIMAL}, #{yjfyoct_sq,jdbcType=DECIMAL},
+    #{yjfyoct_sh,jdbcType=DECIMAL}, #{cxjsoct_sq,jdbcType=DECIMAL}, #{cxjsoct_sh,jdbcType=DECIMAL},
+    #{yjsrnov_sq,jdbcType=DECIMAL}, #{yjsrnov_sh,jdbcType=DECIMAL}, #{yjfynov_sq,jdbcType=DECIMAL},
+    #{yjfynov_sh,jdbcType=DECIMAL}, #{cxjsnov_sq,jdbcType=DECIMAL}, #{cxjsnov_sh,jdbcType=DECIMAL},
+    #{yjsrdec_sq,jdbcType=DECIMAL}, #{yjsrdec_sh,jdbcType=DECIMAL}, #{yjfydec_sq,jdbcType=DECIMAL},
+    #{yjfydec_sh,jdbcType=DECIMAL}, #{cxjsdec_sq,jdbcType=DECIMAL}, #{cxjsdec_sh,jdbcType=DECIMAL},
+    #{yssrtotal_sq,jdbcType=DECIMAL}, #{yssrtotal_sh,jdbcType=DECIMAL}, #{yffytotal_sq,jdbcType=DECIMAL},
+    #{yffytotal_sh,jdbcType=DECIMAL}, #{yfjstotal_sq,jdbcType=DECIMAL}, #{yfjstotal_sh,jdbcType=DECIMAL},
+    #{yssrbef_sq,jdbcType=DECIMAL}, #{yssrbef_sh,jdbcType=DECIMAL}, #{yffybef_sq,jdbcType=DECIMAL},
+    #{yffybef_sh,jdbcType=DECIMAL}, #{yfjsbef_sq,jdbcType=DECIMAL}, #{yfjsbef_sh,jdbcType=DECIMAL},
+    #{yssrthis_sq,jdbcType=DECIMAL}, #{yssrthis_sh,jdbcType=DECIMAL}, #{yffythis_sq,jdbcType=DECIMAL},
+    #{yffythis_sh,jdbcType=DECIMAL}, #{yfjsthis_sq,jdbcType=DECIMAL}, #{yfjsthis_sh,jdbcType=DECIMAL},
+    #{yssrjan_sq,jdbcType=DECIMAL}, #{yssrjan_sh,jdbcType=DECIMAL}, #{yffyjan_sq,jdbcType=DECIMAL},
+    #{yffyjan_sh,jdbcType=DECIMAL}, #{yfjsjan_sq,jdbcType=DECIMAL}, #{yfjsjan_sh,jdbcType=DECIMAL},
+    #{yssrqryj_jan,jdbcType=VARCHAR}, #{jssfcsj_jan,jdbcType=VARCHAR}, #{jssshsj_jan,jdbcType=VARCHAR},
+    #{yssrfeb_sq,jdbcType=DECIMAL}, #{yssrfeb_sh,jdbcType=DECIMAL}, #{yffyfeb_sq,jdbcType=DECIMAL},
+    #{yffyfeb_sh,jdbcType=DECIMAL}, #{yfjsfeb_sq,jdbcType=DECIMAL}, #{yfjsfeb_sh,jdbcType=DECIMAL},
+    #{yssrqryj_feb,jdbcType=VARCHAR}, #{jssfcsj_feb,jdbcType=VARCHAR}, #{jssshsj_feb,jdbcType=VARCHAR},
+    #{yssrmar_sq,jdbcType=DECIMAL}, #{yssrmar_sh,jdbcType=DECIMAL}, #{yffymar_sq,jdbcType=DECIMAL},
+    #{yffymar_sh,jdbcType=DECIMAL}, #{yfjsmar_sq,jdbcType=DECIMAL}, #{yfjsmar_sh,jdbcType=DECIMAL},
+    #{yssrqryj_mar,jdbcType=VARCHAR}, #{jssfcsj_mar,jdbcType=VARCHAR}, #{jssshsj_mar,jdbcType=VARCHAR},
+    #{yssrapr_sq,jdbcType=DECIMAL}, #{yssrapr_sh,jdbcType=DECIMAL}, #{yffyapr_sq,jdbcType=DECIMAL},
+    #{yffyapr_sh,jdbcType=DECIMAL}, #{yfjsapr_sq,jdbcType=DECIMAL}, #{yfjsapr_sh,jdbcType=DECIMAL},
+    #{yssrqryj_apr,jdbcType=VARCHAR}, #{jssfcsj_apr,jdbcType=VARCHAR}, #{jssshsj_apr,jdbcType=VARCHAR},
+    #{yssrmay_sq,jdbcType=DECIMAL}, #{yssrmay_sh,jdbcType=DECIMAL}, #{yffymay_sq,jdbcType=DECIMAL},
+    #{yffymay_sh,jdbcType=DECIMAL}, #{yfjsmay_sq,jdbcType=DECIMAL}, #{yfjsmay_sh,jdbcType=DECIMAL},
+    #{yssrqryj_may,jdbcType=VARCHAR}, #{jssfcsj_may,jdbcType=VARCHAR}, #{jssshsj_may,jdbcType=VARCHAR},
+    #{yssrjun_sq,jdbcType=DECIMAL}, #{yssrjun_sh,jdbcType=DECIMAL}, #{yffyjun_sq,jdbcType=DECIMAL},
+    #{yffyjun_sh,jdbcType=DECIMAL}, #{yfjsjun_sq,jdbcType=DECIMAL}, #{yfjsjun_sh,jdbcType=DECIMAL},
+    #{yssrqryj_jun,jdbcType=VARCHAR}, #{jssfcsj_jun,jdbcType=VARCHAR}, #{jssshsj_jun,jdbcType=VARCHAR},
+    #{yssrjul_sq,jdbcType=DECIMAL}, #{yssrjul_sh,jdbcType=DECIMAL}, #{yffyjul_sq,jdbcType=DECIMAL},
+    #{yffyjul_sh,jdbcType=DECIMAL}, #{yfjsjul_sq,jdbcType=DECIMAL}, #{yfjsjul_sh,jdbcType=DECIMAL},
+    #{yssrqryj_jul,jdbcType=VARCHAR}, #{jssfcsj_jul,jdbcType=VARCHAR}, #{jssshsj_jul,jdbcType=VARCHAR},
+    #{yssraug_sq,jdbcType=DECIMAL}, #{yssraug_sh,jdbcType=DECIMAL}, #{yffyaug_sq,jdbcType=DECIMAL},
+    #{yffyaug_sh,jdbcType=DECIMAL}, #{yfjsaug_sq,jdbcType=DECIMAL}, #{yfjsaug_sh,jdbcType=DECIMAL},
+    #{yssrqryj_aug,jdbcType=VARCHAR}, #{jssfcsj_aug,jdbcType=VARCHAR}, #{jssshsj_aug,jdbcType=VARCHAR},
+    #{yssrsep_sq,jdbcType=DECIMAL}, #{yssrsep_sh,jdbcType=DECIMAL}, #{yffysep_sq,jdbcType=DECIMAL},
+    #{yffysep_sh,jdbcType=DECIMAL}, #{yfjssep_sq,jdbcType=DECIMAL}, #{yfjssep_sh,jdbcType=DECIMAL},
+    #{yssrqryj_sep,jdbcType=VARCHAR}, #{jssfcsj_sep,jdbcType=VARCHAR}, #{jssshsj_sep,jdbcType=VARCHAR},
+    #{yssroct_sq,jdbcType=DECIMAL}, #{yssroct_sh,jdbcType=DECIMAL}, #{yffyoct_sq,jdbcType=DECIMAL},
+    #{yffyoct_sh,jdbcType=DECIMAL}, #{yfjsoct_sq,jdbcType=DECIMAL}, #{yfjsoct_sh,jdbcType=DECIMAL},
+    #{yssrqryj_oct,jdbcType=VARCHAR}, #{jssfcsj_oct,jdbcType=VARCHAR}, #{jssshsj_oct,jdbcType=VARCHAR},
+    #{yssrnov_sq,jdbcType=DECIMAL}, #{yssrnov_sh,jdbcType=DECIMAL}, #{yffynov_sq,jdbcType=DECIMAL},
+    #{yffynov_sh,jdbcType=DECIMAL}, #{yfjsnov_sq,jdbcType=DECIMAL}, #{yfjsnov_sh,jdbcType=DECIMAL},
+    #{yssrqryj_nov,jdbcType=VARCHAR}, #{jssfcsj_nov,jdbcType=VARCHAR}, #{jssshsj_nov,jdbcType=VARCHAR},
+    #{yssrdec_sq,jdbcType=DECIMAL}, #{yssrdec_sh,jdbcType=DECIMAL}, #{yffydec_sq,jdbcType=DECIMAL},
+    #{yffydec_sh,jdbcType=DECIMAL}, #{yfjsdec_sq,jdbcType=DECIMAL}, #{yfjsdec_sh,jdbcType=DECIMAL},
+    #{yssrqryj_dec,jdbcType=VARCHAR}, #{jssfcsj_dec,jdbcType=VARCHAR}, #{jssshsj_dec,jdbcType=VARCHAR},
+    #{yjsstotal_sq,jdbcType=DECIMAL}, #{yjsstotal_sh,jdbcType=DECIMAL}, #{sjfytotal_sq,jdbcType=DECIMAL},
+    #{sjfytotal_sh,jdbcType=DECIMAL}, #{sjjstotal_sq,jdbcType=DECIMAL}, #{sjjstotal_sh,jdbcType=DECIMAL},
+    #{yjssbef_sq,jdbcType=DECIMAL}, #{yjssbef_sh,jdbcType=DECIMAL}, #{sjfybef_sq,jdbcType=DECIMAL},
+    #{sjfybef_sh,jdbcType=DECIMAL}, #{sjjsbef_sq,jdbcType=DECIMAL}, #{sjjsbef_sh,jdbcType=DECIMAL},
+    #{yjssthis_sq,jdbcType=DECIMAL}, #{yjssthis_sh,jdbcType=DECIMAL}, #{sjfythis_sq,jdbcType=DECIMAL},
+    #{sjfythis_sh,jdbcType=DECIMAL}, #{sjjsthis_sq,jdbcType=DECIMAL}, #{sjjsthis_sh,jdbcType=DECIMAL},
+    #{yjssjan_sq,jdbcType=DECIMAL}, #{yjssjan_sh,jdbcType=DECIMAL}, #{sjfyjan_sq,jdbcType=DECIMAL},
+    #{sjfyjan_sh,jdbcType=DECIMAL}, #{sjjsjan_sq,jdbcType=DECIMAL}, #{sjjsjan_sh,jdbcType=DECIMAL},
+    #{yjssfeb_sq,jdbcType=DECIMAL}, #{yjssfeb_sh,jdbcType=DECIMAL}, #{sjfyfeb_sq,jdbcType=DECIMAL},
+    #{sjfyfeb_sh,jdbcType=DECIMAL}, #{sjjsfeb_sq,jdbcType=DECIMAL}, #{sjjsfeb_sh,jdbcType=DECIMAL},
+    #{yjssmar_sq,jdbcType=DECIMAL}, #{yjssmar_sh,jdbcType=DECIMAL}, #{sjfymar_sq,jdbcType=DECIMAL},
+    #{sjfymar_sh,jdbcType=DECIMAL}, #{sjjsmar_sq,jdbcType=DECIMAL}, #{sjjsmar_sh,jdbcType=DECIMAL},
+    #{yjssapr_sq,jdbcType=DECIMAL}, #{yjssapr_sh,jdbcType=DECIMAL}, #{sjfyapr_sq,jdbcType=DECIMAL},
+    #{sjfyapr_sh,jdbcType=DECIMAL}, #{sjjsapr_sq,jdbcType=DECIMAL}, #{sjjsapr_sh,jdbcType=DECIMAL},
+    #{yjssmay_sq,jdbcType=DECIMAL}, #{yjssmay_sh,jdbcType=DECIMAL}, #{sjfymay_sq,jdbcType=DECIMAL},
+    #{sjfymay_sh,jdbcType=DECIMAL}, #{sjjsmay_sq,jdbcType=DECIMAL}, #{sjjsmay_sh,jdbcType=DECIMAL},
+    #{yjssjun_sq,jdbcType=DECIMAL}, #{yjssjun_sh,jdbcType=DECIMAL}, #{sjfyjun_sq,jdbcType=DECIMAL},
+    #{sjfyjun_sh,jdbcType=DECIMAL}, #{sjjsjun_sq,jdbcType=DECIMAL}, #{sjjsjun_sh,jdbcType=DECIMAL},
+    #{yjssjul_sq,jdbcType=DECIMAL}, #{yjssjul_sh,jdbcType=DECIMAL}, #{sjfyjul_sq,jdbcType=DECIMAL},
+    #{sjfyjul_sh,jdbcType=DECIMAL}, #{sjjsjul_sq,jdbcType=DECIMAL}, #{sjjsjul_sh,jdbcType=DECIMAL},
+    #{yjssaug_sq,jdbcType=DECIMAL}, #{yjssaug_sh,jdbcType=DECIMAL}, #{sjfyaug_sq,jdbcType=DECIMAL},
+    #{sjfyaug_sh,jdbcType=DECIMAL}, #{sjjsaug_sq,jdbcType=DECIMAL}, #{sjjsaug_sh,jdbcType=DECIMAL},
+    #{yjsssep_sq,jdbcType=DECIMAL}, #{yjsssep_sh,jdbcType=DECIMAL}, #{sjfysep_sq,jdbcType=DECIMAL},
+    #{sjfysep_sh,jdbcType=DECIMAL}, #{sjjssep_sq,jdbcType=DECIMAL}, #{sjjssep_sh,jdbcType=DECIMAL},
+    #{yjssoct_sq,jdbcType=DECIMAL}, #{yjssoct_sh,jdbcType=DECIMAL}, #{sjfyoct_sq,jdbcType=DECIMAL},
+    #{sjfyoct_sh,jdbcType=DECIMAL}, #{sjjsoct_sq,jdbcType=DECIMAL}, #{sjjsoct_sh,jdbcType=DECIMAL},
+    #{yjssnov_sq,jdbcType=DECIMAL}, #{yjssnov_sh,jdbcType=DECIMAL}, #{sjfynov_sq,jdbcType=DECIMAL},
+    #{sjfynov_sh,jdbcType=DECIMAL}, #{sjjsnov_sq,jdbcType=DECIMAL}, #{sjjsnov_sh,jdbcType=DECIMAL},
+    #{yjssdec_sq,jdbcType=DECIMAL}, #{yjssdec_sh,jdbcType=DECIMAL}, #{sjfydec_sq,jdbcType=DECIMAL},
+    #{sjfydec_sh,jdbcType=DECIMAL}, #{sjjsdec_sq,jdbcType=DECIMAL}, #{sjjsdec_sh,jdbcType=DECIMAL},
+    #{gwyjtotal,jdbcType=DECIMAL}, #{tjyjtotal,jdbcType=DECIMAL}, #{datecreate,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.report.rptQTLnkDetail.model.RptQTLnkDetail" >
+    insert into RPT_QT_LnkDetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="yearly != null" >
+        yearly,
+      </if>
+      <if test="accountProject != null" >
+        accountProject,
+      </if>
+      <if test="accountProjectNo != null" >
+        accountProjectNo,
+      </if>
+      <if test="yjgsqyName != null" >
+        yjgsqyName,
+      </if>
+      <if test="yjgsqyCode != null" >
+        yjgsqyCode,
+      </if>
+      <if test="yjgsareaName != null" >
+        yjgsareaName,
+      </if>
+      <if test="yjgsareaCode != null" >
+        yjgsareaCode,
+      </if>
+      <if test="yjgssybName != null" >
+        yjgssybName,
+      </if>
+      <if test="yjgssybCode != null" >
+        yjgssybCode,
+      </if>
+      <if test="yjgscsName != null" >
+        yjgscsName,
+      </if>
+      <if test="yjgscsCode != null" >
+        yjgscsCode,
+      </if>
+      <if test="yjszcsName != null" >
+        yjszcsName,
+      </if>
+      <if test="yjszcsid != null" >
+        yjszcsid,
+      </if>
+      <if test="yjgszxName != null" >
+        yjgszxName,
+      </if>
+      <if test="yjgszxid != null" >
+        yjgszxid,
+      </if>
+      <if test="srgscsName != null" >
+        srgscsName,
+      </if>
+      <if test="srgscsCode != null" >
+        srgscsCode,
+      </if>
+      <if test="srgszxName != null" >
+        srgszxName,
+      </if>
+      <if test="srgsbmName != null" >
+        srgsbmName,
+      </if>
+      <if test="kfsName != null" >
+        kfsName,
+      </if>
+      <if test="htjfName != null" >
+        htjfName,
+      </if>
+      <if test="reportNo != null" >
+        reportNo,
+      </if>
+      <if test="projectNo != null" >
+        projectNo,
+      </if>
+      <if test="estateName != null" >
+        estateName,
+      </if>
+      <if test="reportDate != null" >
+        reportDate,
+      </if>
+      <if test="dealDate != null" >
+        dealDate,
+      </if>
+      <if test="qkdzrq != null" >
+        qkdzrq,
+      </if>
+      <if test="srlxName != null" >
+        srlxName,
+      </if>
+      <if test="kscqfyje != null" >
+        kscqfyje,
+      </if>
+      <if test="fysc != null" >
+        fysc,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="obj01 != null" >
+        obj01,
+      </if>
+      <if test="obj02 != null" >
+        obj02,
+      </if>
+      <if test="obj03 != null" >
+        obj03,
+      </if>
+      <if test="obj04 != null" >
+        obj04,
+      </if>
+      <if test="obj05 != null" >
+        obj05,
+      </if>
+      <if test="obj06 != null" >
+        obj06,
+      </if>
+      <if test="obj07 != null" >
+        obj07,
+      </if>
+      <if test="obj08 != null" >
+        obj08,
+      </if>
+      <if test="obj09 != null" >
+        obj09,
+      </if>
+      <if test="obj10 != null" >
+        obj10,
+      </if>
+      <if test="obj11 != null" >
+        obj11,
+      </if>
+      <if test="obj12 != null" >
+        obj12,
+      </if>
+      <if test="obj13 != null" >
+        obj13,
+      </if>
+      <if test="obj14 != null" >
+        obj14,
+      </if>
+      <if test="obj15 != null" >
+        obj15,
+      </if>
+      <if test="obj16 != null" >
+        obj16,
+      </if>
+      <if test="obj17 != null" >
+        obj17,
+      </if>
+      <if test="obj18 != null" >
+        obj18,
+      </if>
+      <if test="obj19 != null" >
+        obj19,
+      </if>
+      <if test="obj20 != null" >
+        obj20,
+      </if>
+      <if test="yjsrtotal_sq != null" >
+        yjsrtotal_sq,
+      </if>
+      <if test="yjsrtotal_sh != null" >
+        yjsrtotal_sh,
+      </if>
+      <if test="yjfytotal_sq != null" >
+        yjfytotal_sq,
+      </if>
+      <if test="yjfytotal_sh != null" >
+        yjfytotal_sh,
+      </if>
+      <if test="cxjstotal_sq != null" >
+        cxjstotal_sq,
+      </if>
+      <if test="cxjstotal_sh != null" >
+        cxjstotal_sh,
+      </if>
+      <if test="yjsrbef_sq != null" >
+        yjsrbef_sq,
+      </if>
+      <if test="yjsrbef_sh != null" >
+        yjsrbef_sh,
+      </if>
+      <if test="yjfybef_sq != null" >
+        yjfybef_sq,
+      </if>
+      <if test="yjfybef_sh != null" >
+        yjfybef_sh,
+      </if>
+      <if test="cxjsbef_sq != null" >
+        cxjsbef_sq,
+      </if>
+      <if test="cxjsbef_sh != null" >
+        cxjsbef_sh,
+      </if>
+      <if test="yjsrthis_sq != null" >
+        yjsrthis_sq,
+      </if>
+      <if test="yjsrthis_sh != null" >
+        yjsrthis_sh,
+      </if>
+      <if test="yjfythis_sq != null" >
+        yjfythis_sq,
+      </if>
+      <if test="yjfythis_sh != null" >
+        yjfythis_sh,
+      </if>
+      <if test="cxjsthis_sq != null" >
+        cxjsthis_sq,
+      </if>
+      <if test="cxjsthis_sh != null" >
+        cxjsthis_sh,
+      </if>
+      <if test="yjsrjan_sq != null" >
+        yjsrjan_sq,
+      </if>
+      <if test="yjsrjan_sh != null" >
+        yjsrjan_sh,
+      </if>
+      <if test="yjfyjan_sq != null" >
+        yjfyjan_sq,
+      </if>
+      <if test="yjfyjan_sh != null" >
+        yjfyjan_sh,
+      </if>
+      <if test="cxjsjan_sq != null" >
+        cxjsjan_sq,
+      </if>
+      <if test="cxjsjan_sh != null" >
+        cxjsjan_sh,
+      </if>
+      <if test="yjsrfeb_sq != null" >
+        yjsrfeb_sq,
+      </if>
+      <if test="yjsrfeb_sh != null" >
+        yjsrfeb_sh,
+      </if>
+      <if test="yjfyfeb_sq != null" >
+        yjfyfeb_sq,
+      </if>
+      <if test="yjfyfeb_sh != null" >
+        yjfyfeb_sh,
+      </if>
+      <if test="cxjsfeb_sq != null" >
+        cxjsfeb_sq,
+      </if>
+      <if test="cxjsfeb_sh != null" >
+        cxjsfeb_sh,
+      </if>
+      <if test="yjsrmar_sq != null" >
+        yjsrmar_sq,
+      </if>
+      <if test="yjsrmar_sh != null" >
+        yjsrmar_sh,
+      </if>
+      <if test="yjfymar_sq != null" >
+        yjfymar_sq,
+      </if>
+      <if test="yjfymar_sh != null" >
+        yjfymar_sh,
+      </if>
+      <if test="cxjsmar_sq != null" >
+        cxjsmar_sq,
+      </if>
+      <if test="cxjsmar_sh != null" >
+        cxjsmar_sh,
+      </if>
+      <if test="yjsrapr_sq != null" >
+        yjsrapr_sq,
+      </if>
+      <if test="yjsrapr_sh != null" >
+        yjsrapr_sh,
+      </if>
+      <if test="yjfyapr_sq != null" >
+        yjfyapr_sq,
+      </if>
+      <if test="yjfyapr_sh != null" >
+        yjfyapr_sh,
+      </if>
+      <if test="cxjsapr_sq != null" >
+        cxjsapr_sq,
+      </if>
+      <if test="cxjsapr_sh != null" >
+        cxjsapr_sh,
+      </if>
+      <if test="yjsrmay_sq != null" >
+        yjsrmay_sq,
+      </if>
+      <if test="yjsrmay_sh != null" >
+        yjsrmay_sh,
+      </if>
+      <if test="yjfymay_sq != null" >
+        yjfymay_sq,
+      </if>
+      <if test="yjfymay_sh != null" >
+        yjfymay_sh,
+      </if>
+      <if test="cxjsmay_sq != null" >
+        cxjsmay_sq,
+      </if>
+      <if test="cxjsmay_sh != null" >
+        cxjsmay_sh,
+      </if>
+      <if test="yjsrjun_sq != null" >
+        yjsrjun_sq,
+      </if>
+      <if test="yjsrjun_sh != null" >
+        yjsrjun_sh,
+      </if>
+      <if test="yjfyjun_sq != null" >
+        yjfyjun_sq,
+      </if>
+      <if test="yjfyjun_sh != null" >
+        yjfyjun_sh,
+      </if>
+      <if test="cxjsjun_sq != null" >
+        cxjsjun_sq,
+      </if>
+      <if test="cxjsjun_sh != null" >
+        cxjsjun_sh,
+      </if>
+      <if test="yjsrjul_sq != null" >
+        yjsrjul_sq,
+      </if>
+      <if test="yjsrjul_sh != null" >
+        yjsrjul_sh,
+      </if>
+      <if test="yjfyjul_sq != null" >
+        yjfyjul_sq,
+      </if>
+      <if test="yjfyjul_sh != null" >
+        yjfyjul_sh,
+      </if>
+      <if test="cxjsjul_sq != null" >
+        cxjsjul_sq,
+      </if>
+      <if test="cxjsjul_sh != null" >
+        cxjsjul_sh,
+      </if>
+      <if test="yjsraug_sq != null" >
+        yjsraug_sq,
+      </if>
+      <if test="yjsraug_sh != null" >
+        yjsraug_sh,
+      </if>
+      <if test="yjfyaug_sq != null" >
+        yjfyaug_sq,
+      </if>
+      <if test="yjfyaug_sh != null" >
+        yjfyaug_sh,
+      </if>
+      <if test="cxjsaug_sq != null" >
+        cxjsaug_sq,
+      </if>
+      <if test="cxjsaug_sh != null" >
+        cxjsaug_sh,
+      </if>
+      <if test="yjsrsep_sq != null" >
+        yjsrsep_sq,
+      </if>
+      <if test="yjsrsep_sh != null" >
+        yjsrsep_sh,
+      </if>
+      <if test="yjfysep_sq != null" >
+        yjfysep_sq,
+      </if>
+      <if test="yjfysep_sh != null" >
+        yjfysep_sh,
+      </if>
+      <if test="cxjssep_sq != null" >
+        cxjssep_sq,
+      </if>
+      <if test="cxjssep_sh != null" >
+        cxjssep_sh,
+      </if>
+      <if test="yjsroct_sq != null" >
+        yjsroct_sq,
+      </if>
+      <if test="yjsroct_sh != null" >
+        yjsroct_sh,
+      </if>
+      <if test="yjfyoct_sq != null" >
+        yjfyoct_sq,
+      </if>
+      <if test="yjfyoct_sh != null" >
+        yjfyoct_sh,
+      </if>
+      <if test="cxjsoct_sq != null" >
+        cxjsoct_sq,
+      </if>
+      <if test="cxjsoct_sh != null" >
+        cxjsoct_sh,
+      </if>
+      <if test="yjsrnov_sq != null" >
+        yjsrnov_sq,
+      </if>
+      <if test="yjsrnov_sh != null" >
+        yjsrnov_sh,
+      </if>
+      <if test="yjfynov_sq != null" >
+        yjfynov_sq,
+      </if>
+      <if test="yjfynov_sh != null" >
+        yjfynov_sh,
+      </if>
+      <if test="cxjsnov_sq != null" >
+        cxjsnov_sq,
+      </if>
+      <if test="cxjsnov_sh != null" >
+        cxjsnov_sh,
+      </if>
+      <if test="yjsrdec_sq != null" >
+        yjsrdec_sq,
+      </if>
+      <if test="yjsrdec_sh != null" >
+        yjsrdec_sh,
+      </if>
+      <if test="yjfydec_sq != null" >
+        yjfydec_sq,
+      </if>
+      <if test="yjfydec_sh != null" >
+        yjfydec_sh,
+      </if>
+      <if test="cxjsdec_sq != null" >
+        cxjsdec_sq,
+      </if>
+      <if test="cxjsdec_sh != null" >
+        cxjsdec_sh,
+      </if>
+      <if test="yssrtotal_sq != null" >
+        yssrtotal_sq,
+      </if>
+      <if test="yssrtotal_sh != null" >
+        yssrtotal_sh,
+      </if>
+      <if test="yffytotal_sq != null" >
+        yffytotal_sq,
+      </if>
+      <if test="yffytotal_sh != null" >
+        yffytotal_sh,
+      </if>
+      <if test="yfjstotal_sq != null" >
+        yfjstotal_sq,
+      </if>
+      <if test="yfjstotal_sh != null" >
+        yfjstotal_sh,
+      </if>
+      <if test="yssrbef_sq != null" >
+        yssrbef_sq,
+      </if>
+      <if test="yssrbef_sh != null" >
+        yssrbef_sh,
+      </if>
+      <if test="yffybef_sq != null" >
+        yffybef_sq,
+      </if>
+      <if test="yffybef_sh != null" >
+        yffybef_sh,
+      </if>
+      <if test="yfjsbef_sq != null" >
+        yfjsbef_sq,
+      </if>
+      <if test="yfjsbef_sh != null" >
+        yfjsbef_sh,
+      </if>
+      <if test="yssrthis_sq != null" >
+        yssrthis_sq,
+      </if>
+      <if test="yssrthis_sh != null" >
+        yssrthis_sh,
+      </if>
+      <if test="yffythis_sq != null" >
+        yffythis_sq,
+      </if>
+      <if test="yffythis_sh != null" >
+        yffythis_sh,
+      </if>
+      <if test="yfjsthis_sq != null" >
+        yfjsthis_sq,
+      </if>
+      <if test="yfjsthis_sh != null" >
+        yfjsthis_sh,
+      </if>
+      <if test="yssrjan_sq != null" >
+        yssrjan_sq,
+      </if>
+      <if test="yssrjan_sh != null" >
+        yssrjan_sh,
+      </if>
+      <if test="yffyjan_sq != null" >
+        yffyjan_sq,
+      </if>
+      <if test="yffyjan_sh != null" >
+        yffyjan_sh,
+      </if>
+      <if test="yfjsjan_sq != null" >
+        yfjsjan_sq,
+      </if>
+      <if test="yfjsjan_sh != null" >
+        yfjsjan_sh,
+      </if>
+      <if test="yssrqryj_jan != null" >
+        yssrqryj_jan,
+      </if>
+      <if test="jssfcsj_jan != null" >
+        jssfcsj_jan,
+      </if>
+      <if test="jssshsj_jan != null" >
+        jssshsj_jan,
+      </if>
+      <if test="yssrfeb_sq != null" >
+        yssrfeb_sq,
+      </if>
+      <if test="yssrfeb_sh != null" >
+        yssrfeb_sh,
+      </if>
+      <if test="yffyfeb_sq != null" >
+        yffyfeb_sq,
+      </if>
+      <if test="yffyfeb_sh != null" >
+        yffyfeb_sh,
+      </if>
+      <if test="yfjsfeb_sq != null" >
+        yfjsfeb_sq,
+      </if>
+      <if test="yfjsfeb_sh != null" >
+        yfjsfeb_sh,
+      </if>
+      <if test="yssrqryj_feb != null" >
+        yssrqryj_feb,
+      </if>
+      <if test="jssfcsj_feb != null" >
+        jssfcsj_feb,
+      </if>
+      <if test="jssshsj_feb != null" >
+        jssshsj_feb,
+      </if>
+      <if test="yssrmar_sq != null" >
+        yssrmar_sq,
+      </if>
+      <if test="yssrmar_sh != null" >
+        yssrmar_sh,
+      </if>
+      <if test="yffymar_sq != null" >
+        yffymar_sq,
+      </if>
+      <if test="yffymar_sh != null" >
+        yffymar_sh,
+      </if>
+      <if test="yfjsmar_sq != null" >
+        yfjsmar_sq,
+      </if>
+      <if test="yfjsmar_sh != null" >
+        yfjsmar_sh,
+      </if>
+      <if test="yssrqryj_mar != null" >
+        yssrqryj_mar,
+      </if>
+      <if test="jssfcsj_mar != null" >
+        jssfcsj_mar,
+      </if>
+      <if test="jssshsj_mar != null" >
+        jssshsj_mar,
+      </if>
+      <if test="yssrapr_sq != null" >
+        yssrapr_sq,
+      </if>
+      <if test="yssrapr_sh != null" >
+        yssrapr_sh,
+      </if>
+      <if test="yffyapr_sq != null" >
+        yffyapr_sq,
+      </if>
+      <if test="yffyapr_sh != null" >
+        yffyapr_sh,
+      </if>
+      <if test="yfjsapr_sq != null" >
+        yfjsapr_sq,
+      </if>
+      <if test="yfjsapr_sh != null" >
+        yfjsapr_sh,
+      </if>
+      <if test="yssrqryj_apr != null" >
+        yssrqryj_apr,
+      </if>
+      <if test="jssfcsj_apr != null" >
+        jssfcsj_apr,
+      </if>
+      <if test="jssshsj_apr != null" >
+        jssshsj_apr,
+      </if>
+      <if test="yssrmay_sq != null" >
+        yssrmay_sq,
+      </if>
+      <if test="yssrmay_sh != null" >
+        yssrmay_sh,
+      </if>
+      <if test="yffymay_sq != null" >
+        yffymay_sq,
+      </if>
+      <if test="yffymay_sh != null" >
+        yffymay_sh,
+      </if>
+      <if test="yfjsmay_sq != null" >
+        yfjsmay_sq,
+      </if>
+      <if test="yfjsmay_sh != null" >
+        yfjsmay_sh,
+      </if>
+      <if test="yssrqryj_may != null" >
+        yssrqryj_may,
+      </if>
+      <if test="jssfcsj_may != null" >
+        jssfcsj_may,
+      </if>
+      <if test="jssshsj_may != null" >
+        jssshsj_may,
+      </if>
+      <if test="yssrjun_sq != null" >
+        yssrjun_sq,
+      </if>
+      <if test="yssrjun_sh != null" >
+        yssrjun_sh,
+      </if>
+      <if test="yffyjun_sq != null" >
+        yffyjun_sq,
+      </if>
+      <if test="yffyjun_sh != null" >
+        yffyjun_sh,
+      </if>
+      <if test="yfjsjun_sq != null" >
+        yfjsjun_sq,
+      </if>
+      <if test="yfjsjun_sh != null" >
+        yfjsjun_sh,
+      </if>
+      <if test="yssrqryj_jun != null" >
+        yssrqryj_jun,
+      </if>
+      <if test="jssfcsj_jun != null" >
+        jssfcsj_jun,
+      </if>
+      <if test="jssshsj_jun != null" >
+        jssshsj_jun,
+      </if>
+      <if test="yssrjul_sq != null" >
+        yssrjul_sq,
+      </if>
+      <if test="yssrjul_sh != null" >
+        yssrjul_sh,
+      </if>
+      <if test="yffyjul_sq != null" >
+        yffyjul_sq,
+      </if>
+      <if test="yffyjul_sh != null" >
+        yffyjul_sh,
+      </if>
+      <if test="yfjsjul_sq != null" >
+        yfjsjul_sq,
+      </if>
+      <if test="yfjsjul_sh != null" >
+        yfjsjul_sh,
+      </if>
+      <if test="yssrqryj_jul != null" >
+        yssrqryj_jul,
+      </if>
+      <if test="jssfcsj_jul != null" >
+        jssfcsj_jul,
+      </if>
+      <if test="jssshsj_jul != null" >
+        jssshsj_jul,
+      </if>
+      <if test="yssraug_sq != null" >
+        yssraug_sq,
+      </if>
+      <if test="yssraug_sh != null" >
+        yssraug_sh,
+      </if>
+      <if test="yffyaug_sq != null" >
+        yffyaug_sq,
+      </if>
+      <if test="yffyaug_sh != null" >
+        yffyaug_sh,
+      </if>
+      <if test="yfjsaug_sq != null" >
+        yfjsaug_sq,
+      </if>
+      <if test="yfjsaug_sh != null" >
+        yfjsaug_sh,
+      </if>
+      <if test="yssrqryj_aug != null" >
+        yssrqryj_aug,
+      </if>
+      <if test="jssfcsj_aug != null" >
+        jssfcsj_aug,
+      </if>
+      <if test="jssshsj_aug != null" >
+        jssshsj_aug,
+      </if>
+      <if test="yssrsep_sq != null" >
+        yssrsep_sq,
+      </if>
+      <if test="yssrsep_sh != null" >
+        yssrsep_sh,
+      </if>
+      <if test="yffysep_sq != null" >
+        yffysep_sq,
+      </if>
+      <if test="yffysep_sh != null" >
+        yffysep_sh,
+      </if>
+      <if test="yfjssep_sq != null" >
+        yfjssep_sq,
+      </if>
+      <if test="yfjssep_sh != null" >
+        yfjssep_sh,
+      </if>
+      <if test="yssrqryj_sep != null" >
+        yssrqryj_sep,
+      </if>
+      <if test="jssfcsj_sep != null" >
+        jssfcsj_sep,
+      </if>
+      <if test="jssshsj_sep != null" >
+        jssshsj_sep,
+      </if>
+      <if test="yssroct_sq != null" >
+        yssroct_sq,
+      </if>
+      <if test="yssroct_sh != null" >
+        yssroct_sh,
+      </if>
+      <if test="yffyoct_sq != null" >
+        yffyoct_sq,
+      </if>
+      <if test="yffyoct_sh != null" >
+        yffyoct_sh,
+      </if>
+      <if test="yfjsoct_sq != null" >
+        yfjsoct_sq,
+      </if>
+      <if test="yfjsoct_sh != null" >
+        yfjsoct_sh,
+      </if>
+      <if test="yssrqryj_oct != null" >
+        yssrqryj_oct,
+      </if>
+      <if test="jssfcsj_oct != null" >
+        jssfcsj_oct,
+      </if>
+      <if test="jssshsj_oct != null" >
+        jssshsj_oct,
+      </if>
+      <if test="yssrnov_sq != null" >
+        yssrnov_sq,
+      </if>
+      <if test="yssrnov_sh != null" >
+        yssrnov_sh,
+      </if>
+      <if test="yffynov_sq != null" >
+        yffynov_sq,
+      </if>
+      <if test="yffynov_sh != null" >
+        yffynov_sh,
+      </if>
+      <if test="yfjsnov_sq != null" >
+        yfjsnov_sq,
+      </if>
+      <if test="yfjsnov_sh != null" >
+        yfjsnov_sh,
+      </if>
+      <if test="yssrqryj_nov != null" >
+        yssrqryj_nov,
+      </if>
+      <if test="jssfcsj_nov != null" >
+        jssfcsj_nov,
+      </if>
+      <if test="jssshsj_nov != null" >
+        jssshsj_nov,
+      </if>
+      <if test="yssrdec_sq != null" >
+        yssrdec_sq,
+      </if>
+      <if test="yssrdec_sh != null" >
+        yssrdec_sh,
+      </if>
+      <if test="yffydec_sq != null" >
+        yffydec_sq,
+      </if>
+      <if test="yffydec_sh != null" >
+        yffydec_sh,
+      </if>
+      <if test="yfjsdec_sq != null" >
+        yfjsdec_sq,
+      </if>
+      <if test="yfjsdec_sh != null" >
+        yfjsdec_sh,
+      </if>
+      <if test="yssrqryj_dec != null" >
+        yssrqryj_dec,
+      </if>
+      <if test="jssfcsj_dec != null" >
+        jssfcsj_dec,
+      </if>
+      <if test="jssshsj_dec != null" >
+        jssshsj_dec,
+      </if>
+      <if test="yjsstotal_sq != null" >
+        yjsstotal_sq,
+      </if>
+      <if test="yjsstotal_sh != null" >
+        yjsstotal_sh,
+      </if>
+      <if test="sjfytotal_sq != null" >
+        sjfytotal_sq,
+      </if>
+      <if test="sjfytotal_sh != null" >
+        sjfytotal_sh,
+      </if>
+      <if test="sjjstotal_sq != null" >
+        sjjstotal_sq,
+      </if>
+      <if test="sjjstotal_sh != null" >
+        sjjstotal_sh,
+      </if>
+      <if test="yjssbef_sq != null" >
+        yjssbef_sq,
+      </if>
+      <if test="yjssbef_sh != null" >
+        yjssbef_sh,
+      </if>
+      <if test="sjfybef_sq != null" >
+        sjfybef_sq,
+      </if>
+      <if test="sjfybef_sh != null" >
+        sjfybef_sh,
+      </if>
+      <if test="sjjsbef_sq != null" >
+        sjjsbef_sq,
+      </if>
+      <if test="sjjsbef_sh != null" >
+        sjjsbef_sh,
+      </if>
+      <if test="yjssthis_sq != null" >
+        yjssthis_sq,
+      </if>
+      <if test="yjssthis_sh != null" >
+        yjssthis_sh,
+      </if>
+      <if test="sjfythis_sq != null" >
+        sjfythis_sq,
+      </if>
+      <if test="sjfythis_sh != null" >
+        sjfythis_sh,
+      </if>
+      <if test="sjjsthis_sq != null" >
+        sjjsthis_sq,
+      </if>
+      <if test="sjjsthis_sh != null" >
+        sjjsthis_sh,
+      </if>
+      <if test="yjssjan_sq != null" >
+        yjssjan_sq,
+      </if>
+      <if test="yjssjan_sh != null" >
+        yjssjan_sh,
+      </if>
+      <if test="sjfyjan_sq != null" >
+        sjfyjan_sq,
+      </if>
+      <if test="sjfyjan_sh != null" >
+        sjfyjan_sh,
+      </if>
+      <if test="sjjsjan_sq != null" >
+        sjjsjan_sq,
+      </if>
+      <if test="sjjsjan_sh != null" >
+        sjjsjan_sh,
+      </if>
+      <if test="yjssfeb_sq != null" >
+        yjssfeb_sq,
+      </if>
+      <if test="yjssfeb_sh != null" >
+        yjssfeb_sh,
+      </if>
+      <if test="sjfyfeb_sq != null" >
+        sjfyfeb_sq,
+      </if>
+      <if test="sjfyfeb_sh != null" >
+        sjfyfeb_sh,
+      </if>
+      <if test="sjjsfeb_sq != null" >
+        sjjsfeb_sq,
+      </if>
+      <if test="sjjsfeb_sh != null" >
+        sjjsfeb_sh,
+      </if>
+      <if test="yjssmar_sq != null" >
+        yjssmar_sq,
+      </if>
+      <if test="yjssmar_sh != null" >
+        yjssmar_sh,
+      </if>
+      <if test="sjfymar_sq != null" >
+        sjfymar_sq,
+      </if>
+      <if test="sjfymar_sh != null" >
+        sjfymar_sh,
+      </if>
+      <if test="sjjsmar_sq != null" >
+        sjjsmar_sq,
+      </if>
+      <if test="sjjsmar_sh != null" >
+        sjjsmar_sh,
+      </if>
+      <if test="yjssapr_sq != null" >
+        yjssapr_sq,
+      </if>
+      <if test="yjssapr_sh != null" >
+        yjssapr_sh,
+      </if>
+      <if test="sjfyapr_sq != null" >
+        sjfyapr_sq,
+      </if>
+      <if test="sjfyapr_sh != null" >
+        sjfyapr_sh,
+      </if>
+      <if test="sjjsapr_sq != null" >
+        sjjsapr_sq,
+      </if>
+      <if test="sjjsapr_sh != null" >
+        sjjsapr_sh,
+      </if>
+      <if test="yjssmay_sq != null" >
+        yjssmay_sq,
+      </if>
+      <if test="yjssmay_sh != null" >
+        yjssmay_sh,
+      </if>
+      <if test="sjfymay_sq != null" >
+        sjfymay_sq,
+      </if>
+      <if test="sjfymay_sh != null" >
+        sjfymay_sh,
+      </if>
+      <if test="sjjsmay_sq != null" >
+        sjjsmay_sq,
+      </if>
+      <if test="sjjsmay_sh != null" >
+        sjjsmay_sh,
+      </if>
+      <if test="yjssjun_sq != null" >
+        yjssjun_sq,
+      </if>
+      <if test="yjssjun_sh != null" >
+        yjssjun_sh,
+      </if>
+      <if test="sjfyjun_sq != null" >
+        sjfyjun_sq,
+      </if>
+      <if test="sjfyjun_sh != null" >
+        sjfyjun_sh,
+      </if>
+      <if test="sjjsjun_sq != null" >
+        sjjsjun_sq,
+      </if>
+      <if test="sjjsjun_sh != null" >
+        sjjsjun_sh,
+      </if>
+      <if test="yjssjul_sq != null" >
+        yjssjul_sq,
+      </if>
+      <if test="yjssjul_sh != null" >
+        yjssjul_sh,
+      </if>
+      <if test="sjfyjul_sq != null" >
+        sjfyjul_sq,
+      </if>
+      <if test="sjfyjul_sh != null" >
+        sjfyjul_sh,
+      </if>
+      <if test="sjjsjul_sq != null" >
+        sjjsjul_sq,
+      </if>
+      <if test="sjjsjul_sh != null" >
+        sjjsjul_sh,
+      </if>
+      <if test="yjssaug_sq != null" >
+        yjssaug_sq,
+      </if>
+      <if test="yjssaug_sh != null" >
+        yjssaug_sh,
+      </if>
+      <if test="sjfyaug_sq != null" >
+        sjfyaug_sq,
+      </if>
+      <if test="sjfyaug_sh != null" >
+        sjfyaug_sh,
+      </if>
+      <if test="sjjsaug_sq != null" >
+        sjjsaug_sq,
+      </if>
+      <if test="sjjsaug_sh != null" >
+        sjjsaug_sh,
+      </if>
+      <if test="yjsssep_sq != null" >
+        yjsssep_sq,
+      </if>
+      <if test="yjsssep_sh != null" >
+        yjsssep_sh,
+      </if>
+      <if test="sjfysep_sq != null" >
+        sjfysep_sq,
+      </if>
+      <if test="sjfysep_sh != null" >
+        sjfysep_sh,
+      </if>
+      <if test="sjjssep_sq != null" >
+        sjjssep_sq,
+      </if>
+      <if test="sjjssep_sh != null" >
+        sjjssep_sh,
+      </if>
+      <if test="yjssoct_sq != null" >
+        yjssoct_sq,
+      </if>
+      <if test="yjssoct_sh != null" >
+        yjssoct_sh,
+      </if>
+      <if test="sjfyoct_sq != null" >
+        sjfyoct_sq,
+      </if>
+      <if test="sjfyoct_sh != null" >
+        sjfyoct_sh,
+      </if>
+      <if test="sjjsoct_sq != null" >
+        sjjsoct_sq,
+      </if>
+      <if test="sjjsoct_sh != null" >
+        sjjsoct_sh,
+      </if>
+      <if test="yjssnov_sq != null" >
+        yjssnov_sq,
+      </if>
+      <if test="yjssnov_sh != null" >
+        yjssnov_sh,
+      </if>
+      <if test="sjfynov_sq != null" >
+        sjfynov_sq,
+      </if>
+      <if test="sjfynov_sh != null" >
+        sjfynov_sh,
+      </if>
+      <if test="sjjsnov_sq != null" >
+        sjjsnov_sq,
+      </if>
+      <if test="sjjsnov_sh != null" >
+        sjjsnov_sh,
+      </if>
+      <if test="yjssdec_sq != null" >
+        yjssdec_sq,
+      </if>
+      <if test="yjssdec_sh != null" >
+        yjssdec_sh,
+      </if>
+      <if test="sjfydec_sq != null" >
+        sjfydec_sq,
+      </if>
+      <if test="sjfydec_sh != null" >
+        sjfydec_sh,
+      </if>
+      <if test="sjjsdec_sq != null" >
+        sjjsdec_sq,
+      </if>
+      <if test="sjjsdec_sh != null" >
+        sjjsdec_sh,
+      </if>
+      <if test="gwyjtotal != null" >
+        gwyjtotal,
+      </if>
+      <if test="tjyjtotal != null" >
+        tjyjtotal,
+      </if>
+      <if test="datecreate != null" >
+        datecreate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="yearly != null" >
+        #{yearly,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProject != null" >
+        #{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null" >
+        #{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsqyName != null" >
+        #{yjgsqyName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsqyCode != null" >
+        #{yjgsqyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsareaName != null" >
+        #{yjgsareaName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsareaCode != null" >
+        #{yjgsareaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgssybName != null" >
+        #{yjgssybName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgssybCode != null" >
+        #{yjgssybCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgscsName != null" >
+        #{yjgscsName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgscsCode != null" >
+        #{yjgscsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjszcsName != null" >
+        #{yjszcsName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjszcsid != null" >
+        #{yjszcsid,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgszxName != null" >
+        #{yjgszxName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgszxid != null" >
+        #{yjgszxid,jdbcType=VARCHAR},
+      </if>
+      <if test="srgscsName != null" >
+        #{srgscsName,jdbcType=VARCHAR},
+      </if>
+      <if test="srgscsCode != null" >
+        #{srgscsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="srgszxName != null" >
+        #{srgszxName,jdbcType=VARCHAR},
+      </if>
+      <if test="srgsbmName != null" >
+        #{srgsbmName,jdbcType=VARCHAR},
+      </if>
+      <if test="kfsName != null" >
+        #{kfsName,jdbcType=VARCHAR},
+      </if>
+      <if test="htjfName != null" >
+        #{htjfName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportNo != null" >
+        #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null" >
+        #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateName != null" >
+        #{estateName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null" >
+        #{reportDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDate != null" >
+        #{dealDate,jdbcType=VARCHAR},
+      </if>
+      <if test="qkdzrq != null" >
+        #{qkdzrq,jdbcType=VARCHAR},
+      </if>
+      <if test="srlxName != null" >
+        #{srlxName,jdbcType=VARCHAR},
+      </if>
+      <if test="kscqfyje != null" >
+        #{kscqfyje,jdbcType=VARCHAR},
+      </if>
+      <if test="fysc != null" >
+        #{fysc,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=VARCHAR},
+      </if>
+      <if test="obj01 != null" >
+        #{obj01,jdbcType=VARCHAR},
+      </if>
+      <if test="obj02 != null" >
+        #{obj02,jdbcType=VARCHAR},
+      </if>
+      <if test="obj03 != null" >
+        #{obj03,jdbcType=VARCHAR},
+      </if>
+      <if test="obj04 != null" >
+        #{obj04,jdbcType=VARCHAR},
+      </if>
+      <if test="obj05 != null" >
+        #{obj05,jdbcType=VARCHAR},
+      </if>
+      <if test="obj06 != null" >
+        #{obj06,jdbcType=VARCHAR},
+      </if>
+      <if test="obj07 != null" >
+        #{obj07,jdbcType=VARCHAR},
+      </if>
+      <if test="obj08 != null" >
+        #{obj08,jdbcType=VARCHAR},
+      </if>
+      <if test="obj09 != null" >
+        #{obj09,jdbcType=VARCHAR},
+      </if>
+      <if test="obj10 != null" >
+        #{obj10,jdbcType=VARCHAR},
+      </if>
+      <if test="obj11 != null" >
+        #{obj11,jdbcType=VARCHAR},
+      </if>
+      <if test="obj12 != null" >
+        #{obj12,jdbcType=VARCHAR},
+      </if>
+      <if test="obj13 != null" >
+        #{obj13,jdbcType=VARCHAR},
+      </if>
+      <if test="obj14 != null" >
+        #{obj14,jdbcType=VARCHAR},
+      </if>
+      <if test="obj15 != null" >
+        #{obj15,jdbcType=VARCHAR},
+      </if>
+      <if test="obj16 != null" >
+        #{obj16,jdbcType=VARCHAR},
+      </if>
+      <if test="obj17 != null" >
+        #{obj17,jdbcType=VARCHAR},
+      </if>
+      <if test="obj18 != null" >
+        #{obj18,jdbcType=VARCHAR},
+      </if>
+      <if test="obj19 != null" >
+        #{obj19,jdbcType=VARCHAR},
+      </if>
+      <if test="obj20 != null" >
+        #{obj20,jdbcType=VARCHAR},
+      </if>
+      <if test="yjsrtotal_sq != null" >
+        #{yjsrtotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrtotal_sh != null" >
+        #{yjsrtotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfytotal_sq != null" >
+        #{yjfytotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfytotal_sh != null" >
+        #{yjfytotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjstotal_sq != null" >
+        #{cxjstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjstotal_sh != null" >
+        #{cxjstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrbef_sq != null" >
+        #{yjsrbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrbef_sh != null" >
+        #{yjsrbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfybef_sq != null" >
+        #{yjfybef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfybef_sh != null" >
+        #{yjfybef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsbef_sq != null" >
+        #{cxjsbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsbef_sh != null" >
+        #{cxjsbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrthis_sq != null" >
+        #{yjsrthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrthis_sh != null" >
+        #{yjsrthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfythis_sq != null" >
+        #{yjfythis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfythis_sh != null" >
+        #{yjfythis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsthis_sq != null" >
+        #{cxjsthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsthis_sh != null" >
+        #{cxjsthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjan_sq != null" >
+        #{yjsrjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjan_sh != null" >
+        #{yjsrjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjan_sq != null" >
+        #{yjfyjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjan_sh != null" >
+        #{yjfyjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjan_sq != null" >
+        #{cxjsjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjan_sh != null" >
+        #{cxjsjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrfeb_sq != null" >
+        #{yjsrfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrfeb_sh != null" >
+        #{yjsrfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyfeb_sq != null" >
+        #{yjfyfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyfeb_sh != null" >
+        #{yjfyfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsfeb_sq != null" >
+        #{cxjsfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsfeb_sh != null" >
+        #{cxjsfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmar_sq != null" >
+        #{yjsrmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmar_sh != null" >
+        #{yjsrmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymar_sq != null" >
+        #{yjfymar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymar_sh != null" >
+        #{yjfymar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmar_sq != null" >
+        #{cxjsmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmar_sh != null" >
+        #{cxjsmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrapr_sq != null" >
+        #{yjsrapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrapr_sh != null" >
+        #{yjsrapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyapr_sq != null" >
+        #{yjfyapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyapr_sh != null" >
+        #{yjfyapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsapr_sq != null" >
+        #{cxjsapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsapr_sh != null" >
+        #{cxjsapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmay_sq != null" >
+        #{yjsrmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmay_sh != null" >
+        #{yjsrmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymay_sq != null" >
+        #{yjfymay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymay_sh != null" >
+        #{yjfymay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmay_sq != null" >
+        #{cxjsmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmay_sh != null" >
+        #{cxjsmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjun_sq != null" >
+        #{yjsrjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjun_sh != null" >
+        #{yjsrjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjun_sq != null" >
+        #{yjfyjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjun_sh != null" >
+        #{yjfyjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjun_sq != null" >
+        #{cxjsjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjun_sh != null" >
+        #{cxjsjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjul_sq != null" >
+        #{yjsrjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjul_sh != null" >
+        #{yjsrjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjul_sq != null" >
+        #{yjfyjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjul_sh != null" >
+        #{yjfyjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjul_sq != null" >
+        #{cxjsjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjul_sh != null" >
+        #{cxjsjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsraug_sq != null" >
+        #{yjsraug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsraug_sh != null" >
+        #{yjsraug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyaug_sq != null" >
+        #{yjfyaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyaug_sh != null" >
+        #{yjfyaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsaug_sq != null" >
+        #{cxjsaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsaug_sh != null" >
+        #{cxjsaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrsep_sq != null" >
+        #{yjsrsep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrsep_sh != null" >
+        #{yjsrsep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfysep_sq != null" >
+        #{yjfysep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfysep_sh != null" >
+        #{yjfysep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjssep_sq != null" >
+        #{cxjssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjssep_sh != null" >
+        #{cxjssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsroct_sq != null" >
+        #{yjsroct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsroct_sh != null" >
+        #{yjsroct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyoct_sq != null" >
+        #{yjfyoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyoct_sh != null" >
+        #{yjfyoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsoct_sq != null" >
+        #{cxjsoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsoct_sh != null" >
+        #{cxjsoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrnov_sq != null" >
+        #{yjsrnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrnov_sh != null" >
+        #{yjsrnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfynov_sq != null" >
+        #{yjfynov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfynov_sh != null" >
+        #{yjfynov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsnov_sq != null" >
+        #{cxjsnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsnov_sh != null" >
+        #{cxjsnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrdec_sq != null" >
+        #{yjsrdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrdec_sh != null" >
+        #{yjsrdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfydec_sq != null" >
+        #{yjfydec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfydec_sh != null" >
+        #{yjfydec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsdec_sq != null" >
+        #{cxjsdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsdec_sh != null" >
+        #{cxjsdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrtotal_sq != null" >
+        #{yssrtotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrtotal_sh != null" >
+        #{yssrtotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffytotal_sq != null" >
+        #{yffytotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffytotal_sh != null" >
+        #{yffytotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjstotal_sq != null" >
+        #{yfjstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjstotal_sh != null" >
+        #{yfjstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrbef_sq != null" >
+        #{yssrbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrbef_sh != null" >
+        #{yssrbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffybef_sq != null" >
+        #{yffybef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffybef_sh != null" >
+        #{yffybef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsbef_sq != null" >
+        #{yfjsbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsbef_sh != null" >
+        #{yfjsbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrthis_sq != null" >
+        #{yssrthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrthis_sh != null" >
+        #{yssrthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffythis_sq != null" >
+        #{yffythis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffythis_sh != null" >
+        #{yffythis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsthis_sq != null" >
+        #{yfjsthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsthis_sh != null" >
+        #{yfjsthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjan_sq != null" >
+        #{yssrjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjan_sh != null" >
+        #{yssrjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjan_sq != null" >
+        #{yffyjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjan_sh != null" >
+        #{yffyjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjan_sq != null" >
+        #{yfjsjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjan_sh != null" >
+        #{yfjsjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_jan != null" >
+        #{yssrqryj_jan,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_jan != null" >
+        #{jssfcsj_jan,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_jan != null" >
+        #{jssshsj_jan,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrfeb_sq != null" >
+        #{yssrfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrfeb_sh != null" >
+        #{yssrfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyfeb_sq != null" >
+        #{yffyfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyfeb_sh != null" >
+        #{yffyfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsfeb_sq != null" >
+        #{yfjsfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsfeb_sh != null" >
+        #{yfjsfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_feb != null" >
+        #{yssrqryj_feb,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_feb != null" >
+        #{jssfcsj_feb,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_feb != null" >
+        #{jssshsj_feb,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrmar_sq != null" >
+        #{yssrmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrmar_sh != null" >
+        #{yssrmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymar_sq != null" >
+        #{yffymar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymar_sh != null" >
+        #{yffymar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmar_sq != null" >
+        #{yfjsmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmar_sh != null" >
+        #{yfjsmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_mar != null" >
+        #{yssrqryj_mar,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_mar != null" >
+        #{jssfcsj_mar,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_mar != null" >
+        #{jssshsj_mar,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrapr_sq != null" >
+        #{yssrapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrapr_sh != null" >
+        #{yssrapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyapr_sq != null" >
+        #{yffyapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyapr_sh != null" >
+        #{yffyapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsapr_sq != null" >
+        #{yfjsapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsapr_sh != null" >
+        #{yfjsapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_apr != null" >
+        #{yssrqryj_apr,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_apr != null" >
+        #{jssfcsj_apr,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_apr != null" >
+        #{jssshsj_apr,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrmay_sq != null" >
+        #{yssrmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrmay_sh != null" >
+        #{yssrmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymay_sq != null" >
+        #{yffymay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymay_sh != null" >
+        #{yffymay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmay_sq != null" >
+        #{yfjsmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmay_sh != null" >
+        #{yfjsmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_may != null" >
+        #{yssrqryj_may,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_may != null" >
+        #{jssfcsj_may,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_may != null" >
+        #{jssshsj_may,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrjun_sq != null" >
+        #{yssrjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjun_sh != null" >
+        #{yssrjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjun_sq != null" >
+        #{yffyjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjun_sh != null" >
+        #{yffyjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjun_sq != null" >
+        #{yfjsjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjun_sh != null" >
+        #{yfjsjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_jun != null" >
+        #{yssrqryj_jun,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_jun != null" >
+        #{jssfcsj_jun,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_jun != null" >
+        #{jssshsj_jun,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrjul_sq != null" >
+        #{yssrjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjul_sh != null" >
+        #{yssrjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjul_sq != null" >
+        #{yffyjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjul_sh != null" >
+        #{yffyjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjul_sq != null" >
+        #{yfjsjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjul_sh != null" >
+        #{yfjsjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_jul != null" >
+        #{yssrqryj_jul,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_jul != null" >
+        #{jssfcsj_jul,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_jul != null" >
+        #{jssshsj_jul,jdbcType=VARCHAR},
+      </if>
+      <if test="yssraug_sq != null" >
+        #{yssraug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssraug_sh != null" >
+        #{yssraug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyaug_sq != null" >
+        #{yffyaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyaug_sh != null" >
+        #{yffyaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsaug_sq != null" >
+        #{yfjsaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsaug_sh != null" >
+        #{yfjsaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_aug != null" >
+        #{yssrqryj_aug,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_aug != null" >
+        #{jssfcsj_aug,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_aug != null" >
+        #{jssshsj_aug,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrsep_sq != null" >
+        #{yssrsep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrsep_sh != null" >
+        #{yssrsep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffysep_sq != null" >
+        #{yffysep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffysep_sh != null" >
+        #{yffysep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjssep_sq != null" >
+        #{yfjssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjssep_sh != null" >
+        #{yfjssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_sep != null" >
+        #{yssrqryj_sep,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_sep != null" >
+        #{jssfcsj_sep,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_sep != null" >
+        #{jssshsj_sep,jdbcType=VARCHAR},
+      </if>
+      <if test="yssroct_sq != null" >
+        #{yssroct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssroct_sh != null" >
+        #{yssroct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyoct_sq != null" >
+        #{yffyoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyoct_sh != null" >
+        #{yffyoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsoct_sq != null" >
+        #{yfjsoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsoct_sh != null" >
+        #{yfjsoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_oct != null" >
+        #{yssrqryj_oct,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_oct != null" >
+        #{jssfcsj_oct,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_oct != null" >
+        #{jssshsj_oct,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrnov_sq != null" >
+        #{yssrnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrnov_sh != null" >
+        #{yssrnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffynov_sq != null" >
+        #{yffynov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffynov_sh != null" >
+        #{yffynov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsnov_sq != null" >
+        #{yfjsnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsnov_sh != null" >
+        #{yfjsnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_nov != null" >
+        #{yssrqryj_nov,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_nov != null" >
+        #{jssfcsj_nov,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_nov != null" >
+        #{jssshsj_nov,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrdec_sq != null" >
+        #{yssrdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrdec_sh != null" >
+        #{yssrdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffydec_sq != null" >
+        #{yffydec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffydec_sh != null" >
+        #{yffydec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsdec_sq != null" >
+        #{yfjsdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsdec_sh != null" >
+        #{yfjsdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_dec != null" >
+        #{yssrqryj_dec,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_dec != null" >
+        #{jssfcsj_dec,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_dec != null" >
+        #{jssshsj_dec,jdbcType=VARCHAR},
+      </if>
+      <if test="yjsstotal_sq != null" >
+        #{yjsstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsstotal_sh != null" >
+        #{yjsstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfytotal_sq != null" >
+        #{sjfytotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfytotal_sh != null" >
+        #{sjfytotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjstotal_sq != null" >
+        #{sjjstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjstotal_sh != null" >
+        #{sjjstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssbef_sq != null" >
+        #{yjssbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssbef_sh != null" >
+        #{yjssbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfybef_sq != null" >
+        #{sjfybef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfybef_sh != null" >
+        #{sjfybef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsbef_sq != null" >
+        #{sjjsbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsbef_sh != null" >
+        #{sjjsbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssthis_sq != null" >
+        #{yjssthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssthis_sh != null" >
+        #{yjssthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfythis_sq != null" >
+        #{sjfythis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfythis_sh != null" >
+        #{sjfythis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsthis_sq != null" >
+        #{sjjsthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsthis_sh != null" >
+        #{sjjsthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjan_sq != null" >
+        #{yjssjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjan_sh != null" >
+        #{yjssjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjan_sq != null" >
+        #{sjfyjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjan_sh != null" >
+        #{sjfyjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjan_sq != null" >
+        #{sjjsjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjan_sh != null" >
+        #{sjjsjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssfeb_sq != null" >
+        #{yjssfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssfeb_sh != null" >
+        #{yjssfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyfeb_sq != null" >
+        #{sjfyfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyfeb_sh != null" >
+        #{sjfyfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsfeb_sq != null" >
+        #{sjjsfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsfeb_sh != null" >
+        #{sjjsfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmar_sq != null" >
+        #{yjssmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmar_sh != null" >
+        #{yjssmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymar_sq != null" >
+        #{sjfymar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymar_sh != null" >
+        #{sjfymar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmar_sq != null" >
+        #{sjjsmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmar_sh != null" >
+        #{sjjsmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssapr_sq != null" >
+        #{yjssapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssapr_sh != null" >
+        #{yjssapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyapr_sq != null" >
+        #{sjfyapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyapr_sh != null" >
+        #{sjfyapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsapr_sq != null" >
+        #{sjjsapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsapr_sh != null" >
+        #{sjjsapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmay_sq != null" >
+        #{yjssmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmay_sh != null" >
+        #{yjssmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymay_sq != null" >
+        #{sjfymay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymay_sh != null" >
+        #{sjfymay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmay_sq != null" >
+        #{sjjsmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmay_sh != null" >
+        #{sjjsmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjun_sq != null" >
+        #{yjssjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjun_sh != null" >
+        #{yjssjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjun_sq != null" >
+        #{sjfyjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjun_sh != null" >
+        #{sjfyjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjun_sq != null" >
+        #{sjjsjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjun_sh != null" >
+        #{sjjsjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjul_sq != null" >
+        #{yjssjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjul_sh != null" >
+        #{yjssjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjul_sq != null" >
+        #{sjfyjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjul_sh != null" >
+        #{sjfyjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjul_sq != null" >
+        #{sjjsjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjul_sh != null" >
+        #{sjjsjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssaug_sq != null" >
+        #{yjssaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssaug_sh != null" >
+        #{yjssaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyaug_sq != null" >
+        #{sjfyaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyaug_sh != null" >
+        #{sjfyaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsaug_sq != null" >
+        #{sjjsaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsaug_sh != null" >
+        #{sjjsaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsssep_sq != null" >
+        #{yjsssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsssep_sh != null" >
+        #{yjsssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfysep_sq != null" >
+        #{sjfysep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfysep_sh != null" >
+        #{sjfysep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjssep_sq != null" >
+        #{sjjssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjssep_sh != null" >
+        #{sjjssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssoct_sq != null" >
+        #{yjssoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssoct_sh != null" >
+        #{yjssoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyoct_sq != null" >
+        #{sjfyoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyoct_sh != null" >
+        #{sjfyoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsoct_sq != null" >
+        #{sjjsoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsoct_sh != null" >
+        #{sjjsoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssnov_sq != null" >
+        #{yjssnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssnov_sh != null" >
+        #{yjssnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfynov_sq != null" >
+        #{sjfynov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfynov_sh != null" >
+        #{sjfynov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsnov_sq != null" >
+        #{sjjsnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsnov_sh != null" >
+        #{sjjsnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssdec_sq != null" >
+        #{yjssdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssdec_sh != null" >
+        #{yjssdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfydec_sq != null" >
+        #{sjfydec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfydec_sh != null" >
+        #{sjfydec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsdec_sq != null" >
+        #{sjjsdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsdec_sh != null" >
+        #{sjjsdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="gwyjtotal != null" >
+        #{gwyjtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="tjyjtotal != null" >
+        #{tjyjtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="datecreate != null" >
+        #{datecreate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.report.rptQTLnkDetail.model.RptQTLnkDetail" >
+    update RPT_QT_LnkDetail
+    <set >
+      <if test="yearly != null" >
+        yearly = #{yearly,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProject != null" >
+        accountProject = #{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null" >
+        accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsqyName != null" >
+        yjgsqyName = #{yjgsqyName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsqyCode != null" >
+        yjgsqyCode = #{yjgsqyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsareaName != null" >
+        yjgsareaName = #{yjgsareaName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgsareaCode != null" >
+        yjgsareaCode = #{yjgsareaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgssybName != null" >
+        yjgssybName = #{yjgssybName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgssybCode != null" >
+        yjgssybCode = #{yjgssybCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgscsName != null" >
+        yjgscsName = #{yjgscsName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgscsCode != null" >
+        yjgscsCode = #{yjgscsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yjszcsName != null" >
+        yjszcsName = #{yjszcsName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjszcsid != null" >
+        yjszcsid = #{yjszcsid,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgszxName != null" >
+        yjgszxName = #{yjgszxName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjgszxid != null" >
+        yjgszxid = #{yjgszxid,jdbcType=VARCHAR},
+      </if>
+      <if test="srgscsName != null" >
+        srgscsName = #{srgscsName,jdbcType=VARCHAR},
+      </if>
+      <if test="srgscsCode != null" >
+        srgscsCode = #{srgscsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="srgszxName != null" >
+        srgszxName = #{srgszxName,jdbcType=VARCHAR},
+      </if>
+      <if test="srgsbmName != null" >
+        srgsbmName = #{srgsbmName,jdbcType=VARCHAR},
+      </if>
+      <if test="kfsName != null" >
+        kfsName = #{kfsName,jdbcType=VARCHAR},
+      </if>
+      <if test="htjfName != null" >
+        htjfName = #{htjfName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportNo != null" >
+        reportNo = #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null" >
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateName != null" >
+        estateName = #{estateName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null" >
+        reportDate = #{reportDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDate != null" >
+        dealDate = #{dealDate,jdbcType=VARCHAR},
+      </if>
+      <if test="qkdzrq != null" >
+        qkdzrq = #{qkdzrq,jdbcType=VARCHAR},
+      </if>
+      <if test="srlxName != null" >
+        srlxName = #{srlxName,jdbcType=VARCHAR},
+      </if>
+      <if test="kscqfyje != null" >
+        kscqfyje = #{kscqfyje,jdbcType=VARCHAR},
+      </if>
+      <if test="fysc != null" >
+        fysc = #{fysc,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=VARCHAR},
+      </if>
+      <if test="obj01 != null" >
+        obj01 = #{obj01,jdbcType=VARCHAR},
+      </if>
+      <if test="obj02 != null" >
+        obj02 = #{obj02,jdbcType=VARCHAR},
+      </if>
+      <if test="obj03 != null" >
+        obj03 = #{obj03,jdbcType=VARCHAR},
+      </if>
+      <if test="obj04 != null" >
+        obj04 = #{obj04,jdbcType=VARCHAR},
+      </if>
+      <if test="obj05 != null" >
+        obj05 = #{obj05,jdbcType=VARCHAR},
+      </if>
+      <if test="obj06 != null" >
+        obj06 = #{obj06,jdbcType=VARCHAR},
+      </if>
+      <if test="obj07 != null" >
+        obj07 = #{obj07,jdbcType=VARCHAR},
+      </if>
+      <if test="obj08 != null" >
+        obj08 = #{obj08,jdbcType=VARCHAR},
+      </if>
+      <if test="obj09 != null" >
+        obj09 = #{obj09,jdbcType=VARCHAR},
+      </if>
+      <if test="obj10 != null" >
+        obj10 = #{obj10,jdbcType=VARCHAR},
+      </if>
+      <if test="obj11 != null" >
+        obj11 = #{obj11,jdbcType=VARCHAR},
+      </if>
+      <if test="obj12 != null" >
+        obj12 = #{obj12,jdbcType=VARCHAR},
+      </if>
+      <if test="obj13 != null" >
+        obj13 = #{obj13,jdbcType=VARCHAR},
+      </if>
+      <if test="obj14 != null" >
+        obj14 = #{obj14,jdbcType=VARCHAR},
+      </if>
+      <if test="obj15 != null" >
+        obj15 = #{obj15,jdbcType=VARCHAR},
+      </if>
+      <if test="obj16 != null" >
+        obj16 = #{obj16,jdbcType=VARCHAR},
+      </if>
+      <if test="obj17 != null" >
+        obj17 = #{obj17,jdbcType=VARCHAR},
+      </if>
+      <if test="obj18 != null" >
+        obj18 = #{obj18,jdbcType=VARCHAR},
+      </if>
+      <if test="obj19 != null" >
+        obj19 = #{obj19,jdbcType=VARCHAR},
+      </if>
+      <if test="obj20 != null" >
+        obj20 = #{obj20,jdbcType=VARCHAR},
+      </if>
+      <if test="yjsrtotal_sq != null" >
+        yjsrtotal_sq = #{yjsrtotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrtotal_sh != null" >
+        yjsrtotal_sh = #{yjsrtotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfytotal_sq != null" >
+        yjfytotal_sq = #{yjfytotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfytotal_sh != null" >
+        yjfytotal_sh = #{yjfytotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjstotal_sq != null" >
+        cxjstotal_sq = #{cxjstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjstotal_sh != null" >
+        cxjstotal_sh = #{cxjstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrbef_sq != null" >
+        yjsrbef_sq = #{yjsrbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrbef_sh != null" >
+        yjsrbef_sh = #{yjsrbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfybef_sq != null" >
+        yjfybef_sq = #{yjfybef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfybef_sh != null" >
+        yjfybef_sh = #{yjfybef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsbef_sq != null" >
+        cxjsbef_sq = #{cxjsbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsbef_sh != null" >
+        cxjsbef_sh = #{cxjsbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrthis_sq != null" >
+        yjsrthis_sq = #{yjsrthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrthis_sh != null" >
+        yjsrthis_sh = #{yjsrthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfythis_sq != null" >
+        yjfythis_sq = #{yjfythis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfythis_sh != null" >
+        yjfythis_sh = #{yjfythis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsthis_sq != null" >
+        cxjsthis_sq = #{cxjsthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsthis_sh != null" >
+        cxjsthis_sh = #{cxjsthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjan_sq != null" >
+        yjsrjan_sq = #{yjsrjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjan_sh != null" >
+        yjsrjan_sh = #{yjsrjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjan_sq != null" >
+        yjfyjan_sq = #{yjfyjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjan_sh != null" >
+        yjfyjan_sh = #{yjfyjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjan_sq != null" >
+        cxjsjan_sq = #{cxjsjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjan_sh != null" >
+        cxjsjan_sh = #{cxjsjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrfeb_sq != null" >
+        yjsrfeb_sq = #{yjsrfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrfeb_sh != null" >
+        yjsrfeb_sh = #{yjsrfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyfeb_sq != null" >
+        yjfyfeb_sq = #{yjfyfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyfeb_sh != null" >
+        yjfyfeb_sh = #{yjfyfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsfeb_sq != null" >
+        cxjsfeb_sq = #{cxjsfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsfeb_sh != null" >
+        cxjsfeb_sh = #{cxjsfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmar_sq != null" >
+        yjsrmar_sq = #{yjsrmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmar_sh != null" >
+        yjsrmar_sh = #{yjsrmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymar_sq != null" >
+        yjfymar_sq = #{yjfymar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymar_sh != null" >
+        yjfymar_sh = #{yjfymar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmar_sq != null" >
+        cxjsmar_sq = #{cxjsmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmar_sh != null" >
+        cxjsmar_sh = #{cxjsmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrapr_sq != null" >
+        yjsrapr_sq = #{yjsrapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrapr_sh != null" >
+        yjsrapr_sh = #{yjsrapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyapr_sq != null" >
+        yjfyapr_sq = #{yjfyapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyapr_sh != null" >
+        yjfyapr_sh = #{yjfyapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsapr_sq != null" >
+        cxjsapr_sq = #{cxjsapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsapr_sh != null" >
+        cxjsapr_sh = #{cxjsapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmay_sq != null" >
+        yjsrmay_sq = #{yjsrmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrmay_sh != null" >
+        yjsrmay_sh = #{yjsrmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymay_sq != null" >
+        yjfymay_sq = #{yjfymay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfymay_sh != null" >
+        yjfymay_sh = #{yjfymay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmay_sq != null" >
+        cxjsmay_sq = #{cxjsmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsmay_sh != null" >
+        cxjsmay_sh = #{cxjsmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjun_sq != null" >
+        yjsrjun_sq = #{yjsrjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjun_sh != null" >
+        yjsrjun_sh = #{yjsrjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjun_sq != null" >
+        yjfyjun_sq = #{yjfyjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjun_sh != null" >
+        yjfyjun_sh = #{yjfyjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjun_sq != null" >
+        cxjsjun_sq = #{cxjsjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjun_sh != null" >
+        cxjsjun_sh = #{cxjsjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjul_sq != null" >
+        yjsrjul_sq = #{yjsrjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrjul_sh != null" >
+        yjsrjul_sh = #{yjsrjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjul_sq != null" >
+        yjfyjul_sq = #{yjfyjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyjul_sh != null" >
+        yjfyjul_sh = #{yjfyjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjul_sq != null" >
+        cxjsjul_sq = #{cxjsjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsjul_sh != null" >
+        cxjsjul_sh = #{cxjsjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsraug_sq != null" >
+        yjsraug_sq = #{yjsraug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsraug_sh != null" >
+        yjsraug_sh = #{yjsraug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyaug_sq != null" >
+        yjfyaug_sq = #{yjfyaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyaug_sh != null" >
+        yjfyaug_sh = #{yjfyaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsaug_sq != null" >
+        cxjsaug_sq = #{cxjsaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsaug_sh != null" >
+        cxjsaug_sh = #{cxjsaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrsep_sq != null" >
+        yjsrsep_sq = #{yjsrsep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrsep_sh != null" >
+        yjsrsep_sh = #{yjsrsep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfysep_sq != null" >
+        yjfysep_sq = #{yjfysep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfysep_sh != null" >
+        yjfysep_sh = #{yjfysep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjssep_sq != null" >
+        cxjssep_sq = #{cxjssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjssep_sh != null" >
+        cxjssep_sh = #{cxjssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsroct_sq != null" >
+        yjsroct_sq = #{yjsroct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsroct_sh != null" >
+        yjsroct_sh = #{yjsroct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyoct_sq != null" >
+        yjfyoct_sq = #{yjfyoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyoct_sh != null" >
+        yjfyoct_sh = #{yjfyoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsoct_sq != null" >
+        cxjsoct_sq = #{cxjsoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsoct_sh != null" >
+        cxjsoct_sh = #{cxjsoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrnov_sq != null" >
+        yjsrnov_sq = #{yjsrnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrnov_sh != null" >
+        yjsrnov_sh = #{yjsrnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfynov_sq != null" >
+        yjfynov_sq = #{yjfynov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfynov_sh != null" >
+        yjfynov_sh = #{yjfynov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsnov_sq != null" >
+        cxjsnov_sq = #{cxjsnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsnov_sh != null" >
+        cxjsnov_sh = #{cxjsnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrdec_sq != null" >
+        yjsrdec_sq = #{yjsrdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsrdec_sh != null" >
+        yjsrdec_sh = #{yjsrdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfydec_sq != null" >
+        yjfydec_sq = #{yjfydec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfydec_sh != null" >
+        yjfydec_sh = #{yjfydec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsdec_sq != null" >
+        cxjsdec_sq = #{cxjsdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="cxjsdec_sh != null" >
+        cxjsdec_sh = #{cxjsdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrtotal_sq != null" >
+        yssrtotal_sq = #{yssrtotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrtotal_sh != null" >
+        yssrtotal_sh = #{yssrtotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffytotal_sq != null" >
+        yffytotal_sq = #{yffytotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffytotal_sh != null" >
+        yffytotal_sh = #{yffytotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjstotal_sq != null" >
+        yfjstotal_sq = #{yfjstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjstotal_sh != null" >
+        yfjstotal_sh = #{yfjstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrbef_sq != null" >
+        yssrbef_sq = #{yssrbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrbef_sh != null" >
+        yssrbef_sh = #{yssrbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffybef_sq != null" >
+        yffybef_sq = #{yffybef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffybef_sh != null" >
+        yffybef_sh = #{yffybef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsbef_sq != null" >
+        yfjsbef_sq = #{yfjsbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsbef_sh != null" >
+        yfjsbef_sh = #{yfjsbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrthis_sq != null" >
+        yssrthis_sq = #{yssrthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrthis_sh != null" >
+        yssrthis_sh = #{yssrthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffythis_sq != null" >
+        yffythis_sq = #{yffythis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffythis_sh != null" >
+        yffythis_sh = #{yffythis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsthis_sq != null" >
+        yfjsthis_sq = #{yfjsthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsthis_sh != null" >
+        yfjsthis_sh = #{yfjsthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjan_sq != null" >
+        yssrjan_sq = #{yssrjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjan_sh != null" >
+        yssrjan_sh = #{yssrjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjan_sq != null" >
+        yffyjan_sq = #{yffyjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjan_sh != null" >
+        yffyjan_sh = #{yffyjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjan_sq != null" >
+        yfjsjan_sq = #{yfjsjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjan_sh != null" >
+        yfjsjan_sh = #{yfjsjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_jan != null" >
+        yssrqryj_jan = #{yssrqryj_jan,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_jan != null" >
+        jssfcsj_jan = #{jssfcsj_jan,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_jan != null" >
+        jssshsj_jan = #{jssshsj_jan,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrfeb_sq != null" >
+        yssrfeb_sq = #{yssrfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrfeb_sh != null" >
+        yssrfeb_sh = #{yssrfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyfeb_sq != null" >
+        yffyfeb_sq = #{yffyfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyfeb_sh != null" >
+        yffyfeb_sh = #{yffyfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsfeb_sq != null" >
+        yfjsfeb_sq = #{yfjsfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsfeb_sh != null" >
+        yfjsfeb_sh = #{yfjsfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_feb != null" >
+        yssrqryj_feb = #{yssrqryj_feb,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_feb != null" >
+        jssfcsj_feb = #{jssfcsj_feb,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_feb != null" >
+        jssshsj_feb = #{jssshsj_feb,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrmar_sq != null" >
+        yssrmar_sq = #{yssrmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrmar_sh != null" >
+        yssrmar_sh = #{yssrmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymar_sq != null" >
+        yffymar_sq = #{yffymar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymar_sh != null" >
+        yffymar_sh = #{yffymar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmar_sq != null" >
+        yfjsmar_sq = #{yfjsmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmar_sh != null" >
+        yfjsmar_sh = #{yfjsmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_mar != null" >
+        yssrqryj_mar = #{yssrqryj_mar,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_mar != null" >
+        jssfcsj_mar = #{jssfcsj_mar,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_mar != null" >
+        jssshsj_mar = #{jssshsj_mar,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrapr_sq != null" >
+        yssrapr_sq = #{yssrapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrapr_sh != null" >
+        yssrapr_sh = #{yssrapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyapr_sq != null" >
+        yffyapr_sq = #{yffyapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyapr_sh != null" >
+        yffyapr_sh = #{yffyapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsapr_sq != null" >
+        yfjsapr_sq = #{yfjsapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsapr_sh != null" >
+        yfjsapr_sh = #{yfjsapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_apr != null" >
+        yssrqryj_apr = #{yssrqryj_apr,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_apr != null" >
+        jssfcsj_apr = #{jssfcsj_apr,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_apr != null" >
+        jssshsj_apr = #{jssshsj_apr,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrmay_sq != null" >
+        yssrmay_sq = #{yssrmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrmay_sh != null" >
+        yssrmay_sh = #{yssrmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymay_sq != null" >
+        yffymay_sq = #{yffymay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffymay_sh != null" >
+        yffymay_sh = #{yffymay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmay_sq != null" >
+        yfjsmay_sq = #{yfjsmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsmay_sh != null" >
+        yfjsmay_sh = #{yfjsmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_may != null" >
+        yssrqryj_may = #{yssrqryj_may,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_may != null" >
+        jssfcsj_may = #{jssfcsj_may,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_may != null" >
+        jssshsj_may = #{jssshsj_may,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrjun_sq != null" >
+        yssrjun_sq = #{yssrjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjun_sh != null" >
+        yssrjun_sh = #{yssrjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjun_sq != null" >
+        yffyjun_sq = #{yffyjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjun_sh != null" >
+        yffyjun_sh = #{yffyjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjun_sq != null" >
+        yfjsjun_sq = #{yfjsjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjun_sh != null" >
+        yfjsjun_sh = #{yfjsjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_jun != null" >
+        yssrqryj_jun = #{yssrqryj_jun,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_jun != null" >
+        jssfcsj_jun = #{jssfcsj_jun,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_jun != null" >
+        jssshsj_jun = #{jssshsj_jun,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrjul_sq != null" >
+        yssrjul_sq = #{yssrjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrjul_sh != null" >
+        yssrjul_sh = #{yssrjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjul_sq != null" >
+        yffyjul_sq = #{yffyjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyjul_sh != null" >
+        yffyjul_sh = #{yffyjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjul_sq != null" >
+        yfjsjul_sq = #{yfjsjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsjul_sh != null" >
+        yfjsjul_sh = #{yfjsjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_jul != null" >
+        yssrqryj_jul = #{yssrqryj_jul,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_jul != null" >
+        jssfcsj_jul = #{jssfcsj_jul,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_jul != null" >
+        jssshsj_jul = #{jssshsj_jul,jdbcType=VARCHAR},
+      </if>
+      <if test="yssraug_sq != null" >
+        yssraug_sq = #{yssraug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssraug_sh != null" >
+        yssraug_sh = #{yssraug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyaug_sq != null" >
+        yffyaug_sq = #{yffyaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyaug_sh != null" >
+        yffyaug_sh = #{yffyaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsaug_sq != null" >
+        yfjsaug_sq = #{yfjsaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsaug_sh != null" >
+        yfjsaug_sh = #{yfjsaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_aug != null" >
+        yssrqryj_aug = #{yssrqryj_aug,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_aug != null" >
+        jssfcsj_aug = #{jssfcsj_aug,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_aug != null" >
+        jssshsj_aug = #{jssshsj_aug,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrsep_sq != null" >
+        yssrsep_sq = #{yssrsep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrsep_sh != null" >
+        yssrsep_sh = #{yssrsep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffysep_sq != null" >
+        yffysep_sq = #{yffysep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffysep_sh != null" >
+        yffysep_sh = #{yffysep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjssep_sq != null" >
+        yfjssep_sq = #{yfjssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjssep_sh != null" >
+        yfjssep_sh = #{yfjssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_sep != null" >
+        yssrqryj_sep = #{yssrqryj_sep,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_sep != null" >
+        jssfcsj_sep = #{jssfcsj_sep,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_sep != null" >
+        jssshsj_sep = #{jssshsj_sep,jdbcType=VARCHAR},
+      </if>
+      <if test="yssroct_sq != null" >
+        yssroct_sq = #{yssroct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssroct_sh != null" >
+        yssroct_sh = #{yssroct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyoct_sq != null" >
+        yffyoct_sq = #{yffyoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffyoct_sh != null" >
+        yffyoct_sh = #{yffyoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsoct_sq != null" >
+        yfjsoct_sq = #{yfjsoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsoct_sh != null" >
+        yfjsoct_sh = #{yfjsoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_oct != null" >
+        yssrqryj_oct = #{yssrqryj_oct,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_oct != null" >
+        jssfcsj_oct = #{jssfcsj_oct,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_oct != null" >
+        jssshsj_oct = #{jssshsj_oct,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrnov_sq != null" >
+        yssrnov_sq = #{yssrnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrnov_sh != null" >
+        yssrnov_sh = #{yssrnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffynov_sq != null" >
+        yffynov_sq = #{yffynov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffynov_sh != null" >
+        yffynov_sh = #{yffynov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsnov_sq != null" >
+        yfjsnov_sq = #{yfjsnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsnov_sh != null" >
+        yfjsnov_sh = #{yfjsnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_nov != null" >
+        yssrqryj_nov = #{yssrqryj_nov,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_nov != null" >
+        jssfcsj_nov = #{jssfcsj_nov,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_nov != null" >
+        jssshsj_nov = #{jssshsj_nov,jdbcType=VARCHAR},
+      </if>
+      <if test="yssrdec_sq != null" >
+        yssrdec_sq = #{yssrdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrdec_sh != null" >
+        yssrdec_sh = #{yssrdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yffydec_sq != null" >
+        yffydec_sq = #{yffydec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yffydec_sh != null" >
+        yffydec_sh = #{yffydec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsdec_sq != null" >
+        yfjsdec_sq = #{yfjsdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yfjsdec_sh != null" >
+        yfjsdec_sh = #{yfjsdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yssrqryj_dec != null" >
+        yssrqryj_dec = #{yssrqryj_dec,jdbcType=VARCHAR},
+      </if>
+      <if test="jssfcsj_dec != null" >
+        jssfcsj_dec = #{jssfcsj_dec,jdbcType=VARCHAR},
+      </if>
+      <if test="jssshsj_dec != null" >
+        jssshsj_dec = #{jssshsj_dec,jdbcType=VARCHAR},
+      </if>
+      <if test="yjsstotal_sq != null" >
+        yjsstotal_sq = #{yjsstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsstotal_sh != null" >
+        yjsstotal_sh = #{yjsstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfytotal_sq != null" >
+        sjfytotal_sq = #{sjfytotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfytotal_sh != null" >
+        sjfytotal_sh = #{sjfytotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjstotal_sq != null" >
+        sjjstotal_sq = #{sjjstotal_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjstotal_sh != null" >
+        sjjstotal_sh = #{sjjstotal_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssbef_sq != null" >
+        yjssbef_sq = #{yjssbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssbef_sh != null" >
+        yjssbef_sh = #{yjssbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfybef_sq != null" >
+        sjfybef_sq = #{sjfybef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfybef_sh != null" >
+        sjfybef_sh = #{sjfybef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsbef_sq != null" >
+        sjjsbef_sq = #{sjjsbef_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsbef_sh != null" >
+        sjjsbef_sh = #{sjjsbef_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssthis_sq != null" >
+        yjssthis_sq = #{yjssthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssthis_sh != null" >
+        yjssthis_sh = #{yjssthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfythis_sq != null" >
+        sjfythis_sq = #{sjfythis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfythis_sh != null" >
+        sjfythis_sh = #{sjfythis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsthis_sq != null" >
+        sjjsthis_sq = #{sjjsthis_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsthis_sh != null" >
+        sjjsthis_sh = #{sjjsthis_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjan_sq != null" >
+        yjssjan_sq = #{yjssjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjan_sh != null" >
+        yjssjan_sh = #{yjssjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjan_sq != null" >
+        sjfyjan_sq = #{sjfyjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjan_sh != null" >
+        sjfyjan_sh = #{sjfyjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjan_sq != null" >
+        sjjsjan_sq = #{sjjsjan_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjan_sh != null" >
+        sjjsjan_sh = #{sjjsjan_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssfeb_sq != null" >
+        yjssfeb_sq = #{yjssfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssfeb_sh != null" >
+        yjssfeb_sh = #{yjssfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyfeb_sq != null" >
+        sjfyfeb_sq = #{sjfyfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyfeb_sh != null" >
+        sjfyfeb_sh = #{sjfyfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsfeb_sq != null" >
+        sjjsfeb_sq = #{sjjsfeb_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsfeb_sh != null" >
+        sjjsfeb_sh = #{sjjsfeb_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmar_sq != null" >
+        yjssmar_sq = #{yjssmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmar_sh != null" >
+        yjssmar_sh = #{yjssmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymar_sq != null" >
+        sjfymar_sq = #{sjfymar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymar_sh != null" >
+        sjfymar_sh = #{sjfymar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmar_sq != null" >
+        sjjsmar_sq = #{sjjsmar_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmar_sh != null" >
+        sjjsmar_sh = #{sjjsmar_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssapr_sq != null" >
+        yjssapr_sq = #{yjssapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssapr_sh != null" >
+        yjssapr_sh = #{yjssapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyapr_sq != null" >
+        sjfyapr_sq = #{sjfyapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyapr_sh != null" >
+        sjfyapr_sh = #{sjfyapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsapr_sq != null" >
+        sjjsapr_sq = #{sjjsapr_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsapr_sh != null" >
+        sjjsapr_sh = #{sjjsapr_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmay_sq != null" >
+        yjssmay_sq = #{yjssmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssmay_sh != null" >
+        yjssmay_sh = #{yjssmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymay_sq != null" >
+        sjfymay_sq = #{sjfymay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfymay_sh != null" >
+        sjfymay_sh = #{sjfymay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmay_sq != null" >
+        sjjsmay_sq = #{sjjsmay_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsmay_sh != null" >
+        sjjsmay_sh = #{sjjsmay_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjun_sq != null" >
+        yjssjun_sq = #{yjssjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjun_sh != null" >
+        yjssjun_sh = #{yjssjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjun_sq != null" >
+        sjfyjun_sq = #{sjfyjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjun_sh != null" >
+        sjfyjun_sh = #{sjfyjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjun_sq != null" >
+        sjjsjun_sq = #{sjjsjun_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjun_sh != null" >
+        sjjsjun_sh = #{sjjsjun_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjul_sq != null" >
+        yjssjul_sq = #{yjssjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssjul_sh != null" >
+        yjssjul_sh = #{yjssjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjul_sq != null" >
+        sjfyjul_sq = #{sjfyjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyjul_sh != null" >
+        sjfyjul_sh = #{sjfyjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjul_sq != null" >
+        sjjsjul_sq = #{sjjsjul_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsjul_sh != null" >
+        sjjsjul_sh = #{sjjsjul_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssaug_sq != null" >
+        yjssaug_sq = #{yjssaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssaug_sh != null" >
+        yjssaug_sh = #{yjssaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyaug_sq != null" >
+        sjfyaug_sq = #{sjfyaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyaug_sh != null" >
+        sjfyaug_sh = #{sjfyaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsaug_sq != null" >
+        sjjsaug_sq = #{sjjsaug_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsaug_sh != null" >
+        sjjsaug_sh = #{sjjsaug_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsssep_sq != null" >
+        yjsssep_sq = #{yjsssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsssep_sh != null" >
+        yjsssep_sh = #{yjsssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfysep_sq != null" >
+        sjfysep_sq = #{sjfysep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfysep_sh != null" >
+        sjfysep_sh = #{sjfysep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjssep_sq != null" >
+        sjjssep_sq = #{sjjssep_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjssep_sh != null" >
+        sjjssep_sh = #{sjjssep_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssoct_sq != null" >
+        yjssoct_sq = #{yjssoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssoct_sh != null" >
+        yjssoct_sh = #{yjssoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyoct_sq != null" >
+        sjfyoct_sq = #{sjfyoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfyoct_sh != null" >
+        sjfyoct_sh = #{sjfyoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsoct_sq != null" >
+        sjjsoct_sq = #{sjjsoct_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsoct_sh != null" >
+        sjjsoct_sh = #{sjjsoct_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssnov_sq != null" >
+        yjssnov_sq = #{yjssnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssnov_sh != null" >
+        yjssnov_sh = #{yjssnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfynov_sq != null" >
+        sjfynov_sq = #{sjfynov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfynov_sh != null" >
+        sjfynov_sh = #{sjfynov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsnov_sq != null" >
+        sjjsnov_sq = #{sjjsnov_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsnov_sh != null" >
+        sjjsnov_sh = #{sjjsnov_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssdec_sq != null" >
+        yjssdec_sq = #{yjssdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="yjssdec_sh != null" >
+        yjssdec_sh = #{yjssdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfydec_sq != null" >
+        sjfydec_sq = #{sjfydec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjfydec_sh != null" >
+        sjfydec_sh = #{sjfydec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsdec_sq != null" >
+        sjjsdec_sq = #{sjjsdec_sq,jdbcType=DECIMAL},
+      </if>
+      <if test="sjjsdec_sh != null" >
+        sjjsdec_sh = #{sjjsdec_sh,jdbcType=DECIMAL},
+      </if>
+      <if test="gwyjtotal != null" >
+        gwyjtotal = #{gwyjtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="tjyjtotal != null" >
+        tjyjtotal = #{tjyjtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="datecreate != null" >
+        datecreate = #{datecreate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.report.rptQTLnkDetail.model.RptQTLnkDetail" >
+    update RPT_QT_LnkDetail
+    set yearly = #{yearly,jdbcType=VARCHAR},
+    accountProject = #{accountProject,jdbcType=VARCHAR},
+    accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR},
+    yjgsqyName = #{yjgsqyName,jdbcType=VARCHAR},
+    yjgsqyCode = #{yjgsqyCode,jdbcType=VARCHAR},
+    yjgsareaName = #{yjgsareaName,jdbcType=VARCHAR},
+    yjgsareaCode = #{yjgsareaCode,jdbcType=VARCHAR},
+    yjgssybName = #{yjgssybName,jdbcType=VARCHAR},
+    yjgssybCode = #{yjgssybCode,jdbcType=VARCHAR},
+    yjgscsName = #{yjgscsName,jdbcType=VARCHAR},
+    yjgscsCode = #{yjgscsCode,jdbcType=VARCHAR},
+    yjszcsName = #{yjszcsName,jdbcType=VARCHAR},
+    yjszcsid = #{yjszcsid,jdbcType=VARCHAR},
+    yjgszxName = #{yjgszxName,jdbcType=VARCHAR},
+    yjgszxid = #{yjgszxid,jdbcType=VARCHAR},
+    srgscsName = #{srgscsName,jdbcType=VARCHAR},
+    srgscsCode = #{srgscsCode,jdbcType=VARCHAR},
+    srgszxName = #{srgszxName,jdbcType=VARCHAR},
+    srgsbmName = #{srgsbmName,jdbcType=VARCHAR},
+    kfsName = #{kfsName,jdbcType=VARCHAR},
+    htjfName = #{htjfName,jdbcType=VARCHAR},
+    reportNo = #{reportNo,jdbcType=VARCHAR},
+    projectNo = #{projectNo,jdbcType=VARCHAR},
+    estateName = #{estateName,jdbcType=VARCHAR},
+    reportDate = #{reportDate,jdbcType=VARCHAR},
+    dealDate = #{dealDate,jdbcType=VARCHAR},
+    qkdzrq = #{qkdzrq,jdbcType=VARCHAR},
+    srlxName = #{srlxName,jdbcType=VARCHAR},
+    kscqfyje = #{kscqfyje,jdbcType=VARCHAR},
+    fysc = #{fysc,jdbcType=VARCHAR},
+    num = #{num,jdbcType=VARCHAR},
+    obj01 = #{obj01,jdbcType=VARCHAR},
+    obj02 = #{obj02,jdbcType=VARCHAR},
+    obj03 = #{obj03,jdbcType=VARCHAR},
+    obj04 = #{obj04,jdbcType=VARCHAR},
+    obj05 = #{obj05,jdbcType=VARCHAR},
+    obj06 = #{obj06,jdbcType=VARCHAR},
+    obj07 = #{obj07,jdbcType=VARCHAR},
+    obj08 = #{obj08,jdbcType=VARCHAR},
+    obj09 = #{obj09,jdbcType=VARCHAR},
+    obj10 = #{obj10,jdbcType=VARCHAR},
+    obj11 = #{obj11,jdbcType=VARCHAR},
+    obj12 = #{obj12,jdbcType=VARCHAR},
+    obj13 = #{obj13,jdbcType=VARCHAR},
+    obj14 = #{obj14,jdbcType=VARCHAR},
+    obj15 = #{obj15,jdbcType=VARCHAR},
+    obj16 = #{obj16,jdbcType=VARCHAR},
+    obj17 = #{obj17,jdbcType=VARCHAR},
+    obj18 = #{obj18,jdbcType=VARCHAR},
+    obj19 = #{obj19,jdbcType=VARCHAR},
+    obj20 = #{obj20,jdbcType=VARCHAR},
+    yjsrtotal_sq = #{yjsrtotal_sq,jdbcType=DECIMAL},
+    yjsrtotal_sh = #{yjsrtotal_sh,jdbcType=DECIMAL},
+    yjfytotal_sq = #{yjfytotal_sq,jdbcType=DECIMAL},
+    yjfytotal_sh = #{yjfytotal_sh,jdbcType=DECIMAL},
+    cxjstotal_sq = #{cxjstotal_sq,jdbcType=DECIMAL},
+    cxjstotal_sh = #{cxjstotal_sh,jdbcType=DECIMAL},
+    yjsrbef_sq = #{yjsrbef_sq,jdbcType=DECIMAL},
+    yjsrbef_sh = #{yjsrbef_sh,jdbcType=DECIMAL},
+    yjfybef_sq = #{yjfybef_sq,jdbcType=DECIMAL},
+    yjfybef_sh = #{yjfybef_sh,jdbcType=DECIMAL},
+    cxjsbef_sq = #{cxjsbef_sq,jdbcType=DECIMAL},
+    cxjsbef_sh = #{cxjsbef_sh,jdbcType=DECIMAL},
+    yjsrthis_sq = #{yjsrthis_sq,jdbcType=DECIMAL},
+    yjsrthis_sh = #{yjsrthis_sh,jdbcType=DECIMAL},
+    yjfythis_sq = #{yjfythis_sq,jdbcType=DECIMAL},
+    yjfythis_sh = #{yjfythis_sh,jdbcType=DECIMAL},
+    cxjsthis_sq = #{cxjsthis_sq,jdbcType=DECIMAL},
+    cxjsthis_sh = #{cxjsthis_sh,jdbcType=DECIMAL},
+    yjsrjan_sq = #{yjsrjan_sq,jdbcType=DECIMAL},
+    yjsrjan_sh = #{yjsrjan_sh,jdbcType=DECIMAL},
+    yjfyjan_sq = #{yjfyjan_sq,jdbcType=DECIMAL},
+    yjfyjan_sh = #{yjfyjan_sh,jdbcType=DECIMAL},
+    cxjsjan_sq = #{cxjsjan_sq,jdbcType=DECIMAL},
+    cxjsjan_sh = #{cxjsjan_sh,jdbcType=DECIMAL},
+    yjsrfeb_sq = #{yjsrfeb_sq,jdbcType=DECIMAL},
+    yjsrfeb_sh = #{yjsrfeb_sh,jdbcType=DECIMAL},
+    yjfyfeb_sq = #{yjfyfeb_sq,jdbcType=DECIMAL},
+    yjfyfeb_sh = #{yjfyfeb_sh,jdbcType=DECIMAL},
+    cxjsfeb_sq = #{cxjsfeb_sq,jdbcType=DECIMAL},
+    cxjsfeb_sh = #{cxjsfeb_sh,jdbcType=DECIMAL},
+    yjsrmar_sq = #{yjsrmar_sq,jdbcType=DECIMAL},
+    yjsrmar_sh = #{yjsrmar_sh,jdbcType=DECIMAL},
+    yjfymar_sq = #{yjfymar_sq,jdbcType=DECIMAL},
+    yjfymar_sh = #{yjfymar_sh,jdbcType=DECIMAL},
+    cxjsmar_sq = #{cxjsmar_sq,jdbcType=DECIMAL},
+    cxjsmar_sh = #{cxjsmar_sh,jdbcType=DECIMAL},
+    yjsrapr_sq = #{yjsrapr_sq,jdbcType=DECIMAL},
+    yjsrapr_sh = #{yjsrapr_sh,jdbcType=DECIMAL},
+    yjfyapr_sq = #{yjfyapr_sq,jdbcType=DECIMAL},
+    yjfyapr_sh = #{yjfyapr_sh,jdbcType=DECIMAL},
+    cxjsapr_sq = #{cxjsapr_sq,jdbcType=DECIMAL},
+    cxjsapr_sh = #{cxjsapr_sh,jdbcType=DECIMAL},
+    yjsrmay_sq = #{yjsrmay_sq,jdbcType=DECIMAL},
+    yjsrmay_sh = #{yjsrmay_sh,jdbcType=DECIMAL},
+    yjfymay_sq = #{yjfymay_sq,jdbcType=DECIMAL},
+    yjfymay_sh = #{yjfymay_sh,jdbcType=DECIMAL},
+    cxjsmay_sq = #{cxjsmay_sq,jdbcType=DECIMAL},
+    cxjsmay_sh = #{cxjsmay_sh,jdbcType=DECIMAL},
+    yjsrjun_sq = #{yjsrjun_sq,jdbcType=DECIMAL},
+    yjsrjun_sh = #{yjsrjun_sh,jdbcType=DECIMAL},
+    yjfyjun_sq = #{yjfyjun_sq,jdbcType=DECIMAL},
+    yjfyjun_sh = #{yjfyjun_sh,jdbcType=DECIMAL},
+    cxjsjun_sq = #{cxjsjun_sq,jdbcType=DECIMAL},
+    cxjsjun_sh = #{cxjsjun_sh,jdbcType=DECIMAL},
+    yjsrjul_sq = #{yjsrjul_sq,jdbcType=DECIMAL},
+    yjsrjul_sh = #{yjsrjul_sh,jdbcType=DECIMAL},
+    yjfyjul_sq = #{yjfyjul_sq,jdbcType=DECIMAL},
+    yjfyjul_sh = #{yjfyjul_sh,jdbcType=DECIMAL},
+    cxjsjul_sq = #{cxjsjul_sq,jdbcType=DECIMAL},
+    cxjsjul_sh = #{cxjsjul_sh,jdbcType=DECIMAL},
+    yjsraug_sq = #{yjsraug_sq,jdbcType=DECIMAL},
+    yjsraug_sh = #{yjsraug_sh,jdbcType=DECIMAL},
+    yjfyaug_sq = #{yjfyaug_sq,jdbcType=DECIMAL},
+    yjfyaug_sh = #{yjfyaug_sh,jdbcType=DECIMAL},
+    cxjsaug_sq = #{cxjsaug_sq,jdbcType=DECIMAL},
+    cxjsaug_sh = #{cxjsaug_sh,jdbcType=DECIMAL},
+    yjsrsep_sq = #{yjsrsep_sq,jdbcType=DECIMAL},
+    yjsrsep_sh = #{yjsrsep_sh,jdbcType=DECIMAL},
+    yjfysep_sq = #{yjfysep_sq,jdbcType=DECIMAL},
+    yjfysep_sh = #{yjfysep_sh,jdbcType=DECIMAL},
+    cxjssep_sq = #{cxjssep_sq,jdbcType=DECIMAL},
+    cxjssep_sh = #{cxjssep_sh,jdbcType=DECIMAL},
+    yjsroct_sq = #{yjsroct_sq,jdbcType=DECIMAL},
+    yjsroct_sh = #{yjsroct_sh,jdbcType=DECIMAL},
+    yjfyoct_sq = #{yjfyoct_sq,jdbcType=DECIMAL},
+    yjfyoct_sh = #{yjfyoct_sh,jdbcType=DECIMAL},
+    cxjsoct_sq = #{cxjsoct_sq,jdbcType=DECIMAL},
+    cxjsoct_sh = #{cxjsoct_sh,jdbcType=DECIMAL},
+    yjsrnov_sq = #{yjsrnov_sq,jdbcType=DECIMAL},
+    yjsrnov_sh = #{yjsrnov_sh,jdbcType=DECIMAL},
+    yjfynov_sq = #{yjfynov_sq,jdbcType=DECIMAL},
+    yjfynov_sh = #{yjfynov_sh,jdbcType=DECIMAL},
+    cxjsnov_sq = #{cxjsnov_sq,jdbcType=DECIMAL},
+    cxjsnov_sh = #{cxjsnov_sh,jdbcType=DECIMAL},
+    yjsrdec_sq = #{yjsrdec_sq,jdbcType=DECIMAL},
+    yjsrdec_sh = #{yjsrdec_sh,jdbcType=DECIMAL},
+    yjfydec_sq = #{yjfydec_sq,jdbcType=DECIMAL},
+    yjfydec_sh = #{yjfydec_sh,jdbcType=DECIMAL},
+    cxjsdec_sq = #{cxjsdec_sq,jdbcType=DECIMAL},
+    cxjsdec_sh = #{cxjsdec_sh,jdbcType=DECIMAL},
+    yssrtotal_sq = #{yssrtotal_sq,jdbcType=DECIMAL},
+    yssrtotal_sh = #{yssrtotal_sh,jdbcType=DECIMAL},
+    yffytotal_sq = #{yffytotal_sq,jdbcType=DECIMAL},
+    yffytotal_sh = #{yffytotal_sh,jdbcType=DECIMAL},
+    yfjstotal_sq = #{yfjstotal_sq,jdbcType=DECIMAL},
+    yfjstotal_sh = #{yfjstotal_sh,jdbcType=DECIMAL},
+    yssrbef_sq = #{yssrbef_sq,jdbcType=DECIMAL},
+    yssrbef_sh = #{yssrbef_sh,jdbcType=DECIMAL},
+    yffybef_sq = #{yffybef_sq,jdbcType=DECIMAL},
+    yffybef_sh = #{yffybef_sh,jdbcType=DECIMAL},
+    yfjsbef_sq = #{yfjsbef_sq,jdbcType=DECIMAL},
+    yfjsbef_sh = #{yfjsbef_sh,jdbcType=DECIMAL},
+    yssrthis_sq = #{yssrthis_sq,jdbcType=DECIMAL},
+    yssrthis_sh = #{yssrthis_sh,jdbcType=DECIMAL},
+    yffythis_sq = #{yffythis_sq,jdbcType=DECIMAL},
+    yffythis_sh = #{yffythis_sh,jdbcType=DECIMAL},
+    yfjsthis_sq = #{yfjsthis_sq,jdbcType=DECIMAL},
+    yfjsthis_sh = #{yfjsthis_sh,jdbcType=DECIMAL},
+    yssrjan_sq = #{yssrjan_sq,jdbcType=DECIMAL},
+    yssrjan_sh = #{yssrjan_sh,jdbcType=DECIMAL},
+    yffyjan_sq = #{yffyjan_sq,jdbcType=DECIMAL},
+    yffyjan_sh = #{yffyjan_sh,jdbcType=DECIMAL},
+    yfjsjan_sq = #{yfjsjan_sq,jdbcType=DECIMAL},
+    yfjsjan_sh = #{yfjsjan_sh,jdbcType=DECIMAL},
+    yssrqryj_jan = #{yssrqryj_jan,jdbcType=VARCHAR},
+    jssfcsj_jan = #{jssfcsj_jan,jdbcType=VARCHAR},
+    jssshsj_jan = #{jssshsj_jan,jdbcType=VARCHAR},
+    yssrfeb_sq = #{yssrfeb_sq,jdbcType=DECIMAL},
+    yssrfeb_sh = #{yssrfeb_sh,jdbcType=DECIMAL},
+    yffyfeb_sq = #{yffyfeb_sq,jdbcType=DECIMAL},
+    yffyfeb_sh = #{yffyfeb_sh,jdbcType=DECIMAL},
+    yfjsfeb_sq = #{yfjsfeb_sq,jdbcType=DECIMAL},
+    yfjsfeb_sh = #{yfjsfeb_sh,jdbcType=DECIMAL},
+    yssrqryj_feb = #{yssrqryj_feb,jdbcType=VARCHAR},
+    jssfcsj_feb = #{jssfcsj_feb,jdbcType=VARCHAR},
+    jssshsj_feb = #{jssshsj_feb,jdbcType=VARCHAR},
+    yssrmar_sq = #{yssrmar_sq,jdbcType=DECIMAL},
+    yssrmar_sh = #{yssrmar_sh,jdbcType=DECIMAL},
+    yffymar_sq = #{yffymar_sq,jdbcType=DECIMAL},
+    yffymar_sh = #{yffymar_sh,jdbcType=DECIMAL},
+    yfjsmar_sq = #{yfjsmar_sq,jdbcType=DECIMAL},
+    yfjsmar_sh = #{yfjsmar_sh,jdbcType=DECIMAL},
+    yssrqryj_mar = #{yssrqryj_mar,jdbcType=VARCHAR},
+    jssfcsj_mar = #{jssfcsj_mar,jdbcType=VARCHAR},
+    jssshsj_mar = #{jssshsj_mar,jdbcType=VARCHAR},
+    yssrapr_sq = #{yssrapr_sq,jdbcType=DECIMAL},
+    yssrapr_sh = #{yssrapr_sh,jdbcType=DECIMAL},
+    yffyapr_sq = #{yffyapr_sq,jdbcType=DECIMAL},
+    yffyapr_sh = #{yffyapr_sh,jdbcType=DECIMAL},
+    yfjsapr_sq = #{yfjsapr_sq,jdbcType=DECIMAL},
+    yfjsapr_sh = #{yfjsapr_sh,jdbcType=DECIMAL},
+    yssrqryj_apr = #{yssrqryj_apr,jdbcType=VARCHAR},
+    jssfcsj_apr = #{jssfcsj_apr,jdbcType=VARCHAR},
+    jssshsj_apr = #{jssshsj_apr,jdbcType=VARCHAR},
+    yssrmay_sq = #{yssrmay_sq,jdbcType=DECIMAL},
+    yssrmay_sh = #{yssrmay_sh,jdbcType=DECIMAL},
+    yffymay_sq = #{yffymay_sq,jdbcType=DECIMAL},
+    yffymay_sh = #{yffymay_sh,jdbcType=DECIMAL},
+    yfjsmay_sq = #{yfjsmay_sq,jdbcType=DECIMAL},
+    yfjsmay_sh = #{yfjsmay_sh,jdbcType=DECIMAL},
+    yssrqryj_may = #{yssrqryj_may,jdbcType=VARCHAR},
+    jssfcsj_may = #{jssfcsj_may,jdbcType=VARCHAR},
+    jssshsj_may = #{jssshsj_may,jdbcType=VARCHAR},
+    yssrjun_sq = #{yssrjun_sq,jdbcType=DECIMAL},
+    yssrjun_sh = #{yssrjun_sh,jdbcType=DECIMAL},
+    yffyjun_sq = #{yffyjun_sq,jdbcType=DECIMAL},
+    yffyjun_sh = #{yffyjun_sh,jdbcType=DECIMAL},
+    yfjsjun_sq = #{yfjsjun_sq,jdbcType=DECIMAL},
+    yfjsjun_sh = #{yfjsjun_sh,jdbcType=DECIMAL},
+    yssrqryj_jun = #{yssrqryj_jun,jdbcType=VARCHAR},
+    jssfcsj_jun = #{jssfcsj_jun,jdbcType=VARCHAR},
+    jssshsj_jun = #{jssshsj_jun,jdbcType=VARCHAR},
+    yssrjul_sq = #{yssrjul_sq,jdbcType=DECIMAL},
+    yssrjul_sh = #{yssrjul_sh,jdbcType=DECIMAL},
+    yffyjul_sq = #{yffyjul_sq,jdbcType=DECIMAL},
+    yffyjul_sh = #{yffyjul_sh,jdbcType=DECIMAL},
+    yfjsjul_sq = #{yfjsjul_sq,jdbcType=DECIMAL},
+    yfjsjul_sh = #{yfjsjul_sh,jdbcType=DECIMAL},
+    yssrqryj_jul = #{yssrqryj_jul,jdbcType=VARCHAR},
+    jssfcsj_jul = #{jssfcsj_jul,jdbcType=VARCHAR},
+    jssshsj_jul = #{jssshsj_jul,jdbcType=VARCHAR},
+    yssraug_sq = #{yssraug_sq,jdbcType=DECIMAL},
+    yssraug_sh = #{yssraug_sh,jdbcType=DECIMAL},
+    yffyaug_sq = #{yffyaug_sq,jdbcType=DECIMAL},
+    yffyaug_sh = #{yffyaug_sh,jdbcType=DECIMAL},
+    yfjsaug_sq = #{yfjsaug_sq,jdbcType=DECIMAL},
+    yfjsaug_sh = #{yfjsaug_sh,jdbcType=DECIMAL},
+    yssrqryj_aug = #{yssrqryj_aug,jdbcType=VARCHAR},
+    jssfcsj_aug = #{jssfcsj_aug,jdbcType=VARCHAR},
+    jssshsj_aug = #{jssshsj_aug,jdbcType=VARCHAR},
+    yssrsep_sq = #{yssrsep_sq,jdbcType=DECIMAL},
+    yssrsep_sh = #{yssrsep_sh,jdbcType=DECIMAL},
+    yffysep_sq = #{yffysep_sq,jdbcType=DECIMAL},
+    yffysep_sh = #{yffysep_sh,jdbcType=DECIMAL},
+    yfjssep_sq = #{yfjssep_sq,jdbcType=DECIMAL},
+    yfjssep_sh = #{yfjssep_sh,jdbcType=DECIMAL},
+    yssrqryj_sep = #{yssrqryj_sep,jdbcType=VARCHAR},
+    jssfcsj_sep = #{jssfcsj_sep,jdbcType=VARCHAR},
+    jssshsj_sep = #{jssshsj_sep,jdbcType=VARCHAR},
+    yssroct_sq = #{yssroct_sq,jdbcType=DECIMAL},
+    yssroct_sh = #{yssroct_sh,jdbcType=DECIMAL},
+    yffyoct_sq = #{yffyoct_sq,jdbcType=DECIMAL},
+    yffyoct_sh = #{yffyoct_sh,jdbcType=DECIMAL},
+    yfjsoct_sq = #{yfjsoct_sq,jdbcType=DECIMAL},
+    yfjsoct_sh = #{yfjsoct_sh,jdbcType=DECIMAL},
+    yssrqryj_oct = #{yssrqryj_oct,jdbcType=VARCHAR},
+    jssfcsj_oct = #{jssfcsj_oct,jdbcType=VARCHAR},
+    jssshsj_oct = #{jssshsj_oct,jdbcType=VARCHAR},
+    yssrnov_sq = #{yssrnov_sq,jdbcType=DECIMAL},
+    yssrnov_sh = #{yssrnov_sh,jdbcType=DECIMAL},
+    yffynov_sq = #{yffynov_sq,jdbcType=DECIMAL},
+    yffynov_sh = #{yffynov_sh,jdbcType=DECIMAL},
+    yfjsnov_sq = #{yfjsnov_sq,jdbcType=DECIMAL},
+    yfjsnov_sh = #{yfjsnov_sh,jdbcType=DECIMAL},
+    yssrqryj_nov = #{yssrqryj_nov,jdbcType=VARCHAR},
+    jssfcsj_nov = #{jssfcsj_nov,jdbcType=VARCHAR},
+    jssshsj_nov = #{jssshsj_nov,jdbcType=VARCHAR},
+    yssrdec_sq = #{yssrdec_sq,jdbcType=DECIMAL},
+    yssrdec_sh = #{yssrdec_sh,jdbcType=DECIMAL},
+    yffydec_sq = #{yffydec_sq,jdbcType=DECIMAL},
+    yffydec_sh = #{yffydec_sh,jdbcType=DECIMAL},
+    yfjsdec_sq = #{yfjsdec_sq,jdbcType=DECIMAL},
+    yfjsdec_sh = #{yfjsdec_sh,jdbcType=DECIMAL},
+    yssrqryj_dec = #{yssrqryj_dec,jdbcType=VARCHAR},
+    jssfcsj_dec = #{jssfcsj_dec,jdbcType=VARCHAR},
+    jssshsj_dec = #{jssshsj_dec,jdbcType=VARCHAR},
+    yjsstotal_sq = #{yjsstotal_sq,jdbcType=DECIMAL},
+    yjsstotal_sh = #{yjsstotal_sh,jdbcType=DECIMAL},
+    sjfytotal_sq = #{sjfytotal_sq,jdbcType=DECIMAL},
+    sjfytotal_sh = #{sjfytotal_sh,jdbcType=DECIMAL},
+    sjjstotal_sq = #{sjjstotal_sq,jdbcType=DECIMAL},
+    sjjstotal_sh = #{sjjstotal_sh,jdbcType=DECIMAL},
+    yjssbef_sq = #{yjssbef_sq,jdbcType=DECIMAL},
+    yjssbef_sh = #{yjssbef_sh,jdbcType=DECIMAL},
+    sjfybef_sq = #{sjfybef_sq,jdbcType=DECIMAL},
+    sjfybef_sh = #{sjfybef_sh,jdbcType=DECIMAL},
+    sjjsbef_sq = #{sjjsbef_sq,jdbcType=DECIMAL},
+    sjjsbef_sh = #{sjjsbef_sh,jdbcType=DECIMAL},
+    yjssthis_sq = #{yjssthis_sq,jdbcType=DECIMAL},
+    yjssthis_sh = #{yjssthis_sh,jdbcType=DECIMAL},
+    sjfythis_sq = #{sjfythis_sq,jdbcType=DECIMAL},
+    sjfythis_sh = #{sjfythis_sh,jdbcType=DECIMAL},
+    sjjsthis_sq = #{sjjsthis_sq,jdbcType=DECIMAL},
+    sjjsthis_sh = #{sjjsthis_sh,jdbcType=DECIMAL},
+    yjssjan_sq = #{yjssjan_sq,jdbcType=DECIMAL},
+    yjssjan_sh = #{yjssjan_sh,jdbcType=DECIMAL},
+    sjfyjan_sq = #{sjfyjan_sq,jdbcType=DECIMAL},
+    sjfyjan_sh = #{sjfyjan_sh,jdbcType=DECIMAL},
+    sjjsjan_sq = #{sjjsjan_sq,jdbcType=DECIMAL},
+    sjjsjan_sh = #{sjjsjan_sh,jdbcType=DECIMAL},
+    yjssfeb_sq = #{yjssfeb_sq,jdbcType=DECIMAL},
+    yjssfeb_sh = #{yjssfeb_sh,jdbcType=DECIMAL},
+    sjfyfeb_sq = #{sjfyfeb_sq,jdbcType=DECIMAL},
+    sjfyfeb_sh = #{sjfyfeb_sh,jdbcType=DECIMAL},
+    sjjsfeb_sq = #{sjjsfeb_sq,jdbcType=DECIMAL},
+    sjjsfeb_sh = #{sjjsfeb_sh,jdbcType=DECIMAL},
+    yjssmar_sq = #{yjssmar_sq,jdbcType=DECIMAL},
+    yjssmar_sh = #{yjssmar_sh,jdbcType=DECIMAL},
+    sjfymar_sq = #{sjfymar_sq,jdbcType=DECIMAL},
+    sjfymar_sh = #{sjfymar_sh,jdbcType=DECIMAL},
+    sjjsmar_sq = #{sjjsmar_sq,jdbcType=DECIMAL},
+    sjjsmar_sh = #{sjjsmar_sh,jdbcType=DECIMAL},
+    yjssapr_sq = #{yjssapr_sq,jdbcType=DECIMAL},
+    yjssapr_sh = #{yjssapr_sh,jdbcType=DECIMAL},
+    sjfyapr_sq = #{sjfyapr_sq,jdbcType=DECIMAL},
+    sjfyapr_sh = #{sjfyapr_sh,jdbcType=DECIMAL},
+    sjjsapr_sq = #{sjjsapr_sq,jdbcType=DECIMAL},
+    sjjsapr_sh = #{sjjsapr_sh,jdbcType=DECIMAL},
+    yjssmay_sq = #{yjssmay_sq,jdbcType=DECIMAL},
+    yjssmay_sh = #{yjssmay_sh,jdbcType=DECIMAL},
+    sjfymay_sq = #{sjfymay_sq,jdbcType=DECIMAL},
+    sjfymay_sh = #{sjfymay_sh,jdbcType=DECIMAL},
+    sjjsmay_sq = #{sjjsmay_sq,jdbcType=DECIMAL},
+    sjjsmay_sh = #{sjjsmay_sh,jdbcType=DECIMAL},
+    yjssjun_sq = #{yjssjun_sq,jdbcType=DECIMAL},
+    yjssjun_sh = #{yjssjun_sh,jdbcType=DECIMAL},
+    sjfyjun_sq = #{sjfyjun_sq,jdbcType=DECIMAL},
+    sjfyjun_sh = #{sjfyjun_sh,jdbcType=DECIMAL},
+    sjjsjun_sq = #{sjjsjun_sq,jdbcType=DECIMAL},
+    sjjsjun_sh = #{sjjsjun_sh,jdbcType=DECIMAL},
+    yjssjul_sq = #{yjssjul_sq,jdbcType=DECIMAL},
+    yjssjul_sh = #{yjssjul_sh,jdbcType=DECIMAL},
+    sjfyjul_sq = #{sjfyjul_sq,jdbcType=DECIMAL},
+    sjfyjul_sh = #{sjfyjul_sh,jdbcType=DECIMAL},
+    sjjsjul_sq = #{sjjsjul_sq,jdbcType=DECIMAL},
+    sjjsjul_sh = #{sjjsjul_sh,jdbcType=DECIMAL},
+    yjssaug_sq = #{yjssaug_sq,jdbcType=DECIMAL},
+    yjssaug_sh = #{yjssaug_sh,jdbcType=DECIMAL},
+    sjfyaug_sq = #{sjfyaug_sq,jdbcType=DECIMAL},
+    sjfyaug_sh = #{sjfyaug_sh,jdbcType=DECIMAL},
+    sjjsaug_sq = #{sjjsaug_sq,jdbcType=DECIMAL},
+    sjjsaug_sh = #{sjjsaug_sh,jdbcType=DECIMAL},
+    yjsssep_sq = #{yjsssep_sq,jdbcType=DECIMAL},
+    yjsssep_sh = #{yjsssep_sh,jdbcType=DECIMAL},
+    sjfysep_sq = #{sjfysep_sq,jdbcType=DECIMAL},
+    sjfysep_sh = #{sjfysep_sh,jdbcType=DECIMAL},
+    sjjssep_sq = #{sjjssep_sq,jdbcType=DECIMAL},
+    sjjssep_sh = #{sjjssep_sh,jdbcType=DECIMAL},
+    yjssoct_sq = #{yjssoct_sq,jdbcType=DECIMAL},
+    yjssoct_sh = #{yjssoct_sh,jdbcType=DECIMAL},
+    sjfyoct_sq = #{sjfyoct_sq,jdbcType=DECIMAL},
+    sjfyoct_sh = #{sjfyoct_sh,jdbcType=DECIMAL},
+    sjjsoct_sq = #{sjjsoct_sq,jdbcType=DECIMAL},
+    sjjsoct_sh = #{sjjsoct_sh,jdbcType=DECIMAL},
+    yjssnov_sq = #{yjssnov_sq,jdbcType=DECIMAL},
+    yjssnov_sh = #{yjssnov_sh,jdbcType=DECIMAL},
+    sjfynov_sq = #{sjfynov_sq,jdbcType=DECIMAL},
+    sjfynov_sh = #{sjfynov_sh,jdbcType=DECIMAL},
+    sjjsnov_sq = #{sjjsnov_sq,jdbcType=DECIMAL},
+    sjjsnov_sh = #{sjjsnov_sh,jdbcType=DECIMAL},
+    yjssdec_sq = #{yjssdec_sq,jdbcType=DECIMAL},
+    yjssdec_sh = #{yjssdec_sh,jdbcType=DECIMAL},
+    sjfydec_sq = #{sjfydec_sq,jdbcType=DECIMAL},
+    sjfydec_sh = #{sjfydec_sh,jdbcType=DECIMAL},
+    sjjsdec_sq = #{sjjsdec_sq,jdbcType=DECIMAL},
+    sjjsdec_sh = #{sjjsdec_sh,jdbcType=DECIMAL},
+    gwyjtotal = #{gwyjtotal,jdbcType=DECIMAL},
+    tjyjtotal = #{tjyjtotal,jdbcType=DECIMAL},
+    datecreate = #{datecreate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="queryList" parameterType="map" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM RPT_QT_LnkDetail r
+    WHERE r.yearly = #{organization,jdbcType=VARCHAR}
+
+    <if test="accountProjectList != null" >
+      AND r.accountProjectNo IN
+      <foreach collection="accountProjectList" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+
+    </if>
+
+    <if test="regionCodeList != null">
+      AND r.yjgsqyCode IN
+      <foreach collection="regionCodeList" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="areaCityCodeList != null">
+      AND r.yjgsareaCode IN
+      <foreach collection="areaCityCodeList" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="cityIdList != null">
+      AND r.yjszcsid IN
+      <foreach collection="cityIdList" item="item" index="index"  open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+    <if test="centerIdList != null">
+      AND r.yjgszxid IN
+      <foreach collection="centerIdList" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+    <if test="project != null and project != ''">
+      AND (r.projectNo like CONCAT('%', #{project},'%') OR r.estateName like CONCAT('%', #{project},'%') )
+    </if>
+
+    <if test="reportId != null and reportId != ''">
+      AND r.reportNo like CONCAT('%', #{reportId},'%')
+    </if>
+
+    <if test="dealDateStart != null and dealDateStart != ''">
+        <![CDATA[
+  		  AND Convert(varchar(10),r.dealDate,120) >= #{dealDateStart,jdbcType=NVARCHAR}
+        ]]>
+    </if>
+    <if test="dealDateEnd != null and dealDateEnd != ''">
+        <![CDATA[
+          AND Convert(varchar(10),r.dealDate,120) <= #{dealDateEnd,jdbcType=NVARCHAR}
+    	]]>
+    </if>
+
+    ORDER BY id
+  </select>
+
+  <update id="export" parameterType="map">
+      EXEC usp_EXPORTDATA_BCP  #{sqlstr},#{filePathName};
+  </update>
+</mapper>

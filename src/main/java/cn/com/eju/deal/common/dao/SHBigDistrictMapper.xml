@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.common.dao.SHBigDistrictMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.common.model.SHBigDistrict">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="groupId" property="groupId" jdbcType="INTEGER" />
+		<result column="orgId" property="orgId" jdbcType="VARCHAR" />
+		<result column="bigDistrictNo" property="bigDistrictNo"
+			jdbcType="VARCHAR" />
+		<result column="bigDistrictName" property="bigDistrictName"
+			jdbcType="VARCHAR" />
+		<result column="districtNo" property="districtNo" jdbcType="VARCHAR" />
+		<result column="districtName" property="districtName" jdbcType="VARCHAR" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="userCreateId" property="userCreateId" jdbcType="INTEGER" />
+		<result column="delFlg" property="delFlg" jdbcType="CHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, groupId, orgId, bigDistrictNo, bigDistrictName, districtNo,
+		districtName, dateCreate,
+		userCreateId, delFlg
+	</sql>
+	<sql id="Base_Column_List2">
+		DISTINCT districtNo,
+		districtName
+	</sql>
+	<select id="getBigDistrictBySelectedPostId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		<!-- 用户所在组是各区父组 -->
+		SELECT
+			<include refid="Base_Column_List2" />
+		FROM dbo.BAS_SHBigDistrict T1
+		WHERE T1.delFlg = 'N'
+		AND T1.orgId LIKE ( SELECT orgId.ToString() + '%'
+			FROM dbo.USR_Group
+			WHERE groupId = (SELECT groupId FROM dbo.USR_Post WHERE delFlag='N' AND postId = #{selectedPostId})
+		)
+		UNION
+		<!-- 用户组是各区下属组 -->
+		SELECT
+			<include refid="Base_Column_List2" />
+		FROM dbo.BAS_SHBigDistrict T1
+		WHERE T1.delFlg = 'N'
+		AND ( SELECT orgId.ToString()
+			FROM dbo.USR_Group
+			WHERE groupId = (SELECT groupId FROM dbo.USR_Post WHERE delFlag='N' AND postId = #{selectedPostId})
+		) LIKE T1.orgId + '%'
+	</select>
+</mapper>

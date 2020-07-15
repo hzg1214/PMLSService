@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.performswitch.dao.PmlsPerformSwitchWeekLogMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeekLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="relateSystem" jdbcType="INTEGER" property="relateSystem" />
+    <result column="cityNo" jdbcType="VARCHAR" property="cityNo" />
+    <result column="year" jdbcType="VARCHAR" property="year" />
+    <result column="month" jdbcType="VARCHAR" property="month" />
+    <result column="weekNo" jdbcType="INTEGER" property="weekNo" />
+    <result column="switchState" jdbcType="INTEGER" property="switchState" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="createUserCode" jdbcType="VARCHAR" property="createUserCode" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, relateSystem, cityNo, year, month, weekNo, switchState, createDate, createUserCode, 
+    delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Pmls_Perform_Switch_Week_Log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Pmls_Perform_Switch_Week_Log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeekLog">
+    insert into Pmls_Perform_Switch_Week_Log (id, relateSystem, cityNo, 
+      year, month, weekNo, 
+      switchState, createDate, createUserCode, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{relateSystem,jdbcType=INTEGER}, #{cityNo,jdbcType=VARCHAR}, 
+      #{year,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{weekNo,jdbcType=INTEGER}, 
+      #{switchState,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{createUserCode,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeekLog">
+    insert into Pmls_Perform_Switch_Week_Log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relateSystem != null">
+        relateSystem,
+      </if>
+      <if test="cityNo != null">
+        cityNo,
+      </if>
+      <if test="year != null">
+        year,
+      </if>
+      <if test="month != null">
+        month,
+      </if>
+      <if test="weekNo != null">
+        weekNo,
+      </if>
+      <if test="switchState != null">
+        switchState,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="createUserCode != null">
+        createUserCode,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="relateSystem != null">
+        #{relateSystem,jdbcType=INTEGER},
+      </if>
+      <if test="cityNo != null">
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null">
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+        #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="weekNo != null">
+        #{weekNo,jdbcType=INTEGER},
+      </if>
+      <if test="switchState != null">
+        #{switchState,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserCode != null">
+        #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeekLog">
+    update Pmls_Perform_Switch_Week_Log
+    <set>
+      <if test="relateSystem != null">
+        relateSystem = #{relateSystem,jdbcType=INTEGER},
+      </if>
+      <if test="cityNo != null">
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null">
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+        month = #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="weekNo != null">
+        weekNo = #{weekNo,jdbcType=INTEGER},
+      </if>
+      <if test="switchState != null">
+        switchState = #{switchState,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserCode != null">
+        createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeekLog">
+    update Pmls_Perform_Switch_Week_Log
+    set relateSystem = #{relateSystem,jdbcType=INTEGER},
+      cityNo = #{cityNo,jdbcType=VARCHAR},
+      year = #{year,jdbcType=VARCHAR},
+      month = #{month,jdbcType=VARCHAR},
+      weekNo = #{weekNo,jdbcType=INTEGER},
+      switchState = #{switchState,jdbcType=INTEGER},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

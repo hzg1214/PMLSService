@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.AchievementCancelMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.AchievementCancel">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="achievementCancelNo" property="achievementCancelNo" jdbcType="NVARCHAR" />
+		<result column="contractId" property="contractId" jdbcType="INTEGER" />
+		<result column="cancelReason" property="cancelReason" jdbcType="NVARCHAR" />
+		<result column="flowId" property="flowId" jdbcType="NVARCHAR" />
+		<result column="remarks" property="remarks" jdbcType="NVARCHAR" />
+		<result column="approveState" property="approveState" jdbcType="NVARCHAR" />
+		<result column="approveDate" property="approveDate" jdbcType="TIMESTAMP" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="userCreate" property="userCreate" jdbcType="INTEGER" />
+		<result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+		<result column="updateUser" property="updateUser" jdbcType="INTEGER" />
+		<result column="accountSubject" property="accountSubject" jdbcType="NVARCHAR" />
+		<result column="busDepartment" property="busDepartment" jdbcType="NVARCHAR" />
+		<result column="isDelete" property="isDelete" jdbcType="BIT" />
+	</resultMap>
+	
+	 <resultMap id="StoreDecorationMap" type="cn.com.eju.deal.dto.store.StoreDecorationDto" />
+	
+	<sql id="Base_Column_List">
+	achievementCancelNo,contractId,cancelReason,flowId,remarks,approveState,
+	approveDate,dateCreate,userCreate,updateDate,updateUser,accountSubject,
+	busDepartment,isDelete
+	</sql>
+	
+	<resultMap id="AchievementCancelDtoMap" type="cn.com.eju.deal.dto.contract.AchievementCancelDto" />
+	<resultMap id="StoreDtoMap" type="cn.com.eju.deal.dto.store.StoreDto" />
+	<!-- 根据合同ID查询门店撤销信息 -->
+	<select id="getAchievementCancelInfo" resultMap="AchievementCancelDtoMap" parameterType="java.lang.Integer">	
+        SELECT  s.id AS storeId ,
+		        s.StoreNo AS storeNo ,
+		        s.Name AS storeName ,
+		        bd.DistrictName AS districtName ,
+		        T.CompanyName AS companyName ,
+		        s.Address AS address ,
+		        T.dicValue AS contractTypeStr ,
+		        decorationStatusStr = ISNULL(bdv2.dicValue, '-') ,
+		        updateDateStr = CASE WHEN ISNULL(SC.dateCreate, 0) >= ISNULL(SC.updateDate,
+		                                                              0) THEN '-'
+		                             ELSE CONVERT(VARCHAR(10), SC.updateDate, 120)
+		                        END ,
+		        cs.isCancel ,
+		        k.changeCompany ,k.changeType,
+		        k.approveState ,
+		        k.contractStopNo ,
+		        k.cancelFlag,
+		        s.businessStatus
+		FROM    dbo.ContractStore cs
+		        LEFT JOIN dbo.Store s ON s.Id = cs.StoreId
+		                                 AND s.IsDelete = 0
+		        LEFT JOIN dbo.BAS_District bd ON bd.DistrictNo = s.DistrictNo
+		        LEFT JOIN ( SELECT  storeId ,
+		                            MAX(Id) AS 'id'
+		                    FROM    dbo.Store_Decoration SD
+		                    WHERE   SD.delFlag = 0
+		                    GROUP BY SD.storeId
+		                  ) F ON F.storeId = CS.StoreId
+		        LEFT JOIN Store_Decoration SC ON SC.id = F.id
+		        LEFT JOIN ( SELECT  cc.contractId ,
+		                            ccs.storeId ,
+		                            cc.changeCompany ,cc.changeType,
+		                            cc.approveState ,
+		                            cc.contractStopNo,cancelFlag
+		                    FROM    ContractChange cc
+		                            JOIN ContractChangeStore ccs ON cc.id = ccs.contractStopId
+		                    WHERE   cc.contractId = #{contractId,jdbcType=INTEGER}
+		                            AND cc.delFlag = 0
+		                            AND ccs.delFlag = 0
+		                            AND cc.approveState &lt;&gt; 2
+									AND cc.cancelFlag = 0
+		                            AND cc.changeType IN (17002,17003,17004)
+		                  ) k ON k.contractId = cs.ContractId
+		                         AND k.storeId = s.id
+		        LEFT JOIN dbo.BAS_DictionaryValue bdv2 ON bdv2.dicCode = SC.decorationStatus
+		        JOIN ( SELECT   bdv.dicValue ,
+		                        cy.CompanyName ,
+		                        c.id
+		               FROM     dbo.Contract c
+		                        LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode = c.ContractType
+		                        LEFT JOIN dbo.Company cy ON cy.Id = c.CompanyId
+		               WHERE    c.Id = #{contractId,jdbcType=INTEGER}
+		             ) T ON t.id = cs.ContractId
+		WHERE   cs.IsDelete = 0
+		        AND cs.ContractId = #{contractId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 获取门店业绩撤销记录 -->
+	<select id="getAchievementCancelRecord" resultMap="AchievementCancelDtoMap" parameterType="java.lang.Integer">	
+        SELECT  SAC.achievementCancelNo ,
+                SAC.flowId,
+		        SAC.dateCreate ,
+		        UR.userCode,
+		        SAC.approveState ,
+		        SAC.approveDate ,
+		        CY.CompanyName as companyName,
+		        UR.userName as userCreateName,
+		        BDV.dicValue AS approveStateName ,
+		        storeNum = ( SELECT COUNT(1)
+		                     FROM   dbo.Store_AchievementCancelMapping
+		                     WHERE  achievementCancelId = SAC.id
+		                            AND delFlag = 0
+		                   )
+		FROM    dbo.Store_AchievementCancel SAC
+		        LEFT JOIN dbo.Contract CT ON CT.Id = SAC.contractId
+		        LEFT JOIN dbo.Company CY ON CY.Id = CT.CompanyId
+		        LEFT JOIN crm.dbo.USR_User UR ON UR.userId = SAC.userCreate
+		        LEFT JOIN dbo.BAS_DictionaryValue BDV ON BDV.dicCode = SAC.approveState
+		WHERE   SAC.isDelete = 0
+		        AND contractId =  #{contractId,jdbcType=INTEGER}
+		ORDER BY SAC.achievementCancelNo DESC
+	</select>
+	
+	<!--  根据合同ID和门店撤销编号获取-查看-所需详细信息 -->
+	<select id="getInfoToView" resultMap="AchievementCancelDtoMap" parameterType="java.util.Map">	
+        SELECT  SAC.achievementCancelNo ,
+		        SAC.dateCreate ,
+		        UR.userCode ,
+		        SAC.approveState ,
+		        SAC.approveDate ,
+		        CY.CompanyName AS companyName ,
+		        UR.userName AS userCreateName ,
+		        BDV.dicValue AS approveStateName ,
+		        storeNum = ( SELECT COUNT(1)
+		                     FROM   dbo.Store_AchievementCancelMapping
+		                     WHERE  achievementCancelId = SAC.id
+		                            AND delFlag = 0
+		                   ) ,
+		        SAC.cancelReason ,
+		        SAC.remarks,ContractNo
+		FROM    dbo.Store_AchievementCancel SAC
+		        LEFT JOIN dbo.Contract CT ON CT.Id = SAC.contractId
+		        LEFT JOIN dbo.Company CY ON CY.Id = CT.CompanyId
+		        LEFT JOIN crm.dbo.USR_User UR ON UR.userId = SAC.userCreate
+		        LEFT JOIN dbo.BAS_DictionaryValue BDV ON BDV.dicCode = SAC.approveState
+		WHERE   SAC.isDelete = 0
+		        AND achievementCancelNo = #{achievementCancelNo,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 获取被撤销门店信息 -->
+	<select id="getStoreInfoToView" resultMap="StoreDtoMap" parameterType="java.util.Map">	
+	    SELECT  S.Name AS name ,
+	            S.StoreNo AS storeNo ,
+	            T.dicValue AS contractTypeName ,
+	            S.Address AS address ,
+	            BDT.DistrictName AS districtName ,
+	            decorationStatusName = ISNULL(bdv2.dicValue, '-') ,
+	            updateDateStr = CASE WHEN ISNULL(SDN.dateCreate, 0) >= ISNULL(SDN.updateDate, 0)
+                                     THEN '-'
+                                     ELSE CONVERT(VARCHAR(10), SDN.updateDate, 120)
+                                END 
+	    FROM    dbo.Store_AchievementCancel  SAC
+	            LEFT JOIN dbo.Store_AchievementCancelMapping SAM ON SAC.id = SAM.achievementCancelId
+	            LEFT JOIN dbo.Store S ON S.Id = SAM.storeId
+	                                     AND S.IsDelete = 0
+	            LEFT JOIN dbo.BAS_District BDT ON S.DistrictNo = BDT.DistrictNo
+	            LEFT JOIN (SELECT MAX(id) id , storeId FROM dbo.Store_Decoration WHERE delFlag =0 GROUP BY storeId) F ON F.storeId = SAM.StoreId 
+				LEFT JOIN dbo.Store_Decoration SDN ON SDN.id =F.id 
+	            LEFT JOIN dbo.BAS_DictionaryValue bdv2 ON bdv2.dicCode = SDN.decorationStatus ,
+	            ( SELECT    BDV.dicValue FROM dbo.Contract C
+	                        LEFT JOIN dbo.BAS_DictionaryValue BDV ON BDV.dicCode = C.ContractType
+	              WHERE     Id = #{contractId,jdbcType=INTEGER}
+	            ) T
+	    WHERE   SAC.isDelete = 0
+	            AND SAM.delFlag = 0
+	            AND S.IsDelete = 0
+	            AND SAC.achievementCancelNo = #{achievementCancelNo,jdbcType=VARCHAR}
+	</select>
+	
+ 	<!-- 获取门店撤销申请撤销所需的[页面]信息【OA专用】 -->
+	<select id="getContractInfo" resultMap="AchievementCancelDtoMap" parameterType="java.util.Map">	
+        SELECT  CT.ContractNo ,
+        		CY.CompanyNo
+		FROM    dbo.Contract CT
+		        LEFT JOIN dbo.Company CY ON CT.CompanyId = CY.Id
+		WHERE   CT.Id = #{contractId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 获取门店撤销申请撤销所需的[门店]信息【OA专用】 -->
+	<select id="getStoreInfo" resultMap="StoreDtoMap" parameterType="java.util.Map">	
+        SELECT  S.Name ,
+		        S.StoreNo ,
+		        S.Address ,
+		        decorationStatusName =ISNULL(bdv.dicValue,'-')
+		FROM    dbo.Store S
+		        LEFT JOIN (SELECT MAX(id) id , storeId FROM dbo.Store_Decoration WHERE delFlag =0 GROUP BY storeId) F ON F.storeId = s.Id
+				LEFT JOIN dbo.Store_Decoration SDN ON SDN.id =F.id 
+		        LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode = SDN.decorationStatus
+        WHERE
+        	1=1
+	       	<if test="storeIdList != null and storeIdList != ''">
+				<foreach collection="storeIdList" item="item" index="index"
+					open="AND (" close=")" separator="OR">
+						<![CDATA[
+			    			 S.Id = #{item, jdbcType=INTEGER}
+			    		]]>
+				</foreach>
+			</if>
+	</select>
+	
+ 	<!-- 插入门店撤销记录  -->
+  	<insert id="createNewCancelRecord"  parameterType="cn.com.eju.deal.contract.model.AchievementCancel"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO Store_AchievementCancel
+		( achievementCancelNo, contractId, cancelReason, flowId, approveState, approveDate, dateCreate,  
+		userCreate, accountSubject, busDepartment, isDelete,stopKbn)
+		VALUES
+		(#{achievementCancelNo, jdbcType =NVARCHAR},#{contractId, jdbcType =INTEGER},#{cancelReason, jdbcType =NVARCHAR}
+		,#{flowId, jdbcType =NVARCHAR},#{approveState, jdbcType =NVARCHAR},#{approveDate, jdbcType =TIMESTAMP}
+		,#{dateCreate, jdbcType =TIMESTAMP},#{userCreate, jdbcType =INTEGER},#{accountSubject, jdbcType =NVARCHAR},#{busDepartment, jdbcType =NVARCHAR}
+		,#{isDelete, jdbcType =BIT},#{stopKbn, jdbcType =CHAR})
+	</insert>
+	
+	<!-- OA审核后，更新审核状态 -->
+	<update id="updateCancelState" parameterType="Map">
+		UPDATE  dbo.Store_AchievementCancel
+		SET     approveState = #{approveState, jdbcType =NVARCHAR} ,
+		        remarks = #{remarks, jdbcType =NVARCHAR},
+		        approveDate = #{approveDate, jdbcType =TIMESTAMP}
+		WHERE   achievementCancelNo = #{achievementCancelNo, jdbcType =NVARCHAR}
+	</update>
+	
+	<!-- 门店撤销申请变更，更新审核状态 -->
+	<update id="updateCancelRecord" parameterType="cn.com.eju.deal.contract.model.AchievementCancel"
+		useGeneratedKeys="true" keyProperty="id">
+		UPDATE  dbo.Store_AchievementCancel
+		SET     approveState = #{approveState, jdbcType =NVARCHAR} ,
+				cancelReason = #{cancelReason, jdbcType =NVARCHAR},
+				flowId = #{flowId, jdbcType =NVARCHAR} ,
+				updateDate = #{updateDate, jdbcType =TIMESTAMP},
+				updateUser =#{updateUser, jdbcType =INTEGER},
+				accountSubject =#{accountSubject, jdbcType =NVARCHAR},
+				busDepartment =#{busDepartment, jdbcType =NVARCHAR},
+				remarks = 'null',
+				isDelete = 0
+		WHERE   achievementCancelNo =#{achievementCancelNo, jdbcType =NVARCHAR}
+	</update>
+	
+	<!-- 根据No查询信息 -->
+	<select id="getAchievementCancelByNo" resultMap="BaseResultMap" parameterType="java.util.Map">	
+        SELECT * FROM dbo.Store_AchievementCancel WHERE achievementCancelNo = #{achievementCancelNo, jdbcType =NVARCHAR}
+	</select>
+	
+	
+	<select id="getCancelByapproveState" resultMap="BaseResultMap" parameterType="java.util.Map">	
+        SELECT * 
+          FROM dbo.Store_AchievementCancel 
+          WHERE 
+           approveState = #{approveState, jdbcType =NVARCHAR}
+           AND isDelete=0
+	</select>
+
+	<!--Add cning 2017/07/04 Start-->
+	<!-- 获取被撤销的门店信息 -->
+	<select id="getCancelStore" resultMap="BaseResultMap" parameterType="java.util.Map">	
+	    SELECT  SAC.*
+		FROM    dbo.Store_AchievementCancel SAC
+		where id in (
+			SELECT achievementCancelId 
+				FROM Store_AchievementCancelMapping
+				where  isDelete=0 AND contractId=#{contractId,jdbcType=INTEGER} AND storeId=#{storeId,jdbcType=INTEGER}
+		)
+		AND SAC.isDelete=0
+	</select>
+	<!--Add cning 2017/07/04 End-->
+	
+	<select id="getStoreDecorationList" resultMap="StoreDecorationMap" parameterType="java.util.Map">
+	        SELECT S.StoreNo AS storeNo,S.Name AS storeName,SF.oaMdfpStatus,CD.decorateStatus AS decorationStatus FROM OMS.dbo.CRM_Decoration CD 
+				  LEFT JOIN Store S ON S.StoreNo = CD.storeNo AND S.IsDelete = 0
+				  LEFT JOIN Contract C ON C.ContractNo = CD.contractNo
+				  LEFT JOIN OMS.dbo.CRM_oaStoreFlop SF ON CD.decorateId = SF.decorateId AND SF.delFlag = 0
+				  WHERE    CD.delFlag = 0
+				  AND C.Id = #{contractId}
+	              <if test="storeIdList != null and storeIdList != ''">
+					<foreach collection="storeIdList" item="item" index="index"
+						open="AND (" close=")" separator="OR">
+							<![CDATA[
+				    			S.Id = #{item, jdbcType=INTEGER}
+				    		]]>
+					</foreach>
+		          </if>
+	</select>
+
+	<update id="updateStoreIsCancel" parameterType="java.lang.String">
+		UPDATE  dbo.ContractStore
+		SET     ContractStore.isCancel = 17201
+		FROM    ContractStore
+				INNER JOIN Store_AchievementCancel sac ON ContractStore.ContractId = sac.contractId
+				INNER JOIN dbo.Store_AchievementCancelMapping sacm ON sacm.achievementCancelId = sac.id
+																	  AND sacm.storeId = ContractStore.StoreId
+		WHERE   sac.achievementCancelNo = #{achievementCancelNo}
+				AND sacm.delFlag = 0
+				AND sac.isDelete = 0
+				AND ContractStore.IsDelete = 0
+	</update>
+ </mapper>

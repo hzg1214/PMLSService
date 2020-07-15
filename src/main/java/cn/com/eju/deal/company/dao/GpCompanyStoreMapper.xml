@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.company.dao.GpCompanyStoreMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.company.model.GpCompanyStore">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="CompanyId" property="companyId" jdbcType="NVARCHAR" />
+		<result column="StoreId" property="storeId" jdbcType="NVARCHAR" />
+		<result column="IsDelete" property="isDelete" jdbcType="BIT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, CompanyId, StoreId, IsDelete
+	</sql>
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from Gp_CompanyStore
+		where Id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="getGpCompanyStoreList" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		from Gp_CompanyStore
+		where CompanyId=#{companyId,jdbcType=INTEGER}
+			and IsDelete=0
+	</select>
+
+	<delete id="deleteById">
+		UPDATE dbo.Gp_CompanyStore SET IsDelete=1
+		<where>CompanyId=#{companyId} and StoreId=#{storeId}</where>
+	</delete>
+
+
+	<delete id="deleteGpCompanyStore">
+		UPDATE dbo.Gp_CompanyStore SET IsDelete=1
+		<where>CompanyId=#{companyId}</where>
+	</delete>
+
+
+	<insert id="create" parameterType="cn.com.eju.deal.company.model.GpCompanyStore"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into Gp_CompanyStore (Id, CompanyId, StoreId,
+		IsDelete)
+		values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=NVARCHAR},
+		#{storeId,jdbcType=NVARCHAR},
+		#{isDelete,jdbcType=BIT})
+	</insert>
+
+	<insert id="batchCreate" parameterType="java.util.List">
+		INSERT INTO Gp_CompanyStore
+		( 
+		CompanyId ,
+		StoreId ,
+		IsDelete
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.companyId},#{item.storeId},0)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="cn.com.eju.deal.company.model.GpCompanyStore">
+		update Gp_CompanyStore
+		set CompanyId = #{companyId,jdbcType=NVARCHAR},
+		StoreId = #{storeId,jdbcType=NVARCHAR},
+		IsDelete = #{isDelete,jdbcType=BIT}
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="deleteRelate" parameterType="cn.com.eju.deal.company.model.GpCompanyStore">
+		UPDATE dbo.Gp_CompanyStore SET IsDelete=1
+		<where>CompanyId=#{companyId} and StoreId=#{storeId}</where>
+	</update>
+</mapper>

@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.remittanceTrack.dao.RemittanceTrackMapper">
+
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack">
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="year" jdbcType="INTEGER" property="year" />
+    <result column="month" jdbcType="INTEGER" property="month" />
+    <result column="week" jdbcType="INTEGER" property="week" />
+    <result column="projectNo" jdbcType="VARCHAR" property="projectNo" />
+    <result column="xjAccount" jdbcType="DECIMAL" property="xjAccount" />
+    <result column="dfAccount" jdbcType="DECIMAL" property="dfAccount" />
+    <result column="trackType" jdbcType="VARCHAR" property="trackType" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="dateUpdate" jdbcType="TIMESTAMP" property="dateUpdate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="userIdUpdate" jdbcType="INTEGER" property="userIdUpdate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  		Id,
+	    year,
+		month,
+		week,
+		projectNo,
+		xjAccount,
+		dfAccount,
+		trackType,
+		dateCreate,
+		dateUpdate,
+		userIdCreate,
+		userIdUpdate,
+		delFlag
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from PMLS_Remittance_Track
+    where Id = #{id,jdbcType=INTEGER}
+    and delFlag = 0
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from PMLS_Remittance_Track
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack" useGeneratedKeys="true" keyProperty="id">
+    insert into PMLS_Remittance_Track (
+    	id,
+      	year,
+		month,
+		week,
+		projectNo,
+		xjAccount,
+		dfAccount,
+		trackType,
+		dateCreate,
+		dateUpdate,
+		userIdCreate,
+		userIdUpdate,
+		delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, #{month,jdbcType=INTEGER},
+      #{week,jdbcType=INTEGER}, #{projectNo,jdbcType=VARCHAR}, #{xjAccount,jdbcType=DECIMAL},
+      #{dfAccount,jdbcType=DECIMAL}, #{trackType,jdbcType=VARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}
+      #{dateUpdate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{userIdUpdate,jdbcType=INTEGER},
+      #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack">
+    update PMLS_Remittance_Track
+    <set>
+      <if test="year != null">
+        year = #{year,jdbcType=INTEGER},
+      </if>
+      <if test="month != null">
+        month = #{month,jdbcType=INTEGER},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=INTEGER},
+      </if>
+      <if test="projectNo != null">
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="xjAccount != null">
+        xjAccount = #{xjAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="dfAccount != null">
+        dfAccount = #{dfAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="trackType != null">
+        trackType = #{trackType,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="userIdUpdate != null">
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询 list 表头-->
+    <select id="getRemittanceTitle" parameterType="Map" resultType="cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackDto">
+        SELECT 
+		(CASE WHEN t.weekStartDate1 IS NOT NULL THEN CONCAT(t.weekStartDate1,'-',t.weekEndDate1) ELSE NULL END) weekDate1
+		,(CASE WHEN t.weekStartDate2 IS NOT NULL THEN CONCAT(t.weekStartDate2,'-',t.weekEndDate2) ELSE NULL END) weekDate2
+		,(CASE WHEN t.weekStartDate3 IS NOT NULL THEN CONCAT(t.weekStartDate3,'-',t.weekEndDate3) ELSE NULL END) weekDate3
+		,(CASE WHEN t.weekStartDate4 IS NOT NULL THEN CONCAT(t.weekStartDate4,'-',t.weekEndDate4) ELSE NULL END) weekDate4
+		,(CASE WHEN t.weekStartDate5 IS NOT NULL THEN CONCAT(t.weekStartDate5,'-',t.weekEndDate5) ELSE NULL END) weekDate5
+		,(CASE WHEN t.weekStartDate6 IS NOT NULL THEN CONCAT(t.weekStartDate6,'-',t.weekEndDate6) ELSE NULL END) weekDate6
+		  FROM (SELECT  t1.year ,
+		        t1.month ,
+		        MAX(CASE WHEN t1.weekNo = 1
+		                 THEN CONVERT(VARCHAR(100), t1.weekStartDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekStartDate1 ,
+		        MAX(CASE WHEN t1.weekNo = 1
+		                 THEN CONVERT(VARCHAR(100), t1.weekEndDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekEndDate1 ,
+		        MAX(CASE WHEN t1.weekNo = 2
+		                 THEN CONVERT(VARCHAR(100), t1.weekStartDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekStartDate2 ,
+		        MAX(CASE WHEN t1.weekNo = 2
+		                 THEN CONVERT(VARCHAR(100), t1.weekEndDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekEndDate2 ,
+		        MAX(CASE WHEN t1.weekNo = 3
+		                 THEN CONVERT(VARCHAR(100), t1.weekStartDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekStartDate3 ,
+		        MAX(CASE WHEN t1.weekNo = 3
+		                 THEN CONVERT(VARCHAR(100), t1.weekEndDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekEndDate3 ,
+		        MAX(CASE WHEN t1.weekNo = 4
+		                 THEN CONVERT(VARCHAR(100), t1.weekStartDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekStartDate4 ,
+		        MAX(CASE WHEN t1.weekNo = 4
+		                 THEN CONVERT(VARCHAR(100), t1.weekEndDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekEndDate4 ,
+		        MAX(CASE WHEN t1.weekNo = 5
+		                 THEN CONVERT(VARCHAR(100), t1.weekStartDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekStartDate5 ,
+		        MAX(CASE WHEN t1.weekNo = 5
+		                 THEN CONVERT(VARCHAR(100), t1.weekEndDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekEndDate5 ,
+		        MAX(CASE WHEN t1.weekNo = 6
+		                 THEN CONVERT(VARCHAR(100), t1.weekStartDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekStartDate6 ,
+		        MAX(CASE WHEN t1.weekNo = 6
+		                 THEN CONVERT(VARCHAR(100), t1.weekEndDateStr, 2)
+		                 ELSE NULL
+		            END) AS weekEndDate6
+		FROM    dbo.Pmls_Week_Info t1
+		WHERE   t1.year = #{year,jdbcType=INTEGER}
+		        AND t1.month = #{month,jdbcType=INTEGER}
+		GROUP BY t1.year , t1.month 
+		) t
+    </select>
+    
+      <!-- 查询 list -->
+    <select id="queryRemitanceTrackList" parameterType="Map" resultType="cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackDto">
+        SELECT  ROW_NUMBER() OVER ( ORDER BY t.projectNo DESC ) rowNo 
+        ,e.projectNo projectNo
+        ,e.EstateNm projectName 
+        ,e.projectStatus 
+        ,db1.dicValue projectStatusStr 
+        ,t.Id
+		,t.yearMonthVersion
+		,t.weekVersion
+		,t.sortNo
+        ,ISNULL(vp.PartnerNm, '') partnerName
+        ,CAST(ROUND(t.xjAccount${dataMonth}_1,2) AS DECIMAL(18,2)) xjAccount1 
+		,CAST(ROUND(t.dfAccount${dataMonth}_1,2) AS DECIMAL(18,2)) dfAccount1 
+		,CAST(ROUND(ISNULL(t.xjAccount${dataMonth}_1,0)+ISNULL(t.dfAccount${dataMonth}_1,0),2) AS DECIMAL(18,2)) weekTotal1
+		
+		,CAST(ROUND(t.xjAccount${dataMonth}_2,2) AS DECIMAL(18,2)) xjAccount2 
+		,CAST(ROUND(t.dfAccount${dataMonth}_2,2) AS DECIMAL(18,2)) dfAccount2 
+		,CAST(ROUND(ISNULL(t.xjAccount${dataMonth}_2,0)+ISNULL(t.dfAccount${dataMonth}_2,0),2) AS DECIMAL(18,2)) weekTotal2
+		
+		,CAST(ROUND(t.xjAccount${dataMonth}_3,2) AS DECIMAL(18,2)) xjAccount3
+		,CAST(ROUND(t.dfAccount${dataMonth}_3,2) AS DECIMAL(18,2)) dfAccount3
+		,CAST(ROUND(ISNULL(t.xjAccount${dataMonth}_3,0)+ISNULL(t.dfAccount${dataMonth}_3,0),2) AS DECIMAL(18,2)) weekTotal3
+		
+		,CAST(ROUND(t.xjAccount${dataMonth}_4,2) AS DECIMAL(18,2)) xjAccount4 
+		,CAST(ROUND(t.dfAccount${dataMonth}_4,2) AS DECIMAL(18,2)) dfAccount4 
+		,CAST(ROUND(ISNULL(t.xjAccount${dataMonth}_4,0)+ISNULL(t.dfAccount${dataMonth}_4,0),2) AS DECIMAL(18,2)) weekTotal4
+		
+		,CAST(ROUND(t.xjAccount${dataMonth}_5,2) AS DECIMAL(18,2)) xjAccount5
+		,CAST(ROUND(t.dfAccount${dataMonth}_5,2) AS DECIMAL(18,2)) dfAccount5 
+		,CAST(ROUND(ISNULL(t.xjAccount${dataMonth}_5,0)+ISNULL(t.dfAccount${dataMonth}_5,0),2) AS DECIMAL(18,2)) weekTotal5
+		
+		,CAST(ROUND(t.xjAccount${dataMonth}_6,2) AS DECIMAL(18,2)) xjAccount6 
+		,CAST(ROUND(t.dfAccount${dataMonth}_6,2) AS DECIMAL(18,2)) dfAccount6 
+		,CAST(ROUND(ISNULL(t.xjAccount${dataMonth}_6,0)+ISNULL(t.dfAccount${dataMonth}_6,0),2) AS DECIMAL(18,2)) weekTotal6
+		
+		,CAST(ROUND(ISNULL(t.xjAccount${dataMonth}_1,0)+ISNULL(t.dfAccount${dataMonth}_1,0)
+		+ISNULL(t.xjAccount${dataMonth}_2,0)+ISNULL(t.dfAccount${dataMonth}_2,0)
+		+ISNULL(t.xjAccount${dataMonth}_3,0)+ISNULL(t.dfAccount${dataMonth}_3,0)
+		+ISNULL(t.xjAccount${dataMonth}_4,0)+ISNULL(t.dfAccount${dataMonth}_4,0)
+		+ISNULL(t.xjAccount${dataMonth}_5,0)+ISNULL(t.dfAccount${dataMonth}_5,0)
+		+ISNULL(t.xjAccount${dataMonth}_6,0)+ISNULL(t.dfAccount${dataMonth}_6,0),2) AS DECIMAL(18,2)) hkTotal
+	FROM    dbo.LNK_Estate e
+	        LEFT JOIN dbo.V_LNK_estate_Partner vp ON vp.EstateId = e.EstateId
+	        LEFT JOIN ( SELECT  ROW_NUMBER() OVER ( PARTITION BY projectNo,partnerName ORDER BY projectNo,partnerName, yearMonthVersion DESC , weekVersion DESC ) AS w ,
+	                            *
+	                    FROM    PMLS_Remittance_Track
+	                    WHERE   delFlag = 0
+	                            AND sortNo &lt;= #{sortNo,jdbcType=INTEGER}
+	                    <if test="trackType != null and trackType !=''"><!-- 回款类型 -->
+							AND trackType= #{trackType,jdbcType=VARCHAR}
+				        </if>
+	                  ) t ON e.projectNo = t.projectNo AND t.partnerName=vp.PartnerNm AND t.w = 1
+	        LEFT JOIN dbo.BAS_DictionaryValue db1 ON db1.dicCode = e.projectStatus
+	                                                 AND db1.delFlag = 'N'
+	WHERE   e.DelFlg = 0 AND e.projectStatus IN ( 20306, 20302 )
+    	<if test="cityNo != null and cityNo !=''"><!-- 城市 -->
+			AND e.CityNo =#{cityNo,jdbcType=VARCHAR} 
+        </if>
+    	<if test="projectDepartmentId != null and projectDepartmentId !=''"><!-- 归属项目组 -->
+			AND e.projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER}
+        </if>
+    	<if test="projectNo != null and projectNo !=''"><!-- 项目 -->
+    	<![CDATA[
+			AND (e.projectNo LIKE CONCAT('%', #{projectNo},'%')
+                OR e.EstateNm LIKE CONCAT('%', #{projectNo},'%')
+                )
+			]]>
+        </if>
+        ORDER BY e.projectNo DESC 
+    </select>
+    
+    <select id="queryRemittanceTrackBySortNo" parameterType="Map" resultType="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack">
+        SELECT id FROM PMLS_Remittance_Track WHERE delFlag=0
+        <if test="sortNo != null and sortNo !=''">
+			AND sortNo = #{sortNo,jdbcType=INTEGER}
+        </if>
+        <if test="projectNo != null and projectNo !=''">
+			AND projectNo = #{projectNo,jdbcType=VARCHAR}
+        </if>
+        <if test="partnerName != null and partnerName !=''">
+			AND partnerName = #{partnerName,jdbcType=VARCHAR}
+        </if>
+        <if test="year != null and year !=''">
+			AND year = #{year,jdbcType=INTEGER}
+        </if>
+        <if test="trackType != null and trackType !=''">
+			AND trackType = #{trackType,jdbcType=VARCHAR}
+        </if>
+    </select>
+    
+  	<update id="updateImport" parameterType="cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackDto" >
+	    update dbo.PMLS_Remittance_Track 
+	    <set>
+	      <if test="xjAccount1 != null"> 
+		        xjAccount${dataMonth}_1 = #{xjAccount1,jdbcType=DECIMAL},
+	      </if>
+	      <if test="dfAccount1 != null"> 
+		        dfAccount${dataMonth}_1 = #{dfAccount1,jdbcType=DECIMAL},
+		  </if>     
+	      <if test="xjAccount2 != null"> 
+		        xjAccount${dataMonth}_2 = #{xjAccount2,jdbcType=DECIMAL},
+		  </if>
+	      <if test="dfAccount2 != null"> 
+		        dfAccount${dataMonth}_2 = #{dfAccount2,jdbcType=DECIMAL},
+		  </if>      
+	      <if test="xjAccount3 != null"> 
+		        xjAccount${dataMonth}_3 = #{xjAccount3,jdbcType=DECIMAL},
+		  </if>
+	      <if test="dfAccount3 != null"> 
+		        dfAccount${dataMonth}_3 = #{dfAccount3,jdbcType=DECIMAL},
+		  </if>
+		        
+	      <if test="xjAccount4 != null"> 
+		        xjAccount${dataMonth}_4 = #{xjAccount4,jdbcType=DECIMAL},
+		  </if>
+	      <if test="dfAccount4 != null"> 
+		        dfAccount${dataMonth}_4 = #{dfAccount4,jdbcType=DECIMAL},
+		  </if>
+		        
+	      <if test="xjAccount5 != null"> 
+		        xjAccount${dataMonth}_5 = #{xjAccount5,jdbcType=DECIMAL},
+          </if>
+	      <if test="dfAccount5 != null"> 
+		        dfAccount${dataMonth}_5 = #{dfAccount5,jdbcType=DECIMAL},
+		  </if>
+		        
+	      <if test="xjAccount6 != null"> 
+		        xjAccount${dataMonth}_6 = #{xjAccount6,jdbcType=DECIMAL},
+		  </if>
+	      <if test="dfAccount6 != null"> 
+		        dfAccount${dataMonth}_6 = #{dfAccount6,jdbcType=DECIMAL},
+		  </if>
+	      <if test="sortNo != null"> 
+		        sortNo = #{sortNo,jdbcType=INTEGER},
+		  </if>
+	      <if test="yearMonthVersion != null"> 
+		        yearMonthVersion = #{yearMonthVersion,jdbcType=INTEGER},
+		  </if>
+	      <if test="weekVersion != null"> 
+		        weekVersion = #{weekVersion,jdbcType=INTEGER},
+		  </if>
+		        
+		        dateUpdate = GETDATE(),
+		        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER}
+	  </set>
+	    where id = #{id,jdbcType=INTEGER}
+  	</update>
+  	
+  	<insert id="insertImport" parameterType="cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackDto" useGeneratedKeys="true" keyProperty="id">
+    	insert into PMLS_Remittance_Track (
+      		  year ,
+              projectNo ,
+              yearMonthVersion ,
+              weekVersion ,
+              partnerName ,
+              trackType ,
+              sortNo ,
+              
+		xjAccount${dataMonth}_1,
+		dfAccount${dataMonth}_1,
+		
+		xjAccount${dataMonth}_2,
+		dfAccount${dataMonth}_2,
+		
+		xjAccount${dataMonth}_3,
+		dfAccount${dataMonth}_3,
+		
+		xjAccount${dataMonth}_4,
+		dfAccount${dataMonth}_4,
+		
+		xjAccount${dataMonth}_5,
+		dfAccount${dataMonth}_5,
+		
+		xjAccount${dataMonth}_6,
+		dfAccount${dataMonth}_6,
+		
+		dateCreate,
+		userIdCreate,
+		delFlag
+      )
+    values (#{year,jdbcType=INTEGER},#{projectNo,jdbcType=VARCHAR}, #{yearMonthVersion,jdbcType=INTEGER},
+	        #{weekVersion,jdbcType=INTEGER},#{partnerName,jdbcType=VARCHAR},#{trackType,jdbcType=VARCHAR},
+	        #{sortNo,jdbcType=INTEGER}, 
+	        #{xjAccount1,jdbcType=DECIMAL},
+			#{dfAccount1,jdbcType=DECIMAL},
+			
+			#{xjAccount2,jdbcType=DECIMAL},
+			#{dfAccount2,jdbcType=DECIMAL},
+			
+			#{xjAccount3,jdbcType=DECIMAL},
+			#{dfAccount3,jdbcType=DECIMAL},
+			
+			#{xjAccount4,jdbcType=DECIMAL},
+			#{dfAccount4,jdbcType=DECIMAL},
+			
+			#{xjAccount5,jdbcType=DECIMAL},
+			#{dfAccount5,jdbcType=DECIMAL},
+			
+			#{xjAccount6,jdbcType=DECIMAL},
+			#{dfAccount6,jdbcType=DECIMAL},
+        GETDATE(),#{userIdCreate,jdbcType=INTEGER},0
+      )
+  </insert>
+  
+  <select id="queryUpRemittanceTrackBySortNo" parameterType="Map" resultType="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack">
+        SELECT  TOP(1)  *
+	                    FROM    PMLS_Remittance_Track
+	                    WHERE   delFlag = 0
+	                            AND sortNo &lt;= #{sortNo,jdbcType=INTEGER}
+        <if test="projectNo != null and projectNo !=''">
+			AND projectNo = #{projectNo,jdbcType=VARCHAR}
+        </if>
+        <if test="partnerName != null and partnerName !=''">
+			AND partnerName = #{partnerName,jdbcType=VARCHAR}
+        </if>
+        <if test="trackType != null and trackType !=''">
+			AND trackType = #{trackType,jdbcType=VARCHAR}
+        </if>
+        ORDER BY sortNo DESC
+    </select>
+  
+  
+  <insert id="insertOldRemittanceTrack" parameterType="cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackDto" useGeneratedKeys="true" keyProperty="id">
+			INSERT  INTO PMLS_Remittance_Track
+        ( year ,
+          projectNo ,
+          yearMonthVersion ,
+          weekVersion ,
+          partnerName ,
+          xjAccount1_1 ,
+          dfAccount1_1 ,
+          xjAccount1_2 ,
+          dfAccount1_2 ,
+          xjAccount1_3 ,
+          dfAccount1_3 ,
+          xjAccount1_4 ,
+          dfAccount1_4 ,
+          xjAccount1_5 ,
+          dfAccount1_5 ,
+          xjAccount1_6 ,
+          dfAccount1_6 ,
+          xjAccount2_1 ,
+          dfAccount2_1 ,
+          xjAccount2_2 ,
+          dfAccount2_2 ,
+          xjAccount2_3 ,
+          dfAccount2_3 ,
+          xjAccount2_4 ,
+          dfAccount2_4 ,
+          xjAccount2_5 ,
+          dfAccount2_5 ,
+          xjAccount2_6 ,
+          dfAccount2_6 ,
+          xjAccount3_1 ,
+          dfAccount3_1 ,
+          xjAccount3_2 ,
+          dfAccount3_2 ,
+          xjAccount3_3 ,
+          dfAccount3_3 ,
+          xjAccount3_4 ,
+          dfAccount3_4 ,
+          xjAccount3_5 ,
+          dfAccount3_5 ,
+          xjAccount3_6 ,
+          dfAccount3_6 ,
+          xjAccount4_1 ,
+          dfAccount4_1 ,
+          xjAccount4_2 ,
+          dfAccount4_2 ,
+          xjAccount4_3 ,
+          dfAccount4_3 ,
+          xjAccount4_4 ,
+          dfAccount4_4 ,
+          xjAccount4_5 ,
+          dfAccount4_5 ,
+          xjAccount4_6 ,
+          dfAccount4_6 ,
+          xjAccount5_1 ,
+          dfAccount5_1 ,
+          xjAccount5_2 ,
+          dfAccount5_2 ,
+          xjAccount5_3 ,
+          dfAccount5_3 ,
+          xjAccount5_4 ,
+          dfAccount5_4 ,
+          xjAccount5_5 ,
+          dfAccount5_5 ,
+          xjAccount5_6 ,
+          dfAccount5_6 ,
+          xjAccount6_1 ,
+          dfAccount6_1 ,
+          xjAccount6_2 ,
+          dfAccount6_2 ,
+          xjAccount6_3 ,
+          dfAccount6_3 ,
+          xjAccount6_4 ,
+          dfAccount6_4 ,
+          xjAccount6_5 ,
+          dfAccount6_5 ,
+          xjAccount6_6 ,
+          dfAccount6_6 ,
+          xjAccount7_1 ,
+          dfAccount7_1 ,
+          xjAccount7_2 ,
+          dfAccount7_2 ,
+          xjAccount7_3 ,
+          dfAccount7_3 ,
+          xjAccount7_4 ,
+          dfAccount7_4 ,
+          xjAccount7_5 ,
+          dfAccount7_5 ,
+          xjAccount7_6 ,
+          dfAccount7_6 ,
+          xjAccount8_1 ,
+          dfAccount8_1 ,
+          xjAccount8_2 ,
+          dfAccount8_2 ,
+          xjAccount8_3 ,
+          dfAccount8_3 ,
+          xjAccount8_4 ,
+          dfAccount8_4 ,
+          xjAccount8_5 ,
+          dfAccount8_5 ,
+          xjAccount8_6 ,
+          dfAccount8_6 ,
+          xjAccount9_1 ,
+          dfAccount9_1 ,
+          xjAccount9_2 ,
+          dfAccount9_2 ,
+          xjAccount9_3 ,
+          dfAccount9_3 ,
+          xjAccount9_4 ,
+          dfAccount9_4 ,
+          xjAccount9_5 ,
+          dfAccount9_5 ,
+          xjAccount9_6 ,
+          dfAccount9_6 ,
+          xjAccount10_1 ,
+          dfAccount10_1 ,
+          xjAccount10_2 ,
+          dfAccount10_2 ,
+          xjAccount10_3 ,
+          dfAccount10_3 ,
+          xjAccount10_4 ,
+          dfAccount10_4 ,
+          xjAccount10_5 ,
+          dfAccount10_5 ,
+          xjAccount10_6 ,
+          dfAccount10_6 ,
+          xjAccount11_1 ,
+          dfAccount11_1 ,
+          xjAccount11_2 ,
+          dfAccount11_2 ,
+          xjAccount11_3 ,
+          dfAccount11_3 ,
+          xjAccount11_4 ,
+          dfAccount11_4 ,
+          xjAccount11_5 ,
+          dfAccount11_5 ,
+          xjAccount11_6 ,
+          dfAccount11_6 ,
+          xjAccount12_1 ,
+          dfAccount12_1 ,
+          xjAccount12_2 ,
+          dfAccount12_2 ,
+          xjAccount12_3 ,
+          dfAccount12_3 ,
+          xjAccount12_4 ,
+          dfAccount12_4 ,
+          xjAccount12_5 ,
+          dfAccount12_5 ,
+          xjAccount12_6 ,
+          dfAccount12_6 ,
+          trackType ,
+          dateCreate ,
+          dateUpdate ,
+          userIdCreate ,
+          userIdUpdate ,
+          delFlag ,
+          sortNo
+        )
+        SELECT  year ,
+                projectNo ,
+                yearMonthVersion ,
+                weekVersion ,
+                partnerName ,
+                xjAccount1_1 ,
+                dfAccount1_1 ,
+                xjAccount1_2 ,
+                dfAccount1_2 ,
+                xjAccount1_3 ,
+                dfAccount1_3 ,
+                xjAccount1_4 ,
+                dfAccount1_4 ,
+                xjAccount1_5 ,
+                dfAccount1_5 ,
+                xjAccount1_6 ,
+                dfAccount1_6 ,
+                xjAccount2_1 ,
+                dfAccount2_1 ,
+                xjAccount2_2 ,
+                dfAccount2_2 ,
+                xjAccount2_3 ,
+                dfAccount2_3 ,
+                xjAccount2_4 ,
+                dfAccount2_4 ,
+                xjAccount2_5 ,
+                dfAccount2_5 ,
+                xjAccount2_6 ,
+                dfAccount2_6 ,
+                xjAccount3_1 ,
+                dfAccount3_1 ,
+                xjAccount3_2 ,
+                dfAccount3_2 ,
+                xjAccount3_3 ,
+                dfAccount3_3 ,
+                xjAccount3_4 ,
+                dfAccount3_4 ,
+                xjAccount3_5 ,
+                dfAccount3_5 ,
+                xjAccount3_6 ,
+                dfAccount3_6 ,
+                xjAccount4_1 ,
+                dfAccount4_1 ,
+                xjAccount4_2 ,
+                dfAccount4_2 ,
+                xjAccount4_3 ,
+                dfAccount4_3 ,
+                xjAccount4_4 ,
+                dfAccount4_4 ,
+                xjAccount4_5 ,
+                dfAccount4_5 ,
+                xjAccount4_6 ,
+                dfAccount4_6 ,
+                xjAccount5_1 ,
+                dfAccount5_1 ,
+                xjAccount5_2 ,
+                dfAccount5_2 ,
+                xjAccount5_3 ,
+                dfAccount5_3 ,
+                xjAccount5_4 ,
+                dfAccount5_4 ,
+                xjAccount5_5 ,
+                dfAccount5_5 ,
+                xjAccount5_6 ,
+                dfAccount5_6 ,
+                xjAccount6_1 ,
+                dfAccount6_1 ,
+                xjAccount6_2 ,
+                dfAccount6_2 ,
+                xjAccount6_3 ,
+                dfAccount6_3 ,
+                xjAccount6_4 ,
+                dfAccount6_4 ,
+                xjAccount6_5 ,
+                dfAccount6_5 ,
+                xjAccount6_6 ,
+                dfAccount6_6 ,
+                xjAccount7_1 ,
+                dfAccount7_1 ,
+                xjAccount7_2 ,
+                dfAccount7_2 ,
+                xjAccount7_3 ,
+                dfAccount7_3 ,
+                xjAccount7_4 ,
+                dfAccount7_4 ,
+                xjAccount7_5 ,
+                dfAccount7_5 ,
+                xjAccount7_6 ,
+                dfAccount7_6 ,
+                xjAccount8_1 ,
+                dfAccount8_1 ,
+                xjAccount8_2 ,
+                dfAccount8_2 ,
+                xjAccount8_3 ,
+                dfAccount8_3 ,
+                xjAccount8_4 ,
+                dfAccount8_4 ,
+                xjAccount8_5 ,
+                dfAccount8_5 ,
+                xjAccount8_6 ,
+                dfAccount8_6 ,
+                xjAccount9_1 ,
+                dfAccount9_1 ,
+                xjAccount9_2 ,
+                dfAccount9_2 ,
+                xjAccount9_3 ,
+                dfAccount9_3 ,
+                xjAccount9_4 ,
+                dfAccount9_4 ,
+                xjAccount9_5 ,
+                dfAccount9_5 ,
+                xjAccount9_6 ,
+                dfAccount9_6 ,
+                xjAccount10_1 ,
+                dfAccount10_1 ,
+                xjAccount10_2 ,
+                dfAccount10_2 ,
+                xjAccount10_3 ,
+                dfAccount10_3 ,
+                xjAccount10_4 ,
+                dfAccount10_4 ,
+                xjAccount10_5 ,
+                dfAccount10_5 ,
+                xjAccount10_6 ,
+                dfAccount10_6 ,
+                xjAccount11_1 ,
+                dfAccount11_1 ,
+                xjAccount11_2 ,
+                dfAccount11_2 ,
+                xjAccount11_3 ,
+                dfAccount11_3 ,
+                xjAccount11_4 ,
+                dfAccount11_4 ,
+                xjAccount11_5 ,
+                dfAccount11_5 ,
+                xjAccount11_6 ,
+                dfAccount11_6 ,
+                xjAccount12_1 ,
+                dfAccount12_1 ,
+                xjAccount12_2 ,
+                dfAccount12_2 ,
+                xjAccount12_3 ,
+                dfAccount12_3 ,
+                xjAccount12_4 ,
+                dfAccount12_4 ,
+                xjAccount12_5 ,
+                dfAccount12_5 ,
+                xjAccount12_6 ,
+                dfAccount12_6 ,
+                trackType ,
+                dateCreate ,
+                dateUpdate ,
+                userIdCreate ,
+                userIdUpdate ,
+                delFlag ,
+                sortNo
+        FROM    PMLS_Remittance_Track t1
+        WHERE   id = #{id,jdbcType=INTEGER}
+  </insert>
+</mapper>

@@ -1,0 +1,1805 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ContractMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.Contract">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="ContractNo" property="contractNo" jdbcType="NVARCHAR" />
+		<result column="ContractType" property="contractType" jdbcType="INTEGER" />
+		<result column="CompanyId" property="companyId" jdbcType="INTEGER" />
+		<result column="UserCreate" property="userCreate" jdbcType="INTEGER" />
+		<result column="PartyB" property="partyB" jdbcType="NVARCHAR" />
+		<result column="PartyBAddress" property="partyBAddress"
+			jdbcType="NVARCHAR" />
+		<result column="LealPerson" property="lealPerson" jdbcType="NVARCHAR" />
+		<result column="DateLifeStart" property="dateLifeStart"
+			jdbcType="TIMESTAMP" />
+		<result column="DateLifeEnd" property="dateLifeEnd" jdbcType="TIMESTAMP" />
+		<result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="DepositFee" property="depositFee" jdbcType="DECIMAL" />
+		<result column="PenaltyFee" property="penaltyFee" jdbcType="DECIMAL" />
+		<result column="Recipients" property="recipients" jdbcType="NVARCHAR" />
+		<result column="RecipientsAddress" property="recipientsAddress"
+			jdbcType="NVARCHAR" />
+		<result column="Remark" property="remark" jdbcType="NVARCHAR" />
+		<result column="CompanyBankNo" property="companyBankNo"
+			jdbcType="NVARCHAR" />
+		<result column="AgreementNo" property="agreementNo" jdbcType="NVARCHAR" />
+		<result column="registrId" property="registrId" jdbcType="VARCHAR" />
+		<result column="ContractStatus" property="contractStatus"
+			jdbcType="INTEGER" />
+		<result column="AuthRepresentative" property="authRepresentative"
+			jdbcType="NVARCHAR" />
+		<result column="TotleDepositFee" property="totleDepositFee"
+			jdbcType="DECIMAL" />
+		<result column="StoreNum" property="storeNum" jdbcType="INTEGER" />
+		<result column="CityNo" property="cityNo" jdbcType="NVARCHAR" />
+		<result column="DistrictNo" property="districtNo" jdbcType="NVARCHAR" />
+		<result column="AreaNo" property="areaNo" jdbcType="NVARCHAR" />
+		<result column="PartyBCityNo" property="partyBcityNo" jdbcType="NVARCHAR" />
+		<result column="PartyBDistrictNo" property="partyBdistrictNo"
+			jdbcType="NVARCHAR" />
+		<result column="PartyBAreaNo" property="partyBareaNo" jdbcType="NVARCHAR" />
+		<result column="BankAccount" property="bankAccount" jdbcType="NVARCHAR" />
+		<result column="AccountName" property="accountName" jdbcType="NVARCHAR" />
+		<result column="expandingPersonnelId" property="expandingPersonnelId"
+			jdbcType="VARCHAR" />
+		<result column="ExpandingPersonnel" property="expandingPersonnel"
+			jdbcType="NVARCHAR" />
+		<result column="agentContact" property="agentContact" jdbcType="VARCHAR" />
+		<result column="FlowId" property="flowId" jdbcType="VARCHAR" />
+
+		<result column="oaFileIdBusiness" property="oaFileIdBusiness"
+			jdbcType="VARCHAR" />
+		<result column="oaFileIdCard" property="oaFileIdCard" jdbcType="VARCHAR" />
+		<result column="oaFileIdPhoto" property="oaFileIdPhoto"
+			jdbcType="VARCHAR" />
+		<result column="oaFileIdStore" property="oaFileIdStore"
+			jdbcType="VARCHAR" />
+		<result column="oaFileIdInstall" property="oaFileIdInstall"
+			jdbcType="VARCHAR" />
+		<result column="oaFileIdOther" property="oaFileIdOther"
+			jdbcType="VARCHAR" />
+		<result column="PerformDate" property="performDate"
+			jdbcType="TIMESTAMP" />	
+		<result column="DateUpdate" property="dateUpdate"
+			jdbcType="TIMESTAMP" />	
+		<result column="pfmcAtbtDepmt" property="pfmcAtbtDepmt"
+			jdbcType="VARCHAR" />
+		<result column="oaApproveType" property="oaApproveType"
+			jdbcType="VARCHAR" />
+		<result column="isChanged" property="isChanged" jdbcType="BIT"/>
+		<!-- 到账保证金 -->
+		<result column="arrivalDepositFee" property="arrivalDepositFee" jdbcType="DECIMAL" />
+		<result column="depositFeeState" property="depositFeeState" jdbcType="INTEGER" />
+		<!-- 保证金退款 -->
+		<result column="totalRefundAmount" property="totalRefundAmount" jdbcType="DECIMAL" />
+		<result column="refundState" property="refundState" jdbcType="VARCHAR" />
+		<!-- Add 2017/04/05 cning start -->
+		<!-- 原合同编号 -->
+		<result column="originalContractNo" property="originalContractNo" jdbcType="VARCHAR" />
+		<!-- 合同类别(新签，续签)-->
+		<result column="originalContractdistinction" property="originalContractdistinction" jdbcType="INTEGER" />
+		<!-- Add 2017/04/05 cning end -->
+		
+		<!--Add By tong 2017/04/07 Start  -->
+		<!-- 合作协议书类型 -->
+		<result column="agreementType" property="agreementType" jdbcType="INTEGER" />
+		<!--Add By tong 2017/04/07 End -->	
+		<result column="centerId" property="centerId" jdbcType="INTEGER" />
+		<result column="contractB2A" property="contractB2A" jdbcType="INTEGER" />
+		<result column="contractB2AName" property="contractB2AName" jdbcType="VARCHAR" />
+		<result column="originalId" property="originalId" jdbcType="INTEGER"/>
+		<result column="AcCityNo" property="acCityNo" jdbcType="VARCHAR"/>
+		<result column="centerName" property="centerName" jdbcType="VARCHAR"/>
+		<result column="submitOAStatus" property="submitOAStatus" jdbcType="INTEGER" />
+		
+		<result column="companyLealPerson" property="companyLealPerson"
+			jdbcType="VARCHAR" />
+		<result column="oaFileIdNotice" property="oaFileIdNotice"
+			jdbcType="VARCHAR" />
+		<result column="oaFileIdComplement" property="oaFileIdComplement"
+			jdbcType="VARCHAR" />
+		<result column="contractVersion" property="contractVersion" jdbcType="INTEGER" />
+		<result column="accountProject" property="accountProject" jdbcType="VARCHAR" />
+		<result column="accountProjectNo" property="accountProjectNo" jdbcType="VARCHAR" />
+		<result column="aBTypeStore" property="aBTypeStore" jdbcType="INTEGER"/>
+<!-- 		新增授牌类型 开户信息  2019/5/29 hzg-->
+		<result column="shoupaiType" property="shoupaiType" jdbcType="VARCHAR"/>
+		<result column="accountProvinceNo" property="accountProvinceNo" jdbcType="VARCHAR"/>
+		<result column="accountProvinceName" property="accountProvinceName" jdbcType="VARCHAR"/>
+		<result column="accountCityNo" property="accountCityNo" jdbcType="VARCHAR"/>
+		<result column="accountCityName" property="accountCityName" jdbcType="VARCHAR"/>
+		<result column="oaApproveContractType" property="oaApproveContractType" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		Id, ContractNo, ContractType, CompanyId, UserCreate,
+		PartyB,
+		PartyBAddress, LealPerson,
+		DateLifeStart, DateLifeEnd,
+		DateCreate, DepositFee,
+		PenaltyFee, Recipients, RecipientsAddress,
+		Remark, CompanyBankNo, AgreementNo, registrId,
+		ContractStatus,
+		AuthRepresentative, totleDepositFee, storeNum, cityNo,
+		districtNo,
+		areaNo,
+		partyBcityNo,partyBdistrictNo,partyBareaNo,bankAccount,accountName,expandingPersonnelId,expandingPersonnel,
+		flowId,agentContact,
+		oaFileIdBusiness,oaFileIdCard,oaFileIdPhoto,oaFileIdStore,oaFileIdInstall,oaFileIdOther,pfmcAtbtDepmt,isChanged,arrivalDepositFee,oaApproveType,OriginalContractdistinction,contractB2A,AcCityNo,
+		submitOAStatus,
+		oaFileIdNotice,oaFileIdComplement,
+		originalContractNo,refundState,shoupaiType,oaApproveContractType
+	</sql>
+
+	<resultMap id="StoreInfoMap" type="cn.com.eju.deal.dto.store.StoreDto" />
+	
+	<resultMap id="StoreDecorationMap" type="cn.com.eju.deal.dto.store.StoreDecorationDto" />
+	
+	<resultMap id="ContractDtoMap" type="cn.com.eju.deal.dto.contract.ContractDto" />
+	
+	<resultMap id="DeopositStoreMap" type="cn.com.eju.deal.dto.open.DeopositStore" />
+	
+	<select id="selectStoreByContractId" resultMap="StoreInfoMap" parameterType="java.lang.Integer">	
+		 SELECT s.* ,dbo.F_CRM_SplitCodeToName(2, cs.BTypeStore) as BTypeStoreName,
+		        cs.storeState ,
+		        cs.storeId ,
+		        cs.isArrivalAct ,
+		        cs.dateArrivalAct ,
+		        d.DistrictName AS districtName,
+				cs.refundAmount,
+				cs.refundDate,
+				cs.refundState,
+				cs.addressDetail as addressDetailContract
+		 FROM   Store s
+		        LEFT JOIN ContractStore cs ON s.Id = cs.StoreId
+		                                      AND cs.IsDelete = 0
+		        LEFT JOIN dbo.BAS_District d ON d.DistrictNo = s.DistrictNo
+         WHERE   cs.ContractId = #{id,jdbcType=INTEGER}
+                AND s.IsDelete = '0'
+	</select>
+
+	<!-- 根据合同No查询合同下的门店 -->
+	<select id="getStoreInfoByContractNo" resultMap="StoreInfoMap" parameterType="java.util.Map">
+        SELECT  T1.* , T3.DepositFee,
+        T4.DistrictName
+		FROM    Store T1
+        		LEFT JOIN ContractStore T2 ON T1.Id = T2.StoreId
+                                      AND T2.IsDelete = 0
+        		LEFT JOIN dbo.Contract T3 ON T2.ContractId = T3.Id
+        		LEFT JOIN dbo.BAS_District T4 ON T1.DistrictNo = T4.DistrictNo
+		WHERE   T3.ContractNo = #{contractNo,jdbcType=NVARCHAR}
+        AND T1.IsDelete = '0'
+	</select>
+	
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer"
+		useCache="false">
+        SELECT  
+                (SELECT T2.Id FROM dbo.Contract T2 WHERE T2.ContractNo=T1.OriginalContractNo) AS originalId
+                ,T1.* , 
+                restSplitDepositFee = ISNULL(T1.arrivalDepositFee, 0)
+                - ( ISNULL(T1.DepositFee, 0) * ( SELECT COUNT(1)
+                                                 FROM   dbo.ContractStore T
+                                                 WHERE  T.ContractId = T1.Id
+                                                        AND T.isArrivalAct = 1
+                                               ) ) 
+                - (ISNULL(T1.totalRefundAmount, 0)-ISNULL((SELECT SUM(TM.refundAmount)  FROM   dbo.ContractStore TM
+                                                 WHERE  TM.ContractId = T1.Id
+                                                        AND TM.isArrivalAct = 1),0)),
+                T2.groupName AS pfmcAtbtDepmtName
+                ,dbo.F_CRM_GetDicVal(T1.contractB2A) as contractB2AName
+                ,centerName=(SELECT Top 1 centerName FROM dbo.v_crm_center_group_ref where centerid=T1.centerId)
+                ,companyCityName = (select TOP 1 bcity.CityName AS companyCityName FROM dbo.Company co 
+						LEFT JOIN  BAS_City bcity on bcity.CityNo =co.CityNo and bcity.FlagDeleted = 0
+						where T1.CompanyId = co.Id and co.IsDelete =0 
+					)
+				,companyLealPerson = (
+				SELECT
+					TOP 1 cp.LegalPerson 
+				FROM
+					Company cp
+				WHERE
+					cp.IsDelete = 0 and
+					cp.Id = T1.CompanyId
+					and T1.id = #{id,jdbcType=INTEGER}
+				order by cp.Id desc
+			)
+        FROM    dbo.Contract T1
+                LEFT JOIN ( SELECT  orgId.ToString() AS orgIdStr ,
+                                    groupName
+                            FROM    dbo.USR_Group
+                            WHERE   typeId = 7
+                                    AND delFlag = 'N'
+                          ) T2 ON T1.pfmcAtbtDepmt LIKE T2.orgIdStr + '%'
+        WHERE   T1.id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据OA flowId 查询合同 -->
+	<select id="getByFlowId" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM Contract
+		<where>
+			flowId = #{flowId,jdbcType=VARCHAR}
+		</where>
+	</select>
+
+	<select id="getByCompanyId" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM Contract
+		<where>
+			ContractStatus in (10402,10403)
+			AND CompanyId =
+			#{companyId,jdbcType=INTEGER}
+			AND DateLifeEnd > getdate()
+		</where>
+	</select>
+
+	<!-- 根据公司ID查询合同状态为未签，审核通过，审核未通过的合同 -->
+	<select id="getContractByCompanyId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer" useCache="false">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM Contract
+		<where>
+			ContractStatus in (10401,10403,10404)
+			AND CompanyId =
+			#{companyId,jdbcType=INTEGER}
+		</where>
+	</select>
+
+	<resultMap id="ContractInfoMap"
+		type="cn.com.eju.deal.contract.model.ContractSearchResult" />
+	<!-- 查询 list -->
+	<select id="selectContractList" parameterType="Map" resultMap="ContractInfoMap">
+		SELECT 
+		ct.Id as id,
+		ct.ContractNo as contractNo,
+		ct.AgreementNo as
+		agreementNo,
+		ct.DateCreate as dateCreate,
+		ct.UserCreate as userCreate,
+		ct.ContractStatus as contractStatus,
+		ct.FlowId as flowId,
+		cy.CompanyName as companyName,
+		ct.ContractType,
+		ct.ExpandingPersonnel as expandingPersonnel,
+		ct.CompanyId as companyId,
+		ct.ExpandingPersonnelId as expandingPersonnelId,
+		u.userName AS  userNameCreate,
+		ct.isChanged,
+		ct.totleDepositFee,
+		ct.depositFee,
+		ct.storeNum,
+		ct.contractB2A,
+		arrivalDepositFee = ISNULL(ct.arrivalDepositFee,0),
+		restSplitDepositFee = ISNULL(ct.arrivalDepositFee, 0)
+							-(ISNULL(ct.DepositFee, 0)*ISNULL(tmp.storeCount,0)) 
+							- (ISNULL(ct.totalRefundAmount, 0) - ISNULL(tmp.sumRefund,0)),
+		v.dicValue AS depositFeeStatus,
+        ct.depositFeeState  depositFeeStateCode,
+        ct.refundState        
+        <!--Add By tong 2017/04/07 Start  -->
+        ,ISNULL(ct.Valid,0) as valid
+        ,ISNULL(ct.OriginalContractdistinction,0) as originalContractdistinction
+        ,ISNULL(ct.PartyB,'') as partyB
+        <!--Add By tong 2017/04/07 End -->
+        ,ISNULL(CitySetting.newDepositOpenFlag,'0') as newDepositOpenFlag,
+		CASE
+
+		WHEN (
+		SELECT
+		isnull( a.sj, 0 ) - isnull( b.fj, 0 ) depositFee
+		FROM
+		(
+		SELECT SUM( rd.amount ) sj
+		FROM dbo.Store_Receive r
+		LEFT JOIN dbo.Store_Receive_Dtl rd ON r.id=rd.receiveId AND rd.delFlag=0
+		LEFT JOIN dbo.Store_Receive_Reverse srr ON r.id =srr.receiveId AND srr.delFlag=0
+		WHERE r.contractNo = ct.ContractNo AND srr.receiveId IS NULL
+		) a,
+		(
+		SELECT
+		SUM( pd.amount ) fj
+		FROM
+		dbo.Store_Payment p,
+		dbo.Store_Payment_Dtl pd
+		WHERE
+		p.id = pd.paymentId
+		AND p.contractNo = ct.ContractNo
+		) b
+		) = 0 THEN
+		1 ELSE 0
+		END isDeposit
+		FROM Contract ct 
+		    LEFT JOIN dbo.Bas_CitySetting CitySetting ON ct.acCityNo = CitySetting.cityNo
+			INNER JOIN Company cy ON ct.CompanyId = cy.Id AND cy.IsDelete = 0 
+			INNER JOIN crm.dbo.USR_User u ON ct.UserCreate = u.userId and u.delFlag = 'N'
+			INNER JOIN dbo.BAS_DictionaryValue v ON ct.DepositFeeState = v.dicCode 
+			<!-- AND v.delFlag = 'N' -->
+			LEFT JOIN ( SELECT  COUNT(1) AS storeCount , 
+								SUM(ISNULL(cs.refundAmount, 0)) AS sumRefund , 
+								cs.ContractId cid
+                    	FROM    dbo.ContractStore cs
+                    	WHERE   cs.isArrivalAct = 1
+                    			AND cs.IsDelete = 0
+                    	GROUP BY cs.ContractId
+                  ) tmp ON ct.id = tmp.cid
+            
+          <!--   LEFT JOIN dbo.ContractChange T2 ON ct.Id = T2.contractId
+                                                          AND T2.delFlag = 0
+            LEFT JOIN  CRM.dbo.BAS_DictionaryValue dbv2 ON dbv2.dicCode =  T2.isaTob 
+            											  AND dbv2.delFlag = 'N'  -->                                          
+		<where>
+			<if test="companyId != null and companyId != ''">
+				<![CDATA[ct.CompanyId = #{companyId,jdbcType=INTEGER}]]>
+			</if>
+			<if test="contractStatus != null and contractStatus != ''"><!-- 合同状态筛选 -->
+				<![CDATA[AND ct.ContractStatus = #{contractStatus,jdbcType=INTEGER}]]>
+			</if>
+			<!-- 数据权限控制 -->
+			<!-- <if test="userIdList != null and userIdList != ''">
+				AND (ct.UserCreate in
+				<foreach collection="userIdList" item="item" index="index"
+					open="(" close=")" separator=",">
+				<![CDATA[
+	    			 #{item, jdbcType=INTEGER}
+	    		]]>
+				</foreach>
+				<![CDATA[OR ct.ExpandingPersonnelId = #{userCode,jdbcType=VARCHAR})]]>
+			</if> -->
+			
+			<!-- 特殊的角色自己所在城市的所以公司都可看-->
+			<if test="cityNo != null and cityNo != ''">
+			   <!-- AND ct.partyBcityNO = #{cityNo}-->
+			   and ct.AcCityNo= #{cityNo}
+			</if>
+			 <if test="auth != 1">
+				<!-- 只能查看自己创建的合同 -->
+				AND  ct.userCreate=#{userCreate}
+			</if>	 	
+			
+			<!-- 合作模式 -->
+			<if test="contracttype != null and contracttype != ''">
+				<![CDATA[
+	    			AND ct.contractType = #{contracttype,jdbcType=INTEGER}
+	    		]]>
+			</if>
+
+			<!--Mod By tong 2017/04/07 Start  -->
+		    <!-- 合同编号 -->
+			<!-- <if test="contractNo != null and contractNo != ''">
+				<![CDATA[
+	    			AND ct.ContractNo LIKE '%${contractNo}%'
+	    		]]>
+			</if> -->
+			<!-- 合同编号、协议书编号、经纪公司或创建人 -->
+			<if test="searchKey != null and searchKey != ''">
+				<![CDATA[
+	    			AND (ct.ContractNo LIKE '%${searchKey}%' OR ct.AgreementNo LIKE '%${searchKey}%' OR ct.PartyB LIKE '%${searchKey}%' OR u.userName LIKE '%${searchKey}%' )
+	    		]]>
+			</if>
+			<!--Mod By tong 2017/04/07 End -->
+			<!-- 公司名称 -->
+			<if test="companyName != null and companyName != ''">
+				<![CDATA[
+    				AND cy.CompanyName  LIKE '%${companyName}%'
+    			]]>
+			</if>
+			<!-- Del By tong 2017/4/6  start  -->
+			<!-- 协议书编号 -->
+			<!-- <if test="agreementNo != null and agreementNo != ''">
+				<![CDATA[
+    				AND ct.agreementNo LIKE '%${agreementNo}%'
+    			]]>
+			</if> -->
+			<!-- 创建人 -->
+			<!-- <if test="userCreate != null and userCreate != ''">
+			 	<![CDATA[
+    				AND u.userName LIKE '%${userCreate}%'
+    			]]>
+			</if> -->
+			<!-- Del By tong 2017/4/6 end  -->
+			<if test="signDateType != null and signDateType == 1"><!-- 今日签约场合 -->
+                <![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) = Convert(varchar(10),getdate(),120)
+    			]]>
+			</if>
+			<if test="signDateType != null and signDateType == 2"><!-- 本周签约场合 -->
+                <![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) >= Convert(varchar(10),DATEADD(wk,DATEDIFF(wk,0,getdate()),0),120)
+    				AND Convert(varchar(10),ct.DateCreate,120) <= Convert(varchar(10),dateadd(d,+6 ,DATEADD(wk,DATEDIFF(wk,0,getdate()),0)),120)
+    			]]>
+			</if>
+			<if test="signDateType != null and signDateType == 3"><!-- 本月签约场合 -->
+                <![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) >= Convert(varchar(10),DATEADD(mm,DATEDIFF(mm,0,getdate()),0),120)
+    				AND Convert(varchar(10),ct.DateCreate,120) <= Convert(varchar(10),dateadd(ms,-3,DATEADD(mm,DATEDIFF(m,0,getdate())+1,0)),120)
+    			]]>
+			</if>
+			<if test="signDateType == ''">
+				<if test="dateCreateStart != null and dateCreateStart != ''">
+                    <![CDATA[
+	  		  			AND ct.DateCreate is not null
+	    				AND Convert(varchar(10),ct.DateCreate,120) >= #{dateCreateStart,jdbcType=NVARCHAR}
+	    			]]>
+				</if>
+				<if test="dateCreateEnd != null and dateCreateEnd != ''">
+                    <![CDATA[
+	  		  			AND ct.DateCreate is not null
+	    				AND Convert(varchar(10),ct.DateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+	    			]]>
+				</if>
+			</if>
+			<!-- 保证金到账状态 -->
+			<!-- <if test="depositFeeStatus != null and depositFeeStatus == 1">总保证金为0
+                   <![CDATA[
+    				AND ct.TotleDepositFee = 0
+    			]]>
+			</if> -->
+			<if test="depositFeeStatus != null and depositFeeStatus == 2"><!-- 未到账 -->
+                   <![CDATA[
+    				AND ct.depositFeeState = 17501
+    			]]>
+			</if>
+			<if test="depositFeeStatus != null and depositFeeStatus == 3"><!-- 部分到账 -->
+                   <![CDATA[
+    				AND ct.depositFeeState = 17502
+    			]]>
+			</if>
+			<if test="depositFeeStatus != null and depositFeeStatus == 4"><!-- 已到账 -->
+			 	<![CDATA[
+    				AND ct.depositFeeState = 17503
+    			]]>
+			</if>
+			
+				
+			<!--Mod By tong 2017/04/07 Start  -->	
+			
+			<!-- 合同类别 -->
+			<if test="originalContractdistinction != null and originalContractdistinction!= '' and originalContractdistinction == 1"><!-- 新签 -->
+                   <![CDATA[
+    				AND ct.OriginalContractdistinction = 18601
+    			]]>
+			</if>
+			<if test="originalContractdistinction != null and originalContractdistinction!= '' and originalContractdistinction == 2"><!-- 续签 -->
+                   <![CDATA[
+    				AND ct.OriginalContractdistinction = 18602
+    			]]>
+			</if>
+			<!-- 乙转甲 -->
+			<if test="isaTob != null and isaTob != '' and isaTob == 1  ">
+                   <![CDATA[
+    				AND ct.contractB2A = 20201
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if>
+			<!-- 不是乙转甲 -->
+			<if test="isaTob != null and isaTob != '' and isaTob == 2 ">
+                   <![CDATA[
+    				AND ct.contractB2A = 20202
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if>
+			
+			<!-- 合同生效状态 
+			<if test="Valid != null and Valid != '' and Valid == 1  ">
+                   <![CDATA[
+    				AND ct.Valid = 18401
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if>
+			<if test="Valid != null and Valid != '' and Valid == 2 ">--><!-- 生效 
+                   <![CDATA[
+    				AND ct.Valid = 18402
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if>
+			<if test="Valid != null and Valid != '' and Valid == 3 ">--><!-- 过期
+			 	<![CDATA[
+    				AND ct.Valid = 18403
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if> -->
+			
+			
+			<if test="refundState != null and refundState == 1"><!-- 未退款 -->
+                   <![CDATA[
+                  	 AND ct.ContractStatus = '10403'
+                  	 AND ct.refundState is null
+    			]]>
+			</if>
+			<if test="refundState != null and refundState == 2"><!-- 部分退款 -->
+                   <![CDATA[
+                    AND ct.ContractStatus = '10403'
+    				AND ct.refundState = 17802
+    			]]>
+			</if>
+			<if test="refundState != null and refundState == 3"><!-- 已退款 -->
+			 	<![CDATA[
+			 	 	AND ct.ContractStatus = '10403'
+    				AND ct.refundState = 17803
+    			]]>
+			</if>
+			
+			
+			
+			<!-- <if test="refundState != null and refundState != ''">
+    		      AND ct.refundState = #{refundState,jdbcType=INTEGER}
+			</if> -->
+			
+		<!--Mod By tong 2017/04/07 End -->	
+		</where>
+		order by ct.DateCreate desc
+	</select>
+
+	<select id="queryContractTypeByStoreCompanyId" parameterType="Map"
+		resultMap="BaseResultMap">
+		SELECT
+		CT.Id, CT.ContractNo, CT.ContractType, CT.CompanyId,
+		CT.UserCreate,
+		CT.PartyB, CT.PartyBAddress, CT.LealPerson,
+		CT.DateLifeStart, CT.DateLifeEnd, CT.DateCreate, CT.DepositFee,
+		CT.PenaltyFee, CT.Recipients, CT.RecipientsAddress, CT.Remark,
+		CT.CompanyBankNo,
+		CT.AgreementNo, CT.registrId,
+		CT.ContractStatus,
+		CT.AuthRepresentative, CT.totleDepositFee, CT.storeNum, CT.cityNo,
+		CT.districtNo, CT.areaNo,
+		CT.partyBcityNo,CT.partyBdistrictNo,CT.partyBareaNo,CT.bankAccount,CT.accountName,CT.expandingPersonnelId,CT.expandingPersonnel,
+		CT.flowId
+		FROM
+		CONTRACT CT, ContractStore CS
+		WHERE
+		CT.COMPANYID =
+		#{companyId,jdbcType=INTEGER}
+		and CT.CONTRACTSTATUS in (10402,10403)
+		and CS.ContractId = CT.Id
+		and CS.IsDelete = 0
+		and CS.StoreId =
+		#{storeId,jdbcType=INTEGER}
+	</select>
+
+	<!-- 逻辑删除 -->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		UPDATE Contract
+		SET
+		ContractStatus = 10405,DateUpdate=GETDATE()
+		<where>
+			id = #{id,jdbcType=INTEGER}
+		</where>
+	</delete>
+
+	<insert id="create" parameterType="cn.com.eju.deal.contract.model.Contract"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into Contract (ContractNo,
+		ContractType,
+		CompanyId, UserCreate, PartyB,
+		PartyBAddress, LealPerson,
+		DateLifeStart,
+		DateLifeEnd, DateCreate, DepositFee, PenaltyFee,
+		Recipients, RecipientsAddress, Remark,
+		CompanyBankNo, AgreementNo,
+		registrId, ContractStatus, AuthRepresentative,
+		totleDepositFee,
+		storeNum, cityNo, districtNo,
+		areaNo,partyBcityNo,partyBdistrictNo,partyBareaNo,
+		bankAccount,accountName,expandingPersonnelId,expandingPersonnel,
+		agentContact,
+		flowId,oaFileIdBusiness,oaFileIdCard,oaFileIdPhoto,oaFileIdStore,oaFileIdInstall,oaFileIdOther,
+		pfmcAtbtDepmt,oaApproveType,depositFeeState,centerId
+		<!--Add 2017/04/07 cning start -->
+		,OriginalContractNo
+		,OriginalContractdistinction
+		,AgreementType
+		,Valid
+		,contractB2A
+		<!--Add 2017/04/07 cning end -->
+		,performDate,dateUpdate
+		,acCityNo,submitOAStatus,
+		oaFileIdNotice,oaFileIdComplement,
+		accountProject,accountProjectNo,oldContractNo
+		,shoupaiType,accountProvinceNo,accountProvinceName
+		,accountCityNo,accountCityName,oaApproveContractType
+		)
+		values (#{contractNo,jdbcType=NVARCHAR},
+		#{contractType,jdbcType=INTEGER},
+		#{companyId,jdbcType=INTEGER},
+		#{userCreate,jdbcType=INTEGER},
+		#{partyB,jdbcType=NVARCHAR},
+		#{partyBAddress,jdbcType=NVARCHAR}, #{lealPerson,jdbcType=NVARCHAR},
+		#{dateLifeStart,jdbcType=TIMESTAMP},
+		#{dateLifeEnd,jdbcType=TIMESTAMP},
+		#{dateCreate,jdbcType=TIMESTAMP},
+		#{depositFee,jdbcType=DECIMAL}, #{penaltyFee,jdbcType=DECIMAL},
+		#{recipients,jdbcType=NVARCHAR},
+		#{recipientsAddress,jdbcType=NVARCHAR}, #{remark,jdbcType=NVARCHAR},
+		#{companyBankNo,jdbcType=NVARCHAR}, #{agreementNo,jdbcType=NVARCHAR},
+		#{registrId,jdbcType=VARCHAR},
+		#{contractStatus,jdbcType=INTEGER},
+		#{authRepresentative,jdbcType=NVARCHAR},
+		#{totleDepositFee,jdbcType=DECIMAL}, #{storeNum,jdbcType=INTEGER},
+		#{cityNo,jdbcType=NVARCHAR}, #{districtNo,jdbcType=NVARCHAR},
+		#{areaNo,jdbcType=NVARCHAR},
+		#{partyBcityNo,jdbcType=NVARCHAR},
+		#{partyBdistrictNo,jdbcType=NVARCHAR},
+		#{partyBareaNo,jdbcType=NVARCHAR},
+		#{bankAccount,jdbcType=NVARCHAR},#{accountName,jdbcType=NVARCHAR},#{expandingPersonnelId,jdbcType=VARCHAR},#{expandingPersonnel,jdbcType=NVARCHAR},
+		#{agentContact,jdbcType=VARCHAR},
+		#{flowId,jdbcType=VARCHAR},
+		#{oaFileIdBusiness,jdbcType=VARCHAR},#{oaFileIdCard,jdbcType=VARCHAR},#{oaFileIdPhoto,jdbcType=VARCHAR},
+		#{oaFileIdStore,jdbcType=VARCHAR},#{oaFileIdInstall,jdbcType=VARCHAR},#{oaFileIdOther,jdbcType=VARCHAR},
+		#{pfmcAtbtDepmt,jdbcType=VARCHAR},
+		#{oaApproveType,jdbcType=VARCHAR},
+		#{depositFeeState,jdbcType=INTEGER},
+		#{centerId,jdbcType=INTEGER}
+		<!--Add 2017/04/07 cning start -->
+		,#{originalContractNo,jdbcType=VARCHAR}
+		,#{originalContractdistinction,jdbcType=INTEGER}
+		,#{agreementType,jdbcType=INTEGER}
+		,#{valid,jdbcType=INTEGER}
+		<!--Add 2017/04/07 cning end -->
+		,#{contractB2A,jdbcType=INTEGER}
+		,#{performDate,jdbcType=TIMESTAMP}
+		,#{dateUpdate,jdbcType=TIMESTAMP}
+		,#{acCityNo,jdbcType=VARCHAR},21201
+		,#{oaFileIdNotice,jdbcType=VARCHAR}
+		,#{oaFileIdComplement,jdbcType=VARCHAR}
+		,#{accountProject,jdbcType=VARCHAR}
+		,#{accountProjectNo,jdbcType=VARCHAR}
+		,#{oldContractNo,jdbcType=VARCHAR}
+		,#{shoupaiType,jdbcType=VARCHAR}
+		,#{accountProvinceNo,jdbcType=VARCHAR}
+		,#{accountProvinceName,jdbcType=VARCHAR}
+		,#{accountCityNo,jdbcType=VARCHAR}
+		,#{accountCityName,jdbcType=VARCHAR}
+		,#{oaApproveContractType,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<update id="update" parameterType="cn.com.eju.deal.contract.model.Contract">
+		update Contract
+		<set>
+			<if test="contractNo != null">
+				ContractNo = #{contractNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="contractType != null">
+				ContractType = #{contractType,jdbcType=INTEGER},
+			</if>
+			<if test="companyId != null">
+				CompanyId = #{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="userCreate != null">
+				UserCreate = #{userCreate,jdbcType=INTEGER},
+			</if>
+			<if test="partyB != null">
+				PartyB = #{partyB,jdbcType=NVARCHAR},
+			</if>
+			<if test="partyBAddress != null">
+				PartyBAddress = #{partyBAddress,jdbcType=NVARCHAR},
+			</if>
+			<if test="lealPerson != null">
+				LealPerson = #{lealPerson,jdbcType=NVARCHAR},
+			</if>
+			<if test="dateLifeStart != null">
+				DateLifeStart = #{dateLifeStart,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateLifeEnd != null">
+				DateLifeEnd = #{dateLifeEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateCreate != null">
+				DateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateUpdate != null">
+				DateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="depositFee != null">
+				DepositFee = #{depositFee,jdbcType=DECIMAL},
+			</if>
+			<if test="penaltyFee != null">
+				PenaltyFee = #{penaltyFee,jdbcType=DECIMAL},
+			</if>
+			<if test="recipients != null">
+				Recipients = #{recipients,jdbcType=NVARCHAR},
+			</if>
+			<if test="recipientsAddress != null">
+				RecipientsAddress =
+				#{recipientsAddress,jdbcType=NVARCHAR},
+			</if>
+			<if test="remark != null">
+				Remark = #{remark,jdbcType=NVARCHAR},
+			</if>
+			<if test="companyBankNo != null">
+				CompanyBankNo = #{companyBankNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="agreementNo != null">
+				AgreementNo = #{agreementNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="registrId != null">
+				registrId = #{registrId,jdbcType=VARCHAR},
+			</if>
+			<if test="contractStatus != null">
+				ContractStatus = #{contractStatus,jdbcType=INTEGER},
+			</if>
+			<if test="authRepresentative != null">
+				AuthRepresentative =
+				#{authRepresentative,jdbcType=NVARCHAR},
+			</if>
+			<if test="totleDepositFee != null">
+				TotleDepositFee = #{totleDepositFee,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeNum != null">
+				StoreNum = #{storeNum,jdbcType=NVARCHAR},
+			</if>
+			<if test="cityNo != null">
+				CityNo = #{cityNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="districtNo != null">
+				DistrictNo = #{districtNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="areaNo != null">
+				AreaNo = #{areaNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="partyBcityNo != null">
+				PartyBCityNo = #{partyBcityNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="partyBdistrictNo != null">
+				PartyBDistrictNo = #{partyBdistrictNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="partyBareaNo != null">
+				PartyBAreaNo = #{partyBareaNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="bankAccount != null">
+				BankAccount = #{bankAccount,jdbcType=NVARCHAR},
+			</if>
+			<if test="accountName != null">
+				AccountName = #{accountName,jdbcType=NVARCHAR},
+			</if>
+			<if test="expandingPersonnelId != null">
+				expandingPersonnelId =
+				#{expandingPersonnelId,jdbcType=VARCHAR},
+			</if>
+			<if test="expandingPersonnel != null">
+				ExpandingPersonnel =
+				#{expandingPersonnel,jdbcType=NVARCHAR},
+			</if>
+			<if test="agentContact != null">
+				agentContact = #{agentContact,jdbcType=VARCHAR},
+			</if>
+			<if test="flowId != null">
+				FlowId = #{flowId,jdbcType=VARCHAR},
+			</if>
+			<if test="oaFileIdBusiness != null">
+				oaFileIdBusiness = #{oaFileIdBusiness,jdbcType=VARCHAR},
+			</if>
+			<if test="oaFileIdCard != null">
+				oaFileIdCard = #{oaFileIdCard,jdbcType=VARCHAR},
+			</if>
+			<if test="oaFileIdPhoto != null">
+				oaFileIdPhoto = #{oaFileIdPhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="oaFileIdStore != null">
+				oaFileIdStore = #{oaFileIdStore,jdbcType=VARCHAR},
+			</if>
+			<if test="oaFileIdInstall != null">
+				oaFileIdInstall = #{oaFileIdInstall,jdbcType=VARCHAR},
+			</if>
+			<if test="oaFileIdOther != null">
+				oaFileIdOther = #{oaFileIdOther,jdbcType=VARCHAR},
+			</if>
+			<if test="pfmcAtbtDepmt != null">
+				pfmcAtbtDepmt = #{pfmcAtbtDepmt,jdbcType=VARCHAR},
+			</if>
+			<if test="oaApproveType != null">
+				oaApproveType = #{oaApproveType,jdbcType=VARCHAR},
+			</if>
+			
+			<!-- Add 2017/04/10 cning 新加合同协议类型  start-->
+			<if test="agreementType != null">
+				AgreementType = #{agreementType,jdbcType=INTEGER},
+			</if>
+			<!-- Add 2017/04/10 cning 新加合同协议类型  end-->
+			
+			<!-- Add 2017/06/12 cning 是否乙类转甲类  start-->
+			<if test="contractB2A != null">
+				contractB2A = #{contractB2A,jdbcType=INTEGER},
+			</if>
+			<!-- Add 2017/06/12 cning 是否乙类转甲类  end-->
+			<if test="centerId != null">
+				centerId = #{centerId,jdbcType=INTEGER}
+			</if>
+			<if test="submitOAStatus!=null">
+				submitOAStatus = #{submitOAStatus,jdbcType=INTEGER}
+			</if>
+			<if test="oaFileIdNotice != null">
+				oaFileIdNotice = #{oaFileIdNotice,jdbcType=VARCHAR},
+			</if>
+			<if test="oaFileIdComplement != null">
+				oaFileIdComplement = #{oaFileIdComplement,jdbcType=VARCHAR},
+			</if>
+			<if test="contractVersion != null">
+				contractVersion = #{contractVersion,jdbcType=INTEGER},
+			</if>
+			<if test="transferAmt != null">
+			    transferAmt = #{transferAmt,jdbcType=DECIMAL},
+			</if>
+			<if test="shoupaiType != null">
+			    shoupaiType = #{shoupaiType,jdbcType=VARCHAR},
+			</if>
+			<if test="accountProvinceNo != null">
+			    accountProvinceNo = #{accountProvinceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="accountProvinceName != null">
+			    accountProvinceName = #{accountProvinceName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountCityNo != null">
+			    accountCityNo = #{accountCityNo,jdbcType=VARCHAR},
+			</if>
+			<if test="accountCityName != null">
+			    accountCityName = #{accountCityName,jdbcType=VARCHAR},
+			</if>
+			<if test="oaApproveContractType != null">
+				oaApproveContractType = #{oaApproveContractType,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<update id="updateFlowIdById" parameterType="cn.com.eju.deal.contract.model.Contract">
+		update Contract
+		<set>
+			FlowId = #{flowId,jdbcType=VARCHAR}
+			<if test="submitOAStatus!=null">
+				,submitOAStatus = #{submitOAStatus,jdbcType=INTEGER}
+			</if>
+			<if test="accountProject!=null">
+				,accountProject = #{accountProject,jdbcType=NVARCHAR}
+			</if>
+			<if test="accountProjectNo!=null">
+				,accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR}
+			</if>
+		</set>
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateContractStatusByFlowId" parameterType="cn.com.eju.deal.contract.model.Contract">
+		update Contract
+		<set>
+			<if test="contractStatus != null">
+				ContractStatus = #{contractStatus,jdbcType=INTEGER},
+			</if>
+			<if test="performDate != null">
+				PerformDate = #{performDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateUpdate != null">
+				DateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where FlowId = #{flowId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 批量更新 -->
+	<update id="updateParam" parameterType="Map">
+
+		UPDATE Contract
+		<set>
+			<if test="contractStatus != null">
+				ContractStatus = #{contractStatus,jdbcType=INTEGER},
+			</if>
+			<if test="performDate != null">
+				PerformDate =  #{performDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateUpdate != null">
+				DateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+
+		<where>
+			<if test="flowIdList != null and flowIdList != ''">
+				<foreach collection="flowIdList" item="item" index="index"
+					open="AND (" close=")" separator="OR">
+						<![CDATA[
+			    			 flowId = #{item, jdbcType=VARCHAR}
+			    		]]>
+				</foreach>
+			</if>
+
+		</where>
+
+	</update>
+
+	<select id="getContractsByCompanyId" resultType="java.lang.Integer"
+		parameterType="java.lang.Integer" useCache="false">
+		SELECT COUNT(*)
+		FROM
+		Contract
+		WHERE ContractStatus!=10405 AND CompanyId = #{companyId,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据公司名称查询该公司是否存在意向合同 -->
+	<select id='getContractInfo' resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM Contract T1
+		WHERE T1.CompanyId IN (
+		SELECT T2.Id
+		FROM Company T2
+		WHERE T2.IsDelete = '0'
+		AND T2.CompanyName
+		=#{companyName,jdbcType=VARCHAR}
+		)
+		AND T1.ContractType = 10303
+	</select>
+
+	<select id="getSignHisByStoreId" resultMap="ContractInfoMap"
+		parameterType="Map">
+		SELECT
+		<if test="topOne != null and topOne != ''">
+				 TOP 1 
+		</if> 
+		ct.Id AS id ,
+		ct.ContractNo AS contractNo ,
+		ct.AgreementNo AS
+		agreementNo ,
+		ct.DateCreate AS dateCreate ,
+		ct.UserCreate AS userCreate
+		,
+		ct.ContractStatus AS contractStatus ,
+		ct.FlowId AS flowId ,
+		cy.CompanyName AS companyName ,
+		ct.ContractType ,
+		ct.ExpandingPersonnel
+		AS expandingPersonnel ,
+		ct.ExpandingPersonnelId AS expandingPersonnelId ,
+		ct.isChanged ,
+		sc.storeState AS storeState,
+		ct.DateLifeEnd,
+		ct.companyId
+		FROM dbo.Store s
+		INNER JOIN dbo.ContractStore sc ON s.Id = sc.StoreId and sc.IsDelete=0
+		LEFT JOIN dbo.Contract ct ON sc.ContractId = ct.Id
+		LEFT JOIN Company cy
+		ON ct.CompanyId = cy.Id
+		<where>
+			<if test="storeId != null and storeId != ''">
+				s.Id= #{storeId,jdbcType=INTEGER}
+			</if>
+			<if test="storeList != null and storeList != ''">
+                <foreach collection="storeList" item="item" index="index" open="AND (" close=")" separator="OR">
+                    <![CDATA[
+	    			 s.Id = #{item, jdbcType=INTEGER}
+	    		]]>
+                </foreach>
+            </if> 
+			<if test="contractNo != null and contractNo != ''">
+	  			<![CDATA[AND ct.contractNo LIKE '%${contractNo}']]>
+			</if>
+			<if test="dateCreateStart != null and dateCreateStart != ''">
+                   <![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) >= #{dateCreateStart,jdbcType=NVARCHAR}
+    			]]>
+			</if>
+			<if test="dateCreateEnd != null and dateCreateEnd != ''">
+                   <![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+    			]]>
+			</if>
+		</where>
+		order by ct.DateCreate desc
+	</select>
+	<!-- 根据合同和门店查询未取消关联的公司和门店 -->
+	<select id="getIsRelieveCompany" resultType="cn.com.eju.deal.dto.company.CompanyStoreDtoNew"
+		parameterType="Map">
+		SELECT 
+			ROW_NUMBER() OVER(order by cs.StoreId desc) AS datacount,
+			cs.CompanyId as companyId,
+			cs.IsDelete,cs.StoreId as storeId
+		FROM dbo.CompanyStore cs 
+		join Contract ct ON ct.CompanyId = cs.CompanyId AND ct.id= #{contractId}
+		AND ct.ContractStatus IN (10401,10402,10403,10404)
+		<where>
+			cs.IsDelete = 0
+			<if test="storeList != null and storeList != ''">
+                <foreach collection="storeList" item="item" index="index" open="AND (" close=")" separator="OR">
+                    <![CDATA[
+	    			 cs.StoreId = #{item, jdbcType=INTEGER}
+	    		]]>
+                </foreach>
+            </if> 
+		</where>
+		order by datacount desc
+	</select>
+	<!-- 查询公司下审核通过的合同 -->
+	<select id="getAuditpassByCompanyId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer" useCache="false">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM Contract
+		<where>
+		CompanyId = #{companyId,jdbcType=INTEGER}
+		</where>
+	</select>
+	
+	<!-- 查询当前User及其下属User的合同列表信息（提供给CRM微信端）  -->
+ 	<select id='getByUserId' parameterType="Map" resultMap="ContractInfoMap">
+		SELECT T1.id
+				   ,T1.ContractNo
+			       ,T1.ContractStatus
+				   ,T1.ContractType
+				   ,T2.CompanyName
+				   ,T1.DateCreate
+		FROM Contract(NOLOCK) T1 
+		LEFT JOIN Company T2 ON T1.CompanyId = T2.Id 
+		WHERE 1=1 
+		<!-- 数据权限控制 (当前用户及其下属用户Id集合)-->
+		<if test="userIdList != null and userIdList != ''">
+			<foreach collection="userIdList" item="item" index="index"
+				open="AND (" close=")" separator="OR">
+			<![CDATA[
+    			 T1.UserCreate =  #{item,jdbcType=INTEGER}
+    		]]>
+			</foreach>
+		</if>
+		<if test="searchKey != null and searchKey != ''"><!-- 查询条件:合同编号或公司名称 -->
+                <![CDATA[
+                AND (T1.ContractNo LIKE '%${searchKey}%' OR T2.CompanyName LIKE '%${searchKey}%')
+                ]]>
+		</if>
+        <if test="contractStatus != null and contractStatus != ''"><!-- 查询条件: 审核状态 -->
+                <![CDATA[
+                AND T1.ContractStatus = #{contractStatus,jdbcType=INTEGER}
+                ]]>
+        </if>
+        <if test="contractType != null and contractType != ''"><!-- 查询条件: 签约类型 -->
+                <![CDATA[
+                AND T1.ContractType = #{contractType,jdbcType=INTEGER}
+                ]]>
+        </if>
+        ORDER BY T1.DateCreate DESC 
+	</select>
+	
+	<!-- 根据合同ID查询门店信息 (新增合同变更页面用) -->
+	<select id="getByContractIdOfAdd" resultMap="StoreInfoMap"
+		parameterType="java.lang.Integer">
+		SELECT  de.decorateStatus ,
+		        dv.dicValue AS decorateStatusNm ,
+		        de.decorationType ,
+		        sa.oaMdysSumJsj ,
+		        sf.decorateCompany ,
+		        T2.isCancel ,
+		        T2.storeState ,
+		        T2.storeId ,
+		        T1.*
+		FROM    Store T1
+		        LEFT JOIN ContractStore T2 ON T1.Id = T2.StoreId
+		                                      AND T2.IsDelete = '0'
+		        LEFT JOIN OMS.dbo.CRM_Decoration de ON de.decorateId = ( SELECT
+		                                                              MAX(decorateId)
+		                                                              FROM
+		                                                              OMS.dbo.CRM_Decoration
+		                                                              WHERE
+		                                                              storeNo = T1.storeNo
+		                                                              AND delFlag = '0'
+		                                                              )
+		        LEFT JOIN OMS.dbo.CRM_oaStoreFlop sf ON de.decorateId = sf.decorateId
+		                                                AND sf.delFlag = 0
+		        LEFT JOIN OMS.dbo.CRM_oaStoreAcceptance sa ON de.decorateId = sa.decorateId
+		                                                      AND sa.delFlag = 0
+		        LEFT JOIN OMS.dbo.BAS_DictionaryValue dv ON de.decorateStatus = dv.dicCode
+		                                                    AND dv.typeId = 163
+		                                                    AND dv.delFlag = 'N'
+		WHERE   T2.ContractId = #{id,jdbcType=INTEGER}
+		        AND T1.IsDelete = '0'
+	</select>
+	
+	<!-- 根据合同变更ID和合同ID查询门店信息 (更新合同变更页面用) -->
+	<select id="getByContractIdOfEdit" resultMap="StoreInfoMap"
+		parameterType="Map">
+		SELECT  k.receivedAmount ,
+		        k.depositBackMoney ,
+		        k.depositBalance ,
+		        de.decorateStatus ,
+		        de.decorationType ,
+		        sa.oaMdysSumJsj ,
+		        sf.decorateCompany ,
+		        T2.isCancel ,
+		        T2.storeState ,
+		        T2.storeId ,
+		        T1.* ,
+		        k.changeCompany ,
+		        k.approveState ,
+		        k.contractStopNo ,
+		        k.contractStopId
+		FROM    Store T1
+		        JOIN ContractStore T2 ON T1.Id = T2.StoreId
+		                                 AND T2.IsDelete = '0'
+		        LEFT JOIN ( SELECT  cc.contractId ,
+		                            cc.changeCompany ,
+		                            cc.approveState ,
+		                            cc.contractStopNo ,
+		                            ccs.contractStopId ,
+		                            ccs.receivedAmount ,
+		                            ccs.depositBackMoney ,
+		                            ccs.depositBalance ,
+		                            ccs.storeId
+		                    FROM    ContractChange cc
+		                            JOIN ContractChangeStore ccs ON cc.id = ccs.contractStopId
+		                    WHERE   cc.delFlag = 0
+		                            AND ccs.delFlag = 0
+		                            AND cc.contractId = #{contractId,jdbcType=INTEGER}
+		                            AND ccs.contractStopId = #{contractStopId,jdbcType=INTEGER}
+		                  ) k ON k.contractId = t2.ContractId
+		                         AND k.storeId = t2.StoreId
+		        LEFT JOIN OMS.dbo.CRM_Decoration de ON de.decorateId = ( SELECT
+		                                                              MAX(decorateId)
+		                                                              FROM
+		                                                              OMS.dbo.CRM_Decoration
+		                                                              WHERE
+		                                                              storeNo = T1.storeNo
+		                                                              AND delFlag = '0'
+		                                                              )
+		        LEFT JOIN OMS.dbo.CRM_oaStoreFlop sf ON de.decorateId = sf.decorateId
+		                                                AND sf.delFlag = 0
+		        LEFT JOIN OMS.dbo.CRM_oaStoreAcceptance sa ON de.decorateId = sa.decorateId
+		                                                      AND sa.delFlag = 0
+		        LEFT JOIN OMS.dbo.BAS_DictionaryValue dv ON de.decorateStatus = dv.dicCode
+		                                                    AND dv.typeId = 163
+		                                                    AND dv.delFlag = 'N'
+		WHERE   t2.ContractId = #{contractId,jdbcType=INTEGER}
+		        AND T1.IsDelete = '0'
+	</select>
+
+	<select id="queryLockingStoreForStop" resultMap="StoreInfoMap" parameterType="java.lang.Integer">
+		SELECT  cc.contractId ,
+				 cc.changeCompany ,
+				 cc.approveState ,
+				 cc.contractStopNo ,
+				 ccs.contractStopId ,
+				 ccs.storeId
+		FROM    ContractChange cc
+		JOIN ContractChangeStore ccs ON cc.id = ccs.contractStopId
+		WHERE   cc.delFlag = 0
+		AND ccs.delFlag = 0
+		and cc.cancelFlag = 0
+		AND cc.approveState != '2'
+		AND cc.contractId = #{contractId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据变更记录表中的flowId更新合同状态 -->
+	<update id="updateCtrctStateByChgFlowId" parameterType="cn.com.eju.deal.contract.model.ContractChange">
+		UPDATE  T1
+        SET     T1.isChanged = 1
+        FROM    dbo.Contract T1
+                LEFT JOIN dbo.ContractChange T2 ON T1.Id = T2.contractId
+                                                          AND T2.delFlag = 0
+        WHERE   T2.flowId = #{flowId,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 根据合同变更ID查询门店地址 -->
+	<select id="getStoreInfo" resultMap="StoreInfoMap" parameterType="java.lang.Integer">	
+		SELECT  T1.storeId 
+		            ,T2.AddressDetail 
+		FROM    ContractChangeStore T1
+		        LEFT JOIN Store T2 ON T2.Id = T1.storeId
+		WHERE   T1.delFlag = 0
+		        AND T2.IsDelete = 0
+		        AND T1.contractStopId = #{contractStopId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据合同变更表的FlowId 更新 合同表的 合同状态 -->
+	<update id="updateCtrctStatusByChgFlowId" parameterType="cn.com.eju.deal.contract.model.ContractChange">
+		UPDATE  T1
+		SET     T1.ContractStatus = 10406,
+		T1.DateUpdate = GETDATE()
+		FROM    dbo.Contract T1
+		LEFT JOIN dbo.ContractChange T2 ON T1.Id = T2.contractId
+											AND T2.delFlag = 0
+		WHERE   T2.flowId = #{flowId,jdbcType=NVARCHAR}
+	</update>
+	
+	<!-- 根据合同Id查询合同信息 -->
+	<select id="getContractById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	    SELECT  * 
+        FROM  Contract
+        WHERE  id = #{contractId,jdbcType=INTEGER}
+	</select>
+	<!-- 根据合同变更ID和合同ID查询门店信息 (查询变更详情用) -->
+	<select id="getByContractIdOfView" resultType="cn.com.eju.deal.dto.store.StoreDto" parameterType="Map">
+		SELECT 		T3.*,
+			        T2.storeState
+			        ,T2.storeId
+			        ,contractChangeState = CASE ISNULL(T3.storeId, 0)
+			                                WHEN '0' THEN '正常'
+			                                WHEN T2.storeId THEN '变更中'
+			                              END 	
+			        ,dbo.F_CRM_SplitCodeToName(2,T1.BTypeStore) AS BTypeStoreName			        
+			        ,T1.*,
+			        T1.ABTypeStore as aBTypeStore,
+			        T1.StoreManager as storeManager,
+			        T1.StoreManagerPhone as storeManagerPhone
+		FROM  Store T1
+		        INNER JOIN ContractStore T2 ON T1.Id = T2.StoreId
+		                                      AND T2.IsDelete = '0'
+		        INNER JOIN ContractChangeStore T3 ON T3.storeId = T2.StoreId
+                                              AND T3.delFlag = '0' 
+											  AND T3.contractStopId = #{contractStopId,jdbcType=INTEGER}
+		WHERE   T2.ContractId = #{contractId,jdbcType=INTEGER}
+              AND T1.IsDelete = '0'
+	</select>
+	
+	<!-- 根据FlowIdList 查询合同门店信息用于门店装修表	-->
+	<select id="getPassContractList" resultMap="StoreDecorationMap" parameterType="Map">	
+				SELECT  T1.ContractNo AS contractNo ,
+		        T1.CityNo ,
+		        T1.AcCityNo ,
+		        <!-- contractTypeName = CASE ISNULL(T1.ContractType, 0)
+		                             WHEN '10302' THEN 'B版'
+		                             WHEN '10304' THEN 'A转B版'
+		                           END , -->
+		        contractTypeName = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = T1.ContractType AND dicCode!=10301 AND dicCode!=10306),             
+		        T1.PartyB AS companyName ,
+		        T3.Name AS storeName ,
+		        T3.AddressDetail AS storeAddress ,
+		        T3.StoreNo AS storeNo ,
+		        T3.Id AS storeId,
+		       	T1.agreementNo,
+				dateLifeStartStr =  CONVERT(DATETIME,T1.DateLifeStart,120),
+				dateLifeEndStr = CONVERT(DATETIME,T1.DateLifeEnd,120),
+				T1.PartyB AS oafilpagency
+<!-- Add By GUOPENGFEI 2017/04/07	start-->
+				,ISNULL(T1.OriginalContractdistinction,0) AS OriginalContractdistinction
+<!-- Add By GUOPENGFEI 2017/04/07	end-->
+		FROM    dbo.Contract T1
+		        RIGHT JOIN dbo.ContractStore T2 ON T2.ContractId = T1.Id
+		        LEFT JOIN dbo.Store T3 ON T3.Id = T2.StoreId
+		WHERE   (T1.ContractType = 10302
+		        OR t1.ContractType = 10304)
+				<if test="flowIdList != null and flowIdList != ''">
+					<foreach collection="flowIdList" item="item" index="index"
+						open="AND (" close=")" separator="OR">
+							<![CDATA[
+				    			T1.flowId = #{item, jdbcType=VARCHAR}
+				    		]]>
+					</foreach>
+				</if>
+				ORDER BY T3.Id ASC
+	</select>
+	
+		<update id="updateArvDepositFee" parameterType="cn.com.eju.deal.contract.model.Contract">
+		UPDATE dbo.Contract 
+		SET arrivalDepositFee=ISNULL(arrivalDepositFee,0) + #{arrivalDepositFee,jdbcType=DECIMAL} 
+		    ,depositFeeState = #{depositFeeState,jdbcType=INTEGER}
+		    <if test="refundState != null">
+		      ,refundState = #{refundState,jdbcType=VARCHAR}
+		    </if>
+		WHERE ContractNo = #{contractNo,jdbcType=NVARCHAR}
+	</update>
+	
+	<!-- 根据合同No查询合同信息 -->
+	<select id="getContractByNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT  ISNULL(TotleDepositFee, 0) AS TotleDepositFee ,
+        	ISNULL(arrivalDepositFee, 0) AS arrivalDepositFee ,
+        	ISNULL(totalRefundAmount,0) AS totalRefundAmount,
+        	ISNULL(depositFee,0) AS depositFee,
+        	Id,
+        	contractStatus,
+        	transferAmt,
+        	refundState,
+        	accountProject,
+        	accountProjectNo,
+        	acCityNo
+        FROM  Contract
+        WHERE  ContractNo = #{contractNo,jdbcType=NVARCHAR}
+	</select>
+	
+	<!-- 根据门店ID查询该门店对应的未作废的最新合同信息 -->
+	<select id="getByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT TOP 1
+                T1.*
+        FROM    Contract T1
+                LEFT JOIN ContractStore T2 ON T2.ContractId = T1.Id
+                                              AND T2.IsDelete = 0
+                                              
+                LEFT JOIN Store T3 ON T3.Id = T2.StoreId
+                                      AND T2.IsDelete = 0
+        WHERE   T3.Id = #{storeId,jdbcType=INTEGER}
+                AND T1.ContractStatus != 10405	<!-- 合同作废的排除 -->
+                <!-- Del By cning 2017/07/27 续签-乙转甲-再新签message修正 Start -->
+               -- AND (T2.storestate != 2 or T2.storestate is null)               <!-- 门店没有被解除 -->
+               <!-- Del By cning 2017/07/27 续签-乙转甲-再新签message修正 End -->
+        ORDER BY T1.DateCreate DESC
+	</select>
+		<!-- Add By NingChao 2017/04/07 Start -->
+	<!-- 根据门店ID查询该门店对应的有效的B类最新合同信息 -->
+	<select id="getByRenewStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT TOP 1
+        		T1.*
+        FROM    Contract T1
+                LEFT JOIN ContractStore T2 ON T2.ContractId = T1.Id
+                                              AND T2.IsDelete = 0
+                LEFT JOIN Store T3 ON T3.Id = T2.StoreId
+                                      AND T2.IsDelete = 0
+        WHERE   T3.Id = #{storeId,jdbcType=INTEGER}
+                AND T3.ContractType = 10302 <!-- B类合同 -->
+                AND T1.ContractStatus not in (10404,10405,10406)	<!-- 有效的合同 -->
+                <!--AND T3.RenewFlag=18302		 待续签门店 -->
+                AND T2.isCancel != 17201 <!-- 不正常的合同 -->
+        ORDER BY T1.DateLifeEnd DESC
+	</select>
+	
+	<!-- 根据FlowId查询合同信息更新OMS保证金合同状态（专用于调用OMS接口） -->
+	<select id="getByFlowIdList" resultMap="BaseResultMap" parameterType="Map">
+		SELECT  T1.contractNo ,
+		        t1.ContractStatus,
+				t1.CompanyId
+		FROM    dbo.Contract T1
+				LEFT JOIN dbo.ContractChange T2 ON T2.contractId = T1.Id
+		WHERE   
+			isChanged = 1
+			<if test="flowIdList != null and flowIdList != ''">
+				<foreach collection="flowIdList" item="item" index="index"
+					open="AND (" close=")" separator="OR">
+						<![CDATA[
+			    			T2.flowId = #{item, jdbcType=VARCHAR}
+			    		]]>
+				</foreach>
+			</if>
+	</select>
+	
+	<!-- 根据FlowId获取保证金不等于0的合同信息 -->
+	<select id="getDepoistNozeroCtrctByFlowId" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+<!-- Add By GUOPENGFEI 2017/04/07	start-->
+				,ISNULL(Contract.OriginalContractdistinction,0) AS OriginalContractdistinction
+				,contractTypeName = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = Contract.ContractType)
+<!-- Add By GUOPENGFEI 2017/04/07	end-->
+		FROM Contract
+		<where>
+			flowId = #{flowId,jdbcType=VARCHAR}
+			<!-- AND TotleDepositFee != 0 -->
+		</where>
+	</select>
+	
+	<!-- OMS翻牌申请调用接口，根据合同编号获取申请数据返回 -->
+	<select id="returnDataToDecApplication" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT  ContractNo ,
+        PartyB ,
+        AgreementNo ,
+        DateLifeStart ,
+        DateLifeEnd
+		FROM    dbo.Contract
+		<where>
+			ContractNo = #{contractNo,jdbcType=VARCHAR}
+		</where>
+	</select>
+	
+	<!-- 根据门店ids查询最新非撤销合同Id -->
+	<select id="getTopOneContract" resultMap="ContractDtoMap"
+		parameterType="java.util.Map">
+		SELECT  TOP 1 C.Id,C.ContractNo,S.StoreNo
+		FROM    dbo.ContractStore CS
+		        LEFT JOIN dbo.Contract C ON CS.ContractId = C.Id
+				LEFT JOIN dbo.Store S ON S.Id =CS.StoreId
+		WHERE   C.ContractStatus NOT IN ( 10405 )
+				<if test="storeIdList != null and storeIdList != ''">
+					<foreach collection="storeIdList" item="item" index="index"
+						open="AND (" close=")" separator="OR">
+							<![CDATA[
+				    			CS.StoreId = #{item, jdbcType=INTEGER}
+				    		]]>
+					</foreach>
+				</if>
+				ORDER BY CS.Id DESC	
+	</select>
+	
+	<!-- 获取保证金退款编辑所需详情信息 -->
+	<select id="getDepositRefundDetail" resultMap="DeopositStoreMap"
+		parameterType="Map">
+		SELECT  C.ContractNo ,
+		        S.StoreNo ,
+		        S.Name ,
+		        S.AddressDetail ,
+		        C.DepositFee ,
+		        CS.refundAmount ,
+		        CS.refundState ,
+		        CONVERT(varchar, CS.refundDate, 120 ) AS lastRefundDate
+		FROM    dbo.Contract C
+		        LEFT JOIN dbo.ContractStore CS ON CS.ContractId = C.Id
+		        LEFT JOIN dbo.Store S ON S.Id = CS.StoreId
+		WHERE   CS.IsDelete = 0
+		        AND S.IsDelete = 0
+		        AND CS.isArrivalAct =1
+		        AND ContractNo = #{contractNo,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 获取剩余未分账保证金 -->
+	<select id="getRestSplitDepositFee" resultType="Map" parameterType="Map">
+        SELECT  restSplitDepositFee = ISNULL(C.arrivalDepositFee, 0)
+                - ( ISNULL(C.DepositFee, 0) * ( SELECT  COUNT(1)
+                                                FROM    dbo.ContractStore T
+                                                WHERE   T.ContractId = C.Id
+                                                        AND T.isArrivalAct = 1
+                                              ) )
+                - (ISNULL(C.totalRefundAmount, 0)
+                - ISNULL(( SELECT   SUM(TM.refundAmount)
+                           FROM     dbo.ContractStore TM
+                           WHERE    TM.ContractId = C.Id
+                                    AND TM.isArrivalAct = 1
+                         ), 0))
+        FROM    dbo.Contract C
+		WHERE   ContractNo = #{contractNo,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 查询当前合同以及门店中 已到账 和 已撤销总额 -->
+	<select id="getDepositInfoByNo" resultMap="ContractDtoMap" parameterType="Map">
+        SELECT  ISNULL(C.totalRefundAmount, 0) AS totalRefundAmount,
+                ISNULL(C.arrivalDepositFee, 0) AS arrivalDepositFee,
+        		<if test="storeNo != null">
+               	 	ISNULL(CS.refundAmount, 0) AS refundAmount,
+        		</if>
+                ISNULL(C.DepositFee, 0) AS depositFee
+        FROM    dbo.Contract C
+        		<if test="storeNo != null">
+	                LEFT JOIN dbo.ContractStore CS ON CS.ContractId = C.Id
+	                                                  AND CS.IsDelete = 0
+	                LEFT JOIN dbo.Store S ON S.Id = CS.StoreId
+	                                         AND S.IsDelete = 0
+       			 </if>
+        WHERE   1=1
+        		<if test="contractNo != null">
+        			AND C.ContractNo = #{contractNo,jdbcType=VARCHAR}
+        		</if>
+        		<if test="storeNo != null">
+               	 	AND S.StoreNo = #{storeNo,jdbcType=VARCHAR}
+       		 	</if>
+	</select>
+	
+	<!-- 更新保证金退款金额 和 退款状态 -->
+	<update id="updateRefundInfo" parameterType="Map">
+		update Contract
+		<set>
+			<if test="totalRefundAmount != null">
+			totalRefundAmount = #{totalRefundAmount,jdbcType=DECIMAL} ,
+			</if>
+			<if test="refundState != null">
+        	refundState = #{refundState,jdbcType=VARCHAR}
+        	</if>
+		</set>
+		where ContractNo = #{contractNo,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 获取合同剩余未分账保证金-用于校验 -->
+	<select id="checkRestDeposit" resultType="Map" parameterType="Map">
+        SELECT  restSplitDepositFee = ISNULL(C.arrivalDepositFee, 0)
+                - ( ISNULL(C.DepositFee, 0) * ( SELECT  COUNT(1)
+                                                FROM    dbo.ContractStore T
+                                                WHERE   T.ContractId = C.Id
+                                                        AND T.isArrivalAct = 1
+                                              ) )
+                - (ISNULL(C.totalRefundAmount, 0)
+                - ISNULL(( SELECT   SUM(TM.refundAmount)
+                           FROM     dbo.ContractStore TM
+                           WHERE    TM.ContractId = C.Id
+                                    AND TM.isArrivalAct = 1
+                         ), 0))
+        FROM    dbo.Contract C
+		WHERE   C.Id =#{contractId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getCtrctRelateByCompanyId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer" useCache="false">
+		SELECT  Id AS id, 
+				ContractNo AS contractNo ,
+                ContractType AS contractType ,
+                PartyB AS partyB ,
+                PartyBAddress AS partyBAddress ,
+                LealPerson AS lealPerson ,
+                DateLifeStart AS dateLifeStart ,
+                DateLifeEnd AS dateLifeEnd ,
+                DateCreate AS dateCreate ,
+                AgreementNo AS agreementNo ,
+                ContractStatus AS contractStatus ,
+                registrId ,
+                PerformDate AS performDate
+        FROM    dbo.Contract
+        WHERE   CompanyId = #{companyId}
+	</select>
+	
+	<!--根据B或者A转B审核通过的合同查询门店的信息	移除T1.ABTypeStore = 19902，甲类可以做三方变量-->
+	<select id="getContractByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">	
+		Select 
+			TOP 1
+			T3.*,T1.ABTypeStore,(CASE WHEN DateLifeEnd > getdate() THEN 1 ELSE 0 end) contractPastStatus
+			From Store T1
+			INNER JOIN ContractStore T2
+						On T1.Id = T2.StoreId
+			INNER JOIN Contract T3
+						ON T2.ContractId = T3.Id
+			Where 
+				    T1.Id= #{storeId,jdbcType=INTEGER}
+					AND T3.ContractStatus = 10403 
+					AND T3.ContractType in (10302, 10304) 
+					Order by T3.DateCreate DESC
+	</select>
+	
+	<update id="updateContractCompanyAdressByFlowId" parameterType="cn.com.eju.deal.contract.model.Contract">
+		update Contract
+		<set>
+			<if test="partyBcityNo != null">
+				PartyBCityNo = #{partyBcityNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="partyBdistrictNo != null">
+				PartyBDistrictNo = #{partyBdistrictNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="partyBAddress != null">
+				PartyBAddress = #{partyBAddress,jdbcType=NVARCHAR},
+			</if>
+			<if test="partyB != null">
+				partyB = #{partyB,jdbcType=NVARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据协议书编号查询合同 -->
+	<select id="getContractByAgreementNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT * FROM Contract
+		WHERE AgreementNo= #{agreementNo,jdbcType=NVARCHAR}
+	</select>
+
+	<!-- 获取公司关联的合同列表 -->
+	<select id="getContractCompanyList" parameterType="Map" resultType="cn.com.eju.deal.dto.contract.ContractSearchResultDto">
+		SELECT  ct.Id AS id ,
+		ct.ContractNo AS contractNo ,
+		ct.AgreementNo AS agreementNo ,
+		ct.DateCreate AS dateCreate ,
+		ct.UserCreate AS userCreate ,
+		ct.ContractStatus AS contractStatus ,
+		ct.FlowId AS flowId ,
+		cy.CompanyName AS companyName ,
+		ct.ContractType ,
+		ct.ExpandingPersonnel AS expandingPersonnel ,
+		ct.CompanyId AS companyId ,
+		ct.ExpandingPersonnelId AS expandingPersonnelId ,
+		u.userName AS userNameCreate ,
+		ct.isChanged ,
+		ct.totleDepositFee ,
+		ct.depositFee ,
+		ct.storeNum ,
+		arrivalDepositFee = ISNULL(ct.arrivalDepositFee, 0) ,
+		v.dicValue AS depositFeeStatus ,
+		ct.depositFeeState depositFeeStateCode ,
+		ct.refundState ,
+		ISNULL(ct.Valid, 0) AS valid ,
+		ISNULL(ct.OriginalContractdistinction, 0) AS originalContractdistinction ,
+		ISNULL(ct.PartyB, '') AS partyB
+		FROM    Contract ct
+		INNER JOIN Company cy ON ct.CompanyId = cy.Id
+		AND cy.IsDelete = 0
+		INNER JOIN crm.dbo.USR_User u ON ct.UserCreate = u.userId
+		AND u.delFlag = 'N'
+		INNER JOIN dbo.BAS_DictionaryValue v ON ct.DepositFeeState = v.dicCode
+		<where>
+			<if test="companyId != null and companyId != ''">
+				<![CDATA[ct.CompanyId = #{companyId,jdbcType=INTEGER}]]>
+			</if>
+			<if test="contractStatus != null and contractStatus != ''"><!-- 合同状态筛选 -->
+				<![CDATA[AND ct.ContractStatus = #{contractStatus,jdbcType=INTEGER}]]>
+			</if>
+
+			<!-- 特殊的角色自己所在城市的所以公司都可看-->
+			<if test="cityNo != null and cityNo != ''">
+				<!-- AND ct.partyBcityNO = #{cityNo}-->
+				and ct.AcCityNo= #{cityNo}
+			</if>
+			<if test="auth != 1">
+				<!-- 只能查看自己创建的合同 -->
+				AND  ct.userCreate=#{userCreate}
+			</if>
+
+			<!-- 合作模式 -->
+			<if test="contracttype != null and contracttype != ''">
+				<![CDATA[
+	    			AND ct.contractType = #{contracttype,jdbcType=INTEGER}
+	    		]]>
+			</if>
+
+			<!--Mod By tong 2017/04/07 End -->
+			<!-- 公司名称 -->
+			<if test="companyName != null and companyName != ''">
+				<![CDATA[
+    				AND cy.CompanyName  LIKE '%${companyName}%'
+    			]]>
+			</if>
+
+			<if test="signDateType != null and signDateType == 1"><!-- 今日签约场合 -->
+				<![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) = Convert(varchar(10),getdate(),120)
+    			]]>
+			</if>
+			<if test="signDateType != null and signDateType == 2"><!-- 本周签约场合 -->
+				<![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) >= Convert(varchar(10),DATEADD(wk,DATEDIFF(wk,0,getdate()),0),120)
+    				AND Convert(varchar(10),ct.DateCreate,120) <= Convert(varchar(10),dateadd(d,+6 ,DATEADD(wk,DATEDIFF(wk,0,getdate()),0)),120)
+    			]]>
+			</if>
+			<if test="signDateType != null and signDateType == 3"><!-- 本月签约场合 -->
+				<![CDATA[
+  		  			AND ct.DateCreate is not null
+    				AND Convert(varchar(10),ct.DateCreate,120) >= Convert(varchar(10),DATEADD(mm,DATEDIFF(mm,0,getdate()),0),120)
+    				AND Convert(varchar(10),ct.DateCreate,120) <= Convert(varchar(10),dateadd(ms,-3,DATEADD(mm,DATEDIFF(m,0,getdate())+1,0)),120)
+    			]]>
+			</if>
+			<if test="signDateType == ''">
+				<if test="dateCreateStart != null and dateCreateStart != ''">
+					<![CDATA[
+	  		  			AND ct.DateCreate is not null
+	    				AND Convert(varchar(10),ct.DateCreate,120) >= #{dateCreateStart,jdbcType=NVARCHAR}
+	    			]]>
+				</if>
+				<if test="dateCreateEnd != null and dateCreateEnd != ''">
+					<![CDATA[
+	  		  			AND ct.DateCreate is not null
+	    				AND Convert(varchar(10),ct.DateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+	    			]]>
+				</if>
+			</if>
+			<!-- 保证金到账状态 -->
+			<!-- <if test="depositFeeStatus != null and depositFeeStatus == 1">总保证金为0
+                   <![CDATA[
+    				AND ct.TotleDepositFee = 0
+    			]]>
+			</if> -->
+			<if test="depositFeeStatus != null and depositFeeStatus == 2"><!-- 未到账 -->
+				<![CDATA[
+    				AND ct.depositFeeState = 17501
+    			]]>
+			</if>
+			<if test="depositFeeStatus != null and depositFeeStatus == 3"><!-- 部分到账 -->
+				<![CDATA[
+    				AND ct.depositFeeState = 17502
+    			]]>
+			</if>
+			<if test="depositFeeStatus != null and depositFeeStatus == 4"><!-- 已到账 -->
+				<![CDATA[
+    				AND ct.depositFeeState = 17503
+    			]]>
+			</if>
+
+
+			<!--Mod By tong 2017/04/07 Start  -->
+
+			<!-- 合同类别 -->
+			<if test="originalContractdistinction != null and originalContractdistinction!= '' and originalContractdistinction == 1"><!-- 新签 -->
+				<![CDATA[
+    				AND ct.OriginalContractdistinction = 18601
+    			]]>
+			</if>
+			<if test="originalContractdistinction != null and originalContractdistinction!= '' and originalContractdistinction == 2"><!-- 续签 -->
+				<![CDATA[
+    				AND ct.OriginalContractdistinction = 18602
+    			]]>
+			</if>
+
+			<!-- 合同生效状态 -->
+			<if test="Valid != null and Valid != '' and Valid == 1  "><!-- 待生效 -->
+				<![CDATA[
+    				AND ct.Valid = 18401
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if>
+			<if test="Valid != null and Valid != '' and Valid == 2 "><!-- 生效 -->
+				<![CDATA[
+    				AND ct.Valid = 18402
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if>
+			<if test="Valid != null and Valid != '' and Valid == 3 "><!-- 过期 -->
+				<![CDATA[
+    				AND ct.Valid = 18403
+    				AND ct.ContractStatus = '10403'
+    			]]>
+			</if>
+
+			<!--Mod By tong 2017/04/07 End -->
+		</where>
+		order by ct.DateCreate desc
+	</select>
+
+	<select id="queryConfirmContractByCompanyId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.contract.model.Contract">
+		SELECT  *
+		FROM    dbo.Contract c
+				JOIN dbo.Company cp ON c.CompanyId = cp.Id
+		WHERE   c.ContractStatus = 10403
+				AND cp.id = #{companyId,jdbcType=INTEGER}
+	</select>
+	<!-- 根据业绩城市编号查询其核算主体 -->
+	<select id="queryAccountProject" resultType="cn.com.eju.deal.contract.model.Contract">
+		SELECT 
+			bcs.accountProject as accountProject,bcs.accountProjectCode as accountProjectNo,bcs.id 
+		FROM CRM.dbo.Bas_CitySetting bcs
+		WHERE bcs.delFlag = 'N' and
+			bcs.cityNo = #{cityNoString,jdbcType=VARCHAR}
+		ORDER BY bcs.id 
+	</select>
+
+	<select id="selectNewestContract" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.contract.model.Contract">
+		SELECT  id,ContractNo
+		FROM    dbo.Contract
+		WHERE   id = ( SELECT   MAX(c.id)
+					   FROM     dbo.Contract c
+								JOIN dbo.ContractStore cs ON c.Id = cs.ContractId
+					   WHERE    cs.IsDelete = 0
+								AND cs.StoreId = #{storeId,jdbcType=INTEGER}
+					 )
+					 AND dbo.Contract.ContractStatus IN (10401,10403,10404)
+	</select>
+
+	<select id="selectNewestContractByCompanyId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.contract.model.Contract">
+		SELECT  id ,
+				ContractNo
+		FROM    dbo.Contract
+		WHERE   CompanyId = #{companyId,jdbcType=INTEGER}
+				AND ContractStatus IN ( 10401, 10403, 10404 )
+		ORDER BY id DESC
+	</select>
+	<insert id="insertContractReturn" parameterType="java.lang.Integer">
+		INSERT INTO dbo.OaContractReturn
+        (ContractNo ,
+          FlowId ,
+          OriginalContractdistinction ,
+          OAPerformDate ,
+          hasDeal ,
+          dateUpdate ,
+          dateCreate ,
+          ContractStatus
+        )
+		SELECT  ContractNo,FlowId,OriginalContractdistinction,
+		GETDATE(),1,GETDATE(),GETDATE(),10404
+		 FROM  dbo.Contract
+		 WHERE Id = #{id,jdbcType=INTEGER}
+	</insert>
+
+	<select id="checkCompanyId" resultType="Map" parameterType="java.lang.Integer" useCache="false">
+		SELECT contractNo FROM Contract
+		<where>
+			ContractStatus in (10402,10403)
+			AND CompanyId = #{companyId,jdbcType=INTEGER}
+			AND DateLifeEnd > getdate()
+		</where>
+		UNION ALL
+		SELECT gpContractNo ContractNo FROM dbo.GP_Contract
+		<where>
+			ContractStatus in (10402,10403)
+			AND CompanyId = #{companyId,jdbcType=INTEGER}
+		</where>
+	</select>
+
+
+	<select id="selectDateLifeEnd" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+                 SELECT TOP 1
+                 		c.id,
+                 		c.ContractStatus,
+                        c.DateLifeEnd
+                FROM    dbo.ContractStore cs
+                        LEFT JOIN dbo.Contract c ON cs.ContractId = c.Id
+                WHERE   cs.StoreId = #{storeId}
+                        AND cs.IsDelete = 0
+                        AND c.ContractStatus = 10403
+                ORDER BY cs.Id DESC
+    </select>
+</mapper>

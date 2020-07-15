@@ -1,0 +1,11 @@
+package cn.com.eju.pmls.skStatement.service;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import org.springframework.stereotype.Service;
+
+@Service("skStatementService")
+public class SkStatementService {
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+}

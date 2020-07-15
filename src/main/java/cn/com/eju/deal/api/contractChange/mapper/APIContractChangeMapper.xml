@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.api.contractChange.mapper.APIContractChangeMapper" >
+	<resultMap id="contractChangeDtoBaseMap"  type="cn.com.eju.deal.api.contractChange.model.ContractChangeNewDto">
+		<result column="contractId" property="contractId" />
+		<result column="contractNo" property="contractNo" />
+		<result column="agreementNo" property="agreementNo" />
+		<result column="companyId" property="companyId" />
+		<result column="companyName" property="companyName" />
+		<result column="companyNo" property="companyNo" />
+		
+		<result column="registrId" property="registrId" />
+		<result column="legalPerson" property="legalPerson" />
+		<result column="dataCount" property="dataCount" />
+		
+		<result column="partyBCityNo" property="partyBCityNo" />
+		<result column="partyBDistrictNo" property="partyBDistrictNo" />
+		<result column="partyBAddress" property="partyBAddress" />
+		<result column="contractTypeStr" property="contractTypeStr" />
+		<result column="acCityNo" property="acCityNo" jdbcType="BIT" />
+		<!-- 终止扩展字段 -->
+		<result column="contractStopId" property="contractStopId"/>
+		<result column="contractStopNo" property="contractStopNo"/>
+		<result column="stopType" property="stopType"/>
+		<result column="stopDate" property="stopDate" jdbcType="TIMESTAMP"/>
+		<result column="stopReason" property="stopReason"/>
+		<result column="remarks" property="remarks"/>
+		<result column="stopDescribe" property="stopDescribe"/>
+		<result column="isReleaseFlag" property="isReleaseFlag"/>
+		<result column="flowId" property="flowId"/>
+		<result column="ctEndApproveState" property="ctEndApproveState"/>
+		<result column="approveStateName" property="approveStateName"/>
+		
+		<collection property="contractChangeList" javaType="ArrayList" ofType="cn.com.eju.deal.api.contractChange.model.StoreChangeDto">
+			<result column="storeId" property="storeId" />
+			<result column="storeNo" property="storeNo" />
+			<result column="name" property="storeName" />
+			<result column="address" property="address" />
+			<result column="addressDetail" property="addressDetail" />
+			<result column="centerId" property="centerId" />
+			<result column="centerName" property="centerName" />
+			<result column="maintainer" property="maintainer" />
+			<result column="maintainerName" property="maintainerName" />
+			<result column="businessStatus" property="businessStatus" />
+			<result column="isCancel" property="isCancel" />
+			<result column="storeState" property="storeState" />
+			<result column="contractStopNo" property="contractStopNo" />
+			<result column="changeCompany" property="changeCompany" />
+			<result column="approveState" property="approveState" />
+			<!-- 终止扩展字段 -->
+			<result column="receivedAmount" property="receivedAmount" />
+			<result column="depositBalance" property="depositBalance" />
+			<result column="depositBackMoney" property="depositBackMoney" />
+			
+		</collection>
+	</resultMap>
+	<resultMap id="contractChangeEdDtoBaseMap"  type="cn.com.eju.deal.api.contractChange.model.AchievementCancelEdDto">
+		<id column="id" property="id"/>
+		<result column="achievementCancelNo" property="achievementCancelNo"/>
+		<result column="contractId" property="contractId"/>
+		<result column="contractNo" property="contractNo"/>
+		<result column="cancelReason" property="cancelReason"/>
+		<result column="flowId" property="flowId"  />
+		<result column="remarks" property="remarks"  />
+		<result column="approveState" property="approveState"  />
+		<result column="approveDate" property="approveDate"  />
+		<result column="dateCreate" property="dateCreate"  />
+		<result column="userCreate" property="userCreate"  />
+		<result column="updateDate" property="updateDate" />
+		<result column="updateUser" property="updateUser" />
+		<result column="accountSubject" property="accountSubject" />
+		<result column="busDepartment" property="busDepartment" />
+		<result column="isDelete" property="isDelete" />
+		<result column="agreementNo" property="agreementNo" />
+		<result column="companyName" property="companyName" />
+		<result column="companyNo" property="companyNo" />
+		<result column="companyAddress" property="companyAddress" />
+		<result column="dataCount" property="dataCount" />
+		<result column="registrId" property="registrId" />
+		<result column="legalPerson" property="legalPerson" />
+		<result column="approveStateName" property="approveStateName" />
+		<result column="userCreateName" property="userCreateName" />
+		<collection property="contractChangeEdList" javaType="ArrayList" ofType="cn.com.eju.deal.api.contractChange.model.StoreChangeDto">
+			<result column="storeId" property="storeId" />
+			<result column="storeNo" property="storeNo" />
+			<result column="name" property="storeName" />
+			<result column="address" property="address" />
+			<result column="addressDetail" property="addressDetail" />
+			<result column="centerId" property="centerId" />
+			<result column="centerName" property="centerName" />
+			<result column="maintainer" property="maintainer" />
+			<result column="maintainerName" property="maintainerName" />
+			<result column="businessStatus" property="businessStatus" />
+			<result column="isCancel" property="isCancel" />
+			<result column="contractStopNo" property="contractStopNo" />
+			<result column="changeCompany" property="changeCompany" />
+			<result column="approveState" property="approveState" />
+		</collection>
+	</resultMap>
+	<resultMap id="oaProcessDtoBaseMap"  type="cn.com.eju.deal.api.contractChange.model.OaProcessDto">
+		<result column="flowId" property="flowId" />
+		<result column="empname" property="empname" />
+		<result column="empnumber" property="empnumber" />
+		<result column="content" property="content" />
+		<result column="createDate" property="createDate" />
+		<result column="orderNo" property="orderNo"/>
+	</resultMap>
+	<!-- 查询合同撤销列表 -->
+	<select id="getContractList" parameterType="map" resultMap="contractChangeDtoBaseMap">
+		select 
+				DENSE_RANK() OVER (ORDER BY c.DateCreate desc, c.id) rowNum,
+				c.Id as contractId,
+				c.ContractNo as contractNo,
+				c.agreementNo,
+				c.CompanyId as companyId,
+				c.PartyB as companyName,
+				cm.CompanyNo as companyNo,
+				c.partyBCityNo,
+				c.partyBDistrictNo,
+				c.partyBAddress,
+				s.id as storeId,
+				s.StoreNo as storeNo,
+				s.Name as name,
+				s.Address as address,
+				s.AddressDetail as addressDetail
+			INTO #temp_contractchange
+			from Contract c
+				inner join Company cm on cm.id = c.CompanyId
+				inner join	ContractStore cs  on c.id=cs.ContractId and cs.isDelete = 0 and cs.isCancel = '17201'
+				inner join store s on s.id=cs.StoreId
+			where c.ContractType != 10306 and c.ContractStatus = 10403
+				<if test="userCreate!=null and userCreate!=0">
+					and (c.centerId in (SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM'))
+					  or c.UserCreate=#{userCreate} or s.Maintainer = #{userCode} OR c.expandingPersonnelId = #{userCode}
+					)
+				</if>
+				<if test="contractNo!=null and contractNo!=''">
+					and (
+						c.contractNo like  '%${contractNo}%'
+						or  c.agreementNo like  '%${contractNo}%'
+						or  c.PartyB like  '%${contractNo}%'
+						or  s.Name like  '%${contractNo}%'
+						or  s.AddressDetail like  '%${contractNo}%'
+						)
+				</if>
+			SELECT t.* FROM (
+				SELECT *,(SELECT COUNT(DISTINCT(contractId)) FROM #temp_contractchange) AS dataCount FROM #temp_contractchange
+			) t ORDER BY t.rowNum
+			DROP TABLE #temp_contractchange
+	</select>
+	<!-- 获取撤销合同详情信息 -->
+	<select id="getContractChangeInfo" parameterType="map" resultMap="contractChangeDtoBaseMap">
+		select
+			c.Id as contractId,
+			c.AcCityNo as acCityNo,
+			c.ContractNo as contractNo,
+			c.agreementNo,
+			c.CompanyId as companyId,
+			cm.CompanyNo as companyNo,
+			c.PartyB as companyName,
+			c.registrId,
+			c.LealPerson as legalPerson,
+			c.partyBCityNo,
+			c.partyBDistrictNo,
+			c.partyBAddress,
+			s.StoreNo as storeNo,
+			s.Name,
+			s.Address,
+			s.AddressDetail,
+			s.id as storeId,
+			s.StoreNo as storeNo,
+			s.Name as name,
+			s.Address as address,
+			s.AddressDetail as addressDetail,
+			ISNULL(s2.centername, '') AS centerName,
+			s.Maintainer as maintainer,
+			ISNULL(s.maintainerName, '-') as maintainerName,
+			s.businessStatus,
+			bdv.dicValue as contractTypeStr,
+			cs.isCancel
+		FROM Contract c
+		INNER JOIN Company cm on cm.id = c.CompanyId
+		INNER JOIN	ContractStore cs  on c.id=cs.ContractId and cs.isDelete = 0 and cs.isCancel = '17201'
+		INNER JOIN store s on s.id=cs.StoreId
+		LEFT JOIN dbo.USR_User s1 ON s.Maintainer=s1.userCode AND s1.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] s2 ON s1.groupId=s2.groupId
+		LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode = c.ContractType AND bdv.delFlag='N'
+		where c.id = #{contractId}
+	</select>
+	<!-- 获取已撤销的合同列表信息 -->
+	<select id="getContractChangeEdList" parameterType="map" resultMap="contractChangeEdDtoBaseMap">
+		SELECT *,(SELECT COUNT(DISTINCT(t1.id))  FROM (
+					SELECT SAC.id FROM    dbo.Store_AchievementCancel SAC
+					INNER  JOIN dbo.Store_AchievementCancelMapping SAM ON SAC.id = SAM.achievementCancelId AND SAM.delFlag = 0
+			        LEFT JOIN dbo.Contract CT ON CT.Id = SAC.contractId
+			        LEFT JOIN dbo.Company CY ON CY.Id = CT.CompanyId
+		            LEFT JOIN dbo.Store S ON S.Id = SAM.storeId  AND S.IsDelete = 0
+		            LEFT JOIN dbo.BAS_District BDT ON CY.DistrictNo = BDT.DistrictNo
+		            LEFT JOIN dbo.BAS_City BDT2 ON CY.CityNo = BDT2.CityNo AND BDT2.FlagDeleted=0
+				WHERE   SAC.isDelete = 0 
+					<if test="userCreate!=null and userCreate!=0">
+					and (CT.centerId in (SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM'))
+					  or CT.UserCreate=#{userCreate} or S.Maintainer = '${userCode}'  OR CT.expandingPersonnelId = #{userCode}
+					)
+					</if>
+					<if test="achievementCancelNo!=null and achievementCancelNo!=''">
+						and (
+							SAC.achievementCancelNo like  '%${achievementCancelNo}%'
+							or  CT.agreementNo like  '%${achievementCancelNo}%'
+							or  CY.CompanyName like  '%${achievementCancelNo}%'
+							or  S.Name like  '%${achievementCancelNo}%'
+							or  S.AddressDetail like  '%${achievementCancelNo}%'
+							)
+					</if>
+				)t1) as dataCount 
+		FROM (
+			SELECT  SAC.achievementCancelNo ,SAC.id,
+					SAC.approveState,
+					BDV.dicValue AS approveStateName,
+		        	CT.agreementNo,
+		        	CT.ContractNo as contractNo,
+		        	CT.Id as contractId,
+		       		CY.CompanyName AS companyName ,
+		       		CY.CompanyNo as companyNo,
+		       		(BDT2.CityName+ BDT.DistrictName + CY.Address )as companyAddress,
+		        	s.id as storeId,
+					s.StoreNo as storeNo,
+					s.Name as name,
+					s.Address as address,
+					s.AddressDetail as addressDetail
+			FROM    dbo.Store_AchievementCancel SAC
+				INNER  JOIN dbo.Store_AchievementCancelMapping SAM ON SAC.id = SAM.achievementCancelId AND SAM.delFlag = 0
+		        LEFT JOIN dbo.Contract CT ON CT.Id = SAC.contractId
+		        LEFT JOIN dbo.Company CY ON CY.Id = CT.CompanyId
+		        --LEFT JOIN dbo.USR_User UR ON UR.userId = SAC.userCreate
+		        LEFT JOIN dbo.BAS_DictionaryValue BDV ON BDV.dicCode = SAC.approveState
+	            LEFT JOIN dbo.Store S ON S.Id = SAM.storeId  AND S.IsDelete = 0
+	            LEFT JOIN dbo.BAS_District BDT ON CY.DistrictNo = BDT.DistrictNo
+	            LEFT JOIN dbo.BAS_City BDT2 ON CY.CityNo = BDT2.CityNo AND BDT2.FlagDeleted=0
+			WHERE   SAC.isDelete = 0 
+				<if test="userCreate!=null and userCreate!=0">
+					and (CT.centerId in (SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM'))
+					  or CT.UserCreate=#{userCreate} or S.Maintainer = '${userCode}' OR CT.expandingPersonnelId = #{userCode}
+					)
+				</if>
+				<if test="achievementCancelNo!=null and achievementCancelNo!=''">
+					and (
+						SAC.achievementCancelNo like  '%${achievementCancelNo}%'
+						or  CT.agreementNo like  '%${achievementCancelNo}%'
+						or  CY.CompanyName like  '%${achievementCancelNo}%'
+						or  S.Name like  '%${achievementCancelNo}%'
+						or  S.AddressDetail like  '%${achievementCancelNo}%'
+						)
+				</if>
+		) t order by id desc
+		  
+	</select>
+	<select id="getContractChangeEdInfo" parameterType="map" resultMap="contractChangeEdDtoBaseMap">
+			SELECT  SAC.achievementCancelNo ,SAC.id,
+		        	CT.agreementNo,
+		        	CT.ContractNo as contractNo,
+		        	CT.Id as contractId,
+		        	CT.LealPerson as legalPerson,
+		        	CT.registrId,
+		        	SAC.cancelReason,
+		        	SAC.flowId,
+		       		CY.CompanyName AS companyName ,
+		       		CY.CompanyNo as companyNo,
+		       		(BDT2.CityName+ BDT.DistrictName + CY.Address )as companyAddress,
+		        	s.id as storeId,
+					s.StoreNo as storeNo,
+					s.Name as name,
+					s.Address as address,
+					s.AddressDetail as addressDetail,
+					SAC.approveState,
+					s1.userName as userCreateName,
+					SAC.userCreate,
+					SAC.dateCreate,
+					SAC.approveDate
+			FROM    dbo.Store_AchievementCancel SAC
+				INNER  JOIN dbo.Store_AchievementCancelMapping SAM ON SAC.id = SAM.achievementCancelId AND SAM.delFlag = 0
+		        LEFT JOIN dbo.Contract CT ON CT.Id = SAC.contractId
+		        LEFT JOIN dbo.Company CY ON CY.Id = CT.CompanyId
+	            LEFT JOIN dbo.Store S ON S.Id = SAM.storeId  AND S.IsDelete = 0
+	            LEFT JOIN dbo.BAS_District BDT ON CY.DistrictNo = BDT.DistrictNo
+	            LEFT JOIN dbo.BAS_City BDT2 ON CY.CityNo = BDT2.CityNo AND BDT2.FlagDeleted=0
+	            LEFT JOIN dbo.USR_User s1 ON SAC.userCreate=s1.userId AND s1.delFlag='N'
+			WHERE   SAC.isDelete = 0 
+					AND SAC.id = #{id}		
+	</select>
+	<select id="getOaProcessByFlowId" parameterType="string" resultMap="oaProcessDtoBaseMap">
+	SELECT
+			Row_Number() over ( order by getdate() ) as orderNo,
+			flowId ,
+	        empname ,
+	        empnumber ,
+	        content,
+	       CONVERT(varchar(100), create_date, 23)  as createDate
+		FROM
+			V_OA_Table_approveInfo
+		WHERE flowId = #{flowId}
+			ORDER BY create_date desc
+	</select>
+	<select id="getSenderLoginNameAndCode" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.api.contractChange.model.CenterSetting">
+		SELECT id,mdcxSendUserCode,mdcxSendUserName,centerId FROM  dbo.BAS_CenterSetting 
+		WHERE centerId=(SELECT TOP 1 centerId FROM  contract WHERE id =  #{contractId});
+	</select>
+	<!-- 合同终止列表 -->
+	<select id="getContractEndList" parameterType="map" resultMap="contractChangeDtoBaseMap">
+		 SELECT 
+				SUM(CASE WHEN row_num2 = 1 THEN 1
+		                         ELSE 0
+		                    END) OVER ( ) AS dataCount,
+		        t.*
+		 FROM   ( SELECT   
+							DENSE_RANK() OVER ( ORDER BY c.DateCreate DESC, c.Id ) rowNum ,
+							ROW_NUMBER() OVER ( PARTITION BY c.DateCreate,  c.Id  ORDER BY  c.DateCreate DESC,  c.Id ) row_num2,
+							c.DateCreate as dateCreate,
+		                    c.Id AS contractId ,
+		                    c.ContractNo AS contractNo ,
+		                    c.AgreementNo as agreementNo,
+		                    c.CompanyId AS companyId ,
+		                    c.PartyB AS companyName ,
+		                    cm.CompanyNo AS companyNo ,
+		                    c.PartyBCityNo ,
+		                    c.PartyBDistrictNo ,
+		                    c.PartyBAddress ,
+		                    s.Id AS storeId ,
+		                    s.StoreNo AS storeNo ,
+		                    s.Name AS name ,
+		                    s.Address AS address ,
+		                    s.AddressDetail AS addressDetail
+		          FROM      Contract c
+		                    INNER JOIN Company cm ON cm.Id = c.CompanyId
+		                    INNER JOIN ContractStore cs ON c.Id = cs.ContractId  AND cs.IsDelete = 0 AND cs.isCancel = '17203' and cs.storeState = 0
+		                    INNER JOIN Store s ON s.Id = cs.StoreId
+		          WHERE     c.ContractType != 10306
+		                    AND c.ContractStatus = 10403
+		                    <if test="userCreate!=null and userCreate!=0">
+								AND ( c.centerId IN ( SELECT  centerGroupId FROM dbo.F_WX_UserCenterAuth('${userCode}', 'CRM') )  
+								OR c.UserCreate = ${userCreate} OR s.Maintainer = '${userCode}' OR c.expandingPersonnelId = #{userCode})
+							</if>
+							<if test="contractNo!=null and contractNo!=''">
+								and (
+									c.contractNo like  '%${contractNo}%'
+									or  c.agreementNo like  '%${contractNo}%'
+									or  c.PartyB like  '%${contractNo}%'
+									or  s.Name like  '%${contractNo}%'
+									or  s.AddressDetail like  '%${contractNo}%'
+									)
+							</if>
+		        ) t --where t.rowNum &gt; ((${pageIndex}-1) * ${pageSize}) AND t.rowNum  &lt;= (${pageIndex}*${pageSize})
+				ORDER BY t.DateCreate desc
+	</select>
+	<!-- 合同终止提交页面信息 -->
+	<select id="toContractEndSubmit" parameterType="map" resultMap="contractChangeDtoBaseMap">
+		select
+			c.Id as contractId,
+			c.AcCityNo as acCityNo,
+			c.ContractNo as contractNo,
+			c.agreementNo,
+			c.CompanyId as companyId,
+			cm.CompanyNo as companyNo,
+			c.PartyB as companyName,
+			c.registrId,
+			c.LealPerson as legalPerson,
+			c.partyBCityNo,
+			c.partyBDistrictNo,
+			c.partyBAddress,
+			s.StoreNo as storeNo,
+			s.Name,
+			s.Address,
+			s.AddressDetail,
+			s.id as storeId,
+			s.StoreNo as storeNo,
+			s.Name as name,
+			s.Address as address,
+			s.AddressDetail as addressDetail,
+			ISNULL(s2.centername, '') AS centerName,
+			s.Maintainer as maintainer,
+			ISNULL(s.maintainerName, '-') as maintainerName,
+			s.businessStatus,
+			bdv.dicValue as contractTypeStr,
+			cs.isCancel,
+			cs.storeState
+		FROM Contract c
+		INNER JOIN Company cm on cm.id = c.CompanyId
+		INNER JOIN	ContractStore cs  on c.id=cs.ContractId and cs.isDelete = 0 and cs.isCancel = '17203' and cs.storeState = 0
+		INNER JOIN store s on s.id=cs.StoreId
+		LEFT JOIN dbo.USR_User s1 ON s.Maintainer=s1.userCode AND s1.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] s2 ON s1.groupId=s2.groupId
+		LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode = c.ContractType AND bdv.delFlag='N'
+		where c.id = #{contractId}
+	</select>
+	<!-- 合同终止待提交列表 -->
+	<select id="getContractEndToSumbmitList" parameterType="map" resultMap="contractChangeDtoBaseMap">
+		 SELECT 
+				SUM(CASE WHEN row_num2 = 1 THEN 1
+		                         ELSE 0
+		                    END) OVER ( ) AS dataCount,
+		        t.*
+		 FROM   ( SELECT   
+							DENSE_RANK() OVER ( ORDER BY c.DateCreate DESC, c.Id ) rowNum ,
+							ROW_NUMBER() OVER ( PARTITION BY c.DateCreate,  c.Id  ORDER BY  c.DateCreate DESC,  c.Id ) row_num2,
+							ch.contractStopNo,
+							ch.id contractStopId,
+							c.DateCreate as dateCreate,
+		                    c.Id AS contractId ,
+		                    c.ContractNo AS contractNo ,
+		                    c.AgreementNo as agreementNo,
+		                    c.CompanyId AS companyId ,
+		                    c.PartyB AS companyName ,
+		                    cm.CompanyNo AS companyNo ,
+		                    c.PartyBCityNo ,
+		                    c.PartyBDistrictNo ,
+		                    c.PartyBAddress ,
+		                    s.Id AS storeId ,
+		                    s.StoreNo AS storeNo ,
+		                    s.Name AS name ,
+		                    s.Address AS address ,
+		                    s.AddressDetail AS addressDetail,
+		                    ch.approveState as ctEndApproveState,
+							approveStateName = (CASE WHEN ch.approveState =0 THEN '待提交'
+								WHEN ch.approveState = 1 THEN '审核中'
+								WHEN ch.approveState = 2 THEN '已审核'
+								WHEN ch.approveState = 3 THEN '审核未通过'
+			                  ELSE '其他' end) 
+		          FROM      Contract c
+		                    INNER JOIN Company cm ON cm.Id = c.CompanyId
+		                    INNER JOIN ContractStore cs ON c.Id = cs.ContractId  AND cs.IsDelete = 0 AND cs.isCancel = '17203' 
+		                    INNER JOIN Store s ON s.Id = cs.StoreId
+		                    INNER JOIN ContractChangeStore ccs on c.Id = ccs.contractId and ccs.storeId = s.Id and ccs.delFlag=0
+							INNER JOIN dbo.ContractChange ch ON ch.id = ccs.contractStopId AND ccs.contractId = ch.contractId AND ch.delFlag =0  and ch.changeType = 17001 
+							 AND (ch.approveState = 0 OR ch.approveState = 3 )
+		          WHERE     c.ContractType != 10306
+		                    AND c.ContractStatus = 10403
+		                    <if test="userCreate!=null and userCreate!=0">
+								AND ( c.centerId IN ( SELECT  centerGroupId FROM dbo.F_WX_UserCenterAuth('${userCode}', 'CRM') )  
+								OR c.UserCreate = ${userCreate} OR s.Maintainer = '${userCode}' OR c.expandingPersonnelId = #{userCode})
+							</if>
+							<if test="contractNo!=null and contractNo!=''">
+								and (
+									c.contractNo like  '%${contractNo}%'
+									or  c.agreementNo like  '%${contractNo}%'
+									or  c.PartyB like  '%${contractNo}%'
+									or  s.Name like  '%${contractNo}%'
+									or  s.AddressDetail like  '%${contractNo}%'
+									)
+							</if>
+		        ) t 
+				ORDER BY t.DateCreate desc
+	</select>
+	<!-- 合同终止进度查询列表 -->
+	<select id="getContractEndProgressList" parameterType="map" resultMap="contractChangeDtoBaseMap">
+		 SELECT 
+				SUM(CASE WHEN row_num2 = 1 THEN 1
+		                         ELSE 0
+		                    END) OVER ( ) AS dataCount,
+		        t.*
+		 FROM   ( SELECT   
+							DENSE_RANK() OVER ( ORDER BY c.DateCreate DESC, c.Id ) rowNum ,
+							ROW_NUMBER() OVER ( PARTITION BY c.DateCreate,  c.Id  ORDER BY  c.DateCreate DESC,  c.Id ) row_num2,
+							c.DateCreate as dateCreate,
+		                    c.Id AS contractId ,
+		                    c.ContractNo AS contractNo ,
+		                    c.AgreementNo as agreementNo,
+		                    c.CompanyId AS companyId ,
+		                    c.PartyB AS companyName ,
+		                    cm.CompanyNo AS companyNo ,
+		                    s.Id AS storeId ,
+		                    s.StoreNo AS storeNo ,
+		                    s.Name AS name ,
+		                    s.Address AS address ,
+		                    s.AddressDetail AS addressDetail,
+		                    ch.approveState as ctEndApproveState,
+							approveStateName = (CASE WHEN ch.approveState =0 THEN '待提交'
+								WHEN ch.approveState = 1 THEN '审核中'
+								WHEN ch.approveState = 2 THEN '已审核'
+								WHEN ch.approveState = 3 THEN '审核未通过'
+			                  ELSE '其他' end),
+			                  ch.contractStopNo,
+			                  ch.id AS contractStopId
+		          FROM      Contract c
+		                    INNER JOIN Company cm ON cm.Id = c.CompanyId
+		                    INNER JOIN ContractStore cs ON c.Id = cs.ContractId  AND cs.IsDelete = 0 AND cs.isCancel = '17203' 
+		                    INNER JOIN Store s ON s.Id = cs.StoreId
+		                    INNER JOIN ContractChangeStore ccs on c.Id = ccs.contractId and ccs.storeId = s.Id and ccs.delFlag=0
+							INNER JOIN dbo.ContractChange ch ON ch.id = ccs.contractStopId
+								AND ccs.contractId = ch.contractId AND ch.delFlag =0  and ch.changeType = 17001
+								and ch.submitOAStatus &lt;&gt;21201
+		                    where c.ContractStatus = 10403
+		                    <if test="userCreate!=null and userCreate!=0">
+								AND ( c.centerId IN ( SELECT  centerGroupId FROM dbo.F_WX_UserCenterAuth('${userCode}', 'CRM') )  
+								OR c.UserCreate = ${userCreate} OR s.Maintainer = '${userCode}' OR c.expandingPersonnelId = #{userCode})
+							</if>
+							<if test="contractNo!=null and contractNo!=''">
+								and (
+									c.contractNo like  '%${contractNo}%'
+									or  ch.contractStopNo like  '%${contractNo}%'
+									or  c.PartyB like  '%${contractNo}%'
+									or  s.Name like  '%${contractNo}%'
+									or  s.AddressDetail like  '%${contractNo}%'
+									)
+							</if>
+		        ) t 
+				ORDER BY t.DateCreate desc
+	</select>
+	<!-- 合同终止查看页面 -->
+	<select id="getContractEndToView" parameterType="map" resultMap="contractChangeDtoBaseMap">
+		SELECT  
+			c.ContractNo ,
+			c.Id AS contractId ,
+			c.registrId ,
+			c.LealPerson AS legalPerson ,
+			c.agreementNo,
+			c.CompanyId as companyId,
+			c.PartyB as companyName,
+			c.partyBCityNo,
+			c.partyBDistrictNo,
+			c.partyBAddress,
+			cm.CompanyName AS companyName ,
+			cm.CompanyNo AS companyNo ,
+			s.Id AS storeId ,
+			s.StoreNo AS storeNo ,
+			s.AddressDetail AS addressDetail ,
+			s.Name AS name ,
+			s.Maintainer as maintainer,
+			ISNULL(s.maintainerName, '-') as maintainerName,
+			s.businessStatus,
+			ch.id AS contractStopId ,
+			ch.contractStopNo ,
+			ch.stopType ,
+			ch.stopDate ,
+			ch.stopReason ,
+			ch.stopDescribe ,
+			ch.remarks ,
+			ch.isReleaseFlag ,
+			ch.flowId,
+			ccs.depositBalance ,
+		   ccs.depositBackMoney,
+		   ccs.receivedAmount,
+		   ISNULL(s2.centername, '') AS centerName
+		FROM    Contract c
+		        INNER JOIN Company cm ON cm.Id = c.CompanyId
+		        INNER JOIN ContractStore cs ON c.Id = cs.ContractId 
+		        									AND cs.IsDelete = 0
+													AND cs.isCancel = '17203' 
+		        INNER JOIN Store s ON s.Id = cs.StoreId
+		        INNER JOIN ContractChangeStore ccs ON c.Id = ccs.contractId 
+		        									AND ccs.storeId = s.Id  AND ccs.delFlag = 0
+		        INNER JOIN dbo.ContractChange ch ON ch.id = ccs.contractStopId
+		                                            AND ccs.contractId = ch.contractId
+		                                            AND ch.delFlag = 0
+		                                            AND ch.id = #{contractStopId}
+				LEFT JOIN dbo.USR_User s1 ON s.Maintainer=s1.userCode AND s1.delFlag='N'
+				LEFT JOIN [V_CRM_Center_Group_ref] s2 ON s1.groupId=s2.groupId
+				WHERE   c.ContractType != 10306 AND c.ContractStatus = 10403 
+						AND c.Id = #{contractId}
+	</select>
+
+	<select id="getStoreDecorateInfo" parameterType="java.lang.Integer" resultType="java.util.Map">
+		 SELECT isnull(de.decorateStatus,0) decorateSituate,
+				isnull(de.decorationType,0) decorationType,
+				isnull(sa.oaMdysSumJsj,0) decorateAmount,
+				isnull(sf.decorateCompany,'') decorateCompany
+		 FROM   Store T1
+				LEFT JOIN OMS.dbo.CRM_Decoration de ON de.decorateId = ( SELECT
+																	  MAX(decorateId)
+																	  FROM
+																	  OMS.dbo.CRM_Decoration
+																	  WHERE
+																	  storeNo = T1.StoreNo
+																	  AND delFlag = '0'
+																	  )
+				LEFT JOIN OMS.dbo.CRM_oaStoreFlop sf ON de.decorateId = sf.decorateId
+														AND sf.delFlag = 0
+				LEFT JOIN OMS.dbo.CRM_oaStoreAcceptance sa ON de.decorateId = sa.decorateId
+															  AND sa.delFlag = 0
+		 WHERE  T1.Id = #{storeId}
+				AND T1.IsDelete = '0'
+	</select>
+
+    <select id="checkContractStoreForTerminate" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT  COUNT(*) AS num
+        FROM    dbo.ContractChange c
+                JOIN dbo.ContractChangeStore cs ON c.id = cs.contractStopId
+        WHERE   c.changeType = 17001
+                AND c.delFlag = '0'
+                AND cs.delFlag = '0'
+                AND c.contractId = #{contractId}
+                AND cs.storeId = #{storeId}
+    </select>
+    <select id="checkStoreApplyInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT  	  cc.contractId ,
+                      ccs.storeId ,
+                      cc.approveState,
+                      s.storeNo,s.Name as storeName
+              FROM    ContractChange cc
+                      JOIN ContractChangeStore ccs ON cc.id = ccs.contractStopId
+                      JOIN Store s on s.id = ccs.storeId  AND s.IsDelete = 0
+              WHERE   cc.contractId = #{contractId,jdbcType=INTEGER}
+                      AND cc.delFlag = 0
+                      AND ccs.delFlag = 0
+                      AND cc.changeType in (17002,17003)
+				AND ccs.storeId = #{storeId,jdbcType=INTEGER}
+    </select>
+</mapper>

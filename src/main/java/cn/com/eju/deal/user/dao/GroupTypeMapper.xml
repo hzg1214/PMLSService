@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.GroupTypeMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.GroupType" >
+    <id column="typeId" property="typeId" jdbcType="INTEGER" />
+    <result column="typeName" property="typeName" jdbcType="NVARCHAR" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    typeId, typeName, dateCreate, userIdCreate, delFlag
+  </sql>
+  <select id="queryList" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_GroupType where delFlag = 'N'
+  </select>
+  <select id="selectType" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_GroupType
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_GroupType
+    where typeId = #{typeId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from USR_GroupType
+    where typeId = #{typeId,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+     update USR_GroupType SET
+      delFlag = 'Y'
+     where typeId = #{typeId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.eju.deal.user.model.GroupType" >
+    insert into USR_GroupType (typeName,userIdCreate)
+    values (#{typeName,jdbcType=NVARCHAR},#{userIdCreate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.user.model.GroupType" >
+    insert into USR_GroupType
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        typeId,
+      </if>
+      <if test="typeName != null" >
+        typeName,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.user.model.GroupType" >
+    update USR_GroupType
+    <set >
+      <if test="typeName != null" >
+        typeName = #{typeName,jdbcType=NVARCHAR},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where typeId = #{typeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.user.model.GroupType" >
+    update USR_GroupType
+    set typeName = #{typeName,jdbcType=NVARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=NVARCHAR}
+    where typeId = #{typeId,jdbcType=INTEGER}
+  </update>
+</mapper>

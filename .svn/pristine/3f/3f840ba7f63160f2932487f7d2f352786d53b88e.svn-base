@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.otherReport.dao.LnkYjQtYjsrMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.otherReport.model.LnkYjQtYjsr">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reportId" jdbcType="INTEGER" property="reportId" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="befTaxAmount" jdbcType="DECIMAL" property="befTaxAmount" />
+    <result column="aftTaxAmount" jdbcType="DECIMAL" property="aftTaxAmount" />
+    <result column="recordDate" jdbcType="TIMESTAMP" property="recordDate" />
+    <result column="delFlg" jdbcType="BIT" property="delFlg" />
+    <result column="crtDt" jdbcType="TIMESTAMP" property="crtDt" />
+    <result column="crtEmpId" jdbcType="INTEGER" property="crtEmpId" />
+    <result column="uptEmpId" jdbcType="INTEGER" property="uptEmpId" />
+    <result column="uptDt" jdbcType="TIMESTAMP" property="uptDt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, reportId, num, befTaxAmount, aftTaxAmount, recordDate, delFlg, crtDt,
+    crtEmpId, uptEmpId, uptDt
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from LNK_YJ_QT_YJSR
+    where id = #{id,jdbcType=INTEGER}
+     and delFlg = 0
+  </select>
+
+  <update id="mergeInsert" parameterType="cn.com.eju.deal.otherReport.model.LnkYjQtYjfy" >
+    MERGE INTO dbo.LNK_YJ_QT_YJSR s1
+    USING (SELECT #{reportId} AS reportId,#{num} AS num,#{recordDate} AS recordDate) AS s2
+    ON s1.reportId=s2.reportId AND s1.num=s2.num AND s1.recordDate=s2.recordDate
+    WHEN MATCHED THEN
+    UPDATE SET s1.befTaxAmount=#{befTaxAmount},s1.aftTaxAmount=#{aftTaxAmount},s1.uptEmpId=#{uptEmpId},s1.uptDt=getdate(),s1.delFlg=0
+    WHEN NOT MATCHED THEN
+    INSERT (reportId,befTaxAmount,aftTaxAmount,recordDate,num,crtEmpId,crtDt,delFlg)
+    VALUES(#{reportId},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{num},#{crtEmpId},getdate(),0);
+  </update>
+  
+  <select id="getList"  parameterType="Map" resultType="cn.com.eju.deal.otherReport.dto.LnkYjWyDto">
+      SELECT * into #reportDetail from (
+      SELECT  x1.Id,x1.reportNo,x1.businessDate,x1.srType,1 tsnum,x1.dealAmount
+      FROM dbo.LNK_Qt_ReportDetail(NOLOCK) x1
+      inner join dbo.LNK_Qt_Report(NOLOCK) report on x1.reportNo=report.reportNo
+      INNER JOIN LNK_Estate(NOLOCK) Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+      WHERE x1.businessType = 27302
+      AND x1.DelFlg =0
+      AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+      <if test="projectDepartmentId != null and projectDepartmentId != ''">
+        AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+      </if>
+      <if test="estateNmKey != null and estateNmKey != ''">
+        AND Estate.estateNm IN (${estateNmKey})
+      </if>
+      <if test="reportNo != null and reportNo != ''">
+        <![CDATA[AND report.reportNo LIKE '%' + RTrim(LTrim('${reportNo}')) + '%']]>
+      </if>
+      UNION ALL
+      SELECT x1.Id,x1.reportNo,x1.businessDate,x1.srType,-1 tsnum,-x1.dealAmount
+      FROM dbo.LNK_Qt_ReportDetail(NOLOCK) x1
+      inner join dbo.LNK_Qt_Report(NOLOCK) report on x1.reportNo=report.reportNo
+      INNER JOIN LNK_Estate(NOLOCK) Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+      WHERE x1.businessType = 27303
+      AND x1.DelFlg =0
+      AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+      <if test="projectDepartmentId != null and projectDepartmentId != ''">
+        AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+      </if>
+      <if test="estateNmKey != null and estateNmKey != ''">
+        AND Estate.estateNm IN (${estateNmKey})
+      </if>
+      <if test="reportNo != null and reportNo != ''">
+        <![CDATA[AND report.reportNo LIKE '%' + RTrim(LTrim('${reportNo}')) + '%']]>
+      </if>
+      )tbl1
+
+      SELECT * INTO #q from (
+      SELECT
+      t.reportId ,
+      t.rowNo / 8 AS rowNo ,
+      t.num,
+      t.reportNo,
+      SUM(CASE WHEN t.befTaxAmount IS NOT NULL THEN t.befTaxAmount ELSE 0 END) befTaxAmountTotal ,
+      SUM(CASE WHEN t.aftTaxAmount IS NOT NULL THEN t.aftTaxAmount ELSE 0 END) aftTaxAmountTotal ,
+      MAX(CASE t.rowNo % 7 WHEN 1 THEN t.befTaxAmount ELSE NULL END) befTaxAmount ,
+      MAX(CASE t.rowNo % 7 WHEN 1 THEN t.aftTaxAmount ELSE NULL END) aftTaxAmount ,
+      MAX(CASE t.rowNo % 7 WHEN 1 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) recordDate ,
+      MAX(CASE t.rowNo % 7 WHEN 1 THEN switchFlag ELSE NULL END) switchFlag,
+      MAX(CASE t.rowNo % 7 WHEN 2 THEN t.befTaxAmount ELSE NULL END) befTaxAmount1 ,
+      MAX(CASE t.rowNo % 7 WHEN 2 THEN t.aftTaxAmount ELSE NULL END) aftTaxAmount1 ,
+      MAX(CASE t.rowNo % 7 WHEN 2 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) recordDate1 ,
+      MAX(CASE t.rowNo % 7 WHEN 2 THEN switchFlag ELSE NULL END) switchFlag1 ,
+      MAX(CASE t.rowNo % 7 WHEN 3 THEN t.befTaxAmount ELSE NULL END) befTaxAmount2 ,
+      MAX(CASE t.rowNo % 7 WHEN 3 THEN t.aftTaxAmount ELSE NULL END) aftTaxAmount2 ,
+      MAX(CASE t.rowNo % 7 WHEN 3 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) recordDate2 ,
+      MAX(CASE t.rowNo % 7 WHEN 3 THEN switchFlag ELSE NULL END) switchFlag2 ,
+      MAX(CASE t.rowNo % 7 WHEN 4 THEN t.befTaxAmount ELSE NULL END) befTaxAmount3 ,
+      MAX(CASE t.rowNo % 7 WHEN 4 THEN t.aftTaxAmount ELSE NULL END) aftTaxAmount3 ,
+      MAX(CASE t.rowNo % 7 WHEN 4 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) recordDate3 ,
+      MAX(CASE t.rowNo % 7 WHEN 4 THEN switchFlag ELSE NULL END) switchFlag3 ,
+      MAX(CASE t.rowNo % 7 WHEN 5 THEN t.befTaxAmount ELSE NULL END) befTaxAmount4 ,
+      MAX(CASE t.rowNo % 7 WHEN 5 THEN t.aftTaxAmount ELSE NULL END) aftTaxAmount4 ,
+      MAX(CASE t.rowNo % 7 WHEN 5 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) recordDate4 ,
+      MAX(CASE t.rowNo % 7 WHEN 5 THEN switchFlag ELSE NULL END) switchFlag4 ,
+      MAX(CASE t.rowNo % 7 WHEN 6 THEN t.befTaxAmount ELSE NULL END) befTaxAmount5 ,
+      MAX(CASE t.rowNo % 7 WHEN 6 THEN t.aftTaxAmount ELSE NULL END) aftTaxAmount5 ,
+      MAX(CASE t.rowNo % 7 WHEN 6 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) recordDate5 ,
+      MAX(CASE t.rowNo % 7 WHEN 6 THEN switchFlag ELSE NULL END) switchFlag5 ,
+      MAX(CASE t.rowNo % 7 WHEN 0 THEN t.befTaxAmount ELSE NULL END) befTaxAmount6 ,
+      MAX(CASE t.rowNo % 7 WHEN 0 THEN t.aftTaxAmount ELSE NULL END) aftTaxAmount6 ,
+      MAX(CASE t.rowNo % 7 WHEN 0 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) recordDate6,
+      MAX(CASE t.rowNo % 7 WHEN 0 THEN switchFlag ELSE NULL END) switchFlag6
+      FROM
+      (
+      select * from (
+      SELECT ROW_NUMBER() OVER ( PARTITION BY ys.reportId,num ORDER BY ys.reportId, recordDate ) rowNo ,re.reportNo,ys.*,COUNT(s.id) switchFlag
+      FROM dbo.LNK_YJ_QT_YJSR(NOLOCK) ys
+      INNER JOIN dbo.LNK_Qt_Report(NOLOCK) re ON ys.reportId = re.id
+      INNER JOIN LNK_Estate Estate (NOLOCK) ON re.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+      LEFT JOIN OMS.dbo.CRM_Perform_Switch(NOLOCK) s ON s.delFlag=0 AND s.switchState = 17502 AND s.relateSystem = 17402
+      AND switchYear=YEAR(ys.recordDate) AND switchMonth=MONTH(ys.recordDate)
+      AND s.cityNo= #{cityNo,jdbcType=VARCHAR}
+      WHERE ys.DelFlg = 0 AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+      <if test="projectDepartmentId != null and projectDepartmentId != ''">
+        AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+      </if>
+      <if test="estateNmKey != null and estateNmKey != ''">
+        AND Estate.estateNm IN (${estateNmKey})
+      </if>
+      GROUP BY ys.id,ys.reportId,ys.num,re.reportNo,ys.befTaxAmount,ys.aftTaxAmount,ys.recordDate,ys.delFlg,ys.crtDt,ys.crtEmpId,ys.uptEmpId,ys.uptDt
+      ) r where r.rowNo &lt; 8
+      ) t
+      GROUP bY t.reportId ,
+      t.rowNo / 8,t.num,t.reportNo
+      )tbl2
+
+      SELECT
+      ROW_NUMBER() OVER ( ORDER BY report.EstateId desc,reportDetail.reportNo desc, reportDetail.id asc,num desc ) rowNo ,
+      reportDetail.id,
+      report.EstateId ,
+      report.EstateNm ,
+      report.ReportNo ,
+      report.id reportId,
+      Estate.projectNo ,
+      CAST(ROUND(reportDetail.dealAmount, 2) AS NUMERIC(20, 2)) dealAmount ,
+      CONVERT(CHAR(10), reportDetail.businessDate, 120) AS dealDate ,
+      reportDetail.tsnum AS num ,
+      reportDetail.srType,
+      q.befTaxAmountTotal,
+      q.aftTaxAmountTotal,
+      q.befTaxAmount,
+      q.aftTaxAmount,
+      q.recordDate,
+      q.switchFlag,
+      q.befTaxAmount1,
+      q.aftTaxAmount1,
+      q.recordDate1,
+      q.switchFlag1,
+      q.befTaxAmount2,
+      q.aftTaxAmount2,
+      q.recordDate2,
+      q.switchFlag2,
+      q.befTaxAmount3,
+      q.aftTaxAmount3,
+      q.recordDate3,
+      q.switchFlag3,
+      q.befTaxAmount4,
+      q.aftTaxAmount4,
+      q.recordDate4,
+      q.switchFlag4,
+      q.befTaxAmount5,
+      q.aftTaxAmount5,
+      q.recordDate5,
+      q.switchFlag5,
+      q.befTaxAmount6,
+      q.aftTaxAmount6,
+      q.recordDate6,
+      q.switchFlag6,
+      bdv.dicValue srName
+      FROM    dbo.LNK_Qt_Report(NOLOCK) report
+      INNER JOIN #reportDetail reportDetail ON report.ReportNo = reportDetail.ReportNo
+
+      INNER JOIN LNK_Estate(NOLOCK) Estate ON report.EstateId = Estate.EstateId
+      AND Estate.DelFlg = 0
+      LEFT JOIN #q q ON q.ReportNo = report.ReportNo AND q.num=reportDetail.tsnum
+      left join BAS_DictionaryValue(NOLOCK) bdv on reportDetail.srType = bdv.dicCode and bdv.delFlag = 'N'
+      WHERE
+      1 = 1
+      AND report.DelFlg = 0
+      AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+      and  reportDetail.businessDate >=#{countDateStart} and reportDetail.businessDate &lt;=#{countDateEnd}
+      <if test="projectDepartmentId != null and projectDepartmentId != ''">
+        AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+      </if>
+      <if test="reportNo != null and reportNo != ''">
+        <![CDATA[AND report.reportNo LIKE '%' + RTrim(LTrim('${reportNo}')) + '%']]>
+      </if>
+      <if test="projectNo != null and projectNo != ''">
+        <![CDATA[AND Estate.projectNo  LIKE '%${projectNo}%']]>
+      </if>
+      <if test="estateNmKey != null and estateNmKey != ''">
+        AND Estate.estateNm IN (${estateNmKey})
+      </if>
+    ORDER BY report.EstateId desc, reportDetail.reportNo desc, reportDetail.id asc,num desc
+
+      drop table #reportDetail
+      drop table #q
+  </select>
+
+    <update id="mergeInsertWy" parameterType="cn.com.eju.deal.otherReport.dto.LnkYjWyDto" >
+        MERGE INTO dbo.LNK_YJ_QT_YJSR s1
+        USING (SELECT #{reportId} AS reportId,#{num} AS num,#{recordDate} AS recordDate) AS s2
+        ON s1.reportId=s2.reportId AND s1.num=s2.num AND s1.recordDate=s2.recordDate
+        WHEN MATCHED THEN
+        UPDATE SET s1.befTaxAmount=#{befTaxAmount},s1.aftTaxAmount=#{aftTaxAmount},s1.uptEmpId=#{uptEmpId},s1.uptDt=getdate(),s1.delFlg=0
+        WHEN NOT MATCHED THEN
+        INSERT (reportId,befTaxAmount,aftTaxAmount,recordDate,num,crtEmpId,crtDt,delFlg)
+        VALUES(#{reportId},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{num},#{crtEmpId},getdate(),0);
+    </update>
+</mapper>

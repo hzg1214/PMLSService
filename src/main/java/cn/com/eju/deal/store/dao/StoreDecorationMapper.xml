@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.StoreDecorationMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.dto.store.StoreDecorationDto">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="storeId" property="storeId" jdbcType="INTEGER"/>
+        <result column="decorationNo" property="decorationNo" jdbcType="NVARCHAR"/>
+        <result column="contractNo" property="contractNo" jdbcType="NVARCHAR"/>
+        <result column="storeNo" property="storeNo" jdbcType="NVARCHAR"/>
+        <result column="decorationStatus" property="decorationStatus" jdbcType="INTEGER"/>
+        <result column="userCreate" property="userCreate" jdbcType="INTEGER"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="updateUserId" property="updateUserId" jdbcType="INTEGER"/>
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="delFlag" property="delFlag" jdbcType="BIT"/>
+        <result column="paymentStatus" property="paymentStatus" jdbcType="INTEGER"/>
+        
+        <result column="companyName" property="companyName" jdbcType="NVARCHAR"/>
+        <result column="contractType" property="contractType" jdbcType="INTEGER"/>
+        <result column="userCode" property="userCode" jdbcType="INTEGER"/>
+        <result column="userName" property="userName" jdbcType="NVARCHAR"/>
+        <result column="contractTypeName" property="contractTypeName" jdbcType="NVARCHAR"/>
+        <result column="contractStatus" property="contractStatus" jdbcType="INTEGER"/>
+        <result column="paymentStatusName" property="paymentStatusName" jdbcType="NVARCHAR"/>
+        <result column="decorationType" property="decorationType" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 查询门店装修记录 -->
+    <select id="getStoreDecoration" resultMap="BaseResultMap" parameterType="Map">
+		SELECT  T1.decorationNo ,
+		        T1.contractNo ,
+		        T1.dateCreate ,
+		        T1.decorationStatus ,
+		        T2.PartyB AS companyName ,
+		        T2.ContractType AS contractType ,
+		        T2.ContractStatus AS contractStatus,
+		        T3.userCode ,
+		        T3.userName,
+				T4.dicValue AS contractTypeName,
+				upToDateDecorationStatus = (SELECT MIN(decorationStatus) FROM dbo.Store_Decoration sd WHERE sd.delFlag=0 AND sd.storeId = #{storeId,jdbcType=INTEGER})
+				,T5.dicValue AS paymentStatusName,
+				T1.decorationType
+		FROM    dbo.Store_Decoration T1
+		        LEFT JOIN dbo.Contract T2 ON T2.ContractNo = T1.contractNo
+		        LEFT JOIN crm.dbo.USR_User T3 ON T1.userCreate = T3.userId
+				LEFT JOIN dbo.BAS_DictionaryValue T4 ON T4.dicCode = T2.ContractType 
+				Left JOIN dbo.BAS_DictionaryValue T5 ON T5.dicCode = T1.paymentStatus 
+		WHERE   T1.delFlag = 0
+				AND
+				T1.storeId = #{storeId,jdbcType=INTEGER}
+  	</select>
+  	
+  	<!-- 批量插入门店装修数据 -->
+  	<insert id="insertBatch"  parameterType="java.util.List">  
+	    INSERT INTO dbo.Store_Decoration (storeId,decorationNo,contractNo,storeNo,dateCreate,updateDate,delFlag)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	        (#{item.storeId},#{item.decorationNo},#{item.contractNo},#{item.storeNo},#{item.dateCreate},#{item.updateDate},#{item.delFlag})  
+	    </foreach>  
+	</insert>  
+	
+  	<!-- 插入新门店装修数据 -->
+  	<insert id="addDecorationRecord"  parameterType="cn.com.eju.deal.dto.store.StoreDecorationDto"
+  		useGeneratedKeys="true" keyProperty="id">  
+	    INSERT INTO dbo.Store_Decoration (storeId,decorationNo,contractNo,storeNo,userCreate,dateCreate,updateDate,delFlag)   
+	    values  
+	        (#{storeId,jdbcType=INTEGER},#{decorationNo,jdbcType=NVARCHAR},#{contractNo,jdbcType=NVARCHAR},#{storeNo,jdbcType=NVARCHAR},#{userCreate,jdbcType=INTEGER},#{dateCreate,jdbcType=TIMESTAMP},#{updateDate,jdbcType=TIMESTAMP},#{delFlag,jdbcType=BIT})  
+	</insert>  
+	
+	<!-- OMS调用接口-更新门店装修进度 -->
+	<update id="updateDecorationRecord" parameterType="Map">
+        UPDATE Store_Decoration
+		<set>
+			updateDate = GETDATE(),
+	        <if test="decorationStatus != null and  decorationStatus != ''">
+	            decorationStatus = #{decorationStatus,jdbcType=INTEGER},
+	        </if>
+	        <if test="updateUserId != null and updateUserId != ''">
+	            updateUserId = #{updateUserId,jdbcType=INTEGER},
+	        </if>
+        </set>
+        where decorationNo = #{decorationNo,jdbcType=NVARCHAR}
+    </update>
+    
+    
+    	<!-- OMS调用更新门店装修 装修付款状态 -->
+	<update id="updateStoreDecorationPayStatus" parameterType="Map">
+        UPDATE Store_Decoration
+		<set>
+			updateDate = GETDATE(),
+	        <if test="paymentStatus != null and  paymentStatus != ''">
+	            paymentStatus = #{paymentStatus,jdbcType=INTEGER},
+	        </if>
+        </set>
+        where decorationNo = #{decorationNo,jdbcType=NVARCHAR}
+    </update>
+    
+    <!-- OMS调用更新门店装修 装修类型 -->
+	<update id="updateDecorationType" parameterType="Map">
+        UPDATE Store_Decoration
+		<set>
+			updateDate = GETDATE(),
+	        <if test="decorationType != null and  decorationType != ''">
+	            decorationType = #{decorationType,jdbcType=INTEGER},
+	        </if>
+	        <if test="paymentStatus != null and  paymentStatus != ''">
+	            paymentStatus = #{paymentStatus,jdbcType=INTEGER},
+	        </if>
+        </set>
+        where decorationNo = #{decorationNo,jdbcType=NVARCHAR}
+    </update>
+    
+    <update id="updateDecorationForNew" parameterType="Map">
+        update Store_Decoration
+        set
+            updateDate = GETDATE(),
+            decorationNo = #{decorationNo,jdbcType=NVARCHAR},
+            contractNo = #{contractNo,jdbcType=NVARCHAR}
+        where
+            storeNo = #{storeNo,jdbcType=NVARCHAR}
+            and contractNo = #{oldContractNo,jdbcType=NVARCHAR}
+    </update>
+</mapper>

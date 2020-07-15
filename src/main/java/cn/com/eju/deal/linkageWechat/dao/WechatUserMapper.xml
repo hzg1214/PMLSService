@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.linkageWechat.dao.WechatUserMapper">
+<!-- WechatMessage 开始 新增记录微信消息记录 -->
+<!-- WechatUser开始 查询微信用户 -->
+  <select id="getWechatUserByWechatId" resultType="cn.com.eju.deal.linkageWechat.model.WechatUser" parameterType="java.lang.String" >
+	  SELECT Id
+	      ,wechatId
+	      ,subscribe
+	      ,mobile
+	      ,nickName
+	      ,sex
+	      ,language
+	      ,city
+	      ,province
+	      ,country
+	      ,headImgUrl
+	      ,subscribeTime
+	      ,unionId
+	      ,remark
+	      ,unsubscribeTime
+	      ,isBindMobile
+	      ,mobile
+	      ,dateCreate
+	      ,userIdCreate
+	      ,delFlag
+	      ,bindMobileDate
+	      ,companyName
+	      ,userName
+	      ,companyNo
+	      ,userNo
+	  FROM WX_WechatUser
+	     WHERE delFlag = 'N' 
+	     AND wechatId=#{wechatId,jdbcType=VARCHAR}
+      <!-- <if test="isBindMobile != null" >
+         AND isBindMobile = #{isBindMobile,jdbcType=VARCHAR} 
+      </if> -->
+  </select>
+  
+  <insert id="saveWechatUser" parameterType="cn.com.eju.deal.linkageWechat.model.WechatUser" useGeneratedKeys="true" keyProperty="wechatId" >
+    insert into WX_WechatUser (
+       wechatId
+      ,subscribe
+      ,nickName
+      ,sex
+      ,language
+      ,city
+      ,province
+      ,country
+      ,headImgUrl
+      ,subscribeTime
+      ,unionId
+      ,remark
+      ,unsubscribeTime)
+    values (#{wechatId,jdbcType=VARCHAR},#{subscribe,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR},
+    			#{sex,jdbcType=INTEGER},#{language,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+    		   #{province,jdbcType=VARCHAR},#{country,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR},
+    		   #{subscribeTime,jdbcType=INTEGER},#{unionId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+    		   #{unsubscribeTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateWechatUser" parameterType="cn.com.eju.deal.linkageWechat.model.WechatUser" >
+    update WX_WechatUser
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="subscribe != null" >
+        subscribe = #{subscribe,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null" >
+        nickName = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="language != null" >
+        language = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="headImgUrl != null" >
+        headImgUrl = #{headImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="unsubscribeTime != null" >
+        unsubscribeTime = #{unsubscribeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="isBindMobile != null" >
+        isBindMobile = #{isBindMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="bindMobileDate != null" >
+        bindMobileDate = #{bindMobileDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        companyNo = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null" >
+        userNo = #{userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+    where wechatId = #{wechatId,jdbcType=VARCHAR}
+    and  delFlag = 'N'
+  </update>
+  <!-- WechatUser 结束 -->
+  
+</mapper>

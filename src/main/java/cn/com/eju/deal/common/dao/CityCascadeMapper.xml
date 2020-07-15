@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.common.dao.CityCascadeMapper">
+	<!-- 省份 -->
+	<resultMap id="ProvinceResultMap" type="cn.com.eju.deal.common.model.Province">
+		<result column="provinceNo" property="provinceNo" jdbcType="NVARCHAR" />
+    	<result column="provinceName" property="provinceName" jdbcType="NVARCHAR" />
+	</resultMap>
+	<!-- 城市 -->
+	<resultMap id="CityResultMap" type="cn.com.eju.deal.common.model.City">
+		<result column="provinceNo" property="provinceNo" jdbcType="NVARCHAR" />
+    	<result column="provinceName" property="provinceName" jdbcType="NVARCHAR" />
+    	<result column="CityNo" property="cityNo" jdbcType="NVARCHAR" />
+    	<result column="CityName" property="cityName" jdbcType="NVARCHAR" />
+	</resultMap>
+	<!-- 区域 -->
+	<resultMap id="DistrictResultMap" type="cn.com.eju.deal.common.model.District">
+		<result column="provinceNo" property="provinceNo" jdbcType="NVARCHAR" />
+    	<result column="provinceName" property="provinceName" jdbcType="NVARCHAR" />
+    	<result column="CityNo" property="cityNo" jdbcType="NVARCHAR" />
+    	<result column="CityName" property="cityName" jdbcType="NVARCHAR" />
+    	<result column="DistrictNo" property="districtNo" jdbcType="NVARCHAR" />
+    	<result column="DistrictName" property="districtName" jdbcType="NVARCHAR" />
+	</resultMap>
+	<!-- 板块 -->
+	<resultMap id="AreaResultMap" type="cn.com.eju.deal.common.model.Area">
+		<result column="provinceNo" property="provinceNo" jdbcType="NVARCHAR" />
+    	<result column="provinceName" property="provinceName" jdbcType="NVARCHAR" />
+    	<result column="CityNo" property="cityNo" jdbcType="NVARCHAR" />
+    	<result column="CityName" property="cityName" jdbcType="NVARCHAR" />
+    	<result column="DistrictNo" property="districtNo" jdbcType="NVARCHAR" />
+    	<result column="DistrictName" property="districtName" jdbcType="NVARCHAR" />
+    	<result column="AreaNo" property="areaNo" jdbcType="NVARCHAR" />
+    	<result column="AreaName" property="areaName" jdbcType="NVARCHAR" />
+	</resultMap>
+	
+	<!-- 查询省份列表 -->
+	<select id='queryProvinceList' resultMap="ProvinceResultMap">
+		SELECT provinceNo,provinceName 
+		FROM dbo.BAS_City
+		WHERE FlagDeleted=0
+		AND  provinceNo IS NOT NULL
+		GROUP BY provinceNo,provinceName
+	</select>
+	<!-- 查询城市列表 -->
+	<select id='queryCityList' parameterType="java.lang.String" resultMap="CityResultMap">
+		SELECT provinceNo,provinceName,CityNo,CityName 
+		FROM dbo.BAS_City
+		WHERE FlagDeleted=0 AND provinceNo=#{provinceNo,jdbcType=NVARCHAR}
+		GROUP BY provinceNo,provinceName,CityNo,CityName
+	</select>
+	<!-- 查询区域列表 -->
+	<select id='queryDistrictList' parameterType="java.lang.String" resultMap="DistrictResultMap">
+		SELECT c.provinceNo,c.provinceName,d.CityNo,d.CityName,d.DistrictNo,d.DistrictName 
+		FROM dbo.BAS_District d
+		LEFT JOIN dbo.BAS_City c ON c.CityNo = d.CityNo
+		WHERE d.CityNo=#{cityNo,jdbcType=NVARCHAR}
+		GROUP BY c.provinceNo,c.provinceName,d.CityNo,d.CityName,d.DistrictNo,d.DistrictName
+	</select>
+	<!-- 查询板块列表 -->
+	<select id='queryAreaList' parameterType="java.lang.String" resultMap="AreaResultMap">
+		SELECT c.provinceNo,c.provinceName,a.CityNo,a.CityName,a.DistrictNo,a.DistrictName,a.AreaNo,a.AreaName 
+		FROM dbo.BAS_Area a
+		LEFT JOIN dbo.BAS_City c ON c.CityNo=a.CityNo
+		WHERE a.DistrictNo=#{districtNo,jdbcType=NVARCHAR}
+		GROUP BY c.provinceNo,c.provinceName,a.CityNo,a.CityName,a.DistrictNo,a.DistrictName,a.AreaNo,a.AreaName
+	</select>
+	
+	<!-- 查询城市 -->
+	<select id='queryCity' parameterType="java.lang.String" resultMap="CityResultMap">
+		SELECT provinceNo,provinceName,CityNo,CityName 
+		FROM dbo.BAS_City
+		WHERE FlagDeleted=0 AND CityNo=#{cityNo,jdbcType=NVARCHAR}
+	</select>
+	<!-- 查询区域 -->
+	<select id='queryDistrict' parameterType="java.lang.String" resultMap="DistrictResultMap">
+		SELECT c.provinceNo,c.provinceName,d.CityNo,d.CityName,d.DistrictNo,d.DistrictName 
+		FROM dbo.BAS_District d
+		LEFT JOIN dbo.BAS_City c ON c.CityNo = d.CityNo
+		WHERE d.DistrictNo=#{districtNo,jdbcType=NVARCHAR}
+	</select>
+	<!-- 查询板块 -->
+	<select id='queryArea' parameterType="java.lang.String" resultMap="AreaResultMap">
+		SELECT c.provinceNo,c.provinceName,a.CityNo,a.CityName,a.DistrictNo,a.DistrictName,a.AreaNo,a.AreaName 
+		FROM dbo.BAS_Area a
+		LEFT JOIN dbo.BAS_City c ON c.CityNo=a.CityNo
+		WHERE a.AreaNo=#{areaNo,jdbcType=NVARCHAR}
+	</select>
+	
+			<!-- 查询已开通城市列表 -->
+	<select id='queryCityListByIsService' parameterType="java.lang.String" resultMap="CityResultMap">
+		SELECT CityNo,CityName 
+		FROM dbo.BAS_City
+			WHERE FlagDeleted=0 
+		  	  AND isService = 1
+		
+	</select>
+
+	<select id='queryCityListByPlace' parameterType="java.lang.String" resultMap="CityResultMap">
+		SELECT CityNo,CityName
+		FROM dbo.BAS_City
+			WHERE FlagDeleted=0
+		  	  AND isService = 1 and id not in (368,369,370)
+	</select>
+
+	<select id='queryCityListByAffiliation' parameterType="java.lang.Integer" resultMap="CityResultMap">
+		SELECT DISTINCT t1.cityId,t2.cityNo,t2.cityName
+			FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM') t1
+			INNER JOIN dbo.BAS_City t2 ON t1.cityId = t2.ID where t1.cityId not in (368,369,370)
+	</select>
+	<!-- 查询联动城市列表 add by wang kanlin 2017/09/20 -->
+	<select id='queryCityListByIsLnkService' parameterType="java.lang.String" resultMap="CityResultMap">
+		SELECT CityNo,CityName 
+		FROM dbo.BAS_City
+			WHERE FlagDeleted=0 
+		  	  AND islnkService = 1
+		
+	</select>
+	<select id='queryCityListByUserId' parameterType="java.lang.String" resultMap="CityResultMap">
+		SELECT distinct CityNo,CityName
+		FROM dbo.V_CRM_USER_CITY
+		WHERE userId=#{userId}
+	</select>
+	<!-- 查询发布城市城市列表 -->
+	<select id='queryCitySettingsList' parameterType="java.lang.String" resultMap="CityResultMap">
+		  	SELECT
+				bc.CityName as cityName,
+				bcs.cityNo
+			FROM
+				Bas_CitySetting bcs
+			LEFT JOIN BAS_City bc ON bcs.cityNo = bc.CityNo
+			AND bc.FlagDeleted = 0
+			WHERE
+				bcs.delFlag = 'N'
+	</select>
+	<select id='queryCityNameByCityNo' parameterType="java.lang.String" resultMap="CityResultMap">
+		  	SELECT
+				bc.CityName as cityName,
+				bc.cityNo
+			FROM
+				 BAS_City bc 
+			WHERE
+				bc.FlagDeleted = 0 and  bc.CityNo=#{cityNo}
+	</select>
+</mapper>

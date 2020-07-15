@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.otherReport.dao.LnkQtLogMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.otherReport.model.LnkQtLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reportId" jdbcType="INTEGER" property="reportId" />
+    <result column="reportNo" jdbcType="VARCHAR" property="reportNo" />
+    <result column="businessType" jdbcType="VARCHAR" property="businessType" />
+    <result column="businessUserId" jdbcType="INTEGER" property="businessUserId" />
+    <result column="businessDate" jdbcType="TIMESTAMP" property="businessDate" />
+    <result column="opMemo" jdbcType="NVARCHAR" property="opMemo" />
+    <result column="crtUserId" jdbcType="INTEGER" property="crtUserId" />
+    <result column="crtDate" jdbcType="TIMESTAMP" property="crtDate" />
+    <result column="DelFlg" jdbcType="BIT" property="delFlg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, reportId, reportNo, businessType, businessUserId, businessDate, opMemo, crtUserId,
+    crtDate, DelFlg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from LNK_Qt_Log
+    where id = #{id,jdbcType=INTEGER}
+     and DelFlg = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from LNK_Qt_Log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.otherReport.model.LnkQtLog">
+    insert into LNK_Qt_Log (id, reportId, reportNo,
+      businessType, businessUserId, businessDate,
+      opMemo, crtUserId, crtDate,
+      DelFlg)
+    values (#{id,jdbcType=INTEGER}, #{reportId,jdbcType=INTEGER}, #{reportNo,jdbcType=VARCHAR},
+      #{businessType,jdbcType=VARCHAR}, #{businessUserId,jdbcType=INTEGER}, #{businessDate,jdbcType=TIMESTAMP},
+      #{opMemo,jdbcType=NVARCHAR}, #{crtUserId,jdbcType=INTEGER}, #{crtDate,jdbcType=TIMESTAMP},
+      #{delFlg,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.otherReport.model.LnkQtLog">
+    insert into LNK_Qt_Log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="reportId != null">
+        reportId,
+      </if>
+      <if test="reportNo != null">
+        reportNo,
+      </if>
+      <if test="businessType != null">
+        businessType,
+      </if>
+      <if test="businessUserId != null">
+        businessUserId,
+      </if>
+      <if test="businessDate != null">
+        businessDate,
+      </if>
+      <if test="opMemo != null">
+        opMemo,
+      </if>
+      <if test="crtUserId != null">
+        crtUserId,
+      </if>
+      <if test="crtDate != null">
+        crtDate,
+      </if>
+      <if test="delFlg != null">
+        DelFlg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null">
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null">
+        #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessUserId != null">
+        #{businessUserId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDate != null">
+        #{businessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opMemo != null">
+        #{opMemo,jdbcType=NVARCHAR},
+      </if>
+      <if test="crtUserId != null">
+        #{crtUserId,jdbcType=INTEGER},
+      </if>
+      <if test="crtDate != null">
+        #{crtDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.otherReport.model.LnkQtLog">
+    update LNK_Qt_Log
+    <set>
+      <if test="reportId != null">
+        reportId = #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null">
+        reportNo = #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        businessType = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessUserId != null">
+        businessUserId = #{businessUserId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDate != null">
+        businessDate = #{businessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opMemo != null">
+        opMemo = #{opMemo,jdbcType=NVARCHAR},
+      </if>
+      <if test="crtUserId != null">
+        crtUserId = #{crtUserId,jdbcType=INTEGER},
+      </if>
+      <if test="crtDate != null">
+        crtDate = #{crtDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null">
+        DelFlg = #{delFlg,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.otherReport.model.LnkQtLog">
+    update LNK_Qt_Log
+    set reportId = #{reportId,jdbcType=INTEGER},
+      reportNo = #{reportNo,jdbcType=VARCHAR},
+      businessType = #{businessType,jdbcType=VARCHAR},
+      businessUserId = #{businessUserId,jdbcType=INTEGER},
+      businessDate = #{businessDate,jdbcType=TIMESTAMP},
+      opMemo = #{opMemo,jdbcType=NVARCHAR},
+      crtUserId = #{crtUserId,jdbcType=INTEGER},
+      crtDate = #{crtDate,jdbcType=TIMESTAMP},
+      DelFlg = #{delFlg,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getQtLogListByQtReportId" parameterType="Map" resultType="cn.com.eju.deal.otherReport.dto.QtLogDto">
+    select
+    	uu.userName logUserName,uu.userCode logUserCode,
+    	<include refid="Base_Column_List" />
+    from LNK_Qt_Log qtlog
+    LEFT JOIN crm.dbo.USR_User uu ON uu.userId=qtlog.crtUserId AND uu.delFlag='N'
+    where qtlog.reportId = #{reportId,jdbcType=INTEGER} AND qtlog.DelFlg = 0
+    ORDER BY qtlog.crtDate DESC
+  </select>
+</mapper>

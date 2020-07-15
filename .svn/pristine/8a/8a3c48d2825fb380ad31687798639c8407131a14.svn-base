@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.OaFYCompanyReturnMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.OaFYCompanyReturn">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="contractNo" property="contractNo" jdbcType="NVARCHAR" />
+		<result column="oaCode" property="oaCode" jdbcType="NVARCHAR" />
+		<result column="oaPerformDate" property="oaPerformDate" jdbcType="TIMESTAMP" />
+		<result column="hasDeal" property="hasDeal" jdbcType="INTEGER" />
+		<result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="reason" property="reason" jdbcType="NVARCHAR" />
+		<result column="contractId" property="contractId" jdbcType="INTEGER" />
+		<result column="companyId" property="companyId" jdbcType="INTEGER" />
+		<result column="companyNo" property="companyNo" jdbcType="NVARCHAR" />
+		<result column="companyName" property="companyName" jdbcType="NVARCHAR" />
+		<result column="cityNo" property="cityNo" jdbcType="NVARCHAR" />
+		<result column="districtNo" property="districtNo" jdbcType="NVARCHAR" />
+		<result column="areaNo" property="areaNo" jdbcType="NVARCHAR" />
+		<result column="companyAddr" property="companyAddr" jdbcType="NVARCHAR" />
+		<result column="linkMan" property="linkMan" jdbcType="NVARCHAR" />
+		<result column="linkPhone" property="linkPhone" jdbcType="NVARCHAR" />
+		<result column="fangyouCompanyId" property="fangyouCompanyId" jdbcType="NVARCHAR" />
+		<result column="longitude" property="longitude" jdbcType="NVARCHAR" />
+		<result column="latitude" property="latitude" jdbcType="NVARCHAR" />
+		<result column="fangyouOpenStatus" property="fangyouOpenStatus" jdbcType="NVARCHAR" />
+	</resultMap>
+    
+	<sql id="Base_Column_List">
+		id, contractNo, oaCode, oaPerformDate, hasDeal, dateUpdate, dateCreate, reason, contractId, 
+		companyId, companyNo, companyName, cityNo, districtNo, areaNo, companyAddr, linkMan, linkPhone, 
+		fangyouCompanyId, longitude, latitude, fangyouOpenStatus
+	</sql>
+
+	<!-- 查找提交状态为0未提交的OA房友公司返回信息 -->
+	<select id="getOAFYCompanyReturn" resultMap="BaseResultMap" >	
+		SELECT    OaFYCompanyReturn.*,
+				  Contract.Id AS contractId,
+				  Company.Id AS companyId,
+				  Company.CompanyNo AS companyNo,
+				  Company.CompanyName AS CompanyName,
+				  Company.CityNo AS cityNo,
+				  Company.DistrictNo AS districtNo,
+				  Company.AreaNo AS areaNo,
+				  Company.Address AS companyAddr,
+				  Company.LegalPerson AS linkMan,
+				  Company.ContactNumber AS linkPhone,
+				  Company.FangyouCompanyId AS fangyouCompanyId,
+				  Company.Longitude AS longitude,
+				  Company.Latitude AS latitude,
+				  Company.FangyouOpenStatus AS FangyouOpenStatus 
+		FROM      OaFYCompanyReturn
+		LEFT JOIN Contract 
+		ON        Contract.ContractNo = OaFYCompanyReturn.ContractNo
+		LEFT JOIN Company ON Company.Id = Contract.CompanyId 
+		AND       Company.IsDelete = 0
+   	    WHERE     hasDeal = 0 
+	</select>
+	
+	<!-- 更新OA房友公司返回信息的未提交原因 -->
+	<update id="updateOAFYCompanyReason" parameterType="cn.com.eju.deal.contract.model.OaFYCompanyReturn">
+		UPDATE OaFYCompanyReturn 
+		SET
+			Reason=#{reason},
+			dateUpdate=#{dateUpdate}
+		WHERE id=#{id};
+	</update>
+
+	<!-- 更新OA房友公司返回信息的提交状态 都设为 1:已提交 -->
+	<update id="updateOAFYCompanyHasDeal">
+		UPDATE OaFYCompanyReturn 
+		SET
+			hasDeal = 1,
+			dateUpdate = getdate()
+		WHERE hasDeal = 0;
+	</update>
+</mapper>

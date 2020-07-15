@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.gpContract.dao.GpContractMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.gpContract.model.GpContract">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="gpContractNo" property="gpContractNo" jdbcType="VARCHAR"/>
+        <result column="partyB" property="partyB" jdbcType="NVARCHAR"/>
+        <result column="legalPerson" property="legalPerson" jdbcType="NVARCHAR"/>
+        <result column="partyBCityNo" property="partyBCityNo" jdbcType="VARCHAR"/>
+        <result column="partyBCityName" property="partyBCityName" jdbcType="NVARCHAR"/>
+        <result column="partyBDistrictNo" property="partyBDistrictNo" jdbcType="VARCHAR"/>
+        <result column="partyBDistrictName" property="partyBDistrictName" jdbcType="NVARCHAR"/>
+        <result column="partyBAddress" property="partyBAddress" jdbcType="NVARCHAR"/>
+        <result column="gpAgreementNo" property="gpAgreementNo" jdbcType="VARCHAR"/>
+        <result column="registerId" property="registerId" jdbcType="VARCHAR"/>
+        <result column="ourFullId" property="ourFullId" jdbcType="INTEGER"/>
+        <result column="ourFullName" property="ourFullName" jdbcType="NVARCHAR"/>
+        <result column="storeNum" property="storeNum" jdbcType="INTEGER"/>
+        <result column="depositFee" property="depositFee" jdbcType="DECIMAL"/>
+        <result column="dateLifeStart" property="dateLifeStart" jdbcType="TIMESTAMP"/>
+        <result column="dateLifeEnd" property="dateLifeEnd" jdbcType="TIMESTAMP"/>
+        <result column="exPersonId" property="exPersonId" jdbcType="VARCHAR"/>
+        <result column="exPerson" property="exPerson" jdbcType="NVARCHAR"/>
+        <result column="centerId" property="centerId" jdbcType="INTEGER"/>
+        <result column="centerName" property="centerName" jdbcType="NVARCHAR"/>
+        <result column="accountNm" property="accountNm" jdbcType="NVARCHAR"/>
+        <result column="accountProvinceNo" property="accountProvinceNo" jdbcType="VARCHAR"/>
+        <result column="accountProvinceNm" property="accountProvinceNm" jdbcType="NVARCHAR"/>
+        <result column="accountCityNo" property="accountCityNo" jdbcType="VARCHAR"/>
+        <result column="accountCityNm" property="accountCityNm" jdbcType="NVARCHAR"/>
+        <result column="bankAccountNm" property="bankAccountNm" jdbcType="NVARCHAR"/>
+        <result column="bankAccount" property="bankAccount" jdbcType="VARCHAR"/>
+        <result column="partyBNm" property="partyBNm" jdbcType="NVARCHAR"/>
+        <result column="partyBTel" property="partyBTel" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="NVARCHAR"/>
+        <result column="cityNo" property="cityNo" jdbcType="VARCHAR"/>
+        <result column="companyId" property="companyId" jdbcType="INTEGER"/>
+        <result column="companyName" property="companyName" jdbcType="NVARCHAR"/>
+        <result column="accountProject" property="accountProject" jdbcType="NVARCHAR"/>
+        <result column="accountProjectNo" property="accountProjectNo" jdbcType="VARCHAR"/>
+        <result column="contractStatus" property="contractStatus" jdbcType="INTEGER"/>
+        <result column="performDate" property="performDate" jdbcType="TIMESTAMP"/>
+        <result column="contractType" property="contractType" jdbcType="INTEGER"/>
+        <result column="valid" property="valid" jdbcType="INTEGER"/>
+        <result column="oaNo" property="oaNo" jdbcType="VARCHAR"/>
+        <result column="flowId" property="flowId" jdbcType="VARCHAR"/>
+        <result column="submitOAStatus" property="submitOAStatus" jdbcType="INTEGER"/>
+        <result column="submitOAUserId" property="submitOAUserId" jdbcType="INTEGER"/>
+        <result column="submitTime" property="submitTime" jdbcType="TIMESTAMP"/>
+        <result column="userCreate" property="userCreate" jdbcType="INTEGER"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="userUpdate" property="userUpdate" jdbcType="INTEGER"/>
+        <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,gpContractNo,partyB,legalPerson,partyBCityNo,partyBCityName,partyBDistrictNo,partyBDistrictName,partyBAddress,
+		gpAgreementNo,registerId,ourFullId,ourFullName,storeNum,depositFee,dateLifeStart,dateLifeEnd,exPersonId,exPerson,centerId,
+		centerName,accountNm,accountProvinceNo,accountProvinceNm,accountCityNo,accountCityNm,bankAccountNm,bankAccount,partyBNm,
+		partyBTel,remark,cityNo,companyId,companyName,accountProject,accountProjectNo,contractStatus,performDate,
+		contractType,valid,oaNo,flowId,submitOAStatus,submitOAUserId,submitTime,userCreate,dateCreate,userUpdate,dateUpdate
+	</sql>
+
+
+    <sql id="column_List">
+        id,gpContractNo,partyB,legalPerson,partyBCityNo,partyBCityName,partyBDistrictNo,partyBDistrictName,partyBAddress,
+        gpAgreementNo,registerId,ourFullId,ourFullName,storeNum,ISNULL(depositFee,0) depositFee,dateLifeStart,dateLifeEnd,exPersonId,exPerson,centerId,
+        centerName,accountNm,accountProvinceNo,accountProvinceNm,accountCityNo,accountCityNm,bankAccountNm,bankAccount,partyBNm,
+        partyBTel,remark,cityNo,companyId,companyName,accountProject,accountProjectNo,contractStatus,performDate,
+        contractType,valid,oaNo,flowId,submitOAStatus,submitOAUserId,submitTime,userCreate,dateCreate,userUpdate,dateUpdate
+    </sql>
+
+    <resultMap id="ContractInfoMap" type="cn.com.eju.deal.gpContract.model.GpContractDto" />
+
+    <select id="getByGpId" resultMap="ContractInfoMap" parameterType="java.lang.Integer" useCache="false">
+      SELECT c.id,c.companyId,c.gpContractNo,partyB,legalPerson,partyBCityNo,partyBCityName,partyBDistrictNo,partyBDistrictName,partyBAddress,
+        gpAgreementNo,registerId,ourFullId,ourFullName,storeNum,depositFee,dateLifeStart,dateLifeEnd,exPersonId,exPerson,centerId,
+        centerName,accountNm,accountProvinceNo,accountProvinceNm,accountCityNo,accountCityNm,bankAccountNm,bankAccount,partyBNm,
+        partyBTel,remark,cityNo,companyId,companyName,accountProject,accountProjectNo,contractStatus,performDate,com.CompanyNo,c.contractVersion,
+        contractType,valid,oaNo,flowId,submitOAStatus,submitOAUserId,submitTime,userCreate,c.dateCreate,userUpdate,dateUpdate,
+        dic1.dicValue as contractTypeNm,dic2.dicValue AS validNm,dic3.dicValue AS contractStatusNm,dic4.dicValue AS submitOAStatusNm
+        ,CASE t.kbn WHEN '1' THEN '已到账'
+		ELSE '未到账' END AS depositStatusNm
+        FROM dbo.GP_Contract c
+        LEFT JOIN dbo.BAS_DictionaryValue dic1 ON dic1.dicCode = c.contractType
+        LEFT JOIN dbo.BAS_DictionaryValue dic2 ON dic2.dicCode = c.valid
+        LEFT JOIN dbo.BAS_DictionaryValue dic3 ON dic3.dicCode = c.contractStatus
+        LEFT JOIN dbo.BAS_DictionaryValue dic4 ON dic4.dicCode = c.submitOAStatus
+        LEFT JOIN (SELECT  DISTINCT gpContractNo, '1' kbn FROM Fangyou_Movement_Deposit WHERE delFlag=0) t
+		ON c.gpContractNo=t.gpContractNo
+		LEFT JOIN (SELECT id,CompanyNo FROM dbo.Company WHERE IsDelete = 0) com ON c.companyId = com.Id
+      where c.id = #{id,jdbcType=INTEGER}
+	</select>
+
+    <select id="selectByGpContractNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="column_List" />
+        FROM dbo.GP_Contract
+        where
+        delFlag = 0 and gpContractNo = #{gpContractNo,jdbcType=VARCHAR}
+	</select>
+
+
+    <!-- 查询 list -->
+    <select id="queryList" parameterType="Map" resultMap="ContractInfoMap">
+        SELECT c.id,c.gpContractNo,partyB,c.legalPerson,partyBCityNo,partyBCityName,partyBDistrictNo,partyBDistrictName,partyBAddress,
+        gpAgreementNo,registerId,ourFullId,ourFullName,storeNum,depositFee,dateLifeStart,dateLifeEnd,exPersonId,exPerson,c.centerId,
+        centerName,accountNm,accountProvinceNo,accountProvinceNm,accountCityNo,accountCityNm,bankAccountNm,bankAccount,partyBNm,
+        partyBTel,remark,c.cityNo,companyId,c.companyName,accountProject,accountProjectNo,contractStatus,performDate,
+        c.contractType,valid,oaNo,flowId,submitOAStatus,submitOAUserId,submitTime,c.userCreate,c.dateCreate,c.userUpdate,c.dateUpdate,
+        dic1.dicValue as contractTypeNm,dic2.dicValue AS validNm,dic3.dicValue AS contractStatusNm,dic4.dicValue AS submitOAStatusNm,
+        us.userName,cy.CompanyNo as companyNo,
+        CASE t.kbn WHEN '1' THEN '已到账'
+		ELSE '未到账' END AS depositStatusNm
+        FROM dbo.GP_Contract c
+        LEFT JOIN dbo.BAS_DictionaryValue dic1 ON dic1.dicCode = c.contractType
+        LEFT JOIN dbo.BAS_DictionaryValue dic2 ON dic2.dicCode = c.valid
+        LEFT JOIN dbo.BAS_DictionaryValue dic3 ON dic3.dicCode = c.contractStatus
+        LEFT JOIN dbo.BAS_DictionaryValue dic4 ON dic4.dicCode = c.submitOAStatus
+        LEFT JOIN crm.dbo.USR_User us on us.userId = c.userCreate and us.delFlag = 'N'
+        LEFT JOIN dbo.Company cy on cy.id = c.companyId and cy.IsDelete = 0
+        LEFT JOIN (SELECT  DISTINCT fm.gpContractNo, '1' kbn FROM Fangyou_Movement_Deposit fm WHERE fm.delFlag=0) t
+		ON c.gpContractNo=t.gpContractNo
+        <where>
+            c.delFlag = 0
+            <if test="cityNo != null and cityNo != ''">
+                and c.cityNo= #{cityNo,jdbcType=VARCHAR}
+            </if>
+            <!-- 合同编号、协议书编号 -->
+            <if test="searchKey != null and searchKey != ''">
+                <![CDATA[
+	    			AND (c.gpContractNo LIKE '%${searchKey}%' OR c.gpAgreementNo LIKE '%${searchKey}%')
+	    		]]>
+            </if>
+            <if test="dateCreateStart != null and dateCreateStart != ''">
+                <![CDATA[
+	  		  			AND c.DateCreate is not null
+	    				AND Convert(varchar(10),c.DateCreate,120) >= #{dateCreateStart,jdbcType=NVARCHAR}
+	    			]]>
+            </if>
+            <if test="dateCreateEnd != null and dateCreateEnd != ''">
+                <![CDATA[
+	  		  			AND c.DateCreate is not null
+	    				AND Convert(varchar(10),c.DateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+	    			]]>
+            </if>
+            <!-- 公司名称 -->
+           <!--  <if test="companyName != null and companyName != ''">
+                <![CDATA[
+    				AND (c.companyName  LIKE '%${companyName}%' or c.companyId LIKE '%${companyName}%')
+    			]]>
+            </if> -->
+            <if test="contractStatus != null and contractStatus != ''"><!-- 审核态筛选 -->
+                <![CDATA[AND c.contractStatus = #{contractStatus,jdbcType=INTEGER}]]>
+            </if>
+            <if test="userName != null and userName != '' ">
+                AND us.userName  LIKE CONCAT('%', #{userName},'%')
+            </if>
+            <if test="companyName != null and companyName != '' ">
+                AND( cy.companyNo  LIKE CONCAT('%', #{companyName},'%') OR cy.CompanyName LIKE CONCAT('%', #{companyName},'%'))
+            </if>
+            <if test="depositStatus == '1'.toString()">
+                AND t.kbn='1' 
+            </if>
+            <if test="depositStatus != null and depositStatus != '' and depositStatus != '1'.toString()">
+                AND (t.kbn !='1' OR t.kbn IS NULL)
+            </if>
+        </where>
+        order by c.DateCreate desc
+    </select>
+
+    <!-- 逻辑删除 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        UPDATE Contract
+        SET
+        ContractStatus = 10405
+        <where>
+            id = #{id,jdbcType=INTEGER}
+        </where>
+    </delete>
+
+    <insert id="create" parameterType="cn.com.eju.deal.gpContract.model.GpContract" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO GP_Contract ( gpContractNo , partyB , legalPerson , partyBCityNo , partyBCityName , partyBDistrictNo ,
+        partyBDistrictName , partyBAddress , registerId , ourFullId , ourFullName , gpAgreementNo , storeNum ,
+        depositFee , dateLifeStart , dateLifeEnd , exPersonId , exPerson , centerId , centerName , accountNm ,
+        accountProvinceNo , accountProvinceNm , accountCityNo , accountCityNm , bankAccountNm , bankAccount ,
+        partyBNm , partyBTel , remark , cityNo , companyId , companyName , accountProject , accountProjectNo ,
+        contractStatus ,contractType , valid , oaNo , flowId , submitOAStatus , submitOAUserId ,userCreate , dateCreate,delFlag,inputSource
+        )
+        values (#{gpContractNo,jdbcType=NVARCHAR},
+        #{partyB,jdbcType=NVARCHAR},#{legalPerson,jdbcType=NVARCHAR},
+        #{partyBCityNo,jdbcType=VARCHAR},#{partyBCityName,jdbcType=NVARCHAR},
+        #{partyBDistrictNo,jdbcType=VARCHAR},#{partyBDistrictName,jdbcType=NVARCHAR},
+        #{partyBAddress,jdbcType=NVARCHAR},#{registerId,jdbcType=VARCHAR},
+        #{ourFullId,jdbcType=INTEGER},#{ourFullName,jdbcType=NVARCHAR},
+        #{gpAgreementNo,jdbcType=VARCHAR},#{storeNum,jdbcType=INTEGER},
+        #{depositFee,jdbcType=DECIMAL},#{dateLifeStart,jdbcType=TIMESTAMP},#{dateLifeEnd,jdbcType=TIMESTAMP},
+        #{exPersonId,jdbcType=VARCHAR},#{exPerson,jdbcType=NVARCHAR},
+        #{centerId,jdbcType=INTEGER},#{centerName,jdbcType=NVARCHAR},#{accountNm,jdbcType=NVARCHAR},
+        #{accountProvinceNo,jdbcType=VARCHAR},#{accountProvinceNm,jdbcType=NVARCHAR},
+        #{accountCityNo,jdbcType=VARCHAR},#{accountCityNm,jdbcType=NVARCHAR},
+        #{bankAccountNm,jdbcType=NVARCHAR},#{bankAccount,jdbcType=VARCHAR},
+        #{partyBNm,jdbcType=NVARCHAR},#{partyBTel,jdbcType=VARCHAR},#{remark,jdbcType=NVARCHAR},
+        #{cityNo,jdbcType=NVARCHAR},#{companyId,jdbcType=INTEGER},#{companyName,jdbcType=NVARCHAR},
+        #{accountProject,jdbcType=VARCHAR},#{accountProjectNo,jdbcType=VARCHAR},#{contractStatus,jdbcType=INTEGER},
+        #{contractType,jdbcType=INTEGER},#{valid,jdbcType=INTEGER},#{oaNo,jdbcType=VARCHAR},#{flowId,jdbcType=VARCHAR},
+        #{submitOAStatus,jdbcType=INTEGER},#{submitOAUserId,jdbcType=INTEGER},
+        #{userCreate,jdbcType=INTEGER},#{dateCreate,jdbcType=TIMESTAMP},0,#{inputSource,jdbcType=VARCHAR})
+
+    </insert>
+
+    <update id="update" parameterType="cn.com.eju.deal.gpContract.model.GpContract">
+        update GP_Contract
+        <set>
+            <if test="gpContractNo != null">
+                gpContractNo = #{gpContractNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyB != null">
+                partyB = #{partyB,jdbcType=NVARCHAR},
+            </if>
+            <if test="legalPerson != null">
+                legalPerson = #{legalPerson,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyBCityNo != null">
+                partyBcityNo = #{partyBCityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="partyBCityName != null">
+                partyBCityName = #{partyBCityName,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyBDistrictNo != null">
+                partyBdistrictNo = #{partyBDistrictNo,jdbcType=VARCHAR},
+            </if>
+            <if test="partyBDistrictName != null">
+                partyBDistrictName = #{partyBDistrictName,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyBAddress != null">
+                PartyBAddress = #{partyBAddress,jdbcType=NVARCHAR},
+            </if>
+            <if test="registerId != null">
+                registerId = #{registerId,jdbcType=VARCHAR},
+            </if>
+            <if test="ourFullId != null">
+                ourFullId = #{ourFullId,jdbcType=INTEGER},
+            </if>
+            <if test="ourFullName != null">
+                ourFullName = #{ourFullName,jdbcType=NVARCHAR},
+            </if>
+            <if test="gpAgreementNo != null">
+                gpAgreementNo = #{gpAgreementNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="storeNum != null">
+                storeNum = #{storeNum,jdbcType=INTEGER},
+            </if>
+            <if test="depositFee != null">
+                depositFee = #{depositFee,jdbcType=DECIMAL},
+            </if>
+            <if test="dateLifeStart != null">
+                dateLifeStart = #{dateLifeStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateLifeEnd != null">
+                dateLifeEnd = #{dateLifeEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exPersonId != null">
+                exPersonId = #{exPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="exPerson != null">
+                exPerson = #{exPerson,jdbcType=NVARCHAR},
+            </if>
+            <if test="centerId != null">
+                centerId = #{centerId,jdbcType=INTEGER},
+            </if>
+            <if test="centerName != null">
+                centerName = #{centerName,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountNm != null">
+                accountNm = #{accountNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountProvinceNo != null">
+                accountProvinceNo = #{accountProvinceNo,jdbcType=VARCHAR},
+            </if>
+            <if test="accountProvinceNm != null">
+                accountProvinceNm = #{accountProvinceNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountCityNo != null">
+                accountCityNo = #{accountCityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="accountCityNm != null">
+                accountCityNm = #{accountCityNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="bankAccountNm != null">
+                bankAccountNm = #{bankAccountNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="bankAccount != null">
+                bankAccount = #{bankAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="partyBNm != null">
+                partyBNm = #{partyBNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyBTel != null">
+                partyBTel = #{partyBTel,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=NVARCHAR},
+            </if>
+            <if test="cityNo != null">
+                cityNo = #{cityNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="companyId != null">
+                companyId = #{companyId,jdbcType=INTEGER},
+            </if>
+            <if test="companyName != null">
+                companyName = #{companyName,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountProject!=null">
+                accountProject = #{accountProject,jdbcType=VARCHAR},
+            </if>
+            <if test="accountProjectNo!=null">
+                accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR},
+            </if>
+            <if test="contractStatus != null">
+                contractStatus = #{contractStatus,jdbcType=INTEGER},
+            </if>
+            <if test="contractType != null">
+                contractType = #{contractType,jdbcType=INTEGER},
+            </if>
+            <if test="valid != null">
+                valid = #{valid,jdbcType=INTEGER},
+            </if>
+            <if test="oaNo != null">
+                oaNo = #{oaNo,jdbcType=VARCHAR},
+            </if>
+            <if test="flowId != null">
+                flowId = #{flowId,jdbcType=VARCHAR},
+            </if>
+            <if test="submitOAStatus != null">
+                submitOAStatus = #{submitOAStatus,jdbcType=INTEGER},
+            </if>
+            <if test="submitOAUserId != null">
+                submitOAUserId = #{submitOAUserId,jdbcType=INTEGER},
+            </if>
+            <if test="submitTime != null">
+                submitTime = #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userUpdate != null">
+                userUpdate = #{userUpdate,jdbcType=INTEGER},
+            </if>
+            <if test="dateUpdate != null">
+                dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据协议书编号查询合同 -->
+    <select id="getListByAgreementNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM GP_Contract
+        WHERE delFlag = 0 AND contractStatus in (10401,10402,10403) AND gpAgreementNo= #{agreementNo,jdbcType=NVARCHAR}
+    </select>
+
+    <update id="updateFlowIdById" parameterType="cn.com.eju.deal.gpContract.model.GpContract">
+        update GP_Contract
+        <set>
+            flowId = #{flowId,jdbcType=VARCHAR}
+            <if test="submitOAStatus!=null">
+                ,submitOAStatus = #{submitOAStatus,jdbcType=INTEGER}
+                ,submitOAUserId = #{submitOAUserId,jdbcType=INTEGER}
+                ,submitTime = GETDATE()
+            </if>
+            <if test="accountProject!=null">
+                ,accountProject = #{accountProject,jdbcType=NVARCHAR}
+            </if>
+            <if test="accountProjectNo!=null">
+                ,accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR}
+            </if>
+            <if test="oaNo!=null">
+                ,oaNo = #{oaNo,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <resultMap id="StoreInfoMap" type="cn.com.eju.deal.dto.store.StoreDto" />
+    <select id="selectStoreByContractId" resultMap="StoreInfoMap" parameterType="java.lang.Integer">
+        SELECT s.* ,dbo.F_CRM_SplitCodeToName(2, cs.BTypeStore) as BTypeStoreName,
+            cs.storeState , cs.storeId , d.DistrictName AS districtName, d.CityName AS cityName,
+            cs.addressDetail as addressDetailContract,isnull(v.centername,'') centerName
+        FROM dbo.GP_ContractStore cs
+        LEFT JOIN dbo.Store s ON s.Id = cs.storeId  AND s.IsDelete = '0'
+        LEFT JOIN dbo.BAS_District d ON d.DistrictNo = s.DistrictNo
+        LEFT JOIN crm.dbo.USR_User u ON s.Maintainer=u.userCode AND u.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] v ON u.groupId=v.groupId
+        WHERE cs.IsDelete = 0 AND cs.gpContractId = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 根据OA flowId 查询合同 -->
+    <select id="getByFlowId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM GP_Contract
+        <where>
+            delFlag = 0 AND flowId = #{flowId,jdbcType=VARCHAR}
+        </where>
+    </select>
+    <select id="getContractChangeByFlowId" resultType="cn.com.eju.deal.gpContractChange.model.GpContractChange" parameterType="java.lang.String">
+        SELECT
+        *
+        FROM GP_ContractChange
+        <where>
+            delFlag = 0 AND flowId = #{flowId,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <update id="updateContractStatusByFlowId" parameterType="cn.com.eju.deal.gpContract.model.GpContract">
+        update GP_Contract
+        <set>
+            <if test="contractStatus != null">
+                contractStatus = #{contractStatus,jdbcType=INTEGER},
+            </if>
+            <if test="performDate != null">
+                performDate = #{performDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateUpdate != null">
+                dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where flowId = #{flowId,jdbcType=VARCHAR}
+    </update>
+    <!-- 根据公司ID查询合同状态为未签，审核通过，审核未通过的公盘合同 -->
+	<select id="getGpContractByCompanyId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer" useCache="false">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM GP_Contract
+		<where>
+			ContractStatus in (10401,10403,10404)
+			AND companyId =
+			#{companyId,jdbcType=INTEGER}
+		</where>
+	</select>
+    <!-- 根据门店ID跟新公盘合同状态为未签，审核未通过的公盘门店信息 -->
+	<update id="updateByGpStoreId" parameterType="java.util.Map">
+		UPDATE dbo.GP_ContractStore SET 
+			addressDetail = #{addressDetail,jdbcType=NVARCHAR} WHERE id IN (SELECT cs.id FROM  GP_ContractStore cs INNER JOIN
+         	dbo.GP_Contract c ON c.id= cs.gpContractId AND c.delFlag =0 AND c.contractStatus IN (10401,10404) WHERE cs.isDelete = 0
+				 AND cs.storeId = #{storeId})
+	</update>
+	<!-- 运营维护查询最新有效的公盘合同信息 -->
+	<select id="selectNewestGpContractByCompanyId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.gpContract.model.GpContract">
+        SELECT c.gpContractNo,c.id FROM  dbo.GP_Contract c JOIN dbo.Company cy ON c.companyId = cy.id AND cy.IsDelete = 0
+		  WHERE cy.id=#{companyId,jdbcType=INTEGER}  
+		  AND c.delFlag =0 AND c.contractStatus IN (10401,10403,10404)
+		  ORDER BY c.id DESC
+    </select>
+    <!-- 运营维护查询最新的公盘合同 -->
+    <select id="selectNewestGpContract" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.gpContract.model.GpContract">
+		SELECT  id,gpContractNo
+		FROM    dbo.GP_Contract 
+		WHERE   id = ( SELECT  MAX(c.id)
+                       FROM    dbo.GP_Contract c
+                               JOIN dbo.GP_ContractStore cs ON cs.gpContractId = c.id
+                                                     AND cs.isDelete = 0
+                       WHERE   c.delFlag = 0 AND cs.storeId = #{storeId,jdbcType=INTEGER}
+                      )
+					 AND contractStatus IN (10401,10403,10404)
+	</select>
+	
+	<update id="updateContractChangeStatusByFlowId" parameterType="cn.com.eju.deal.gpContractChange.model.GpContractChange">
+        update GP_ContractChange
+        <set>
+            <if test="approveState != null">
+                approveState = #{approveState,jdbcType=INTEGER},
+            </if>
+            <if test="approvePassDate != null">
+                approvePassDate = #{approvePassDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateUpt != null">
+                dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where flowId = #{flowId,jdbcType=VARCHAR}
+    </update>
+     <!-- 根据公司ID查询合同状态为未签，审核通过，审核未通过的公盘合同 -->
+	<select id="getGpContractByCompanyInfo" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+			*
+		FROM GP_Contract
+		<where>
+			delFlag=0 AND companyId= #{companyId,jdbcType=INTEGER}
+		</where>
+	</select>
+	<!-- 根据relateId删除业绩归属信息 -->
+	<update id="deleteAchivAchievementByrelateId" parameterType="java.lang.Integer">
+		UPDATE Achiv_Achievement
+		SET delFlag = 1
+		WHERE delFlag = 0 AND achieveType= 17914
+		AND relateId = #{relateId,jdbcType=INTEGER}
+	</update>
+
+    <insert id="insertContractReturn" parameterType="java.lang.Integer">
+		INSERT  INTO dbo.OaGpContractReturn
+        ( GpContractNo ,
+          FlowId ,
+          OAPerformDate ,
+          hasDeal ,
+          dateUpdate ,
+          dateCreate ,
+          ContractStatus ,
+          CrmGpContractNo ,
+          oaNo
+        )
+        SELECT  gpContractNo ,
+                flowId ,
+                GETDATE() ,
+                1 ,
+                GETDATE() ,
+                GETDATE() ,
+                10404 ,
+                NULL ,
+                oaNo
+        FROM    dbo.GP_Contract
+        WHERE   id = #{id,jdbcType=INTEGER}
+	</insert>
+
+    <select id="queryDeposit" resultType="java.math.BigDecimal" parameterType="java.lang.Integer">
+        SELECT
+        sum( ISNULL( arrivalDepositFee, 0 ) ) - sum( ISNULL( totalRefundAmount, 0 ) )-sum(isNULL(transferAmt,0))
+        FROM
+        dbo.Contract
+        WHERE 1=1
+        and contractStatus in (10403,10406)
+        AND ContractType = 10302
+        AND CompanyId = #{CompanyId,jdbcType=INTEGER}
+    </select>
+
+    <select id="getRefIdByCompanyId" resultType="cn.com.eju.deal.gpContract.model.GpContractDto" parameterType="java.lang.Integer">
+        select top 1 id,FileSourceId from (
+        select id,performDate,1 FileSourceId from Contract where CompanyId = #{companyId,jdbcType=INTEGER} and contractStatus = 10403
+        union all
+        select id,performDate,12 FileSourceId from GP_Contract where delflag = 0 and CompanyId = #{companyId,jdbcType=INTEGER} and contractStatus = 10403
+        ) gp_c ORDER BY performDate desc
+    </select>
+    
+    <select id="getTerminateList" resultType="Map" parameterType="Map">
+        SELECT c.id,gpContractNo,c.companyName,cm.CompanyNo
+        FROM dbo.GP_Contract c
+        LEFT JOIN dbo.Company cm ON cm.Id =c.companyId
+        LEFT JOIN dbo.GP_ContractStore cs ON c.id=cs.gpContractId AND cs.isDelete=0
+        LEFT JOIN dbo.Store s ON s.Id=cs.storeId
+        WHERE c.delFlag=0 AND c.contractStatus=10403  AND c.id NOT IN (SELECT gpContractId FROM dbo.GP_ContractChange WHERE delFlag='0' AND changeType=17001 AND approveState &lt; 4)
+        <if test="userCreate!=null and userCreate!=0">
+            AND ( c.centerId IN ( SELECT  centerGroupId FROM dbo.F_WX_UserCenterAuth('${userCode}', 'CRM') )
+            OR c.UserCreate = ${userCreate} OR s.Maintainer = '${userCode}' OR c.exPersonId=${userCreate})
+        </if>
+        <if test="keyWord != null and keyWord != ''"><!-- 查询条件:联系人姓名、联系电话、门店名 -->
+            AND (gpContractNo LIKE '%${keyWord}%' OR cm.companyNo = '${keyWord}' OR cm.companyName LIKE '%${keyWord}%' )
+        </if>
+        GROUP BY c.id,gpContractNo,c.companyName,cm.CompanyNo
+        ORDER BY c.id DESC
+    </select>
+
+    <resultMap id="gpContractWXMap"  type="cn.com.eju.deal.api.gpContract.dto.GPContractWXDto">
+        <result column="gpContractId" property="gpContractId" />
+        <result column="gpContractNo" property="gpContractNo" />
+        <result column="gpAgreementNo" property="gpAgreementNo" />
+        <result column="companyId" property="companyId" />
+        <result column="companyName" property="companyName" />
+        <result column="companyNo" property="companyNo" />
+        <result column="registerId" property="registerId" />
+        <result column="legalPerson" property="legalPerson" />
+
+        <result column="partyBCityNo" property="partyBCityNo" />
+        <result column="partyBDistrictNo" property="partyBDistrictNo" />
+        <result column="partyBAddress" property="partyBAddress" />
+        <result column="contractTypeStr" property="contractTypeStr" />
+        <result column="acCityNo" property="acCityNo" />
+        <!-- 终止扩展字段 -->
+        <result column="gpContractStopId" property="gpContractStopId"/>
+        <result column="gpContractStopNo" property="gpContractStopNo"/>
+        <result column="stopType" property="stopType"/>
+        <result column="stopDate" property="stopDate" jdbcType="TIMESTAMP"/>
+        <result column="stopAmount" property="stopAmount"/>
+        <result column="stopReason" property="stopReason"/>
+        <result column="remarks" property="remarks"/>
+        <result column="stopDescribe" property="stopDescribe"/>
+        <result column="flowId" property="flowId"/>
+        <result column="ctEndApproveState" property="ctEndApproveState"/>
+        <result column="approveStateName" property="approveStateName"/>
+
+        <collection property="contractChangeList" javaType="ArrayList" ofType="cn.com.eju.deal.api.gpContract.dto.GPStoreChangeDto">
+            <result column="storeId" property="storeId" />
+            <result column="storeNo" property="storeNo" />
+            <result column="name" property="storeName" />
+            <result column="address" property="address" />
+            <result column="addressDetail" property="addressDetail" />
+            <result column="centerId" property="centerId" />
+            <result column="centerName" property="centerName" />
+            <result column="maintainer" property="maintainer" />
+            <result column="maintainerName" property="maintainerName" />
+            <result column="storeManager" property="storeManager" />
+            <result column="storeManagerPhone" property="storeManagerPhone" />
+            <result column="businessStatus" property="businessStatus" />
+            <result column="isCancel" property="isCancel" />
+            <result column="storeState" property="storeState" />
+            <result column="gpContractStopNo" property="gpContractStopNo" />
+            <result column="changeCompany" property="changeCompany" />
+            <result column="approveState" property="approveState" />
+        </collection>
+    </resultMap>
+    <select id="getGpContractZZDetail" parameterType="map" resultMap="gpContractWXMap">
+        SELECT  c.Id AS gpContractId ,
+        c.cityNo AS acCityNo ,
+        c.gpContractNo ,
+        c.gpAgreementNo ,
+        c.CompanyId AS companyId ,
+        cm.CompanyNo AS companyNo ,
+        c.PartyB AS companyName ,
+        c.registerId ,
+        c.legalPerson ,
+        c.partyBCityNo ,
+        c.partyBDistrictNo ,
+        c.partyBAddress ,
+        s.StoreNo AS storeNo ,
+        s.id AS storeId ,
+        s.Name AS name ,
+        s.Address AS address ,
+        s.AddressDetail AS addressDetail ,
+        ISNULL(s2.centername, '') AS centerName ,
+        s.Maintainer AS maintainer ,
+        ISNULL(s.maintainerName, '-') AS maintainerName ,
+        s.businessStatus ,s.storeManager,
+		  ISNULL(s.storeManagerPhone, '-') as storeManagerPhone,
+        bdv.dicValue AS contractTypeStr ,
+        cs.isCancel ,
+        cs.storeState
+        FROM    dbo.GP_Contract c
+                LEFT JOIN Company cm ON cm.id = c.CompanyId
+                LEFT JOIN dbo.GP_ContractStore cs ON c.id = cs.gpContractId
+                                               AND cs.isDelete = 0
+                LEFT JOIN store s ON s.id = cs.StoreId
+                LEFT JOIN crm.dbo.USR_User s1 ON s.Maintainer = s1.userCode
+                                             AND s1.delFlag = 'N'
+                LEFT JOIN [V_CRM_Center_Group_ref] s2 ON s1.groupId = s2.groupId
+                LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode = c.ContractType
+                                                         AND bdv.delFlag = 'N'
+                where c.id = #{gpContractId}
+    </select>
+</mapper>

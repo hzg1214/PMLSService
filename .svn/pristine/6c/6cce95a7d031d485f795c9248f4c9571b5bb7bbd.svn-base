@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.follow.dao.FollowMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.follow.model.Follow" >
+    <id column="Id" property="followId" jdbcType="INTEGER" />
+    <result column="CompanyId" property="companyId" jdbcType="INTEGER" />
+    <result column="StoreId" property="storeId" jdbcType="INTEGER" />
+    <result column="Title" property="title" jdbcType="NVARCHAR" />
+    <result column="FollowType" property="followType" jdbcType="INTEGER" />
+    <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="Content" property="content" jdbcType="NVARCHAR" />
+    <result column="UserCreate" property="userCreate" jdbcType="INTEGER" />
+    <result column="Longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="Latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="IsDelete" property="isDelete" jdbcType="BIT" />
+    <result column="followPosition" property="followPosition" jdbcType="NVARCHAR" />
+    <!-- 扩展字段 -->
+    <result column="FollowTypeName" property="followTypeName" jdbcType="NVARCHAR" />
+    <result column="CompanyName" property="companyName" jdbcType="NVARCHAR" />
+    <result column="userNameCreate" property="userNameCreate" jdbcType="NVARCHAR" />
+    <result column="storeName" property="storeName" jdbcType="NVARCHAR" />
+
+	  <collection property="signPicList" column="signPictureRefId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+	  <collection property="signOutPicList" column="signOutPictureRefId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+
+  </resultMap>
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.model.sweepStreets.WXPictureDto"></resultMap>
+
+  <sql id="Base_Column_List" >
+    Id, CompanyId, StoreId, Title, FollowType, DateCreate, Content, UserCreate, Longitude, 
+    Latitude,IsDelete, followPosition
+  </sql>
+  
+  <!-- 查询-根据id -->
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT f.id,isnull(f.signLongitude,f.longitude) longitude,isnull(f.signLatitude,latitude) latitude,
+    CONVERT(VARCHAR,f.signTime,120) as signTime,CONVERT(VARCHAR,f.signOutTime,120) as signOutTime,f.signPictureRefId,f.signOutPictureRefId,
+    f.StoreId,
+     case when f.title is null then
+		 	STUFF(( SELECT ',' + bd.dicValue
+                         FROM   dbo.BAS_DictionaryValue bd
+                         where   PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + f.followPurpose + ',')>0
+                         ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + f.followPurpose + ',')
+                          FOR XML PATH('')), 1, 1,'')
+                else f.title end title,
+    f.FollowType, f.DateCreate, f.Content, f.UserCreate, f.IsDelete, f.followPosition,
+    FollowTypeName=dv.dicValue
+	FROM dbo.Follow (NOLOCK) f
+	LEFT JOIN dbo.BAS_DictionaryValue dv ON dv.dicCode=f.FollowType
+	LEFT JOIN dbo.BAS_DictionaryValue t ON t.dicCode=f.followPurpose
+	WHERE f.Id= #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询 list -->
+  <select id="queryList" parameterType="Map" resultMap="BaseResultMap">
+  	SELECT f.id,isnull(f.signLongitude,f.longitude) longitude,isnull(f.signLatitude,latitude) latitude,
+	  f.StoreId,
+	  case when f.title is null then
+		  STUFF(( SELECT ',' + bd.dicValue
+		  FROM   dbo.BAS_DictionaryValue bd
+		  where   PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + f.followPurpose + ',')>0
+		  ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + f.followPurpose + ',')
+		  FOR XML PATH('')), 1, 1,'')
+	  else f.title end title,
+	  f.FollowType, f.DateCreate, f.Content, f.UserCreate, f.IsDelete, f.followPosition,
+	  FollowTypeName=dv.dicValue
+	FROM dbo.Follow (NOLOCK) f
+	LEFT JOIN dbo.BAS_DictionaryValue dv ON dv.dicCode=f.FollowType
+	  LEFT JOIN dbo.BAS_DictionaryValue t ON t.dicCode=f.followPurpose
+	<where>
+		f.IsDelete=0 and f.followPurpose LIKE '%19503%'
+		<if test="companyId != null and companyId != ''">
+ 		  	<![CDATA[AND f.CompanyId = #{companyId,jdbcType=INTEGER}]]>
+		</if>
+		<if test="storeId != null and storeId != ''">
+ 		  	<![CDATA[AND f.StoreId = #{storeId,jdbcType=INTEGER}]]>
+		</if>
+		<if test="title != null and title != ''">
+	  		<![CDATA[AND f.Title LIKE '%${title}%']]>
+		</if>
+		<if test="followType != null and followType != ''">
+ 		  	<![CDATA[AND f.FollowType = #{followType,jdbcType=INTEGER}]]>
+		</if>
+		<if test="content != null and content != ''">
+	  		<![CDATA[AND f.Content LIKE '%${content}%']]>
+		</if>
+		<if test="userCreate != null and userCreate != ''">
+ 		  	<![CDATA[AND f.UserCreate = #{userCreate,jdbcType=INTEGER}]]>
+		</if>
+		<!-- 数据权限控制 -->
+		 <!-- <if test="userIdList != null and userIdList != ''">
+			and UserCreate in  
+		    <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+		        #{item,jdbcType=INTEGER}
+		    </foreach>
+		</if>  -->
+		<if test="longitude != null and longitude != ''">
+ 		  	<![CDATA[AND f.Longitude = #{longitude,jdbcType=DECIMAL}]]>
+		</if>
+		<if test="latitude != null and latitude != ''">
+	  		<![CDATA[AND f.Latitude = #{latitude,jdbcType=DECIMAL}]]>
+		</if>
+		<if test="dateCreateFrom != null and dateCreateFrom != ''">
+               <![CDATA[
+  				AND f.DateCreate is not null
+ 				AND Convert(varchar(10),f.DateCreate,120) >= #{dateCreateFrom,jdbcType=TIMESTAMP}
+ 				]]>
+		</if>
+		<if test="dateCreateTo != null and dateCreateTo != ''">
+               <![CDATA[
+  				AND f.DateCreate is not null
+				AND Convert(varchar(10),f.DateCreate,120) <= #{dateCreateTo,jdbcType=TIMESTAMP}
+				]]>
+		</if>
+	</where>
+		ORDER BY f.DateCreate DESC
+  </select>
+
+	<select id="selectPicture" parameterType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" resultMap="pictureDtoMap">
+		select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+		from Pic_Picture_Ref where pictureRefId=#{pictureRefId} and pictureStatus=0
+	</select>
+  
+  <!-- 新增 -->
+  <insert id="create" parameterType="cn.com.eju.deal.follow.model.Follow" useGeneratedKeys="true" keyProperty="followId">
+    INSERT into Follow ( StoreId, Title, FollowType, DateCreate, Content, UserCreate, Longitude, Latitude, IsDelete, followPosition)
+    values ( #{storeId,jdbcType=INTEGER}, 
+      #{title,jdbcType=NVARCHAR}, #{followType,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=NVARCHAR}, #{userCreate,jdbcType=INTEGER}, #{longitude,jdbcType=DECIMAL}, 
+      #{latitude,jdbcType=DECIMAL},0,  #{followPosition,jdbcType=NVARCHAR})
+  </insert>
+  
+  <!-- 修改 -->
+  <update id="update" parameterType="cn.com.eju.deal.follow.model.Follow" >
+    UPDATE Follow
+    <set >
+      <if test="title != null" >
+        Title = #{title,jdbcType=NVARCHAR},
+      </if>
+      <if test="followType != null" >
+        FollowType = #{followType,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        Content = #{content,jdbcType=NVARCHAR},
+      </if>
+      <if test="userCreate != null">
+ 		UserCreate = #{userCreate,jdbcType=INTEGER},
+	  </if>
+      <if test="longitude != null">
+		Longitude = #{longitude,jdbcType=DECIMAL},
+	  </if>
+	  <if test="latitude != null">
+  		Latitude = #{latitude,jdbcType=DECIMAL},
+	  </if>
+      <if test="dateCreate != null" >
+        DateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        IsDelete = #{isDelete,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followPosition != null" >
+        followPosition = #{followPosition,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where Id = #{followId,jdbcType=INTEGER}
+  </update>
+  <!-- 我的最新跟进列表（门店） -->
+  <select id="getStoreFollows" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	SELECT f.* FROM dbo.Follow (NOLOCK) f
+	INNER JOIN(
+	SELECT StoreId,DateCreate=MAX(DateCreate)
+	FROM dbo.Follow WHERE IsDelete=0 AND UserCreate=#{userCreate,jdbcType=INTEGER}
+	GROUP BY StoreId
+	) f1 ON f1.DateCreate = f.DateCreate AND f1.StoreId = f.StoreId
+	ORDER BY f.DateCreate DESC
+  </select>
+  
+  <!-- 我的跟进列表 -->
+  <select id="getMyFollows" resultMap="BaseResultMap" parameterType="Map" >
+	SELECT  f.* , userNameCreate=u.userName, storeName = s.Name
+	FROM    dbo.Follow (NOLOCK) f
+	LEFT JOIN dbo.Store (NOLOCK) s ON s.Id = f.StoreId
+	LEFT JOIN crm.dbo.USR_User (NOLOCK) u ON u.userId=f.UserCreate
+	<where>
+		f.IsDelete=0
+		<!-- <if test="userCreate != null and userCreate != ''">
+ 		  	<![CDATA[AND f.UserCreate = #{userCreate,jdbcType=INTEGER}]]>
+		</if> -->
+		<!-- 数据权限控制 -->
+		<if test="userIdList != null and userIdList != ''">
+			<!-- <foreach collection="userIdList" item="item" index="index" open="AND (" close=")" separator="OR">
+					<![CDATA[
+		    			 f.UserCreate = #{item, jdbcType=INTEGER}
+		    		]]>
+			</foreach> -->
+			and f.UserCreate in  
+		    <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+		        #{item,jdbcType=INTEGER}
+		    </foreach>
+		</if>
+		<if test="searchKey != null and searchKey != ''">
+ 		  	<![CDATA[AND (s.Name LIKE '%${searchKey}%' OR u.userName LIKE '%${searchKey}%')]]>
+		</if>
+		<if test="dateFollowFrom != null and dateFollowFrom != '' and dateFollowTo != null and dateFollowTo != ''">
+ 		  	<![CDATA[
+ 		  		AND f.DateCreate BETWEEN #{dateFollowFrom,jdbcType=TIMESTAMP} AND #{dateFollowTo,jdbcType=TIMESTAMP}
+   			]]>
+		</if>
+	</where>
+	<!-- ORDER BY f.DateCreate DESC -->
+  </select>
+</mapper>

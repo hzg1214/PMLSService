@@ -1,0 +1,1834 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.EstateMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.Estate">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="EstateId" property="estateId" jdbcType="VARCHAR"/>
+        <result column="DistrictId" property="districtId" jdbcType="VARCHAR"/>
+        <result column="AreaId" property="areaId" jdbcType="VARCHAR"/>
+        <result column="EstateNm" property="estateNm" jdbcType="NVARCHAR"/>
+        <result column="AuditStatus" property="auditStatus" jdbcType="INTEGER"/>
+        <result column="AuditMemo" property="auditMemo" jdbcType="NVARCHAR"/>
+        <result column="ReleaseStatus" property="releaseStatus" jdbcType="INTEGER"/>
+        <result column="ReleaseOffMemo" property="releaseOffMemo" jdbcType="NVARCHAR"/>
+        <result column="ReleaseDt" property="releaseDt" jdbcType="VARCHAR"/>
+        <result column="SalesStatus" property="salesStatus" jdbcType="INTEGER"/>
+        <result column="Partner" property="partner" jdbcType="INTEGER"/>
+        <result column="PartnerNm" property="partnerNm" jdbcType="NVARCHAR"/>
+        <result column="CooperationDtStart" property="cooperationDtStart" jdbcType="TIMESTAMP"/>
+        <result column="CooperationDtEnd" property="cooperationDtEnd" jdbcType="TIMESTAMP"/>
+        <result column="CityNo" property="cityNo" jdbcType="VARCHAR"/>
+        <result column="DeptId" property="deptId" jdbcType="INTEGER"/>
+        <result column="EmpId" property="empId" jdbcType="INTEGER"/>
+        <result column="SalePriceUnit" property="salePriceUnit" jdbcType="DECIMAL"/>
+        <result column="SalePriceUnitMin" property="salePriceUnitMin" jdbcType="DECIMAL"/>
+        <result column="SalePriceUnitMax" property="salePriceUnitMax" jdbcType="DECIMAL"/>
+        <result column="Address" property="address" jdbcType="NVARCHAR"/>
+        <result column="AddressCoordinateX" property="addressCoordinateX" jdbcType="NVARCHAR"/>
+        <result column="AddressCoordinateY" property="addressCoordinateY" jdbcType="NVARCHAR"/>
+        <result column="Mark" property="mark" jdbcType="NVARCHAR"/>
+        <result column="OpenKbn" property="openKbn" jdbcType="INTEGER"/>
+        <result column="OpenTime" property="openTime" jdbcType="TIMESTAMP"/>
+        <result column="realOpenTime" property="realOpenTime" jdbcType="TIMESTAMP"/>
+        <result column="HouseTransferKbn" property="houseTransferKbn" jdbcType="INTEGER"/>
+        <result column="HouseTransferTime" property="houseTransferTime" jdbcType="NVARCHAR"/>
+        <result column="ProjectDescription" property="projectDescription" jdbcType="NVARCHAR"/>
+        <result column="EstateTypeSearch" property="estateTypeSearch" jdbcType="NVARCHAR"/>
+        <result column="DevCompany" property="devCompany" jdbcType="NVARCHAR"/>
+        <result column="FieldAddress" property="fieldAddress" jdbcType="NVARCHAR"/>
+        <result column="CooperationExpDt" property="cooperationExpDt" jdbcType="INTEGER"/>
+        <result column="PreSalePermitKbn" property="preSalePermitKbn" jdbcType="INTEGER"/>
+        <result column="TypeKbn" property="typeKbn" jdbcType="VARCHAR"/>
+        <result column="MgtKbn" property="mgtKbn" jdbcType="VARCHAR"/>
+        <result column="OwnYearKbn" property="ownYearKbn" jdbcType="VARCHAR"/>
+        <result column="DecorationKbn" property="decorationKbn" jdbcType="VARCHAR"/>
+        <result column="HouseCnt" property="houseCnt" jdbcType="INTEGER"/>
+        <result column="ParkCnt" property="parkCnt" jdbcType="INTEGER"/>
+        <result column="ParkFee" property="parkFee" jdbcType="DECIMAL"/>
+        <result column="MgtCompany" property="mgtCompany" jdbcType="NVARCHAR"/>
+        <result column="RateFAR" property="rateFAR" jdbcType="VARCHAR"/>
+        <result column="RateGreen" property="rateGreen" jdbcType="VARCHAR"/>
+        <result column="MgtPrice" property="mgtPrice" jdbcType="DECIMAL"/>
+        <result column="StaircaseHousehold" property="staircaseHousehold" jdbcType="VARCHAR"/>
+        <result column="HeatKbn" property="heatKbn" jdbcType="INTEGER"/>
+        <result column="HydropowerGasKbn" property="hydropowerGasKbn" jdbcType="INTEGER"/>
+        <result column="SceneDeptId" property="sceneDeptId" jdbcType="INTEGER"/>
+        <result column="SceneEmpId" property="sceneEmpId" jdbcType="INTEGER"/>
+        <result column="CrtEmpId" property="crtEmpId" jdbcType="INTEGER"/>
+        <result column="UptEmpId" property="uptEmpId" jdbcType="INTEGER"/>
+        <result column="DelFlg" property="delFlg" jdbcType="BIT"/>
+        <result column="CrtDt" property="crtDt" jdbcType="TIMESTAMP"/>
+        <result column="UptDt" property="uptDt" jdbcType="TIMESTAMP"/>
+
+        <result column="recordName" property="recordName" jdbcType="VARCHAR"/>
+        <result column="promotionName" property="promotionName" jdbcType="VARCHAR"/>
+        <result column="signName" property="signName" jdbcType="VARCHAR"/>
+        <result column="realityCityNo" property="realityCityNo" jdbcType="VARCHAR"/>
+        <result column="projectStatus" property="projectStatus" jdbcType="INTEGER"/>
+        <result column="startDate" property="startDate" jdbcType="TIMESTAMP"/>
+        <result column="endDate" property="endDate" jdbcType="TIMESTAMP"/>
+        <result column="signDate" property="signDate" jdbcType="TIMESTAMP"/>
+        <result column="oaSignNo" property="oaSignNo" jdbcType="VARCHAR"/>
+        <result column="measureDate" property="measureDate" jdbcType="TIMESTAMP"/>
+        <result column="oaMeasureNo" property="oaMeasureNo" jdbcType="VARCHAR"/>
+        <result column="budgetDate" property="budgetDate" jdbcType="TIMESTAMP"/>
+        <result column="oaBudgetNo" property="oaBudgetNo" jdbcType="VARCHAR"/>
+        <result column="cooperationMode" property="cooperationMode" jdbcType="INTEGER"/>
+        <result column="projectDepartmentId" property="projectDepartmentId" jdbcType="INTEGER"/>
+        <result column="projectDepartment" property="projectDepartment" jdbcType="VARCHAR"/>
+        <result column="projectNo" property="projectNo" jdbcType="VARCHAR"/>
+        <result column="empTel" property="empTel" jdbcType="VARCHAR"/>
+        <result column="devCompanyBroker" property="devCompanyBroker" jdbcType="VARCHAR"/>
+        <result column="devCompanyBrokerTel" property="devCompanyBrokerTel" jdbcType="VARCHAR"/>
+        <result column="partnerContactNm" property="partnerContactNm" jdbcType="VARCHAR"/>
+        <result column="partnerContactTel" property="partnerContactTel" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="opEstateId" property="opEstateId" jdbcType="VARCHAR"/>
+        <result column="opEstateNm" property="opEstateNm" jdbcType="VARCHAR"/>
+        <result column="estatePosition" property="estatePosition" jdbcType="INTEGER"/>
+        <result column="countryNo" property="countryNo" jdbcType="VARCHAR"/>
+        <result column="countryNm" property="countryNm" jdbcType="VARCHAR"/>
+        <result column="accountProject" jdbcType="NVARCHAR" property="accountProject"/>
+        <result column="accountProjectNo" jdbcType="NVARCHAR" property="accountProjectNo"/>
+
+        <result column="particularFlag" property="particularFlag" jdbcType="INTEGER"/>
+        <result column="directSignFlag" property="directSignFlag" jdbcType="INTEGER"/>
+        <result column="bigCustomerFlag" property="bigCustomerFlag" jdbcType="INTEGER"/>
+        <result column="bigCustomerId" property="bigCustomerId" jdbcType="INTEGER"/>
+
+        <result column="isYjDy" property="isYjDy" jdbcType="BIT"/>
+        <result column="yjDyAmount" property="yjDyAmount" jdbcType="DECIMAL"/>
+        <result column="isPureDy" property="isPureDy" jdbcType="BIT"/>
+        <result column="subscribedQuarter1" property="subscribedQuarter1" jdbcType="DECIMAL"/>
+        <result column="subscribedQuarter2" property="subscribedQuarter2" jdbcType="DECIMAL"/>
+        <result column="subscribedQuarter3" property="subscribedQuarter3" jdbcType="DECIMAL"/>
+        <result column="subscribedQuarter4" property="subscribedQuarter4" jdbcType="DECIMAL"/>
+        <result column="subscribedThisYear" property="subscribedThisYear" jdbcType="DECIMAL"/>
+        <result column="subscribedNextYear" property="subscribedNextYear" jdbcType="DECIMAL"/>
+        <result column="custodyFlg" property="custodyFlg" jdbcType="INTEGER"/>
+        <result column="developerName" property="developerName" jdbcType="VARCHAR"/>
+        <result column="mattressNailId" property="mattressNailId" jdbcType="INTEGER"/>
+
+        <result column="businessModel" property="businessModel" jdbcType="INTEGER"/>
+        <result column="isSpecialProject" property="isSpecialProject" jdbcType="INTEGER"/>
+        <result column="devCompanyId" property="devCompanyId" jdbcType="VARCHAR"/>
+        <result column="brushRaiseFlag" property="brushRaiseFlag" jdbcType="INTEGER"/>
+        <result column="totalFieldFlag" property="totalFieldFlag" jdbcType="INTEGER"/>        
+        <result column="partnerAbbreviationCode" property="partnerAbbreviationCode" jdbcType="VARCHAR"/>
+        <result column="partnerAbbreviationNm" property="partnerAbbreviationNm" jdbcType="VARCHAR"/>
+        <result column="projectLeaderEmpId" property="projectLeaderEmpId" jdbcType="INTEGER"/>
+        <result column="projectLeaderTel" property="projectLeaderTel" jdbcType="VARCHAR"/>
+        <result column="projectLeaderName" property="projectLeaderName" jdbcType="VARCHAR"/>
+         <result column="developerBrandId" property="developerBrandId" jdbcType="INTEGER"/>
+         <result column="developerBrandName" property="developerBrandName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap type="cn.com.eju.deal.dto.houseLinkage.estate.EstateDto" id="EstateDtoMap"></resultMap>
+    <sql id="Base_Column_List">
+    Id,EstateId,DistrictId,AreaId,EstateNm,AuditStatus,AuditMemo,ReleaseStatus,ReleaseOffMemo,ReleaseDt,SalesStatus,
+    Partner,PartnerNm,CooperationDtStart,CooperationDtEnd,cooperationMode,CityNo,DeptId,EmpId,SalePriceUnit,SalePriceUnitMin,SalePriceUnitMax,
+Address,AddressCoordinateX,AddressCoordinateY,Mark,OpenKbn,OpenTime,HouseTransferKbn,HouseTransferTime,
+ProjectDescription,EstateTypeSearch,DevCompany,FieldAddress,CooperationExpDt,PreSalePermitKbn,TypeKbn,MgtKbn,OwnYearKbn,
+DecorationKbn,HouseCnt,ParkCnt,ParkFee,MgtCompany,RateFAR,RateGreen,MgtPrice,StaircaseHousehold,HeatKbn,HydropowerGasKbn,
+SceneDeptId,SceneEmpId,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,recordName,promotionName,signName,realityCityNo,projectDepartmentId,projectStatus,startDate,
+endDate,projectNo,empTel,devCompanyBroker,devCompanyBrokerTel,partnerContactNm,partnerContactTel,realOpenTime,estatePosition,countryNo,opEstateId,opEstateNm,
+accountProject,accountProjectNo,signDate,businessModel,isSpecialProject,subscribedQuarter1,subscribedQuarter2,subscribedQuarter3,subscribedQuarter4,subscribedThisYear,subscribedNextYear,devCompanyId,brushRaiseFlag,totalFieldFlag
+,partnerAbbreviationCode,partnerAbbreviationNm,developerName,projectLeaderEmpId,projectLeaderTel
+,developerBrandId,developerBrandName
+  </sql>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+        SELECT
+        LNK_Estate.*
+        ,USR_Group.groupName AS projectDepartment
+        ,crm.dbo.USR_User.userName
+        ,cty.countryName AS countryNm
+        ,uu.userName projectLeaderName
+        FROM LNK_Estate
+        LEFT JOIN USR_Group ON LNK_Estate.projectDepartmentId = USR_Group.groupId
+        LEFT JOIN crm.dbo.USR_User on crm.dbo.USR_User.userId = LNK_Estate.SceneEmpId   AND crm.dbo.USR_User.delFlag='N'
+        LEFT JOIN crm.dbo.USR_User uu on uu.userId = LNK_Estate.projectLeaderEmpId AND uu.delFlag='N'
+        JOIN BAS_COUNTRY cty ON LNK_Estate.countryNo = cty.countryNo
+        <where>
+            LNK_Estate.Id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="selectEstateInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        <where>
+            EstateId = #{estateId,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <select id="selectEstateByEstateId" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        <where>
+            DelFlg = 0 AND EstateId = #{estateId,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <resultMap id="EstateInfoMap" type="cn.com.eju.deal.houseLinkage.estate.model.EstateSearchResult"/>
+    <!-- 查询 list -->
+    <select id="selectEstateList" parameterType="Map" resultMap="EstateInfoMap">
+        SELECT
+        e.Id as id,
+        e.EstateId as estateId,
+        e.CityNo as cityNo,
+        e.DistrictId as districtId,
+        e.Partner as partner,
+        e.PartnerNm as partnerNm,
+        e.AuditStatus as auditStatus,
+        e.ReleaseStatus as releaseStatus,
+        e.ReleaseDt as releaseDt,
+        e.EstateNm as estateNm,
+        e.Address as address,
+        e.CrtEmpId as empId,
+        uu.userName as empName,
+        ug.groupName as deptName,
+        e.CooperationDtStart as cooperationDtStart,
+        e.CooperationDtEnd as cooperationDtEnd,
+        e.CrtDt as crtDt,
+        e.realityCityNo as realityCityNo,
+        e.projectStatus as projectStatus,
+        e.startDate as startDate,
+        e.endDate as endDate,
+        e.cooperationMode,
+        e.measureDate,
+        e.projectNo,
+        e.estatePosition,
+        e.countryNo,
+        cty.countryName AS countryNm,
+        e.sceneEmpId
+        FROM LNK_Estate e , crm.dbo.USR_User uu, USR_Group ug,BAS_COUNTRY cty
+        <where>
+            e.CrtEmpId = uu.userId
+            and uu.groupId = ug.groupId
+            and e.DelFlg = 0
+            and e.countryNo = cty.countryNo
+            <if test="businessModel != null and businessModel != ''"> <!-- 业务模式 -->
+                <![CDATA[AND e.businessModel = #{businessModel,jdbcType=INTEGER}]]>
+            </if>
+            <if test="partner != null and partner != ''"><!-- 合作方场合 -->
+                <![CDATA[AND e.Partner = #{partner,jdbcType=INTEGER}]]>
+            </if>
+            <if test="auditStatus != null and auditStatus != ''"><!-- 审核状态场合 -->
+                <![CDATA[
+  				AND e.AuditStatus  = #{auditStatus,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="releaseStatus != null and releaseStatus !=''"><!-- 发布状态场合 -->
+                <![CDATA[
+  				AND e.ReleaseStatus = #{releaseStatus,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="projectStatus != null and projectStatus !=''"><!-- 发布状态场合 -->
+                <![CDATA[
+  				AND e.projectStatus = #{projectStatus,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="projectDepartmentId != null and projectDepartmentId !=''"><!-- 归属项目组 -->
+                <![CDATA[
+  				AND e.projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="deptId != null and deptId !=''"><!-- 录入部门场合 -->
+                <![CDATA[
+  				AND e.DeptId = #{deptId,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="empId != null and empId !=''"><!-- 录入人场合 -->
+                <![CDATA[
+  				AND e.CrtEmpId = #{empId,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="estateNm != null and estateNm !=''"><!-- 楼盘名场合或项目编号 -->
+                <![CDATA[
+  				AND (e.projectNo LIKE '%${estateNm}%'
+  					or e.EstateNm LIKE '%${estateNm}%'
+  					or e.recordName LIKE '%${estateNm}%'
+  					or e.promotionName LIKE '%${estateNm}%'
+  					or e.signName LIKE '%${estateNm}%'
+--   					or e.EstateId LIKE '%${estateNm}%'
+  					or uu.userName LIKE '%${estateNm}%')
+  				]]>
+            </if>
+            <if test="partnerNm != null and partnerNm !=''"><!-- 合作方 -->
+                <![CDATA[
+  				AND (e.partnerNm LIKE '%${partnerNm}%')
+  				]]>
+            </if>
+
+            <if test="cityNo != null and cityNo !=''"><!-- 城市 -->
+                AND e.CityNo = #{cityNo,jdbcType=NVARCHAR}
+            </if>
+            <if test="realityCityNo != null and realityCityNo !=''"><!-- 楼盘地址 -->
+                AND e.realityCityNo = #{realityCityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="districtId != null and districtId !=''"><!-- 楼盘区域 -->
+                AND e.districtId = #{districtId,jdbcType=VARCHAR}
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn == 13101"><!-- 合作期自场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND e.CooperationDtStart is not null
+		    				AND Convert(varchar(10),e.CooperationDtStart,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND e.CooperationDtStart is not null
+		    				AND Convert(varchar(10),e.CooperationDtStart,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn ==13102"><!-- 合作期至场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND e.CooperationDtEnd is not null
+		    				AND Convert(varchar(10),e.CooperationDtEnd,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND e.CooperationDtEnd is not null
+		    				AND Convert(varchar(10),e.CooperationDtEnd,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn ==13103"><!-- 录入日场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND e.CrtDt is not null
+		    				AND Convert(varchar(10),e.CrtDt,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND e.CrtDt is not null
+		    				AND Convert(varchar(10),e.CrtDt,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+
+            <if test="contractType != null and contractType =='1'.toString()">
+                <![CDATA[
+					AND e.CrtDt is not null
+					AND e.CooperationDtEnd >= GETDATE()
+				]]>
+            </if>
+            <if test="contractType != null and contractType =='2'.toString()">
+                <![CDATA[
+					AND e.CrtDt is not null
+					AND e.CooperationDtEnd  < GETDATE()
+				]]>
+            </if>
+        </where>
+        order by e.CrtDt desc
+    </select>
+
+
+    <select id="getStatisticForEstate" resultType="cn.com.eju.deal.dto.houseLinkage.estate.EstateDto"
+            parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        <where>
+            <!-- 数据权限控制 -->
+            <!-- <if test="userIdList != null and userIdList != ''">
+               <foreach collection="userIdList" item="item" index="index"
+                   open="AND (" close=")" separator="OR">
+               <![CDATA[
+                    CrtEmpId = #{item, jdbcType=INTEGER}
+               ]]>
+               </foreach>
+           </if> -->
+            <if test="cityNo != null and cityNo !=''"><!-- 查询条件是否有城市 -->
+                <![CDATA[
+  				AND CityNo = #{cityNo,jdbcType=NVARCHAR}
+  				]]>
+            </if>
+            <if test="realityCityNo != null and realityCityNo !=''"><!-- 楼盘地址 -->
+                AND realityCityNo = #{realityCityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="districtId != null and districtId !=''"><!-- 查询条件是否有区域 -->
+                <![CDATA[
+  				AND DistrictId = #{districtId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="areaId != null and areaId !=''"><!-- 查询条件是否有板块 -->
+                <![CDATA[
+  				AND AreaId = #{areaId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="estateType != null and estateType !=''"><!-- 查询条件是否有楼盘类型 -->
+                <![CDATA[
+  				AND MgtKbn LIKE '%${estateType}%'
+  				]]>
+            </if>
+            <if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+                <![CDATA[
+  				AND (projectNo LIKE '%${estateNm}%'
+  					 or EstateNm LIKE '%${estateNm}%'
+  					 or recordName LIKE '%${estateNm}%'
+  					 or promotionName LIKE '%${estateNm}%'
+  					 or signName LIKE '%${estateNm}%'
+  					 or EstateId LIKE '%${estateNm}%')
+  				]]>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn ==14001"><!-- 合作期自场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND CooperationDtStart is not null
+		    				AND Convert(varchar(10),CooperationDtStart,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND CooperationDtStart is not null
+		    				AND Convert(varchar(10),CooperationDtStart,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn ==14002"><!-- 合作期至场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND CooperationDtEnd is not null
+		    				AND Convert(varchar(10),CooperationDtEnd,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND CooperationDtEnd is not null
+		    				AND Convert(varchar(10),CooperationDtEnd,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+        </where>
+        order by CrtDt desc
+    </select>
+
+
+    <select id="getSceneEstateList" resultType="cn.com.eju.deal.dto.houseLinkage.estate.EstateDto" parameterType="Map">
+        SELECT ISNULL(t.relationUnconfirm, 0) AS relationUnconfirm ,
+        ISNULL(t.pledgedUnconfirm, 0) AS pledgedUnconfirm ,
+        ISNULL(t.signUnconfirm, 0) AS signUnconfirm ,
+        ISNULL(t.signConfirm, 0) AS signConfirm ,
+        ISNULL(t.brokerageConfirm, 0) AS brokerageConfirm ,
+        e.* ,
+        cty.countryName AS countryNm
+        FROM dbo.LNK_Estate e
+        JOIN BAS_COUNTRY cty ON e.countryNo = cty.countryNo
+        LEFT JOIN (
+        SELECT r.EstateId,
+        SUM(CASE WHEN r.LatestProgress = 13502
+        AND r.ConfirmStatus IN (13602,13603) THEN 1
+        ELSE 0
+        END) AS relationUnconfirm ,
+        SUM(CASE WHEN ( ( r.LatestProgress = 13503
+        AND r.ConfirmStatus IN ( 13602,
+        13603 )
+        )
+        OR ( r.LatestProgress = 13504
+        AND r.ConfirmStatus = 13603
+        )
+        ) THEN 1
+        ELSE 0
+        END) AS pledgedUnconfirm ,
+        SUM(CASE WHEN (r.LatestProgress = 13505
+        AND r.ConfirmStatus = 13603) OR (r.LatestProgress = 13505 AND r.ConfirmStatus = 13602 AND r.dealDate is null)
+        THEN 1
+        ELSE 0
+        END) AS signUnconfirm ,
+        SUM(CASE WHEN r.LatestProgress = 13505
+        AND r.ConfirmStatus IN (13601,13602) AND r.dealDate is not null
+        AND r.brokerageStatus = 22001 THEN 1
+        ELSE 0
+        END) AS signConfirm ,
+        SUM(CASE WHEN r.brokerageStatus IN ( 22002, 22003 )
+        THEN 1
+        ELSE 0
+        END) AS brokerageConfirm
+        FROM dbo.LNK_Report r
+        WHERE r.DelFlg = 0
+        AND  r.CityNo = #{cityNo,jdbcType=NVARCHAR}
+        GROUP BY r.EstateId
+        ) t ON e.EstateId = t.EstateId
+        <where>
+            e.DelFlg = 0
+            AND cty.delFlag = 0
+            <!-- releaseStatus = 13001 -->
+            <!-- 数据权限控制 -->
+            <if test="userIdList != null and userIdList != ''">
+                <foreach collection="userIdList" item="item" index="index"
+                         open="AND (" close=")" separator="OR">
+                    <![CDATA[
+	    			 e.SceneEmpId = #{item, jdbcType=INTEGER}
+	    		]]>
+                </foreach>
+            </if>
+            <if test="cityNo != null and cityNo !=''"><!-- 业绩归属城市或发布城市 -->
+                AND e.EstateId IN (SELECT t.EstateId FROM V_CRM_EstateCity t WHERE t.cityNo =
+                #{cityNo,jdbcType=NVARCHAR})
+            </if>
+
+            <if test="realityCityNo != null and realityCityNo !=''"><!-- 查询条件是否有项目所在城市 -->
+                <![CDATA[
+  				AND e.realityCityNo = #{realityCityNo,jdbcType=NVARCHAR}
+  				]]>
+            </if>
+            <if test="districtNo != null and districtNo !=''"><!-- 查询条件是否有项目所在区域 -->
+                <![CDATA[
+  				AND e.DistrictId = #{districtNo,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="areaId != null and areaId !=''"><!-- 查询条件是否有板块 -->
+                <![CDATA[
+  				AND e.AreaId = #{areaId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="estateType != null and estateType !=''"><!-- 查询条件是否有楼盘类型 -->
+                <![CDATA[
+  				AND e.MgtKbn LIKE '%${estateType}%'
+  				]]>
+            </if>
+            <!--<if test="estateNm != null and estateNm !=''">&lt;!&ndash; 查询条件是否有录入楼盘名 &ndash;&gt;-->
+            <!--<![CDATA[-->
+            <!--AND (e.EstateNm LIKE '%${estateNm}%'-->
+            <!--or e.recordName LIKE '%${estateNm}%'-->
+            <!--or e.promotionName LIKE '%${estateNm}%'-->
+            <!--or e.signName LIKE '%${estateNm}%'-->
+            <!--or e.projectNo LIKE '%${estateNm}%')-->
+            <!--&#45;&#45;or EstateId LIKE '%${estateNm}%'-->
+            <!--]]>-->
+            <!--</if>-->
+
+            <if test="projectDepartmentId != null and projectDepartmentId !=''"><!-- 归属项目组 -->
+                <![CDATA[
+  				AND e.projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER}
+  				]]>
+            </if>
+
+            <if test="projectNo != null and projectNo !=''"><!-- 查询条件是否有录入楼盘名 -->
+                AND (e.projectNo LIKE CONCAT('%', #{projectNo},'%')
+                OR e.EstateNm LIKE CONCAT('%', #{projectNo},'%')
+                )
+            </if>
+            <if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+                AND e.EstateNm LIKE CONCAT('%', #{estateNm},'%')
+            </if>
+        </where>
+        order by e.CrtDt desc
+    </select>
+
+    <select id="getSceneStatisticEstateList" resultType="cn.com.eju.deal.dto.houseLinkage.estate.EstateDto"
+            parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        <where>
+            <!-- releaseStatus = 13001 -->
+            <!-- 数据权限控制 -->
+            <if test="userIdList != null and userIdList != ''">
+                <foreach collection="userIdList" item="item" index="index"
+                         open="AND (" close=")" separator="OR">
+                    <![CDATA[
+	    			 SceneEmpId = #{item, jdbcType=INTEGER}
+	    		]]>
+                </foreach>
+            </if>
+            <if test="cityNo != null and cityNo !=''"><!-- 查询条件是否有业绩归属城市 -->
+                <![CDATA[
+  				AND CityNo = #{cityNo,jdbcType=NVARCHAR}
+  				]]>
+            </if>
+            <if test="realityCityNo != null and realityCityNo !=''"><!-- 查询条件是否有项目所在城市 -->
+                <![CDATA[
+  				AND realityCityNo = #{realityCityNo,jdbcType=NVARCHAR}
+  				]]>
+            </if>
+            <if test="districtNo != null and districtNo !=''"><!-- 查询条件是否有项目所在区域 -->
+                <![CDATA[
+  				AND DistrictId = #{districtNo,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="areaId != null and areaId !=''"><!-- 查询条件是否有板块 -->
+                <![CDATA[
+  				AND AreaId = #{areaId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="estateType != null and estateType !=''"><!-- 查询条件是否有楼盘类型 -->
+                <![CDATA[
+  				AND MgtKbn LIKE '%${estateType}%'
+  				]]>
+            </if>
+            <if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+                <![CDATA[
+  				AND (EstateNm LIKE '%${estateNm}%' or EstateId LIKE '%${estateNm}%' or projectNo LIKE '%${estateNm}%')
+  				]]>
+            </if>
+        </where>
+        order by CrtDt desc
+    </select>
+
+    <select id="getSceneCommissionList" resultType="cn.com.eju.deal.dto.houseLinkage.estate.EstateDto"
+            parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        <where>
+            releaseStatus = 13001
+            <!-- 数据权限控制 -->
+            <if test="userIdList != null and userIdList != ''">
+                <foreach collection="userIdList" item="item" index="index"
+                         open="AND (" close=")" separator="OR">
+                    <![CDATA[
+	    			 SceneEmpId = #{item, jdbcType=INTEGER}
+	    		]]>
+                </foreach>
+            </if>
+            <if test="cityNo != null and cityNo !=''"><!-- 查询条件是否有业绩归属城市 -->
+                <![CDATA[
+  				AND CityNo = #{cityNo,jdbcType=NVARCHAR}
+  				]]>
+            </if>
+            <if test="realityCityNo != null and realityCityNo !=''"><!-- 查询条件是否有项目所在城市 -->
+                <![CDATA[
+  				AND realityCityNo = #{realityCityNo,jdbcType=NVARCHAR}
+  				]]>
+            </if>
+            <if test="districtNo != null and districtNo !=''"><!-- 查询条件是否有项目所在区域 -->
+                <![CDATA[
+  				AND DistrictId = #{districtNo,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="areaId != null and areaId !=''"><!-- 查询条件是否有板块 -->
+                <![CDATA[
+  				AND AreaId = #{areaId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="estateType != null and estateType !=''"><!-- 查询条件是否有楼盘类型 -->
+                <![CDATA[
+  				AND MgtKbn LIKE '%${estateType}%'
+  				]]>
+            </if>
+            <if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+                <![CDATA[
+  				AND (EstateNm LIKE '%${estateNm}%'
+  					or recordName LIKE '%${estateNm}%'
+  					or promotionName LIKE '%${estateNm}%'
+  					or signName LIKE '%${estateNm}%'
+  				or EstateId LIKE '%${estateNm}%')
+  				]]>
+            </if>
+            <if test="rewardType != null and rewardType !=''"><!-- 查询条件是否有奖励类型 -->
+                <if test="rewardType == 3"><!-- 带看 -->
+                    AND RelationReward = != ''
+                </if>
+                <if test="rewardType == 4"><!-- 认筹 -->
+                    AND PledgedReward = != ''
+                </if>
+                <if test="rewardType == 5"><!-- 认购 -->
+                    AND SubscribedReward = != ''
+                </if>
+                <if test="rewardType == 6"><!-- 成交 -->
+                    AND BargainReward = != ''
+                </if>
+                <if test="rewardType == 8"><!-- 结佣 -->
+                    AND Commission = != ''
+                </if>
+            </if>
+        </where>
+        order by CrtDt desc
+    </select>
+
+
+    <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.estate.model.Estate"
+            useGeneratedKeys="true" keyProperty="id">
+	insert into LNK_Estate (EstateId,DistrictId,AreaId,EstateNm,AuditStatus,AuditMemo,ReleaseStatus,ReleaseOffMemo,
+	ReleaseDt,SalesStatus,Partner,PartnerNm,CooperationDtStart,CooperationDtEnd,CityNo,DeptId,EmpId,SalePriceUnit,SalePriceUnitMin,SalePriceUnitMax,
+	Address,AddressCoordinateX,AddressCoordinateY,Mark,OpenKbn,OpenTime,HouseTransferKbn,HouseTransferTime,ProjectDescription,
+	EstateTypeSearch,DevCompany,FieldAddress,CooperationExpDt,PreSalePermitKbn,TypeKbn,MgtKbn,OwnYearKbn,
+	DecorationKbn,HouseCnt,ParkCnt,ParkFee,MgtCompany,RateFAR,RateGreen,MgtPrice,StaircaseHousehold,HeatKbn,
+	HydropowerGasKbn,SceneDeptId,SceneEmpId,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,recordName,promotionName,signName,realityCityNo,projectDepartmentId,
+	cooperationMode,projectNo,empTel,devCompanyBroker,devCompanyBrokerTel,partnerContactNm,partnerContactTel,projectStatus,realOpenTime
+	,opEstateId,opEstateNm,estatePosition,countryNo,accountProject,accountProjectNo,
+	particularFlag,directSignFlag,bigCustomerFlag,bigCustomerId,isPureDy,custodyFlg,developerName,mattressNailId
+	,businessModel,isSpecialProject,subscribedQuarter1,subscribedQuarter2,subscribedQuarter3,subscribedQuarter4,subscribedThisYear,subscribedNextYear
+	,devCompanyId,brushRaiseFlag,totalFieldFlag,isExcuseCommision,projectLeaderEmpId,projectLeaderTel
+	,partnerAbbreviationNm,partnerAbbreviationCode,developerBrandId,developerBrandName
+	)
+	values (#{estateId, jdbcType=VARCHAR},#{districtId, jdbcType=VARCHAR},#{areaId, jdbcType=VARCHAR},#{estateNm,
+	jdbcType=NVARCHAR},
+	#{auditStatus, jdbcType=INTEGER},#{auditMemo, jdbcType=NVARCHAR},#{releaseStatus, jdbcType=INTEGER},
+	#{releaseOffMemo, jdbcType=NVARCHAR},#{releaseDt, jdbcType=VARCHAR},#{salesStatus, jdbcType=INTEGER},
+	#{partner, jdbcType=INTEGER},#{partnerNm, jdbcType=NVARCHAR},#{cooperationDtStart, jdbcType=TIMESTAMP},
+	#{cooperationDtEnd, jdbcType=TIMESTAMP},#{cityNo, jdbcType=VARCHAR},#{deptId, jdbcType=INTEGER},
+	#{empId, jdbcType=INTEGER},#{salePriceUnit, jdbcType=DECIMAL},#{salePriceUnitMin, jdbcType=DECIMAL},
+	#{salePriceUnitMax, jdbcType=DECIMAL},#{address, jdbcType=NVARCHAR},
+	#{addressCoordinateX, jdbcType=NVARCHAR},#{addressCoordinateY, jdbcType=NVARCHAR},
+	#{mark, jdbcType=NVARCHAR},#{openKbn, jdbcType=INTEGER},#{openTime, jdbcType=TIMESTAMP},
+	#{houseTransferKbn, jdbcType=VARCHAR},#{houseTransferTime, jdbcType=NVARCHAR},
+	#{projectDescription, jdbcType=NVARCHAR},
+	#{estateTypeSearch, jdbcType=NVARCHAR},#{devCompany, jdbcType=NVARCHAR},#{fieldAddress, jdbcType=NVARCHAR},
+	#{cooperationExpDt, jdbcType=INTEGER},#{preSalePermitKbn, jdbcType=INTEGER},
+	#{typeKbn, jdbcType=VARCHAR},#{mgtKbn, jdbcType=VARCHAR},#{ownYearKbn, jdbcType=VARCHAR},
+	#{decorationKbn, jdbcType=VARCHAR},#{houseCnt, jdbcType=INTEGER},#{parkCnt, jdbcType=INTEGER},
+	#{parkFee, jdbcType=DECIMAL},#{mgtCompany, jdbcType=NVARCHAR},#{rateFAR, jdbcType=VARCHAR},
+	#{rateGreen, jdbcType=VARCHAR},#{mgtPrice, jdbcType=DECIMAL},#{staircaseHousehold, jdbcType=VARCHAR},
+	#{heatKbn, jdbcType=INTEGER},#{hydropowerGasKbn, jdbcType=INTEGER},#{sceneDeptId, jdbcType=INTEGER},
+	#{sceneEmpId, jdbcType=INTEGER},
+	#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg ,jdbcType=BIT},
+	#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP},
+	#{recordName,jdbcType=NVARCHAR},#{promotionName,jdbcType=NVARCHAR},#{signName,jdbcType=NVARCHAR},
+	#{realityCityNo,jdbcType=VARCHAR},#{projectDepartmentId, jdbcType=INTEGER},#{cooperationMode,jdbcType=INTEGER},
+	#{projectNo,jdbcType=VARCHAR},#{empTel,jdbcType=VARCHAR},#{devCompanyBroker,jdbcType=VARCHAR},#{devCompanyBrokerTel,jdbcType=VARCHAR},
+	#{partnerContactNm,jdbcType=VARCHAR},#{partnerContactTel,jdbcType=VARCHAR},#{projectStatus,jdbcType=INTEGER},#{realOpenTime, jdbcType=TIMESTAMP}
+	,#{opEstateId,jdbcType=VARCHAR},#{opEstateNm,jdbcType=VARCHAR}
+	,#{estatePosition, jdbcType=INTEGER},#{countryNo,jdbcType=VARCHAR}
+	,#{accountProject,jdbcType=NVARCHAR},#{accountProjectNo,jdbcType=NVARCHAR}
+	,#{particularFlag, jdbcType=INTEGER},#{directSignFlag, jdbcType=INTEGER},#{bigCustomerFlag, jdbcType=INTEGER}
+	,#{bigCustomerId, jdbcType=INTEGER},#{isPureDy ,jdbcType=BIT},#{custodyFlg ,jdbcType=INTEGER},#{developerName ,jdbcType=VARCHAR}
+	,#{mattressNailId ,jdbcType=INTEGER}
+	,#{businessModel ,jdbcType=INTEGER}
+	,#{isSpecialProject ,jdbcType=INTEGER},#{subscribedQuarter1, jdbcType=DECIMAL},#{subscribedQuarter2, jdbcType=DECIMAL},#{subscribedQuarter3, jdbcType=DECIMAL},#{subscribedQuarter4, jdbcType=DECIMAL},#{subscribedThisYear, jdbcType=DECIMAL},#{subscribedNextYear, jdbcType=DECIMAL}
+	,#{devCompanyId ,jdbcType=INTEGER},#{brushRaiseFlag ,jdbcType=INTEGER},#{totalFieldFlag ,jdbcType=INTEGER}
+	,#{isExcuseCommision ,jdbcType=INTEGER},#{projectLeaderEmpId ,jdbcType=INTEGER},#{projectLeaderTel ,jdbcType=VARCHAR}
+	,#{partnerAbbreviationNm ,jdbcType=VARCHAR},#{partnerAbbreviationCode ,jdbcType=VARCHAR},#{developerBrandId ,jdbcType=INTEGER},#{developerBrandName ,jdbcType=VARCHAR}
+	)
+  </insert>
+
+    <update id="update" parameterType="cn.com.eju.deal.houseLinkage.estate.model.Estate">
+        update LNK_Estate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="estateId != null">
+                EstateId = #{estateId, jdbcType=VARCHAR},
+            </if>
+            <if test="districtId != null">
+                DistrictId = #{districtId, jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                AreaId = #{areaId, jdbcType=VARCHAR},
+            </if>
+            <if test="estateNm != null">
+                EstateNm = #{estateNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="auditStatus != null">
+                AuditStatus = #{auditStatus, jdbcType=INTEGER},
+            </if>
+            <if test="auditMemo != null">
+                AuditMemo = #{auditMemo, jdbcType=NVARCHAR},
+            </if>
+            <if test="releaseStatus != null">
+                ReleaseStatus = #{releaseStatus, jdbcType=INTEGER},
+            </if>
+            <if test="releaseOffMemo != null">
+                ReleaseOffMemo = #{releaseOffMemo, jdbcType=NVARCHAR},
+            </if>
+            <if test="releaseDt != null">
+                ReleaseDt = #{releaseDt, jdbcType=VARCHAR},
+            </if>
+            <if test="salesStatus != null">
+                SalesStatus = #{salesStatus, jdbcType=INTEGER},
+            </if>
+            <if test="partner != null">
+                Partner = #{partner, jdbcType=INTEGER},
+            </if>
+            <if test="partnerNm != null">
+                PartnerNm = #{partnerNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="cooperationDtStart != null">
+                CooperationDtStart = #{cooperationDtStart, jdbcType=TIMESTAMP},
+            </if>
+            <if test="cooperationDtEnd != null">
+                CooperationDtEnd = #{cooperationDtEnd, jdbcType=TIMESTAMP},
+            </if>
+            <if test="cooperationMode != null">
+                cooperationMode = #{cooperationMode, jdbcType=INTEGER},
+            </if>
+            <if test="businessModel != null">
+                businessModel = #{businessModel, jdbcType=INTEGER},
+            </if>
+            <if test="cityNo != null">
+                CityNo = #{cityNo, jdbcType=VARCHAR},
+            </if>
+            <if test="deptId != null">
+                DeptId = #{deptId, jdbcType=INTEGER},
+            </if>
+            <if test="empId != null">
+                EmpId = #{empId, jdbcType=INTEGER},
+            </if>
+            <if test="salePriceUnit != null">
+                SalePriceUnit = #{salePriceUnit, jdbcType=DECIMAL},
+            </if>
+            <if test="salePriceUnitMax != null">
+                SalePriceUnitMax = #{salePriceUnitMax, jdbcType=DECIMAL},
+            </if>
+            <if test="salePriceUnitMin != null">
+                SalePriceUnitMin = #{salePriceUnitMin, jdbcType=DECIMAL},
+            </if>
+            <if test="address != null">
+                Address = #{address, jdbcType=NVARCHAR},
+            </if>
+            <if test="addressCoordinateX != null">
+                AddressCoordinateX = #{addressCoordinateX, jdbcType=NVARCHAR},
+            </if>
+            <if test="addressCoordinateY != null">
+                AddressCoordinateY = #{addressCoordinateY, jdbcType=NVARCHAR},
+            </if>
+            <if test="mark != null">
+                Mark = #{mark, jdbcType=NVARCHAR},
+            </if>
+            <if test="openKbn != null">
+                OpenKbn = #{openKbn, jdbcType=INTEGER},
+            </if>
+            <if test="openTime != null">
+                OpenTime = #{openTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="houseTransferKbn != null">
+                HouseTransferKbn = #{houseTransferKbn, jdbcType=INTEGER},
+            </if>
+            <if test="houseTransferTime != null">
+                HouseTransferTime = #{houseTransferTime, jdbcType=NVARCHAR},
+            </if>
+            <if test="projectDescription != null">
+                ProjectDescription = #{projectDescription, jdbcType=NVARCHAR},
+            </if>
+            <if test="estateTypeSearch != null">
+                estateTypeSearch = #{estateTypeSearch, jdbcType=NVARCHAR},
+            </if>
+            <if test="fieldAddress != null">
+                fieldAddress = #{fieldAddress, jdbcType=NVARCHAR},
+            </if>
+            <if test="cooperationExpDt != null">
+                cooperationExpDt = #{cooperationExpDt, jdbcType=DECIMAL},
+            </if>
+            <if test="preSalePermitKbn != null">
+                preSalePermitKbn = #{preSalePermitKbn, jdbcType=INTEGER},
+            </if>
+            <if test="typeKbn != null">
+                typeKbn = #{typeKbn, jdbcType=VARCHAR},
+            </if>
+            <if test="mgtKbn != null">
+                mgtKbn = #{mgtKbn, jdbcType=VARCHAR},
+            </if>
+            <if test="ownYearKbn != null">
+                ownYearKbn = #{ownYearKbn, jdbcType=VARCHAR},
+            </if>
+            <if test="decorationKbn != null">
+                decorationKbn = #{decorationKbn, jdbcType=VARCHAR},
+            </if>
+            <if test="houseCnt != null">
+                houseCnt = #{houseCnt, jdbcType=INTEGER},
+            </if>
+            <if test="parkCnt != null">
+                parkCnt = #{parkCnt, jdbcType=INTEGER},
+            </if>
+            <if test="parkFee != null">
+                parkFee = #{parkFee, jdbcType=DECIMAL},
+            </if>
+            <if test="mgtCompany != null">
+                mgtCompany = #{mgtCompany, jdbcType=NVARCHAR},
+            </if>
+            <if test="rateFAR != null">
+                rateFAR = #{rateFAR, jdbcType=VARCHAR},
+            </if>
+            <if test="rateGreen != null">
+                rateGreen = #{rateGreen, jdbcType=VARCHAR},
+            </if>
+            <if test="mgtPrice != null">
+                mgtPrice = #{mgtPrice, jdbcType=DECIMAL},
+            </if>
+            <if test="staircaseHousehold != null">
+                staircaseHousehold = #{staircaseHousehold, jdbcType=VARCHAR},
+            </if>
+            <if test="heatKbn != null">
+                heatKbn = #{heatKbn, jdbcType=INTEGER},
+            </if>
+            <if test="hydropowerGasKbn != null">
+                hydropowerGasKbn = #{hydropowerGasKbn, jdbcType=INTEGER},
+            </if>
+            <if test="sceneDeptId != null">
+                sceneDeptId = #{sceneDeptId, jdbcType=INTEGER},
+            </if>
+            <if test="sceneEmpId != null">
+                sceneEmpId = #{sceneEmpId, jdbcType=INTEGER},
+            </if>
+            <if test="uptEmpId != null">
+                uptEmpId = #{uptEmpId, jdbcType=INTEGER},
+            </if>
+            <if test="delFlg != null">
+                delFlg = #{delFlg, jdbcType=BIT},
+            </if>
+            <if test="uptDt != null">
+                uptDt = #{uptDt, jdbcType=TIMESTAMP},
+            </if>
+            <if test="recordName != null">
+                recordName = #{recordName, jdbcType=NVARCHAR},
+            </if>
+            <if test="promotionName != null">
+                promotionName = #{promotionName, jdbcType=NVARCHAR},
+            </if>
+            <if test="signName != null">
+                signName = #{signName, jdbcType=NVARCHAR},
+            </if>
+            <if test="realityCityNo != null">
+                realityCityNo = #{realityCityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="projectStatus != null">
+                <if test="projectStatus == 0">
+                    projectStatus = 20305,
+                </if>
+                <if test="projectStatus != 0">
+                    projectStatus = #{projectStatus, jdbcType=INTEGER},
+                </if>
+            </if>
+            <if test="startDate != null">
+                startDate = #{startDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null">
+                endDate = #{endDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="projectDepartmentId != null">
+                projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER},
+            </if>
+            <if test="empTel != null">
+                empTel = #{empTel,jdbcType=VARCHAR},
+            </if>
+            <if test="devCompanyBroker != null">
+                devCompanyBroker = #{devCompanyBroker,jdbcType=VARCHAR},
+            </if>
+            <if test="devCompanyBrokerTel != null">
+                devCompanyBrokerTel = #{devCompanyBrokerTel,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerContactNm != null">
+                partnerContactNm = #{partnerContactNm,jdbcType=VARCHAR},
+            </if>
+            <if test="partnerContactTel != null">
+                partnerContactTel = #{partnerContactTel,jdbcType=VARCHAR},
+            </if>
+            <if test="realOpenTime != null">
+                realOpenTime = #{realOpenTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="countryNo != null">
+                countryNo = #{countryNo,jdbcType=VARCHAR},
+            </if>
+            <if test="opEstateId != null">
+                opEstateId = #{opEstateId,jdbcType=VARCHAR},
+            </if>
+            <if test="opEstateNm != null">
+                opEstateNm = #{opEstateNm,jdbcType=VARCHAR},
+            </if>
+            <if test="bigCustomerFlag != null">
+                bigCustomerFlag = #{bigCustomerFlag, jdbcType=INTEGER},
+            </if>
+            <if test="particularFlag != null">
+                particularFlag = #{particularFlag, jdbcType=INTEGER},
+            </if>
+            <if test="bigCustomerFlag == '22601'.toString() and bigCustomerId != null">
+                bigCustomerId = #{bigCustomerId},
+            </if>
+            <if test="bigCustomerFlag == '22602'.toString()">
+                bigCustomerId = null,
+            </if>
+            <if test="directSignFlag != null">
+                directSignFlag = #{directSignFlag, jdbcType=INTEGER},
+            </if>
+            <if test="devCompany != null">
+                devCompany = #{devCompany},
+            </if>
+            <if test="accountProject != null">
+                accountProject = #{accountProject,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountProjectNo != null">
+                accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="custodyFlg != null">
+                custodyFlg = #{custodyFlg,jdbcType=INTEGER},
+            </if>
+            <if test="developerName != null">
+                developerName = #{developerName,jdbcType=VARCHAR},
+            </if>
+            <if test="mattressNailId != null">
+                mattressNailId = #{mattressNailId,jdbcType=INTEGER},
+            </if>
+            <if test="subscribedQuarter1 != null">
+                subscribedQuarter1 = #{subscribedQuarter1, jdbcType=DECIMAL},
+            </if>
+            <if test="subscribedQuarter2 != null">
+                subscribedQuarter2 = #{subscribedQuarter2, jdbcType=DECIMAL},
+            </if>
+            <if test="subscribedQuarter3 != null">
+                subscribedQuarter3 = #{subscribedQuarter3, jdbcType=DECIMAL},
+            </if>
+            <if test="subscribedQuarter4 != null">
+                subscribedQuarter4 = #{subscribedQuarter4, jdbcType=DECIMAL},
+            </if>
+            <if test="subscribedThisYear != null">
+                subscribedThisYear = #{subscribedThisYear, jdbcType=DECIMAL},
+            </if>
+            <if test="subscribedNextYear != null">
+                subscribedNextYear = #{subscribedNextYear, jdbcType=DECIMAL},
+            </if>
+            <if test="isSpecialProject != null">
+                isSpecialProject = #{isSpecialProject, jdbcType=INTEGER},
+            </if>
+            <if test="devCompanyId != null">
+                devCompanyId = #{devCompanyId, jdbcType=INTEGER},
+            </if>
+            <if test="brushRaiseFlag != null">
+                brushRaiseFlag = #{brushRaiseFlag, jdbcType=INTEGER},
+            </if>
+            <if test="totalFieldFlag != null">
+                totalFieldFlag = #{totalFieldFlag, jdbcType=INTEGER},
+            </if>
+			<if test="isExcuseCommision != null">
+				isExcuseCommision = #{isExcuseCommision, jdbcType=INTEGER},
+			</if>
+			<if test="projectLeaderEmpId != null">
+                projectLeaderEmpId = #{projectLeaderEmpId, jdbcType=INTEGER},
+            </if>
+			<if test="projectLeaderTel != null">
+                projectLeaderTel = #{projectLeaderTel, jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="appointmentRelease" parameterType="String">
+		UPDATE dbo.LNK_Estate SET ReleaseStatus=13001 WHERE ReleaseDt=#{releaseDate,jdbcType=VARCHAR}
+	</update>
+
+    <!-- 查询 list -->
+    <select id='queryList' parameterType="Map" resultMap="BaseResultMap">
+        SELECT e.*
+        FROM dbo.LNK_Estate e
+        LEFT JOIN dbo.LNK_EstateRule r ON r.EstateId = e.EstateId AND r.DelFlg=0
+        <where>
+            e.DelFlg=0
+            <if test="estateNm != null and estateNm != ''">
+                <![CDATA[AND e.estateNm = #{estateNm,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="districtId != null and districtId != ''">
+                <![CDATA[AND e.DistrictId=#{districtId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="districtNo != null and districtNo != ''">
+                <![CDATA[AND e.DistrictId=#{districtNo, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="areaId != null and areaId != ''">
+                <![CDATA[AND e.AreaId = #{areaId, jdbcType=VARCHAR}]]>
+            </if>
+            <!-- 城市No是上海查询上海和昆山;不是上海则按照城市查询 -->
+            <if test="cityNo != null and cityNo != ''">
+                <if test="cityNo == 'AAAD4421-21B1-46FD-9DE4-D5A3183CE260'">
+                    <![CDATA[AND e.CityNo in ('AAAD4421-21B1-46FD-9DE4-D5A3183CE260','52F1D510-DDA2-4A8D-9FD3-E165E933CEEC')]]>
+                </if>
+                <if test="cityNo != 'AAAD4421-21B1-46FD-9DE4-D5A3183CE260'">
+                    <![CDATA[AND e.CityNo = #{cityNo, jdbcType=VARCHAR}]]>
+                </if>
+            </if>
+            <if test="address != null and address != ''">
+                <![CDATA[AND e.Address = #{address,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="partnerNm != null and partnerNm != ''">
+                <![CDATA[AND e.partnerNm = #{partnerNm,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="estateId != null and estateId != ''">
+                <![CDATA[AND e.EstateId=#{estateId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="releaseStatus != null and releaseStatus != ''">
+                <![CDATA[AND e.ReleaseStatus=#{releaseStatus, jdbcType=INTEGER}]]>
+            </if>
+            <if test="saleStatus != null and saleStatus != ''">
+                <![CDATA[AND e.SalesStatus=#{saleStatus, jdbcType=INTEGER}]]>
+            </if>
+            <if test="avgPriceMin != null and avgPriceMin != ''">
+                <![CDATA[AND e.SalePriceUnitMin >= #{avgPriceMin, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="avgPriceMax != null and avgPriceMax != ''">
+                <![CDATA[AND e.SalePriceUnitMax <= #{avgPriceMax, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="buildType != null and buildType != ''">
+                <![CDATA[AND e.MgtKbn LIKE '%${buildType}%']]>
+            </if>
+            <if test="mgtKbn != null and mgtKbn != ''">
+                <![CDATA[AND e.MgtKbn LIKE '%${mgtKbn}%']]>
+            </if>
+            <if test="searchContent != null and searchContent != ''">
+                <![CDATA[AND (e.EstateNm LIKE '%${searchContent}%' OR e.Address LIKE '%${searchContent}%')]]>
+            </if>
+            <!-- 数据权限控制 -->
+            <!-- <if test="userIdList != null and userIdList != ''">
+               <foreach collection="userIdList" item="item" index="index" open="AND (" close=")" separator="OR">
+                   <![CDATA[
+                        e.CrtEmpId = #{item, jdbcType=INTEGER}
+                   ]]>
+               </foreach>
+           </if> -->
+            <!-- 奖励 -->
+            <if test="awardType != null and awardType != ''">
+                <if test="awardType == 14101"><!-- 带看奖励 -->
+                    <![CDATA[AND ISNULL(r.RelationReward,0) > 0]]>
+                </if>
+                <if test="awardType==14102"><!-- 认筹奖励 -->
+                    <![CDATA[AND ISNULL(r.PledgedReward,0) > 0]]>
+                </if>
+                <if test="awardType==14103"><!-- 认购奖励 -->
+                    <![CDATA[AND ISNULL(r.SubscribedReward,0) > 0]]>
+                </if>
+                <if test="awardType==14104"><!-- 成交奖励 -->
+                    <![CDATA[AND ISNULL(r.BargainReward,0) > 0]]>
+                </if>
+            </if>
+            <!-- 房型 -->
+            <if test="roomCount != null and roomCount != ''">
+                <foreach collection="roomCount" item="item" index="index" open="AND (" close=")" separator="OR">
+                    <![CDATA[
+		    			 e.EstateTypeSearch LIKE '%:${item}%'
+		    		]]>
+                </foreach>
+            </if>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+            <if test="orderType != null and orderType != ''">${orderType}</if>
+        </if>
+        <if test="orderBy == null or orderBy == ''">
+            ORDER BY e.CrtDt DESC
+        </if>
+    </select>
+
+    <!-- 归属项目部 -->
+    <select id="getProjectDepartment" parameterType="Map" resultMap="EstateDtoMap">
+         SELECT
+   			 groupId AS projectDepartmentId,groupName AS projectDepartment,USR_Group.timeTag
+		 FROM USR_Group
+		 INNER JOIN USR_GroupType ON USR_Group.typeId = USR_GroupType.typeId AND USR_GroupType.delFlag = 'N' AND USR_GroupType.typeCode = 'BTEJBM'
+		 INNER JOIN Bas_City ON USR_Group.cityId = Bas_City.Id AND Bas_City.FlagDeleted = 0
+		 INNER JOIN Bas_CitySetting ON Bas_City.cityNo = Bas_CitySetting.cityNo AND Bas_CitySetting.delFlag = 'N' AND USR_Group.timeTag = Bas_CitySetting.timeTag
+		 WHERE
+		  USR_Group.groupName like '%联动%'
+		  AND USR_Group.delFlag='N'
+		  AND Bas_City.CityNo =  #{cityNo,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 导入数据批量插入 -->
+    <insert id="insertLnkImport" parameterType="Map">
+        INSERT INTO LNK_Import (
+        templateType
+        ,amountType
+        ,year
+        ,projectNo
+        ,estateId
+        ,estateNm
+        ,reportId
+        ,detailId
+        ,buildingNo
+        ,num
+        ,dealAmount
+        ,dealDate
+        ,subTotalPreTax
+        ,beforeAmountPreTax
+        ,janPreTax
+        ,febPreTax
+        ,marPreTax
+        ,aprPreTax
+        ,mayPreTax
+        ,junPreTax
+        ,julPreTax
+        ,augPreTax
+        ,sepPreTax
+        ,octPreTax
+        ,novPreTax
+        ,decPreTax
+        ,subTotalAfterTax
+        ,beforeAmountAfterTax
+        ,janAfterTax
+        ,febAfterTax
+        ,marAfterTax
+        ,aprAfterTax
+        ,mayAfterTax
+        ,junAfterTax
+        ,julAfterTax
+        ,augAfterTax
+        ,sepAfterTax
+        ,octAfterTax
+        ,novAfterTax
+        ,decAfterTax
+        ,CrtEmpId
+        ,UptEmpId
+        ,DelFlg
+        ,CrtDt
+        ,UptDt
+        )
+        VALUES
+        (
+        #{templateType, jdbcType=NVARCHAR}
+        ,#{amountType, jdbcType=NVARCHAR}
+        ,#{year, jdbcType=INTEGER}
+        ,#{projectNo, jdbcType=VARCHAR}
+        ,#{estateId, jdbcType=VARCHAR}
+        ,#{estateNm, jdbcType=NVARCHAR}
+        ,#{reportId, jdbcType=VARCHAR}
+        ,#{detailId, jdbcType=INTEGER}
+        ,#{buildingNo, jdbcType=NVARCHAR}
+        ,#{num, jdbcType=INTEGER}
+        ,#{dealAmount, jdbcType=DECIMAL}
+        ,#{dealDate, jdbcType=TIMESTAMP}
+        <if test="subTotalPreTax != null and subTotalPreTax != ''">
+            ,#{subTotalPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="subTotalPreTax == null or subTotalPreTax == ''">
+            ,NULL
+        </if>
+        <if test="beforeAmountPreTax != null and beforeAmountPreTax != ''">
+            ,#{beforeAmountPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="beforeAmountPreTax == null or beforeAmountPreTax == ''">
+            ,NULL
+        </if>
+        <if test="janPreTax != null and janPreTax != ''">
+            ,#{janPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="janPreTax == null or janPreTax == ''">
+            ,NULL
+        </if>
+        <if test="febPreTax != null and febPreTax != ''">
+            ,#{febPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="febPreTax == null or febPreTax == ''">
+            ,NULL
+        </if>
+        <if test="marPreTax != null and marPreTax != ''">
+            ,#{marPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="marPreTax == null or marPreTax == ''">
+            ,NULL
+        </if>
+        <if test="aprPreTax != null and aprPreTax != ''">
+            ,#{aprPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="aprPreTax == null or aprPreTax == ''">
+            ,NULL
+        </if>
+        <if test="mayPreTax != null and mayPreTax != ''">
+            ,#{mayPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="mayPreTax == null or mayPreTax == ''">
+            ,NULL
+        </if>
+        <if test="junPreTax != null and junPreTax != ''">
+            ,#{junPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="junPreTax == null or junPreTax == ''">
+            ,NULL
+        </if>
+        <if test="julPreTax != null and julPreTax != ''">
+            ,#{julPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="julPreTax == null or julPreTax == ''">
+            ,NULL
+        </if>
+        <if test="augPreTax != null and augPreTax != ''">
+            ,#{augPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="augPreTax == null or augPreTax == ''">
+            ,NULL
+        </if>
+        <if test="sepPreTax != null and sepPreTax != ''">
+            ,#{sepPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="sepPreTax == null or sepPreTax == ''">
+            ,NULL
+        </if>
+        <if test="octPreTax != null and octPreTax != ''">
+            ,#{octPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="octPreTax == null or octPreTax == ''">
+            ,NULL
+        </if>
+        <if test="novPreTax != null and novPreTax != ''">
+            ,#{novPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="novPreTax == null or novPreTax == ''">
+            ,NULL
+        </if>
+        <if test="decPreTax != null and decPreTax != ''">
+            ,#{decPreTax, jdbcType=DECIMAL}
+        </if>
+        <if test="decPreTax == null or decPreTax == ''">
+            ,NULL
+        </if>
+        <if test="subTotalAfterTax != null and subTotalAfterTax != ''">
+            ,#{subTotalAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="subTotalAfterTax == null or subTotalAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="beforeAmountAfterTax != null and beforeAmountAfterTax != ''">
+            ,#{beforeAmountAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="beforeAmountAfterTax == null or beforeAmountAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="janAfterTax != null and janAfterTax != ''">
+            ,#{janAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="janAfterTax == null or janAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="febAfterTax != null and febAfterTax != ''">
+            ,#{febAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="febAfterTax == null or febAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="marAfterTax != null and marAfterTax != ''">
+            ,#{marAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="marAfterTax == null or marAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="aprAfterTax != null and aprAfterTax != ''">
+            ,#{aprAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="aprAfterTax == null or aprAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="mayAfterTax != null and mayAfterTax != ''">
+            ,#{mayAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="mayAfterTax == null or mayAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="junAfterTax != null and junAfterTax != ''">
+            ,#{junAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="junAfterTax == null or junAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="julAfterTax != null and julAfterTax != ''">
+            ,#{julAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="julAfterTax == null or julAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="augAfterTax != null and augAfterTax != ''">
+            ,#{augAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="augAfterTax == null or augAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="sepAfterTax != null and sepAfterTax != ''">
+            ,#{sepAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="sepAfterTax == null or sepAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="octAfterTax != null and octAfterTax != ''">
+            ,#{octAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="octAfterTax == null or octAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="novAfterTax != null and novAfterTax != ''">
+            ,#{novAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="novAfterTax == null or novAfterTax == ''">
+            ,NULL
+        </if>
+        <if test="decAfterTax != null and decAfterTax != ''">
+            ,#{decAfterTax, jdbcType=DECIMAL}
+        </if>
+        <if test="decAfterTax == null or decAfterTax == ''">
+            ,NULL
+        </if>
+        ,#{CrtEmpId, jdbcType=INTEGER}
+        ,#{UptEmpId, jdbcType=INTEGER}
+        ,#{delFlg, jdbcType=INTEGER}
+        ,getdate()
+        ,getdate()
+        )
+    </insert>
+
+    <!-- 导入数据更新 -->
+    <update id="updateLnkImport" parameterType="java.util.Map">
+        UPDATE LNK_Import
+        <set>
+            estateId = #{estateId, jdbcType=VARCHAR}
+            ,estateNm = #{estateNm, jdbcType=VARCHAR}
+            ,buildingNo = #{buildingNo, jdbcType=NVARCHAR}
+            ,dealAmount = #{dealAmount, jdbcType=DECIMAL}
+            ,dealDate = #{dealDate, jdbcType=TIMESTAMP}
+            <if test="subTotalPreTax != null and subTotalPreTax != ''">
+                ,subTotalPreTax = #{subTotalPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="subTotalPreTax == null or subTotalPreTax == ''">
+                ,subTotalPreTax = NULL
+            </if>
+            <if test="beforeAmountPreTax != null and beforeAmountPreTax != ''">
+                ,beforeAmountPreTax = #{beforeAmountPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="beforeAmountPreTax == null or beforeAmountPreTax == ''">
+                ,beforeAmountPreTax = NULL
+            </if>
+            <if test="janPreTax != null and janPreTax != ''">
+                ,janPreTax = #{janPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="janPreTax == null or janPreTax == ''">
+                ,janPreTax = NULL
+            </if>
+            <if test="febPreTax != null and febPreTax != ''">
+                ,febPreTax = #{febPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="febPreTax == null or febPreTax == ''">
+                ,febPreTax = NULL
+            </if>
+            <if test="marPreTax != null and marPreTax != ''">
+                ,marPreTax = #{marPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="marPreTax == null or marPreTax == ''">
+                ,marPreTax = NULL
+            </if>
+            <if test="aprPreTax != null and aprPreTax != ''">
+                ,aprPreTax = #{aprPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="aprPreTax == null or aprPreTax == ''">
+                ,aprPreTax = NULL
+            </if>
+            <if test="mayPreTax != null and mayPreTax != ''">
+                ,mayPreTax = #{mayPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="mayPreTax == null or mayPreTax == ''">
+                ,mayPreTax = NULL
+            </if>
+            <if test="junPreTax != null and junPreTax != ''">
+                ,junPreTax = #{junPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="junPreTax == null or junPreTax == ''">
+                ,junPreTax = NULL
+            </if>
+            <if test="julPreTax != null and julPreTax != ''">
+                ,julPreTax = #{julPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="julPreTax == null or julPreTax == ''">
+                ,julPreTax = NULL
+            </if>
+            <if test="augPreTax != null and augPreTax != ''">
+                ,augPreTax = #{augPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="augPreTax == null or augPreTax == ''">
+                ,augPreTax = NULL
+            </if>
+            <if test="sepPreTax != null and sepPreTax != ''">
+                ,sepPreTax = #{sepPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="sepPreTax == null or sepPreTax == ''">
+                ,sepPreTax = NULL
+            </if>
+            <if test="octPreTax != null and octPreTax != ''">
+                ,octPreTax = #{octPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="octPreTax == null or octPreTax == ''">
+                ,octPreTax = NULL
+            </if>
+            <if test="novPreTax != null and novPreTax != ''">
+                ,novPreTax = #{novPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="novPreTax == null or novPreTax == ''">
+                ,novPreTax = NULL
+            </if>
+            <if test="decPreTax != null and decPreTax != ''">
+                ,decPreTax = #{decPreTax, jdbcType=DECIMAL}
+            </if>
+            <if test="decPreTax == null or decPreTax == ''">
+                ,decPreTax = NULL
+            </if>
+            <if test="subTotalAfterTax != null and subTotalAfterTax != ''">
+                ,subTotalAfterTax = #{subTotalAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="subTotalAfterTax == null or subTotalAfterTax == ''">
+                ,subTotalAfterTax = NULL
+            </if>
+            <if test="beforeAmountAfterTax != null and beforeAmountAfterTax != ''">
+                ,beforeAmountAfterTax = #{beforeAmountAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="beforeAmountAfterTax == null or beforeAmountAfterTax == ''">
+                ,beforeAmountAfterTax = NULL
+            </if>
+            <if test="janAfterTax != null and janAfterTax != ''">
+                ,janAfterTax = #{janAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="janAfterTax == null or janAfterTax == ''">
+                ,janAfterTax = NULL
+            </if>
+            <if test="febAfterTax != null and febAfterTax != ''">
+                ,febAfterTax = #{febAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="febAfterTax == null or febAfterTax == ''">
+                ,febAfterTax = NULL
+            </if>
+            <if test="marAfterTax != null and marAfterTax != ''">
+                ,marAfterTax = #{marAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="marAfterTax == null or marAfterTax == ''">
+                ,marAfterTax = NULL
+            </if>
+            <if test="aprAfterTax != null and aprAfterTax != ''">
+                ,aprAfterTax = #{aprAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="aprAfterTax == null or aprAfterTax == ''">
+                ,aprAfterTax = NULL
+            </if>
+            <if test="mayAfterTax != null and mayAfterTax != ''">
+                ,mayAfterTax = #{mayAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="mayAfterTax == null or mayAfterTax == ''">
+                ,mayAfterTax = NULL
+            </if>
+            <if test="junAfterTax != null and junAfterTax != ''">
+                ,junAfterTax = #{junAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="junAfterTax == null or junAfterTax == ''">
+                ,junAfterTax = NULL
+            </if>
+            <if test="julAfterTax != null and julAfterTax != ''">
+                ,julAfterTax = #{julAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="julAfterTax == null or julAfterTax == ''">
+                ,julAfterTax = NULL
+            </if>
+            <if test="augAfterTax != null and augAfterTax != ''">
+                ,augAfterTax = #{augAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="augAfterTax == null or augAfterTax == ''">
+                ,augAfterTax = NULL
+            </if>
+            <if test="sepAfterTax != null and sepAfterTax != ''">
+                ,sepAfterTax = #{sepAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="sepAfterTax == null or sepAfterTax == ''">
+                ,sepAfterTax = NULL
+            </if>
+            <if test="octAfterTax != null and octAfterTax != ''">
+                ,octAfterTax = #{octAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="octAfterTax == null or octAfterTax == ''">
+                ,octAfterTax = NULL
+            </if>
+            <if test="novAfterTax != null and novAfterTax != ''">
+                ,novAfterTax = #{novAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="novAfterTax == null or novAfterTax == ''">
+                ,novAfterTax = NULL
+            </if>
+            <if test="decAfterTax != null and decAfterTax != ''">
+                ,decAfterTax = #{decAfterTax, jdbcType=DECIMAL}
+            </if>
+            <if test="decAfterTax == null or decAfterTax == ''">
+                ,decAfterTax = NULL
+            </if>
+            ,UptEmpId = #{UptEmpId, jdbcType=INTEGER}
+            ,UptDt = getdate()
+        </set>
+        WHERE reportId = #{reportId, jdbcType=VARCHAR}
+        AND detailId = #{detailId, jdbcType=INTEGER}
+        AND num = #{num, jdbcType=VARCHAR}
+        AND amountType = #{amountType, jdbcType=VARCHAR}
+        AND templateType = #{templateType, jdbcType=VARCHAR}
+        AND year = #{year, jdbcType=INTEGER}
+    </update>
+
+    <update id="updateLnkImportBefore" parameterType="java.util.Map">
+        UPDATE LNK_Import
+        <set>
+            beforeAmountPreTax = {subTotalPreTax, jdbcType=DECIMAL}
+            ,beforeAmountAfterTax = {subTotalAfterTax, jdbcType=DECIMAL}
+        </set>
+        WHERE reportId = #{reportId, jdbcType=VARCHAR}
+        AND detailId = #{detailId, jdbcType=INTEGER}
+        AND num = #{num, jdbcType=VARCHAR}
+        AND amountType = #{amountType, jdbcType=VARCHAR}
+        AND templateType = #{templateType, jdbcType=VARCHAR}
+        AND year = #{year, jdbcType=INTEGER} + 1
+    </update>
+
+    <!-- 根据报备ID查询数据 -->
+    <select id="getLnkImportByReportId" resultType="Map" parameterType="Map">
+		SELECT top 1 * FROM LNK_Import
+		WHERE reportId = #{reportId, jdbcType=VARCHAR}
+		AND detailId = #{detailId, jdbcType=VARCHAR}
+		AND num = #{num, jdbcType=VARCHAR}
+		AND templateType = #{templateType, jdbcType=VARCHAR}
+		AND amountType = #{amountType, jdbcType=VARCHAR}
+		AND year = #{year, jdbcType=INTEGER}
+		AND DelFlg = 0
+	</select>
+
+    <!--根据业绩城市ID，查询是否关账-->
+    <select id="checkCitySwitchMonth" parameterType="cn.com.eju.deal.dto.scene.padCommission.PadCommissionResultDto"
+            resultType="Map">
+		SELECT TOP 1 switchYear AS year,switchMonth AS month FROM oms.dbo.CRM_Perform_Switch
+		WHERE switchState = 17502
+		AND relateSystem = 17402
+		AND delFlag=0
+		AND cityNo=#{cityNo}
+		ORDER BY closeDate desc
+	</select>
+    <select id="checkCitySwitchMonthByCityNo" parameterType="java.lang.String" resultType="Map">
+		SELECT TOP 1 switchYear AS year,switchMonth AS month FROM Pmls_Perform_Switch
+		WHERE switchState = 27502
+		AND relateSystem = 27601
+		AND delFlag=0
+		AND cityNo=#{cityNo}
+		ORDER BY closeDate desc
+	</select>
+
+
+    <!--校验报单是否有效-->
+    <select id="checkCityNo" parameterType="cn.com.eju.deal.dto.scene.padCommission.PadCommissionResultDto"
+            resultType="java.lang.Integer">
+		SELECT count(1) FROM dbo.LNK_Report report
+		INNER JOIN LNK_Estate Estate
+        ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+		WHERE report.DelFlg=0
+		AND ReportId=#{reportId}
+		AND Estate.CityNo=#{cityNo}
+		AND (roughDate IS NOT NULL OR dealDate IS NOT NULL )
+	</select>
+    <!--校验报单是否有效-->
+    <select id="checkCityNoByMap" parameterType="Map" resultType="java.lang.Integer">
+		SELECT count(1) FROM dbo.LNK_Report report
+		INNER JOIN LNK_Estate Estate
+		ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+		WHERE report.DelFlg=0
+		AND ReportId=#{reportId}
+		AND Estate.CityNo=#{cityNo}
+		AND (roughDate IS NOT NULL OR dealDate IS NOT NULL )
+	</select>
+
+    <!--根据报备ID和时间，查询是否关账-->
+    <select id="checkSwitchMonth" parameterType="cn.com.eju.deal.dto.scene.padCommission.PadCommissionResultDto"
+            resultType="java.lang.Integer">
+		SELECT count(1) FROM dbo.LNK_Report t1
+		INNER JOIN LNK_Estate t2 ON t1.EstateId = t2.EstateId AND t2.DelFlg = 0
+		INNER JOIN oms.dbo.CRM_Perform_Switch t3 ON t2.CityNo=t3.cityNo
+		WHERE t3.switchState = 17502 AND t3.relateSystem = 17402 AND t3.delFlag=0
+		AND t1.ReportId=#{reportId}
+		AND t3.switchYear=YEAR(#{recordDate})
+		AND t3.switchMonth=MONTH(#{recordDate})
+	</select>
+
+    <select id="checkSwitchMonthByMap" parameterType="Map" resultType="java.lang.Integer">
+		SELECT count(1) FROM dbo.LNK_Report t1
+		INNER JOIN LNK_Estate t2 ON t1.EstateId = t2.EstateId AND t2.DelFlg = 0
+		INNER JOIN oms.dbo.CRM_Perform_Switch t3 ON t2.CityNo=t3.cityNo
+		WHERE t3.switchState = 17502 AND t3.relateSystem = 17402 AND t3.delFlag=0
+		AND t1.ReportId=#{reportId}
+		AND t3.switchYear=YEAR(#{recordDate})
+		AND t3.switchMonth=MONTH(#{recordDate})
+	</select>
+
+    <select id="merageYjReportdy" parameterType="cn.com.eju.deal.dto.scene.padCommission.PadCommissionResultDto">
+		MERGE INTO dbo.LNK_Reportdy s1
+		USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate) AS s2
+		ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate
+		WHEN MATCHED THEN
+		UPDATE SET s1.BefTaxYjAmount=#{befTaxYjAmount},s1.AftTaxYjAmount=#{aftTaxYjAmount},s1.UptEmpId=#{uptEmpId},s1.UptDt=getdate(),s1.DelFlg=0
+		WHEN NOT MATCHED THEN
+		INSERT (ReportId,BefTaxYjAmount,AftTaxYjAmount,RecordDate,CrtEmpId,CrtDt,UptEmpId,UptDt,DelFlg)
+		VALUES(#{reportId},#{befTaxYjAmount},#{aftTaxYjAmount},#{recordDate},#{crtEmpId},getdate(),#{uptEmpId},getdate(),#{delFlag});
+	</select>
+
+    <select id="merageSjReportdy" parameterType="cn.com.eju.deal.dto.scene.padCommission.PadCommissionResultDto">
+		MERGE INTO dbo.LNK_Reportdy s1
+		USING (SELECT  #{reportId} AS reportId,#{recordDate} AS recordDate) AS s2
+		ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate
+		WHEN MATCHED THEN
+		UPDATE SET s1.BefTaxSjAmount=#{befTaxSjAmount},s1.AftTaxSjAmount=#{aftTaxSjAmount},s1.UptEmpId=#{UptEmpId},s1.UptDt=getdate(),s1.DelFlg=0
+		WHEN NOT MATCHED THEN
+		INSERT (ReportId,BefTaxSjAmount,AftTaxSjAmount,RecordDate,CrtEmpId,CrtDt,UptEmpId,UptDt,DelFlg)
+		VALUES(#{reportId},#{befTaxSjAmount},#{aftTaxSjAmount},#{recordDate},#{crtEmpId},getdate(),#{uptEmpId},getdate(),#{delFlag});
+	</select>
+
+    <select id="queryByOpEstateId" parameterType="java.lang.String"
+            resultType="cn.com.eju.deal.houseLinkage.estate.model.Estate">
+       SELECT * FROM dbo.LNK_Estate
+       WHERE opEstateId = #{opEstateId,jdbcType=VARCHAR} AND DelFlg = 0
+    </select>
+
+    <select id="queryCountryList" resultType="java.util.HashMap">
+		SELECT * FROM BAS_COUNTRY WHERE delFlag = 0
+	</select>
+    <select id="getBigCustomerList" resultType="cn.com.eju.deal.houseLinkage.estate.model.BigCutomer">
+		SELECT * FROM LNK_BigCustomer WHERE delFlag = 0 AND vaild = 1
+	</select>
+
+    <select id="getMattressNail" resultType="cn.com.eju.deal.houseLinkage.estate.model.MattressNail">
+		SELECT * FROM LNK_MattressNail WHERE delFlag = 0 AND vaild = 1
+	</select>
+
+    <select id="selectMattressNail" parameterType="Map"
+            resultType="cn.com.eju.deal.houseLinkage.estate.model.MattressNail">
+		SELECT * FROM LNK_MattressNail WHERE id=#{mattressNailId,jdbcType=INTEGER} and delFlag = 0
+	</select>
+
+    <!--获取楼盘名称列表-->
+    <select id="getEstateNmList" parameterType="Map" resultType="String">
+		SELECT EstateNm FROM LNK_Report WHERE DelFlg = 0 AND CityNo =  #{cityNo,jdbcType=VARCHAR}
+		GROUP BY EstateNm ORDER BY EstateNm
+	</select>
+
+    <select id="getByProjectNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT top 1
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        <where>
+            projectNo = #{projectNo,jdbcType=VARCHAR}
+        </where>
+    </select>
+    <!--获取创建日期最早的未审核的项目-->
+    <select id="getLastProject" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT top 1
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        where DelFlg=0 AND AuditStatus='12901'
+        order by CrtDt asc
+    </select>
+    <!--获取创建日期最早的未审核的项目-->
+    <select id="getLastProjectByCity" resultMap="BaseResultMap" parameterType="Map">
+        SELECT top 1
+        <include refid="Base_Column_List"/>
+        FROM LNK_Estate
+        where DelFlg=0 AND AuditStatus='12901'
+        AND cityNo = #{cityNo,jdbcType=VARCHAR}
+        order by CrtDt asc
+    </select>
+
+    <!--其它收入项目列表-->
+    <select id="getProjectList" resultType="cn.com.eju.deal.dto.houseLinkage.estate.EstateDto" parameterType="Map">
+        SELECT ISNULL(t.bbCount, 0) AS bbCount ,
+        ISNULL(t.cxCount, 0) AS cxCount ,
+        ISNULL(t.jyCount, 0) AS jyCount ,
+        e.* ,
+        cty.countryName AS countryNm
+        FROM dbo.LNK_Estate e
+        JOIN BAS_COUNTRY cty ON e.countryNo = cty.countryNo
+        LEFT JOIN (
+        SELECT
+        estateId,
+        sum(
+        CASE WHEN lqt.brokerageStatus != '22001' THEN 1 ELSE 0 END ) AS jyCount
+        ,sum( CASE WHEN lqt.reportStatus = '27001' AND lqt.brokerageStatus = '22001' THEN 1 ELSE 0
+        END ) AS bbCount
+        ,sum(CASE WHEN lqt.reportStatus = '27002' AND lqt.brokerageStatus = '22001' THEN 1 ELSE 0
+        END ) AS cxCount
+        FROM dbo.LNK_Qt_Report lqt
+        GROUP BY estateId
+        ) t ON e.EstateId = t.EstateId
+        <where>
+            e.DelFlg = 0
+            AND cty.delFlag = 0
+            <!-- releaseStatus = 13001 -->
+            <!-- 数据权限控制 -->
+            <if test="userIdList != null and userIdList != ''">
+                <foreach collection="userIdList" item="item" index="index"
+                         open="AND (" close=")" separator="OR">
+                    <![CDATA[
+	    			 e.SceneEmpId = #{item, jdbcType=INTEGER}
+	    		]]>
+                </foreach>
+            </if>
+            <if test="cityNo != null and cityNo !=''"><!-- 业绩归属城市或发布城市 -->
+                AND e.EstateId IN (SELECT t.EstateId FROM V_CRM_EstateCity t WHERE t.cityNo =
+                #{cityNo,jdbcType=NVARCHAR})
+            </if>
+
+            <if test="realityCityNo != null and realityCityNo !=''"><!-- 查询条件是否有项目所在城市 -->
+                <![CDATA[
+  				AND e.realityCityNo = #{realityCityNo,jdbcType=NVARCHAR}
+  				]]>
+            </if>
+            <if test="districtNo != null and districtNo !=''"><!-- 查询条件是否有项目所在区域 -->
+                <![CDATA[
+  				AND e.DistrictId = #{districtNo,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="areaId != null and areaId !=''"><!-- 查询条件是否有板块 -->
+                <![CDATA[
+  				AND e.AreaId = #{areaId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="estateType != null and estateType !=''"><!-- 查询条件是否有楼盘类型 -->
+                <![CDATA[
+  				AND e.MgtKbn LIKE '%${estateType}%'
+  				]]>
+            </if>
+            <if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+                <![CDATA[
+  				AND (e.EstateNm LIKE '%${estateNm}%'
+  					or e.recordName LIKE '%${estateNm}%'
+  					or e.promotionName LIKE '%${estateNm}%'
+  					or e.signName LIKE '%${estateNm}%'
+  				or e.projectNo LIKE '%${estateNm}%')
+  				--or EstateId LIKE '%${estateNm}%'
+  				]]>
+            </if>
+
+            <if test="projectDepartmentId != null and projectDepartmentId !=''"><!-- 归属项目组 -->
+                <![CDATA[
+  				AND e.projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER}
+  				]]>
+            </if>
+			<if test="projectNo != null and projectNo !=''"><!-- 查询条件是否有录入楼盘名 -->
+			    AND e.projectNo LIKE CONCAT('%', #{projectNo},'%')
+			</if>
+			<if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+				AND e.EstateNm LIKE CONCAT('%', #{estateNm},'%')
+			</if>
+        </where>
+        order by e.CrtDt desc
+    </select>
+
+
+    <!-- 同步项目到 mysql -->
+    <insert id="syncEstate" parameterType="cn.com.eju.deal.houseLinkage.estate.model.Estate">
+		DECLARE @projectNo VARCHAR(100);
+		DECLARE @estateNm VARCHAR(255);
+		DECLARE @cityCode VARCHAR(50);
+		DECLARE @isBx INT;
+		DECLARE @country VARCHAR(50);
+		DECLARE @isOnly INT;
+		DECLARE @address VARCHAR(255);
+
+		SELECT
+		@projectNo = t1.projectNo
+		,@estateNm = t1.EstateNm
+		,@cityCode = CASE WHEN t1.realityCityNo = '52F1D510-DDA2-4A8D-9FD3-E165E933CEEC' THEN '320500' ELSE t2.govCityCode END
+		,@isBx = CASE WHEN t1.businessModel = '25504' THEN 1 ELSE 0 END
+		,@country = CASE WHEN t1.countryNo = 'CTY_000001' THEN '国内' ELSE '国外' END
+		,@isOnly = CASE WHEN t1.totalFieldFlag = '27802' THEN 1 ELSE 0 END
+		,@address = t1.Address
+		FROM dbo.LNK_Estate t1
+		LEFT JOIN BAS_City t2 ON t1.realityCityNo = t2.CityNo
+		WHERE t1.id = #{id}
+
+		exec p_save_project @projectNo,@estateNm,@cityCode,@isBx,@country,@isOnly,@address
+
+    </insert>
+
+
+    <select id="getCenterInfo" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.houseLinkage.estate.model.Estate">
+     SELECT  e.projectDepartmentId AS centerId ,
+        ISNULL(center.groupName, '') AS centerName ,
+        *
+        FROM    dbo.LNK_Estate e
+                LEFT JOIN dbo.USR_Group center ON center.groupId = e.projectDepartmentId
+                                                  AND center.delFlag = 'N'
+        WHERE   e.delFlg = 0
+                AND e.id = #{id}
+    </select>
+</mapper>

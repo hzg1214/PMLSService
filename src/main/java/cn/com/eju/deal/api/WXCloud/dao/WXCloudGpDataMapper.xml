@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.api.WXCloud.dao.WXCloudGpDataMapper">
+  <insert id="mergeGpDayData" parameterType="Map">
+    MERGE INTO dbo.cloud_yyjb_gp_day_data d1
+		USING (SELECT #{dateStr} AS dateStr,#{cityNo} AS cityNo) AS d2
+		ON d1.dateStr=d2.dateStr AND d1.cityNo=d2.cityNo AND d1.delFlag = 0
+		WHEN MATCHED THEN
+		UPDATE SET d1.storeNmAll=#{storeNmAll},d1.storeNmAdd=#{storeNmAdd},d1.storeNmSubtract=#{storeNmSubtract},
+		            d1.dealNmAll=#{dealNmAll},d1.dealNmAdd=#{dealNmAdd},d1.dealNmSubtract=#{dealNmSubtract},
+		            d1.dealAmountAll=#{dealAmountAll},d1.dealAmountAdd=#{dealAmountAdd},d1.dealAmountSubtract=#{dealAmountSubtract},
+		            d1.incomeAll=#{incomeAll},d1.incomeAdd=#{incomeAdd},d1.incomeSubtract=#{incomeSubtract},
+		            d1.datecreate=getdate()
+		WHEN NOT MATCHED THEN
+		INSERT (dateStr,cityNo,cityName,storeNmAll,storeNmAdd,storeNmSubtract,dealNmAll,dealNmAdd,dealNmSubtract,
+		        dealAmountAll,dealAmountAdd,dealAmountSubtract,incomeAll,incomeAdd,incomeSubtract,delFlag,datecreate)
+		VALUES(#{dateStr},#{cityNo},#{cityName},#{storeNmAll},#{storeNmAdd},#{storeNmSubtract},#{dealNmAll},#{dealNmAdd},#{dealNmSubtract},
+		        #{dealAmountAll},#{dealAmountAdd},#{dealAmountSubtract},#{incomeAll},#{incomeAdd},#{incomeSubtract},0,getdate());
+  </insert>
+
+  <insert id="mergeGpWeekData" parameterType="Map">
+    MERGE INTO dbo.cloud_yyjb_gp_week_data d1
+    USING (SELECT #{yearStr} AS yearStr,#{weekIndex} AS weekIndex,#{cityNo} AS cityNo) AS d2
+    ON d1.yearStr=d2.yearStr AND d1.weekIndex=d2.weekIndex AND d1.cityNo=d2.cityNo AND d1.delFlag = 0
+    WHEN MATCHED THEN
+    UPDATE SET d1.storeNmAll=#{storeNmAll},d1.storeNmAdd=d1.storeNmAdd+#{storeNmAdd},d1.storeNmSubtract=d1.storeNmSubtract+#{storeNmSubtract},
+    d1.dealNmAll=#{dealNmAll},d1.dealNmAdd=d1.dealNmAdd+#{dealNmAdd},d1.dealNmSubtract=d1.dealNmSubtract+#{dealNmSubtract},
+    d1.dealAmountAll=#{dealAmountAll},d1.dealAmountAdd=d1.dealAmountAdd+#{dealAmountAdd},d1.dealAmountSubtract=d1.dealAmountSubtract+#{dealAmountSubtract},
+    d1.incomeAll=#{incomeAll},d1.incomeAdd=d1.incomeAdd+#{incomeAdd},d1.incomeSubtract=d1.incomeSubtract+#{incomeSubtract},
+    d1.datecreate=getdate()
+    WHEN NOT MATCHED THEN
+    INSERT (yearStr,weekIndex,cityNo,cityName,storeNmAll,storeNmAdd,storeNmSubtract,dealNmAll,dealNmAdd,dealNmSubtract,
+    dealAmountAll,dealAmountAdd,dealAmountSubtract,incomeAll,incomeAdd,incomeSubtract,delFlag,datecreate)
+    VALUES(#{yearStr},#{weekIndex},#{cityNo},#{cityName},#{storeNmAll},#{storeNmAdd},#{storeNmSubtract},#{dealNmAll},#{dealNmAdd},#{dealNmSubtract},
+    #{dealAmountAll},#{dealAmountAdd},#{dealAmountSubtract},#{incomeAll},#{incomeAdd},#{incomeSubtract},0,getdate());
+  </insert>
+
+  <insert id="mergeGpMonthData" parameterType="Map">
+    MERGE INTO dbo.cloud_yyjb_gp_month_data d1
+    USING (SELECT #{yearStr} AS yearStr,#{monthIndex} AS monthIndex,#{cityNo} AS cityNo) AS d2
+    ON d1.yearStr=d2.yearStr AND d1.monthIndex=d2.monthIndex AND d1.cityNo=d2.cityNo AND d1.delFlag = 0
+    WHEN MATCHED THEN
+    UPDATE SET d1.storeNmAll=#{storeNmAll},d1.storeNmAdd=d1.storeNmAdd+#{storeNmAdd},d1.storeNmSubtract=d1.storeNmSubtract+#{storeNmSubtract},
+    d1.dealNmAll=#{dealNmAll},d1.dealNmAdd=d1.dealNmAdd+#{dealNmAdd},d1.dealNmSubtract=d1.dealNmSubtract+#{dealNmSubtract},
+    d1.dealAmountAll=#{dealAmountAll},d1.dealAmountAdd=d1.dealAmountAdd+#{dealAmountAdd},d1.dealAmountSubtract=d1.dealAmountSubtract+#{dealAmountSubtract},
+    d1.incomeAll=#{incomeAll},d1.incomeAdd=d1.incomeAdd+#{incomeAdd},d1.incomeSubtract=d1.incomeSubtract+#{incomeSubtract},
+    d1.datecreate=getdate()
+    WHEN NOT MATCHED THEN
+    INSERT (yearStr,monthIndex,cityNo,cityName,storeNmAll,storeNmAdd,storeNmSubtract,dealNmAll,dealNmAdd,dealNmSubtract,
+    dealAmountAll,dealAmountAdd,dealAmountSubtract,incomeAll,incomeAdd,incomeSubtract,delFlag,datecreate)
+    VALUES(#{yearStr},#{monthIndex},#{cityNo},#{cityName},#{storeNmAll},#{storeNmAdd},#{storeNmSubtract},#{dealNmAll},#{dealNmAdd},#{dealNmSubtract},
+    #{dealAmountAll},#{dealAmountAdd},#{dealAmountSubtract},#{incomeAll},#{incomeAdd},#{incomeSubtract},0,getdate());
+  </insert>
+
+  <insert id="mergeGpQuarterData" parameterType="Map">
+    MERGE INTO dbo.cloud_yyjb_gp_quarter_data d1
+    USING (SELECT #{yearStr} AS yearStr,#{quarterIndex} AS quarterIndex,#{cityNo} AS cityNo) AS d2
+    ON d1.yearStr=d2.yearStr AND d1.quarterIndex=d2.quarterIndex AND d1.cityNo=d2.cityNo AND d1.delFlag = 0
+    WHEN MATCHED THEN
+    UPDATE SET d1.storeNmAll=#{storeNmAll},d1.storeNmAdd=d1.storeNmAdd+#{storeNmAdd},d1.storeNmSubtract=d1.storeNmSubtract+#{storeNmSubtract},
+    d1.dealNmAll=#{dealNmAll},d1.dealNmAdd=d1.dealNmAdd+#{dealNmAdd},d1.dealNmSubtract=d1.dealNmSubtract+#{dealNmSubtract},
+    d1.dealAmountAll=#{dealAmountAll},d1.dealAmountAdd=d1.dealAmountAdd+#{dealAmountAdd},d1.dealAmountSubtract=d1.dealAmountSubtract+#{dealAmountSubtract},
+    d1.incomeAll=#{incomeAll},d1.incomeAdd=d1.incomeAdd+#{incomeAdd},d1.incomeSubtract=d1.incomeSubtract+#{incomeSubtract},
+    d1.datecreate=getdate()
+    WHEN NOT MATCHED THEN
+    INSERT (yearStr,quarterIndex,cityNo,cityName,storeNmAll,storeNmAdd,storeNmSubtract,dealNmAll,dealNmAdd,dealNmSubtract,
+    dealAmountAll,dealAmountAdd,dealAmountSubtract,incomeAll,incomeAdd,incomeSubtract,delFlag,datecreate)
+    VALUES(#{yearStr},#{quarterIndex},#{cityNo},#{cityName},#{storeNmAll},#{storeNmAdd},#{storeNmSubtract},#{dealNmAll},#{dealNmAdd},#{dealNmSubtract},
+    #{dealAmountAll},#{dealAmountAdd},#{dealAmountSubtract},#{incomeAll},#{incomeAdd},#{incomeSubtract},0,getdate());
+  </insert>
+  
+  <select id="getIndexForDate" resultType="Map" parameterType="Map">
+   SELECT the_month monthIndex,d2.week weekIndex,CASE [quarter] WHEN '一季度' THEN 1 WHEN '二季度' THEN 2 WHEN '三季度' THEN 3 WHEN '四季度' THEN 4 END quarterIndex,LEFT(the_year,4) yearStr
+    FROM dbo.dim_date d
+	LEFT  JOIN  dbo.dim_date_week d2
+	ON  d.the_date_char  BETWEEN d2.weekstart AND d2.weekend	
+	WHERE CONVERT(VARCHAR(10),the_date,120)=#{dateStr}
+  </select>
+</mapper>

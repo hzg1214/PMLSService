@@ -1,0 +1,24 @@
+package cn.com.eju.pmls.jsStatement.dao;
+
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl;
+
+import java.util.List;
+import java.util.Map;
+
+public interface PmlsJsStatementDtlMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(PmlsJsStatementDtl record);
+
+    int insertSelective(PmlsJsStatementDtl record);
+
+    PmlsJsStatementDtl selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(PmlsJsStatementDtl record);
+
+    int updateByPrimaryKey(PmlsJsStatementDtl record);
+    /**
+     * 选择请款单
+     * */
+    List<PmlsJsStatementDtl> selectJsStatementDtlListCanQk(Map<String, Object> queryParam);
+}

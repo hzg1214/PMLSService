@@ -1,0 +1,722 @@
+package cn.com.eju.pmls.cooperation.service;
+
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.base.support.SystemParam;
+import cn.com.eju.deal.common.dao.FileRecordMainMapper;
+import cn.com.eju.deal.common.model.FileRecordMain;
+import cn.com.eju.deal.common.service.FileRecordMainService;
+import cn.com.eju.deal.common.util.FileUtils;
+import cn.com.eju.deal.common.util.UploadFileUtil;
+import cn.com.eju.deal.common.util.WordToPDF_Aspose;
+import cn.com.eju.deal.common.util.Word_ReplaceTextLocal;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.support.ReturnCode;
+import cn.com.eju.deal.core.util.DateUtil;
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.dto.common.FileRecordMainDto;
+import cn.com.eju.deal.dto.company.CompanyDto;
+import cn.com.eju.deal.frameContract.dao.FrameContractMapper;
+import cn.com.eju.deal.frameContract.model.FrameContract;
+import cn.com.eju.deal.houseLinkage.estate.dao.EstateRuleMapper;
+import cn.com.eju.deal.houseLinkage.estate.model.EstateContractDto;
+import cn.com.eju.deal.houseLinkage.report.dao.ReportMapper;
+import cn.com.eju.deal.houseLinkage.report.model.Report;
+import cn.com.eju.deal.reportbase.util.Constants;
+import cn.com.eju.deal.store.dao.StoreMapper;
+import cn.com.eju.deal.store.model.Store;
+import cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto;
+import cn.com.eju.pmls.cooperation.dao.CooperationMapper;
+import cn.com.eju.pmls.cooperation.model.CooperationDto;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.*;
+
+@Service("cooperationService")
+public class CooperationService extends BaseService {
+
+    @Resource
+    private CooperationMapper cooperationMapper;
+
+    @Resource
+    private FileRecordMainMapper fileRecordMainMapper;
+
+    @Resource
+    private EstateRuleMapper estateRuleMapper;
+
+    @Resource
+    private ReportMapper reportMapper;
+
+    @Resource
+    private FrameContractMapper frameContractMapper;
+
+    @Resource
+    private StoreMapper storeMapper;
+
+
+    @Resource(name = "fileService")
+    private FileRecordMainService fileService;
+
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    /**
+     * 合作确认函 列表
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData getCooperationList(Map<String, Object> queryParam) {
+        ResultData<List<CooperationDto>> resultData = new ResultData<List<CooperationDto>>();
+        List<CooperationDto> list = cooperationMapper.getCooperationList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /**
+     * 新增合作确认函
+     *
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ResultData addCooperation(CooperationDto dto) throws Exception {
+        ResultData resultData = new ResultData();
+        if (dto.getViolateAmount() != null) {
+            BigDecimal baseAccount = new BigDecimal("10000");
+            BigDecimal bd = dto.getViolateAmount().multiply(baseAccount).setScale(2, BigDecimal.ROUND_HALF_UP);
+            dto.setViolateAmount(bd);
+        }
+        int count = cooperationMapper.addCooperation(dto);
+        cooperationMapper.updateById(dto);
+        //如果有图片，更新信息
+        if (dto.getId() != null && dto.getId() != 0) {
+            if (dto.getFileIds() != null && !"".equals(dto.getFileIds())) {
+                String fileIdArray[] = dto.getFileIds().split(",");
+                for (int i = 0; i < fileIdArray.length; i++) {
+                    FileRecordMain fileRecordMain = new FileRecordMain();
+                    fileRecordMain.setRefId(dto.getId());
+                    fileRecordMain.setFileRecordMainId(Integer.parseInt(fileIdArray[i]));
+                    fileRecordMainMapper.update(fileRecordMain);
+                }
+            }
+        }
+        if (count > 0) {
+            //更新公司的供应商信息
+            Map<String, Object> queryParam = new HashMap<String, Object>();
+            queryParam.put("businessLicenseNo", dto.getBusinessLicenseNo());
+            BusinessManagerDto vendorDto = cooperationMapper.getCompanyVendorInfo(queryParam);
+            vendorDto.setCompanyNo(dto.getCompanyNo());
+            vendorDto.setUserUpdate(dto.getUserIdCreate());
+            cooperationMapper.updateCompanyVendor(vendorDto);
+            resultData.setSuccess("新增成功");
+        } else {
+            resultData.setFail("新增失败");
+        }
+        return resultData;
+    }
+
+    /**
+     * 修改合作确认函
+     *
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ResultData updateCooperation(CooperationDto dto) throws Exception {
+        ResultData resultData = new ResultData();
+        if (dto.getViolateAmount() != null) {
+            BigDecimal baseAccount = new BigDecimal("10000");
+            BigDecimal bd = dto.getViolateAmount().multiply(baseAccount).setScale(2, BigDecimal.ROUND_HALF_UP);
+            dto.setViolateAmount(bd);
+        }
+        int count = cooperationMapper.updateCooperation(dto);
+        cooperationMapper.updateById(dto);
+        //先删除图片
+        fileRecordMainMapper.updateStatusByContractId(Integer.parseInt(dto.getId().toString()));
+        if (dto.getFileIds() != null && !"".equals(dto.getFileIds())) {
+            String fileIdArray[] = dto.getFileIds().split(",");
+            for (int i = 0; i < fileIdArray.length; i++) {
+                FileRecordMain fileRecordMain = new FileRecordMain();
+                fileRecordMain.setRefId(dto.getId());
+                fileRecordMain.setIsDelete(false);
+                fileRecordMain.setFileRecordMainId(Integer.parseInt(fileIdArray[i]));
+                fileRecordMainMapper.update(fileRecordMain);
+            }
+        }
+        if (count > 0) {
+            //更新公司的供应商信息
+            Map<String, Object> queryParam = new HashMap<String, Object>();
+            queryParam.put("businessLicenseNo", dto.getBusinessLicenseNo());
+            BusinessManagerDto vendorDto = cooperationMapper.getCompanyVendorInfo(queryParam);
+            vendorDto.setCompanyNo(dto.getCompanyNo());
+            vendorDto.setUserUpdate(dto.getUserIdUpt());
+            cooperationMapper.updateCompanyVendor(vendorDto);
+            resultData.setSuccess("修改成功");
+        } else {
+            resultData.setFail("修改失败");
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取合作确认函详情
+     *
+     * @param dto
+     * @return
+     */
+    public ResultData getCooperationInfo(CooperationDto dto) {
+        ResultData<CooperationDto> resultData = new ResultData<CooperationDto>();
+        CooperationDto cooperationDto = cooperationMapper.getCooperationInfo(dto);
+        if (cooperationDto != null && cooperationDto.getId() != 0) {
+            if (cooperationDto.getViolateAmount() != null) {
+                BigDecimal baseAccount = new BigDecimal("10000");
+                BigDecimal bd = cooperationDto.getViolateAmount().divide(baseAccount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                cooperationDto.setViolateAmount(bd);
+            }
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("refId", cooperationDto.getId().toString());
+            map.put("fileTypeId", "1067");
+            List<FileRecordMain> fileList1 = fileRecordMainMapper.queryList(map);
+            map.put("fileTypeId", "1068");
+            List<FileRecordMain> fileList2 = fileRecordMainMapper.queryList(map);
+            fileList1.addAll(fileList2);
+            cooperationDto.setFileList(fileList1);
+        }
+        resultData.setReturnData(cooperationDto);
+        return resultData;
+    }
+
+
+    /**
+     * 作废合作确认函
+     *
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ResultData invalidCooperation(CooperationDto dto) throws Exception {
+        ResultData resultData = new ResultData();
+        CooperationDto oldDto = cooperationMapper.getCooperationInfo(dto);
+        if (oldDto.getApproveState() != 10401) {
+            resultData.setFail("该分销合同不能作废！");
+            return resultData;
+        }
+        int count = cooperationMapper.updateCooperation(dto);
+        if (count > 0) {
+            resultData.setSuccess("修改成功");
+        } else {
+            resultData.setFail("修改失败");
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取经纪公司列表
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData getCompanyList(Map<String, Object> queryParam) {
+        ResultData<List<BusinessManagerDto>> resultData = new ResultData<List<BusinessManagerDto>>();
+        List<BusinessManagerDto> list = cooperationMapper.getCompanyList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /**
+     * 检查经纪公司是否可选
+     *
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public ResultData checkCompany(BusinessManagerDto dto) throws Exception {
+        ResultData resultData = new ResultData();
+        BusinessManagerDto businessManagerDto = cooperationMapper.getCompanyInfo(dto);
+        Map<String, Object> queryParam = new HashMap<String, Object>();
+        queryParam.put("companyNo", businessManagerDto.getCompanyNo());
+        queryParam.put("businessLicenseNo", businessManagerDto.getBusinessLicenseNo());
+
+        // 如果是大渠道的场合
+        if (businessManagerDto != null &&
+                businessManagerDto.getArteryType() != null &&
+                businessManagerDto.getArteryType() == 29501
+                ) {
+            FrameContract frameContract = cooperationMapper.getCompanyFrameContractInfo(queryParam);
+            if (frameContract == null) {
+                resultData.setFail("该渠道无框架协议，请先新建框架协议！");
+                return resultData;
+            }
+        }
+        BusinessManagerDto vendorDto = cooperationMapper.getCompanyVendorInfo(queryParam);
+        if (vendorDto == null) {
+            resultData.setFail("该经纪公司没有对应的供应商，请先在OA做供应商入库！");
+            return resultData;
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取项目合同列表
+     * 收入类合同 进场确认函
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData queryEstateHtRecord(Map<String, Object> queryParam) throws Exception {
+        ResultData<List<EstateContractDto>> resultData = new ResultData<List<EstateContractDto>>();
+        List<EstateContractDto> list = cooperationMapper.queryEstateHtRecord(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /**
+     * 获取经纪公司详情
+     *
+     * @param dto
+     * @return
+     */
+    public ResultData getCompanyInfo(BusinessManagerDto dto) {
+        ResultData<BusinessManagerDto> resultData = new ResultData<BusinessManagerDto>();
+        BusinessManagerDto businessManagerDto = cooperationMapper.getCompanyInfo(dto);
+        resultData.setReturnData(businessManagerDto);
+        return resultData;
+    }
+
+
+    /**
+     * 更新分销合同信息及房友中心信息
+     *
+     * @param reportId
+     ***/
+    public ResultData updateReportCooperation(String reportId) {
+        ResultData resultData = new ResultData();
+        try {
+            Map<String, Object> reportMap = new HashMap<String, Object>();
+            reportMap.put("reportId", reportId);
+            Report reportDb = reportMapper.getReport(reportMap).get(0);
+            if (reportDb == null) {
+                resultData.setFail();
+                return resultData;
+            }
+
+            Map<String, Object> queryParam = new HashMap<>();
+            queryParam.put("projectNo", reportDb.getProjectNo());
+            queryParam.put("companyNo", reportDb.getCompanyId());
+            CooperationDto cooperationDtoDb = cooperationMapper.getCooperationNew(queryParam);
+            if (cooperationDtoDb != null //存在分销合同
+                    && StringUtil.isEmpty(reportDb.getContractNo())) {//报备记录还未更新分销合同编号
+                Report reportUpt = new Report();
+                reportUpt.setId(reportDb.getId());
+                reportUpt.setContractNo(cooperationDtoDb.getContractNo());
+                reportUpt.setHtedition(cooperationDtoDb.getHtedition());
+                int count = reportMapper.updateContractNo(reportUpt);
+
+                //更新中心
+                if ("28302".equals(cooperationDtoDb.getHtedition())
+                        && reportDb.getBranchId() == null && StringUtil.isNotEmpty(reportDb.getStoreId())) {
+                    Store storeDb = storeMapper.getCenterInfo(Integer.parseInt(reportDb.getStoreId()));
+                    if (storeDb != null && storeDb.getCenterId() != null) {
+                        reportUpt.setFyCenterId(storeDb.getCenterId());
+                        reportUpt.setFyCenterName(storeDb.getCenterName());
+                        int count2 = reportMapper.updateFyCenter(reportUpt);
+                    }
+                }
+
+                //更新中心
+                if ("28302".equals(cooperationDtoDb.getHtedition())
+                        && reportDb.getBranchId() != null && StringUtil.isNotEmpty(reportDb.getCompanyId())) {
+                    Map<String, Object> companyParam = new HashMap<>();
+                    companyParam.put("companyNo", reportDb.getCompanyId());
+                    List<CompanyDto> list = frameContractMapper.getFrameContractCompanyList(companyParam);
+                    if (!CollectionUtils.isEmpty(list) && list.get(0).getCenterId() != null) {
+                        reportUpt.setFyCenterId(list.get(0).getCenterId());
+                        reportUpt.setFyCenterName(list.get(0).getCenterName());
+                        int count2 = reportMapper.updateFyCenter(reportUpt);
+                    }
+                }
+
+                if ("28301".equals(cooperationDtoDb.getHtedition())) {
+                    reportUpt.setFyCenterId(null);
+                    reportUpt.setFyCenterName(null);
+                    int count2 = reportMapper.updateFyCenter(reportUpt);
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("cooperationService", "CooperationService", "updateReportCooperation", reportId, null, "", "", e);
+        }
+        resultData.setSuccess();
+        return resultData;
+    }
+
+
+    /**
+     * check报备的分销合同信息
+     *
+     * @param reportId
+     ***/
+    public ResultData checkReportCooperation(String reportId) {
+        ResultData resultData = new ResultData();
+        resultData.setSuccess();
+        try {
+            this.updateReportCooperation(reportId);
+
+            Map<String, Object> reportMap = new HashMap<String, Object>();
+            reportMap.put("reportId", reportId);
+            Report reportDb = reportMapper.getReport(reportMap).get(0);
+            if (reportDb == null) {
+                resultData.setFail("该报备不存在");
+                return resultData;
+            }
+
+            String auditDateEnd = SystemParam.getWebConfigValue("auditDateEnd");
+            Date endDate = DateUtil.getDate(auditDateEnd, "yyyy-MM-dd HH:mm:ss");
+            if (StringUtil.isEmpty(reportDb.getContractNo())) {//报备记录还未更新分销合同编号
+                if (new Date().after(endDate)) {
+                    resultData.setFail("审核失败：该经纪公司没有分销合同。");
+                    return resultData;
+                }
+                if (endDate.after(new Date())) {
+                    Report reportUpt = new Report();
+                    reportUpt.setId(reportDb.getId());
+                    reportUpt.setHtedition("28302");
+                    int count = reportMapper.updateContractNo(reportUpt);
+
+                    //更新中心
+                    if (reportDb.getBranchId() == null && StringUtil.isNotEmpty(reportDb.getStoreId())) {
+                        Store storeDb = storeMapper.getCenterInfo(Integer.parseInt(reportDb.getStoreId()));
+                        if (storeDb != null && storeDb.getCenterId() != null) {
+                            reportUpt.setFyCenterId(storeDb.getCenterId());
+                            reportUpt.setFyCenterName(storeDb.getCenterName());
+                            int count2 = reportMapper.updateFyCenter(reportUpt);
+                        }
+                    }
+                    //更新中心
+                    if (reportDb.getBranchId() != null && StringUtil.isNotEmpty(reportDb.getCompanyId())) {
+                        Map<String, Object> companyParam = new HashMap<>();
+                        companyParam.put("companyNo", reportDb.getCompanyId());
+                        List<CompanyDto> list = frameContractMapper.getFrameContractCompanyList(companyParam);
+                        if (!CollectionUtils.isEmpty(list) && list.get(0).getCenterId() != null) {
+                            reportUpt.setFyCenterId(list.get(0).getCenterId());
+                            reportUpt.setFyCenterName(list.get(0).getCenterName());
+                            int count2 = reportMapper.updateFyCenter(reportUpt);
+                        }
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultData.setFail("检查业绩信息失败 请重试");
+            logger.error("cooperationService", "CooperationService", "checkReportCooperation", reportId, null, "", "", e);
+        }
+        return resultData;
+    }
+
+    /**
+     * 发起OA申请 合作协议
+     *
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ResultData sendOACooperation(HttpServletRequest request, CooperationDto dto) throws Exception {
+        ResultData resultData = new ResultData();
+        CooperationDto oldDto = cooperationMapper.getCooperationInfo(dto);
+        if (oldDto.getApproveState() != 10401 && oldDto.getApproveState() != 10404) {
+            resultData.setFail("该分销合同不能发起OA申请！");
+            return resultData;
+        }
+
+
+        if (StringUtil.isEmpty(oldDto.getSignType())
+                ||StringUtil.isEmpty(oldDto.getHtType())
+                ||StringUtil.isEmpty(oldDto.getHtCategory())
+                ||oldDto.getDybl()==null
+        ) {
+            resultData.setFail("信息填写不完整，请补充完整后再提交OA审核！");
+            return resultData;
+        }
+
+        if (StringUtil.isEmpty(oldDto.getWsqyzt()) || StringUtil.isEmpty(oldDto.getCompanyName())
+                || StringUtil.isEmpty(oldDto.getProjectName()) || StringUtil.isEmpty(oldDto.getProjectAddr())
+                || StringUtil.isEmpty(oldDto.getCooperationRange()) || StringUtil.isEmpty(oldDto.getDateLifeStart()) || StringUtil.isEmpty(oldDto.getDateLifeEnd())
+                || StringUtil.isEmpty(oldDto.getSucceedSell()) || StringUtil.isEmpty(oldDto.getFyjsbz())
+                || oldDto.getSettlePayNum() == null || oldDto.getViolateAmount() == null
+            //|| StringUtil.isEmpty(dto.getRemark())
+                ) {
+            resultData.setFail("信息填写不完整，请补充完整后再提交OA审核！");
+            return resultData;
+        }
+
+
+        try {
+            if ("29202".equals(oldDto.getSignType())) {
+                CooperationDto evisaDto = cooperationMapper.getCooperationInfoEvisa(oldDto.getId());
+                if (StringUtil.isEmpty(evisaDto.getWsqyzt()) || StringUtil.isEmpty(evisaDto.getCompanyName())
+                        || StringUtil.isEmpty(evisaDto.getProjectName()) || StringUtil.isEmpty(evisaDto.getProjectAddr())
+                        || StringUtil.isEmpty(evisaDto.getCooperationRange()) || StringUtil.isEmpty(evisaDto.getDateLifeStart()) || StringUtil.isEmpty(evisaDto.getDateLifeEnd())
+                        || StringUtil.isEmpty(evisaDto.getSucceedSell()) || StringUtil.isEmpty(evisaDto.getFyjsbz())
+                        || evisaDto.getSettlePayNum() == null || evisaDto.getViolateAmount() == null
+                    //|| StringUtil.isEmpty(dto.getRemark())
+                        ) {
+                    resultData.setFail("信息填写不完整，请补充完整后再提交OA审核！");
+                    return resultData;
+                }
+                ResultData resultDataEVisa = this.createCooperationEVisaFile(request, evisaDto, dto.getUserIdUpt());
+                if (!ReturnCode.SUCCESS.equals(resultDataEVisa.getReturnCode())) {
+                    resultData.setFail("发起OA审核失败:生成合同文件失败了");
+                    return resultData;
+                }
+            }
+        } catch (Exception e) {
+            resultData.setFail("发起OA审核失败:生成合同文件失败");
+            logger.error("cooperationService", "CooperationService", "sendOACooperation", "", null, "", "生成合同文件", e);
+            return resultData;
+        }
+
+
+        int count = cooperationMapper.updateSendOACooperation(dto);
+        if (count > 0) {
+            resultData.setSuccess("发起OA申请成功");
+        } else {
+            resultData.setFail("发起OA申请失败");
+        }
+        return resultData;
+    }
+
+    /**
+     * 草稿  这个方法还需要完善
+     */
+    public ResultData createCooperationEVisaFile(HttpServletRequest request, CooperationDto dto, String opUserId) throws Exception {
+        ResultData resultData = new ResultData();
+        resultData.setFail();//默认失败
+
+        String destPath = null;
+        String pdfDestPath = null;
+        try {
+            String ctxPath = request.getSession().getServletContext().getRealPath("/");
+
+            String filename = "cooperationEVisa.docx";
+            //获取文件的路径
+            String srcPath = request.getSession().getServletContext().getRealPath("/WEB-INF/template/" + filename);
+
+            String url = ctxPath + "data" + File.separator + Constants.COOPERATION_E_VISA;
+
+            File dataFile = new File(ctxPath + "data");
+            if (!dataFile.isDirectory()) {
+                dataFile.mkdir();
+            }
+
+            File direct = new File(url);
+            if (!direct.isDirectory()) {
+                direct.mkdir();
+            }
+
+            long time = System.currentTimeMillis();
+            //删掉历史文件
+            FileUtils.deleteFile(direct, time);
+
+            File directory = new File(url + File.separator + time);
+            if (!directory.isDirectory()) {
+                directory.mkdir();
+            }
+
+            destPath = url + File.separator + time + File.separator + "cooperationEVisa_" + dto.getId() + ".docx";
+
+
+            Map<String, String> relaceMap = new HashMap<>();
+            relaceMap.put("P1", dto.getWsqyzt());
+            relaceMap.put("P2", dto.getCompanyName());
+            relaceMap.put("P3", dto.getProjectName());
+            relaceMap.put("P4", dto.getProjectAddr());
+            relaceMap.put("P5", dto.getCooperationRange());
+            if (dto.getDateLifeStart() != null) {
+                Date startDate = DateUtil.getDate(dto.getDateLifeStart(), "yyyy-MM-dd");
+                String D1 = DateUtil.fmtDate(startDate, "yyyy");
+                String D2 = DateUtil.fmtDate(startDate, "MM");
+                String D3 = DateUtil.fmtDate(startDate, "dd");
+                relaceMap.put("D1", D1);
+                relaceMap.put("D2", D2);
+                relaceMap.put("D3", D3);
+            }
+            if (dto.getDateLifeEnd() != null) {
+                Date endDate = DateUtil.getDate(dto.getDateLifeEnd(), "yyyy-MM-dd");
+                String D4 = DateUtil.fmtDate(endDate, "yyyy");
+                String D5 = DateUtil.fmtDate(endDate, "MM");
+                String D6 = DateUtil.fmtDate(endDate, "dd");
+                relaceMap.put("D4", D4);
+                relaceMap.put("D5", D5);
+                relaceMap.put("D6", D6);
+            }
+
+            relaceMap.put("P7", dto.getSucceedSell());
+            relaceMap.put("P8", dto.getFyjsbz());
+            //relaceMap.put("P9", dto.getRemark());
+            if (dto.getSettlePayNum() != null) {
+                relaceMap.put("Q1", dto.getSettlePayNum().toString());//已做非空判断
+            }
+            if (dto.getViolateAmount() != null) {
+                BigDecimal baseAccount = new BigDecimal("10000");
+                BigDecimal bd = dto.getViolateAmount().divide(baseAccount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                relaceMap.put("Q2", bd.toString());
+            }
+
+            boolean replaceFlag = Word_ReplaceTextLocal.searchAndReplace(srcPath, destPath, relaceMap);
+            if (!replaceFlag) {
+                resultData.setFail("生成合同文档失败 请重新提交！");
+                logger.error("生成合同文档失败=============" + dto.getContractNo());
+                return resultData;
+            }
+
+            pdfDestPath = url + File.separator + time + File.separator + "cooperationEVisa_" + dto.getId() + ".pdf";
+            boolean toPDFFlag = WordToPDF_Aspose.doc2pdf(destPath, pdfDestPath);
+            if (!toPDFFlag) {
+                resultData.setFail("生成合同文档PDF失败 请重新提交！");
+                logger.error("转换合同文档失败=============" + dto.getContractNo());
+                return resultData;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultData.setFail("生成合同文档失败了！");
+            logger.error("生成合同文档失败了！=============" + dto.getContractNo());
+            logger.error("cooperationService", "CooperationService", "createCooperationEVisaFile"
+                    , dto.getId().toString(), null, "", "", e);
+            return resultData;
+        }
+
+
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(pdfDestPath);
+            String yxFileName = UUID.randomUUID().toString() + ".pdf";
+            //上传附件
+            String URL = SystemParam.getWebConfigValue("upLoadFangYouFile");
+            UploadFileUtil uploadFileUtil = new UploadFileUtil();
+
+            logger.info("上传合同文档开始=============" + dto.getContractNo());
+            String returnJsonStr = uploadFileUtil.uploadFile(URL, yxFileName, fileInputStream);
+
+            Map<String, Object> returnMap = null;
+            if (StringUtil.isNotEmpty(returnJsonStr)) {
+                returnMap = JSON.parseObject(returnJsonStr, Map.class);
+                if (returnMap.containsKey("BFlag") && returnMap.containsKey("TData")) {
+                    Integer bFlag = (Integer) returnMap.get("BFlag");
+
+                    if (10 == bFlag) {
+                        JSONObject tData = (JSONObject) returnMap.get("TData");
+                        tData.put("fileName", yxFileName);
+                        tData.put("isImage", "0");
+                        tData.put("fileSuffix", yxFileName.substring((yxFileName.lastIndexOf(".") + 1)).toLowerCase());
+                        //if("0".equals(isImage)){
+                        //文件时只返回url，将url放到url500中
+                        tData.put("picUrl_20_percent", "");
+                        tData.put("picUrl_50_percent", "");
+                        tData.put("picUrl_500", tData.get("url"));
+                        //}
+
+                        resultData.setSuccess();
+                        resultData.setReturnData(tData);
+                    } else {
+                        resultData.setFail("上传文件" + "失败");
+                        logger.error("上传合同文档失败=============" + dto.getContractNo() + "返回数据异常:" + returnJsonStr);
+                    }
+                } else {
+                    resultData.setFail("上传文件" + "失败");
+                    logger.error("上传合同文档失败=============" + dto.getContractNo() + "返回数据异常:" + returnJsonStr);
+                }
+            } else {
+                resultData.setFail("上传文件" + "失败");
+                logger.error("上传合同文档失败=============" + dto.getContractNo() + "返回数据异常:" + returnJsonStr);
+            }
+            logger.info("上传合同文档结束=============" + dto.getContractNo() + "dataJson=" + returnJsonStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("上传合同文档失败=============" + dto.getContractNo());
+            logger.error("cooperationService", "CooperationService", "createCooperationEVisaFile"
+                    , dto.getId().toString(), null, "", "", e);
+            resultData.setFail("上传合同文档失败！");
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        if (ReturnCode.SUCCESS.equals(resultData.getReturnCode())) {
+
+            //删除原有文件
+            Map<String, Object> map = new HashMap<>();
+            map.put("contractId", dto.getId());
+            map.put("fileTypeId", 1071);
+            map.put("fileSourceId", 22);
+            fileRecordMainMapper.deleteByCondition(map);
+
+            FileRecordMainDto fileRecordMainDto = null;
+
+            Integer companyId = null;
+/*            if (StringUtil.isNotEmpty(companyIdStr)) {
+                companyId = Integer.valueOf(companyIdStr);
+            }*/
+            Map<String, Object> marketFileMap = (Map) resultData.getReturnData();
+
+            String fileName = String.valueOf(marketFileMap.get("fileName"));
+            // 2、创建文件关系记录
+            fileRecordMainDto = new FileRecordMainDto();
+            fileRecordMainDto.setCompanyId(companyId);
+            // fileRecordMainDto.setFileId(fileCode);
+            fileRecordMainDto.setFileSourceId(22);
+            fileRecordMainDto.setFileTypeId(1071);
+            fileRecordMainDto.setUserCreate(Integer.parseInt(opUserId));//前端传的
+            fileRecordMainDto.setDateCreate(new Date());
+            fileRecordMainDto.setIsDelete(false);
+            fileRecordMainDto.setFileAbbrUrl(String.valueOf(marketFileMap.get("picUrl_20_percent")));
+            fileRecordMainDto.setFileFullName(fileName);
+            fileRecordMainDto.setFileNo("");
+            fileRecordMainDto.setFileSuffix(String.valueOf(marketFileMap.get("fileSuffix")));
+            fileRecordMainDto.setFileUrl(String.valueOf(marketFileMap.get("picUrl_500")));
+//            fileRecordMainDto.setSfImage(StringUtil.isAvaliableFileFmt(fileName, SystemCfg.getString("uploadPicSuffix")));
+            fileRecordMainDto.setSfImage(false);
+            fileRecordMainDto.setRefId(dto.getId());
+            fileRecordMainDto.setSellFileNo(String.valueOf(marketFileMap.get("file_id")));
+            fileRecordMainDto.setUrl50(String.valueOf(marketFileMap.get("picUrl_50_percent")));
+            fileService.createStr(fileRecordMainDto);
+        }
+        return resultData;
+    }
+
+
+}

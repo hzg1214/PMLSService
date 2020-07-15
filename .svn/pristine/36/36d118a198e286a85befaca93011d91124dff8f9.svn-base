@@ -1,0 +1,111 @@
+package cn.com.eju.deal.houseLinkage.report.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import cn.com.eju.deal.Report.model.BrokerageDto;
+import cn.com.eju.deal.Report.model.CommissionInfoDto;
+import cn.com.eju.deal.core.dao.IDao;
+import cn.com.eju.deal.dto.houseLinkage.report.ReportDto;
+import cn.com.eju.deal.dto.houseLinkage.report.ReportFYDto;
+import cn.com.eju.deal.houseLinkage.report.model.Report;
+import cn.com.eju.deal.houseLinkage.report.model.ReportSearchResult;
+import cn.com.eju.deal.houseLinkage.report.model.StatisticCompanySearchResult;
+import cn.com.eju.deal.scene.estate.model.SceneRecognitionSearchResult;
+import cn.com.eju.deal.scene.statistic.model.SceneStatisticCompanySearchResult;
+
+public interface ReportMapper extends IDao<Report> {
+
+	List<ReportSearchResult> selectReportList(Map<?, ?> param) throws Exception;
+	
+	List<Report> getReport(Map<?, ?> param) throws Exception;
+	
+	List<StatisticCompanySearchResult> getStatisticForCompany(Map<?, ?> param) throws Exception;
+	
+	List<SceneRecognitionSearchResult> selectSceneRecognitionList(Map<?, ?> param) throws Exception;
+	
+	List<SceneStatisticCompanySearchResult> selectSceneStatisticCompanyList(Map<?, ?> param) throws Exception;
+	
+	int updateBackProgress(Map<?, ?> param) throws Exception;
+	
+	List<Report> checkExistReport(Map<?, ?> param) throws Exception;
+	
+	List<Report> getMaxReportId(@Param("reportId")String reportId) throws Exception;
+	
+	int createReport(Map<?, ?> param) throws Exception;
+	
+	int updateReback(Report report) throws Exception;
+	
+	int updateHistoryCustomer(Map<?, ?> param) throws Exception;
+	
+	/**
+	 * 根据fyReportId查询
+	 * */
+	Report getByFyReportId(String fyReportId);
+	
+	/**
+	 * 结佣推送记录
+	 * */
+	List<CommissionInfoDto> getBrokerageSend();
+	
+	/**
+	 * 更新结佣发送状态
+	 * */
+	int updateBrokerage(Map<String, Object> reqMap);
+
+	Report getRoughReportById(int id);
+	
+	/**
+	 * 结佣明细
+	 * */
+	List<BrokerageDto> getBrokerageInfo(Map<String, Object> param);
+	
+	Map<String,Object> getYHCompanyInfo(String storeId);
+	
+	int updateYHCompanyInfo(Map<String,Object> map);
+	
+	int checkRebackBrokerage(String reportId);
+
+	List<Integer> getReportDetailIdList(Integer id);
+
+    void insertYjReport(ReportDto dto);
+
+	/**
+	 * 获取返佣对象
+	 * @param param
+	 * @return
+	 */
+	List<ReportFYDto> getReportFYInfo(Map<String, Object> param);
+
+    void updateAccountProject(Map<String, Object> map);
+
+    List<Map<String,Object>> getAccountProject(@Param("cityNo") String cityNo);
+
+	Report getByReportId(String reportId);
+	//业务节点-返佣对象(结佣)
+	List<ReportFYDto> getJyFyData(Map<String, Object> map);
+	//业务节点-返佣对象(成销)
+	List<ReportFYDto> getCxFyData(Map<String, Object> map);
+	//获取成销相关数据
+	BrokerageDto getBrokerageCxData(Map<String, Object> map);
+	//获取结佣相关数据
+	BrokerageDto getBrokerageJyData(Map<String, Object> map);
+	
+	int unlockReback(Map<String, Object> param);
+
+	int createUnlockRebackLog(Map<String, Object> param);
+
+	List<Map<String,Object>> getOffsetInfoList(Map<String, Object> reqMap);
+
+	int updateContractNo(Report report);
+
+	int updateFyCenter(Report report);
+
+	void  updateEstateCenter(Map<String, Object> reqMap);
+
+	int uptPreBack(Map<String, Object> reqMap);
+
+    Integer getTopReportDetail(Map<String, Object> reqMap);
+}

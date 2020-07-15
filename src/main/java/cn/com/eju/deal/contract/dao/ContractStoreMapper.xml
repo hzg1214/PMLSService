@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ContractStoreMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.ContractStore">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="StoreId" property="storeId" jdbcType="INTEGER" />
+		<result column="ContractId" property="contractId" jdbcType="INTEGER" />
+		<result column="IsDelete" property="isDelete" jdbcType="BIT" />
+		<result column="storeState" property="storeState" jdbcType="BIT" />
+		<result column="isArrivalAct" property="isArrivalAct" jdbcType="INTEGER" />
+		<result column="dateArrivalAct" property="dateArrivalAct" jdbcType="TIMESTAMP"/>
+		<result column="isCancel" property="isCancel" jdbcType="NVARCHAR"/>
+		<result column="refundState" property="refundState" jdbcType="NVARCHAR"/>
+		<result column="refundAmount" property="refundAmount" jdbcType="DECIMAL"/>
+		<result column="refundDate" property="refundDate" jdbcType="TIMESTAMP"/>
+		<result column="addressDetail" property="addressDetail" jdbcType="NVARCHAR"/>
+		<result column="ABTypeStore" property="ABTypeStore" jdbcType="INTEGER"/>
+        <result column="BTypeStore" property="BTypeStore" jdbcType="NVARCHAR"/>
+        <result column="BTypeStoreName" property="BTypeStoreName" jdbcType="NVARCHAR"/>
+        <result column="storeNo" property="storeNo" jdbcType="NVARCHAR"/>
+        <result column="name" property="name" jdbcType="NVARCHAR"/>
+        <result column="cityNo" property="cityNo" jdbcType="NVARCHAR"/>
+        <result column="districtNo" property="districtNo" jdbcType="NVARCHAR"/>
+        <result column="areaNo" property="areaNo" jdbcType="NVARCHAR"/>
+        <result column="address" property="address" jdbcType="NVARCHAR"/>
+        <result column="longitude" property="longitude" jdbcType="NVARCHAR"/>
+        <result column="latitude" property="latitude" jdbcType="NVARCHAR"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, StoreId, ContractId, IsDelete,storeState,isArrivalAct,dateArrivalAct,addressDetail
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from ContractStore
+		where Id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selStoreByContractId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		Id, StoreId, ContractId, IsDelete,storeState,isArrivalAct,dateArrivalAct,isCancel,addressDetail
+		from ContractStore
+		where ContractId = #{contractId,jdbcType=INTEGER}
+		and IsDelete = 0
+	</select>
+
+	<insert id="create" parameterType="cn.com.eju.deal.contract.model.ContractStore"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into ContractStore (StoreId, ContractId,
+		IsDelete,storeState,
+		isArrivalAct,dateArrivalAct,isCancel,addressDetail, ABTypeStore, BTypeStore)
+		values (#{storeId,jdbcType=INTEGER}, #{contractId,jdbcType=INTEGER},
+		#{isDelete,jdbcType=BIT},#{storeState,jdbcType=BIT},
+		#{isArrivalAct,jdbcType=INTEGER},#{dateArrivalAct,jdbcType=TIMESTAMP},'17201'
+		,#{addressDetail,jdbcType=NVARCHAR}
+		,#{ABTypeStore,jdbcType=INTEGER}
+		,#{BTypeStore,jdbcType=NVARCHAR}
+		)
+	</insert>
+
+	<update id="delStoreByContractId" parameterType="java.lang.Integer">
+		update ContractStore
+		set IsDelete = 1
+		where ContractId = #{contractId,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteByContractId" parameterType="java.lang.Integer">
+		delete from ContractStore
+		where ContractId = #{contractId,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 更新合同门店关系表 -->
+	<update id="update" parameterType="cn.com.eju.deal.contract.model.ContractStore">
+        UPDATE dbo.ContractStore
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeId != null">
+				StoreId = #{storeId,jdbcType=INTEGER},
+			</if>
+			<if test="contractId != null">
+				ContractId = #{contractId,jdbcType=INTEGER},
+			</if>
+			<if test="isDelete != null">
+				IsDelete = #{isDelete,jdbcType=BIT},
+			</if>
+			<if test="storeState != null">
+				StoreState = #{storeState,jdbcType=INTEGER},
+			</if>
+			<if test="isArrivalAct != null">
+				isArrivalAct = #{isArrivalAct,jdbcType=INTEGER},
+			</if>
+			<if test="dateArrivalAct != null">
+				dateArrivalAct = #{dateArrivalAct,jdbcType=TIMESTAMP},
+			</if>
+			<if test="contractStopDate != null">
+				contractStopDate = #{contractStopDate,jdbcType=TIMESTAMP},
+			</if>			
+			<if test="addressDetail != null">
+				addressDetail = #{addressDetail,jdbcType=NVARCHAR},
+			</if>
+			<if test="refundState != null">
+				refundState = #{refundState,jdbcType=NVARCHAR},
+			</if>
+			<if test="refundAmount != null">
+				refundAmount = #{refundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="refundDate != null">
+				refundDate = #{refundDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="flag != null">
+				flag = #{flag,jdbcType=INTEGER},
+			</if>
+			<if test="depositFee != null">
+				depositFee = #{depositFee,jdbcType=DECIMAL},
+			</if>
+			<if test="ABTypeStore != null">
+				ABTypeStore = #{ABTypeStore,jdbcType=INTEGER},
+			</if>
+			<if test="BTypeStore != null">
+				BTypeStore = #{BTypeStore,jdbcType=NVARCHAR},
+			</if>
+			<if test="isCancel != null">
+				isCancel = #{isCancel},
+			</if>
+        </trim>
+        <where>
+        	isDelete = 0
+        	<if test="storeId != null">
+        		<![CDATA[AND storeId = #{storeId,jdbcType=INTEGER}]]>
+        	</if>
+        	<if test="contractId != null">
+        		<![CDATA[AND contractId = #{contractId,jdbcType=INTEGER}]]>
+        	</if>
+        </where>
+    </update>
+    
+    <!-- 根据flowID查询合同中的门店 -->
+	<select id="getContractStoresByFlowId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT  T1.*
+		FROM    dbo.ContractStore T1
+		LEFT JOIN dbo.ContractChange T2 ON T1.contractId = T2.ContractId
+		WHERE   T1.IsDelete = 0
+		AND T2.flowId = #{flowId,jdbcType=NVARCHAR}
+	</select>
+	
+	<!-- 根据storeId、contractId查询合同门店关联信息 -->
+	<select id="getContractStore" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		Id, StoreId, ContractId, IsDelete,storeState,isArrivalAct,dateArrivalAct,isCancel,DepositFee,refundAmount,refundDate,refundState
+		FROM ContractStore
+		WHERE IsDelete = 0
+		<if test="storeId != null and storeId != '' ">
+		    <![CDATA[AND StoreId = #{storeId,jdbcType=INTEGER}]]>
+		</if>
+		<if test="contractId != null and contractId != '' ">
+		    <![CDATA[AND ContractId = #{contractId,jdbcType=INTEGER}]]>
+		</if>
+	</select>
+	
+	<!-- 更新isCancel 状态-->
+	<update id="updateIsCancel" parameterType="Map">
+		UPDATE  dbo.ContractStore
+        SET     isCancel = #{isCancel, jdbcType=NVARCHAR}
+        FROM    dbo.Store_AchievementCancel SAC
+                LEFT JOIN dbo.Store_AchievementCancelMapping SAM ON SAC.id = SAM.achievementCancelId
+                                                              AND SAM.delFlag = 0
+        WHERE   dbo.ContractStore.ContractId = SAM.contractId
+                AND dbo.ContractStore.StoreId = SAM.storeId
+                AND SAC.achievementCancelNo = #{achievementCancelNo, jdbcType=NVARCHAR}
+	</update>
+	
+	<!-- 根据OA审核状态更新isCancel状态-->
+	<update id="updateIsCancelState" parameterType="Map">
+		UPDATE  dbo.ContractStore
+		SET     isCancel = #{storeApproveState, jdbcType =NVARCHAR}
+		FROM    ( SELECT    SAC.achievementCancelNo ,
+		                    SAM.storeId ,
+		                    SAM.contractId
+		          FROM      dbo.Store_AchievementCancel SAC
+		                    LEFT JOIN dbo.Store_AchievementCancelMapping SAM ON SAC.id = SAM.achievementCancelId
+		        ) T
+		WHERE   T.storeId = dbo.ContractStore.StoreId
+		        AND T.contractId = dbo.ContractStore.ContractId
+		        AND T.achievementCancelNo = #{achievementCancelNo, jdbcType =NVARCHAR}
+	</update>
+	
+	<!-- 根据storeIdList、contractId查询合同门店关联信息 -->
+	<select id="getStoreCancelState" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		Id, StoreId, ContractId, IsDelete,storeState,isArrivalAct,dateArrivalAct,isCancel
+		FROM ContractStore
+		WHERE IsDelete = 0
+		    AND ContractId = #{contractId,jdbcType=INTEGER}
+    		<if test="storeIdList != null and storeIdList != ''">
+				<foreach collection="storeIdList" item="storeId" index="index" open="AND (" close=")" separator="OR">
+				    <![CDATA[ storeId = #{storeId, jdbcType=INTEGER}]]>
+				</foreach>
+			</if>
+	</select>
+	
+	<!-- 根据门店ids和合同id 更新isCancel状态-->
+	<update id="updateIsCancelByStoreIds" parameterType="Map">
+		UPDATE  dbo.ContractStore
+		<set>
+			<if test="isCancel != null">
+		     	isCancel = #{isCancel,jdbcType=NVARCHAR},
+		    </if>
+		    <if test="contractStopDate != null">
+		    	contractStopDate =#{contractStopDate,jdbcType=TIMESTAMP},
+		    </if>
+		</set>
+		WHERE   ContractId = #{contractId,jdbcType=INTEGER}
+		    <if test="storeIds != null and storeIds != ''">
+				<foreach collection="storeIds" item="storeId" index="index" open="AND (" close=")" separator="OR">
+				    <![CDATA[ StoreId = #{storeId, jdbcType=INTEGER}]]>
+				</foreach>
+			</if>
+	</update>
+	
+	<!-- 更新保证金退款金额 、 退款时间和退款状态 -->
+	<update id="updateRefundInfo" parameterType="Map">
+		UPDATE  dbo.ContractStore
+        <set>   
+        	<if test="refundAmount != null">
+        		refundAmount = #{refundAmount,jdbcType=DECIMAL} ,
+        	</if>
+        	<if test="refundState != null">
+                refundState = #{refundState,jdbcType=VARCHAR} ,
+            </if>
+            <if test="refundDate != null">
+                refundDate = CONVERT(DATETIME,#{refundDate,jdbcType=NVARCHAR},120) 
+            </if>
+        </set>
+        FROM    dbo.Contract C ,
+                dbo.Store S
+        WHERE   C.Id = ContractId
+                AND S.Id = StoreId
+                AND S.StoreNo = #{storeNo,jdbcType=VARCHAR}
+                AND C.ContractNo = #{contractNo,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 同步合同的门店地址 -->
+	<update id="updateByContractId" parameterType="java.lang.Integer">
+			UPDATE  dbo.ContractStore SET AddressDetail = S.AddressDetail
+				FROM dbo.ContractStore CS
+						        inner JOIN dbo.Contract C ON CS.ContractId = C.Id
+								inner JOIN dbo.Store S ON S.Id =CS.StoreId
+							WHERE  CS.ContractId = #{contractId,jdbcType=INTEGER}       
+    </update>
+    
+     <resultMap id="ContractStoreDtoMap" type="cn.com.eju.deal.dto.contract.ContractStoreDto" />
+    
+    <!-- 获取最新门店关联合同信息 -->
+	<select id="getTopContractStoreByStore" resultMap="ContractStoreDtoMap" parameterType="java.lang.Integer">
+		SELECT  TOP 1 cs.*,c.contractStatus
+		FROM    dbo.ContractStore CS
+		        inner JOIN dbo.Contract C ON CS.ContractId = C.Id
+				inner JOIN dbo.Store S ON S.Id =CS.StoreId
+			WHERE  cs.storeId = #{storeId, jdbcType=INTEGER}
+			  and  cs.IsDelete = 0	
+			  and  s.IsDelete = 0
+				   ORDER BY CS.Id DESC	
+	</select>
+	
+	    <!-- 获取合同类型 776-->
+	<select id="getTopContractTypeByStore" resultType="java.lang.String" parameterType="java.lang.Integer">
+			SELECT contract2.ContractType FROM
+				 (SELECT  MAX(cs.Id) AS 'Id' ,
+									StoreId   
+							FROM    ContractStore cs 
+									INNER JOIN Contract contract ON cs.ContractId = contract.Id
+							WHERE   cs.IsDelete = 0
+									AND contract.ContractStatus != 10401
+									AND contract.ContractStatus != 10402
+									AND contract.ContractStatus != 10404
+									AND contract.ContractStatus != 10405
+							GROUP BY StoreId) 
+			AS b 
+			INNER JOIN dbo.ContractStore AS cs2 ON cs2.id = b.id
+			INNER JOIN dbo.CONTRACT AS contract2 ON contract2.id = cs2.ContractId
+			WHERE cs2.isCancel != 17203 
+			  AND contract2.ContractStatus = 10403
+			  AND cs2.StoreId = #{storeId, jdbcType=INTEGER}
+	</select>
+	
+	<!--Add by WangLei 2017/04/07 Start  -->
+	<select id="getOrgContractInfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+		Select ContractStore.isArrivalAct AS isArrivalAct,
+		ContractStore.refundAmount AS refundAmount,
+		Contract.DepositFee AS depositFee,
+		Contract.AgreementType,
+		Contract.AgreementNo
+		From ContractStore 
+		INNER JOIN Contract 
+		On ContractStore.ContractId = Contract.Id 
+		WHERE StoreId = #{storeId, jdbcType=INTEGER}
+		AND ContractNo = #{originalContractNo,jdbcType= VARCHAR}
+		AND IsDelete = 0
+	</select>
+	
+	<!--Add by WangLei 2017/04/07 End  -->
+	<!-- 合同撤销/作废后 解除门店合同关系 -->
+	<update id="updateFlag" parameterType="map">
+			UPDATE  dbo.ContractStore 
+			SET flag = 1
+			WHERE  IsDelete=0 AND contractId = #{contractId,jdbcType=INTEGER}
+			<!-- 撤销的门店Id -->
+			<if test="storeIdList!=null">
+				<foreach collection="storeIdList" item="storeId" 
+					open=" and storeId in (" close=")" separator=",">
+					#{storeId}
+				</foreach>
+			</if>
+    </update>
+    
+    <select id="getContractStoreContractId" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT Top 1 c2.id FROM dbo.ContractStore  c1,dbo.Contract c2
+			WHERE c1.ContractId=c2.Id
+			  AND c1.storeId =#{storeId, jdbcType=INTEGER}
+			  <![CDATA[ AND c2.id <> #{contractId, jdbcType=INTEGER} ]]>
+			  AND c2.companyId= #{companyId, jdbcType=INTEGER}
+			  AND c1.IsDelete=0
+			  ORDER BY c2.id desc
+	</select>
+	
+	<select id="selStoreByContractIdStoreId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select *, dbo.F_CRM_SplitCodeToName(2, BTypeStore) AS BTypeStoreName
+		from ContractStore
+		where ContractId = #{contractId,jdbcType=INTEGER}
+		      and StoreId = #{storeId,jdbcType=INTEGER}
+		and IsDelete = 0
+	</select>
+	
+    <!-- 根据flowID查询合同中的门店 -->
+	<select id="getContractStoresByContractFlowId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT  T1.*,s.storeNo,s.name
+		FROM    dbo.ContractStore T1
+		join dbo.store s on t1.storeId = s.id
+		LEFT JOIN dbo.Contract T2 ON T1.contractId = T2.Id
+		WHERE   T1.IsDelete = 0
+		AND T2.flowId = #{flowId,jdbcType=NVARCHAR}
+	</select>
+	
+	<!--Add by Sucen 2017/07/17 Start  -->
+	<!-- 根据contractId查询合同门店关联信息 -->
+	<select id="getContractStoreByContractId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT	  T1.StoreId AS StoreId,
+				  T2.StoreNo AS storeNo,
+				  T2.Name AS name,
+				  T2.CityNo AS cityNo,
+				  T2.DistrictNo AS districtNo,
+				  T2.AreaNo AS areaNo,
+				  T2.Address AS address,
+				  T2.AddressDetail AS addressDetail,
+				  T2.Longitude AS longitude,
+				  T2.Latitude AS Latitude
+		FROM      ContractStore  T1
+		LEFT JOIN Store T2 ON T1.StoreId = T2.Id
+		AND       T2.IsDelete = 0
+		WHERE     T1.IsDelete = 0
+		AND       T1.ContractId = #{contractId,jdbcType=INTEGER}
+	</select>
+	<!--Add by Sucen 2017/07/17 End  -->
+	
+	
+</mapper>

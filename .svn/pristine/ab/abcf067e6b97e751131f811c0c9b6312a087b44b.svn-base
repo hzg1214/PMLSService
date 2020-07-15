@@ -1,0 +1,42 @@
+package cn.com.eju.pmls.skStatement.service;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkStatementMapper;
+import cn.com.eju.pmls.skStatement.dto.PmlsSkStatementDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+@Service("skStatementService")
+public class SkStatementService {
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Autowired
+    PmlsSkStatementMapper pmlsSkStatementMapper;
+
+    /**
+     * 查询
+     */
+    public ResultData<List<PmlsSkStatementDto>> queryList(Map<String, Object> queryParam) {
+        ResultData<List<PmlsSkStatementDto>> resultData = new ResultData<List<PmlsSkStatementDto>>();
+        List<PmlsSkStatementDto> list = pmlsSkStatementMapper.queryList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+
+    public ResultData<PmlsSkStatementDto> getSkStatementById(Map<String, Object> queryParam) {
+        ResultData<PmlsSkStatementDto> resultData = new ResultData<PmlsSkStatementDto>();
+        PmlsSkStatementDto dto = pmlsSkStatementMapper.getSkStatementById(queryParam);
+        resultData.setReturnData(dto);
+        return resultData;
+    }
+}
+
+

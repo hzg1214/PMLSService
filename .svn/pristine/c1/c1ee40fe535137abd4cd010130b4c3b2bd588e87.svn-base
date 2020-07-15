@@ -1,0 +1,18 @@
+#local
+
+#application name
+dubbo.application.name=dubbo_pmls_service
+
+#zookeeper address
+dubbo.registry.protocol=zookeeper
+#dubbo.registry.address=10.99.70.28:2181
+#dubbo.registry.address=127.0.0.1:2181
+dubbo.registry.address=10.0.60.73:2181
+
+#service in Dubbo port host
+dubbo.protocol.port=21883
+dubbo.protocol.host=127.0.0.1
+
+#Dubbo admin password
+dubbo.admin.root.password=root
+dubbo.admin.guest.password=guest

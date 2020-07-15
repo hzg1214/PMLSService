@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.storeinformation.dao.StoreInformationDetailMapper">
+
+	<resultMap id="StoreInformationDetailDtoMap" type="cn.com.eju.deal.dto.storeinformation.StoreInformationDetailDto"/>
+
+	<select id="queryInformationDetailList" parameterType="Map" resultMap="StoreInformationDetailDtoMap">
+		SELECT  t.* ,
+			contractTypeName =  ( CASE WHEN ( t.contractType = 0 OR t.contractType IS NULL ) THEN '未签'
+			WHEN ( t.contractType = 10301 ) THEN 'A'
+			WHEN t.contractType = 10302 THEN 'B'
+			WHEN t.contractType = 10303 THEN 'A转B'
+			WHEN t.contractType = 10304 THEN 'D'
+			ELSE '-' END)
+		FROM    ( SELECT    
+					s.CityNo AS cityNo ,
+					bc.CityName AS cityName,
+					s.AcCityNo AS acCityNo ,
+					cbc.CityName AS acCityName,
+					s.centerId AS centerId,
+					dbc.centerName AS centerName,
+					s.Id AS storeId ,
+					s.StoreNo AS storeNo ,
+					s.Name AS storeName ,
+					s.DistrictNo AS districtNo ,
+					bd.DistrictName AS districtName,
+					s.Address AS address ,
+					s.AddressDetail AS addressDetail ,
+					cdbd.dicValue AS bussinessPlace,
+					bdv.dicValue AS storeSizeScale,
+					s.Maintainer AS maintainer,
+					s.maintainerName AS maintainerName,
+					cy.CompanyNo AS companyNo,
+					cy.CompanyName AS companyName,
+					cuu.userName AS userName,
+					dbo.F_ClearNullDate(s.DateCreate) dateCreate,
+					contractType = ( SELECT TOP 1
+											c.ContractType
+									 FROM   CRM.dbo.ContractStore cs
+											LEFT JOIN CRM.dbo.Contract c ON cs.ContractId = c.Id
+									 WHERE  cs.StoreId = s.Id
+											AND c.ContractStatus != 10405
+											AND ( cs.storeState != 2
+												  OR cs.storeState IS NULL
+												)
+											AND cs.IsDelete = 0
+									 ORDER BY cs.Id DESC
+								   )
+		  FROM   CRM.dbo.Store s 
+			LEFT JOIN CRM.dbo.BAS_City bc ON bc.CityNo = s.CityNo AND bc.FlagDeleted = 0
+			LEFT JOIN CRM.dbo.BAS_City cbc ON cbc.CityNo = s.AcCityNo AND bc.FlagDeleted = 0
+			LEFT JOIN CRM.dbo.BAS_District bd ON bd.DistrictNo = s.DistrictNo AND bd.FlagDeleted = 0
+			LEFT JOIN CRM.dbo.CompanyStore cs ON cs.StoreId = s.id AND cs.IsDelete = 0 
+			LEFT JOIN CRM.dbo.Company cy ON cs.CompanyId = cy.Id AND cy.IsDelete=0
+			LEFT JOIN CRM.dbo.USR_User cuu ON cuu.userId = s.UserCreate AND cuu.delFlag='N'
+			LEFT JOIN CRM.dbo.BAS_DictionaryValue cdbd ON cdbd.dicCode = s.businessPlaceType AND cdbd.delFlag='N'
+			LEFT JOIN CRM.dbo.BAS_DictionaryValue bdv ON bdv.dicCode = s.storeSizeScale AND bdv.delFlag='N'
+		  	LEFT JOIN CRM.dbo.BAS_CenterSetting dbc ON dbc.centerId = s.centerId AND dbc.delFlag=0
+		  WHERE s.IsDelete=0 ) t
+		  
+		 WHERE 1 = 1
+
+<!--	 归属城市(业绩城市 )-->
+		<if test="cityNo != null and cityNo != ''">
+			AND t.AcCityNo IN ('${cityNo}')
+		</if>
+<!-- 	门店城市(物理城市) -->
+		<if test="storeCityName != null and storeCityName != ''">
+			AND t.cityName =#{storeCityName, jdbcType=NVARCHAR}
+		</if>
+<!-- 	归属中心 -->
+		<if test="centerIdStr != null and centerIdStr != ''">
+			AND t.centerId IN (${centerIdStr})
+		</if>
+<!-- 	开始时间 -->
+		<if test="dealDateStart != null and dealDateStart != ''">
+			AND t.dateCreate >= convert(datetime, '${dealDateStart}')
+		</if>
+<!-- 	结束时间 -->
+		<if test="dealDateEnd != null and dealDateEnd != ''">
+			AND t.dateCreate &lt; convert(datetime, '${dealDateEnd}') + 1
+		</if>
+<!-- 	维护人 -->
+		<if test="maintainerId != null and maintainerId != ''">
+			AND (t.maintainer = #{maintainerId, jdbcType=NVARCHAR} or t.maintainerName = #{maintainerId, jdbcType=NVARCHAR})
+		</if>
+<!-- 	门店名称、编号 -->
+		<if test="storeNo != null and storeNo != ''">
+			AND (t.storeNo like '%'+'${storeNo}'+'%' or t.storeName like '%'+'${storeNo}'+'%')
+		</if>
+<!-- 	公司名称、编号 -->
+		<if test="companyNo != null and companyNo != ''">
+			AND (t.companyNo like '%'+'${companyNo}'+'%' or t.companyName like '%'+'${companyNo}'+'%')
+		</if>
+		ORDER BY t.dateCreate DESC
+	</select>
+</mapper>

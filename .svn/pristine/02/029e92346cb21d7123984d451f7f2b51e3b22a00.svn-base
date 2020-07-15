@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.remittanceTrack.dao.RemittanceTrackMapper">
+
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack">
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="year" jdbcType="INTEGER" property="year" />
+    <result column="month" jdbcType="INTEGER" property="month" />
+    <result column="week" jdbcType="INTEGER" property="week" />
+    <result column="projectNo" jdbcType="VARCHAR" property="projectNo" />
+    <result column="xjAccount" jdbcType="DECIMAL" property="xjAccount" />
+    <result column="dfAccount" jdbcType="DECIMAL" property="dfAccount" />
+    <result column="trackType" jdbcType="VARCHAR" property="trackType" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="dateUpdate" jdbcType="TIMESTAMP" property="dateUpdate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="userIdUpdate" jdbcType="INTEGER" property="userIdUpdate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  		Id,
+	    year,
+		month,
+		week,
+		projectNo,
+		xjAccount,
+		dfAccount,
+		trackType,
+		dateCreate,
+		dateUpdate,
+		userIdCreate,
+		userIdUpdate,
+		delFlag
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from PMLS_Remittance_Track
+    where Id = #{id,jdbcType=INTEGER}
+    and delFlag = 0
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from PMLS_Remittance_Track
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack" useGeneratedKeys="true" keyProperty="id">
+    insert into PMLS_Remittance_Track (
+    	id,
+      	year,
+		month,
+		week,
+		projectNo,
+		xjAccount,
+		dfAccount,
+		trackType,
+		dateCreate,
+		dateUpdate,
+		userIdCreate,
+		userIdUpdate,
+		delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, #{month,jdbcType=INTEGER},
+      #{week,jdbcType=INTEGER}, #{projectNo,jdbcType=VARCHAR}, #{xjAccount,jdbcType=DECIMAL},
+      #{dfAccount,jdbcType=DECIMAL}, #{trackType,jdbcType=VARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}
+      #{dateUpdate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{userIdUpdate,jdbcType=INTEGER},
+      #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack">
+    update PMLS_Remittance_Track
+    <set>
+      <if test="year != null">
+        year = #{year,jdbcType=INTEGER},
+      </if>
+      <if test="month != null">
+        month = #{month,jdbcType=INTEGER},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=INTEGER},
+      </if>
+      <if test="projectNo != null">
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="xjAccount != null">
+        xjAccount = #{xjAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="dfAccount != null">
+        dfAccount = #{dfAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="trackType != null">
+        trackType = #{trackType,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="userIdUpdate != null">
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack">
+    update PMLS_Remittance_Track
+    set 
+        year=#{year,jdbcType=INTEGER},
+		month=#{month,jdbcType=INTEGER},
+		week=#{week,jdbcType=INTEGER},
+		projectNo=#{projectNo,jdbcType=VARCHAR},
+		xjAccount=#{xjAccount,jdbcType=DECIMAL},
+		dfAccount=#{dfAccount,jdbcType=DECIMAL},
+		trackType=#{trackType,jdbcType=VARCHAR},
+		dateCreate=#{dateCreate,jdbcType=TIMESTAMP},
+		dateUpdate=#{dateUpdate,jdbcType=TIMESTAMP},
+		userIdCreate=#{userIdCreate,jdbcType=INTEGER},
+		userIdUpdate=#{userIdUpdate,jdbcType=INTEGER},
+		delFlag=#{delFlag,jdbcType=BIT}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询 list -->
+    <select id="queryList" parameterType="Map" resultType="cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackDto">
+        SELECT  *
+		FROM    dbo.PMLS_Remittance_Track track
+    </select>
+    
+</mapper>

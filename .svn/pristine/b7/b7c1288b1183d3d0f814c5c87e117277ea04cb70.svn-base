@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.developer.dao.DeveloperBrandMapper">
+
+  <!--获取开发商品牌列表-->
+  <select id="getDeveloperBrandList"  parameterType="Map" resultType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto">
+    select t.* from (
+    	select distinct
+      t1.Id ,
+      t1.developerBrandCode ,
+      t1.developerBrandName ,
+      t1.orgId ,
+      t1.parentId ,
+      CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate ,
+      t1.dateUpdate ,
+      t1.userIdCreate ,
+      t1.userIdUpdate ,
+      t1.delFlag ,
+      t1.remark,
+      t2.userName createUserName ,
+      t1.partner,
+      t1.bigCustomerFlag,
+	  t1.bigCustomerId,
+	  t1.bigCustomerName,
+	  t1.isYjDy,
+	  t1.mattressNailId,
+	  t1.mattressNailName,
+      bd.dicValue partnerStr 
+      from PMLS_DeveloperBrand t1
+    INNER JOIN dbo.USR_User t2 ON t1.userIdCreate=t2.userId AND t2.delFlag='N'
+    LEFT JOIN dbo.BAS_DictionaryValue bd ON bd.dicCode=t1.partner and bd.delFlag='N'
+    <if test="developerBrandCode!=null and developerBrandCode!=''">
+      INNER JOIN (
+        SELECT orgId  FROM PMLS_DeveloperBrand WHERE 1=1 and delFlag=0
+<!--         <if test="developerBrandName!=null and developerBrandName!=''"> -->
+<!--           and developerBrandName like '%'+#{developerBrandName}+'%' -->
+<!--         </if> -->
+        <if test="developerBrandCode!=null and developerBrandCode!=''">
+          AND (developerBrandCode LIKE '%${developerBrandCode}%' or developerBrandName LIKE '%${developerBrandCode}%')
+        </if>
+      ) t3 ON (t1.orgId.ToString() LIKE t3.orgId.ToString()+'%' OR t3.orgId.ToString() LIKE t1.orgId.ToString()+'%')
+    </if>
+        where t1.delFlag=0
+    ) t where 1=1
+    <if test="partner!=null and partner!=''">
+      and t.partner = #{partner}
+    </if>
+     order by t.parentId ASC,t.dateCreate desc
+  </select>
+  
+  <!--获取开发商品牌信息-->
+  <select id="getDeveloperBrandInfo"  parameterType="Map" resultType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto">
+    select top 1
+      orgId.ToString() as orgId,
+      Id ,
+      developerBrandCode ,
+      developerBrandName ,
+      parentId ,
+      dateCreate ,
+      dateUpdate ,
+      userIdCreate ,
+      userIdUpdate ,
+      delFlag ,
+      remark ,
+      partner
+      ,bigCustomerFlag
+      ,bigCustomerId
+      ,bigCustomerName
+      ,isYjDy
+      ,mattressNailId
+      ,mattressNailName
+    from PMLS_DeveloperBrand where delFlag=0
+    <if test="id!=null and id!=0">
+      and id=#{id}
+    </if>
+    <if test="developerBrandCode!=null and developerBrandCode!=''">
+      and developerBrandCode =#{developerBrandCode}
+    </if>
+
+  </select>
+  <!--新增开发商品牌-->
+  <insert id="addDeveloperBrand" parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+        INSERT INTO PMLS_DeveloperBrand (
+          developerBrandCode,
+          developerBrandName,
+          orgId,
+          parentId,
+          remark,
+          dateCreate,
+          userIdCreate,
+          delFlag,
+          bigCustomerFlag,
+		  bigCustomerId,
+		  bigCustomerName,
+		  isYjDy,
+		  mattressNailId,
+		  mattressNailName,
+          partner
+        ) VALUES(
+          #{developerBrandCode},
+          #{developerBrandName},
+          null,
+          #{parentId},
+          #{remark},
+          getdate(),
+          #{userIdCreate},
+          0,
+          #{bigCustomerFlag},
+		  #{bigCustomerId},
+		  #{bigCustomerName},
+		  #{isYjDy},
+		  #{mattressNailId},
+		  #{mattressNailName},
+          #{partner}
+          
+        )
+    </insert>
+    
+  <!--修改开发商品牌-->
+  <update id="updateDeveloperBrand"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto">
+    update PMLS_DeveloperBrand
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="developerBrandName!=null and developerBrandName!=''">
+        developerBrandName=#{developerBrandName},
+      </if>
+      <if test="remark!=null and remark!=''">
+        remark=#{remark},
+      </if>
+      <if test="orgId!=null and orgId!=''">
+        orgId=#{orgId},
+      </if>
+      <if test="userIdUpdate!=null and userIdUpdate!=''">
+        userIdUpdate=#{userIdUpdate},
+      </if>
+      <if test="dateUpdate!=null">
+      	dateUpdate=getdate(),
+      </if>
+      <if test="partner!=null">
+      	partner=#{partner},
+      </if>
+    </trim>
+    where id=#{id}
+  </update>
+  
+  <!--修改开发商品牌-->
+  <update id="updateDeveloperBrandById"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto">
+    update PMLS_DeveloperBrand
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="developerBrandName!=null and developerBrandName!=''">
+        developerBrandName=#{developerBrandName},
+      </if>
+      <if test="userIdUpdate!=null and userIdUpdate!=''">
+        userIdUpdate=#{userIdUpdate},
+      </if>
+      <if test="dateUpdate!=null">
+      	dateUpdate=getdate(),
+      </if>
+      <if test="partner!=null">
+      	partner=#{partner},
+      </if>
+      
+      <if test="bigCustomerFlag!=null">
+      	bigCustomerFlag=#{bigCustomerFlag},
+      </if>
+      <if test="bigCustomerFlag!=null and bigCustomerFlag==22602">
+      	bigCustomerId=null,bigCustomerName=null,
+      </if>
+      <if test="bigCustomerId!=null">
+      	bigCustomerId=#{bigCustomerId},
+      </if>
+      <if test="bigCustomerName!=null">
+      	bigCustomerName=#{bigCustomerName},
+      </if>
+      <if test="isYjDy!=null">
+      	isYjDy=#{isYjDy},
+      </if>
+      <if test="isYjDy!=null and isYjDy==0">
+      	mattressNailId=null,mattressNailName=null,
+      </if>
+      <if test="mattressNailId!=null">
+      	mattressNailId=#{mattressNailId},
+      </if>
+      <if test="mattressNailName!=null">
+      	mattressNailName=#{mattressNailName},
+      </if>
+    </trim>
+    where id=#{id}
+  </update>
+  
+  <!--修改开发商品牌20200401 修改节点一下所有子节点-->
+  <update id="updateDeveloperBrandByOrgId"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto">
+    update PMLS_DeveloperBrand
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="remark!=null and remark!=''">
+        remark=#{remark},
+      </if>
+      <if test="userIdUpdate!=null and userIdUpdate!=''">
+        userIdUpdate=#{userIdUpdate},
+      </if>
+      <if test="dateUpdate!=null">
+      	dateUpdate=getdate(),
+      </if>
+      <if test="partner!=null">
+      	partner=#{partner},
+      </if>
+    </trim>
+    where orgId.ToString() LIKE #{orgId}+'%'
+  </update>
+  
+  <!--删除开发商品牌-->
+  <update id="deleteDeveloperBrand" parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto" >
+<!--     update PMLS_DeveloperBrand set delFlag=1,userIdUpdate=#{userIdUpdate},dateUpdate=getdate() where (id=#{id} or parentId=#{id}) -->
+    update PMLS_DeveloperBrand set delFlag=1,userIdUpdate=#{userIdUpdate},dateUpdate=getdate() where orgId.ToString() LIKE '%/'+'${id}'+'/%'
+  </update>
+  
+   <!--校验开发商品牌是否已关联开发商-->
+  <select id="checkDeveloper" parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto" resultType="int">
+      SELECT COUNT(1) AS num FROM PMLS_DeveloperBrand t1
+      INNER JOIN PMLS_Developer t2 ON t1.id=t2.developerBrandId AND t2.delFlag=0
+      WHERE t1.delFlag=0 AND t1.orgId.ToString() LIKE '%/'+'${id}'+'/%'
+  </select>
+  
+  <!--校验开发商品牌是否存在-->
+  <select id="checkDeveloperInfo" parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto" resultType="int">
+      select count(1) as num from PMLS_DeveloperBrand t1 where t1.delFlag=0 and t1.developerBrandName=#{developerBrandName}
+      <if test="id!=null and id!=0">
+        and t1.id!=#{id}
+      </if>
+  </select>
+  
+  <!--是否可以修改合作方品牌信息-->
+  <select id="updateCheck" parameterType="cn.com.eju.pmls.developer.dto.DeveloperBrandDto" resultType="int">
+      DECLARE @bandId hierarchyid
+		SELECT @bandId=orgId FROM PMLS_DeveloperBrand WHERE id=#{id}
+		SELECT  COUNT(*) cnt FROM (
+		SELECT d.id FROM PMLS_DeveloperBrand b,dbo.PMLS_Developer d 
+		WHERE b.id=d.developerBrandId AND  b.orgId.IsDescendantOf(@bandId)=1 AND b.delFlag=0 AND d.delFlag=0
+		UNION   
+		SELECT  d.id FROM PMLS_DeveloperBrand b,dbo.PMLS_Developer d  
+		WHERE b.id=d.developerBrandId AND  @bandId.IsDescendantOf(orgId)=1 AND b.delFlag=0 AND d.delFlag=0
+		) t
+  </select>
+  
+<!--   查询选择该合作方品牌的草稿项目-大客户 -->
+  <select id="getEstateBigCustomerListByBrandId" parameterType="int" resultType="map">
+      SELECT le.id,le.projectNo,le.EstateNm projectName,le.bigCustomerFlag,le.bigCustomerId,lb.name bigCustomerName FROM dbo.PMLS_DeveloperBrand  brand
+		INNER JOIN dbo.PMLS_Developer  pd ON brand.id=pd.developerBrandId AND pd.delFlag=0
+		INNER JOIN dbo.LNK_Estate le ON le.devCompanyId=pd.Id AND le.DelFlg=0 
+		LEFT JOIN dbo.LNK_BigCustomer lb ON lb.bigCustomerId=le.bigCustomerId AND lb.delFlag=0 AND lb.vaild=1
+		WHERE le.projectStatus=20305 AND brand.delFlag=0 and brand.Id=#{id}
+  </select>
+  
+<!--   查询选择该合作方品牌的草稿项目-垫佣甲方 -->
+  <select id="getEstateMattressNailListByBrandId" parameterType="int" resultType="map">
+      SELECT le.id,le.projectNo,le.EstateNm projectName,le.custodyFlg,le.mattressNailId,mn.name mattressNailName FROM dbo.PMLS_DeveloperBrand  brand
+		INNER JOIN dbo.PMLS_Developer  pd ON brand.id=pd.developerBrandId AND pd.delFlag=0
+		INNER JOIN dbo.LNK_Estate le ON le.partnerAbbreviationCode=pd.developerCode  AND le.DelFlg=0  
+		LEFT JOIN dbo.LNK_MattressNail mn ON mn.mattressNailId=le.mattressNailId AND mn.delFlag=0 AND mn.vaild=1
+		WHERE le.projectStatus=20305 AND brand.delFlag=0 AND brand.Id=#{id}
+  </select>
+  
+  <!--更新项目是否大客户-->
+  <update id="updateEstateByBrand" parameterType="Map">
+    update dbo.LNK_Estate 
+    <set>
+      <if test="bigCustomerFlag!=null and bigCustomerFlag==22602">
+        bigCustomerFlag=#{bigCustomerFlag},bigCustomerId=null,
+      </if>
+      <if test="bigCustomerId!=null">
+        bigCustomerId=#{bigCustomerId},
+      </if>
+      <if test="isYjDy!=null and isYjDy==0">
+        custodyFlg=#{isYjDy},mattressNailId=null,
+      </if>
+      <if test="mattressNailId!=null">
+        mattressNailId=#{mattressNailId}
+      </if>
+    </set>
+    where DelFlg=0 and id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+    <!--新增日志记录表-->
+  <insert id="addBcMattressNailLog" parameterType="cn.com.eju.pmls.developer.model.PmlsBcMattressNaillog" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+        INSERT INTO dbo.Pmls_Bc_MattressNail_log
+        ( businessType ,
+          businessNo ,
+          businessNm ,
+          oldBigCustomerFlag ,
+          oldBigCustomerId ,
+          oldBigCustomerName ,
+          bigCustomerFlag ,
+          bigCustomerId ,
+          bigCustomerName ,
+          oldIsYjDy ,
+          oldMattressNailId ,
+          oldMattressNailName ,
+          isYjDy ,
+          mattressNailId ,
+          mattressNailName ,
+          descMemo ,
+          createDate ,
+          createUserCode ,
+          delFlag
+        )
+	VALUES  ( #{businessType} , -- businessType - char(1)
+          #{businessNo} , -- businessNo - varchar(50)
+          #{businessNm} , -- businessNm - varchar(50)
+          #{oldBigCustomerFlag} , -- oldBigCustomerFlag - int
+          #{oldBigCustomerId} , -- oldBigCustomerId - int
+          #{oldBigCustomerName} , -- oldBCustomerName - varchar(200)
+          #{bigCustomerFlag}, -- bigCustomerFlag - int
+          #{bigCustomerId} , -- bigCustomerId - int
+          #{bigCustomerName} , -- bigCustomerName - varchar(200)
+          #{oldIsYjDy}, -- oldIsYjDy - int
+          #{oldMattressNailId} , -- oldMattressNailId - int
+          #{oldMattressNailName} , -- oldMattressNailName - varchar(200)
+          #{isYjDy}, -- isYjDy - int
+          #{mattressNailId} , -- mattressNailId - int
+          #{mattressNailName} , -- mattressNailName - varchar(200)
+          '' , -- descMemo - nvarchar(500)
+          GETDATE() , -- createDate - datetime
+          #{createUserCode} , -- createUserCode - varchar(10)
+          0  -- delFlag - bit
+        )
+    </insert>
+    
+    <!--   查询选择该合作方品牌的草稿项目-大客户 -->
+  <select id="selDeveloperByBrandId" parameterType="int" resultType="cn.com.eju.pmls.developer.model.Developer">
+      SELECT * FROM dbo.PMLS_Developer WHERE developerBrandId= #{developerBrandId,jdbcType=INTEGER} AND delFlag=0
+  </select>
+</mapper>

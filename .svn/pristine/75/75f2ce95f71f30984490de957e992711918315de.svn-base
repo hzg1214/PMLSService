@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.performswitch.dao.PmlsPerformSwitchWeekMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeek">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="relateSystem" jdbcType="INTEGER" property="relateSystem" />
+    <result column="cityNo" jdbcType="VARCHAR" property="cityNo" />
+    <result column="year" jdbcType="VARCHAR" property="year" />
+    <result column="month" jdbcType="VARCHAR" property="month" />
+    <result column="weekNo" jdbcType="INTEGER" property="weekNo" />
+    <result column="switchState" jdbcType="INTEGER" property="switchState" />
+    <result column="weekStartDate" jdbcType="DATE" property="weekStartDate" />
+    <result column="weekEndDate" jdbcType="DATE" property="weekEndDate" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="createUserCode" jdbcType="VARCHAR" property="createUserCode" />
+    <result column="updateDate" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="updateUserCode" jdbcType="VARCHAR" property="updateUserCode" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, relateSystem, cityNo, year, month, weekNo, switchState, weekStartDate, weekEndDate,
+    createDate, createUserCode, updateDate, updateUserCode, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Pmls_Perform_Switch_Week
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Pmls_Perform_Switch_Week
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeek">
+    insert into Pmls_Perform_Switch_Week (id, relateSystem, cityNo,
+      year, month, weekNo,
+      switchState, weekStartDate, weekEndDate,
+      createDate, createUserCode, updateDate,
+      updateUserCode, delFlag)
+    values (#{id,jdbcType=INTEGER}, #{relateSystem,jdbcType=INTEGER}, #{cityNo,jdbcType=VARCHAR},
+      #{year,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{weekNo,jdbcType=INTEGER},
+      #{switchState,jdbcType=INTEGER}, #{weekStartDate,jdbcType=DATE}, #{weekEndDate,jdbcType=DATE},
+      #{createDate,jdbcType=TIMESTAMP}, #{createUserCode,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},
+      #{updateUserCode,jdbcType=VARCHAR}, #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeek">
+    insert into Pmls_Perform_Switch_Week
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relateSystem != null">
+        relateSystem,
+      </if>
+      <if test="cityNo != null">
+        cityNo,
+      </if>
+      <if test="year != null">
+        year,
+      </if>
+      <if test="month != null">
+        month,
+      </if>
+      <if test="weekNo != null">
+        weekNo,
+      </if>
+      <if test="switchState != null">
+        switchState,
+      </if>
+      <if test="weekStartDate != null">
+        weekStartDate,
+      </if>
+      <if test="weekEndDate != null">
+        weekEndDate,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="createUserCode != null">
+        createUserCode,
+      </if>
+      <if test="updateDate != null">
+        updateDate,
+      </if>
+      <if test="updateUserCode != null">
+        updateUserCode,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="relateSystem != null">
+        #{relateSystem,jdbcType=INTEGER},
+      </if>
+      <if test="cityNo != null">
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null">
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+        #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="weekNo != null">
+        #{weekNo,jdbcType=INTEGER},
+      </if>
+      <if test="switchState != null">
+        #{switchState,jdbcType=INTEGER},
+      </if>
+      <if test="weekStartDate != null">
+        #{weekStartDate,jdbcType=DATE},
+      </if>
+      <if test="weekEndDate != null">
+        #{weekEndDate,jdbcType=DATE},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserCode != null">
+        #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserCode != null">
+        #{updateUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeek">
+    update Pmls_Perform_Switch_Week
+    <set>
+      <if test="relateSystem != null">
+        relateSystem = #{relateSystem,jdbcType=INTEGER},
+      </if>
+      <if test="cityNo != null">
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null">
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+        month = #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="weekNo != null">
+        weekNo = #{weekNo,jdbcType=INTEGER},
+      </if>
+      <if test="switchState != null">
+        switchState = #{switchState,jdbcType=INTEGER},
+      </if>
+      <if test="weekStartDate != null">
+        weekStartDate = #{weekStartDate,jdbcType=DATE},
+      </if>
+      <if test="weekEndDate != null">
+        weekEndDate = #{weekEndDate,jdbcType=DATE},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserCode != null">
+        createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserCode != null">
+        updateUserCode = #{updateUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeek">
+    update Pmls_Perform_Switch_Week
+    set relateSystem = #{relateSystem,jdbcType=INTEGER},
+      cityNo = #{cityNo,jdbcType=VARCHAR},
+      year = #{year,jdbcType=VARCHAR},
+      month = #{month,jdbcType=VARCHAR},
+      weekNo = #{weekNo,jdbcType=INTEGER},
+      switchState = #{switchState,jdbcType=INTEGER},
+      weekStartDate = #{weekStartDate,jdbcType=DATE},
+      weekEndDate = #{weekEndDate,jdbcType=DATE},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      updateUserCode = #{updateUserCode,jdbcType=VARCHAR},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <!-- 查询 list map -->
+  <select id="queryLisDto" resultType="cn.com.eju.pmls.performswitch.dto.PmlsPerformSwitchWeekDto" parameterType="java.util.Map">
+		SELECT ccu.cityNo,cityName,ISNULL(switchState,27501) switchState FROM BAS_City ccu
+		LEFT JOIN Pmls_Perform_Switch_Week cps ON ccu.cityNo = cps.cityNo
+			AND cps.delFlag =0
+			<if test="year != null and year !=''">
+				AND cps.year = #{year}
+			</if>
+			<if test="month != null and month !=''">
+				AND cps.month = #{month}
+			</if>
+            <if test="weekNo != null and weekNo !=''">
+				AND cps.weekNo = #{weekNo}
+			</if>
+			<if test="relateSystem != null and relateSystem !=''">
+				AND cps.relateSystem = #{relateSystem}
+			</if>
+		<where>
+			1=1
+			<if test="cityList != null">
+				<![CDATA[
+   					AND ccu.cityNo in
+   				]]>
+				<foreach collection="cityList" item="item" index="index"
+                         open="(" separator="," close=")">
+					<![CDATA[
+						#{item}
+					]]>
+				</foreach>
+			</if>
+		</where>
+		ORDER BY ccu.id DESC
+	</select>
+</mapper>

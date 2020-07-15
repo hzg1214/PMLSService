@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.followDetail.dao.FollowDetailMapper">
+
+	<resultMap id="followDetailDtoMap" type="cn.com.eju.deal.dto.followDetail.FollowDetailDto"></resultMap>
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.model.sweepStreets.WXPictureDto"></resultMap>
+
+	<select id="query" parameterType="java.util.Map" resultMap="followDetailDtoMap">
+	SELECT x3.Name storeName,
+			x3.StoreNo ,x3.signageNo,x3.storeAddress,
+			org.yearly,
+			org.regionCode,
+			org.regionName,
+			org.areaCityCode,
+			org.areaCityName,
+			org.cityId,
+			org.cityGroupId,
+			org.cityGroupName,
+			org.centerGroupId,
+			org.centerGroupName,
+			x3.CityNo cityNo,
+			x3.CityName cityName ,
+			x3.DistrictName areaName,
+			x3.AddressDetail address,
+			x3.centername tradeCenter,
+			x3.userId developerId,
+			x3.userName developer,
+			x1.ContractType contractTypeName, x1.id,
+			dbo.F_CRM_GetDicVal(x1.contractStatus) contractStatus,
+			x3.decorateStatus,
+			dbo.F_CRM_GetDicVal(x3.decorateStatus) decorateStatusName,
+			x3.businessStatusName,
+			x3.Maintainer ,
+			x3.maintainerName ,
+			dbo.F_CRM_GetDicVal(FollowType) followTypeName ,
+			CASE WHEN title IS NULL
+				 THEN STUFF(( SELECT    ',' + bd.dicValue
+							  FROM      dbo.BAS_DictionaryValue bd
+							  WHERE     PATINDEX('%' + RTRIM(bd.dicCode) + '%',
+												 followPurpose) > 0
+							  ORDER BY  PATINDEX('%' + RTRIM(bd.dicCode) + '%',
+												 followPurpose)
+							FOR
+							  XML PATH('')
+							), 1, 1, '')
+				 ELSE title
+			END followAim ,
+			Content followDesc,
+			x2.userId followerId,
+			x2.userName follower,
+			CONVERT (VARCHAR(100),x1.DateCreate,120) followDate,
+			x1.signAddress signLocation,
+			x1.signPictureRefId,
+			x1.workSumPictureRefId,
+			x1.signDistance distance,
+			CONVERT (VARCHAR(100),x1.signTime,120) signDate,
+			CONVERT (VARCHAR(100),x1.signOutTime,120) signOutDate,
+			CASE WHEN x1.signOutTime IS NULL THEN NULL
+				 ELSE DATEDIFF(MINUTE, x1.signTime, x1.signOutTime)
+			END signDuration ,
+			[联合晨会] morningMeeting,
+			[夕会] duskMeeting,
+			[门店PK] storePK,
+			[门店培训] storeTrain,
+			[区域活动] areaActivity,
+			[招聘培训调查] hireTrain,
+			[公盘问题调查] publicPlate,
+			[系统问题调查] system,
+			[交易问题调查] trade,
+			[联动问题调查] link,
+			[财务返款调查] refund,
+			[VI检查] vi,
+			[工服检查] uniform,
+			[房源检查] houseResource,
+			[合同检查] contractName
+	FROM    ( SELECT    t3.ContractType ,t3.ContractStatus,
+					t4.workSumPictureRefId,
+                    t1.* ,
+                    [联合晨会] ,
+                    [夕会] ,
+                    [门店PK] ,
+                    [门店培训] ,
+                    [区域活动] ,
+                    [招聘培训调查] ,
+                    [公盘问题调查] ,
+                    [系统问题调查] ,
+                    [交易问题调查] ,
+                    [联动问题调查] ,
+                    [财务返款调查] ,
+                    [VI检查] ,
+                    [工服检查] ,
+                    [房源检查] ,
+                    [合同检查]
+          FROM      dbo.Follow t1
+                    LEFT JOIN ( SELECT  *
+                                FROM    ( SELECT    x1.followId ,
+                                                    dbo.F_CRM_GetDicVal(x2.answerId) answerName ,
+                                                    x3.wsName
+                                          FROM      Follow_WorkSummarySub x1 ,
+                                                    Follow_WorkSummaryDetail x2 ,
+                                                    WorkSummaryType x3
+                                          WHERE     x1.wsSubId = x2.wsSubId
+                                                    AND x2.wsId = x3.wsId
+                                                    AND x1.isDelete = 0
+                                                    AND x2.isDelete = 0
+                                                    AND x3.isDelete = 0
+                                        ) xx PIVOT ( MAX(answerName) FOR wsName IN ( [联合晨会],
+                                                              [夕会], [门店PK],
+                                                              [门店培训], [区域活动],
+                                                              [招聘培训调查],
+                                                              [公盘问题调查],
+                                                              [系统问题调查],
+                                                              [交易问题调查],
+                                                              [联动问题调查],
+                                                              [财务返款调查], [VI检查],
+                                                              [工服检查], [房源检查],
+                                                              [合同检查] ) ) t
+                              ) t2 ON t1.id = t2.followId
+                    LEFT JOIN ( SELECT  x2.ContractId ,
+                                        x2.StoreId ,
+                                        dbo.F_CRM_GetDicVal(x1.ContractType) ContractType,
+										x1.ContractStatus
+                                FROM    dbo.Contract x1 ,
+                                        dbo.ContractStore x2
+                                WHERE   x1.Id = x2.ContractId
+                                        AND x2.flag = 0
+                                        AND x2.IsDelete = 0
+                                        AND x1.Valid = '18402'
+                              ) t3 ON t1.StoreId = t3.StoreId
+					LEFT JOIN (SELECT followId,pictureRefId workSumPictureRefId FROM Follow_WorkSummarySub
+								WHERE wsType = '30' AND isDelete = 0
+							  ) t4 ON t1.id = t4.followId
+        ) x1 ,
+        crm.dbo.USR_User x2 ,
+        ( SELECT    z1.id storeid ,
+                    z1.Name ,
+                    z1.StoreNo ,
+					z1.AddressDetail AS storeAddress,
+					z1.cityNo,
+                    z1.acCityNo ,
+                    z1.UserCreate ,
+                    z1.Maintainer ,
+                    z1.maintainerName ,
+                    z1.AddressDetail,
+					z1.businessStatus,
+					dic_biz.dicValue businessStatusName,
+					(SELECT DistrictName FROM dbo.BAS_District WHERE DistrictNo = z1.DistrictNo) DistrictName,
+					z2.CityName ,
+					z2.centercode,
+					z2.centerid,s.signageNo,s.decorateStatus,
+					z2.centername,u.userId,u.userName
+          FROM      Store z1
+		  LEFT JOIN (SELECT DISTINCT centerid,centercode,centername,CityName FROM V_CRM_Center_Group_ref) z2 ON z1.centerid = z2.centerid
+		  LEFT JOIN dbo.BAS_DictionaryValue dic_biz ON z1.businessStatus = dic_biz.dicCode AND dic_biz.delFlag = 'N'
+		  LEFT JOIN crm.dbo.USR_User u ON z1.UserCreate = u.userId
+		  LEFT JOIN (
+				SELECT t1.storeNo, t2.signageNo, t1.decorateStatus FROM OMS.dbo.CRM_Decoration t1
+				LEFT JOIN OMS.dbo.CRM_oaStoreFlop t2
+				ON t1.decorateId=t2.decorateId AND t2.delFlag=0
+				WHERE t1.delFlag=0
+		  ) s ON z1.storeNo = s.storeNo
+        ) x3,
+		dbo.V_USR_OrgHis org
+
+		WHERE x1.UserCreate = x2.userId
+          AND x1.StoreId = x3.StoreId
+		  AND x3.centerId = org.centerGroupId
+		<if test="followAimCodeStr != null and followAimCodeStr != ''">
+			AND x1.followPurpose LIKE '%${followAimCodeStr}%'
+		</if>
+		<if test="contractStatus != null and contractStatus != ''">
+			AND x1.contractStatus = '${contractStatus}'
+		</if>
+		<if test="decorateStatus != null and decorateStatus != ''">
+			AND x3.decorateStatus = '${decorateStatus}'
+		</if>
+		<if test="cityNo != null and cityNo != ''">
+			AND x3.acCityNo IN ('${cityNo}')
+		</if>
+		<if test="centerId != null and centerId != ''">
+			AND x3.centerid IN ('${centerId}')
+		</if>
+		<if test="store != null and store != ''">
+			AND (x3.Name LIKE '%${store}%' OR x3.StoreNo LIKE '%${store}%' OR x3.AddressDetail LIKE '%${store}%' OR x3.signageNo LIKE '%${store}%')
+		</if>
+		<if test="follower != null and follower != ''">
+			AND x2.userName = '${follower}'
+		</if>
+		<if test="dateStart != null and dateStart != ''">
+			AND CONVERT (VARCHAR,x1.DateCreate,23) >= '${dateStart}'
+		</if>
+		<if test="dateEnd != null and dateEnd != ''">
+			AND CONVERT (VARCHAR,x1.DateCreate,23) &lt;= '${dateEnd}'
+		</if>
+		<if test="organization != null and organization != ''">
+			AND org.yearly = #{organization}
+		</if>
+		<if test="regionCodeList != null">
+			AND org.regionCode IN
+			<foreach collection="regionCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="areaCityCodeList != null">
+			AND org.areaCityCode IN
+			<foreach collection="areaCityCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="cityIdList != null">
+			AND org.cityId IN
+			<foreach collection="cityIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="centerIdList != null">
+			AND org.centerGroupId IN
+			<foreach collection="centerIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="cityNoList != null">
+			AND x3.acCityNo IN
+			<foreach collection="cityNoList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="userId != null and userId != ''">
+			AND x3.centerId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+		</if>
+	ORDER BY org.regionCode, org.areaCityCode, x3.acCityNo, x1.DateCreate DESC
+	</select>
+
+	<select id="getMapInfo" parameterType="java.util.Map" resultMap="followDetailDtoMap">
+		SELECT signLongitude,signLatitude,CONVERT(VARCHAR(100),DateCreate,120) followDate FROM Follow
+		WHERE signLongitude IS NOT NULL AND signLatitude IS NOT NULL
+		AND UserCreate = #{followerId}
+		AND CONVERT(VARCHAR(10),DateCreate,120) = CONVERT(VARCHAR(10),'${followDate}',120)
+		ORDER BY DateCreate
+	</select>
+
+	<select id="getFollowPictureList" parameterType="java.util.Map" resultMap="pictureDtoMap">
+		select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+		from Pic_Picture_Ref where pictureRefId=#{signPictureRefId} and pictureStatus=0
+	</select>
+
+	<select id="getDecorationPictureList" parameterType="java.util.Map" resultMap="pictureDtoMap">
+		SELECT  f.url20 AS smallPictureUrl ,
+		        f.url50 AS middlePictureUrl ,
+		        f.url500 AS bigPictureUrl
+		FROM    oms.dbo.FIL_FileRecordMain f
+		        JOIN oms.dbo.CRM_oaStoreAcceptance a ON f.RefId = a.id
+		        JOIN ( SELECT   MAX(decorateId) AS decorateId
+		               FROM     oms.dbo.CRM_Decoration d
+		               WHERE    storeNo = #{storeNo,jdbcType=VARCHAR}
+		                 AND    delFlag = 0
+		             ) k ON k.decorateId = a.decorateId
+		WHERE   f.dicCode IN ( 16801,16802, 16803, 16804, 16805 )
+		  AND   f.delFlag = 0
+		  AND   a.delFlag = 0
+	  ORDER BY  f.id ASC
+	</select>
+</mapper>

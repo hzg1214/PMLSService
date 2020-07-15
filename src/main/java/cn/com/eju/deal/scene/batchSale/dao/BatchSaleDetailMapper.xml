@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.batchSale.dao.BatchSaleDetailMapper">
+
+<insert id="insertBatchSaleDetail" parameterType="cn.com.eju.deal.scene.batchSale.dto.BatchSaleDetail" useGeneratedKeys="true" keyProperty="batchDetailId">
+        INSERT INTO LNK_BatchSaleDetail
+        (batchId,reportId,floor,customerName1,customerPhone1,customerName2,customerPhone2,saleAcreage,saleAmount,delFlag,isSale)
+        VALUES
+        (#{batchId},
+         #{reportId},
+         #{floor},
+         #{customerName1},
+         #{customerPhone1},
+         #{customerName2},
+         #{customerPhone2},
+         #{saleAcreage},
+         #{saleAmount},
+         'N',
+         'N')
+    </insert>
+
+     <delete id="deleteBachSaleDetailByBatchId" parameterType="java.util.Map" >
+    UPDATE LNK_BatchSaleDetail
+    SET delFlag='Y'
+    WHERE batchDetailId=#{batchDetailId,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateBachSaleDetail" parameterType="cn.com.eju.deal.scene.batchSale.dto.BatchSaleDetail">
+      UPDATE LNK_BatchSaleDetail
+      <set>
+          <if test="customerName1!=null">
+              customerName1=#{customerName1,jdbcType=VARCHAR},
+          </if>
+          <if test="customerPhone1!=null">
+              customerPhone1=#{customerPhone1,jdbcType=VARCHAR},
+          </if>
+          <if test="customerName2!=null ">
+              customerName2=#{customerName2,jdbcType=VARCHAR},
+          </if>
+          <if test="customerPhone2!=null ">
+              customerPhone2=#{customerPhone2,jdbcType=VARCHAR},
+          </if>
+          <if test="saleAcreage!=null">
+              saleAcreage=#{saleAcreage},
+          </if>
+          <if test="saleAmount!=null">
+              saleAmount=#{saleAmount},
+          </if>
+          <if test="befYjsrTaxAmount!=null">
+              befYjsrTaxAmount=#{befYjsrTaxAmount},
+          </if>
+          <if test="aftYjsrTaxAmount!=null">
+              aftYjsrTaxAmount=#{aftYjsrTaxAmount},
+          </if>
+          <if test="befYjfyTaxAmount!=null">
+              befYjfyTaxAmount=#{befYjfyTaxAmount},
+          </if>
+          <if test="aftYjfyTaxAmount!=null">
+              aftYjfyTaxAmount=#{aftYjfyTaxAmount},
+          </if>
+          <if test="befYjdyTaxAmount!=null">
+              befYjdyTaxAmount=#{befYjdyTaxAmount},
+          </if>
+          <if test="aftYjdyTaxAmount!=null">
+              aftYjdyTaxAmount=#{aftYjdyTaxAmount},
+          </if>
+
+          <if test="befFangyouYJFYAmount!=null">
+              befFangyouYJFYAmount=#{befFangyouYJFYAmount},
+          </if>
+          <if test="aftFangyouYJFYAmount!=null">
+              aftFangyouYJFYAmount=#{aftFangyouYJFYAmount},
+          </if>
+
+      </set>
+        WHERE batchDetailId=#{batchDetailId,jdbcType=INTEGER}
+    </update>
+
+    <select id="getBatchSaleDetailList" parameterType="java.util.Map" resultType="cn.com.eju.deal.scene.batchSale.dto.BatchSaleDetail">
+        SELECT
+            b.batchDetailId,
+            b.batchId,
+            b.reportId,
+            b.floor,
+            b.customerName1,
+            b.customerPhone1,
+            b.customerName2,
+            b.customerPhone2,
+            b.saleAcreage,
+            b.saleAmount,
+            b.befYjsrTaxAmount,
+            b.aftYjsrTaxAmount,
+            b.befYjfyTaxAmount,
+            b.aftYjfyTaxAmount,
+            b.befYjdyTaxAmount,
+            b.aftYjdyTaxAmount,
+            b.delFlag,
+			r.accountProject,
+			r.accountProjectNo
+			,b.befFangyouYJFYAmount
+			,b.aftFangyouYJFYAmount
+			,r.htedition
+			,pc.commissionRatio
+			,pc.commissionAmount
+		    ,r.isGlobalControl
+		    ,r.dyRatio
+        FROM
+          LNK_BatchSaleDetail b
+        INNER JOIN LNK_report r on r.ReportId = b.reportId and r.DelFlg = 0
+        LEFT JOIN PMLS_Cooperation pc ON pc.contractNo = r.contractNo  AND pc.delFlag = '0'
+        WHERE
+          b.delFlag='N'
+         AND b.batchId=#{batchId,jdbcType=INTEGER}
+         ORDER by batchDetailId
+    </select>
+
+    <select id="countBatchSaleDetailNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+         SELECT
+            COUNT(1)
+        FROM
+          LNK_BatchSaleDetail
+        WHERE
+          delFlag='N'
+         AND batchId=#{batchId,jdbcType=INTEGER}
+    </select>
+
+    <select id="countBatchSaleDetail"  parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM LNK_BatchSaleDetail detail
+        LEFT JOIN LNK_BatchSale sale ON sale.batchId=detail.batchId
+        WHERE
+        sale.estateId=#{estateId,jdbcType=VARCHAR}
+        AND sale.userCode=#{userCode,jdbcType=VARCHAR}
+        AND sale.delFlag='N'
+        AND detail.delFlag='N'
+    </select>
+
+    <select id="whetherExistenceBatchSaleDetail" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM LNK_BatchSaleDetail detail
+        LEFT JOIN LNK_BatchSale sale ON sale.batchId=detail.batchId
+        WHERE
+        sale.projectNo=#{projectNo,jdbcType=VARCHAR}
+        AND sale.userCode=#{userCode,jdbcType=VARCHAR}
+        AND sale.delFlag='N'
+        AND detail.delFlag='N'
+        AND detail.reportId=#{reportId,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="yesOrNoDaDingStatus" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM LNK_Report r WITH(NOLOCK)
+        JOIN LNK_ReportDetail d WITH(NOLOCK) ON r.EstateId = d.EstateId
+                                AND r.CompanyId = d.CompanyId
+                                AND r.CustomerId = d.CustomerId
+        WHERE
+        d.isValid = 0
+        AND r.ReportId=#{reportId}
+        AND d.Progress='13505'
+        AND d.ConfirmStatus='13603'
+    </select>
+
+    <select id="checkAccountProject" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) from Account_Project where accountProject = #{accountProject} and cityNo = #{cityNo} and delFlag = 0
+    </select>
+
+    <update id="updateBatchSaleLog" parameterType="java.util.Map">
+        UPDATE
+        LNK_BatchSaleDetail
+        <set>
+            <if test="userCode!=null">
+                empCode=#{userCode},
+            </if>
+            <if test="userName!=null">
+                empName=#{userName},
+            </if>
+            empDate= CONVERT(varchar,GETDATE(),120),
+            isSale='Y',
+        </set>
+        WHERE batchDetailId=#{batchDetailId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByBatachId"  parameterType="java.lang.Integer" resultType="cn.com.eju.deal.scene.batchSale.dto.BatchSaleDetail">
+        select r.*
+        FROM
+        LNK_BatchSaleDetail r
+        WHERE r.batchId = #{batchId,jdbcType=INTEGER}
+        AND r.delFlag = 'N'
+    </select>
+    
+<!--     	校验核算主体-通过项目找到收入类合同(LNK_Estate_Srlht)对应得核算 -->
+    <select id="checkAccountProjectByProjectNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) from dbo.LNK_Estate_Srlht where hsName = #{accountProject} and projectNo = #{projectNo} and delFlag = 0
+    </select>
+</mapper>

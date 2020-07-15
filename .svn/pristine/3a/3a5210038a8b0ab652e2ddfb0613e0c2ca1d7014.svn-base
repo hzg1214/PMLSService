@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.batchReback.dao.BatchRebackDetailMapper">
+
+<insert id="insertBatchRebackDetail" parameterType="cn.com.eju.deal.scene.batchReback.dto.BatchRebackDetail" useGeneratedKeys="true" keyProperty="batchDetailId">
+        INSERT INTO dbo.LNK_BatchRebackDetail
+        ( batchId ,reportId ,floor ,
+          customerName1 ,customerPhone1 ,customerName2 ,customerPhone2 ,
+          saleArea ,saleAmount ,
+          accountProject ,accountProjectNo ,
+          delFlag
+        )
+        VALUES
+        (#{batchId},#{reportId},#{floor},
+         #{customerName1},#{customerPhone1},#{customerName2},#{customerPhone2},
+         #{saleArea},#{saleAmount},
+         #{accountProject},#{accountProjectNo},
+         0)
+    </insert>
+
+     <delete id="deleteBachRebackDetailByBatchId" parameterType="java.util.Map" >
+    UPDATE LNK_BatchRebackDetail
+    SET delFlag=1
+    WHERE batchDetailId=#{batchDetailId,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateBachRebackDetail" parameterType="cn.com.eju.deal.scene.batchReback.dto.BatchRebackDetail">
+      UPDATE LNK_BatchRebackDetail
+      <set>
+          <if test="rebackDate!=null">
+              rebackDate=#{rebackDate},
+          </if>
+      </set>
+        WHERE batchDetailId=#{batchDetailId,jdbcType=INTEGER}
+    </update>
+
+    <select id="getBatchRebackDetailList" parameterType="java.util.Map" resultType="cn.com.eju.deal.scene.batchReback.dto.BatchRebackDetail">
+        SELECT
+            batchDetailId,
+            batchId,
+            r.reportId,
+            floor,
+            customerName1,
+            customerPhone1,
+            customerName2,
+            customerPhone2,
+            saleArea,
+            saleAmount,
+            accountProject,
+			accountProjectNo,
+			SUM(isnull(yjsr.befTaxAmount,0)) befYjsrTaxAmount,SUM(isnull(yjsr.aftTaxAmount,0)) aftYjsrTaxAmount,
+            SUM(isnull(yssr.befTaxAmount,0)) befYssrTaxAmount,SUM(isnull(yssr.aftTaxAmount,0)) aftYssrTaxAmount,
+            --SUM(isnull(yjdy.befTaxAmount,0)) befYjdyTaxAmount,SUM(isnull(yjdy.aftTaxAmount,0)) aftYjdyTaxAmount,
+            rebackDate,
+            delFlag,
+            empCode,
+            empName,
+            empDate
+        FROM
+          LNK_BatchRebackDetail r WITH(NOLOCK)
+          left JOIN dbo.LNK_ReportDetail d WITH(NOLOCK) ON d.isValid = 0 AND d.Progress='13505' AND d.ConfirmStatus='13601' AND r.reportId = d.reportNo
+		  LEFT JOIN dbo.LNK_YJ_YJSR yjsr WITH(NOLOCK) ON yjsr.delFlg=0 AND yjsr.reportId = r.ReportId AND yjsr.detailId=d.Id
+		  LEFT JOIN dbo.LNK_YJ_YSSR yssr WITH(NOLOCK) ON yssr.delFlg=0 AND yssr.reportId=r.ReportId AND yssr.detailId=d.Id
+		  --LEFT JOIN dbo.LNK_YJ_YJDY yjdy ON yjdy.delFlg=0 AND yjdy.reportId=r.ReportId AND yjdy.detailId=d.Id
+        WHERE
+          r.delFlag=0 AND batchId=#{batchId,jdbcType=INTEGER}
+        group by batchDetailId,
+            batchId,
+            r.reportId,
+            floor,
+            customerName1,
+            customerPhone1,
+            customerName2,
+            customerPhone2,
+            saleArea,
+            saleAmount,
+            accountProject,
+			accountProjectNo,
+			rebackDate,
+            delFlag,
+            empCode,
+            empName,
+            empDate
+    </select>
+
+    <select id="countBatchRebackDetailNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+         SELECT
+            COUNT(1)
+        FROM
+          LNK_BatchRebackDetail
+        WHERE
+          delFlag=0
+         AND batchId=#{batchId,jdbcType=INTEGER}
+    </select>
+
+    <select id="countBatchRebackDetail"  parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM LNK_BatchRebackDetail detail
+        LEFT JOIN LNK_BatchReback sale ON sale.batchId=detail.batchId
+        WHERE
+        sale.estateId=#{estateId,jdbcType=VARCHAR}
+        AND sale.userCode=#{userCode,jdbcType=VARCHAR}
+        AND sale.delFlag=0
+        AND detail.delFlag=0
+    </select>
+
+    <select id="whetherExistenceBatchRebackDetail" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM LNK_BatchRebackDetail detail
+        LEFT JOIN LNK_BatchReback sale ON sale.batchId=detail.batchId
+        WHERE
+        sale.projectNo=#{projectNo,jdbcType=VARCHAR}
+        AND sale.userCode=#{userCode,jdbcType=VARCHAR}
+        AND sale.delFlag=0
+        AND detail.delFlag=0
+        AND detail.reportId=#{reportId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="checkAccountProject" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) from Account_Project where accountProject = #{accountProject} and cityNo = #{cityNo} and delFlag = 0
+    </select>
+
+    <update id="updateBatchRebackLog" parameterType="java.util.Map">
+        UPDATE
+        LNK_BatchRebackDetail
+        <set>
+            <if test="userCode!=null">
+                empCode=#{userCode},
+            </if>
+            <if test="userName!=null">
+                empName=#{userName},
+            </if>
+            empDate= CONVERT(varchar,GETDATE(),120)
+        </set>
+        WHERE batchDetailId=#{batchDetailId,jdbcType=INTEGER}
+    </update>
+
+    <select id="checkReback" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        WHERE isValid = 0
+        AND ReportNo=#{reportId}
+        AND Progress='13503'
+        AND ConfirmStatus='13603'
+    </select>
+
+    <select id="selectByBatachId"  parameterType="java.lang.Integer" resultType="cn.com.eju.deal.scene.batchReback.dto.BatchRebackDetail">
+        select r.*
+        FROM
+          LNK_BatchRebackDetail r
+        WHERE r.batchId = #{batchId,jdbcType=INTEGER}
+        AND r.delFlag = 0
+    </select>
+</mapper>

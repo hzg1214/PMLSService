@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuOrder.dao.KefuOrderVerifyMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuOrder.model.KefuOrderVerify">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="orderId" jdbcType="BIGINT" property="orderId" />
+    <result column="checkDate" jdbcType="TIMESTAMP" property="checkDate" />
+    <result column="checkDesc" jdbcType="NVARCHAR" property="checkDesc" />
+    <result column="checkStatus" jdbcType="BIGINT" property="checkStatus" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateUpdate" jdbcType="TIMESTAMP" property="dateUpdate" />
+    <result column="userUpdate" jdbcType="INTEGER" property="userUpdate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, orderId, checkDate, checkDesc, checkStatus, dateCreate, userCreate, dateUpdate, 
+    userUpdate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Order_Verify
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from Kefu_Order_Verify
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuOrder.model.KefuOrderVerify" useGeneratedKeys="true" keyProperty="id">
+    insert into Kefu_Order_Verify (id, orderId, checkDate, 
+      checkDesc, checkStatus, dateCreate, 
+      userCreate, dateUpdate, userUpdate, 
+      delFlag)
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{checkDate,jdbcType=TIMESTAMP}, 
+      #{checkDesc,jdbcType=NVARCHAR}, #{checkStatus,jdbcType=BIGINT}, #{dateCreate,jdbcType=TIMESTAMP}, 
+      #{userCreate,jdbcType=INTEGER}, #{dateUpdate,jdbcType=TIMESTAMP}, #{userUpdate,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuOrder.model.KefuOrderVerify" useGeneratedKeys="true" keyProperty="id">
+    insert into Kefu_Order_Verify
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        orderId,
+      </if>
+      <if test="checkDate != null">
+        checkDate,
+      </if>
+      <if test="checkDesc != null">
+        checkDesc,
+      </if>
+      <if test="checkStatus != null">
+        checkStatus,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate,
+      </if>
+      <if test="userUpdate != null">
+        userUpdate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="checkDate != null">
+        #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkDesc != null">
+        #{checkDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=BIGINT},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdate != null">
+        #{userUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuOrder.model.KefuOrderVerify">
+    update Kefu_Order_Verify
+    <set>
+      <if test="orderId != null">
+        orderId = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="checkDate != null">
+        checkDate = #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkDesc != null">
+        checkDesc = #{checkDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="checkStatus != null">
+        checkStatus = #{checkStatus,jdbcType=BIGINT},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdate != null">
+        userUpdate = #{userUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuOrder.model.KefuOrderVerify">
+    update Kefu_Order_Verify
+    set orderId = #{orderId,jdbcType=BIGINT},
+      checkDate = #{checkDate,jdbcType=TIMESTAMP},
+      checkDesc = #{checkDesc,jdbcType=NVARCHAR},
+      checkStatus = #{checkStatus,jdbcType=BIGINT},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userUpdate = #{userUpdate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectVerifyByOrderId" parameterType="map" resultType="cn.com.eju.deal.keFuOrder.model.KeFuOrderCkDto">
+    SELECT
+    	kov.id id ,kov.orderId,
+    	kov.checkDate ckDate,
+    	kov.checkDesc ckDesc,
+    	duu.userCode userCode ,
+    	duu.userName ckUserName
+    FROM Kefu_Order_Verify kov
+    INNER JOIN dbo.Kefu_Order ko ON kov.orderId=ko.id AND ko.delFlag = '0'
+    LEFT JOIN crm.dbo.USR_User duu ON duu.userId = kov.userCreate AND duu.delFlag='N'
+    WHERE ko.id= #{orderId,jdbcType=INTEGER}
+    AND kov.delFlag = '0'
+    ORDER BY kov.dateCreate DESC
+  </select>
+
+</mapper>

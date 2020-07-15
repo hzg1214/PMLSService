@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.achievement.dao.CitySettingMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.achievement.model.CitySetting">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="cityNo" property="cityNo" jdbcType="VARCHAR" />
+		<result column="achievementOpenFlag" property="achievementOpenFlag"
+			jdbcType="VARCHAR" />
+		<result column="delFlag" property="delFlag" jdbcType="CHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, cityNo, achievementOpenFlag, delFlag
+	</sql>
+	<!-- 根据cityNo查询城市业绩开关 -->
+	<select id="getOpenFlagByCityNo" resultType="string"
+		parameterType="string">
+		SELECT achievementOpenFlag
+		FROM dbo.Bas_CitySetting
+			WHERE delFlag = 'N'
+			AND cityNo =#{cityNo,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 根据cityNo查询模板编号 -->
+	<select id="getCitySettingByCityNo" resultType="Map"
+		parameterType="string">
+		SELECT *
+		FROM dbo.Bas_CitySetting
+			WHERE delFlag = 'N'
+			AND cityNo =#{cityNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getCitySettingByContractAcCityNo" resultType="Map" parameterType="string">
+	   SELECT bc.*
+        FROM dbo.Bas_CitySetting bc
+        JOIN dbo.contract c 
+          ON bc.cityNo = c.acCityNo
+       WHERE bc.delFlag = 'N'
+             AND c.ContractNo =#{contractNo,jdbcType=VARCHAR}
+	</select>
+	<select id="getBasCitySettingByCityNo" resultType="Map" parameterType="string">
+	   SELECT tkTypeCode
+        FROM dbo.Bas_CitySetting bc
+       WHERE bc.delFlag = 'N'
+             AND bc.cityNo =#{cityNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getBasCitySettingList" resultType="map">
+	  SELECT  c.id
+				,bc.cityNo
+				,c.cityName
+		FROM    Bas_CitySetting bc
+				LEFT JOIN dbo.BAS_City c ON bc.cityNo = c.CityNo
+		WHERE   bc.delFlag = 'N'
+	</select>
+
+
+	<select id="getAchivAchievementLevelSettingList" parameterType="java.lang.String" resultType="map">
+	   SELECT
+	  		distinct centerGroupId,centerGroupName
+        FROM dbo.Achiv_AchievementLevel_Setting
+       WHERE delFlag = 0
+         and cityNo = #{cityNo,jdbcType=VARCHAR}
+	</select>
+</mapper>

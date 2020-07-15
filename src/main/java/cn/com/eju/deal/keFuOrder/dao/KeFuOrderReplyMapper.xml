@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuOrder.dao.KeFuOrderReplyMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuOrder.model.KeFuOrderReply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="orderId" jdbcType="VARCHAR" property="orderId" />
+    <result column="replyDate" jdbcType="TIMESTAMP" property="replyDate" />
+    <result column="replyDesc" jdbcType="VARCHAR" property="replyDesc" />
+    <result column="dealStatus" jdbcType="INTEGER" property="dealStatus" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateUpdate" jdbcType="TIMESTAMP" property="dateUpdate" />
+    <result column="userUpdate" jdbcType="INTEGER" property="userUpdate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, orderId, replyDate, replyDesc, dealStatus,  
+    dateCreate, userCreate, dateUpdate, userUpdate, 
+    delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Order_Reply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Order_Reply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrderReply">
+    insert into Kefu_Order_Reply (orderId, replyDate, replyDesc, dealStatus,  
+    dateCreate, userCreate, dateUpdate, userUpdate, 
+    delFlag)
+    values (#{orderId,jdbcType=VARCHAR}, #{replyDate,jdbcType=TIMESTAMP}, 
+      #{replyDesc,jdbcType=VARCHAR}, #{dealStatus,jdbcType=INTEGER}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userCreate,jdbcType=INTEGER}, #{dateUpdate,jdbcType=TIMESTAMP}, 
+      #{userUpdate,jdbcType=INTEGER}, #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrderReply" useGeneratedKeys="true" keyProperty="id">
+    insert into Kefu_Order_Reply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        orderId,
+      </if>
+      <if test="replyDate != null">
+        replyDate,
+      </if>
+      <if test="replyDesc != null">
+        replyDesc,
+      </if>
+      <if test="dealStatus != null">
+        dealStatus,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate,
+      </if>
+      <if test="userUpdate != null">
+        userUpdate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyDate != null">
+        #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyDesc != null">
+        #{replyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="dealStatus != null">
+        #{dealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdate != null">
+        #{userUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrderReply">
+    update Kefu_Order_Reply
+    <set>
+      <if test="orderId != null">
+        orderId = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyDate != null">
+        replyDate = #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyDesc != null">
+        replyDesc = #{replyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="dealStatus != null">
+        dealStatus = #{dealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealDate != null">
+        dealDate = #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkDate != null">
+        checkDate = #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdate != null">
+        userUpdate = #{userUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByOrderId" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrderReply">
+    update Kefu_Order_Reply
+    set replyDate = #{replyDate,jdbcType=TIMESTAMP},
+    	replyDesc = #{replyDesc,jdbcType=VARCHAR},
+    	dealStatus = #{dealStatus,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userUpdate = #{userUpdate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where orderId = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByOrderId" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Order_Reply
+    where orderId = #{orderId,jdbcType=INTEGER}
+  </select>
+  <select id="selectReplyByOrderId" parameterType="map" resultType="cn.com.eju.deal.keFuOrder.model.KeFuOrderCkDto">
+    SELECT
+    	kor.id id ,kor.orderId,
+    	kor.replyDate ckDate,
+    	kor.replyDesc ckDesc,
+    	duu.userCode userCode,
+    	duu.userName ckUserName
+    FROM Kefu_Order_Reply kor
+    INNER JOIN dbo.Kefu_Order ko ON kor.orderId=ko.id AND ko.delFlag = '0'
+    LEFT JOIN crm.dbo.USR_User duu ON duu.userId = kor.userCreate AND duu.delFlag='N'
+    WHERE ko.id=#{orderId,jdbcType=INTEGER}
+    AND kor.delFlag = '0'
+    ORDER BY kor.dateCreate DESC
+  </select>
+</mapper>

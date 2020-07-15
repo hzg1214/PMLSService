@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.sweepStreets.SweepStreetsMapper" >
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.model.sweepStreets.StoreInfoDto" >
+		<result column="storeId" property="storeId" />
+		<result column="storeNo" property="storeNo" />
+		<result column="storeName" property="storeName" />
+		<result column="longitude" property="longitude" />
+		<result column="latitude" property="latitude" />
+		<result column="storeAddress" property="storeAddress" />
+		<result column="auditStatus" property="auditStatus" />
+		<result column="dataCount" property="dataCount" />
+	</resultMap>
+
+	<resultMap id="storeNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="Longitude" property="longitude" />
+		<result column="Latitude" property="latitude" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="StoreManager" property="storeManager" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" />
+		<result column="LinkageSituation" property="linkageSituation" />
+		<result column="ChainBrand" property="chainBrand" />
+		<result column="ChainBrandName" property="chainBrandName" />
+		<result column="StoreDueTime" property="storeDueTime" />
+		<result column="StoreLeaseDueTime" property="storeLeaseDueTime" />
+		<result column="StorePersonNum" property="storePersonNum" />
+		<result column="StorePersonNumName" property="storePersonNumName" />
+		<result column="agentNum" property="agentNum" />
+		<result column="NowUserSystem" property="nowUserSystem" />
+		<result column="NowUserSystemName" property="nowUserSystemName" />
+		<result column="MainBusiness" property="mainBusiness" />
+		<result column="MainBusinessName" property="mainBusinessName" />
+		<result column="TransactionMode" property="transactionMode" />
+		<result column="TransactionModeName" property="transactionModeName" />
+		<result column="businessPlaceType" property="businessPlaceType" />
+		<result column="businessPlaceTypeName" property="businessPlaceTypeName" />
+		<result column="Address" property="address" />
+		<result column="AddressDetail" property="addressDetail" />
+		<result column="AuditStatus" property="auditStatus" />
+		<result column="AuditStatusName" property="auditStatusName" />
+		<result column="companyId" property="companyId" />
+		<result column="maintainer" property="maintainer" />
+		<result column="maintainerName" property="maintainerName" />
+		<result column="centerName" property="centerName" />
+		<result column="storeCenterName" property="storeCenterName" />
+		<result column="pictureRefId" property="pictureRefId" />
+		<result column="businessStatus" property="businessStatus" />
+		<result column="storeType" property="storeType" />
+		<result column="storeSizeScale" property="storeSizeScale" />
+		<result column="storeSizeScaleName" property="storeSizeScaleName" />
+		<result column="contractType" property="contractType" />
+		<collection property="auditRecordList" column="id" ofType="cn.com.eju.deal.model.sweepStreets.StoreAuditRecordDto" select="selectAuditRecord"/>
+		<collection property="storePicList" column="pictureRefId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+	</resultMap>
+	<resultMap id="storeNewDtoMap2" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="address" property="address" />
+		<result column="addressDetail" property="addressDetail" />
+		<result column="storeManager" property="storeManager" />
+		<result column="storeManagerPhone" property="storeManagerPhone" />
+		<result column="userCreate" property="userCreate" />
+		<result column="dateCreate" property="dateCreate" />
+		<result column="btoaAlert" property="btoaAlert" />
+		<result column="btoaAlertDesc" property="btoaAlertDesc" />
+		<result column="maintainer" property="maintainer" />
+		<result column="maintainerName" property="maintainerName" />
+		<result column="acCityNo" property="acCityNo" />
+	</resultMap>
+
+
+	<resultMap id="companyNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.CompanyNewDto">
+		<result column="Id" property="companyId" />
+		<result column="CompanyNo" property="companyNo" />
+		<result column="CompanyName" property="companyName" />
+		<result column="DateCreate" property="dateCreate" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="address" property="address" />
+		<result column="addressDetail" property="addressDetail" />
+		<result column="companyAddress" property="companyAddress" />
+		<result column="businessLicenseNature" property="businessLicenseNature" />
+		<result column="businessLicenseNatureName" property="businessLicenseNatureName" />
+		<result column="legalPerson" property="legalPerson" />
+		<result column="businessLicenseNo" property="businessLicenseNo" />
+		<result column="isUpdate" property="isUpdate" />
+		<result column="dataCount" property="dataCount" />
+		<result column="bizType" property="bizType" />
+		<result column="companyType" property="companyType" />
+		
+		<result column="establishYear" property="establishYear"/>
+        <result column="dockingPeo" property="dockingPeo"/>
+        <result column="dockingPeoTel" property="dockingPeoTel"/>
+        <result column="storeNumber" property="storeNumber"/>
+        <result column="comStaffNum" property="comStaffNum"/>
+        <result column="channelType" property="channelType"/>
+        <result column="undertakeType" property="undertakeType"/>
+        <result column="resourcesRange" property="resourcesRange" />
+        <result column="specificResources" property="specificResources" />
+        <result column="lnkScale" property="lnkScale"/>
+        <result column="closeDeveloper" property="closeDeveloper"/>
+        
+        <result column="undertakeTypeName" property="undertakeTypeName"/>
+        <result column="channelTypeName" property="channelTypeName"/>
+        <result column="lnkScaleName" property="lnkScaleName"/>
+		<result column="contractType" property="contractType" />
+		<collection property="storeList" column="id" ofType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" select="selectRelationStore"/>
+	</resultMap>
+
+	<resultMap id="storeAuditRecordDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreAuditRecordDto">
+		<result column="id" property="id" />
+		<result column="storeId" property="storeId" />
+		<result column="auditDesc" property="auditDesc" />
+		<result column="auditUser" property="auditUser" />
+		<result column="auditUserName" property="auditUserName" />
+		<result column="auditTime" property="auditTime" />
+	</resultMap>
+
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.model.sweepStreets.WXPictureDto"></resultMap>
+	<resultMap id="cityDtoMap" type="cn.com.eju.deal.dto.common.CityDto"></resultMap>
+
+	<select id="getStoreListData" parameterType="Map" resultMap="BaseResultMap">
+		select t.* from (
+			select
+			ROW_NUMBER() OVER (ORDER BY t1.DateCreate desc) rowNum,
+			COUNT(1) OVER()  AS dataCount,
+			id as storeId,
+			storeNo,
+			name as storeName,
+			addressDetail as storeAddress,
+			longitude,
+			latitude,
+			ISNULL(auditStatus,0) AS auditStatus
+			from Store t1 INNER JOIN dbo.USR_User t2 ON t1.UserCreate=t2.userId AND t2.delFlag='N'
+			where 1=1 and t1.isDelete=0 AND t1.centerId = #{centerId}
+			<if test="storeStatus==0">
+				and isnull(auditStatus,0)!=20
+			</if>
+			<if test="storeStatus==1">
+				and isnull(auditStatus,0)=20
+			</if>
+			<if test="userCode!=null and userCode!=''">
+				and (t2.userCode=#{userCode}
+				OR EXISTS (SELECT TOP 1 1 FROM StoreMaintainer sm WHERE sm.delFlag = 'N' AND sm.storeId = t1.Id AND sm.userCode = #{userCode})
+				  or t1.centerId in (
+					SELECT top 1 centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM')
+				     WHERE 1 = 1
+					<if test="centerId!=null and centerId!=''">
+						AND centerGroupId = #{centerId}
+					</if>
+					<if test="cityNo!=null and cityNo!=''">
+						and cityNo=#{cityNo}
+					</if>
+				  )
+				)
+			</if>
+			<if test="cityNo!=null and cityNo!=''">
+				and t1.acCityNo=#{cityNo}
+			</if>
+			<if test="storeName!=null and storeName!=''">
+				and (t1.name like '%' + #{storeName} + '%' or t1.storeNo like '%' + #{storeName} + '%' or t1.addressDetail like '%' + #{storeName} + '%')
+			</if>
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+
+	</select>
+	<select id="getLocalStoreListData" parameterType="Map" resultMap="BaseResultMap">
+		select t.* from (
+			select
+			id as storeId,
+			storeNo,
+			name as storeName,
+			addressDetail as storeAddress,
+			longitude,
+			latitude,
+			ISNULL(auditStatus,0) AS auditStatus,
+			6378137.0*ACOS(SIN(${latitude}/180*PI())*SIN(t1.Latitude/180*PI())+COS(${latitude}/180*PI())*COS(t1.Latitude/180*PI())*COS((${longitude}-t1.Longitude)/180*PI()))
+			as distance
+			from Store t1
+			where 1=1 and t1.isDelete=0 and t1.auditStatus not in(0,30)
+			<!--不显示停业门店-->
+			and t1.businessStatus!=20903
+		) t where t.distance &lt;=1000
+	</select>
+
+	<select id="selectAuditRecord" parameterType="cn.com.eju.deal.model.sweepStreets.StoreAuditRecordDto" resultMap="storeAuditRecordDtoMap">
+		select t1.id,t1.auditDesc,t1.auditUser,CONVERT(VARCHAR,t1.auditTime,23) as auditTime,t2.userName as auditUserName ,
+		ROW_NUMBER() over( order by t1.auditTime desc) as orderNo
+		from Store_AuditRecord t1
+		inner join USR_User t2 on t1.auditUser=t2.userId where t1.storeId=#{storeId} order by t1.auditTime desc
+	</select>
+
+	<select id="selectPicture" parameterType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" resultMap="pictureDtoMap">
+		select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+		from Pic_Picture_Ref where pictureRefId=#{pictureRefId} and pictureStatus=0
+	</select>
+
+	<insert id="addStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" useGeneratedKeys="true" keyProperty="storeId">
+		insert into Store (
+			StoreNo,
+			Name,
+			Longitude,
+			Latitude,
+			IsDelete,
+			CityNo,
+			DistrictNo,
+			Address,
+			UserCreate,
+			StoreStatus,
+			DateCreate,
+			AddressDetail,
+			inputSource,
+			StoreManager,
+			StoreManagerPhone,
+			LinkageSituation,
+			ChainBrand,
+			StoreDueTime,
+			StoreLeaseDueTime,
+			StorePersonNum,
+			NowUserSystem,
+			MainBusiness,
+			TransactionMode,
+			PictureRefId,
+			AuditStatus,
+			CreateLongitude,
+			CreateLatitude,
+			Distance,
+			centerId,
+			acCityNo,
+			businessStatus,
+			businessPlaceType,
+			agentNum,
+			storeSizeScale,
+			storeType
+		) values(
+			#{storeNo},
+			#{storeName},
+			#{longitude},
+			#{latitude},
+			0,
+			#{cityNo},
+			#{districtNo},
+			#{address},
+			#{userCreate},
+			0,
+			GETDATE(),
+			#{addressDetail},
+			#{inputSource},
+			#{storeManager},
+			#{storeManagerPhone},
+			#{linkageSituation},
+			#{chainBrand},
+			#{storeDueTime},
+			#{storeLeaseDueTime},
+			#{storePersonNum},
+			#{nowUserSystem},
+			#{mainBusiness},
+			#{transactionMode},
+			#{pictureRefId},
+			#{auditStatus},
+			#{createLongitude},
+			#{createLatitude},
+			#{distance},
+			#{centerId},
+			#{acCityNo},
+			20901,
+			#{businessPlaceType},
+			#{agentNum},
+			#{storeSizeScale},
+			#{storeType}
+		)
+	</insert>
+
+	<update id="updateStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update Store
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="storeName != null">
+				Name = #{storeName,jdbcType=NVARCHAR},
+			</if>
+			<if test="cityNo != null">
+				cityNo = #{cityNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="districtNo != null">
+				districtNo = #{districtNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=NVARCHAR},
+			</if>
+			<if test="addressDetail != null">
+				addressDetail = #{addressDetail,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeManager != null">
+				StoreManager = #{storeManager,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeManagerPhone != null">
+				StoreManagerPhone = #{storeManagerPhone,jdbcType=NVARCHAR},
+			</if>
+			<if test="linkageSituation != null">
+				LinkageSituation = #{linkageSituation,jdbcType=NVARCHAR},
+			</if>
+			<if test="chainBrand != null">
+				ChainBrand = #{chainBrand,jdbcType=INTEGER},
+			</if>
+			<if test="mainBusiness != null">
+				MainBusiness = #{mainBusiness,jdbcType=INTEGER},
+			</if>
+			<if test="transactionMode != null">
+				TransactionMode = #{transactionMode,jdbcType=INTEGER},
+			</if>
+			<if test="storeType == 23401">
+				<if test="businessPlaceType != null">
+					businessPlaceType = #{businessPlaceType,jdbcType=INTEGER},
+				</if>
+				<if test="storeSizeScale != null">
+					storeSizeScale = #{storeSizeScale,jdbcType=INTEGER},
+				</if>
+				<if test="storePersonNum != null" >
+					StorePersonNum = #{storePersonNum,jdbcType=INTEGER},
+				</if>
+				<if test="agentNum != null" >
+					agentNum = #{agentNum,jdbcType=INTEGER},
+				</if>
+			</if>
+			<if test="storeType != 23401">
+					businessPlaceType = null,
+					storeSizeScale = null,
+					StorePersonNum = null,
+					agentNum = null,
+			</if>
+			<if test="nowUserSystem != null">
+				NowUserSystem = #{nowUserSystem,jdbcType=INTEGER},
+			</if>
+			<if test="storeDueTime != null">
+				StoreDueTime = #{storeDueTime,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeLeaseDueTime != null">
+				StoreLeaseDueTime = #{storeLeaseDueTime,jdbcType=NVARCHAR},
+			</if>
+			<if test="userUpdate != null">
+				UserUpdate = #{userUpdate,jdbcType=NVARCHAR},
+			</if>
+			<if test="pictureRefId != null and pictureRefId!=''">
+				pictureRefId = #{pictureRefId,jdbcType=NVARCHAR},
+			</if>
+			<if test="btoaAlert!=null and btoaAlert!=''">
+				bToAAlert=#{btoaAlert},
+			</if>
+			<if test="btoaAlertDesc!=null and btoaAlertDesc!=''">
+				bToAAlertDesc=#{btoaAlertDesc},
+			</if>
+			<if test="storeType!=null and storeType!=''">
+				storeType=#{storeType},
+			</if>
+			DateUpdate=GETDATE()
+		</trim>
+		where Id=#{storeId}
+	</update>
+
+	<update id="updateStoreAuditStatus" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update Store set
+		<if test="businessStatus != null">
+			businessStatus = #{businessStatus,jdbcType=INTEGER},
+		</if>
+		AuditStatus=#{auditStatus}
+		where Id=#{storeId}
+	</update>
+
+	<update id="deleteStoreById" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update Store set isDelete=1 where Id=#{storeId}
+	</update>
+
+	<select id="checkStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultType="int">
+		SELECT  COUNT(k.id) FROM    (
+			SELECT    store.id
+				FROM      Store
+				WHERE     CityNo = #{cityNo,jdbcType=NVARCHAR}
+				AND     DistrictNo = #{districtNo,jdbcType=NVARCHAR}
+				AND     Address = #{address,jdbcType=NVARCHAR}
+				AND     IsDelete = 0
+				AND     AuditStatus != 30
+				AND     businessStatus != 20903
+				<if test="storeId != null and storeId != ''">
+					<![CDATA[
+				   	and id <> #{storeId,jdbcType=INTEGER}
+				    ]]>
+				</if>
+				UNION ALL
+				( SELECT  c.id
+				FROM    dbo.ContractChange c
+				WHERE   c.changeStoreAddress = 1
+				AND   c.approveState in (0,1,3)
+				and   c.cancelFlag = 0
+				AND   c.delFlag = 0
+				AND   c.storeCity = #{cityNo,jdbcType=NVARCHAR}
+				AND   c.storeDistrict = #{districtNo,jdbcType=NVARCHAR}
+				AND   c.storeAddress = #{address,jdbcType=NVARCHAR}
+			)
+		) k
+	</select>
+
+	<select id="getStoreById" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		SELECT
+		t1.Id,
+		t1.StoreNo,
+		t1.Name,
+		t1.Longitude,
+		t1.Latitude,
+		t1.CityNo,
+		t2.CityName,
+		t1.DistrictNo,
+		t3.DistrictName,
+		t1.Address,
+		t1.AddressDetail,
+		t1.StoreManager,
+		t1.StoreManagerPhone,
+		t1.LinkageSituation,
+		t1.ChainBrand,
+		t1.pictureRefId,
+		t1.maintainer,
+		t1.maintainerName,
+		isnull(t4.brandName,'') AS ChainBrandName,
+		CONVERT(VARCHAR,t1.StoreDueTime,23) as StoreDueTime,
+		CONVERT(VARCHAR,t1.StoreLeaseDueTime,23) as StoreLeaseDueTime,
+		t1.StorePersonNum,
+		isnull(t8.dicValue,'') AS StorePersonNumName,
+		t1.agentNum,
+		t1.NowUserSystem,
+		t1.MainBusiness,
+		mainBusinessName= STUFF(( SELECT ',' + bd.dicValue
+                         FROM   dbo.BAS_DictionaryValue bd
+                         where   PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.mainBusiness + ',')>0
+                         ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.mainBusiness + ',')
+                          FOR XML PATH('')), 1, 1,''),
+		t1.TransactionMode,
+		t1.businessPlaceType,
+		t1.fyAccount,
+		t1.storeSizeScale,
+		isnull(t7.dicValue,'') AS TransactionModeName,
+		isnull(t9.dicValue,'') AS businessStatusName,
+		isnull(t10.dicValue,'') AS businessPlaceTypeName,
+		isnull(t11.dicValue,'') AS storeSizeScaleName,
+		t1.AuditStatus,
+		case when t1.AuditStatus=0 then '未提交'
+		     when t1.AuditStatus=10 then '审核中'
+		     when t1.AuditStatus=20 then '审核通过'
+		     when t1.AuditStatus=30 then '驳回'
+		end AuditStatusName,
+		isnull(s2.centername,'') centerName,
+		s3.groupName as storeCenterName,
+		t1.businessStatus,
+		t1.storeType,
+		(select dicValue from dbo.BAS_DictionaryValue where dicCode = t1.storeType) as storeTypeName,
+		(CASE WHEN scl.ContractStatus IN (10402,10403) AND scl.ContractType IN (10302,10304,10307) THEN 10302 ELSE 0 END) AS contractType
+		FROM dbo.Store t1
+		LEFT JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo
+		LEFT JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo
+		LEFT JOIN dbo.BAS_CityBrand t4 ON t1.ChainBrand=t4.brandNo
+		LEFT JOIN dbo.BAS_DictionaryValue t7 ON t1.TransactionMode=t7.dicCode
+		LEFT JOIN dbo.BAS_DictionaryValue t8 ON t1.StorePersonNum=t8.dicCode
+		LEFT JOIN dbo.BAS_DictionaryValue t9 ON t1.businessStatus=t9.dicCode
+		LEFT JOIN dbo.BAS_DictionaryValue t10 ON t1.businessPlaceType=t10.dicCode
+		LEFT JOIN dbo.BAS_DictionaryValue t11 ON t1.storeSizeScale=t11.dicCode
+		LEFT JOIN dbo.USR_User s1 ON t1.Maintainer=s1.userCode AND s1.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] s2 ON s1.groupId=s2.groupId
+		left join USR_GROUP s3 on t1.centerId=s3.groupId
+		LEFT JOIN dbo.v_crm_StoreContract_last scl ON scl.StoreId = t1.id
+		WHERE t1.Id=#{storeId}
+		AND t1.IsDelete=0
+	</select>
+	
+	<insert id="addAuditRecord" parameterType="Map">
+		insert into Store_AuditRecord (
+			storeId,
+			auditDesc,
+			auditUser,
+			auditTime
+		) values(
+			#{storeId},
+			#{auditDesc},
+			#{auditUser},
+			GETDATE()
+		)
+	</insert>
+
+	<select id="getCompanyListData" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="companyNewDtoMap">
+		select t.* from (
+			select
+				ROW_NUMBER() OVER (ORDER BY t.DateCreate desc) rowNum,
+				COUNT(1) OVER() AS dataCount, t.*
+			from (
+				select distinct
+					t1.id as companyId,
+					t1.companyNo,
+					t1.companyName,
+					(t3.cityName+t4.districtName+t1.address) as addressDetail,
+					companyAddress,
+					t1.DateCreate as createDate,
+					t1.bizType,
+					CONVERT(VARCHAR,t1.DateCreate,23) as dateCreate,
+					t1.companyType
+				from Company t1 INNER JOIN dbo.USR_User t2 ON t1.UserCreate=t2.userId AND t2.delFlag='N'
+				LEFT JOIN dbo.BAS_City t3 ON t1.CityNo=t3.CityNo
+				LEFT JOIN dbo.BAS_District t4 ON t1.DistrictNo=t4.DistrictNo
+				left JOIN dbo.CompanyStore t5 ON t1.id=t5.CompanyId AND t5.IsDelete=0 AND t5.flag=0
+				left JOIN Store t6 ON t5.StoreId=t6.id AND t6.IsDelete=0
+				LEFT JOIN StoreMaintainer sm ON sm.storeId = t6.id AND sm.userCode = #{userCode} AND sm.delFlag = 'N'
+				where 1=1 and t1.isDelete=0
+				<if test="userCode!=null and userCode!=''">
+					and (t2.userCode=#{userCode}
+					or t6.Maintainer=#{userCode}
+					<!--OR EXISTS (SELECT TOP 1 1 FROM StoreMaintainer sm WHERE sm.delFlag = 'N' AND sm.storeId = t6.Id AND sm.userCode = #{userCode})-->
+					or sm.id is not null
+					or t6.centerId in (
+						SELECT top 1 centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM')
+						WHERE 1 = 1
+						<if test="centerId!=null and centerId!=''">
+							AND centerGroupId = #{centerId}
+						</if>
+						<if test="cityNo!=null and cityNo!=''">
+							and (cityNo=#{cityNo}
+								OR EXISTS(SELECT rc.ReleaseCityNo FROM dbo.Company_Release_City rc
+								WHERE rc.IsDelete = 0
+								AND t1.id = rc.CompanyId
+								AND rc.ReleaseCityNo =  #{cityNo,jdbcType=VARCHAR}))
+						</if>
+					  )
+					)
+				</if>
+				<if test="companyName!=null and companyName!=''">
+					and (t1.companyName like '%'+#{companyName}+'%' or t1.companyNo like '%'+#{companyName}+'%'
+					or (t3.cityName+t4.districtName+t1.address) like '%'+#{companyName}+'%')
+				</if>
+			) t
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+
+	</select>
+
+	<select id="checkCompanyByName" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto"  resultMap="companyNewDtoMap">
+		select
+		id as companyId,
+		companyNo,
+		companyName
+		from Company where companyName=#{companyName}
+		<if test="companyId!=null and companyId!=''">
+			and id!=#{companyId}
+		</if>
+		<if test="checkCityNo!=null and checkCityNo!=''">
+			and acCityNo=#{checkCityNo}
+		</if>
+		and isDelete=0
+	</select>
+
+	<select id="checkCompany" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto"  resultMap="companyNewDtoMap">
+		select
+		id as companyId,
+		companyNo,
+		companyName
+		from Company where BusinessLicenseNo=#{businessLicenseNo}
+		<if test="companyId!=null and companyId!=''">
+			and id!=#{companyId}
+		</if>
+		<if test="checkCityNo!=null and checkCityNo!=''">
+			and acCityNo=#{checkCityNo}
+		</if>
+		and isDelete=0
+	</select>
+
+	<insert id="addCompany"  parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" useGeneratedKeys="true" keyProperty="companyId">
+		insert into Company(
+			companyNo,
+			companyName,
+			selectOrgIdStr,
+			isDelete,
+			dateCreate,
+			userCreate,
+			cityNo,
+			districtNo,
+			address,
+			companyStatus,
+			inputSource,
+			businessLicenseNo,
+			legalPerson,
+			contactNumber,
+			companyAddress,
+			businessLicenseNature,
+			FangyouCompanyId,
+			centerId,
+			acCityNo,
+			companyType,
+			establishYear,
+			dockingPeo,
+			dockingPeoTel,
+			storeNumber,
+			comStaffNum,
+			channelType,
+			undertakeType,
+			resourcesRange,
+			specificResources,
+			lnkScale,
+			closeDeveloper
+		) values(
+			#{companyNo},
+			#{companyName},
+			#{selectOrgIdStr},
+			0,
+			getdate(),
+			#{userCreate},
+			#{cityNo},
+			#{districtNo},
+			#{address},
+			#{companyStatus},
+			#{inputSource},
+			#{businessLicenseNo},
+			#{legalPerson},
+			#{contactNumber},
+			#{companyAddress},
+			#{businessLicenseNature},
+			NEWID(),
+			#{centerId},
+			#{acCityNo},
+			#{companyType},
+			#{establishYear},
+			#{dockingPeo},
+			#{dockingPeoTel},
+			#{storeNumber},
+			#{comStaffNum},
+			#{channelType},
+			#{undertakeType},
+			#{resourcesRange},
+			#{specificResources},
+			#{lnkScale},
+			#{closeDeveloper}
+		)
+	</insert>
+
+	<update id="updateCompany" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto">
+		update Company
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="companyName != null">
+				companyName = #{companyName,jdbcType=NVARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=NVARCHAR},
+			</if>
+			<if test="companyAddress != null">
+				companyAddress = #{companyAddress,jdbcType=NVARCHAR},
+			</if>
+			<if test="cityNo != null">
+				cityNo = #{cityNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="districtNo != null">
+				districtNo = #{districtNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="legalPerson != null" >
+				legalPerson = #{legalPerson},
+			</if>
+			<if test="contactNumber != null" >
+				contactNumber = #{contactNumber},
+			</if>
+			<if test="businessLicenseNo != null">
+				businessLicenseNo = #{businessLicenseNo},
+			</if>
+			<if test="businessLicenseNature != null">
+				businessLicenseNature = #{businessLicenseNature},
+			</if>
+			<if test="userUpdate != null">
+				UserUpdate = #{userUpdate,jdbcType=NVARCHAR},
+			</if>
+			<if test="companyType != null">
+				companyType = #{companyType,jdbcType=INTEGER},
+			</if>
+			<if test="establishYear != null">
+				establishYear = #{establishYear,jdbcType=INTEGER},
+			</if>
+			<if test="dockingPeo != null">
+				dockingPeo = #{dockingPeo},
+			</if>
+			<if test="dockingPeoTel != null">
+				dockingPeoTel = #{dockingPeoTel},
+			</if>
+			<if test="storeNumber != null">
+				storeNumber = #{storeNumber,jdbcType=INTEGER},
+			</if>
+			<if test="comStaffNum != null">
+				comStaffNum = #{comStaffNum,jdbcType=INTEGER},
+			</if>
+			<if test="channelType != null">
+				channelType = #{channelType,jdbcType=INTEGER},
+			</if>
+			<if test="undertakeType != null">
+				undertakeType = #{undertakeType},
+			</if>
+			<if test="resourcesRange != null">
+				resourcesRange = #{resourcesRange},
+			</if>
+			<if test="specificResources != null">
+				specificResources = #{specificResources},
+			</if>
+			<if test="lnkScale != null">
+				lnkScale = #{lnkScale,jdbcType=INTEGER},
+			</if>
+			<if test="closeDeveloper != null">
+				closeDeveloper = #{closeDeveloper},
+			</if>
+			DateUpdate=GETDATE()
+		</trim>
+		where id=#{companyId}
+	</update>
+
+	<select id="getCompanyById" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="companyNewDtoMap">
+		 select top 1
+			t1.id,
+			t1.companyNo,
+			t1.companyName,
+			t1.dateCreate,
+			t1.userCreate,
+			t4.userName AS userNameCreate,
+			t1.cityNo,
+			t2.CityName,
+			t1.DistrictNo,
+			t3.DistrictName,
+			t1.Address,
+			t1.companyAddress,
+			t1.LegalPerson,
+			t1.contactNumber,
+			t1.BusinessLicenseNo,
+			t1.BusinessLicenseNature,
+			t1.companyType,
+			(select dicValue from dbo.BAS_DictionaryValue where dicCode = t1.companyType) as companyTypeName,
+			t5.dicValue AS BusinessLicenseNatureName,
+			CASE WHEN t6.companyId IS NULL THEN 1
+			ELSE 0
+			END isUpdate,
+			t1.establishYear ,
+            t1.dockingPeo ,
+            t1.dockingPeoTel ,
+            t1.storeNumber ,
+            t1.comStaffNum ,
+            t1.channelType ,
+            t1.undertakeType ,
+            t1.resourcesRange ,
+            t1.specificResources ,
+            t1.lnkScale ,
+            t1.closeDeveloper ,
+            lnkScaleName = ( SELECT dicValue  FROM   BAS_DictionaryValue WHERE  dicCode = t1.lnkScale ) ,
+            channelTypeName = ( SELECT  dicValue FROM    BAS_DictionaryValue WHERE   dicCode = t1.channelType ) ,
+            undertakeTypeName = STUFF(( SELECT  ',' + bd.dicValue FROM    dbo.BAS_DictionaryValue bd
+                                        WHERE   PATINDEX('%,' + RTRIM(bd.dicCode)+ ',%',',' + t1.undertakeType + ',') > 0
+                                        ORDER BY PATINDEX('%,'+ RTRIM(bd.dicCode)+ ',%',','+ t1.undertakeType + ',') FOR XML PATH('')
+                                      ), 1, 1, ''),
+			ISNULL(scl.contractType,0) AS contractType,t1.acCityNo,t7.cityName acCityName
+		from Company t1
+		LEFT JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo
+		LEFT JOIN dbo.BAS_City t7 ON t1.AcCityNo=t7.CityNo
+		LEFT JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo
+		LEFT JOIN dbo.USR_User t4 ON t1.UserCreate=t4.userId
+		LEFT JOIN dbo.BAS_DictionaryValue t5 ON t1.BusinessLicenseNature=t5.dicCode
+		LEFT JOIN (
+		SELECT DISTINCT companyId  FROM Contract where contractStatus NOT IN (10405,10406)
+		) t6 ON t1.id=t6.CompanyId
+		LEFT JOIN (SELECT TOP 1 * FROM dbo.Contract WHERE CompanyId = #{companyId}
+			AND ContractType IN (10302,10304)
+			AND ContractStatus IN (10402,10403) ORDER BY id desc) scl ON scl.CompanyId = t1.Id
+		where 1=1
+		<if test="companyId!=null and companyId!='' and companyId!=0">
+			and t1.id=#{companyId}
+		</if>
+		<if test="businessLicenseNo!=null and businessLicenseNo!=''">
+			and t1.BusinessLicenseNo='${businessLicenseNo}'
+		</if>
+		and t1.isDelete=0
+	</select>
+
+
+	<insert id="addCompanyStore" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyStoreNewDto">
+		insert into CompanyStore (CompanyId, StoreId,
+		IsDelete,flag,userCreate,dateCreate)
+		values (#{companyId},
+		#{storeId},
+		#{isDelete},#{flag},#{userCreate},GETDATE())
+	</insert>
+
+	<update id="updateCompanyStore" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyStoreNewDto">
+		update CompanyStore
+		set IsDelete = #{isDelete},userUpdate=#{userUpdate},dateUpdate=GETDATE()
+		where Id = #{id}
+	</update>
+
+	<select id="getCompanyStore" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="storeNewDtoMap2">
+		select t1.id,companyId,storeId,storeId as storeNo,t2.name from CompanyStore t1
+		LEFT JOIN dbo.Store t2 ON t1.storeId=t2.id where companyId=#{companyId} and t1.isDelete=0 and flag=0
+	</select>
+
+	<select id="selectRelationStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		SELECT t1.id,t1.Name,t1.StoreNo,t1.AddressDetail,t1.Address,t1.acCityNo FROM Store t1
+		INNER JOIN dbo.CompanyStore t2 ON t1.Id=t2.StoreId AND t2.IsDelete=0 and t2.flag=0
+		WHERE t2.CompanyId=#{companyId}
+	</select>
+
+	<select id="getNotBindStoreList" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap2">
+		SELECT top 20 t1.id,t1.StoreNo,t1.Name,t1.address,t1.acCityNo FROM Store t1
+		LEFT JOIN dbo.CompanyStore t2 ON t1.id=t2.StoreId  and t2.flag=0
+		AND t2.IsDelete=0
+		WHERE 1=1
+		AND t1.AuditStatus=20
+		AND t1.IsDelete=0
+		and t1.businessStatus=20901
+		<if test="cityNo!=null and cityNo!=''">
+			and t1.acCityNo=#{cityNo}
+		</if>
+		AND (t2.id IS NULL
+		<if test="companyId!=null and companyId!=0">
+			OR t2.CompanyId=#{companyId}
+		</if>
+		)
+		<if test="centerId!=null and centerId!=''">
+			AND t1.centerId=#{centerId}
+		</if>
+		<if test="searchText!=null and searchText!=''">
+			AND (t1.address LIKE '%${searchText}%' OR t1.Name LIKE '%${searchText}%')
+		</if>
+		ORDER BY t2.id desc,t1.dateCreate desc
+	</select>
+
+	<select id="getContractStoreByCompanyId" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="storeNewDtoMap2">
+		SELECT DISTINCT  t1.storeId as id,t3.Name  FROM
+		 dbo.CompanyStore t1
+		INNER JOIN Store t3 ON t1.StoreId=t3.Id and t3.isDelete=0
+		inner join dbo.V_CRM_ContractStore_NOW t4 on t1.StoreId=t4.StoreId
+		WHERE t1.IsDelete=0
+		and t1.flag=0
+		and t4.contractStatus not in(10405,10406)
+		AND t1.CompanyId=#{companyId}
+	</select>
+
+	<select id="checkStoreIsContract" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="storeNewDtoMap">
+		SELECT t2.id,t2.name FROM (
+			SELECT distinct s1.StoreId FROM ContractStore s1
+			inner JOIN dbo.CompanyStore s2  on s1.StoreId=s2.StoreId AND s2.IsDelete=0 and s2.flag=0
+			inner join Contract s3 on s1.contractId=s3.id
+			WHERE s1.IsDelete=0 and s1.flag=0
+			AND s1.StoreId IN(${storeIdStr})
+			and isnull(s1.storeState,0)!=2
+			and s3.contractStatus not in (10405,10406)
+			<if test="companyId!=null and companyId!=0">
+				AND s2.CompanyId !=#{companyId}
+			</if>
+			UNION
+			SELECT distinct StoreId FROM CompanyStore WHERE IsDelete=0 AND flag=0 and StoreId IN(${storeIdStr})
+			<if test="companyId!=null and companyId!=0">
+				and companyId!=#{companyId}
+			</if>
+		) t1 LEFT JOIN dbo.Store t2 ON t1.StoreId=t2.id
+	</select>
+
+	<update id="updateStoreMainTainerInfo" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update Store set maintainer=#{userCode},maintainerName=#{userNameCreate} where id=#{storeId}
+	</update>
+
+	<insert id="addStoreMainTainer" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		insert into StoreMaintainer(
+			storeId,
+			userCode,
+			userIdCreate,
+			delFlag,
+			dateCreate,
+			setUserName,
+			setUserCode,
+			dateMtcStart
+		) values(
+			#{storeId},
+			#{userCode},
+			#{userCreate},
+			'N',
+			getdate(),
+			#{userNameCreate},
+			#{userCode},
+			getdate()
+		)
+	</insert>
+
+	<insert id="addStoreCenterHis" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		INSERT INTO dbo.StoreCenterHis
+        ( storeid ,
+          centerid ,
+          createrUser ,
+          status ,
+          createDate
+        )
+		VALUES  (
+		 #{storeId},
+		 #{centerId},
+		 #{userCode},
+		 0,
+		 getdate()
+		)
+	</insert>
+
+	<select id="checkCompanyBusiness" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyBusinessDto" resultType="cn.com.eju.deal.model.sweepStreets.CompanyBusinessDto">
+		select * from CompanyBusinessInfo where businessLicenseNo=#{businessLicenseNo} and status=0
+	</select>
+	<insert id="addCompanyBusinessInfo" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyBusinessDto">
+		insert into CompanyBusinessInfo(
+			companyName,
+			businessLicenseNo,
+			legalPerson,
+			businessLicenseType,
+			registeredCapital,
+			dateEstablishment,
+			dateLifeStart,
+			dateLifeEnd,
+			registrationAuthority,
+			approvalDate,
+			registrationStatus,
+			residence,
+			scopeBusiness,
+			dateCreate,
+			userCreate,
+			status,
+			resultStr,
+			cityNo,
+			cityName
+		) values(
+			#{companyName},
+			#{businessLicenseNo},
+			#{legalPerson},
+			#{businessLicenseType},
+			#{registeredCapital},
+			#{dateEstablishment},
+			#{dateLifeStart},
+			#{dateLifeEnd},
+			#{registrationAuthority},
+			#{approvalDate},
+			#{registrationStatus},
+			#{residence},
+			#{scopeBusiness},
+			getdate(),
+			#{userCreate},
+			0,
+			#{resultStr},
+			#{cityNo},
+			#{cityName}
+		)
+	</insert>
+
+	<select id="getStoreManagerList" resultMap="storeNewDtoMap2">
+		SELECT StoreManager,StoreManagerPhone,UserCreate,DateCreate,id
+ 		FROM Store WHERE (ISNULL(StoreManager,'')!='' AND ISNULL(StoreManagerPhone,'')!='')
+	</select>
+
+	<select id="checkStoreFangyouNo" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) FROM dbo.StoreFangyouAccount WHERE storeId=#{storeId} AND openStatus IN(1,2) and delFlag=0
+	</select>
+
+	<select id="getAllCityList" resultMap="cityDtoMap">
+		SELECT DISTINCT cityNo,cityName FROM dbo.BAS_City WHERE FlagDeleted=0 AND isService=1
+	</select>
+
+	<!--待乙转甲门店列表-->
+	<select id="getBToAStoreList" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap2">
+		SELECT
+			x1.Id ,
+			x1.StoreNo ,
+			x1.Name ,
+			x1.Address,
+			x1.Maintainer,
+			x1.maintainerName,
+			x1.bToAAlert as btoaAlert,
+			x1.bToAAlertDesc as btoaAlertDesc,
+			x2.centerId,
+			x2.centerName,
+			x2.userCode,
+			x2.userName,
+			case when (90-DATEDIFF(dy,x6.DateLifeStart,getdate())) &lt;=0 then 0 else
+			(90-DATEDIFF(dy,x6.DateLifeStart,getdate()))
+			end yqDaysNum
+		FROM Store x1
+		LEFT JOIN (
+			SELECT DISTINCT
+			centerGroupId AS centerId,
+			centerGroupName AS centerName,
+			centerLeaderCode AS userCode,
+			centerLeaderName AS userName
+			FROM  dbo.Achiv_AchievementLevel_Setting s1
+			INNER JOIN dbo.USR_User s2 ON s1.centerLeaderCode=s2.userCode
+			AND s1.centerLeaderName=s2.userName
+		) x2 ON x1.centerId=x2.centerId
+		LEFT join v_crm_StoreContract_last x5 ON x1.id = x5.StoreId
+		LEFT join dbo.contract x6 on x5.contractId = x6.id
+		LEFT join dbo.contractstore x7 on x6.id = x7.contractId AND x1.id = x7.storeId and x7.isDelete = 0
+		WHERE 1=1
+			AND DATEDIFF(dy,x6.DateLifeStart,getdate()) >= 75
+			AND DATEDIFF(dy,x6.DateLifeEnd,getdate()) &lt;= 0
+			AND x1.abTypeStore = 19902
+			AND x6.contractStatus = 10403
+			AND x1.businessStatus = 20901
+			AND x7.isCancel = '17201'
+		<if test="userCode!=null and userCode!=''">
+			and (x1.Maintainer=#{userCode} or x2.userCode=#{userCode})
+		</if>
+		order by x1.bToAAlert asc,x6.DateLifeStart asc
+	</select>
+
+	<!--待乙转甲门店列表-->
+	<select id="getBToAStoreListForPush" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap2">
+		SELECT
+		x1.Id ,
+		x1.StoreNo ,
+		x1.Name ,
+		x1.Address,
+		x1.Maintainer,
+		x1.maintainerName,
+		x1.bToAAlert as btoaAlert,
+		x1.bToAAlertDesc as btoaAlertDesc,
+		x2.centerId,
+		x2.centerName,
+		x2.userCode,
+		x2.userName
+
+		FROM Store x1
+		LEFT JOIN (
+		SELECT DISTINCT
+		centerGroupId AS centerId,
+		centerGroupName AS centerName,
+		centerLeaderCode AS userCode,
+		centerLeaderName AS userName
+		FROM  dbo.Achiv_AchievementLevel_Setting s1
+		INNER JOIN dbo.USR_User s2 ON s1.centerLeaderCode=s2.userCode
+		AND s1.centerLeaderName=s2.userName
+		) x2 ON x1.centerId=x2.centerId
+		LEFT join v_crm_StoreContract_last x5 ON x1.id = x5.StoreId
+		LEFT join dbo.contract x6 on x5.contractId = x6.id
+		LEFT join dbo.contractstore x7 on x6.id = x7.contractId AND x1.id = x7.storeId and x7.isDelete = 0
+		WHERE 1=1
+		AND DATEDIFF(dy,x6.DateLifeStart,getdate()) >= 75
+		AND DATEDIFF(dy,x6.DateLifeEnd,getdate()) &lt;= 0
+		AND x1.abTypeStore = 19902
+		AND x6.contractStatus = 10403
+		AND x1.businessStatus = 20901
+		AND x7.isCancel = '17201'
+		AND x1.bToAAlert=1
+		order by x1.bToAAlert asc,x6.DateLifeStart asc
+	</select>
+
+	<update id="updateStoreBToAAlert" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update Store
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="btoaAlert!=null and btoaAlert!=''">
+				bToAAlert=#{btoaAlert},
+			</if>
+			<if test="btoaAlertDesc!=null and btoaAlertDesc!=''">
+				bToAAlertDesc=#{btoaAlertDesc},
+			</if>
+			DateUpdate=GETDATE()
+		</trim>
+		where Id=#{storeId}
+	</update>
+</mapper>

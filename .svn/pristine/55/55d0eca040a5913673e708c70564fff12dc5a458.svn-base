@@ -1,0 +1,17 @@
+package cn.com.eju.pmls.jsStatement.dao;
+
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatement;
+
+public interface PmlsJsStatementMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(PmlsJsStatement record);
+
+    int insertSelective(PmlsJsStatement record);
+
+    PmlsJsStatement selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(PmlsJsStatement record);
+
+    int updateByPrimaryKey(PmlsJsStatement record);
+}

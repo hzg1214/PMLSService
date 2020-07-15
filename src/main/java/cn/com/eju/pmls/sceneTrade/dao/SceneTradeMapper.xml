@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.sceneTrade.dao.SceneTradeMapper">
+
+
+    <select id="getCustomLegList" parameterType="Map" resultType="cn.com.eju.pmls.sceneTrade.dto.CustomVaildLeg">
+        SELECT customerNm
+        ,customerTel
+        ,registerCnt
+        ,succSaleCnt
+        , CASE WHEN (vaildReportCnt > 0) THEN '有效' ELSE '无效' END vaild
+        FROM (
+        SELECT customerNm ,customerTel ,MAX(CrtDt) crtDt
+        ,ISNULL(COUNT(0),0) AS registerCnt
+        ,ISNULL((SUM(CASE WHEN confirmStatus = 13601 OR confirmStatus = 13603 THEN 1 ELSE 0 END)),0) AS vaildReportCnt
+        ,ISNULL((SUM(CASE WHEN confirmStatus = 13602 THEN 1 ELSE 0 END ) ),0) AS invaildReportCnt
+        ,ISNULL((SUM(CASE WHEN LatestProgress = 13505 AND ConfirmStatus = 13601 THEN 1 ELSE 0 END)),0) AS succSaleCnt
+        FROM LNK_Report lt
+        WHERE DelFlg = 0
+        <if test="customerNm!=null and customerNm!=''">
+            AND (lt.customerNm LIKE CONCAT('%', #{customerNm},'%')
+            OR lt.customerTel LIKE CONCAT('%', #{customerNm},'%')
+            )
+        </if>
+        <if test="cityNo != null and cityNo !=''"><!-- 城市 -->
+            AND lt.CityNo = #{cityNo,jdbcType=NVARCHAR}
+        </if>
+        GROUP BY customerNm,customerTel
+        ) T
+        WHERE 1=1
+        <choose>
+            <when test="vaild != null and vaild != '' and vaild == 0">
+                AND T.vaildReportCnt =0
+            </when>
+            <when test="vaild != null and vaild != '' and vaild == 1">
+                <![CDATA[
+                AND T.vaildReportCnt > 0
+                	]]>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        ORDER BY T.crtDt DESC
+    </select>
+
+    <select id="getCustomDetList" parameterType="Map" resultType="cn.com.eju.pmls.sceneTrade.dto.CustomVaildDet">
+         SELECT r.estateNm
+          ,CASE WHEN r.LatestProgress = 13502 THEN '报备'
+               WHEN r.LatestProgress = 13503 THEN '带看'
+               WHEN r.LatestProgress = 13505 AND r.ConfirmStatus = 13603 THEN '大定'
+               WHEN r.LatestProgress = 13505 AND r.ConfirmStatus = 13601 AND brokerageStatus ='22001' THEN '成销'
+               WHEN r.LatestProgress = 13505 AND r.ConfirmStatus = 13601 AND brokerageStatus ='22002' THEN '部分结佣'
+               WHEN r.LatestProgress = 13505 AND r.ConfirmStatus = 13601 AND brokerageStatus ='22003' THEN '已结佣'
+          END AS progressNm
+          ,CASE  r.confirmStatus  WHEN 13602 THEN '无效' ELSE '有效' END AS confirmStatusNm
+          ,r.companyNm ,
+          CASE WHEN r.LatestProgress =13502 THEN r.ReportDate
+               WHEN r.LatestProgress =13503 THEN r.seeDate
+               WHEN r.LatestProgress =13505 AND r.ConfirmStatus = 13603 THEN r.roughInputDate
+               WHEN r.LatestProgress =13505 AND r.ConfirmStatus = 13601 AND brokerageStatus ='22001' THEN r.dealDate
+               WHEN r.LatestProgress = 13505 AND r.ConfirmStatus = 13601 AND brokerageStatus ='22002' THEN r.brokerageUptDt
+               WHEN r.LatestProgress = 13505 AND r.ConfirmStatus = 13601 AND brokerageStatus ='22003' THEN r.brokerageUptDt
+          END  AS bizOperDate
+
+         FROM LNK_Report r
+        WHERE delFlg = 0
+        AND r.customerNm = #{customerNm,jdbcType=VARCHAR}
+        AND r.customerTel = #{customerTel,jdbcType=VARCHAR}
+        <if test="cityNo != null and cityNo !=''"><!-- 城市 -->
+            AND r.CityNo = #{cityNo,jdbcType=NVARCHAR}
+        </if>
+        order by bizOperDate desc
+    </select>
+
+</mapper>
+

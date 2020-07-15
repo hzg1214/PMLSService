@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.common.dao.CommonMapper">
+
+	<select id="queryOrgList" parameterType="java.util.Map" resultType="cn.com.eju.deal.dto.common.OrgDto">
+		SELECT dicCode orgCode,dicValue orgYear FROM USR_DictionaryValue WHERE typeId='108' ORDER BY dicValue
+	</select>
+
+	<select id="queryCityList" parameterType="java.util.Map" resultType="cn.com.eju.deal.dto.common.CityDto">
+		SELECT DISTINCT t1.cityId,t2.CityNo,t2.CityName FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM') t1
+		INNER JOIN dbo.BAS_City t2
+		ON t1.cityId = t2.ID
+		<if test="orgCode != null and orgCode != ''">
+			WHERE t1.timeTag = '${orgCode}'
+		</if>
+	</select>
+
+	<select id="queryCenterList" parameterType="java.util.Map" resultType="cn.com.eju.deal.dto.common.CenterDto">
+		SELECT DISTINCT centerGroupId centerId,centerGroupName centerName FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM') t1
+		INNER JOIN dbo.BAS_City t2
+		ON t1.cityId = t2.ID
+		WHERE 1 = 1
+		<if test="cityNo != null and cityNo != ''">
+			AND t2.CityNo IN ('${cityNo}')
+		</if>
+		<if test="cityId != null and cityId != ''">
+			AND t1.cityId IN ('${cityId}')
+		</if>
+		<if test="orgCode != null and orgCode != ''">
+			AND t1.timeTag = '${orgCode}'
+		</if>
+	</select>
+
+	<select id="queryFullNameList" parameterType="java.util.Map" resultType="cn.com.eju.deal.common.model.CompanyFullName">
+		SELECT * FROM BAS_CompanyFullName
+		WHERE cityNo =  #{cityNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="checkSwitchMonth" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(1) FROM dbo.LNK_Report t1
+		INNER JOIN LNK_Estate t2 ON t1.EstateId = t2.EstateId AND t2.DelFlg = 0
+		INNER JOIN oms.dbo.CRM_Perform_Switch t3 ON t2.CityNo=t3.cityNo
+		WHERE t3.switchState = 17502 AND t3.relateSystem = 17402 AND t3.delFlag=0
+		AND t1.ReportId=#{reportId}
+		AND t3.switchYear=YEAR(#{recordDate})
+		AND t3.switchMonth=MONTH(#{recordDate})
+	</select>
+
+	<!--根据业绩城市ID，查询是否关账-->
+	<select id="checkCitySwitchMonth" parameterType="java.lang.String" resultType="Map">
+		SELECT TOP 1 switchYear AS year,switchMonth AS month FROM Pmls_Perform_Switch
+		WHERE switchState = 27502
+		AND relateSystem = 27601
+		AND delFlag=0
+		AND cityNo=#{cityNo}
+		ORDER BY closeDate desc
+	</select>
+
+</mapper>

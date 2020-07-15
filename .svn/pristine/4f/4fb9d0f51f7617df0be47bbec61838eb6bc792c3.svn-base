@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.gpContract.dao.GpContractStoreMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.gpContract.model.GpContractStore">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="storeId" property="storeId" jdbcType="INTEGER" />
+		<result column="gpContractId" property="gpContractId" jdbcType="INTEGER" />
+		<result column="isDelete" property="isDelete" jdbcType="BIT" />
+		<result column="storeState" property="storeState" jdbcType="BIT" />
+		<result column="isCancel" property="isCancel" jdbcType="NVARCHAR"/>
+		<result column="addressDetail" property="addressDetail" jdbcType="NVARCHAR"/>
+		<result column="abTypeStore" property="abTypeStore" jdbcType="INTEGER"/>
+		<result column="bTypeStore" property="bTypeStore" jdbcType="NVARCHAR"/>
+		<result column="contractStopDate" property="contractStopDate" jdbcType="TIMESTAMP"/>
+		<result column="flag" property="flag" jdbcType="INTEGER"/>
+		<result column="bTypeStoreName" property="bTypeStoreName" jdbcType="NVARCHAR"/>
+	</resultMap>
+
+	<insert id="create" parameterType="cn.com.eju.deal.gpContract.model.GpContractStore" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO dbo.GP_ContractStore
+        ( storeId ,
+          gpContractId ,
+          storeState ,
+          isCancel ,
+          contractStopDate ,
+          addressDetail ,
+          flag ,
+          abTypeStore ,
+          bTypeStore ,
+          isDelete
+        )
+		VALUES  (#{storeId,jdbcType=INTEGER} , -- storeId - int
+				  #{gpContractId,jdbcType=INTEGER} , -- gpContractId - int
+				  #{storeState,jdbcType=INTEGER} , -- storeState - int
+				  '17201' , -- isCancel - varchar(10)
+				  #{contractStopDate,jdbcType=TIMESTAMP} , -- contractStopDate - datetime
+				  #{addressDetail,jdbcType=NVARCHAR} , -- addressDetail - nvarchar(200)
+				  #{flag,jdbcType=INTEGER} , -- flag - int
+				  #{abTypeStore,jdbcType=INTEGER} , -- abTypeStore - int
+				  #{bTypeStore,jdbcType=NVARCHAR} , -- bTypeStore - varchar(200)
+				  #{isDelete,jdbcType=BIT}  -- isDelete - bit
+				)
+	</insert>
+
+	<!-- 更新合同门店关系表 -->
+	<update id="update" parameterType="cn.com.eju.deal.gpContract.model.GpContractStore">
+        UPDATE dbo.GP_ContractStore
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeId != null">
+				StoreId = #{storeId,jdbcType=INTEGER},
+			</if>
+			<if test="gpContractId != null">
+				gpContractId = #{gpContractId,jdbcType=INTEGER},
+			</if>
+			<if test="isDelete != null">
+				IsDelete = #{isDelete,jdbcType=BIT},
+			</if>
+			<if test="storeState != null">
+				StoreState = #{storeState,jdbcType=INTEGER},
+			</if>
+			<if test="contractStopDate != null">
+				contractStopDate = #{contractStopDate,jdbcType=TIMESTAMP},
+			</if>			
+			<if test="addressDetail != null">
+				addressDetail = #{addressDetail,jdbcType=NVARCHAR},
+			</if>
+			<if test="flag != null">
+				flag = #{flag,jdbcType=INTEGER},
+			</if>
+        </trim>
+        <where>
+        	isDelete = 0
+        	<if test="storeId != null">
+        		<![CDATA[AND storeId = #{storeId,jdbcType=INTEGER}]]>
+        	</if>
+        	<if test="gpContractId != null">
+        		<![CDATA[AND gpContractId = #{gpContractId,jdbcType=INTEGER}]]>
+        	</if>
+        </where>
+    </update>
+
+	<select id="getContractStoreContractId" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT Top 1 c2.id FROM GP_ContractStore  c1,GP_Contract c2
+		WHERE c1.gpContractId=c2.Id
+		AND c1.storeId =#{storeId, jdbcType=INTEGER}
+		<![CDATA[ AND c2.id <> #{contractId, jdbcType=INTEGER} ]]>
+		AND c2.companyId= #{companyId, jdbcType=INTEGER}
+		AND c1.IsDelete=0
+		ORDER BY c2.id desc
+	</select>
+
+	<select id="getStoreByContractIdStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select *, dbo.F_CRM_SplitCodeToName(2, BTypeStore) AS bTypeStoreName
+		from GP_ContractStore
+		where gpContractId = #{contractId,jdbcType=INTEGER}
+		and StoreId = #{storeId,jdbcType=INTEGER}
+		and IsDelete = 0
+	</select>
+
+	<select id="selStoreByContractId" resultMap="BaseResultMap"
+			parameterType="java.lang.Integer">
+		select Id, StoreId, gpContractId, IsDelete,storeState,isCancel,addressDetail
+		from GP_ContractStore
+		where gpContractId = #{contractId,jdbcType=INTEGER}
+		and IsDelete = 0
+	</select>
+
+	<delete id="deleteByContractId" parameterType="java.lang.Integer">
+		delete from GP_ContractStore
+		where gpContractId = #{contractId,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 合同撤销/作废后 解除门店合同关系 -->
+	<update id="updateFlag" parameterType="map">
+		UPDATE  GP_ContractStore
+		SET flag = 1
+		WHERE  IsDelete=0 AND gpContractId = #{gpContractId,jdbcType=INTEGER}
+		<!-- 撤销的门店Id -->
+		<if test="storeIdList!=null">
+			<foreach collection="storeIdList" item="storeId"
+					 open=" and storeId in (" close=")" separator=",">
+				#{storeId}
+			</foreach>
+		</if>
+	</update>
+
+	<!-- 同步合同的门店地址 -->
+	<update id="updateByContractId" parameterType="java.lang.Integer">
+		UPDATE  GP_ContractStore SET addressDetail = S.addressDetail
+		FROM GP_ContractStore CS
+		inner JOIN GP_Contract C ON CS.gpContractId = C.Id
+		inner JOIN dbo.Store S ON S.Id =CS.storeId
+		WHERE  CS.gpContractId = #{contractId,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据flowID查询合同中的门店 -->
+	<select id="getContractStoresByFlowId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT  T1.* ,
+            s.storeNo ,
+            s.name
+		FROM    dbo.GP_ContractStore T1
+            JOIN dbo.store s ON t1.storeId = s.id
+            LEFT JOIN dbo.GP_Contract T2 ON T1.gpContractId = T2.Id
+		WHERE   T1.isDelete = 0
+		  AND T2.flowId = #{flowId,jdbcType=NVARCHAR}
+	</select>
+	<!-- 根据门店ID查询公盘合同门店表中的门店 -->
+	<select id="getGpContractByStoreId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.contract.model.ContractSearchResult">
+		SELECT c.contractStatus,c.id FROM  GP_ContractStore cs INNER JOIN
+		    dbo.GP_Contract c ON c.id= cs.gpContractId AND c.delFlag =0 AND c.contractStatus IN (10401,10404)
+		    WHERE cs.isDelete = 0
+		      AND cs.storeId = #{storeId}
+	</select>
+
+	<!-- 同步公盘合同门店关系表的contractType字段 -->
+	<update id="updateTypeByGpContractNo" parameterType="java.lang.String">
+		UPDATE GP_ContractStore
+		SET contractType = a.contractType
+		FROM
+			(
+		SELECT
+			*
+		FROM
+			store
+		WHERE
+			id IN
+			(
+			SELECT storeId FROM dbo.GP_ContractStore WHERE gpContractId = (SELECT id FROM GP_Contract WHERE gpContractNo = #{gpContractNo,jdbcType=VARCHAR}  and delflag = 0)  and isDelete = 0
+			) and isDelete = 0
+			) a,
+			GP_ContractStore b
+		WHERE
+			a.id = b.storeId
+			AND b.gpContractId =
+			(SELECT id FROM GP_Contract WHERE gpContractNo = #{gpContractNo,jdbcType=VARCHAR})
+			and b.isDelete = 0
+	</update>
+
+</mapper>

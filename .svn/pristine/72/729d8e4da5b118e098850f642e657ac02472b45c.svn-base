@@ -1,0 +1,61 @@
+package cn.com.eju.pmls.rptStore.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.pmls.rptStore.dao.RptStoreDetailMapper;
+import cn.com.eju.pmls.rptStore.dto.RptStoreDetailDto;
+
+@Service("rptStoreDetailService")
+public class RptStoreDetailService extends BaseService {
+	
+    @Resource
+    private RptStoreDetailMapper rptStoreDetailMapper;
+    
+    /**
+     * desc:门店明细列表
+     * 2020年6月17日
+     */
+    public ResultData queryStoreDetailList(Map<String, Object> queryParam) {
+        ResultData<List<RptStoreDetailDto>> resultData = new ResultData<>();
+        int pageIndex = 1;
+        int pageSize = 10;
+        int curPage = 1;
+
+        if (queryParam.get("pageIndex") != null)
+            pageIndex = Integer.parseInt(queryParam.get("pageIndex").toString());
+        if (queryParam.get("pageSize") != null)
+            pageSize = Integer.parseInt(queryParam.get("pageSize").toString());
+        if (queryParam.get("curPage") != null)
+            curPage = Integer.parseInt(queryParam.get("curPage").toString());
+
+        queryParam.remove("pageIndex");
+        queryParam.remove("pageSize");
+        queryParam.remove("curPage");
+
+
+        List<RptStoreDetailDto> list = rptStoreDetailMapper.queryStoreDetailList(queryParam);  
+
+        if (null != list && list.size() > 0) {
+            int size = list.size();
+            resultData.setTotalCount(String.valueOf(size));
+            if (queryParam.get("optFlag") == null) {//导出标记
+                int endRow = pageIndex * pageSize;
+                list = list.subList((pageIndex - 1) * pageSize, endRow > size ? size : endRow);
+
+                queryParam.put("pageIndex", pageIndex);
+                queryParam.put("pageSize", pageSize);
+                queryParam.put("curPage", curPage);
+            }
+            resultData.setReturnData(list);
+        }
+        return resultData;
+    }
+    
+}

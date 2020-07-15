@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.commission.dao.LnkYjReportMapper">
+
+    <select id="getLnkYjReportList" parameterType="Map" resultType="Map">
+        SELECT r.id,r.ReportId,report.EstateNm,Estate.projectNo projectNo, Estate.estateId, report.CompanyNm,s.AddressDetail,
+        report.CustomerNm,report.CustomerTel,report.LatestProgress,
+        ( CASE WHEN report.LatestProgress = 13505
+        AND report.ConfirmStatus = 13603
+        AND report.roughAuditStatus = 1 THEN '大定'
+        WHEN report.LatestProgress=13505 AND report.ConfirmStatus=13601 THEN '成销'
+        ELSE ''
+        END ) AS dicValue ,
+        c.CompanyName
+        ,r.defaultFlag,
+        (CASE WHEN report.brokerageStatus = 22003 THEN 1 ELSE 0 END) AS brokerageStatus
+        FROM dbo.LNK_YJ_REPORT r
+        INNER JOIN dbo.LNK_Report report WITH (NOLOCK, INDEX( i_lnk_report_reportid)) ON r.reportId = report.ReportId
+        AND report.DelFlg = 0
+        LEFT JOIN store s ON report.StoreId = s.id
+        INNER JOIN dbo.Company c ON r.companyNo=c.CompanyNo
+        INNER JOIN LNK_Estate Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+        LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode=report.LatestProgress AND bdv.delFlag='N'
+        LEFT JOIN (SELECT reportId,COUNT(*) whObjNum FROM dbo.LNK_YJ_REPORT WHERE delFlg=0 GROUP BY reportId) obj ON
+        obj.reportId = r.reportId
+        WHERE r.delFlg=0
+        AND r.defaultFlag=0
+        AND report.LatestProgress = 13505
+        AND report.ConfirmStatus != 13602
+        AND report.roughAuditStatus=1
+        AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+        <if test="projectDepartmentId != null and projectDepartmentId != ''">
+            AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="reportId != null and reportId != ''">
+            <![CDATA[AND report.reportId LIKE '%' + RTrim(LTrim('${reportId}')) + '%']]>
+        </if>
+        <if test="searchKey != null and searchKey != ''">
+            <![CDATA[
+ 		   AND (
+ 		   report.CustomerNm LIKE CONCAT('%', #{searchKey},'%')
+ 		   OR report.CustomerTel LIKE CONCAT('%', #{searchKey},'%')
+ 		   OR Estate.DevCompany LIKE CONCAT('%', #{searchKey},'%')
+ 		    )
+ 	  	]]>
+        </if>
+        <if test="estateNmKey != null and estateNmKey != ''">
+            AND (
+            Estate.projectNo LIKE CONCAT('%', #{estateNmKey},'%')
+            OR report.estateNm LIKE CONCAT('%', #{estateNmKey},'%')
+            )
+        </if>
+        <if test="businessType != null and businessType=='DD'">
+            AND report.LatestProgress=13505 AND report.ConfirmStatus=13603 AND report.roughAuditStatus=1
+
+            <if test="countDateStart != null and countDateStart != '' and  countDateStart != 'null'">
+                and report.roughDate>=#{countDateStart}
+            </if>
+            <if test="countDateEnd != null and countDateEnd != ''  and  countDateEnd != 'null' ">
+                and report.roughDate &lt;=#{countDateEnd}
+            </if>
+        </if>
+        <if test="businessType != null and businessType=='CX'">
+            AND report.LatestProgress=13505 AND report.ConfirmStatus=13601
+            <if test="countDateStart != null and countDateStart != '' and  countDateStart != 'null'">
+                and report.dealDate>=#{countDateStart}
+            </if>
+            <if test="countDateEnd != null and countDateEnd != ''  and  countDateEnd != 'null' ">
+                and report.dealDate &lt;=#{countDateEnd}
+            </if>
+        </if>
+        <if test="objNum!=null">
+            AND obj.whObjNum>1
+        </if>
+        ORDER BY r.crtDt DESC
+    </select>
+
+
+    <!--     <select id="getList" parameterType="Map" resultType="Map"> -->
+    <!-- 	SELECT * FROM (SELECT r.ReportId,r.crtDt, -->
+    <!-- 		companyNameList = STUFF((SELECT ','  + companyName FROM  -->
+    <!-- 		LNK_YJ_REPORT l -->
+    <!-- 		INNER JOIN  dbo.Company c  on l.companyNo=c.CompanyNo AND c.IsDelete=0 -->
+    <!-- 		WHERE l.reportId = r.reportId -->
+    <!-- 		  FOR XML PATH('')), 1, 1,'')  -->
+
+    <!-- 		 FROM dbo.LNK_YJ_REPORT r -->
+
+    <!-- 		 WHERE r.delFlg=0  -->
+    <!-- 		 AND r.crtDt>= #{countDateStart} and r.crtDt &lt;=#{countDateEnd} -->
+    <!-- 		GROUP BY r.ReportId,r.crtDt -->
+    <!-- 		) r -->
+    <!-- 	INNER JOIN dbo.LNK_Report report ON r.reportId = report.ReportId AND report.DelFlg = 0 -->
+    <!--     INNER JOIN store s ON report.StoreId = s.id -->
+    <!-- 	INNER JOIN LNK_Estate Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0 -->
+    <!-- 	LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode=report.LatestProgress AND bdv.delFlag='N' -->
+    <!-- 	WHERE 1=1  -->
+    <!--         AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR} -->
+    <!--         <if test="projectDepartmentId != null and projectDepartmentId != ''"> -->
+    <!--             AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR} -->
+    <!--         </if> -->
+    <!--         <if test="reportId != null and reportId != ''"> -->
+    <!--             <![CDATA[AND report.reportId LIKE '%' + RTrim(LTrim('${reportId}')) + '%']]> -->
+    <!--         </if> -->
+    <!--         <if test="searchKey != null and searchKey != ''"> -->
+    <!--             <![CDATA[ -->
+    <!-- 		   AND (Estate.projectNo LIKE '%${searchKey}%' -->
+    <!-- 		   OR report.CustomerNm LIKE '%${searchKey}%' -->
+    <!-- 		   OR report.CustomerTel LIKE '%${searchKey}%' -->
+    <!-- 		   OR Estate.DevCompany LIKE '%${searchKey}%' -->
+    <!-- 		   OR reportDetail.buildingNo LIKE  '%${searchKey}%' ) -->
+    <!-- 	  	]]> -->
+    <!--         </if> -->
+    <!--         <if test="estateNmKey != null and estateNmKey != ''"> -->
+    <!--             AND report.estateNm IN (${estateNmKey}) -->
+    <!--         </if> -->
+    <!--         <if test="businessType != null and businessType=='DD'"> -->
+    <!--         	AND report.LatestProgress=13504 -->
+    <!--         </if> -->
+    <!--         <if test="businessType != null and businessType=='CX'"> -->
+    <!--         	AND report.LatestProgress=13505 -->
+    <!--         </if> -->
+
+    <!--         ORDER BY r.crtDt -->
+    <!--     </select> -->
+
+    <select id="getYjReportDeatilById" parameterType="Map" resultType="Map">
+	 	SELECT  r.reportId reportId,
+		        report.EstateNm estateNm,
+		        report.CompanyNm companyNm,
+		        s.AddressDetail addressDetail,
+		        Estate.projectNo projectNo,
+		        report.CustomerNm customerNm,
+		        report.CustomerTel customerTel,
+		        report.LatestProgress ,
+		        bdv.dicValue ,
+		        c.CompanyName companyName,
+				c.CompanyNo companyNo,
+		        r.defaultFlag 
+		        ,1 isDb
+		FROM    dbo.LNK_YJ_REPORT r
+	        INNER JOIN dbo.LNK_Report report ON r.reportId = report.ReportId
+	                                            AND report.DelFlg = 0
+	        LEFT JOIN Store s ON report.StoreId = s.Id
+	        INNER JOIN LNK_Estate Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+	        INNER JOIN dbo.Company c ON r.companyNo = c.CompanyNo
+	        LEFT JOIN dbo.BAS_DictionaryValue bdv ON bdv.dicCode = report.LatestProgress AND bdv.delFlag = 'N'
+		WHERE   r.delFlg = 0
+				AND r.reportId = #{reportId}
+	 ORDER BY r.defaultFlag,r.crtDt  
+  	</select>
+
+    <select id="selYjReportByReportId" parameterType="Map"
+            resultType="cn.com.eju.deal.scene.commission.model.LnkYjReport">
+        SELECT *
+        FROM dbo.LNK_YJ_REPORT r
+        WHERE r.delFlg = 0
+        AND r.reportId = #{reportId}
+        <if test="defaultFlag != null">
+            AND r.defaultFlag = #{defaultFlag,jdbcType=INTEGER}
+        </if>
+        ORDER BY r.crtDt DESC
+    </select>
+
+    <select id="selYjLogByReportId" parameterType="Map"
+            resultType="cn.com.eju.deal.scene.commission.model.CompanyMatin">
+	 	SELECT top(10) r.reportId reportId,r.crtDt crtDt,c.CompanyName companyName,
+				c.CompanyNo companyNo,u.userName userName,r.content
+		FROM    dbo.LNK_YJ_REPORT_LOG r
+	            INNER JOIN dbo.Company c ON r.companyNo = c.companyNo AND c.IsDelete=0
+	            INNER JOIN USR_User u ON r.crtEmpId=u.userId AND u.delFlag ='N'
+		WHERE   r.delFlag = 'N' 
+				AND r.reportId = #{reportId}
+	 	ORDER BY r.crtDt DESC
+  	</select>
+
+    <select id="decideYjReportByReportId" parameterType="Map" resultType="int">
+        SELECT count(*)
+        FROM (
+        SELECT yj.reportId FROM LNK_YJ_YJFY yj, dbo.LNK_YJ_REPORT r WHERE r.delFlg=0 
+        and yj.delFlg=0
+        AND yj.reportId=r.reportId AND r.defaultFlag>0
+        AND yj.companyNo=r.companyNo
+        AND (ISNULL(yj.befTaxAmount,0) !=0
+		OR ISNULL(yj.aftTaxAmount,0) !=0)
+        AND r.reportID =#{reportId}
+        <if test="companyNoOne != null and companyNoOne != ''">
+            AND r.companyNo != #{companyNoOne}
+        </if>
+        <if test="companyNoTwo != null and companyNoTwo != ''">
+            AND r.companyNo != #{companyNoTwo}
+        </if>
+        union
+        SELECT yj.reportId FROM LNK_YJ_SJFY yj, dbo.LNK_YJ_REPORT r WHERE r.delFlg=0
+        and yj.delFlg=0
+        AND yj.reportId=r.reportId AND r.defaultFlag>0
+        AND yj.companyNo=r.companyNo
+        AND (ISNULL(yj.befTaxAmount,0) !=0
+		OR ISNULL(yj.aftTaxAmount,0) !=0)
+        AND r.reportID =#{reportId}
+        <if test="companyNoOne != null and companyNoOne != ''">
+            AND r.companyNo != #{companyNoOne}
+        </if>
+        <if test="companyNoTwo != null and companyNoTwo != ''">
+            AND r.companyNo != #{companyNoTwo}
+        </if>
+        union
+        SELECT yj.reportId FROM LNK_YJ_YJDY yj, dbo.LNK_YJ_REPORT r WHERE r.delFlg=0
+        and yj.delFlg=0
+        AND yj.reportId=r.reportId AND r.defaultFlag>0
+        AND yj.companyNo=r.companyNo
+        AND (ISNULL(yj.befTaxAmount,0) !=0
+		OR ISNULL(yj.aftTaxAmount,0) !=0)
+        AND r.reportID =#{reportId}
+        <if test="companyNoOne != null and companyNoOne != ''">
+            AND r.companyNo != #{companyNoOne}
+        </if>
+        <if test="companyNoTwo != null and companyNoTwo != ''">
+            AND r.companyNo != #{companyNoTwo}
+        </if>
+        union
+        SELECT yj.reportId FROM LNK_YJ_SJDY yj, dbo.LNK_YJ_REPORT r WHERE r.delFlg=0
+        and yj.delFlg=0
+        AND yj.reportId=r.reportId AND r.defaultFlag>0
+        AND yj.companyNo=r.companyNo
+        AND (ISNULL(yj.befTaxAmount,0) !=0
+		OR ISNULL(yj.aftTaxAmount,0) !=0)
+        AND r.reportID =#{reportId}
+        <if test="companyNoOne != null and companyNoOne != ''">
+            AND r.companyNo != #{companyNoOne}
+        </if>
+        <if test="companyNoTwo != null and companyNoTwo != ''">
+            AND r.companyNo != #{companyNoTwo}
+        </if>
+        )t
+    </select>
+
+
+    <select id="getYjCompany" parameterType="Map" resultType="cn.com.eju.deal.scene.commission.model.YjCompany">
+
+        SELECT c.id id,c.CompanyNo companyNo,c.CompanyName companyName
+        FROM dbo.Company c ,(
+        SELECT CityNo FROM dbo.LNK_Estate L WHERE L.DelFlg=0
+        <if test="projectNo != null and projectNo != ''">
+            AND L.projectNo = #{projectNo,jdbcType=VARCHAR}
+        </if>
+        UNION
+        SELECT em.cityNo FROM dbo.LNK_Estate e ,dbo.LNK_EstateCityMapping em
+        WHERE e.EstateId=em.estateId AND em.delflag=0
+        <if test="projectNo != null and projectNo != ''">
+            AND e.projectNo = #{projectNo,jdbcType=VARCHAR}
+        </if>
+        ) t
+        WHERE c.AcCityNo=t.CityNo
+        AND c.IsDelete=0
+        AND c.CompanyName != ''
+        AND c.CompanyNo IS NOT NULL
+        <if test="inputCompanyName != null and  inputCompanyName != ''">
+            <![CDATA[
+    				AND (c.CompanyNo LIKE '%' + RTrim(LTrim('${inputCompanyName}')) + '%'
+    					OR 
+    					c.CompanyName LIKE '%' + RTrim(LTrim('${inputCompanyName}')) + '%'
+    				)
+    			]]>
+        </if>
+        <if test="inputCompanyNameTow != null and  inputCompanyNameTow != ''">
+            <![CDATA[
+    				AND (c.CompanyNo LIKE '%' + RTrim(LTrim('${inputCompanyNameTow}')) + '%'
+    					OR 
+    					c.CompanyName LIKE '%' + RTrim(LTrim('${inputCompanyNameTow}')) + '%'
+    				)
+    			]]>
+        </if>
+    </select>
+
+    <insert id="insertSelective" parameterType="cn.com.eju.deal.scene.commission.model.LnkYjReport"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into LNK_YJ_REPORT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">
+                reportId,
+            </if>
+            <if test="companyNo != null">
+                companyNo,
+            </if>
+            <if test="defaultFlag != null">
+                defaultFlag,
+            </if>
+            <if test="crtEmpId != null">
+                crtEmpId,
+            </if>
+            <if test="uptEmpId != null">
+                uptEmpId,
+            </if>
+            <if test="crtDt != null">
+                crtDt,
+            </if>
+            <if test="uptDt != null">
+                uptDt,
+            </if>
+            <if test="delFlg != null">
+                delFlg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">
+                #{reportId,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNo != null">
+                #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultFlag != null">
+                #{defaultFlag,jdbcType=INTEGER},
+            </if>
+            <if test="crtEmpId != null">
+                #{crtEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="uptEmpId != null">
+                #{uptEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="crtDt != null">
+                #{crtDt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="uptDt != null">
+                #{uptDt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlg != null">
+                0,
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertLnkYjReportLog" parameterType="cn.com.eju.deal.scene.commission.model.LnkYjReportLog"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into LNK_YJ_REPORT_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">
+                reportId,
+            </if>
+            <if test="companyNo != null">
+                companyNo,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="crtEmpId != null">
+                crtEmpId,
+            </if>
+            <if test="delFlag != null">
+                delFlag,
+            </if>
+            <if test="crtDt != null">
+                crtDt,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">
+                #{reportId,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNo != null">
+                #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="crtEmpId != null">
+                #{crtEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="crtDt != null">
+                #{crtDt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertLog" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+    	insert into LNK_YJ_REPORT_LOG (reportId ,
+        companyNo ,
+        content ,
+        crtEmpId ,
+        delFlag ,
+        crtDt ,
+        uptDt)
+       VALUES  ( 
+        #{reportId,jdbcType=VARCHAR},
+        #{companyNo,jdbcType=VARCHAR},
+        (SELECT #{opkey}+'返佣对象: '+CompanyName+'('+CompanyNo+') ' content FROM  dbo.Company WHERE CompanyNo= #{companyNo,jdbcType=VARCHAR} ),
+         #{crtEmpId,jdbcType=INTEGER},
+        'N',
+        getdate(),
+        getdate())
+  </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.scene.commission.model.LnkYjReport">
+        update LNK_YJ_REPORT
+        <set>
+            <if test="reportId != null">
+                reportId = #{reportId,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNo != null">
+                companyNo = #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultFlag != null">
+                defaultFlag = #{defaultFlag,jdbcType=INTEGER},
+            </if>
+            <if test="crtEmpId != null">
+                crtEmpId = #{crtEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="uptEmpId != null">
+                uptEmpId = #{uptEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="crtDt != null">
+                crtDt = #{crtDt,jdbcType=TIMESTAMP},
+            </if>
+            uptDt = getdate(),
+            <if test="delFlg != null">
+                delFlg = 1
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selCompanyByCompanyNo" parameterType="Map" resultType="cn.com.eju.deal.company.model.Company">
+        SELECT top(1) c.CompanyName companyName,c.CompanyNo companyNo FROM dbo.Company c WHERE 1=1 and IsDelete=0
+        <if test="companyNo != null">
+            AND c.CompanyNo = #{companyNo,jdbcType=VARCHAR}
+        </if>
+        order by c.DateCreate DESC
+    </select>
+
+    <select id="selLnkReportByReportId" parameterType="Map" resultType="Map">
+	 	SELECT  r.brokerageStatus brokerageStatus,r.ReportId reportId
+			FROM    dbo.LNK_REPORT r
+		WHERE r.DelFlg=0 AND r.ReportId=#{reportId,jdbcType=VARCHAR}
+  	</select>
+
+    <update id="deleteOther" parameterType="Map">
+    update LNK_YJ_REPORT
+    set  delFlg=1
+    where reportId = #{reportId}
+    	and  delFlg=0
+    	and companyNo!=#{defcompanyNo}
+  </update>
+
+    <update id="deleteByReportAndCompany" parameterType="Map">
+    update LNK_YJ_REPORT
+    set  delFlg=1
+    ,uptDt = getdate()
+    where reportId = #{reportId}
+    	and  delFlg=0
+    	and companyNo =#{companyNo}
+  </update>
+
+    <update id="delYjReportLog" parameterType="Map">
+    update LNK_YJ_REPORT_LOG
+    set  delFlag='Y'
+    where reportId = #{reportId}
+    	and  delFlag='N'
+    	and companyNo!=#{companyNo}
+  </update>
+  
+  <update id="deleteDataByReportId" parameterType="Map">
+    update LNK_YJ_YJFY
+    set  delFlg=1
+    where reportId = #{reportId}
+    	and  delFlg=0
+    	AND ISNULL(befTaxAmount,0)=0
+		AND ISNULL(aftTaxAmount,0)=0
+    	and companyNo=#{companyNo};
+    update LNK_YJ_SJFY
+    set  delFlg=1
+    where reportId = #{reportId}
+    	and  delFlg=0
+    	AND ISNULL(befTaxAmount,0)=0
+		AND ISNULL(aftTaxAmount,0)=0
+    	and companyNo=#{companyNo};
+    update LNK_YJ_YJDY
+    set  delFlg=1
+    where reportId = #{reportId}
+    	and  delFlg=0
+    	AND ISNULL(befTaxAmount,0)=0
+		AND ISNULL(aftTaxAmount,0)=0
+    	and companyNo=#{companyNo};
+    update LNK_YJ_SJDY
+    set  delFlg=1
+    where reportId = #{reportId}
+    	and  delFlg=0
+    	AND ISNULL(befTaxAmount,0)=0
+		AND ISNULL(aftTaxAmount,0)=0
+    	and companyNo=#{companyNo};
+  </update>
+</mapper>

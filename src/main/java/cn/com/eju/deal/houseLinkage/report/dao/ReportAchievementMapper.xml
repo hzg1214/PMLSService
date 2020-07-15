@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.report.dao.ReportAchievementMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.report.model.ReportAchievement">
+			<id column="id" property="id" jdbcType="INTEGER" />
+			<result column="maintainerId" property="maintainerId" jdbcType="NVARCHAR" />
+			<result column="maintainer" property="maintainer" jdbcType="NVARCHAR" />
+			<result column="performTeam4" property="performTeam4" jdbcType="NVARCHAR" />
+			<result column="postTypeName4" property="postTypeName4" jdbcType="NVARCHAR" />
+			
+			<result column="maintainerLeaderId" property="maintainerLeaderId" jdbcType="NVARCHAR" />
+			<result column="maintainerLeader" property="maintainerLeader" jdbcType="NVARCHAR" />
+			<result column="performTeam3" property="performTeam3" jdbcType="NVARCHAR" />
+			<result column="postTypeName3" property="postTypeName3" jdbcType="NVARCHAR" />
+			
+			<result column="regionalDirectorId" property="regionalDirectorId" jdbcType="NVARCHAR" />
+			<result column="regionalDirector" property="regionalDirector" jdbcType="NVARCHAR" />
+			<result column="performTeam2" property="performTeam2" jdbcType="NVARCHAR" />
+			<result column="postTypeName2" property="postTypeName2" jdbcType="NVARCHAR" />
+			
+			<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+			<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+			<result column="delFlag" property="delFlag" jdbcType="BIT" />
+			<result column="reportId" property="reportId" jdbcType="INTEGER" />
+			<result column="performTeam1" property="performTeam1" jdbcType="NVARCHAR" />
+			
+			<result column="maintainerGroupId" property="maintainerGroupId" jdbcType="INTEGER" />
+			<result column="maintainerPostId" property="maintainerPostId" jdbcType="INTEGER" />
+			<result column="maintainerLeaderGroupId" property="maintainerLeaderGroupId" jdbcType="INTEGER" />
+			<result column="maintainerLeaderPostId" property="maintainerLeaderPostId" jdbcType="INTEGER" />
+			<result column="regionalDirectorGroupId" property="regionalDirectorGroupId" jdbcType="INTEGER" />
+			<result column="regionalDirectorPostId" property="regionalDirectorPostId" jdbcType="INTEGER" />
+			
+			<result column="businessManagerId" property="businessManagerId" jdbcType="NVARCHAR" />
+			<result column="businessManager" property="businessManager" jdbcType="NVARCHAR" />
+			<result column="postTypeName1" property="postTypeName1" jdbcType="NVARCHAR" />
+			<result column="businessManagerGroupId" property="businessManagerGroupId" jdbcType="INTEGER" />
+			<result column="businessManagerPostId" property="businessManagerPostId" jdbcType="INTEGER" />
+    </resultMap>
+
+	<insert id="createReportAchievement" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportAchievement" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO LNK_ReportAchievement
+		(reportId
+		,maintainerId
+		,maintainer
+		,performTeam4
+		,postTypeName4
+		,maintainerLeaderId
+		,maintainerLeader
+		,performTeam3
+		,postTypeName3
+		,regionalDirectorId
+		,regionalDirector
+		,performTeam2
+		,postTypeName2
+		,performTeam1
+		,businessManagerId
+		,businessManager
+		,postTypeName1
+		,maintainerGroupId
+		,maintainerPostId
+		,maintainerLeaderGroupId
+		,maintainerLeaderPostId
+		,regionalDirectorGroupId
+		,regionalDirectorPostId
+		,businessManagerGroupId
+		,businessManagerPostId
+		,userIdCreate
+		,dateCreate
+		,delFlag)
+		VALUES
+		(#{reportId, jdbcType=INTEGER},
+		#{maintainerId, jdbcType=NVARCHAR},
+		#{maintainer, jdbcType=NVARCHAR},
+		#{performTeam4, jdbcType=NVARCHAR},
+		#{postTypeName4, jdbcType=NVARCHAR},
+		#{maintainerLeaderId, jdbcType=NVARCHAR},
+		#{maintainerLeader, jdbcType=NVARCHAR},
+		#{performTeam3, jdbcType=NVARCHAR},
+		#{postTypeName3, jdbcType=NVARCHAR},
+		#{regionalDirectorId, jdbcType=NVARCHAR},
+		#{regionalDirector, jdbcType=NVARCHAR},
+		#{performTeam2, jdbcType=NVARCHAR},
+		#{postTypeName2, jdbcType=NVARCHAR},
+		#{performTeam1, jdbcType=NVARCHAR},
+		#{businessManagerId, jdbcType=NVARCHAR},
+		#{businessManager, jdbcType=NVARCHAR},
+		#{postTypeName1, jdbcType=NVARCHAR},
+		#{maintainerGroupId, jdbcType=INTEGER},
+		#{maintainerPostId, jdbcType=INTEGER},
+		#{maintainerLeaderGroupId, jdbcType=INTEGER},
+		#{maintainerLeaderPostId, jdbcType=INTEGER},
+		#{regionalDirectorGroupId, jdbcType=INTEGER},
+		#{regionalDirectorPostId, jdbcType=INTEGER},
+		#{businessManagerGroupId, jdbcType=INTEGER},
+		#{businessManagerPostId, jdbcType=INTEGER},
+		#{userIdCreate, jdbcType=INTEGER},
+		#{dateCreate, jdbcType=TIMESTAMP},
+		#{delFlag, jdbcType=BIT})
+	</insert>
+    
+</mapper>

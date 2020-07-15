@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.OaContractApprovalInfoMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.OaContractApprovalInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="contractNo" property="contractNo" jdbcType="NVARCHAR" />
+		<result column="flowId" property="flowId" jdbcType="NVARCHAR" />
+		<result column="sortIndex" property="sortIndex" jdbcType="INTEGER" />
+		<result column="empnumber" property="empnumber" jdbcType="NVARCHAR" />
+		<result column="empname" property="empname" jdbcType="NVARCHAR" />
+		<result column="content" property="content" jdbcType="NVARCHAR" />
+		<result column="create_date" property="create_date" jdbcType="TIMESTAMP" />
+		<result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, contractNo, flowId, sortIndex, empnumber, empname, content, create_date, dateUpdate, dateCreate
+	</sql>
+
+	<!-- 查找OA审批意见 -->
+	<select id="GetOaContractApprovalInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT  * 
+		FROM   OaContractApprovalInfo
+		<where>
+			flowId = #{flowId,jdbcType=VARCHAR}
+		</where>	
+		order by create_date, sortIndex	
+	</select>
+</mapper>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.basicInformation.personnelPermissions.dao.PersonnelPermissionsMapper">
+
+  <!--获取列表-->
+  <select id="queryPersonnelPermissionsList"  parameterType="Map" resultType="cn.com.eju.pmls.basicInformation.personnelPermissions.dto.UserCenterCityDto">
+    select 
+    	  ROW_NUMBER() OVER(ORDER BY t1.dateCreate DESC) AS rowNum,
+      	  t1.id,
+      	  t1.userCode,
+		  t1.userName,
+		  t1.centerId,
+		  t1.cityId,
+		  t1.cityNo,
+		  CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate ,
+		  t1.userIdCreate,
+		  t1.delFlag,
+		  t2.userCode userIdCreateCode,
+		  t2.userName userIdCreateName,
+		  bc.centerName,bcity.CityName cityName
+      from BAS_PMLS_UserCenterCitySetting t1
+     LEFT JOIN dbo.USR_User t2 ON t1.userIdCreate=t2.userId AND t2.delFlag='N'
+     INNER JOIN dbo.BAS_CenterSetting bc ON bc.centerId=t1.centerId AND bc.cityId=t1.cityId  AND bc.delFlag=0
+	 LEFT JOIN dbo.Bas_City bcity ON bcity.cityNo=t1.cityNo AND bcity.FlagDeleted=0
+     where t1.delFlag=0
+	    <if test="userCode!=null and userCode!=''">
+	       and ( t1.userCode LIKE CONCAT('%', #{userCode},'%')
+            OR t1.userName LIKE CONCAT('%', #{userCode},'%')
+            )
+	    </if>
+	    <if test="cityNo != null and cityNo != ''">
+            AND t1.cityNo = #{cityNo}
+        </if>
+        <if test="centerGroup != null and centerGroup != ''">
+            AND t1.centerId in (${centerGroup})
+        </if>
+	    ORDER BY t1.dateCreate DESC
+  </select>
+  
+  <select id="getByUserCode" parameterType="Map" resultType="cn.com.eju.pmls.basicInformation.personnelPermissions.model.UserCenterCity">
+        SELECT
+          id,
+      	  userCode,
+		  userName,
+		  centerId,
+		  cityId,
+		  cityNo,
+		  dateCreate,
+		  userIdCreate,
+		  delFlag 
+        FROM BAS_PMLS_UserCenterCitySetting
+        WHERE delFlag = 0 AND userCode = #{userCode,jdbcType=VARCHAR}
+        <if test="cityNo != null and cityNo != ''">
+            and  cityNo = #{cityNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+  
+  <!--获取人员信息-->
+  <select id="getPersonnelPermissionsInfo"  parameterType="Map" resultType="cn.com.eju.pmls.basicInformation.personnelPermissions.dto.UserCenterCityDto">
+    select top 1
+    	  t1.id,
+      	  t1.userCode,
+		  t1.userName,
+		  t1.centerId,
+		  t1.cityId,
+		  t1.cityNo,
+		  t1.dateCreate,
+		  t1.userIdCreate,
+		  t1.delFlag ,
+		  bc.centerName,
+		  bcity.CityName cityName
+    from BAS_PMLS_UserCenterCitySetting t1
+    LEFT JOIN dbo.Bas_City bcity ON bcity.cityNo=t1.cityNo AND bcity.FlagDeleted=0
+    LEFT JOIN dbo.BAS_CenterSetting bc ON bc.centerId=t1.centerId AND bc.cityId=t1.cityId  AND bc.delFlag=0
+    where t1.delFlag=0
+    <if test="id!=null and id!=0">
+      and t1.id=#{id}
+    </if>
+  </select>
+  
+  <!--根据centerId获取cityId-->
+  <select id="getCityIdByCenterId"  parameterType="Integer" resultType="Map">
+    select 
+    	  cityId 
+    from BAS_CenterSetting where delFlag=0
+      and centerId=#{centerId}
+  </select>
+  
+<!--   根据cityNo获取中心列表 -->
+  <select id="getCenterGroupByCityNo" resultType="java.util.Map" parameterType="Map">
+       SELECT DISTINCT t1.centerId,t1.cityId, t1.centerName,t2.cityNo,t2.cityName
+        FROM dbo.BAS_CenterSetting t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId = t2.ID AND t2.FlagDeleted=0
+		WHERE t1.delFlag=0 
+		<if test="cityNo != null and cityNo != ''">
+            and  t2.cityNo = #{cityNo,jdbcType=VARCHAR}
+        </if>
+        AND t1.centerId IS NOT NULL
+   </select>
+   
+<!--    获取城市列表 -->
+  <select id="getCityList" resultType="java.util.Map" parameterType="Map">
+       SELECT DISTINCT t1.cityId,t2.cityNo,t2.cityName
+        FROM dbo.BAS_CenterSetting t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId = t2.ID AND t2.FlagDeleted=0
+		WHERE t1.delFlag=0
+		<if test="cityNo != null and cityNo != ''">
+            and  t2.cityNo = #{cityNo,jdbcType=VARCHAR}
+        </if>
+   </select>
+  
+  <!--新增-->
+  <insert id="addPersonnelPermissions" parameterType="cn.com.eju.pmls.basicInformation.personnelPermissions.model.UserCenterCity" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+        INSERT INTO BAS_PMLS_UserCenterCitySetting (
+		  userCode,
+		  userName,
+		  centerId,
+		  cityId,
+		  cityNo,
+		  dateCreate,
+		  userIdCreate,
+		  delFlag
+        ) VALUES(
+          #{userCode},
+          #{userName},
+          #{centerId},
+          #{cityId},
+          #{cityNo},
+          getdate(),
+          #{userIdCreate},
+          0
+        )
+    </insert>
+    
+  <!--修改-->
+  <update id="updatePersonnelPermissions"  parameterType="cn.com.eju.pmls.basicInformation.personnelPermissions.dto.UserCenterCityDto">
+    update BAS_PMLS_UserCenterCitySetting
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="cityNo!=null and cityNo!=''">
+        cityNo=#{cityNo},
+      </if>
+      <if test="centerId!=null and centerId!=''">
+        centerId=#{centerId},
+      </if>
+      <if test="cityId!=null ">
+        cityId=#{cityId},
+      </if>
+
+    </trim>
+    where delFlag=0 and id=#{id} 
+  </update>
+  
+  <!--删除-->
+  <update id="deletePersonnelPermissions" parameterType="cn.com.eju.pmls.basicInformation.personnelPermissions.dto.UserCenterCityDto" >
+    update BAS_PMLS_UserCenterCitySetting set delFlag=1 where id=#{id}
+  </update>
+  
+</mapper>

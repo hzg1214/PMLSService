@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.otherReport.dao.LnkQtReportdetailMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.otherReport.model.LnkQtReportdetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reportId" jdbcType="INTEGER" property="reportId" />
+    <result column="reportNo" jdbcType="VARCHAR" property="reportNo" />
+    <result column="estateId" jdbcType="VARCHAR" property="estateId" />
+    <result column="estateNm" jdbcType="VARCHAR" property="estateNm" />
+    <result column="businessType" jdbcType="VARCHAR" property="businessType" />
+    <result column="businessUserId" jdbcType="INTEGER" property="businessUserId" />
+    <result column="businessDate" jdbcType="TIMESTAMP" property="businessDate" />
+    <result column="partnerNm" jdbcType="VARCHAR" property="partnerNm" />
+    <result column="srType" jdbcType="INTEGER" property="srType" />
+    <result column="srAmount" jdbcType="DECIMAL" property="srAmount" />
+    <result column="Memo" jdbcType="NVARCHAR" property="memo" />
+    <result column="dealAmount" jdbcType="DECIMAL" property="dealAmount" />
+    <result column="befYJSRAmount" jdbcType="DECIMAL" property="befYJSRAmount" />
+    <result column="aftYJSRAmount" jdbcType="DECIMAL" property="aftYJSRAmount" />
+    <result column="befYJFYAmount" jdbcType="DECIMAL" property="befYJFYAmount" />
+    <result column="aftYJFYAmount" jdbcType="DECIMAL" property="aftYJFYAmount" />
+    <result column="accountProject" jdbcType="NVARCHAR" property="accountProject" />
+    <result column="accountProjectNo" jdbcType="NVARCHAR" property="accountProjectNo" />
+    <result column="accCityNo" jdbcType="VARCHAR" property="accCityNo" />
+    <result column="centerId" jdbcType="INTEGER" property="centerId" />
+    <result column="centerName" jdbcType="NVARCHAR" property="centerName" />
+    <result column="crtUserId" jdbcType="INTEGER" property="crtUserId" />
+    <result column="crtDate" jdbcType="TIMESTAMP" property="crtDate" />
+    <result column="uptUserId" jdbcType="INTEGER" property="uptUserId" />
+    <result column="uptDate" jdbcType="TIMESTAMP" property="uptDate" />
+    <result column="DelFlg" jdbcType="BIT" property="delFlg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, reportId, reportNo, estateId, estateNm, businessType, businessUserId, businessDate,
+    partnerNm, srType, srAmount, Memo, dealAmount, befYJSRAmount, aftYJSRAmount, befYJFYAmount,
+    aftYJFYAmount, accountProject, accountProjectNo, accCityNo, centerId, centerName,
+    crtUserId, crtDate, uptUserId, uptDate, DelFlg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from LNK_Qt_ReportDetail
+    where id = #{id,jdbcType=INTEGER}
+    and DelFlg = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from LNK_Qt_ReportDetail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.otherReport.model.LnkQtReportdetail">
+    insert into LNK_Qt_ReportDetail (reportId, reportNo,
+      estateId, estateNm, businessType,
+      businessUserId, businessDate, partnerNm,
+      srType, srAmount, Memo,
+      dealAmount, befYJSRAmount, aftYJSRAmount,
+      befYJFYAmount, aftYJFYAmount, accountProject,
+      accountProjectNo, accCityNo, centerId,
+      centerName, crtUserId, crtDate,
+      uptUserId, uptDate, DelFlg
+      )
+    values (#{reportId,jdbcType=INTEGER}, #{reportNo,jdbcType=VARCHAR},
+      #{estateId,jdbcType=VARCHAR}, #{estateNm,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR},
+      #{businessUserId,jdbcType=INTEGER}, #{businessDate,jdbcType=TIMESTAMP}, #{partnerNm,jdbcType=VARCHAR},
+      #{srType,jdbcType=INTEGER}, #{srAmount,jdbcType=DECIMAL}, #{memo,jdbcType=NVARCHAR},
+      #{dealAmount,jdbcType=DECIMAL}, #{befYJSRAmount,jdbcType=DECIMAL}, #{aftYJSRAmount,jdbcType=DECIMAL},
+      #{befYJFYAmount,jdbcType=DECIMAL}, #{aftYJFYAmount,jdbcType=DECIMAL}, #{accountProject,jdbcType=NVARCHAR},
+      #{accountProjectNo,jdbcType=NVARCHAR}, #{accCityNo,jdbcType=VARCHAR}, #{centerId,jdbcType=INTEGER},
+      #{centerName,jdbcType=NVARCHAR}, #{crtUserId,jdbcType=INTEGER}, #{crtDate,jdbcType=TIMESTAMP},
+      #{uptUserId,jdbcType=INTEGER}, #{uptDate,jdbcType=TIMESTAMP}, #{delFlg,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.otherReport.model.LnkQtReportdetail" useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_Qt_ReportDetail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="reportId != null">
+        reportId,
+      </if>
+      <if test="reportNo != null">
+        reportNo,
+      </if>
+      <if test="estateId != null">
+        estateId,
+      </if>
+      <if test="estateNm != null">
+        estateNm,
+      </if>
+      <if test="businessType != null">
+        businessType,
+      </if>
+      <if test="businessUserId != null">
+        businessUserId,
+      </if>
+      <if test="businessDate != null">
+        businessDate,
+      </if>
+      <if test="partnerNm != null">
+        partnerNm,
+      </if>
+      <if test="srType != null">
+        srType,
+      </if>
+      <if test="srAmount != null">
+        srAmount,
+      </if>
+      <if test="memo != null">
+        Memo,
+      </if>
+      <if test="dealAmount != null">
+        dealAmount,
+      </if>
+      <if test="befYJSRAmount != null">
+        befYJSRAmount,
+      </if>
+      <if test="aftYJSRAmount != null">
+        aftYJSRAmount,
+      </if>
+      <if test="befYJFYAmount != null">
+        befYJFYAmount,
+      </if>
+      <if test="aftYJFYAmount != null">
+        aftYJFYAmount,
+      </if>
+      <if test="accountProject != null">
+        accountProject,
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo,
+      </if>
+      <if test="accCityNo != null">
+        accCityNo,
+      </if>
+      <if test="centerId != null">
+        centerId,
+      </if>
+      <if test="centerName != null">
+        centerName,
+      </if>
+      <if test="crtUserId != null">
+        crtUserId,
+      </if>
+      <if test="crtDate != null">
+        crtDate,
+      </if>
+      <if test="uptUserId != null">
+        uptUserId,
+      </if>
+      <if test="uptDate != null">
+        uptDate,
+      </if>
+      <if test="delFlg != null">
+        DelFlg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="reportId != null">
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null">
+        #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateId != null">
+        #{estateId,jdbcType=VARCHAR},
+      </if>
+      <if test="estateNm != null">
+        #{estateNm,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessUserId != null">
+        #{businessUserId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDate != null">
+        #{businessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partnerNm != null">
+        #{partnerNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srType != null">
+        #{srType,jdbcType=INTEGER},
+      </if>
+      <if test="srAmount != null">
+        #{srAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=NVARCHAR},
+      </if>
+      <if test="dealAmount != null">
+        #{dealAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="befYJSRAmount != null">
+        #{befYJSRAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="aftYJSRAmount != null">
+        #{aftYJSRAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="befYJFYAmount != null">
+        #{befYJFYAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="aftYJFYAmount != null">
+        #{aftYJFYAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountProject != null">
+        #{accountProject,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        #{accountProjectNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="accCityNo != null">
+        #{accCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="centerId != null">
+        #{centerId,jdbcType=INTEGER},
+      </if>
+      <if test="centerName != null">
+        #{centerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="crtUserId != null">
+        #{crtUserId,jdbcType=INTEGER},
+      </if>
+      <if test="crtDate != null">
+        #{crtDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uptUserId != null">
+        #{uptUserId,jdbcType=INTEGER},
+      </if>
+      <if test="uptDate != null">
+        #{uptDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.otherReport.model.LnkQtReportdetail">
+    update LNK_Qt_ReportDetail
+    <set>
+      <if test="reportId != null">
+        reportId = #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null">
+        reportNo = #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateId != null">
+        estateId = #{estateId,jdbcType=VARCHAR},
+      </if>
+      <if test="estateNm != null">
+        estateNm = #{estateNm,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        businessType = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessUserId != null">
+        businessUserId = #{businessUserId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDate != null">
+        businessDate = #{businessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="partnerNm != null">
+        partnerNm = #{partnerNm,jdbcType=VARCHAR},
+      </if>
+      <if test="srType != null">
+        srType = #{srType,jdbcType=INTEGER},
+      </if>
+      <if test="srAmount != null">
+        srAmount = #{srAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memo != null">
+        Memo = #{memo,jdbcType=NVARCHAR},
+      </if>
+      <if test="dealAmount != null">
+        dealAmount = #{dealAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="befYJSRAmount != null">
+        befYJSRAmount = #{befYJSRAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="aftYJSRAmount != null">
+        aftYJSRAmount = #{aftYJSRAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="befYJFYAmount != null">
+        befYJFYAmount = #{befYJFYAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="aftYJFYAmount != null">
+        aftYJFYAmount = #{aftYJFYAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountProject != null">
+        accountProject = #{accountProject,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="accCityNo != null">
+        accCityNo = #{accCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="centerId != null">
+        centerId = #{centerId,jdbcType=INTEGER},
+      </if>
+      <if test="centerName != null">
+        centerName = #{centerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="crtUserId != null">
+        crtUserId = #{crtUserId,jdbcType=INTEGER},
+      </if>
+      <if test="crtDate != null">
+        crtDate = #{crtDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uptUserId != null">
+        uptUserId = #{uptUserId,jdbcType=INTEGER},
+      </if>
+      <if test="uptDate != null">
+        uptDate = #{uptDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null">
+        DelFlg = #{delFlg,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.otherReport.model.LnkQtReportdetail">
+    update LNK_Qt_ReportDetail
+    set reportId = #{reportId,jdbcType=INTEGER},
+      reportNo = #{reportNo,jdbcType=VARCHAR},
+      estateId = #{estateId,jdbcType=VARCHAR},
+      estateNm = #{estateNm,jdbcType=VARCHAR},
+      businessType = #{businessType,jdbcType=VARCHAR},
+      businessUserId = #{businessUserId,jdbcType=INTEGER},
+      businessDate = #{businessDate,jdbcType=TIMESTAMP},
+      partnerNm = #{partnerNm,jdbcType=VARCHAR},
+      srType = #{srType,jdbcType=INTEGER},
+      srAmount = #{srAmount,jdbcType=DECIMAL},
+      Memo = #{memo,jdbcType=NVARCHAR},
+      dealAmount = #{dealAmount,jdbcType=DECIMAL},
+      befYJSRAmount = #{befYJSRAmount,jdbcType=DECIMAL},
+      aftYJSRAmount = #{aftYJSRAmount,jdbcType=DECIMAL},
+      befYJFYAmount = #{befYJFYAmount,jdbcType=DECIMAL},
+      aftYJFYAmount = #{aftYJFYAmount,jdbcType=DECIMAL},
+      accountProject = #{accountProject,jdbcType=NVARCHAR},
+      accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR},
+      accCityNo = #{accCityNo,jdbcType=VARCHAR},
+      centerId = #{centerId,jdbcType=INTEGER},
+      centerName = #{centerName,jdbcType=NVARCHAR},
+      crtUserId = #{crtUserId,jdbcType=INTEGER},
+      crtDate = #{crtDate,jdbcType=TIMESTAMP},
+      uptUserId = #{uptUserId,jdbcType=INTEGER},
+      uptDate = #{uptDate,jdbcType=TIMESTAMP},
+      DelFlg = #{delFlg,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getDetailListByQtReportId" parameterType="Map" resultType="cn.com.eju.deal.otherReport.dto.QtReportDetailDto">
+    select
+    	uu.userName,uu.userCode,
+    	bd1.dicValue detailSrTypeName ,
+    	<include refid="Base_Column_List" />
+    from LNK_Qt_ReportDetail lqr
+    LEFT JOIN dbo.BAS_DictionaryValue  bd1 ON bd1.dicCode=lqr.srType AND bd1.delFlag='N'
+    LEFT JOIN crm.dbo.USR_User uu ON uu.userId=lqr.businessUserId AND uu.delFlag='N'
+    where lqr.reportId = #{reportId,jdbcType=INTEGER} AND lqr.DelFlg = 0
+    ORDER BY lqr.crtDate 
+  </select>
+  
+</mapper>

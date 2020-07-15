@@ -1,0 +1,83 @@
+package cn.com.eju.pmls.channelBusiness.dao;
+
+import cn.com.eju.deal.dto.common.CityDto;
+import cn.com.eju.deal.dto.common.DistrictDto;
+import cn.com.eju.deal.model.sweepStreets.MaintainerInfoDto;
+import cn.com.eju.deal.youFangTongBind.dto.YouFangTongBindDto;
+import cn.com.eju.deal.youFangTongBind.model.YftEjuBind;
+import cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto;
+import cn.com.eju.pmls.channelBusiness.model.JsStatementDto;
+
+import java.util.List;
+import java.util.Map;
+
+public interface BusinessManagerMapper {
+    //新增商户
+    int addBusiness(BusinessManagerDto dto);
+    //删除商户
+    int deleteBusiness(BusinessManagerDto dto);
+    //修改商户
+    int updateBusiness(BusinessManagerDto dto);
+    //跟据Id获取商户信息
+    BusinessManagerDto getBusinessInfo(BusinessManagerDto dto);
+    //跟进渠道名称和统一社会信用代码查询信息是否存在
+    BusinessManagerDto getBusinessInfo2(BusinessManagerDto dto);
+    //获取商户列表
+    List<BusinessManagerDto> getBusinessManagerList(Map<String, Object> queryParam);
+
+    List<BusinessManagerDto> getNewBusinessManagerList(Map<String, Object> queryParam);
+
+    //新增门店
+    int addStore(BusinessManagerDto dto);
+    //新增联系人
+    int addContacts(BusinessManagerDto dto);
+    //修改联系人
+    int updateContacts(BusinessManagerDto dto);
+
+    //获取联系人信息
+    BusinessManagerDto getContactsInfo(BusinessManagerDto dto);
+    //获取联系人列表
+    List<BusinessManagerDto> getContactsList(Map<String, Object> queryParam);
+    //获取联系人数量
+    int getContactsCount(BusinessManagerDto dto);
+
+    //操作商户记录日志
+    int addOperationLog(BusinessManagerDto dto);
+
+    //获取日志列表
+    List<BusinessManagerDto> getOperationLogList(Map<String, Object> queryParam);
+    //新增商户城市关系表
+    int addCompanyReleaseCity(BusinessManagerDto dto);
+    //新增修改删除管理员之后执行存储过程同步友房通数据
+    void execCompanyAdmin(BusinessManagerDto dto);
+    //新增修改商户之后执行存储过程同步友房通数据
+    void execCompany(BusinessManagerDto dto);
+
+    //校验管理员手机号码是否存在
+    BusinessManagerDto getContactsInfoByTel(BusinessManagerDto dto);
+    //获取未生成附件的结算书列表
+    List<JsStatementDto> getNotFileJssList();
+    //获取结算书明细列表
+    List<JsStatementDto> getJssDetailList(Integer jssId);
+
+    void insertJsStatementFile(Map<String, Object> param);
+
+    //获取维护人列表
+    List<MaintainerInfoDto> getMaintainerList(Map<String, Object> param);
+    //获取房友中心列表
+    List<MaintainerInfoDto> getFyCenterList(Map<String, Object> param);
+    //获取公司维护人变更记录列表
+    List<MaintainerInfoDto> getCompanyMaintainerList(Map<String, Object> param);
+    //添加公司维护人记录
+    int addCompanyMaintainer(BusinessManagerDto dto);
+    //修改公司维护人记录
+    int updateCompanyMaintainer(BusinessManagerDto dto);
+
+
+    //获取未生成附件的结算书列表
+    List<JsStatementDto> getNotFileSfxyList();
+    void insertSfxyFile(Map<String, Object> param);
+    
+    
+    List<JsStatementDto>  getJssDetailListForExcel(Integer jssId);
+}

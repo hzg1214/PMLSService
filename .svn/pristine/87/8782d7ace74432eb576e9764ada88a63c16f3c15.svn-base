@@ -1,0 +1,228 @@
+package cn.com.eju.pmls.cooperation.controller;
+
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.deal.houseLinkage.estate.model.EstateContractDto;
+import cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto;
+import cn.com.eju.pmls.cooperation.model.CooperationDto;
+import cn.com.eju.pmls.cooperation.service.CooperationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("cooperationController")
+public class CooperationController {
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Autowired
+    private CooperationService cooperationService;
+
+    /**
+     * 合作确认函 列表
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/getCooperationList/{param}", method = RequestMethod.GET)
+    public String getCooperationList(@PathVariable String param){
+        //构建返回
+        ResultData<List<CooperationDto>> resultData = new ResultData<List<CooperationDto>>();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = cooperationService.getCooperationList(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "getCooperationList", "", null, "", "查询-list", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 新增合作确认函
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/addCooperation", method = RequestMethod.POST)
+    public String addCooperation(@RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try{
+            CooperationDto dto = JsonUtil.parseToObject(json, CooperationDto.class);
+            resultData = cooperationService.addCooperation(dto);
+        }catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "addCooperation", "", null, "", "新增合作确认函", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 修改合作确认函
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/updateCooperation", method = RequestMethod.POST)
+    public String updateCooperation(@RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try{
+            CooperationDto dto = JsonUtil.parseToObject(json, CooperationDto.class);
+            resultData = cooperationService.updateCooperation(dto);
+        }catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "updateCooperation", "", null, "", "修改合作确认函", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 获取合作确认函详情
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/getCooperationInfo", method = RequestMethod.POST)
+    public String getCooperationInfo(@RequestBody String json) {
+        Map<String, Object> queryParam = JsonUtil.parseToObject(json, Map.class);
+        ResultData resultData = new ResultData();
+        try{
+            CooperationDto dto = JsonUtil.parseToObject(json, CooperationDto.class);
+            resultData = cooperationService.getCooperationInfo(dto);
+        }catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "getCooperationInfo", "", null, "", "获取合作确认函详情", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 作废合作确认函
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/invalidCooperation", method = RequestMethod.POST)
+    public String invalidCooperation(@RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try{
+            CooperationDto dto = JsonUtil.parseToObject(json, CooperationDto.class);
+            resultData = cooperationService.invalidCooperation(dto);
+        }catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "invalidCooperation", "", null, "", "作废合作确认函", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 获取经纪公司列表
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/getCompanyList/{param}", method = RequestMethod.GET)
+    public String getCompanyList(@PathVariable String param){
+        //构建返回
+        ResultData<List<BusinessManagerDto>> resultData = new ResultData<List<BusinessManagerDto>>();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = cooperationService.getCompanyList(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "getCompanyList", "", null, "", "经纪公司列表", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 检查经纪公司是否可选
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/checkCompany", method = RequestMethod.POST)
+    public String checkCompany(@RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try{
+            BusinessManagerDto dto = JsonUtil.parseToObject(json, BusinessManagerDto.class);
+            resultData = cooperationService.checkCompany(dto);
+        }catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "checkCompany", "", null, "", "检查经纪公司是否可选", e);
+        }
+        return resultData.toString();
+    }
+
+
+    /**
+     * 获取项目合同列表
+     * 收入类合同 进场确认函
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/getEstateHtRecord/{param}", method = RequestMethod.GET)
+    public String getEstateHtRecord(@PathVariable String param){
+        //构建返回
+        ResultData<List<EstateContractDto>> resultData = new ResultData<List<EstateContractDto>>();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = cooperationService.queryEstateHtRecord(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "getSrlHtRecord", "", null, "", "获取收入类合同列表", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 获取经纪公司详情
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/getCompanyInfo", method = RequestMethod.POST)
+    public String getCompanyInfo(@RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try{
+            BusinessManagerDto dto = JsonUtil.parseToObject(json, BusinessManagerDto.class);
+            resultData = cooperationService.getCompanyInfo(dto);
+        }catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "getCompanyInfo", "", null, "", "获取经纪公司详情", e);
+        }
+        return resultData.toString();
+    }
+
+
+    @RequestMapping(value = "checkReportCooperation/{reportId}", method = RequestMethod.GET)
+    public String checkReportCooperation(@PathVariable String reportId) {
+        //构建返回
+        ResultData<?> resultData = null;
+        resultData = cooperationService.checkReportCooperation(reportId);
+        return resultData.toString();
+    }
+
+    /**
+     * 发起OA合作协议
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/sendOACooperation", method = RequestMethod.POST)
+    public String sendOACooperation(HttpServletRequest request, @RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try{
+            CooperationDto dto = JsonUtil.parseToObject(json, CooperationDto.class);
+            resultData = cooperationService.sendOACooperation(request,dto);
+        }catch (Exception e) {
+            resultData.setFail();
+            logger.error("cooperation", "CooperationController", "sendOACooperation", "", null, "", "发起OA合作协议", e);
+        }
+        return resultData.toString();
+    }
+
+
+}

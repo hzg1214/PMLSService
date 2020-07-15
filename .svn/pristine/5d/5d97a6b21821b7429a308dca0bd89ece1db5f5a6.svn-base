@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    <result column="reportId" property="reportId" jdbcType="VARCHAR" />
+    <result column="customerName" property="customerName" jdbcType="NVARCHAR" />
+    <result column="buildingNo" property="buildingNo" jdbcType="NVARCHAR" />
+    <result column="cxArea" property="cxArea" jdbcType="DECIMAL" />
+    <result column="cxAmount" property="cxAmount" jdbcType="DECIMAL" />
+    <result column="dealDate" property="dealDate" jdbcType="TIMESTAMP" />
+    <result column="sjAmount_bef" property="sjAmount_bef" jdbcType="DECIMAL" />
+    <result column="sjAmount_aft" property="sjAmount_aft" jdbcType="DECIMAL" />
+    <result column="allocatAmount_bef" property="allocatAmount_bef" jdbcType="DECIMAL" />
+    <result column="allocatAmount_aft" property="allocatAmount_aft" jdbcType="DECIMAL" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="userIdUpdate" property="userIdUpdate" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    insert into PMLS_SkAllocate_dtl (id, parentId, reportId, 
+      customerName, buildingNo, cxArea, 
+      cxAmount, dealDate, sjAmount_bef, 
+      sjAmount_aft, allocatAmount_bef, allocatAmount_aft, 
+      delFlag, dateCreate, userIdCreate, 
+      dateUpdate, userIdUpdate)
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{reportId,jdbcType=VARCHAR}, 
+      #{customerName,jdbcType=NVARCHAR}, #{buildingNo,jdbcType=NVARCHAR}, #{cxArea,jdbcType=DECIMAL}, 
+      #{cxAmount,jdbcType=DECIMAL}, #{dealDate,jdbcType=TIMESTAMP}, #{sjAmount_bef,jdbcType=DECIMAL}, 
+      #{sjAmount_aft,jdbcType=DECIMAL}, #{allocatAmount_bef,jdbcType=DECIMAL}, #{allocatAmount_aft,jdbcType=DECIMAL}, 
+      #{delFlag,jdbcType=BIT}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{dateUpdate,jdbcType=TIMESTAMP}, #{userIdUpdate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    insert into PMLS_SkAllocate_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="parentId != null" >
+        parentId,
+      </if>
+      <if test="reportId != null" >
+        reportId,
+      </if>
+      <if test="customerName != null" >
+        customerName,
+      </if>
+      <if test="buildingNo != null" >
+        buildingNo,
+      </if>
+      <if test="cxArea != null" >
+        cxArea,
+      </if>
+      <if test="cxAmount != null" >
+        cxAmount,
+      </if>
+      <if test="dealDate != null" >
+        dealDate,
+      </if>
+      <if test="sjAmount_bef != null" >
+        sjAmount_bef,
+      </if>
+      <if test="sjAmount_aft != null" >
+        sjAmount_aft,
+      </if>
+      <if test="allocatAmount_bef != null" >
+        allocatAmount_bef,
+      </if>
+      <if test="allocatAmount_aft != null" >
+        allocatAmount_aft,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="buildingNo != null" >
+        #{buildingNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="cxArea != null" >
+        #{cxArea,jdbcType=DECIMAL},
+      </if>
+      <if test="cxAmount != null" >
+        #{cxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealDate != null" >
+        #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sjAmount_bef != null" >
+        #{sjAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="sjAmount_aft != null" >
+        #{sjAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="allocatAmount_bef != null" >
+        #{allocatAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="allocatAmount_aft != null" >
+        #{allocatAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

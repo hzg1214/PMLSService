@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.performanceQuery.dao.PerformanceQueryMapper">
+
+	<resultMap id="performanceQueryDtoMap" type="cn.com.eju.deal.dto.performanceQuery.PerformanceQueryDto"/>
+
+	<select id="queryPerformanceList" parameterType="java.util.Map" resultMap="performanceQueryDtoMap">
+-- 		EXEC P_CRM_RPT_PerformanceQuery '${dateStart}', '${dateEnd}', '${cityId}', '${centerId}', '${storeNo}', '${storeAddress}', '${companyName}', '${sumBy}', '${sortBy}', ${userId}
+		EXEC P_CRM_RPT_PerformanceQuery #{dateStart}, #{dateEnd}, #{organization}, #{regionCodeStr}, #{areaCityCodeStr}, #{cityIdStr}, #{centerIdStr}, #{storeNo}, #{storeAddress}, #{company}, #{sumBy}, #{sortBy}, #{userId}
+	</select>
+
+</mapper>

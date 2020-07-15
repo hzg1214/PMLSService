@@ -1,0 +1,25 @@
+package cn.com.eju.pmls.jsStatement.dao;
+
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsStatementDto;
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatement;
+
+import java.util.List;
+import java.util.Map;
+
+public interface PmlsJsStatementMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(PmlsJsStatement record);
+
+    int insertSelective(PmlsJsStatement record);
+
+    PmlsJsStatement selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(PmlsJsStatement record);
+
+    int updateByPrimaryKey(PmlsJsStatement record);
+
+    List<PmlsJsStatementDto> queryList(Map<String, Object> queryParam);
+    
+    PmlsJsStatementDto getJsStatementDetail(Map<String, Object> queryParam);
+}

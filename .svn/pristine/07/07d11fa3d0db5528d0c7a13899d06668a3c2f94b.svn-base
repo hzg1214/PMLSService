@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.personalInfo.PersonalInfoMapper">
+
+	<resultMap id="PersonalInfoDtoMap" type="cn.com.eju.deal.dto.personalInfo.PersonalInfoDto">
+		<result column="userCode" property="userCode"/>
+		<result column="userName" property="userName"/>
+		<result column="cityGroupName" property="cityName"/>
+		<result column="centerName" property="centerName"/>
+
+		<result column="day_userxzmdNum" property="dayXZMDNum"/>
+		<result column="day_userxzmdNum" property="dayXZMDNum"/>
+		<result column="day_userxzcqNum" property="dayXZCQNum"/>
+		<result column="day_userxzqyNum" property="dayXZQYNum"/>
+		<result column="day_userxzfpNum" property="dayXZFPNum"/>
+		<result column="week_userxzmdNum" property="weekXZMDNum"/>
+		<result column="week_userxzcqNum" property="weekXZCQNum"/>
+		<result column="week_userxzqyNum" property="weekXZQYNum"/>
+		<result column="week_userxzfpNum" property="weekXZFPNum"/>
+		<result column="month_userxzmdNum" property="monthXZMDNum"/>
+		<result column="month_userxzcqNum" property="monthXZCQNum"/>
+		<result column="month_userxzqyNum" property="monthXZQYNum"/>
+		<result column="month_userxzfpNum" property="monthXZFPNum"/>
+		<result column="month_dqdqStoreNum" property="monthDQDQStoreNum"/>
+		<result column="month_dqxqStoreNum" property="monthDQXQStoreNum"/>
+		<result column="month_xqRate" property="monthXQRate"/>
+		<result column="month_jy_qyNum" property="monthJYQYNum"/>
+		<result column="month_jy_yjjsAmount_sq" property="monthJYJSAmount"/>
+		<result column="month_ld_ddAmount" property="monthLDDDAmount"/>
+		<result column="month_ld_cxAmount" property="monthLDCXAmount"/>
+		<result column="month_ld_yjjsAmount_sq" property="monthLDJSAmount"/>
+		<result column="quarter_userxzmdNum" property="quarterXZMDNum"/>
+		<result column="quarter_userxzcqNum" property="quarterXZCQNum"/>
+		<result column="quarter_userxzqyNum" property="quarterXZQYNum"/>
+		<result column="quarter_userxzfpNum" property="quarterXZFPNum"/>
+		<result column="quarter_tyStoreNum" property="quarterTYStoreNum"/>
+		<result column="quarter_tqzzStoreNum" property="quarterTQZZStoreNum"/>
+		<result column="quarter_dqzzStoreNum" property="quarterDQZZStoreNum"/>
+		<result column="quarter_dqdqStoreNum" property="quarterDQDQStoreNum"/>
+		<result column="quarter_dqxqStoreNum" property="quarterDQXQStoreNum"/>
+		<result column="quarter_xqRate" property="quarterXQRate"/>
+		<result column="quarter_jy_qyNum" property="quarterJYQYNum"/>
+		<result column="quarter_jy_yjjsAmount_sq" property="quarterJYJSAmount"/>
+		<result column="quarter_ld_ddAmount" property="quarterLDDDAmount"/>
+		<result column="quarter_ld_cxAmount" property="quarterLDCXAmount"/>
+		<result column="quarter_ld_yjjsAmount_sq" property="quarterLDJSAmount"/>
+		<result column="year_userxzmdNum" property="yearXZMDNum"/>
+		<result column="year_userxzcqNum" property="yearXZCQNum"/>
+		<result column="year_userxzqyNum" property="yearXZQYNum"/>
+		<result column="year_userxzfpNum" property="yearXZFPNum"/>
+		<result column="year_dqdqStoreNum" property="yearDQDQStoreNum"/>
+		<result column="year_dqxqStoreNum" property="yearDQXQStoreNum"/>
+		<result column="year_xqRate" property="yearXQRate"/>
+		<result column="year_jy_qyNum" property="yearJYQYNum"/>
+		<result column="year_jy_yjjsAmount_sq" property="yearJYJSAmount"/>
+		<result column="year_ld_ddAmount" property="yearLDDDAmount"/>
+		<result column="year_ld_cxAmount" property="yearLDCXAmount"/>
+		<result column="year_ld_yjjsAmount_sq" property="yearLDJSAmount"/>
+		<result column="lastM_dqmdNum" property="lastMonthDQMDNum"/>
+		<result column="lastM_xqmdNum" property="lastMonthXQMDNum"/>
+		<result column="lastM_xqRate" property="lastMonthXQRate"/>
+		<result column="lastQ_fpchmdNum" property="lastQuarterFPCHMDNum"/>
+		<result column="lastQ_dqmdNum" property="lastQuarterDQMDNum"/>
+		<result column="lastQ_xqmdNum" property="lastQuarterXQMDNum"/>
+		<result column="lastQ_xqRate" property="lastQuarterXQRate"/>
+		<result column="lastY_dqmdNum" property="lastYearDQMDNum"/>
+		<result column="lastY_xqmdNum" property="lastYearXQMDNum"/>
+		<result column="lastY_xqRate" property="lastYearXQRate"/>
+		<result column="total_userxzmdNum" property="totalXZMDNum"/>
+
+		<result column="total_userxzcqNum" property="totalXZCQNum"/>
+		<result column="total_userxzqyNum" property="totalXZQYNum"/>
+		<result column="total_xzqyNum" property="totalZXYZMDNum"/>
+		<result column="total_userxzfpNum" property="totalXZFPNum"/>
+		<result column="total_dqdqStoreNum" property="totalDQDQStoreNum"/>
+		<result column="total_dqxqStoreNum" property="totalDQXQStoreNum"/>
+		<result column="total_ysbzjmdNum" property="totalYSBZJMDNum"/>
+		<result column="total_ysbzjAmount" property="totalYSBZJAmount"/>
+		<result column="total_ssbzjmdNum" property="totalSSBZJMDNum"/>
+		<result column="total_ssbzjAmount" property="totalSSBZJAmount"/>
+		<result column="total_wsbzjmdNum" property="totalWSBZJMDNum"/>
+		<result column="total_wsbzjAmount" property="totalWSBZJAmount"/>
+		<result column="total_zxsqzmdNum" property="totalZXSQZMDNum"/>
+		<result column="total_zxsqtgmdNum" property="totalZXSQTGMDNum"/>
+		<result column="total_zxwcmdNum" property="totalZXWCMDNum"/>
+		<result column="total_zxyswcmdNum" property="totalZXYSWCMDNum"/>
+		<result column="total_qychmdNum" property="totalQYCHMDNum"/>
+		<result column="total_fpchmdNum" property="totalFPCHMDNum"/>
+		<result column="gs_total_ysbzjmdNum" property="gsTotalYSBZJMDNum"/>
+		<result column="gs_total_ysbzjAmount" property="gsTotalYSBZJAmount"/>
+		<result column="gs_total_ssbzjmdNum" property="gsTotalSSBZJMDNum"/>
+		<result column="gs_total_ssbzjAmount" property="gsTotalSSBZJAmount"/>
+		<result column="gs_total_wsbzjmdNum" property="gsTotalWSBZJMDNum"/>
+		<result column="gs_total_wsbzjAmount" property="gsTotalWSBZJAmount"/>
+		<result column="wgs_total_ysbzjmdNum" property="wgsTotalYSBZJMDNum"/>
+		<result column="wgs_total_ysbzjAmount" property="wgsTotalYSBZJAmount"/>
+		<result column="wgs_total_ssbzjmdNum" property="wgsTotalSSBZJMDNum"/>
+		<result column="wgs_total_ssbzjAmount" property="wgsTotalSSBZJAmount"/>
+		<result column="wgs_total_wsbzjmdNum" property="wgsTotalWSBZJMDNum"/>
+		<result column="wgs_total_wsbzjAmount" property="wgsTotalWSBZJAmount"/>
+		<result column="quarter_fpdcmdNum" property="quarterDCMDNum"/>
+		<result column="quarter_fpdrmdNum2" property="quarterDRMDNum"/>
+		<result column="quarter_qywhmdNum" property="quarterQYWHMDNum"/>
+		<result column="quarter_fpwhmdNum" property="quarterFPWHMDNum"/>
+		<result column="chRate" property="chRate"/>
+		<result column="day_fp_gjmdNum" property="dayFPGJMDNum"/>
+		<result column="day_fp_gjcsNum" property="dayFPGJCSNum"/>
+		<result column="day_wfp_gjmdNum" property="dayWFPGJMDNum"/>
+		<result column="day_wfp_gjcsNum" property="dayWFPGJCSNum"/>
+		<result column="week_fp_gjmdNum" property="weekFPGJMDNum"/>
+		<result column="week_fp_gjcsNum" property="weekFPGJCSNum"/>
+		<result column="week_wfp_gjmdNum" property="weekWFPGJMDNum"/>
+		<result column="week_wfp_gjcsNum" property="weekWFPGJCSNum"/>
+		<result column="month_fp_gjmdNum" property="monthFPGJMDNum"/>
+		<result column="month_fp_gjcsNum" property="monthFPGJCSNum"/>
+		<result column="month_wfp_gjmdNum" property="monthWFPGJMDNum"/>
+		<result column="month_wfp_gjcsNum" property="monthWFPGJCSNum"/>
+		<result column="quarter_fp_gjmdNum" property="quarterFPGJMDNum"/>
+		<result column="quarter_fp_gjcsNum" property="quarterFPGJCSNum"/>
+		<result column="quarter_wfp_gjmdNum" property="quarterWFPGJMDNum"/>
+		<result column="quarter_wfp_gjcsNum" property="quarterWFPGJCSNum"/>
+		<result column="year_fp_gjmdNum" property="yearFPGJMDNum"/>
+		<result column="year_fp_gjcsNum" property="yearFPGJCSNum"/>
+		<result column="year_wfp_gjmdNum" property="yearWFPGJMDNum"/>
+		<result column="year_wfp_gjcsNum" property="yearWFPGJCSNum"/>
+
+		<result column="total_xzmdNum" property="totalGLMDNum"/>
+		<result column="total_xzcqNum" property="totalWHCQMDNum"/>
+		<result column="total_xzqyNum" property="totalWHQYMDNum"/>
+		<result column="total_xzfpNum" property="totalWHFPMDNum"/>
+		<result column="lastQ_fpchmdNum2" property="lastQuarterFPCHMDNum2"/>
+	</resultMap>
+
+	<select id="getPersonList" parameterType="cn.com.eju.deal.base.model.UserInfo" resultMap="PersonalInfoDtoMap">
+		SELECT t.userCode ,
+				case when t.sort!=0 then
+			    	t.userName + '（'+t.userCode+'）'
+			    else t.userName end  userName
+		FROM (
+			SELECT DISTINCT t1.userCode AS userCode,t1.userName,
+				CASE WHEN t1.centerId=t1.userCode THEN 0 ELSE 1 END sort
+			 FROM dbo.wx_maintainerAchievementInfo t1 INNER JOIN
+			dbo.F_WX_UserCenterAuth('${userCode}','CRM') t2 ON t1.centerId=t2.centerGroupId
+			WHERE t1.centerId='${centerId}'
+		) t ORDER BY t.sort,t.userName
+	</select>
+	<!--查询维护人信息-->
+	<select id="getPersonalInfo" parameterType="cn.com.eju.deal.base.model.UserInfo" resultMap="PersonalInfoDtoMap">
+		SELECT *,
+		(isnull(quarter_fpdrmdNum,0)+ isnull(quarter_xzfpNum,0) ) quarter_fpdrmdNum2,  <!--调入门店= 维护变更门店 + 当期翻牌门店 -->
+		(isnull(lastQ_fpchmdNum,0)+ (-1*isnull(quarter_fpdcmdNum,0))-isnull(quarter_fpdrmdNum,0)) as lastQ_fpchmdNum2  <!--延续门店= 当季以前存活门店 + 当期调出门店 - 当期调入门店 -->
+		FROM wx_maintainerAchievementInfo WHERE userCode = #{userCode} AND centerId = #{centerId}
+	</select>
+
+</mapper>

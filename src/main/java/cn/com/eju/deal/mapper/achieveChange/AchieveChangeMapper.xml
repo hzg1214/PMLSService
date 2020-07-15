@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.achieveChange.AchieveChangeMapper">
+    <select id='queryList' resultType="cn.com.eju.deal.dto.achieveChange.AchieveChangeDto" parameterType="java.util.Map">
+
+        SELECT   x1.storeId ,
+        x1.storeNo,
+        x1.Name,
+        x1.changeafter ,
+        x1.dateCreate ,
+        x1.usercreate ,
+        x1.type ,
+        RTRIM(LTRIM(x1.Reason) )Reason,
+        x1.changebefore	,x2.CityName
+        FROM (
+        SELECT x1.StoreNo ,x1.centerId ,x1.Name ,x1.AddressDetail ,x1.CityNo ,x1.id storeId ,
+        x2.changeafter ,x2.dateCreate ,
+        x2.usercreate ,'M' type ,x2.Reason,
+        x3.changeafter changebefore
+        FROM  dbo.Store x1
+        INNER JOIN(
+        SELECT  x1.*,x2.userName + '(' + x2.userCode + ')' changeafter ,
+        x3.userName + '(' + x3.userCode + ')' usercreate,
+        ROW_NUMBER() over(PARTITION by x1.storeId order by x1.dateCreate,x1.id desc) rn
+        FROM StoreMaintainer x1
+        INNER JOIN USR_User x2 ON x1.userCode = x2.userCode
+        INNER JOIN USR_User x3 ON x1.setUserCode = x3.userCode
+        ) x2 ON x1.id = x2.storeId AND x2.delFlag = 'N'
+
+        LEFT JOIN (
+        SELECT  x1.*,x2.userName + '(' + x2.userCode + ')' changeafter ,
+        x3.userName + '(' + x3.userCode + ')' usercreate,
+        ROW_NUMBER() over(PARTITION by x1.storeId order by x1.dateCreate,x1.id desc) rn
+        FROM StoreMaintainer x1
+        INNER JOIN USR_User x2 ON x1.userCode = x2.userCode
+        INNER JOIN USR_User x3 ON x1.setUserCode = x3.userCode
+        ) x3 ON x1.id = x3.storeId AND x3.delFlag = 'N' AND x2.rn-1 = x3.rn
+        WHERE 1=1
+
+        <if test="storeName != null and storeName != ''">
+            AND ( x1.StoreNo LIKE '%${storeName}%' OR  x1.Name LIKE '%${storeName}%' OR x1.AddressDetail LIKE '%${storeName}%')
+        </if>
+        <!--<if test="cityNo != null and cityNo != ''">-->
+            <!--AND x1.CityNo IN ('${cityNo}')-->
+        <!--</if>-->
+        <if test="cityNoList != null">
+            AND x1.CityNo IN
+            <foreach collection="cityNoList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <!--<if test="centerIdStr != null and centerIdStr != ''">-->
+            <!--AND x1.centerId IN (${centerIdStr})-->
+        <!--</if>-->
+        UNION
+
+        SELECT x1.StoreNo ,x1.centerId ,x1.Name ,x1.AddressDetail ,x1.CityNo ,x1.id storeId ,
+        x2.changebefore  ,x2.createDate ,x2.usercreate ,'C' type ,x2.Reason,
+        x3.changebefore changebefore
+        FROM  dbo.Store x1
+        INNER JOIN(
+        SELECT  x1.*,x2.groupName changebefore,x3.userName + '(' + x3.userCode + ')' usercreate,
+        ROW_NUMBER() over(PARTITION by x1.storeId order by x1.createDate,x1.id desc) rn
+        FROM dbo.StoreCenterHis x1
+        INNER JOIN dbo.USR_Group x2 ON x2.delFlag = 'N' AND x1.centerid = x2.groupId
+        INNER JOIN dbo.USR_User x3 ON x3.delFlag = 'N' AND x3.userCode = x1.createrUser
+
+        ) x2 ON x1.id = x2.storeId AND x2.status = 0
+
+        LEFT JOIN (
+        SELECT  x1.*,x2.groupName changebefore,x3.userName + '(' + x3.userCode + ')' usercreate,
+        ROW_NUMBER() over(PARTITION by x1.storeId order by x1.createDate,x1.id desc) rn
+        FROM dbo.StoreCenterHis x1
+        INNER JOIN dbo.USR_Group x2 ON x2.delFlag = 'N' AND x1.centerid = x2.groupId
+        INNER JOIN dbo.USR_User x3 ON x3.delFlag = 'N' AND x3.userCode = x1.createrUser
+
+        ) x3 ON x1.id = x3.storeId AND x3.status = 0 AND x2.rn-1 = x3.rn
+        WHERE 1=1
+        <if test="storeName != null and storeName != ''">
+            AND ( x1.StoreNo LIKE '%${storeName}%' OR  x1.Name LIKE '%${storeName}%' OR x1.AddressDetail LIKE '%${storeName}%')
+        </if>
+        <!--<if test="cityNo != null and cityNo != ''">-->
+            <!--AND x1.CityNo IN ('${cityNo}')-->
+        <!--</if>-->
+        <if test="cityNoList != null">
+            AND x1.CityNo IN
+            <foreach collection="cityNoList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <!--<if test="centerIdStr != null and centerIdStr != ''">-->
+            <!--AND x1.centerId IN (${centerIdStr})-->
+        <!--</if>-->
+        ) x1
+        INNER JOIN dbo.BAS_City x2 ON x1.CityNo = x2.CityNo
+        INNER JOIN store st ON x1.storeId = st.id AND st.IsDelete = 0
+        INNER JOIN V_USR_OrgHis org ON st.centerId = org.centerGroupId
+        WHERE 1 = 1
+        <if test="organization != null and organization != ''">
+            AND org.yearly = #{organization}
+        </if>
+        <if test="regionCodeList != null">
+            AND org.regionCode IN
+            <foreach collection="regionCodeList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="areaCityCodeList != null">
+            AND org.areaCityCode IN
+            <foreach collection="areaCityCodeList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="cityIdList != null">
+            AND org.cityId IN
+            <foreach collection="cityIdList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="centerIdList != null">
+            AND org.centerGroupId IN
+            <foreach collection="centerIdList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        ORDER BY x1.storeId
+    </select>
+
+</mapper>

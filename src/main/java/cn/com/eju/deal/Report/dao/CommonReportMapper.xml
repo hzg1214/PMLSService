@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.Report.dao.CommonReportMapper">
+
+    <select id ="getRegion" resultType="cn.com.eju.deal.Report.dto.UsrOrgHisDto" parameterType="Map">
+        SELECT DISTINCT regionCode,regionName
+        FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')
+        WHERE yearly = #{yearly, jdbcType=VARCHAR}
+        AND regionCode IS NOT NULL
+        AND regionName IS NOT NULL
+    </select>
+
+    <select id ="getAreaCity" resultType="cn.com.eju.deal.Report.dto.UsrOrgHisDto" parameterType="Map">
+        SELECT DISTINCT areaCityCode,areaCityName
+        FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')
+        WHERE yearly = #{yearly, jdbcType=VARCHAR}
+        <if test="regionCodeList != null">
+        AND regionCode IN (
+        <foreach collection="regionCodeList" item="obj" index="index" separator=",">
+            #{obj, jdbcType=VARCHAR}
+        </foreach>
+        )
+        </if>
+        AND areaCityCode IS NOT NULL
+        AND areaCityName IS NOT NULL
+    </select>
+
+    <select id ="getCityGroup" resultType="cn.com.eju.deal.Report.dto.UsrOrgHisDto" parameterType="Map">
+        SELECT DISTINCT cityId,cityGroupName
+        FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')
+        WHERE yearly = #{yearly, jdbcType=VARCHAR}
+        <if test="regionCodeList != null">
+            AND regionCode IN (
+            <foreach collection="regionCodeList" item="obj" index="index" separator=",">
+                #{obj, jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+        <if test="areaCityCodeList != null">
+            AND areaCityCode IN (
+            <foreach collection="areaCityCodeList" item="obj" index="index" separator=",">
+                #{obj, jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </select>
+
+    <select id ="getCenterGroup" resultType="cn.com.eju.deal.Report.dto.UsrOrgHisDto" parameterType="Map">
+        SELECT DISTINCT centerGroupId,centerGroupName
+        FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')
+        WHERE yearly = #{yearly, jdbcType=VARCHAR}
+        <if test="regionCodeList != null">
+            AND regionCode IN (
+            <foreach collection="regionCodeList" item="obj" index="index" separator=",">
+                #{obj, jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+        <if test="areaCityCode != null">
+            AND areaCityCode IN (
+            <foreach collection="areaCityCodeList" item="obj" index="index" separator=",">
+                #{obj, jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+        AND cityId IN (
+        <foreach collection="cityIdList" item="obj" index="index" separator=",">
+            #{obj, jdbcType=VARCHAR}
+        </foreach>
+        )
+    </select>
+    <select id ="getDeptGroup" resultType="cn.com.eju.deal.Report.dto.UsrOrgHisDto" parameterType="Map">
+      SELECT groupId AS projectDepartmentId,CityName + groupName AS projectDepartment
+		 FROM USR_Group
+		 INNER JOIN USR_GroupType ON USR_Group.typeId = USR_GroupType.typeId AND USR_GroupType.delFlag = 'N' AND USR_GroupType.typeCode = 'BTEJBM'
+		 INNER JOIN Bas_City ON USR_Group.cityId = Bas_City.Id AND Bas_City.FlagDeleted = 0
+		 INNER JOIN Bas_CitySetting ON Bas_City.cityNo = Bas_CitySetting.cityNo AND Bas_CitySetting.delFlag = 'N' AND USR_Group.timeTag = Bas_CitySetting.timeTag
+		 WHERE
+		  USR_Group.groupName like '%联动%'
+		  AND USR_Group.delFlag='N'
+		  AND Bas_City.ID IN (
+            <foreach collection="cityIdList" item="obj" index="index" separator=",">
+                #{obj, jdbcType=VARCHAR}
+            </foreach>
+        )
+    </select>
+</mapper>

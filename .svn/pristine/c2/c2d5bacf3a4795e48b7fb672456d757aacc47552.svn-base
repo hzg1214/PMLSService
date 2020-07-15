@@ -1,0 +1,7 @@
+package cn.com.eju.pmls.jsStatement.dto;
+
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatement;
+
+public class PmlsJsStatementDto extends PmlsJsStatement {
+
+}

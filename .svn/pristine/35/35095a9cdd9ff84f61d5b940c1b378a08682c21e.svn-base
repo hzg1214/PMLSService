@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.signContract.SignContractMapper" >
+
+	<resultMap id="contractNewDtoBaseMap" type="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<result column="id" property="contractId" />
+		<result column="contractNo" property="contractNo" />
+		<result column="companyId" property="companyId" />
+		<result column="dateLifeEnd" property="dateLifeEnd" />
+		<result column="dateLifeStart" property="dateLifeStart" />
+		<result column="valid" property="valid" />
+
+		<result column="contractType" property="contractType" />
+		<result column="contractStatus" property="contractStatus" />
+		<result column="storeNum" property="storeNum" />
+		<result column="flowId" property="flowId" />
+		<result column="originalContractdistinction" property="originalContractdistinction" />
+
+		<result column="partyBAddress" property="partyBAddress" />
+
+		<result column="agreementNo" property="agreementNo" />
+		<result column="authRepresentative" property="authRepresentative" />
+		<result column="depositFee" property="depositFee" />
+		<result column="totleDepositFee" property="totleDepositFee" />
+		<result column="penaltyFee" property="penaltyFee" />
+		<result column="agentContact" property="agentContact" />
+		<result column="companyBankNo" property="companyBankNo" />
+		<result column="accountName" property="accountName" />
+		<result column="bankAccount" property="bankAccount" />
+		<result column="recipients" property="recipients" />
+		<result column="recipientsAddress" property="recipientsAddress" />
+		<result column="agreementType" property="agreementType" />
+		<result column="oaApproveType" property="oaApproveType" />
+		<result column="contractB2A" property="contractB2A" />
+		<result column="remark" property="remark" />
+		<result column="expandingPersonnel" property="expandingPersonnel" />
+		<result column="shoupaiType" property="shoupaiType" />
+		<result column="accountProvinceNo" property="accountProvinceNo" />
+		<result column="accountProvinceName" property="accountProvinceName" />
+		<result column="accountCityNo" property="accountCityNo" />
+		<result column="accountCityName" property="accountCityName" />
+	</resultMap>
+
+
+	<resultMap id="contractNewDtoListMap"  extends="contractNewDtoBaseMap" type="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<result column="companyName" property="companyName" />
+		<result column="companyNo" property="companyNo" />
+		<result column="businessLicenseNo" property="businessLicenseNo" />
+		<result column="legalPerson" property="legalPerson" />
+		<result column="validName" property="validName" />
+		<result column="dataCount" property="dataCount" />
+		<result column="cityNo" property="cityNo" />
+		<result column="districtNo" property="districtNo" />
+		<result column="contractVersion" property="contractVersion" />
+		<result column="businessStatus" property="businessStatus" />
+		<result column="originalContractNo" property="originalContractNo" />
+		<result column="centerName" property="centerName" />
+
+		<collection property="contractStoreList" javaType="ArrayList" ofType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+			<result column="storeId" property="storeId" />
+			<result column="StoreNo" property="storeNo" />
+			<result column="Name" property="storeName" />
+			<result column="Address" property="address" />
+			<result column="AddressDetail" property="addressDetail" />
+			<result column="storeState" property="storeState" />
+			<result column="StoreManager" property="storeManager" />
+			<result column="StoreManagerPhone" property="storeManagerPhone" />
+			<result column="ABTypeStore" property="ABTypeStore" />
+			<result column="BTypeStore" property="BTypeStore" />
+		</collection>
+		<!-- -->
+	</resultMap>
+
+
+	<resultMap id="storeNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="Longitude" property="longitude" />
+		<result column="Latitude" property="latitude" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="StoreManager" property="storeManager" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" />
+		<result column="LinkageSituation" property="linkageSituation" />
+		<result column="ChainBrand" property="chainBrand" />
+		<result column="ChainBrandName" property="chainBrandName" />
+		<result column="StoreDueTime" property="storeDueTime" />
+		<result column="StorePersonNum" property="storePersonNum" />
+		<result column="StorePersonNumName" property="storePersonNumName" />
+		<result column="NowUserSystem" property="nowUserSystem" />
+		<result column="NowUserSystemName" property="nowUserSystemName" />
+		<result column="MainBusiness" property="mainBusiness" />
+		<result column="MainBusinessName" property="mainBusinessName" />
+		<result column="TransactionMode" property="transactionMode" />
+		<result column="TransactionModeName" property="transactionModeName" />
+		<result column="Address" property="address" />
+		<result column="AddressDetail" property="addressDetail" />
+		<result column="AuditStatus" property="auditStatus" />
+		<result column="AuditStatusName" property="auditStatusName" />
+		<result column="companyId" property="companyId" />
+		<result column="maintainer" property="maintainer" />
+		<result column="maintainerName" property="maintainerName" />
+		<result column="centerName" property="centerName" />
+
+		<result column="fpStatus" property="fpStatus" />
+		<result column="contractType" property="contractType" />
+		<result column="contractTypeName" property="contractTypeName" />
+		<result column="contractStatus" property="contractStatus" />
+		<result column="storePicUrl" property="storePicUrl" />
+		<result column="showType" property="showType" />
+
+		<result column="ABTypeStore" property="ABTypeStore" />
+		<result column="BTypeStore" property="BTypeStore" />
+		<result column="isCancel" property="isCancel" />
+		<result column="dataCount" property="dataCount" />
+		<result column="beingDueDay" property="beingDueDay" />
+		<result column="dueStatus" property="dueStatus" />
+	</resultMap>
+
+	<resultMap id="companyNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.CompanyNewDto">
+		<result column="Id" property="companyId" />
+		<result column="CompanyNo" property="companyNo" />
+		<result column="CompanyName" property="companyName" />
+		<result column="DateCreate" property="dateCreate" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="address" property="address" />
+		<result column="addressDetail" property="addressDetail" />
+		<result column="companyAddress" property="companyAddress" />
+		<result column="businessLicenseNature" property="businessLicenseNature" />
+		<result column="businessLicenseNatureName" property="businessLicenseNatureName" />
+		<result column="legalPerson" property="legalPerson" />
+		<result column="businessLicenseNo" property="businessLicenseNo" />
+		<result column="isUpdate" property="isUpdate" />
+		<result column="businessStatus" property="businessStatus" />
+		<result column="dataCount" property="dataCount" />
+		<collection property="storeList" column="id" ofType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" select="selectRelationStore"/>
+	</resultMap>
+
+	<resultMap id="contractAuditRecordDtoMap" type="cn.com.eju.deal.model.signContract.ContractAuditRecordDto">
+		<result column="flowId" property="flowId" />
+		<result column="empNumber" property="empNumber" />
+		<result column="empName" property="empName" />
+		<result column="content" property="content" />
+		<result column="createDate" property="createDate" />
+		<result column="orderNo" property="orderNo" />
+	</resultMap>
+
+
+	<select id="getStoreList" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		select t.* from (
+			select
+				ROW_NUMBER() OVER (ORDER BY t.DateCreate desc) rowNum,
+				COUNT(1) OVER() AS dataCount, t.*
+		      from (
+				SELECT DISTINCT
+					t1.Id,
+					t1.StoreNo,
+					t1.Name,
+					t1.AddressDetail,
+					t1.DateCreate,
+					t2.followDateCreate
+				  FROM Store t1
+					LEFT JOIN (
+						SELECT s1.storeId,MAX(s1.DateCreate) followDateCreate FROM Follow s1 WHERE 1=1
+						and s1.UserCreate=#{userCreate}
+						GROUP BY s1.StoreId
+					) t2 ON t1.Id = t2.StoreId
+					LEFT JOIN (
+						SELECT MAX(cs.Id) csId ,cs.StoreId,MAX(ContractId) AS cId,MAX(cs.isCancel) AS isCancel,MAX(storeState)
+						storeState
+						FROM dbo.ContractStore cs
+						WHERE cs.IsDelete = 0
+						GROUP BY cs.StoreId
+					) F ON F.StoreId = t1.Id
+					LEFT JOIN dbo.Contract c ON F.cId = c.ID
+				WHERE 1 = 1
+				AND t1.AuditStatus=20
+				AND t1.IsDelete=0
+				and (isnull(c.contractStatus,0) in(0,10405,10406) or F.storeState=2 or (c.contractType = 10301 and DATEDIFF(day,getdate(),CONVERT(VARCHAR(100), c.DateLifeEnd, 23)) &lt; 0))
+				and t1.acCityNo=#{checkCityNo}
+				<if test="storeName!=null and storeName!=''">
+					and (t1.name like '%${storeName}%'
+					  or t1.storeNo like '%${storeName}%'
+					  or t1.addressDetail like '%${storeName}%')
+					and (t1.maintainer=#{userCode} or t2.followDateCreate is not null
+					  or t1.centerId in (
+						SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM')
+					  )
+					)
+				</if>
+				<if test="storeName==null or storeName==''">
+					and (t1.maintainer=#{userCode} or t2.followDateCreate is not null
+					  or t1.centerId in (
+						SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM')
+					  )
+					)
+				</if>
+	      	) t
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+	</select>
+
+	<select id="checkCompanyStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultType="int">
+		select count(*) from CompanyStore where storeId=#{storeId} and isDelete=0 and flag=0
+	</select>
+
+	<select id="checkAcCityNoForStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultType="int">
+		SELECT CASE WHEN s.AcCityNo=c.AcCityNo OR c.AcCityNo IS NULL  THEN 0 ELSE 1 END FROM dbo.Store(NOLOCK) s
+		LEFT JOIN dbo.CompanyStore(NOLOCK) cs ON cs.StoreId=s.Id AND cs.isDelete=0 and cs.flag=0
+		LEFT JOIN dbo.Company(NOLOCK) c ON c.Id=cs.CompanyId AND c.IsDelete=0
+		WHERE s.Id = #{storeId}
+	</select>
+
+	<select id="checkCompanyStoreForCompany" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultType="int">
+		SELECT COUNT(*) FROM dbo.Store s
+		INNER JOIN dbo.CompanyStore cs ON cs.StoreId=s.Id  AND cs.isDelete=0 and cs.flag=0
+		WHERE s.IsDelete=0 AND cs.CompanyId= #{companyId} AND s.AcCityNo=#{checkCityNo}
+	</select>
+
+	<select id="checkAcCityNoForCompany" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultType="int">
+		SELECT COUNT(*) FROM dbo.Company(NOLOCK) c
+		WHERE c.Id=#{companyId} AND c.AcCityNo!=#{checkCityNo}
+	</select>
+
+	<select id="getCompanyByStoreId" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="companyNewDtoMap">
+		SELECT
+			t1.id,
+			t1.CompanyNo,
+			t1.CompanyName,
+			(t3.cityName+t4.districtName+t1.address) as addressDetail,
+			isnull(t1.BusinessLicenseNo,'') as BusinessLicenseNo,
+			t1.legalPerson,
+			t5.businessStatus
+		 FROM dbo.Company t1
+		INNER JOIN dbo.CompanyStore t2 ON t1.id=t2.CompanyId AND t2.IsDelete=0 AND t2.flag=0
+		inner join Store t5 on t2.storeId=t5.id
+		LEFT JOIN dbo.BAS_City t3 ON t1.CityNo=t3.CityNo
+		LEFT JOIN dbo.BAS_District t4 ON t1.DistrictNo=t4.DistrictNo
+		WHERE t1.IsDelete=0
+		AND t2.StoreId=#{storeId}
+	</select>
+
+	<select id="selectRelationStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		SELECT t1.id,t1.Name,t1.StoreNo,
+			t1.addressDetail,
+			isnull(t1.contractType,0) as contractType,
+			isnull(t1.ABTypeStore,'') ABTypeStore,
+			isnull(t1.BTypeStore,'') BTypeStore,
+			CASE WHEN isnull(c.contractStatus,0) in(0,10405,10406) OR F.storeState=2 then 'noContract'
+			ELSE 'alreadyContract'
+			END showType,
+			t1.Maintainer,
+			t1.maintainerName,
+			isnull(s2.centername,'') centerName,
+			isnull(s3.contractStatus,0) as contractStatus,
+			t1.storeManager,
+			t1.storeManagerPhone
+		 FROM Store t1
+		INNER JOIN dbo.CompanyStore t2 ON t1.Id=t2.StoreId AND t2.IsDelete=0 and t2.flag=0
+		LEFT JOIN dbo.USR_User s1 ON t1.Maintainer=s1.userCode AND s1.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] s2 ON s1.groupId=s2.groupId
+		LEFT JOIN V_CRM_ContractStore_NOW s3 ON t1.id=s3.StoreId
+		LEFT JOIN
+		(
+			SELECT MAX(cs.Id) csId ,cs.StoreId,MAX(ContractId) AS cId,MAX(cs.isCancel) AS isCancel,MAX(storeState) storeState
+			FROM dbo.ContractStore cs
+			WHERE cs.IsDelete = 0 and cs.flag=0
+			GROUP BY cs.StoreId
+		) F ON F.StoreId = t1.Id
+		LEFT JOIN dbo.Contract c ON F.cId = c.ID
+		WHERE 1=1
+		and t1.businessStatus=20901
+		AND t2.CompanyId=#{companyId}
+	</select>
+
+	<insert id="addContract" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" useGeneratedKeys="true" keyProperty="contractId">
+		INSERT INTO Contract(
+			contractNo,
+			lealPerson,
+			partyB,
+			partyBAddress,
+			contractType,
+			companyId,
+			userCreate,
+			dateCreate,
+			contractStatus,
+			storeNum,
+			cityNo,
+			districtNo,
+			oaFileIdBusiness,
+			oaFileIdCard,
+			oaFileIdPhoto,
+			oaFileIdStore,
+			oaFileIdInstall,
+			oaFileIdOther,
+			registrId,
+			expandingPersonnelId,
+			expandingPersonnel,
+			centerId,
+			pfmcAtbtDepmt,
+			isChanged,
+			DepositFeeState,
+			OriginalContractNo,
+			OriginalContractdistinction,
+			Valid,
+			AgreementNo,
+			authRepresentative,
+			depositFee,
+			totleDepositFee,
+			penaltyFee,
+			agentContact,
+			companyBankNo,
+			accountName,
+			bankAccount,
+			recipients,
+			recipientsAddress,
+			agreementType,
+			oaApproveType,
+			contractB2A,
+			remark,
+			partyBCityNo,
+			partyBDistrictNo,
+			dateLifeStart,
+			dateLifeEnd,
+			inputSource,
+			acCityNo,
+			oaFileIdNotice,
+			oaFileIdComplement,
+			accountProject,
+			accountProjectNo,
+			submitOAStatus,
+			shoupaiType,
+			accountProvinceNo,
+			accountProvinceName,
+			accountCityNo,
+			accountCityName
+		)VALUES(
+			#{contractNo},
+			#{lealPerson},
+			#{partyB},
+			#{partyBAddress},
+			#{contractType},
+			#{companyId},
+			#{userCreate},
+			getdate(),
+			10401,
+			#{storeNum},
+			#{cityNo},
+			#{districtNo},
+			#{oaFileIdBusiness},
+			#{oaFileIdCard},
+			#{oaFileIdPhoto},
+			#{oaFileIdStore},
+			#{oaFileIdInstall},
+			#{oaFileIdOther},
+			#{registrId},
+			#{expandingPersonnelId},
+			#{expandingPersonnel},
+			#{centerId},
+			#{pfmcAtbtDepmt},
+			0,
+			17501,
+			#{originalContractNo},
+			#{originalContractdistinction},
+			#{valid},
+			#{agreementNo},
+			#{authRepresentative},
+			#{depositFee},
+			#{totleDepositFee},
+			#{penaltyFee},
+			#{agentContact},
+			#{companyBankNo},
+			#{accountName},
+			#{bankAccount},
+			#{recipients},
+			#{recipientsAddress},
+			#{agreementType},
+			#{oaApproveType},
+			#{contractB2A},
+			#{remark},
+			#{partyBCityNo},
+			#{partyBDistrictNo},
+			#{dateLifeStart},
+			#{dateLifeEnd},
+			#{inputSource},
+			#{acCityNo},
+			#{oaFileIdNotice},
+			#{oaFileIdComplement},
+			#{accountProject},
+			#{accountProjectNo},
+			21201,
+			#{shoupaiType},
+			#{accountProvinceNo},
+			#{accountProvinceName},
+			#{accountCityNo},
+			#{accountCityName}
+		)
+	</insert>
+
+	<update id="updateContract" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto">
+		UPDATE Contract SET
+		AgreementType = #{agreementType},oaApproveType = #{oaApproveType},AgreementNo = #{agreementNo},DateLifeStart = #{dateLifeStart},DateLifeEnd = #{dateLifeEnd},authRepresentative = #{authRepresentative},
+		agentContact = #{agentContact},depositFee = #{depositFee},TotleDepositFee = #{totleDepositFee},PenaltyFee = #{penaltyFee},expandingPersonnelId = #{expandingPersonnelId},
+		ExpandingPersonnel = #{expandingPersonnel},centerId = #{centerId},DateUpdate = getdate(),AcCityNo = #{acCityNo},Valid = #{valid},pfmcAtbtDepmt = #{pfmcAtbtDepmt},contractVersion = #{contractVersion}
+		,shoupaiType = #{shoupaiType}
+		<if test="accountProvinceNo != null">
+			,accountProvinceNo = #{accountProvinceNo}
+		</if>
+		<if test="accountProvinceName != null">
+			,accountProvinceName = #{accountProvinceName}
+		</if>
+		<if test="accountCityNo != null">
+			,accountCityNo = #{accountCityNo}
+		</if>
+		<if test="accountCityName != null">
+			,accountCityName = #{accountCityName}
+		</if>
+		<if test="companyBankNo != null">
+			,companyBankNo = #{companyBankNo}
+		</if>
+		<if test="accountName != null">
+			,accountName = #{accountName}
+		</if>
+		<if test="bankAccount != null">
+			,bankAccount = #{bankAccount}
+		</if>
+		<if test="recipients != null">
+			,recipients = #{recipients}
+		</if>
+		<if test="cityNo != null">
+			,cityNo = #{cityNo}
+		</if>
+		<if test="districtNo != null">
+			,districtNo = #{districtNo}
+		</if>
+		<if test="recipientsAddress != null">
+			,recipientsAddress = #{recipientsAddress}
+		</if>
+		<if test="remark != null">
+			,remark = #{remark}
+		</if>
+		WHERE id = #{contractId}
+	</update>
+
+	<insert id="addContractStore" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto">
+		insert into ContractStore (
+			storeId,
+			contractId,
+			isDelete,
+			storeState,
+			isCancel,
+			addressDetail,
+			flag,
+			ABTypeStore,
+			BTypeStore
+		) values
+		<foreach collection="contractStoreNewDtoList" item="item" index="index" separator=",">
+		(
+			#{item.storeId},
+			#{item.contractId},
+			0,
+			0,
+			17201,
+			#{item.addressDetail},
+			0,
+			#{item.ABTypeStore},
+			#{item.BTypeStore}
+		)
+		</foreach>
+	</insert>
+
+	<update id="updateContractStore" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<foreach collection="contractStoreNewDtoList" item="item" index="index" separator="">
+		UPDATE ContractStore SET ABTypeStore = #{item.ABTypeStore},BTypeStore = #{item.BTypeStore} WHERE storeId = #{item.storeId} AND contractId = #{item.contractId};
+		</foreach>
+	</update>
+
+	<update id="updateStoreStatus" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<foreach collection="contractStoreNewDtoList" item="item" index="index" separator="">
+			update Store set
+				storeStatus=#{item.storeStatus},
+				contractType=#{item.contractType}
+			where id=#{item.storeId};
+		</foreach>
+	</update>
+
+	<update id="updateCompanyStatus" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto">
+		update Company set companyStatus=#{companyStatus},contractType=#{contractType} where id=#{companyId}
+	</update>
+
+	<select id="getCompanyList" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="companyNewDtoMap">
+		select t.* from (
+			SELECT
+				ROW_NUMBER() OVER (order by t.DateCreate desc) rowNum,
+				COUNT(1) OVER() AS dataCount, t.*
+			  FROM (
+				select distinct
+				t1.id as companyId,
+				t1.companyNo,
+				t1.companyName,
+				(t3.cityName+t4.districtName+t1.address) as addressDetail,
+				t1.dateCreate
+				from Company t1 INNER JOIN dbo.USR_User t2 ON t1.UserCreate=t2.userId AND t2.delFlag='N'
+				LEFT JOIN dbo.BAS_City t3 ON t1.CityNo=t3.CityNo
+				LEFT JOIN dbo.BAS_District t4 ON t1.DistrictNo=t4.DistrictNo
+				inner JOIN dbo.CompanyStore t5 ON t1.id=t5.CompanyId AND t5.IsDelete=0 and t5.flag = 0
+				inner JOIN Store t6 ON t5.StoreId=t6.id AND t6.IsDelete=0
+                LEFT JOIN (
+						SELECT MAX(cs.Id) csId ,cs.StoreId,MAX(ContractId) AS cId,MAX(cs.isCancel) AS isCancel,MAX(storeState)
+						storeState
+						FROM dbo.ContractStore cs
+						WHERE cs.IsDelete = 0
+						GROUP BY cs.StoreId
+					) F ON F.StoreId = t6.Id
+				LEFT JOIN dbo.Contract c ON F.cId = c.ID
+				where 1=1 and t1.isDelete=0
+                and (isnull(c.contractStatus,0) in(0,10405,10406) or F.storeState=2 or (c.contractType = 10301 and DATEDIFF(day,getdate(),CONVERT(VARCHAR(100), c.DateLifeEnd, 23)) &lt; 0))
+				and t1.acCityNo=#{checkCityNo}
+				<if test="userCode!=null and userCode!=''">
+					and (t2.userCode=#{userCode} or t6.Maintainer=#{userCode}
+					  OR t6.centerId in (
+					 	SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM')
+					  )
+					)
+				</if>
+				<if test=" companyName!=null and companyName!=''">
+					and (t1.companyName like '%' + #{companyName} + '%' or t1.companyNo like '%' + #{companyName} + '%' or t1.address like '%' + #{companyName} + '%')
+				</if>
+		    ) t
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+	</select>
+
+	<select id="getCompanyById" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="companyNewDtoMap">
+		SELECT
+			t1.id,
+			t1.CompanyNo,
+			t1.CompanyName,
+			(t3.cityName+t4.districtName+t1.address) as addressDetail,
+			t1.BusinessLicenseNo,
+			t1.legalPerson
+		 FROM dbo.Company t1
+		LEFT JOIN dbo.BAS_City t3 ON t1.CityNo=t3.CityNo
+		LEFT JOIN dbo.BAS_District t4 ON t1.DistrictNo=t4.DistrictNo
+		WHERE t1.IsDelete=0
+		AND t1.id=#{companyId}
+	</select>
+
+	<select id="checkStoreContract" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="storeNewDtoMap">
+		select t1.id,t1.storeNo,t1.name from Store t1
+		left join V_CRM_ContractStore_NOW t2 on t1.id=t2.storeId
+		where 1=1
+		and t1.isDelete=0
+		and t1.auditStatus=20
+		AND ISNULL(t1.ContractType,0)!=0
+		<if test="contractType!=null and contractType=='10304'">
+			and (t1.contractType!='10301' or t2.contractStatus!='10403')
+		</if>
+		and t1.id in(${storeIdStr})
+	</select>
+
+	<select id="getContractList" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+			select
+			DENSE_RANK() OVER (ORDER BY c.DateCreate desc, c.id) rowNum,
+			c.id ,
+			c.ContractNo,
+			c.PartyB as CompanyName,
+			c.StoreNum ,
+			CASE WHEN c.ContractType=10301 THEN 'A'
+				WHEN c.ContractType=10302 THEN 'B'
+				WHEN c.ContractType=10303 THEN 'C'
+				WHEN c.ContractType=10304 THEN 'A转B'
+				WHEN c.ContractType=10306 THEN 'D'
+                WHEN c.ContractType=10307 THEN '授牌'
+				ELSE ''
+			END contractType ,
+			CASE WHEN c.ContractStatus=10401 THEN '草签'
+				WHEN c.ContractStatus=10402 THEN '审核中'
+				WHEN c.ContractStatus=10403 THEN '审核通过'
+				WHEN c.ContractStatus=10404 THEN '审核未通过'
+				WHEN c.ContractStatus=10405 THEN '作废'
+				WHEN c.ContractStatus=10406 THEN '终止'
+				ELSE ''
+			END contractStatus,
+			CASE WHEN c.valid=18401 THEN '待生效'
+				WHEN c.valid=18402 THEN '生效'
+				WHEN c.valid=18403 THEN '过期'
+				ELSE ''
+			END validName,
+			CASE WHEN c.OriginalContractdistinction=18601 THEN '新签 '
+				 WHEN c.OriginalContractdistinction=18602 THEN '续签 '
+				ELSE ''
+			END OriginalContractdistinction,
+			s.StoreNo,
+			s.Name,
+			s.Address,
+			s.AddressDetail
+			INTO #temp_contract
+			from Contract c
+			inner join Company cm on cm.id = c.CompanyId
+			inner join	ContractStore cs  on c.id=cs.ContractId and cs.isDelete = 0
+			inner join store s on s.id=cs.StoreId
+
+			where 1=1
+			<if test="userCreate!=null and userCreate!=0">
+				and (c.centerId in (SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM'))
+				  or c.UserCreate=#{userCreate} or s.Maintainer = #{userCode} OR c.expandingPersonnelId = #{userCode}
+				)
+			</if>
+			<if test="cityNo!=null and cityNo!=''">
+				and c.AcCityNo = #{cityNo}
+			</if>
+			<if test="contractNo!=null and contractNo!=''">
+				and (
+				c.contractNo like  '%${contractNo}%'
+				or  c.PartyB like  '%${contractNo}%'
+				or  s.Name like  '%${contractNo}%'
+				or  s.AddressDetail like  '%${contractNo}%'
+				)
+			</if>
+			<if test="contractStatus!=null and contractStatus!=''">
+				and c.contractStatus in (${contractStatus})
+			</if>
+
+		SELECT t.* FROM (
+			SELECT *,(SELECT COUNT(DISTINCT(id)) FROM #temp_contract) AS dataCount FROM #temp_contract
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+		ORDER BY t.rowNum
+
+		DROP TABLE #temp_contract
+	</select>
+
+	<select id="getGpSignContractList" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		SELECT t1.centerId as centerGroupId INTO #temp_centerId FROM dbo.cloud_hbl_fy_org_ref t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId=t2.id AND t2.FlagDeleted=0
+		WHERE t1.orgType ='CENTER' AND t1.year='FY'+RIGHT(YEAR(GETDATE()),2)
+		AND t2.CityNo=#{cityNo};
+
+		select
+			DENSE_RANK() OVER (ORDER BY c.DateCreate desc, c.id) rowNum,
+			c.id ,
+			c.gpContractNo as ContractNo,
+			cm.CompanyNo,
+			c.PartyB as CompanyName,
+			c.StoreNum ,
+			CASE WHEN c.contractType=18601 THEN '新签 '
+			WHEN c.contractType=18602 THEN '续签 '
+			ELSE ''
+			END contractType,
+			CASE WHEN c.ContractStatus=10401 THEN '草签'
+			WHEN c.ContractStatus=10402 THEN '审核中'
+			WHEN c.ContractStatus=10403 THEN '审核通过'
+			WHEN c.ContractStatus=10404 THEN '审核未通过'
+			WHEN c.ContractStatus=10405 THEN '作废'
+			WHEN c.ContractStatus=10406 THEN '终止'
+			ELSE ''
+			END contractStatus,
+			CASE WHEN c.valid=18401 THEN '待生效'
+			WHEN c.valid=18402 THEN '生效'
+			WHEN c.valid=18403 THEN '过期'
+			ELSE ''
+			END validName,
+			CASE WHEN c.contractType=18601 THEN '新签 '
+			WHEN c.contractType=18602 THEN '续签 '
+			ELSE ''
+			END OriginalContractdistinction,
+			s.StoreNo,
+			s.Name,
+			s.Address,
+			s.AddressDetail
+			INTO #temp_contract
+		from Gp_Contract c
+		inner join Company cm on cm.id = c.CompanyId
+		inner join	Gp_ContractStore cs  on c.id=cs.gpContractId and cs.isDelete = 0
+		inner join store s on s.id=cs.StoreId
+		where 1=1
+		<if test="userCreate!=null and userCreate!=0">
+			and (c.centerId in (SELECT centerGroupId FROM #temp_centerId)
+			or c.UserCreate=#{userCreate} or s.Maintainer = #{userCode}
+			)
+		</if>
+		<if test="contractNo!=null and contractNo!=''">
+			and (
+			c.gpContractNo like  '%${contractNo}%'
+			or  c.PartyB like  '%${contractNo}%'
+			or  s.Name like  '%${contractNo}%'
+			or  s.AddressDetail like  '%${contractNo}%'
+			)
+		</if>
+		<if test="contractStatus!=null and contractStatus!=''">
+			and c.contractStatus in (${contractStatus})
+		</if>
+
+		SELECT t.* FROM (
+		SELECT *,(SELECT COUNT(DISTINCT(id)) FROM #temp_contract) AS dataCount FROM #temp_contract
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+		ORDER BY t.rowNum
+
+		DROP TABLE #temp_contract
+		DROP TABLE #temp_centerId
+	</select>
+
+	<!-- 获取合同详情信息 -->
+	<select id="getContractInfo" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		select
+		c.id ,
+		c.ContractNo,
+		c.PartyB as CompanyName,
+		isnull(c.registrId,'') as BusinessLicenseNo,
+		c.LealPerson as LegalPerson,
+		c.partyBAddress,
+		c.StoreNum ,
+		c.cityNo,
+		c.districtNo,
+		c.contractVersion,
+		isnull(CONVERT(varchar(100), c.dateLifeStart, 111),'') as dateLifeStart,
+		isnull(CONVERT(varchar(100), c.dateLifeend, 111),'') as dateLifeend,
+		c.flowId,
+		CASE WHEN c.ContractType=10301 THEN 'A'
+		WHEN c.ContractType=10302 THEN 'B'
+		WHEN c.ContractType=10303 THEN 'C'
+		WHEN c.ContractType=10304 THEN 'A转B'
+		WHEN c.ContractType=10306 THEN 'D'
+        WHEN c.ContractType=10307 THEN '授牌'
+		ELSE ''
+		END contractType ,
+		CASE WHEN c.ContractStatus=10401 THEN '草签'
+		WHEN c.ContractStatus=10402 THEN '审核中'
+		WHEN c.ContractStatus=10403 THEN '审核通过'
+		WHEN c.ContractStatus=10404 THEN '审核未通过'
+		WHEN c.ContractStatus=10405 THEN '作废'
+		WHEN c.ContractStatus=10406 THEN '终止'
+		ELSE ''
+		END contractStatus,
+		CASE WHEN c.valid=18401 THEN '待生效'
+		WHEN c.valid=18402 THEN '生效'
+		WHEN c.valid=18403 THEN '过期'
+		ELSE ''
+		END validName,
+		CASE WHEN c.OriginalContractdistinction=18601 THEN '新签 '
+			 WHEN c.OriginalContractdistinction=18602 THEN '续签 '
+		ELSE ''
+		END OriginalContractdistinction,
+		LTRIM(RTRIM(c.originalContractNo)) as originalContractNo,
+		s.id as storeId,
+		s.StoreNo,
+		s.Name,
+		s.Address,
+		s.AddressDetail,
+		CASE WHEN c.agreementType=11001 THEN '简易A版'
+		WHEN c.agreementType=11002 THEN 'AB版'
+		WHEN c.agreementType=11003 THEN '续签'
+		WHEN c.agreementType=11004 THEN 'A版'
+		WHEN c.agreementType=11005 THEN 'B版'
+        WHEN c.agreementType=11006 THEN '年度合作协议书'
+		ELSE ''
+		END agreementType ,
+		CASE WHEN c.oaApproveType=17101 THEN '标准'
+		WHEN c.oaApproveType=17102 THEN '特殊'
+		ELSE ''
+		END oaApproveType ,
+		CASE WHEN c.contractB2A=20201 THEN '是'
+		WHEN c.contractB2A=20202 THEN '否'
+		ELSE ''
+		END contractB2A,
+		CASE WHEN c.shoupaiType = '24601' THEN '门店'
+             WHEN c.shoupaiType = '24602' THEN '社区'
+			 WHEN c.shoupaiType = '24603' THEN '渠道'
+             ELSE ''
+        END shoupaiType ,
+        accountProvinceNo,
+		accountProvinceName,
+		accountCityNo,
+		accountCityName,
+		c.agreementNo,
+		c.authRepresentative,
+		c.depositFee,
+		c.totleDepositFee,
+		c.penaltyFee,
+		c.agentContact,
+		c.expandingPersonnel,
+		c.companyBankNo,
+		c.accountName,
+		c.bankAccount,
+		c.recipients,
+		c.recipientsAddress,
+		c.remark,
+		c.CompanyId,
+		s.Id AS storeId,
+		s.StoreManager,
+		s.StoreManagerPhone,
+		cs.ABTypeStore,
+		cs.BTypeStore,
+		ISNULL(cs.storeState,0) as storeState
+		from Contract c
+		inner join Company cm on cm.id = c.CompanyId
+		inner join	ContractStore cs  on c.id=cs.ContractId and cs.isDelete = 0
+		inner join store s on s.id=cs.StoreId
+		where 1 = 1
+		<if test="contractId != null and contractId != ''">
+			and c.id=#{contractId}
+		</if>
+		<if test="storeId != null and storeId != ''">
+			and s.id=#{storeId}
+			and c.ContractStatus = 10403
+			and (cs.storeState in (0,1) or cs.storeState is null)
+			AND c.id = (SELECT x5.ContractId FROM v_crm_StoreContract_last x5 WHERE x5.StoreId = #{storeId})
+		</if>
+	</select>
+
+	<!-- 获取公盘合同详情信息 -->
+	<select id="getGpSignContractInfo" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		SELECT
+		c.id ,
+		c.gpContractNo as contractNo,
+		c.PartyB as CompanyName,
+		isnull(c.registerId,'') as BusinessLicenseNo,
+		c.legalPerson as LegalPerson,
+		c.partyBCityName + c.partyBDistrictName + c.partyBAddress AS partyBAddress,
+		c.StoreNum ,
+		c.cityNo,
+		isnull(CONVERT(varchar(100), c.dateLifeStart, 111),'') as dateLifeStart,
+		isnull(CONVERT(varchar(100), c.dateLifeend, 111),'') as dateLifeend,
+		c.flowId,
+		CASE WHEN c.ContractType=18601 THEN '新签 '
+		WHEN c.ContractType=18602 THEN '续签 '
+		ELSE ''
+		END ContractType,
+		CASE WHEN c.ContractStatus=10401 THEN '草签'
+		WHEN c.ContractStatus=10402 THEN '审核中'
+		WHEN c.ContractStatus=10403 THEN '审核通过'
+		WHEN c.ContractStatus=10404 THEN '审核未通过'
+		WHEN c.ContractStatus=10405 THEN '作废'
+		WHEN c.ContractStatus=10406 THEN '终止'
+		ELSE ''
+		END contractStatus,
+		CASE WHEN c.valid=18401 THEN '待生效'
+		WHEN c.valid=18402 THEN '生效'
+		WHEN c.valid=18403 THEN '过期'
+		ELSE ''
+		END validName,
+		CASE WHEN c.ContractType=18601 THEN '新签 '
+		WHEN c.ContractType=18602 THEN '续签 '
+		ELSE ''
+		END OriginalContractdistinction,
+		s.id as storeId,
+		s.StoreNo,
+		s.Name,
+		s.Address,
+		s.AddressDetail,
+		c.gpagreementNo as agreementNo,
+		c.depositFee,
+		c.bankAccountNm accountName,
+		ISNULL(c.accountProvinceNm,'')+ISNULL(c.accountCityNm,'') AS bankAccount,
+		c.remark,
+		c.CompanyId,
+		s.Id AS storeId,
+		s.StoreManager,
+		s.StoreManagerPhone,
+		s.ABTypeStore,
+		s.BTypeStore,
+		ISNULL(cs.storeState,0) as storeState,
+		c.partyBNm AS authRepresentative,
+		c.partyBTel AS agentContact,
+		c.exPerson AS expandingPersonnel,
+		c.centerName
+		from GP_Contract c
+		inner join Company cm on cm.id = c.CompanyId
+		inner join	Gp_ContractStore cs  on c.id=cs.gpContractId and cs.isDelete = 0
+		inner join store s on s.id=cs.StoreId
+		where 1 = 1 and c.delFlag=0
+		<if test="contractId != null and contractId != ''">
+			and c.id=#{contractId}
+		</if>
+	</select>
+
+	<!-- 获取合同详情 审批列表信息 -->
+	<select id="getContractAuditRecordList" parameterType="cn.com.eju.deal.model.signContract.ContractAuditRecordDto" resultMap="contractAuditRecordDtoMap">
+		select
+		flowId,empnumber,empname,content,
+		CONVERT(varchar(100), create_date, 23) as createdate ,
+		Row_Number() over ( order by getdate() ) as orderNo
+		from V_FCJY_CRM_ZJHZBPD_Info
+		where flowId = #{flowId}
+		order by create_date desc;
+	</select>
+
+	<select id="checkAgreementNo" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) FROM dbo.Contract WHERE AgreementNo=#{agreementNo}
+	</select>
+
+	<update id="updateStoreManagerInfo" parameterType="cn.com.eju.deal.model.followMap.ContactsDto">
+		update Store set storeManager=#{contactsName},storeManagerPhone=#{contactsPhone}
+		where id=#{storeId}
+	</update>
+
+	<select id="getTodoSignStoreList" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		SELECT * FROM (
+			SELECT ROW_NUMBER() OVER (ORDER BY t.dueStatus desc,t.beingDueDay asc) rowNum,
+				COUNT(1) OVER() AS dataCount,
+				t.* 
+			FROM (
+				SELECT
+					t.*,dueStatus = (CASE WHEN t.beingDueDay &lt; 0 THEN 2
+										WHEN 0 &lt;= t.beingDueDay AND t.beingDueDay &lt;= 60 THEN 1
+					                  ELSE 0 end) 
+				FROM (
+					SELECT DISTINCT
+					x1.Id ,
+					x1.StoreNo ,
+					x1.Name ,
+					x1.AddressDetail ,
+					x1.DateCreate
+					,DATEDIFF(day,getdate(),CONVERT(VARCHAR(100), x6.DateLifeEnd, 23))AS beingDueDay
+					FROM      dbo.Store x1
+					LEFT JOIN BAS_DictionaryValue d ON d.dicCode = x1.ContractType
+					LEFT JOIN ( SELECT  x1.Id companyid ,
+					x1.CompanyNo ,
+					x1.CompanyName ,
+					x2.StoreId
+					FROM    dbo.Company x1 ,
+					dbo.CompanyStore x2
+					WHERE   x1.Id = x2.CompanyId
+					AND x1.IsDelete = 0
+					AND x2.IsDelete = 0
+					AND x2.flag = 0
+					) x3 ON x1.Id = x3.StoreId
+					LEFT JOIN dbo.USR_User x4 ON x1.UserCreate = x4.userId
+					AND x4.delFlag = 'N'
+					LEFT JOIN v_crm_StoreContract_last x5 ON x1.Id = x5.StoreId
+					LEFT JOIN dbo.Contract x6 ON x5.ContractId = x6.Id AND x6.ContractType != 10301
+					LEFT JOIN dbo.ContractStore x7 ON x6.Id = x7.ContractId
+					AND x1.Id = x7.StoreId
+					AND x7.IsDelete = 0
+					LEFT JOIN dbo.USR_Group X8 ON x1.centerId = X8.groupId
+					WHERE     x1.IsDelete = 0
+					AND x1.AuditStatus = 20
+					AND x1.DateCreate IS NOT NULL
+					AND x1.RenewFlag = 18302
+					AND x1.NeededRenew = 18501
+					AND ( x1.Maintainer = #{userCode} or 1 = (
+										SELECT 1
+										FROM    dbo.USR_Post p
+										JOIN dbo.USR_PostType pt ON p.typeId = pt.typeId
+										WHERE   pt.typeCode IN ( 'PT_SYBZJL', 'PT_YW_ZXFZR', 'PT_SYBZG', 'PT_CRM_ADM' )
+										AND p.postId = #{selectPostId}
+					))
+					AND x1.acCityNo = #{acCityNo}
+					<if test="storeNo!=null and storeNo!=''">
+						and (x1.storeNo like '%${storeNo}%'
+						or x1.addressDetail like '%${storeNo}%')
+					</if>
+					) t
+				) t where
+					1=1  and t.dueStatus != 0
+					 <if test="dueStatus!=null and dueStatus!=0">
+						<if test="dueStatus == '1'.toString()"><!-- 即将过期 -->
+							and t.dueStatus =1
+						</if>
+						<if test="dueStatus == '2'.toString()"><!-- 已过期 -->
+							and t.dueStatus = 2
+						</if>
+					</if>
+		) t where 
+		 t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+	</select>
+</mapper>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.achievement.dao.AchievementMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.achievement.model.Achievement">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="achieveType" jdbcType="VARCHAR" property="achieveType" />
+		<result column="relateId" jdbcType="INTEGER" property="relateId" />
+		<result column="expenderCode" jdbcType="VARCHAR" property="expenderCode" />
+		<result column="expenderName" jdbcType="NVARCHAR" property="expenderName" />
+		<result column="groupId" jdbcType="INTEGER" property="groupId" />
+		<result column="groupName" jdbcType="NVARCHAR" property="groupName" />
+		<result column="groupLeaderCode" jdbcType="VARCHAR" property="groupLeaderCode" />
+		<result column="groupLeaderName" jdbcType="NVARCHAR" property="groupLeaderName" />
+		<result column="centerGroupId" jdbcType="INTEGER" property="centerGroupId" />
+		<result column="centerGroupName" jdbcType="NVARCHAR" property="centerGroupName" />
+		<result column="centerLeaderCode" jdbcType="VARCHAR" property="centerLeaderCode" />
+		<result column="centerLeaderName" jdbcType="NVARCHAR" property="centerLeaderName" />
+		<result column="areaGroupId" jdbcType="INTEGER" property="areaGroupId" />
+		<result column="areaGroupName" jdbcType="NVARCHAR" property="areaGroupName" />
+		<result column="areaLeaderCode" jdbcType="VARCHAR" property="areaLeaderCode" />
+		<result column="areaLeaderName" jdbcType="NVARCHAR" property="areaLeaderName" />
+		<result column="cityGroupId" jdbcType="INTEGER" property="cityGroupId" />
+		<result column="cityGroupName" jdbcType="NVARCHAR" property="cityGroupName" />
+		<result column="cityLeaderCode" jdbcType="VARCHAR" property="cityLeaderCode" />
+		<result column="cityLeaderName" jdbcType="NVARCHAR" property="cityLeaderName" />
+		<result column="delFlag" jdbcType="BIT" property="delFlag" />
+		<result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+		<result column="accountProject" jdbcType="NVARCHAR" property="accountProject" />
+		<result column="accountProjectNo" jdbcType="NVARCHAR" property="accountProjectNo" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, achieveType, relateId, expenderCode, expenderName,
+		groupId,
+		groupName, groupLeaderCode,
+		groupLeaderName, centerGroupId,
+		centerGroupName, centerLeaderCode, centerLeaderName,
+		areaGroupId,
+		areaGroupName, areaLeaderCode, areaLeaderName,
+		cityGroupId,
+		cityGroupName,
+		cityLeaderCode, cityLeaderName, delFlag, dateCreate,
+		accountProject,accountProjectNo
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from Achiv_Achievement
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询业绩归属人信息 -->
+	<select id="getAchievementInfo" resultMap="BaseResultMap" parameterType="string">
+		SELECT  u.userCode AS expenderCode ,
+        		u.userName AS expenderName ,
+		        ass.*
+		FROM    crm.dbo.USR_User u
+		        INNER JOIN ( SELECT MAX(str1) str1 ,
+		                            temp.groupId
+		                     FROM   ( SELECT    u1.groupId ,
+		                                        u2.groupId centergroupId ,
+		                                        u2.orgId.ToString( ) str1
+		                              FROM      dbo.USR_Group u1
+		                                        LEFT JOIN USR_Group u2 ON u1.orgId.ToString() LIKE CONCAT('',
+		                                                              u2.orgId.ToString(),
+		                                                              '%')
+		                                        INNER JOIN dbo.USR_GroupType gt ON u2.typeId = gt.typeId
+		                                                              AND gt.delFlag = 'N'
+		                              WHERE     u1.delFlag = 'N'
+		                                        AND u2.delFlag = 'N'
+		                                        AND gt.typeCode = #{typeCode}
+		                            ) temp
+		                     GROUP BY temp.groupId
+		                   ) t1 ON u.groupId = t1.groupId
+		        LEFT JOIN usr_group g1 ON t1.str1 = g1.orgId.ToString()
+		        LEFT JOIN Achiv_AchievementLevel_Setting ass ON g1.groupId = ass.centerGroupId
+		WHERE   u.usercode = #{userCode}
+		and ass.delFlag=0
+		and ass.achieveType=#{achieveType}
+	</select>
+
+	
+	<!-- 查询业绩归属人信息 -->
+	<select id="getAchievementInfoContract" resultMap="BaseResultMap" parameterType="map">
+		SELECT   ass.*
+		FROM    Achiv_AchievementLevel_Setting ass 
+		WHERE  ass.delFlag=0
+		AND ass.centerGroupId=#{centerGroupId}
+		AND ass.achieveType=#{achieveType}
+	</select>
+
+
+	<!-- 查询业绩归属人信息 -->
+	<select id="getAchievementInfoNew" resultMap="BaseResultMap" parameterType="map">
+		SELECT 	s.maintainerName AS expenderName ,
+				s.maintainer AS expenderCode ,
+				ass.*
+		FROM store s
+		INNER JOIN Achiv_AchievementLevel_Setting ass ON s.centerId = ass.centerGroupId AND ass.delFlag=0
+		WHERE s.isDelete = 0
+		AND ass.achieveType=#{achieveType}
+		<if test="storeId != null" >
+			AND s.id=#{storeId}
+		</if>
+		<if test="storeNo != null" >
+			AND s.storeNo = #{storeNo}
+		</if>
+	</select>
+
+	<!-- 新增业绩归属信息 -->
+	<insert id="create" parameterType="cn.com.eju.deal.achievement.model.Achievement">
+		insert into Achiv_Achievement
+		(	achieveType, relateId,
+			expenderCode, expenderName, groupId,
+			groupName, groupLeaderCode, groupLeaderName,
+			centerGroupId,
+			centerGroupName, centerLeaderCode,
+			centerLeaderName, areaGroupId,
+			areaGroupName,
+			areaLeaderCode, areaLeaderName, cityGroupId,
+			cityGroupName, cityLeaderCode, cityLeaderName,
+			delFlag, dateCreate,
+			accountProject,accountProjectNo
+		)
+		values 
+		(	#{achieveType,jdbcType=VARCHAR},
+			#{relateId,jdbcType=INTEGER},
+			#{expenderCode,jdbcType=VARCHAR},
+			#{expenderName,jdbcType=NVARCHAR}, #{groupId,jdbcType=INTEGER},
+			#{groupName,jdbcType=NVARCHAR}, #{groupLeaderCode,jdbcType=VARCHAR},
+			#{groupLeaderName,jdbcType=NVARCHAR},
+			#{centerGroupId,jdbcType=INTEGER},
+			#{centerGroupName,jdbcType=NVARCHAR},
+			#{centerLeaderCode,jdbcType=VARCHAR},
+			#{centerLeaderName,jdbcType=NVARCHAR},
+			#{areaGroupId,jdbcType=INTEGER}, #{areaGroupName,jdbcType=NVARCHAR},
+			#{areaLeaderCode,jdbcType=VARCHAR},
+			#{areaLeaderName,jdbcType=NVARCHAR}, #{cityGroupId,jdbcType=INTEGER},
+			#{cityGroupName,jdbcType=NVARCHAR},
+			#{cityLeaderCode,jdbcType=VARCHAR},
+			#{cityLeaderName,jdbcType=NVARCHAR},
+			0,
+			GETDATE(),
+			#{accountProject,jdbcType=NVARCHAR},
+			#{accountProjectNo,jdbcType=NVARCHAR}
+		)
+	</insert>
+
+
+	<!-- 新增业绩归属信息 -->
+	<insert id="createQt" parameterType="cn.com.eju.deal.achievement.model.Achievement">
+		insert into LNK_QT_Achiv_Achievement
+		(	achieveType, relateId,
+			expenderCode, expenderName, groupId,
+			groupName, groupLeaderCode, groupLeaderName,
+			centerGroupId,
+			centerGroupName, centerLeaderCode,
+			centerLeaderName, areaGroupId,
+			areaGroupName,
+			areaLeaderCode, areaLeaderName, cityGroupId,
+			cityGroupName, cityLeaderCode, cityLeaderName,
+			delFlag, dateCreate,
+			accountProject,accountProjectNo
+		)
+		values
+		(	#{achieveType,jdbcType=VARCHAR},
+			#{relateId,jdbcType=INTEGER},
+			#{expenderCode,jdbcType=VARCHAR},
+			#{expenderName,jdbcType=NVARCHAR}, #{groupId,jdbcType=INTEGER},
+			#{groupName,jdbcType=NVARCHAR}, #{groupLeaderCode,jdbcType=VARCHAR},
+			#{groupLeaderName,jdbcType=NVARCHAR},
+			#{centerGroupId,jdbcType=INTEGER},
+			#{centerGroupName,jdbcType=NVARCHAR},
+			#{centerLeaderCode,jdbcType=VARCHAR},
+			#{centerLeaderName,jdbcType=NVARCHAR},
+			#{areaGroupId,jdbcType=INTEGER}, #{areaGroupName,jdbcType=NVARCHAR},
+			#{areaLeaderCode,jdbcType=VARCHAR},
+			#{areaLeaderName,jdbcType=NVARCHAR}, #{cityGroupId,jdbcType=INTEGER},
+			#{cityGroupName,jdbcType=NVARCHAR},
+			#{cityLeaderCode,jdbcType=VARCHAR},
+			#{cityLeaderName,jdbcType=NVARCHAR},
+			0,
+			GETDATE(),
+			#{accountProject,jdbcType=NVARCHAR},
+			#{accountProjectNo,jdbcType=NVARCHAR}
+		)
+	</insert>
+
+	<!-- 新增业绩归属信息 -->
+	<update id="updateAchieveInfo" parameterType="cn.com.eju.deal.achievement.model.Achievement">
+		update Achiv_Achievement
+		SET
+			expenderCode = #{expenderCode,jdbcType=VARCHAR},
+			expenderName = #{expenderName,jdbcType=NVARCHAR},
+			groupId = #{groupId,jdbcType=INTEGER},
+			groupName = #{groupName,jdbcType=NVARCHAR},
+			groupLeaderCode = #{groupLeaderCode,jdbcType=VARCHAR},
+			groupLeaderName = #{groupLeaderName,jdbcType=NVARCHAR},
+			centerGroupId = #{centerGroupId,jdbcType=INTEGER},
+			centerGroupName = #{centerGroupName,jdbcType=NVARCHAR},
+			centerLeaderCode = #{centerLeaderCode,jdbcType=VARCHAR},
+			centerLeaderName = #{centerLeaderName,jdbcType=NVARCHAR},
+			areaGroupId = #{areaGroupId,jdbcType=INTEGER},
+			areaGroupName = #{areaGroupName,jdbcType=NVARCHAR},
+			areaLeaderCode = #{areaLeaderCode,jdbcType=VARCHAR},
+			areaLeaderName = #{areaLeaderName,jdbcType=NVARCHAR},
+			cityGroupId = #{cityGroupId,jdbcType=INTEGER},
+			cityGroupName = #{cityGroupName,jdbcType=NVARCHAR},
+			cityLeaderCode = #{cityLeaderCode,jdbcType=VARCHAR},
+			cityLeaderName = #{cityLeaderName,jdbcType=NVARCHAR}
+			,dateUpdate = getdate()
+		WHERE 	delFlag = 0
+				AND achieveType = #{achieveType,jdbcType=VARCHAR}
+				AND relateId = #{relateId,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据relateId删除业绩归属信息 -->
+	<update id="delAchievement" parameterType="java.lang.Integer">
+		UPDATE Achiv_Achievement
+		SET delFlag = 1
+		WHERE delFlag = 0
+		AND relateId = #{relateId,jdbcType=INTEGER}
+	</update>
+	<!-- 查询业绩归属人信息 -->
+	<select id="getAchievementInfoNewByCenterId" resultMap="BaseResultMap" parameterType="map">
+		SELECT 	
+				ass.*
+		FROM  Achiv_AchievementLevel_Setting ass 
+		WHERE ass.delFlag=0
+		AND ass.achieveType=#{achieveType}
+		<if test="centerGroupId != null" >
+			AND ass.centerGroupId=#{centerGroupId}
+		</if>
+	</select>
+
+	<!-- 根据relateId删除业绩归属信息 -->
+	<update id="delQtAchievement" parameterType="java.lang.Integer">
+		UPDATE LNK_QT_Achiv_Achievement
+		SET delFlag = 1
+		WHERE delFlag = 0
+		AND relateId = #{relateId,jdbcType=INTEGER}
+	</update>
+</mapper>

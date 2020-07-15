@@ -1,0 +1,312 @@
+package cn.com.eju.deal.scene.estate.controller;
+
+import cn.com.eju.deal.base.controller.BaseController;
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.common.util.BuildingNoUtil;
+import cn.com.eju.deal.core.support.AppMsg;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.dto.scene.estate.SceneEstateSearchResultDto;
+import cn.com.eju.deal.dto.scene.estate.SceneRecognitionSearchResultDto;
+import cn.com.eju.deal.houseLinkage.estate.model.Estate;
+import cn.com.eju.deal.houseLinkage.report.model.ReportDetail;
+import cn.com.eju.deal.houseLinkage.report.service.YFInterfaceService;
+import cn.com.eju.deal.scene.estate.service.SceneEstateService;
+import cn.com.eju.deal.user.api.impl.UserAPIImpl;
+import cn.com.eju.deal.user.model.Group;
+import cn.com.eju.deal.user.model.User;
+import cn.com.eju.pmls.cooperation.service.CooperationService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**   
+* 服务层
+* @author qianwei
+* @date 2016年3月22日 下午6:05:44
+*/
+
+@RestController
+@RequestMapping(value = "sceneEstate")
+public class SceneEstateController extends BaseController
+{
+    
+    /**
+    * 日志
+    */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+    
+    @Resource(name = "sceneEstatetService")
+    private SceneEstateService sceneEstatetService;
+    
+    @Resource
+    private UserAPIImpl userAPIImpl;
+
+    @Resource
+    private YFInterfaceService yFInterfaceService;
+
+    @Resource
+    private CooperationService cooperationService;
+
+    /** 
+    * 查询-list
+    * @param param 查询条件
+    * @return
+    */
+    @RequestMapping(value = "/qSceneEstate/{param}", method = RequestMethod.GET)
+    public String list(@PathVariable String param)
+    {
+        //构建返回
+        ResultData<List<SceneEstateSearchResultDto>> resultData = new ResultData<List<SceneEstateSearchResultDto>>();
+        
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        
+        //权限控制,参数转换   
+        authParam(queryParam);
+        //案场-项目  看到所有用户数据    
+        queryParam.remove("userIdList");
+        
+        try
+        {
+            resultData = sceneEstatetService.queryList(queryParam);
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("scene", "SceneEstateController", "list", "", null, "", "查询-list", e);
+        }
+        
+        return resultData.toString();
+    }
+    
+    /** 
+     * 查询-状态未认定list
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/qSceneRecognition/{param}", method = RequestMethod.GET)
+    public String querySceneRecognitionList(@PathVariable String param)
+    {
+        //构建返回
+        ResultData<List<SceneRecognitionSearchResultDto>> resultData = new ResultData<List<SceneRecognitionSearchResultDto>>();
+        
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        
+        //权限控制,参数转换
+        authParam(queryParam);
+        //案场-项目-查看  看到所有用户数据 
+        queryParam.remove("userIdList");
+        
+        try
+        {
+            resultData = sceneEstatetService.querySceneRecognitionList(queryParam);
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("scene", "SceneEstateController", "querySceneRecognitionList", "", null, "", "查询-状态未认定list", e);
+        }
+        
+        return resultData.toString();
+    }
+    
+    /** 
+     * 认定报备list
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/qSceneRecognition/confirm", method = RequestMethod.POST)
+    public String querySceneRecognitionConfirm(@RequestBody String param){
+        ResultData<Integer> resultData = new ResultData<>();
+        Map<String, Object> queryParam =new HashMap<>();
+        try{
+        	queryParam = JsonUtil.parseToObject(param,Map.class);
+            BuildingNoUtil.unparse(queryParam);
+
+            String reportStatus = (String)queryParam.get("status");
+            if("13502".equals(reportStatus) || "13504".equals(reportStatus) || "13505".equals(reportStatus)){
+                resultData = sceneEstatetService.checkPreBack(queryParam);
+                if(!"200".equals(resultData.getReturnCode())){
+                    return resultData.toString();
+                }
+            }
+
+            resultData = this.sceneEstatetService.sceneRecogonitionConfirm(queryParam);
+            if("200".equals(resultData.getReturnCode()) && AppMsg.getString("COMMON.OPERATE_SUCCESS").equals(resultData.getReturnMsg())){
+            	String status = (String)queryParam.get("status");
+            	if("13505".equals(status)){//成销操作
+            		sceneEstatetService.dealCrm(queryParam);
+            	}
+
+                if("13504".equals(status)){//大定操作
+                    String userCode = null;
+                    if(queryParam.get("userCode")!=null){
+                        userCode = queryParam.get("userCode").toString();
+                    }
+                    yFInterfaceService.noticeYx((String) queryParam.get("reportId"),"11",userCode,"0");
+                }
+
+                if("13602".equals(status)){//无效
+                    String userCode = null;
+                    if(queryParam.get("userCode")!=null){
+                        userCode = queryParam.get("userCode").toString();
+                    }
+                    yFInterfaceService.noticeYx((String) queryParam.get("reportId"),"15",userCode,"0");
+                }
+
+                if("13502".equals(status) || "13504".equals(status)){
+                    //更新分销合同编号
+                    cooperationService.updateReportCooperation((String) queryParam.get("reportId"));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("scene", "SceneEstateController", "querySceneRecognitionConfirm", queryParam.toString(), null, "", "报备认定失败", e);
+        }
+        return resultData.toString();
+    }
+    
+    /** 
+     * 查询部门列表
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/groupId/{groupId}", method = RequestMethod.GET)
+    public String getGroupList(@PathVariable String groupId)
+    {
+        //构建返回
+        ResultData<List<Group>> groupResultData = new ResultData<List<Group>>();
+        try
+        {
+            groupResultData = this.userAPIImpl.selectAllChildrenByGroupId(Integer.valueOf(groupId));
+        }
+        
+        catch (Exception e)
+        {
+            groupResultData.setFail();
+            logger.error("estate", "SceneEstateController", "getGroupList", "", null, "", "查询部门列表", e);
+        }
+        //ResultData<List<User>> userResultData= this.userAPIImpl.getUserByGroupId(1, Integer.valueOf(groupId));
+        return groupResultData.toString();
+    }
+    
+    /** 
+     * 查询员工列表
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/user/{groupId}", method = RequestMethod.GET)
+    public String getUserList(@PathVariable String groupId)
+    {
+        //构建返回
+        ResultData<List<User>> userResultData = new ResultData<List<User>>();
+        try
+        {
+            userResultData = this.userAPIImpl.getUserByGroupId(1, Integer.valueOf(groupId));
+        }
+        catch (Exception e)
+        {
+            userResultData.setFail();
+            logger.error("scene", "SceneEstateController", "getUserList", "", null, "", "查询员工列表", e);
+        }
+        return userResultData.toString();
+    }
+    
+    /** 
+     * 查询楼盘名
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/estateId/{estateId}", method = RequestMethod.GET)
+    public String getByEstateId(@PathVariable String estateId)
+    {
+        ResultData<Estate> resultData = new ResultData<>();
+        try
+        {
+            resultData = this.sceneEstatetService.getByEstateId(estateId);
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("scene", "SceneEstateController", "getByEstateId", "", null, "", "查询楼盘名", e);
+        }
+        return resultData.toString();
+    }
+    
+    /**
+     * 
+     * 点击成销带出houseInof
+     * @param reqMap
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/qSceneHouseInfo/{param}", method = RequestMethod.GET)
+    public String getSceneHouseInfo(@PathVariable String param)
+    {
+        ResultData<ReportDetail> resultData = new ResultData<ReportDetail>();
+        try
+        {
+            Map<?, ?> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = this.sceneEstatetService.getSceneHouseInfo(queryParam);
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("scene", "SceneEstateController", "getSceneHouseInfo", "", null, "", "点击成销带出houseInof", e);
+        }
+        return resultData.toString();
+        
+    }
+    
+    /** 
+     * 
+     * 点击大定带出houseInfo
+     * @param reqMap
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/qSceneHouseInfoDaDing/{param}", method = RequestMethod.GET)
+    public String getSceneHouseInfoDaDing(@PathVariable String param)
+    {
+        ResultData<ReportDetail> resultData = new ResultData<ReportDetail>();
+        try
+        {
+            Map<?, ?> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = this.sceneEstatetService.getSceneHouseInfoDaDing(queryParam);
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("scene", "SceneEstateController", "getSceneHouseInfoDaDing", "", null, "", "点击大定带出houseInof", e);
+        }
+        return resultData.toString();
+        
+    }
+
+    /**
+     * 校验实际返佣
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/checkSjfy", method = RequestMethod.POST)
+    public String checkSjfy(@RequestBody String param){
+        ResultData<?> resultData = new ResultData<>();
+        Map<String, Object> queryParam =new HashMap<>();
+        try{
+            queryParam = JsonUtil.parseToObject(param,Map.class);
+            resultData = this.sceneEstatetService.checkSjfy(queryParam);
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("scene", "SceneEstateController", "checkSjfy",param, null, "", "校验实际返佣失败", e);
+        }
+        return resultData.toString();
+    }
+}

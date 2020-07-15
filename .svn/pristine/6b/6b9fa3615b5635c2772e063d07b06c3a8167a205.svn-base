@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.linkMarginDetail.dao.LinkMarginDetailMapper">
+
+	<resultMap id="LinkMarginDetailDtoMap" type="cn.com.eju.deal.dto.houseLinkage.linkMarginDetail.LinkMarginDetailDto"/>
+
+	<select id="selLinkMarginDetailList" parameterType="Map" resultMap="LinkMarginDetailDtoMap">
+	
+		SELECT DISTINCT
+                yearly ,
+                cityId,
+                areaCityCode ,
+                areaCityName 
+                INTO #orgHis
+        FROM    dbo.V_USR_OrgHis WITH(NOLOCK)
+		<if test="organization != null and organization != ''">
+	        WHERE   yearly=#{organization, jdbcType=VARCHAR}
+		</if>
+				
+		SELECT  
+			ROW_NUMBER() OVER ( ORDER BY margin.oaNo DESC ) rowNum ,
+			margin.year yearly ,
+
+			margin.gsCityNo gsCityNo,
+			margin.gsCityName gsCityName,--项目归属城市
+            margin.kh_code,
+            margin.kh_name,
+            margin.hs_code,
+            margin.hs_name,
+
+			margin.costCode costCode,
+			margin.costName costName,--成本中心
+
+			margin.projectNo projectNo,
+			margin.projectName projectName,--项目名称/楼盘名称
+
+			margin.ksId ksId,--客商/供应商
+			margin.ksCode ksCode,
+			margin.ksName ksName,
+			
+			margin.oaNo oaNo,--预付款单号
+
+			margin.marginTypeCode marginTypeCode,--类型
+			margin.marginTypeName marginTypeName,
+
+			margin.yjghDate yfhkDate,--预计归还日期
+
+			CAST(margin.oaAmount AS   decimal(18,   2)) oaAmount ,--预付款金额
+			CAST(margin.sjfkAmountTotal AS   decimal(18,   2)) sjfkAmountTotal ,--实际付款金额
+			CAST(margin.zchkAmountTotal AS   decimal(18,   2)) hkAmountTotal ,--回款金额/正常回款
+			CAST(margin.hxAmount AS   decimal(18,   2)) hxAmount ,--核销金额
+			CAST(margin.cyAmountTotal AS   decimal(18,   2)) cyAmountTotal ,--未收回金额
+
+	        CAST((ISNULL(margin.thisCbTotal,0) + ISNULL(margin.preCbTotal,0)) AS   decimal(18,   2)) totalAmount ,
+	        CAST(ISNULL(margin.preCbTotal,0) AS   decimal(18,   2)) preTotal,
+	        CAST(ISNULL(margin.thisCbTotal,0) AS   decimal(18,   2)) thisTotal,
+	        CAST(margin.marginAmountjan AS   decimal(18,   2)) marginjan ,
+			CAST(margin.marginAmountfeb AS   decimal(18,   2)) marginfeb ,
+			CAST(margin.marginAmountmar AS   decimal(18,   2)) marginmar ,
+			CAST(margin.marginAmountapr AS   decimal(18,   2)) marginapr ,
+			CAST(margin.marginAmountmay AS   decimal(18,   2)) marginmay ,
+			CAST(margin.marginAmountjun AS   decimal(18,   2)) marginjun ,
+			CAST(margin.marginAmountjul AS   decimal(18,   2)) marginjul ,
+			CAST(margin.marginAmountaug AS   decimal(18,   2)) marginaug ,
+			CAST(margin.marginAmountsep AS   decimal(18,   2)) marginsep ,
+			CAST(margin.marginAmountoct AS   decimal(18,   2)) marginoct ,
+			CAST(margin.marginAmountnov AS   decimal(18,   2)) marginnov ,
+			CAST(margin.marginAmountdec AS   decimal(18,   2)) margindec ,
+			CAST(margin.marginhkAmountjan AS   decimal(18,   2)) marginhkjan ,
+			CAST(margin.marginhkAmountfeb AS   decimal(18,   2)) marginhkfeb ,
+			CAST(margin.marginhkAmountmar AS   decimal(18,   2)) marginhkmar ,
+			CAST(margin.marginhkAmountapr AS   decimal(18,   2)) marginhkapr ,
+			CAST(margin.marginhkAmountmay AS   decimal(18,   2)) marginhkmay ,
+			CAST(margin.marginhkAmountjun AS   decimal(18,   2)) marginhkjun ,
+			CAST(margin.marginhkAmountjul AS   decimal(18,   2)) marginhkjul ,
+			CAST(margin.marginhkAmountaug AS   decimal(18,   2)) marginhkaug ,
+			CAST(margin.marginhkAmountsep AS   decimal(18,   2)) marginhksep ,
+			CAST(margin.marginhkAmountoct AS   decimal(18,   2)) marginhkoct ,
+			CAST(margin.marginhkAmountnov AS   decimal(18,   2)) marginhknov ,
+			CAST(margin.marginhkAmountdec AS   decimal(18,   2)) marginhkdec ,
+	        CAST(margin.cb01 AS   decimal(18,   2)) marginCbjan ,
+			CAST(margin.cb02 AS   decimal(18,   2)) marginCbfeb ,
+			CAST(margin.cb03 AS   decimal(18,   2)) marginCbmar ,
+			CAST(margin.cb04 AS   decimal(18,   2)) marginCbapr ,
+			CAST(margin.cb05 AS   decimal(18,   2)) marginCbmay ,
+			CAST(margin.cb06 AS   decimal(18,   2)) marginCbjun ,
+			CAST(margin.cb07 AS   decimal(18,   2)) marginCbjul ,
+			CAST(margin.cb08 AS   decimal(18,   2)) marginCbaug ,
+			CAST(margin.cb09 AS   decimal(18,   2)) marginCbsep ,
+			CAST(margin.cb10 AS   decimal(18,   2)) marginCboct ,
+			CAST(margin.cb11 AS   decimal(18,   2)) marginCbnov ,
+			CAST(margin.cb12 AS   decimal(18,   2)) marginCbdec
+		FROM    dbo.LNK_Report_Margin_Total margin WITH(NOLOCK)
+			LEFT JOIN dbo.BAS_City bc WITH(NOLOCK) ON bc.CityNo=margin.gsCityNo AND bc.FlagDeleted = 0
+        	LEFT JOIN #orgHis org ON bc.ID = org.cityId
+            where margin.delFlag=0
+            <if test="organization != null and organization != ''">
+				AND margin.year = #{organization}
+			</if>
+			<if test="areaCityCodeList != null">
+				AND org.areaCityCode IN
+				<foreach collection="areaCityCodeList" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="costCodeList!=null and costCodeList.size > 0">
+	            AND margin.costCode IN
+				<foreach collection="costCodeList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+	        </if>
+			<if test="estateNm != null and estateNm != ''">
+				AND (
+				        margin.projectName  LIKE CONCAT(#{estateNm, jdbcType=NVARCHAR}, '%')
+				     OR margin.projectNo LIKE CONCAT(#{estateNm, jdbcType=NVARCHAR}, '%')
+				    )
+			</if>
+			<if test="kh_name != null and kh_name != ''">
+				<![CDATA[
+				AND margin.kh_name LIKE '%${kh_name}%'
+  				]]>
+			</if>
+			<if test="hs_name != null and hs_name != ''">
+				<![CDATA[
+				AND margin.hs_name LIKE '%${hs_name}%'
+  				]]>
+			</if>
+			<if test="marginTypeCode != null and marginTypeCode != ''">
+				AND margin.marginTypeCode=#{marginTypeCode, jdbcType=NVARCHAR}
+			</if>
+			ORDER BY rowNum
+			
+			DROP TABLE #orgHis
+	</select>
+	
+<!-- 	成本中心列表 -->
+	<select id='queryCostCenterList' parameterType="java.lang.String"
+            resultType="Map">
+          SELECT DISTINCT  e.costCode,e.costName
+            FROM dbo.BAS_EBSCost e
+          where e.delFlag=0 AND e.year = #{organization,jdbcType=VARCHAR}
+    </select>
+</mapper>

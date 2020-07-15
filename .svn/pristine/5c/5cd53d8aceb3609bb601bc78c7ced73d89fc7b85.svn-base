@@ -1,0 +1,999 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.cashbill.dao.CashBillCompanyMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="proParentId" jdbcType="INTEGER" property="proParentId" />
+    <result column="cashBillNo" jdbcType="VARCHAR" property="cashBillNo" />
+    <result column="oaNo" jdbcType="VARCHAR" property="oaNo" />
+    <result column="frameOaNo" jdbcType="VARCHAR" property="frameOaNo" />
+    <result column="frameOaName" jdbcType="VARCHAR" property="frameOaName" />
+
+    <result column="companyId" jdbcType="INTEGER" property="companyId" />
+    <result column="companyNo" jdbcType="VARCHAR" property="companyNo" />
+    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="amountNoTax" jdbcType="DECIMAL" property="amountNoTax" />
+    <result column="amountTax" jdbcType="DECIMAL" property="amountTax" />
+    <result column="amountTotal" jdbcType="DECIMAL" property="amountTotal" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="submitOaStatus" jdbcType="INTEGER" property="submitOaStatus" />
+    <result column="userCode" jdbcType="VARCHAR" property="userCode" />
+    <result column="applyTime" jdbcType="TIMESTAMP" property="applyTime" />
+    <result column="vendorName" jdbcType="VARCHAR" property="vendorName" />
+    <result column="vendorCode" jdbcType="VARCHAR" property="vendorCode" />
+    <result column="accountProject" jdbcType="VARCHAR" property="accountProject" />
+    <result column="accountProjectNo" jdbcType="VARCHAR" property="accountProjectNo" />
+    <result column="flowId" jdbcType="VARCHAR" property="flowId" />
+    <result column="approveStatus" jdbcType="INTEGER" property="approveStatus" />
+    <result column="approveTime" jdbcType="TIMESTAMP" property="approveTime" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+
+      <result column="receiveBankName" property="receiveBankName" jdbcType="VARCHAR" />
+      <result column="receiveBankAccountCardCode" property="receiveBankAccountCardCode" jdbcType="VARCHAR" />
+      <result column="rreceiveBankAccountName" property="rreceiveBankAccountName" jdbcType="VARCHAR" />
+      <result column="receiveBankProvinceName" property="receiveBankProvinceName" jdbcType="VARCHAR" />
+      <result column="receiveBankCityName" property="receiveBankCityName" jdbcType="VARCHAR" />
+      <result column="receiveBankSerialNo" property="receiveBankSerialNo" jdbcType="VARCHAR" />
+      <result column="vendorId " property="vendorId " jdbcType="VARCHAR" />
+      <result column="recordDate" property="recordDate" jdbcType="TIMESTAMP" />
+      <result column="syncFlag" property="syncFlag" jdbcType="INTEGER" />
+
+    <result column="areaTotal" property="areaTotal" jdbcType="DECIMAL" />
+    <result column="roughAmountTotal" property="roughAmountTotal" jdbcType="DECIMAL" />
+    <result column="dealAmountTotal" property="dealAmountTotal" jdbcType="DECIMAL" />
+    <result column="sqYjsrAmountTotal" property="sqYjsrAmountTotal" jdbcType="DECIMAL" />
+    <result column="sqYjfyAmountTotal" property="sqYjfyAmountTotal" jdbcType="DECIMAL" />
+    <result column="sqYjdyAmountTotal" property="sqYjdyAmountTotal" jdbcType="DECIMAL" />
+    <result column="sqSjsrAmountTotal" property="sqSjsrAmountTotal" jdbcType="DECIMAL" />
+    <result column="sqSjfyAmountTotal" property="sqSjfyAmountTotal" jdbcType="DECIMAL" />
+    <result column="sqSjdyAmountTotal" property="sqSjdyAmountTotal" jdbcType="DECIMAL" />
+    <result column="requestAmountTotal" property="requestAmountTotal" jdbcType="DECIMAL" />
+    <result column="taxAmountTotal" property="taxAmountTotal" jdbcType="DECIMAL" />
+    <result column="oaProjectNo" property="oaProjectNo" jdbcType="VARCHAR" />
+    <result column="oaProjectName" property="oaProjectName" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+
+    <result column="offSetFlag" jdbcType="BIT" property="offSetFlag" />
+    <result column="pjsNostr" jdbcType="VARCHAR" property="pjsNostr" />
+    <result column="inValid" jdbcType="CHAR" property="inValid" />
+
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, proParentId, cashBillNo, oaNo, frameOaNo,frameOaName, companyId, companyNo, companyName,
+    amountNoTax, amountTax, amountTotal, remark, submitOaStatus, userCode, applyTime,
+    vendorName, vendorCode, accountProject, accountProjectNo, flowId, approveStatus,
+    approveTime, dateCreate, userIdCreate, delFlag, cityNo, receiveBankName, receiveBankAccountCardCode,
+    receiveBankAccountName, receiveBankProvinceName, receiveBankCityName, receiveBankSerialNo,
+    vendorId, recordDate, syncFlag, areaTotal, roughAmountTotal, dealAmountTotal, sqYjsrAmountTotal,
+    sqYjfyAmountTotal, sqYjdyAmountTotal, sqSjsrAmountTotal, sqSjfyAmountTotal, sqSjdyAmountTotal,
+    requestAmountTotal, taxAmountTotal,oaProjectNo,oaProjectName,remarks,offSetFlag
+    ,pjsNostr,inValid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Cash_Bill_Company
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    UPDATE Cash_Bill_Company SET delFlag = 1
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    insert into Cash_Bill_Company (id, proParentId, cashBillNo,
+      oaNo, frameOaNo, companyId,
+      companyNo, companyName, amountNoTax,
+      amountTax, amountTotal, remark,
+      submitOaStatus, userCode, applyTime,
+      vendorName, vendorCode, accountProject,
+      accountProjectNo, flowId, approveStatus,
+      approveTime, dateCreate, userIdCreate,
+      delFlag, cityNo, receiveBankName,
+      receiveBankAccountCardCode, receiveBankAccountName,
+      receiveBankProvinceName, receiveBankCityName,
+      receiveBankSerialNo, vendorId, recordDate,
+      syncFlag, areaTotal, roughAmountTotal,
+      dealAmountTotal, sqYjsrAmountTotal, sqYjfyAmountTotal,
+      sqYjdyAmountTotal, sqSjsrAmountTotal, sqSjfyAmountTotal,
+      sqSjdyAmountTotal, requestAmountTotal,
+      taxAmountTotal, frameOaName, oaProjectNo,
+      oaProjectName, remarks, offSetFlag,
+      formState, errmsg, oaStartDate,
+      templateCode, templateName, pjsNostr,
+      inValid)
+    values (#{id,jdbcType=INTEGER}, #{proParentId,jdbcType=INTEGER}, #{cashBillNo,jdbcType=VARCHAR},
+      #{oaNo,jdbcType=VARCHAR}, #{frameOaNo,jdbcType=VARCHAR}, #{companyId,jdbcType=INTEGER},
+      #{companyNo,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{amountNoTax,jdbcType=DECIMAL},
+      #{amountTax,jdbcType=DECIMAL}, #{amountTotal,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR},
+      #{submitOaStatus,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP},
+      #{vendorName,jdbcType=VARCHAR}, #{vendorCode,jdbcType=VARCHAR}, #{accountProject,jdbcType=VARCHAR},
+      #{accountProjectNo,jdbcType=VARCHAR}, #{flowId,jdbcType=VARCHAR}, #{approveStatus,jdbcType=INTEGER},
+      #{approveTime,jdbcType=TIMESTAMP}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER},
+      #{delFlag,jdbcType=BIT}, #{cityNo,jdbcType=VARCHAR}, #{receiveBankName,jdbcType=VARCHAR},
+      #{receiveBankAccountCardCode,jdbcType=VARCHAR}, #{receiveBankAccountName,jdbcType=VARCHAR},
+      #{receiveBankProvinceName,jdbcType=VARCHAR}, #{receiveBankCityName,jdbcType=VARCHAR},
+      #{receiveBankSerialNo,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, #{recordDate,jdbcType=TIMESTAMP},
+      #{syncFlag,jdbcType=INTEGER}, #{areaTotal,jdbcType=DECIMAL}, #{roughAmountTotal,jdbcType=DECIMAL},
+      #{dealAmountTotal,jdbcType=DECIMAL}, #{sqYjsrAmountTotal,jdbcType=DECIMAL}, #{sqYjfyAmountTotal,jdbcType=DECIMAL},
+      #{sqYjdyAmountTotal,jdbcType=DECIMAL}, #{sqSjsrAmountTotal,jdbcType=DECIMAL}, #{sqSjfyAmountTotal,jdbcType=DECIMAL},
+      #{sqSjdyAmountTotal,jdbcType=DECIMAL}, #{requestAmountTotal,jdbcType=DECIMAL},
+      #{taxAmountTotal,jdbcType=DECIMAL}, #{frameOaName,jdbcType=NVARCHAR}, #{oaProjectNo,jdbcType=VARCHAR},
+      #{oaProjectName,jdbcType=VARCHAR}, #{remarks,jdbcType=NVARCHAR}, #{offSetFlag,jdbcType=BIT},
+      #{formState,jdbcType=INTEGER}, #{errmsg,jdbcType=NVARCHAR}, #{oaStartDate,jdbcType=TIMESTAMP},
+      #{templateCode,jdbcType=VARCHAR}, #{templateName,jdbcType=VARCHAR}, #{pjsNostr,jdbcType=VARCHAR},
+      #{inValid,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillCompany" useGeneratedKeys="true" keyProperty="id">
+    insert into Cash_Bill_Company
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="proParentId != null">
+        proParentId,
+      </if>
+      <if test="cashBillNo != null">
+        cashBillNo,
+      </if>
+      <if test="oaNo != null">
+        oaNo,
+      </if>
+      <if test="frameOaNo != null">
+        frameOaNo,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+      <if test="companyNo != null">
+        companyNo,
+      </if>
+      <if test="companyName != null">
+        companyName,
+      </if>
+      <if test="amountNoTax != null">
+        amountNoTax,
+      </if>
+      <if test="amountTax != null">
+        amountTax,
+      </if>
+      <if test="amountTotal != null">
+        amountTotal,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="submitOaStatus != null">
+        submitOaStatus,
+      </if>
+      <if test="userCode != null">
+        userCode,
+      </if>
+      <if test="applyTime != null">
+        applyTime,
+      </if>
+      <if test="vendorName != null">
+        vendorName,
+      </if>
+      <if test="vendorCode != null">
+        vendorCode,
+      </if>
+      <if test="accountProject != null">
+        accountProject,
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo,
+      </if>
+      <if test="flowId != null">
+        flowId,
+      </if>
+      <if test="approveStatus != null">
+        approveStatus,
+      </if>
+      <if test="approveTime != null">
+        approveTime,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+      <if test="cityNo != null">
+        cityNo,
+      </if>
+      <if test="receiveBankName != null">
+        receiveBankName,
+      </if>
+      <if test="receiveBankAccountCardCode != null">
+        receiveBankAccountCardCode,
+      </if>
+      <if test="receiveBankAccountName != null">
+        receiveBankAccountName,
+      </if>
+      <if test="receiveBankProvinceName != null">
+        receiveBankProvinceName,
+      </if>
+      <if test="receiveBankCityName != null">
+        receiveBankCityName,
+      </if>
+      <if test="receiveBankSerialNo != null">
+        receiveBankSerialNo,
+      </if>
+      <if test="vendorId != null">
+        vendorId,
+      </if>
+      <if test="recordDate != null">
+        recordDate,
+      </if>
+      <if test="syncFlag != null">
+        syncFlag,
+      </if>
+      <if test="areaTotal != null">
+        areaTotal,
+      </if>
+      <if test="roughAmountTotal != null">
+        roughAmountTotal,
+      </if>
+      <if test="dealAmountTotal != null">
+        dealAmountTotal,
+      </if>
+      <if test="sqYjsrAmountTotal != null">
+        sqYjsrAmountTotal,
+      </if>
+      <if test="sqYjfyAmountTotal != null">
+        sqYjfyAmountTotal,
+      </if>
+      <if test="sqYjdyAmountTotal != null">
+        sqYjdyAmountTotal,
+      </if>
+      <if test="sqSjsrAmountTotal != null">
+        sqSjsrAmountTotal,
+      </if>
+      <if test="sqSjfyAmountTotal != null">
+        sqSjfyAmountTotal,
+      </if>
+      <if test="sqSjdyAmountTotal != null">
+        sqSjdyAmountTotal,
+      </if>
+      <if test="requestAmountTotal != null">
+        requestAmountTotal,
+      </if>
+      <if test="taxAmountTotal != null">
+        taxAmountTotal,
+      </if>
+      <if test="frameOaName != null">
+        frameOaName,
+      </if>
+      <if test="oaProjectNo != null">
+        oaProjectNo,
+      </if>
+      <if test="oaProjectName != null">
+        oaProjectName,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="offSetFlag != null">
+        offSetFlag,
+      </if>
+      <if test="formState != null">
+        formState,
+      </if>
+      <if test="errmsg != null">
+        errmsg,
+      </if>
+      <if test="oaStartDate != null">
+        oaStartDate,
+      </if>
+      <if test="templateCode != null">
+        templateCode,
+      </if>
+      <if test="templateName != null">
+        templateName,
+      </if>
+      <if test="pjsNostr != null">
+        pjsNostr,
+      </if>
+      <if test="inValid != null">
+        inValid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="proParentId != null">
+        #{proParentId,jdbcType=INTEGER},
+      </if>
+      <if test="cashBillNo != null">
+        #{cashBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null">
+        #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="frameOaNo != null">
+        #{frameOaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="amountNoTax != null">
+        #{amountNoTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTax != null">
+        #{amountTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTotal != null">
+        #{amountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="submitOaStatus != null">
+        #{submitOaStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null">
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vendorName != null">
+        #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorCode != null">
+        #{vendorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProject != null">
+        #{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        #{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="approveStatus != null">
+        #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="approveTime != null">
+        #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="cityNo != null">
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankName != null">
+        #{receiveBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankAccountCardCode != null">
+        #{receiveBankAccountCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankAccountName != null">
+        #{receiveBankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankProvinceName != null">
+        #{receiveBankProvinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankCityName != null">
+        #{receiveBankCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankSerialNo != null">
+        #{receiveBankSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordDate != null">
+        #{recordDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syncFlag != null">
+        #{syncFlag,jdbcType=INTEGER},
+      </if>
+      <if test="areaTotal != null">
+        #{areaTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="roughAmountTotal != null">
+        #{roughAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="dealAmountTotal != null">
+        #{dealAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjsrAmountTotal != null">
+        #{sqYjsrAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjfyAmountTotal != null">
+        #{sqYjfyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjdyAmountTotal != null">
+        #{sqYjdyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjsrAmountTotal != null">
+        #{sqSjsrAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjfyAmountTotal != null">
+        #{sqSjfyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjdyAmountTotal != null">
+        #{sqSjdyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="requestAmountTotal != null">
+        #{requestAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="taxAmountTotal != null">
+        #{taxAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="frameOaName != null">
+        #{frameOaName,jdbcType=NVARCHAR},
+      </if>
+      <if test="oaProjectNo != null">
+        #{oaProjectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oaProjectName != null">
+        #{oaProjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=NVARCHAR},
+      </if>
+      <if test="offSetFlag != null">
+        #{offSetFlag,jdbcType=BIT},
+      </if>
+      <if test="formState != null">
+        #{formState,jdbcType=INTEGER},
+      </if>
+      <if test="errmsg != null">
+        #{errmsg,jdbcType=NVARCHAR},
+      </if>
+      <if test="oaStartDate != null">
+        #{oaStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="templateCode != null">
+        #{templateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="templateName != null">
+        #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pjsNostr != null">
+        #{pjsNostr,jdbcType=VARCHAR},
+      </if>
+      <if test="inValid != null">
+        #{inValid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    update Cash_Bill_Company
+    <set>
+      <if test="proParentId != null">
+        proParentId = #{proParentId,jdbcType=INTEGER},
+      </if>
+      <if test="cashBillNo != null">
+        cashBillNo = #{cashBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null">
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="frameOaNo != null">
+        frameOaNo = #{frameOaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        companyId = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null">
+        companyNo = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        companyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="amountNoTax != null">
+        amountNoTax = #{amountNoTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTax != null">
+        amountTax = #{amountTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTotal != null">
+        amountTotal = #{amountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="submitOaStatus != null">
+        submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        userCode = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null">
+        applyTime = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vendorName != null">
+        vendorName = #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorCode != null">
+        vendorCode = #{vendorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProject != null">
+        accountProject = #{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="flowId != null">
+        flowId = #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="approveStatus != null">
+        approveStatus = #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="approveTime != null">
+        approveTime = #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="cityNo != null">
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankName != null">
+        receiveBankName = #{receiveBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankAccountCardCode != null">
+        receiveBankAccountCardCode = #{receiveBankAccountCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankAccountName != null">
+        receiveBankAccountName = #{receiveBankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankProvinceName != null">
+        receiveBankProvinceName = #{receiveBankProvinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankCityName != null">
+        receiveBankCityName = #{receiveBankCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBankSerialNo != null">
+        receiveBankSerialNo = #{receiveBankSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        vendorId = #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordDate != null">
+        recordDate = #{recordDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syncFlag != null">
+        syncFlag = #{syncFlag,jdbcType=INTEGER},
+      </if>
+      <if test="areaTotal != null">
+        areaTotal = #{areaTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="roughAmountTotal != null">
+        roughAmountTotal = #{roughAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="dealAmountTotal != null">
+        dealAmountTotal = #{dealAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjsrAmountTotal != null">
+        sqYjsrAmountTotal = #{sqYjsrAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjfyAmountTotal != null">
+        sqYjfyAmountTotal = #{sqYjfyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjdyAmountTotal != null">
+        sqYjdyAmountTotal = #{sqYjdyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjsrAmountTotal != null">
+        sqSjsrAmountTotal = #{sqSjsrAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjfyAmountTotal != null">
+        sqSjfyAmountTotal = #{sqSjfyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjdyAmountTotal != null">
+        sqSjdyAmountTotal = #{sqSjdyAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="requestAmountTotal != null">
+        requestAmountTotal = #{requestAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="taxAmountTotal != null">
+        taxAmountTotal = #{taxAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="frameOaName != null">
+        frameOaName = #{frameOaName,jdbcType=NVARCHAR},
+      </if>
+      <if test="oaProjectNo != null">
+        oaProjectNo = #{oaProjectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oaProjectName != null">
+        oaProjectName = #{oaProjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=NVARCHAR},
+      </if>
+      <if test="offSetFlag != null">
+        offSetFlag = #{offSetFlag,jdbcType=BIT},
+      </if>
+      <if test="formState != null">
+        formState = #{formState,jdbcType=INTEGER},
+      </if>
+      <if test="errmsg != null">
+        errmsg = #{errmsg,jdbcType=NVARCHAR},
+      </if>
+      <if test="oaStartDate != null">
+        oaStartDate = #{oaStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="templateCode != null">
+        templateCode = #{templateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="templateName != null">
+        templateName = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pjsNostr != null">
+        pjsNostr = #{pjsNostr,jdbcType=VARCHAR},
+      </if>
+      <if test="inValid != null">
+        inValid = #{inValid,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    update Cash_Bill_Company
+    set proParentId = #{proParentId,jdbcType=INTEGER},
+      cashBillNo = #{cashBillNo,jdbcType=VARCHAR},
+      oaNo = #{oaNo,jdbcType=VARCHAR},
+      frameOaNo = #{frameOaNo,jdbcType=VARCHAR},
+      companyId = #{companyId,jdbcType=INTEGER},
+      companyNo = #{companyNo,jdbcType=VARCHAR},
+      companyName = #{companyName,jdbcType=VARCHAR},
+      amountNoTax = #{amountNoTax,jdbcType=DECIMAL},
+      amountTax = #{amountTax,jdbcType=DECIMAL},
+      amountTotal = #{amountTotal,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+      userCode = #{userCode,jdbcType=VARCHAR},
+      applyTime = #{applyTime,jdbcType=TIMESTAMP},
+      vendorName = #{vendorName,jdbcType=VARCHAR},
+      vendorCode = #{vendorCode,jdbcType=VARCHAR},
+      accountProject = #{accountProject,jdbcType=VARCHAR},
+      accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR},
+      flowId = #{flowId,jdbcType=VARCHAR},
+      approveStatus = #{approveStatus,jdbcType=INTEGER},
+      approveTime = #{approveTime,jdbcType=TIMESTAMP},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT},
+      cityNo = #{cityNo,jdbcType=VARCHAR},
+      receiveBankName = #{receiveBankName,jdbcType=VARCHAR},
+      receiveBankAccountCardCode = #{receiveBankAccountCardCode,jdbcType=VARCHAR},
+      receiveBankAccountName = #{receiveBankAccountName,jdbcType=VARCHAR},
+      receiveBankProvinceName = #{receiveBankProvinceName,jdbcType=VARCHAR},
+      receiveBankCityName = #{receiveBankCityName,jdbcType=VARCHAR},
+      receiveBankSerialNo = #{receiveBankSerialNo,jdbcType=VARCHAR},
+      vendorId = #{vendorId,jdbcType=VARCHAR},
+      recordDate = #{recordDate,jdbcType=TIMESTAMP},
+      syncFlag = #{syncFlag,jdbcType=INTEGER},
+      areaTotal = #{areaTotal,jdbcType=DECIMAL},
+      roughAmountTotal = #{roughAmountTotal,jdbcType=DECIMAL},
+      dealAmountTotal = #{dealAmountTotal,jdbcType=DECIMAL},
+      sqYjsrAmountTotal = #{sqYjsrAmountTotal,jdbcType=DECIMAL},
+      sqYjfyAmountTotal = #{sqYjfyAmountTotal,jdbcType=DECIMAL},
+      sqYjdyAmountTotal = #{sqYjdyAmountTotal,jdbcType=DECIMAL},
+      sqSjsrAmountTotal = #{sqSjsrAmountTotal,jdbcType=DECIMAL},
+      sqSjfyAmountTotal = #{sqSjfyAmountTotal,jdbcType=DECIMAL},
+      sqSjdyAmountTotal = #{sqSjdyAmountTotal,jdbcType=DECIMAL},
+      requestAmountTotal = #{requestAmountTotal,jdbcType=DECIMAL},
+      taxAmountTotal = #{taxAmountTotal,jdbcType=DECIMAL},
+      frameOaName = #{frameOaName,jdbcType=NVARCHAR},
+      oaProjectNo = #{oaProjectNo,jdbcType=VARCHAR},
+      oaProjectName = #{oaProjectName,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=NVARCHAR},
+      offSetFlag = #{offSetFlag,jdbcType=BIT},
+      formState = #{formState,jdbcType=INTEGER},
+      errmsg = #{errmsg,jdbcType=NVARCHAR},
+      oaStartDate = #{oaStartDate,jdbcType=TIMESTAMP},
+      templateCode = #{templateCode,jdbcType=VARCHAR},
+      templateName = #{templateName,jdbcType=VARCHAR},
+      pjsNostr = #{pjsNostr,jdbcType=VARCHAR},
+      inValid = #{inValid,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="checkCompanyUnique" parameterType="cn.com.eju.deal.cashbill.model.CashBillCompany" resultType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    SELECT  c.*
+    FROM    Cash_Bill_Project p
+            JOIN dbo.Cash_Bill_Company c ON p.id = c.proParentId
+    WHERE   p.id = #{proParentId,jdbcType=INTEGER}
+            AND c.companyId = #{companyId,jdbcType=INTEGER}
+            AND c.delFlag = 0
+            AND p.delFlag = 0
+  </select>
+
+  <select id="queryByParentId" parameterType="java.util.Map" resultType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    SELECT  *
+    FROM    dbo.Cash_Bill_Company
+    WHERE   proParentId = #{proParentId,jdbcType=INTEGER}
+            AND delFlag = 0
+            <if test="companyId != null and companyId != ''">
+                AND companyId = #{companyId,jdbcType=INTEGER}
+            </if>
+  </select>
+  <select id="getCashBillList" parameterType="map" resultType="cn.com.eju.deal.cashbill.model.CashBillDto">
+	   SELECT
+	   	cbc.id as comParentId,
+		cbc.cashBillNo,
+		cbc.oaNo,
+		cbc.frameOaNo,
+        cbc.frameOaName,
+		cbc.companyId,
+		cbc.companyName,
+		cbc.companyNo,
+		ISNULL(cbc.amountNoTax,0) AS amountNoTax,
+		ISNULL(cbc.amountTax,0) AS amountTax,
+		ISNULL(cbc.amountTotal,0) AS amountTotal,
+		cbc.submitOaStatus,
+		cbc.approveStatus,
+<!-- 		bdv2.dicValue AS approveStatusNm , -->
+		approveStatusNm = (CASE WHEN bdv2.dicValue IS NULL THEN '草稿'
+		                        WHEN cbc.inValid = '1' THEN '作废'
+			                  ELSE bdv2.dicValue end),
+		bdv1.dicValue AS submitOaStatusNm,
+		cbc.userCode,
+		uu.userName,
+		cbc.applyTime,
+		cbp.projectNo,
+		cbp.estateNm,
+		cbp.id as proParentId,
+		cbp.estateId,
+		cbc.remarks,cbc.offSetFlag
+		,cbc.pjsNostr
+		,cbc.inValid
+	FROM
+		Cash_Bill_Company cbc
+	INNER JOIN Cash_Bill_Project cbp ON cbc.proParentId = cbp.id AND cbp.delFlag = '0'
+	<if test="reportNo != null and reportNo !='' ">
+	INNER JOIN(
+                SELECT  comParentId
+                    FROM    Cash_Bill_Report
+                    WHERE reportNo = #{reportNo}
+                      and delFlag = 0
+                    GROUP BY comParentId
+    ) as reportT on reportT.comParentId = cbc.id
+    </if>
+	LEFT JOIN BAS_DictionaryValue bdv1 ON bdv1.dicCode = cbc.submitOaStatus AND bdv1.delFlag = 'N' AND bdv1.typeId = 212
+	LEFT JOIN USR_User uu ON uu.userCode = cbc.userCode AND uu.delFlag = 'N'
+	LEFT JOIN BAS_DictionaryValue bdv2 ON bdv2.dicCode = cbc.approveStatus AND bdv2.delFlag = 'N'
+	
+	WHERE cbc.delFlag = 0
+		<if test="cityNo != null and cityNo != ''">
+			   and cbc.cityNo= #{cityNo}
+		</if>
+		<if test="cashValues != null and cashValues != ''">
+				AND (
+				    cbc.cashBillNo  LIKE CONCAT('%', #{cashValues},'%')
+				    OR cbc.pjsNostr  LIKE CONCAT('%', #{cashValues},'%')
+                    )
+		</if>
+		<if test="projectValues != null and projectValues != ''">
+				AND (cbp.projectNo  LIKE CONCAT('%', #{projectValues},'%')
+					OR cbp.estateNm  LIKE CONCAT('%', #{projectValues},'%')
+					)
+		</if>
+		<if test="companyValues != null and companyValues != ''">
+			AND (cbc.companyNo  LIKE CONCAT('%', #{companyValues},'%')
+					OR cbc.companyName  LIKE CONCAT('%', #{companyValues},'%')
+			)
+		</if>
+		<if test="oAState != null and oAState != ''">
+			AND cbc.submitOaStatus = #{oAState}
+		</if>
+		<if test="userName != null and userName != ''">
+			AND uu.userName  LIKE CONCAT('%', #{userName},'%')
+		</if>
+<!-- 		请款审核状态 -->
+		<if test="approveStatus != null and approveStatus != '' and approveStatus == '25401'">
+			AND (cbc.approveStatus = #{approveStatus} or cbc.approveStatus IS NULL )
+		</if>
+        <if test="approveStatus != null and approveStatus != '' and approveStatus == '25405'">
+			AND cbc.inValid = 1
+		</if>
+		<if test="approveStatus != null and approveStatus != '' and approveStatus != '25401' and approveStatus != '25405'">
+			AND cbc.approveStatus = #{approveStatus}
+		</if>
+	 ORDER BY cbc.dateCreate desc
+  </select>
+  <select id="getReportListById" parameterType="map" resultType="cn.com.eju.deal.cashbill.model.CashBillReport">
+	 SELECT lr.EstateNm projectName,cbr.* FROM dbo.Cash_Bill_Report cbr
+		LEFT JOIN dbo.LNK_Report lr ON cbr.reportNo=lr.ReportId AND lr.DelFlg=0
+		WHERE cbr.delFlag = 0 
+		AND cbr.comParentId= #{comParentId,jdbcType=INTEGER}
+		AND cbr.proParentId =#{proParentId,jdbcType=INTEGER}
+	 ORDER BY cbr.dateCreate
+  </select>
+  <select id="getReportSumById" parameterType="map" resultType="cn.com.eju.deal.cashbill.model.CashBillDto">
+	 SELECT 
+	 	SUM(ISNULL(area, 0)) as areaSum,
+	 	SUM(ISNULL(roughAmount, 0)) as roughAmountSum,
+	 	SUM(ISNULL(dealAmount, 0)) as dealAmountSum
+	 FROM Cash_Bill_Report 
+		WHERE delFlag = 0 
+		AND comParentId= #{comParentId,jdbcType=INTEGER}
+		AND proParentId =#{proParentId,jdbcType=INTEGER}
+  </select>
+  <select id="getCashBillDeatilById" parameterType="map" resultType="cn.com.eju.deal.cashbill.model.CashBillDto">
+	 SELECT
+	    	cbc.id as comParentId,
+      cbc.proParentId,
+      cbc.cashBillNo,
+      cbc.oaNo,
+      cbc.frameOaNo,
+      cbc.companyId,
+      cbc.companyNo,
+      cbc.companyName,
+      cbc.remark,
+      cbc.submitOaStatus,
+      cbc.userCode,
+      cbc.applyTime,
+      cbc.vendorName,
+      cbc.vendorCode,
+      cbc.accountProject,
+      cbc.accountProjectNo,
+      cbc.flowId,
+      cbc.approveStatus,
+      cbc.approveTime,
+      cbc.DateCreate,
+      cbc.userIdCreate,
+      cbc.delFlag,
+      cbc.cityNo,
+      cbc.receiveBankName,
+      cbc.receiveBankAccountCardCode,
+      cbc.receiveBankAccountName,
+      cbc.receiveBankProvinceName,
+      cbc.receiveBankCityName,
+      cbc.receiveBankSerialNo,
+      cbc.vendorId,
+      cbc.recordDate,
+      cbc.syncFlag,
+      cbc.areaTotal,
+      cbc.roughAmountTotal,
+      cbc.dealAmountTotal,
+      cbc.sqYjsrAmountTotal,
+      cbc.sqYjfyAmountTotal,
+      cbc.sqYjdyAmountTotal,
+      cbc.sqSjsrAmountTotal,
+      cbc.sqSjfyAmountTotal,
+      cbc.sqSjdyAmountTotal,
+      cbc.requestAmountTotal,
+      cbc.taxAmountTotal,
+      cbc.frameOaName,
+      cbc.oaProjectNo,
+      cbc.oaProjectName,
+      cbc.remarks,
+      cbc.offSetFlag,
+      cbc.formState,
+      cbc.errmsg,
+      cbc.oaStartDate,
+      cbc.templateCode,
+      cbc.templateName,
+      cbc.pjsNostr,
+      cbc.inValid,
+		ISNULL(cbc.amountNoTax,0) AS amountNoTax,
+		ISNULL(cbc.amountTax,0) AS amountTax,
+		ISNULL(cbc.amountTotal,0) AS amountTotal,
+		bdv1.dicValue AS submitOaStatusNm,
+		uu.userName,
+		cbp.projectNo,
+		cbp.estateNm,
+		cbp.id as proParentId,
+		cbp.estateId
+		,cbp.recordTime
+		,cbp.predictPayTime
+		,cbp.payType
+		,bdv3.dicValue AS payTypeNm
+		,approveStatusNm = (CASE WHEN bdv2.dicValue IS NULL THEN '草稿'
+		                        WHEN cbc.inValid = '1' THEN '作废'
+			                  ELSE bdv2.dicValue end)
+	FROM
+		Cash_Bill_Company cbc
+	INNER JOIN Cash_Bill_Project cbp ON cbc.proParentId = cbp.id AND cbp.delFlag = '0'
+	LEFT JOIN BAS_DictionaryValue bdv1 ON bdv1.dicCode = cbc.submitOaStatus AND bdv1.delFlag = 'N' AND bdv1.typeId = 212
+	LEFT JOIN USR_User uu ON uu.userCode = cbc.userCode AND uu.delFlag = 'N'
+	LEFT JOIN BAS_DictionaryValue bdv2 ON bdv2.dicCode = cbc.approveStatus AND bdv2.delFlag = 'N'
+	LEFT JOIN BAS_DictionaryValue bdv3 ON bdv3.dicCode = cbp.payType AND bdv3.delFlag = 'N'
+	WHERE cbc.delFlag = 0
+		<if test="proParentId != null and proParentId != ''">
+			AND cbp.id = #{proParentId}
+		</if>
+		<if test="comParentId != null and comParentId != ''">
+			AND cbc.id = #{comParentId}
+		</if>
+	 ORDER BY cbc.dateCreate desc
+  </select>
+  <select id="getByCashBillNo" parameterType="java.util.Map" resultType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    SELECT TOP 1
+      <include refid="Base_Column_List" />
+      FROM Cash_Bill_Company
+     WHERE delFlag = 0
+        AND ISNULL(syncFlag,0) !=-1
+       AND cashBillNo = #{cashBillNo,jdbcType=VARCHAR}
+      <if test="flowId != null">
+       AND flowId = #{flowId,jdbcType=VARCHAR}
+      </if>
+      ORDER BY dateCreate desc
+
+  </select>
+  
+<!--   根据BB查询对应业绩centerId对应的考核主体 -->
+  <select id="getCheckBodyByReportNo" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT  bcs.lnqkCheckBodyId ,
+        	bcs.lnqkCheckBodyName
+		FROM    LNK_Report r
+    INNER JOIN dbo.Achiv_Achievement a ON r.Id = a.relateId AND a.delFlag = 0 AND a.achieveType = 17902
+    LEFT JOIN dbo.BAS_CenterSetting bcs ON a.centerGroupId = bcs.centerId AND bcs.delFlag=0
+		WHERE r.DelFlg = 0 and r.ReportId=#{reportNo,jdbcType=VARCHAR}
+  </select>
+  
+<!--   根据flowid取中介合作报批单盖章附件信息 -->
+  <select id="getFlowIdByFrameOaNo" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT c.FlowId,
+		   l.oANo
+	FROM dbo.LNK_FrameContract l 
+		INNER JOIN dbo.Contract c ON l.spContractNo=c.ContractNo 
+			WHERE l.delFlag=0 AND c.FlowId IS NOT NULL AND l.autoToOa=1
+		AND l.oANo=#{frameOaNo,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getVendorNameByVendorId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT VENDOR_NAME as vendorName FROM dbo.V_OA_EJU_SUPPLIERS WHERE VENDOR_ID=#{vendorId}
+ </select>
+
+
+  <select id="execQkUptJs" parameterType="Map">
+        EXEC P_PMLS_RPT_Qk_UptJs  #{id},#{opType}
+  </select>
+
+    <select id="execQkZeroSync" parameterType="map" statementType="CALLABLE">
+        EXEC P_CRM_CASH_BILL_ZERO_SYNC #{cashBillNo},#{returnCode,jdbcType=INTEGER,mode=OUT},#{returnMsg,jdbcType=VARCHAR,mode=OUT}
+    </select>
+
+
+  <update id="updateEditByPrimaryKey" parameterType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+    update Cash_Bill_Company
+    set
+        recordDate = #{recordDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <update id="updateEditOaByPrimaryKey" parameterType="java.lang.Integer">
+    update Cash_Bill_Company
+    set
+      oaNo = null
+      ,applyTime = null
+      ,flowId = null
+      ,approveTime = null
+      ,oaStartDate = null
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.company.dao.CompanyMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.company.model.Company">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="CompanyNo" property="companyNo" jdbcType="NVARCHAR"/>
+        <result column="CompanyName" property="companyName" jdbcType="NVARCHAR"/>
+        <result column="CompanyNamePinyin" property="companyNamePinyin" jdbcType="VARCHAR"/>
+        <result column="StoreName" property="storeName" jdbcType="NVARCHAR"/>
+        <result column="SourceId" property="sourceId" jdbcType="INTEGER"/>
+        <result column="IsDelete" property="isDelete" jdbcType="BIT"/>
+        <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="UserCreate" property="userCreate" jdbcType="INTEGER"/>
+        <result column="CityNo" property="cityNo" jdbcType="NVARCHAR"/>
+        <result column="DistrictNo" property="districtNo" jdbcType="NVARCHAR"/>
+        <result column="AreaNo" property="areaNo" jdbcType="NVARCHAR"/>
+        <result column="Address" property="address" jdbcType="NVARCHAR"/>
+        <result column="ContractType" property="contractType" jdbcType="INTEGER"/>
+        <result column="CompanyScale" property="companyScale" jdbcType="INTEGER"/>
+        <result column="PredictAccountCount" property="predictAccountCount" jdbcType="INTEGER"/>
+        <result column="OriginalVersions" property="originalVersions" jdbcType="NVARCHAR"/>
+        <result column="CompanyStatus" property="companyStatus" jdbcType="INTEGER"/>
+        <result column="Longitude" property="longitude" jdbcType="FLOAT"/>
+        <result column="Latitude" property="latitude" jdbcType="FLOAT"/>
+        <result column="FangyouCompanyId" property="fangyouCompanyId" jdbcType="NVARCHAR"/>
+        <result column="CompanyAddress" property="companyAddress" jdbcType="NVARCHAR"/>
+        <result column="FangyouOpenStatus" property="fangyouOpenStatus" jdbcType="NVARCHAR"/>
+        
+        <!--扩展字段-->
+        <result column="ContactsId" property="contactsId" jdbcType="INTEGER"/>
+        <result column="ContactsNo" property="contactsNo" jdbcType="NVARCHAR"/>
+        <result column="ContactsName" property="contactsName" jdbcType="NVARCHAR"/>
+        <result column="ContactsPhone" property="contactsPhone" jdbcType="NVARCHAR"/>
+        <result column="inputSource" property="inputSource" jdbcType="NVARCHAR"/>
+        
+        <result column="BusinessLicenseNo" property="businessLicenseNo" jdbcType="NVARCHAR"/>
+        <result column="LegalPerson" property="legalPerson" jdbcType="NVARCHAR"/>
+        <result column="ContactNumber" property="contactNumber" jdbcType="NVARCHAR"/>
+        <result column="SelectOrgIdStr" property="selectOrgIdStr" jdbcType="NVARCHAR"/>
+        <result column="openTime" property="openTime" jdbcType="TIMESTAMP"/>
+        <result column="businessLicenseNature" property="businessLicenseNature" jdbcType="VARCHAR"/>
+        <result column="bizType" property="bizType" jdbcType="VARCHAR"/>
+        <result column="isGpSign" property="isGpSign" jdbcType="INTEGER"/>
+        <result column="companyType" property="companyType" jdbcType="INTEGER"/>
+        
+        
+        <result column="establishYear" property="establishYear" jdbcType="INTEGER"/>
+        <result column="dockingPeo" property="dockingPeo" jdbcType="VARCHAR"/>
+        <result column="dockingPeoTel" property="dockingPeoTel" jdbcType="VARCHAR"/>
+        <result column="storeNumber" property="storeNumber" jdbcType="INTEGER"/>
+        <result column="comStaffNum" property="comStaffNum" jdbcType="INTEGER"/>
+        <result column="channelType" property="channelType" jdbcType="INTEGER"/>
+        <result column="undertakeType" property="undertakeType" jdbcType="NVARCHAR"/>
+        <result column="resourcesRange" property="resourcesRange" jdbcType="VARCHAR"/>
+        <result column="specificResources" property="specificResources" jdbcType="VARCHAR"/>
+        <result column="lnkScale" property="lnkScale" jdbcType="INTEGER"/>
+        <result column="closeDeveloper" property="closeDeveloper" jdbcType="VARCHAR"/>
+        
+        <result column="undertakeTypeName" property="undertakeTypeName" jdbcType="VARCHAR"/>
+        <result column="channelTypeName" property="channelTypeName" jdbcType="VARCHAR"/>
+        <result column="lnkScaleName" property="lnkScaleName" jdbcType="VARCHAR"/>
+        <result column="acCityNo" property="acCityNo" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		Id, CompanyNo, CompanyName, CompanyNamePinyin, StoreName,
+		SourceId,
+		IsDelete, DateCreate,
+		UserCreate, CityNo, acCityNo, DistrictNo, AreaNo,
+		Address, ContractType, CompanyScale,
+		PredictAccountCount,
+		OriginalVersions,CompanyStatus,longitude,latitude,FangyouCompanyId,
+		BusinessLicenseNo,LegalPerson,ContactNumber,
+		SelectOrgIdStr,openTime,businessLicenseNature,CompanyAddress,FangyouOpenStatus,
+		bizType,isGpSign,companyType,establishYear,dockingPeo,dockingPeoTel,storeNumber,comStaffNum,
+		channelType,undertakeType,resourcesRange,specificResources,lnkScale,closeDeveloper
+	</sql>
+
+    <!-- 查询-根据id -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>,
+        lnkScaleName=(SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode= lnkScale),channelTypeName=(SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode= channelType),
+			undertakeTypeName= STUFF(( SELECT ',' + bd.dicValue
+        FROM dbo.BAS_DictionaryValue bd
+        where PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + undertakeType + ',')>0
+        ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + undertakeType + ',')
+        FOR XML PATH('')), 1, 1,'')
+        FROM dbo.Company
+        WHERE isDelete=0 AND Id= #{id,jdbcType=INTEGER}
+    </select>
+
+	<!-- 查询-根据id -->
+    <select id="checkBusinessLicenseNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM dbo.Company
+        WHERE BusinessLicenseNo = #{BusinessLicenseNo,jdbcType=NVARCHAR}
+        AND IsDelete = 0
+    </select>
+
+    <select id="checkBusinessLicenseNoWX" resultMap="BaseResultMap" parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM dbo.Company
+        WHERE BusinessLicenseNo = #{businessLicenseNo,jdbcType=NVARCHAR}
+        <if test="checkCityNo!=null and checkCityNo!=''">
+            and AcCityNo = #{checkCityNo}
+        </if>
+        AND IsDelete = 0
+        ORDER BY Id DESC
+    </select>
+
+    <!-- 查询 list -->
+	<select id="queryList" parameterType="Map" resultMap="BaseResultMap">
+		SELECT
+		DISTINCT c.Id ,
+		c.CompanyNo ,
+		c.CompanyName ,
+		c.CompanyNamePinyin ,
+		c.StoreName ,
+		c.SourceId ,
+		c.IsDelete ,
+		c.DateCreate ,
+		c.UserCreate ,
+		c.CityNo ,
+		c.DistrictNo ,
+		c.AreaNo ,
+		c.Address ,
+		c.ContractType ,
+		c.CompanyScale ,
+		c.PredictAccountCount ,
+		c.OriginalVersions ,
+		c.CompanyStatus ,
+		c.longitude ,
+		c.latitude ,
+		c.FangyouCompanyId ,
+		isNull(s.storeCount,0) AS storeCount
+		FROM dbo.Company c		
+		<if test="auth != 1">
+			LEFT JOIN CompanyStore cs ON c.id=cs.CompanyId and cs.isDelete=0
+			LEFT JOIN  Store st on cs.storeId=st.id and st.isDelete=0
+			LEFT JOIN  Usr_user u on st.maintainer=u.userCode and u.delFlag='N'
+		</if>
+		
+		LEFT JOIN (
+			SELECT COUNT(CompanyId) storeCount,CompanyId FROM dbo.CompanyStore cs WHERE 
+			cs.IsDelete = 0 GROUP BY cs.CompanyId 
+		) s on s.CompanyId=c.Id
+		
+		<where>
+			c.IsDelete=0	
+			<!-- 特殊的角色自己所在城市的所以公司都可看-->
+			<if test="cityNo != null and cityNo != ''">
+					AND c.acCityNO = #{cityNo}
+			</if>	
+			<if test="auth != 1">
+				<if test="userCreate != null and userCreate != ''">
+					AND  (c.userCreate=#{userCreate} or u.userId=#{userCreate})
+				</if>
+			</if>
+			
+			<if test="companyNo != null and companyNo != ''">
+				<![CDATA[AND c.CompanyNo LIKE '%' + RTrim(LTrim('${companyNo}')) + '%']]>
+			</if>
+			<if test="companyName != null and companyName != ''">
+				<![CDATA[AND c.CompanyName LIKE '%' + RTrim(LTrim('${companyName}')) + '%']]>
+			</if>
+			<!-- 营业执照 -->
+			<if test="businessLicenseNo != null and businessLicenseNo !=''">
+			    <![CDATA[AND c.BusinessLicenseNo = RTrim(LTrim(#{businessLicenseNo,jdbcType=VARCHAR}))]]>
+			</if>
+			<!-- 公司状态 -->
+			<if test="companyStatus != null and companyStatus != ''">
+				<![CDATA[
+					AND c.companyStatus = #{companyStatus}
+				]]>
+			</if>
+		</where>
+    </select>   
+    
+        <!-- 查询 list -->
+	<select id="queryListSearsh" parameterType="Map" resultMap="BaseResultMap">
+		SELECT * FROM (
+			SELECT 
+				<if test="switchType != null and switchType != '' and switchType != '0'.toString()">
+				te2.*,
+				</if>
+				te1.* 
+				FROM (SELECT
+					c.Id ,
+					c.CompanyNo ,
+					c.CompanyName ,
+					c.CompanyNamePinyin ,
+					c.StoreName ,
+					c.SourceId ,
+					c.IsDelete ,
+					c.DateCreate ,
+					c.UserCreate ,
+					c.CityNo ,
+					c.DistrictNo ,
+					c.AreaNo ,
+					c.Address ,
+					c.ContractType ,
+					c.CompanyScale ,
+					c.PredictAccountCount ,
+					c.OriginalVersions ,
+					c.CompanyStatus ,
+					c.longitude ,
+					c.latitude ,
+					c.FangyouCompanyId ,
+			        c.bizType,
+					COUNT(cs.companyId)  AS storeCount
+					FROM dbo.Company c		
+					LEFT JOIN CompanyStore cs
+                           ON c.id=cs.CompanyId and cs.isDelete=0
+                          AND EXISTS(SELECT id FROM dbo.Store st WHERE cs.StoreId = st.id AND st.IsDelete = 0
+                                         AND st.AcCityNo =#{cityNo,jdbcType=VARCHAR})
+			        LEFT JOIN BAS_City bc ON c.CityNo = bc.CityNo
+			        LEFT JOIN BAS_District bd ON c.DistrictNo = bd.DistrictNo
+					<if test="auth != 1">
+						LEFT JOIN  Store st on cs.storeId=st.id and st.isDelete=0
+						LEFT JOIN  Usr_user u on st.maintainer=u.userCode and u.delFlag='N'
+					</if>	
+					WHERE c.IsDelete=0	 
+						<if test="switchType == '2'.toString()">
+									 AND c.companyType IN(23501,23503)
+						</if>
+						<!-- 特殊的角色自己所在城市的所以公司都可看-->
+						<if test="cityNo != null and cityNo != ''">
+								AND (c.acCityNO = #{cityNo,jdbcType=VARCHAR}
+                                        OR EXISTS(SELECT rc.ReleaseCityNo FROM dbo.Company_Release_City rc
+                                                     WHERE rc.IsDelete = 0
+                                                       AND c.id = rc.CompanyId
+                                                       AND rc.ReleaseCityNo = #{cityNo,jdbcType=VARCHAR}))
+						</if>	
+						<if test="auth != 1">
+							<if test="userCreate != null and userCreate != ''">
+								AND  (c.userCreate=#{userCreate} or u.userId=#{userCreate})
+							</if>
+						</if>
+						
+						<if test="companyNo != null and companyNo != ''">
+							<![CDATA[AND c.CompanyNo LIKE '%' + RTrim(LTrim('${companyNo}')) + '%']]>
+						</if>
+						<if test="companyName != null and companyName != ''">
+							<![CDATA[AND c.CompanyName LIKE '%' + RTrim(LTrim('${companyName}')) + '%']]>
+						</if>
+						<!-- 营业执照 -->
+						<if test="businessLicenseNo != null and businessLicenseNo !=''">
+						    <![CDATA[AND c.BusinessLicenseNo = RTrim(LTrim(#{businessLicenseNo,jdbcType=VARCHAR}))]]>
+						</if>
+						<!-- 公司状态 -->
+						<if test="companyStatus != null and companyStatus != ''">
+							<![CDATA[
+								AND c.companyStatus = #{companyStatus}
+							]]>
+						</if>
+			            <if test="address != null and address != ''">
+			                <![CDATA[
+			                        AND CONCAT(bc.CityName,bd.DistrictName,c.Address) LIKE '%' + RTrim(LTrim('${address}')) + '%'
+			                    ]]>
+			            </if>
+			            <if test="bizType != null and bizType != ''">
+			                <![CDATA[
+			                        AND c.bizType LIKE CONCAT('%',#{bizType},'%')
+			                    ]]>
+			            </if>
+					GROUP BY c.Id ,
+			                    c.CompanyNo ,
+			                    c.CompanyName ,
+			                    c.CompanyNamePinyin ,
+			                    c.StoreName ,
+			                    c.SourceId ,
+			                    c.IsDelete ,
+			                    c.DateCreate ,
+			                    c.UserCreate ,
+			                    c.CityNo ,
+			                    c.DistrictNo ,
+			                    c.AreaNo ,
+			                    c.Address ,
+			                    c.ContractType ,
+			                    c.CompanyScale ,
+			                    c.PredictAccountCount ,
+			                    c.OriginalVersions ,
+			                    c.CompanyStatus ,
+			                    c.longitude ,
+			                    c.latitude ,
+			                    c.FangyouCompanyId,
+			                    c.bizType) te1
+								<if test="switchType != null and switchType != '' and switchType != '0'.toString()">
+									LEFT JOIN (SELECT * FROM (SELECT 
+											T1.ContractType AS contractType2,
+											cs.companyId as companyId2
+											,COUNT(cs.companyId)  AS storeCount2
+									FROM    Store T1
+											INNER JOIN ContractStore T2 ON T1.Id = T2.StoreId
+																		   AND T2.IsDelete = 0
+											INNER JOIN Contract T3 ON T2.ContractId = T3.Id
+																	  AND T3.ContractStatus = 10403
+																	  AND T3.DateLifeEnd > GETDATE()
+											INNER JOIN dbo.CompanyStore cs ON cs.StoreId = T1.Id
+																			  AND cs.IsDelete = 0
+																			  AND T3.CompanyId = cs.CompanyId
+									WHERE   1 = 1
+											AND T1.ContractType = 10302
+											GROUP BY cs.companyId,T1.ContractType) tem WHERE tem.storeCount2 >0) te2 ON te1.Id = te2.companyId2
+							</if>
+							where 1=1 
+		) te3 WHERE 1=1  
+		<if test="switchType == '2'.toString()">
+			AND te3.contractType2 IS NULL 
+		</if>
+		<if test="switchType == '1'.toString()">
+			AND te3.contractType2 IS NOT NULL 
+		</if>
+    </select>
+
+
+    <!-- 新增 -->
+    <insert id="create" parameterType="cn.com.eju.deal.company.model.Company"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Company
+        (
+        CompanyNo, CompanyName,CompanyNamePinyin,
+        StoreName,
+        SourceId,
+        IsDelete, DateCreate, UserCreate,
+        CityNo, DistrictNo, AreaNo,Address,
+        ContractType, CompanyScale,
+        PredictAccountCount,
+        OriginalVersions,CompanyStatus,
+        Longitude,Latitude,FangyouCompanyId,inputSource,
+        BusinessLicenseNo,LegalPerson,ContactNumber,
+       	SelectOrgIdStr
+        )
+        VALUES
+        (
+        #{companyNo,jdbcType=NVARCHAR},
+        #{companyName,jdbcType=NVARCHAR},
+        #{companyNamePinyin,jdbcType=VARCHAR},
+        #{storeName,jdbcType=INTEGER},
+        #{sourceId,jdbcType=INTEGER},
+        
+        0, GETDATE(),#{userCreate,jdbcType=INTEGER},
+        #{cityNo,jdbcType=NVARCHAR},#{districtNo,jdbcType=NVARCHAR},#{areaNo,jdbcType=NVARCHAR},#{address,jdbcType=NVARCHAR},
+        #{contractType,jdbcType=INTEGER},
+        #{companyScale,jdbcType=INTEGER},
+        #{predictAccountCount,jdbcType=INTEGER},
+        #{originalVersions,jdbcType=NVARCHAR},
+        #{companyStatus,jdbcType=INTEGER},
+        #{longitude,jdbcType=FLOAT},#{latitude,jdbcType=FLOAT},
+        #{fangyouCompanyId,jdbcType=NVARCHAR},#{inputSource,jdbcType=NVARCHAR},
+        #{businessLicenseNo,jdbcType=NVARCHAR},#{legalPerson,jdbcType=NVARCHAR},#{contactNumber,jdbcType=NVARCHAR},
+        #{selectOrgIdStr,jdbcType=NVARCHAR}
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="cn.com.eju.deal.company.model.Company">
+        UPDATE Company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyNo != null">
+                CompanyNo = #{companyNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="companyName != null">
+                CompanyName = #{companyName,jdbcType=NVARCHAR},
+            </if>
+            <if test="companyNamePinyin != null">
+                CompanyNamePinyin =
+                #{companyNamePinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="storeName != null">
+                StoreName = #{storeName,jdbcType=INTEGER},
+            </if>
+            <if test="sourceId != null">
+                SourceId = #{sourceId,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                IsDelete = #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="dateCreate != null">
+                DateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userCreate != null">
+                UserCreate = #{userCreate,jdbcType=INTEGER},
+            </if>
+            <if test="cityNo != null">
+                CityNo = #{cityNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="districtNo != null">
+                DistrictNo = #{districtNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="areaNo != null">
+                AreaNo = #{areaNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="address != null">
+                Address = #{address,jdbcType=NVARCHAR},
+            </if>
+            <if test="contractType != null">
+                ContractType = #{contractType,jdbcType=INTEGER},
+            </if>
+            <if test="companyScale != null">
+                CompanyScale = #{companyScale,jdbcType=INTEGER},
+            </if>
+            <if test="predictAccountCount != null">
+                PredictAccountCount =
+                #{predictAccountCount,jdbcType=INTEGER},
+            </if>
+            <if test="originalVersions != null">
+                OriginalVersions = #{originalVersions,jdbcType=NVARCHAR},
+            </if>
+            <if test="companyStatus != null">
+                CompanyStatus = #{companyStatus,jdbcType=INTEGER},
+            </if>
+            <if test="longitude != null">
+                Longitude = #{longitude,jdbcType=FLOAT},
+            </if>
+            <if test="latitude != null">
+                Latitude = #{latitude,jdbcType=FLOAT},
+            </if>
+            <if test="businessLicenseNo != null">
+                BusinessLicenseNo = #{businessLicenseNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="legalPerson != null">
+                LegalPerson = #{legalPerson,jdbcType=NVARCHAR},
+            </if>
+            <if test="contactNumber != null">
+                ContactNumber = #{contactNumber,jdbcType=NVARCHAR},
+            </if>
+            <if test="openTime != null">
+                openTime = #{openTime,jdbcType=TIMESTAMP},
+            </if>    
+            <if test="userUpdate != null">
+                UserUpdate = #{userUpdate,jdbcType=INTEGER},
+                DateUpdate = getDate(),
+            </if>
+            <if test="bizType != null">
+                bizType = #{bizType,jdbcType=VARCHAR},
+            </if>
+            <if test="isGpSign != null">
+                isGpSign = #{isGpSign,jdbcType=INTEGER},
+            </if>
+            <if test="companyType != null">
+                companyType = #{companyType,jdbcType=INTEGER},
+            </if>
+        </trim>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 逻辑删除 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        UPDATE Company
+        SET
+        IsDelete = 1
+        where Id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- 根据门店Id查询所属公司 -->
+    <select id="getCompanyByStoreId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT  c.*
+	FROM dbo.Company c
+	LEFT JOIN dbo.CompanyStore cs ON c.Id = cs.CompanyId AND cs.IsDelete = 0
+	WHERE c.IsDelete=0 AND cs.StoreId=#{storeId,jdbcType=INTEGER}
+  </select>
+
+    <!-- 用户合同 查询可关联的公司 list,自己只能查看自己的客户 -->
+	<select id="queryOwnList" parameterType="Map" resultMap="BaseResultMap">
+		SELECT DISTINCT c.Id ,
+		c.CompanyNo ,
+		c.CompanyName ,
+		c.CompanyNamePinyin ,
+		c.StoreName ,
+		c.SourceId ,
+		c.IsDelete ,
+		c.DateCreate ,
+		c.UserCreate ,
+		c.CityNo ,
+		c.DistrictNo ,
+		c.AreaNo ,
+		c.Address ,
+		c.ContractType ,
+		c.CompanyScale ,
+		c.PredictAccountCount ,
+		c.OriginalVersions ,
+		c.CompanyStatus ,
+		c.longitude ,
+		c.latitude ,
+		c.FangyouCompanyId ,
+		c.businessLicenseNo ,
+		c.legalPerson,c.contactNumber
+		FROM dbo.Company c
+		
+		<!-- 可查看自己创建的公司,和公司绑定的门店的最新维护人是自己   -->
+		<if test="auth != 1">
+			INNER JOIN CompanyStore cs ON c.id=cs.CompanyId and cs.isDelete=0
+			INNER JOIN  Store st on cs.storeId=st.id and st.isDelete=0
+			INNER JOIN  Usr_user u on st.maintainer=u.userCode and u.delFlag='N'
+		</if>
+		<where>
+			 c.IsDelete=0
+			 
+			 <!-- 特殊的角色自己所在城市的所以公司都可看-->
+			<!-- <if test="cityNo != null and cityNo != ''">
+					AND c.accityNO = #{cityNo}
+			</if> -->
+			
+			<if test="cityNoList != null and cityNoList.size > 0">
+				and ( c.accityNO in
+                        <foreach collection="cityNoList" index="index" item="item" open="(" separator="," close=")">
+                            #{item,jdbcType=NVARCHAR}
+                        </foreach>
+                          <if test="type != null and type=='fromLinkage'">
+                                OR EXISTS(SELECT rc.ReleaseCityNo FROM dbo.Company_Release_City rc
+                                                WHERE rc.IsDelete = 0
+                                                AND c.id = rc.CompanyId
+                                                AND rc.ReleaseCityNo in
+                                                    <foreach collection="cityNoList" index="index" item="item" open="(" separator="," close=")">
+                                                        #{item,jdbcType=NVARCHAR}
+                                                    </foreach>
+                                           )
+                          </if>
+                 )
+
+			</if>
+			
+			<if test="auth != 1">
+				<if test="userCreate != null and userCreate != ''">
+					AND  (c.userCreate=#{userCreate} or u.userId=#{userCreate})
+				</if>
+			</if>
+			
+            <if test="companyNo != null and companyNo != ''">
+                <![CDATA[AND c.CompanyNo LIKE '%' + RTrim(LTrim('${companyNo}')) + '%']]>
+            </if>
+            <if test="companyName != null and companyName != ''">
+                <![CDATA[AND c.CompanyName LIKE '%' + RTrim(LTrim('${companyName}')) + '%']]>
+            </if>
+            <if test="storeName != null and storeName != ''">
+                <![CDATA[AND c.StoreName LIKE '%${storeName}%']]>
+            </if>
+			
+            <if test="companyStatus != null  and companyStatus != 0">
+                <![CDATA[AND (c.CompanyStatus = #{companyStatus,jdbcType=INTEGER}  or c.CompanyStatus is NUll) ]]>
+            </if>
+            
+            <if test="sourceId != null and sourceId != ''">
+                <![CDATA[AND c.SourceId = #{sourceId, jdbcType=INTEGER} ]]>
+            </if>
+            <if test="contractType != null and contractType != ''">
+                <![CDATA[AND c.ContractType = #{contractType, jdbcType=INTEGER} ]]>
+            </if>
+
+            <if test="dateCreateFrom != null and dateCreateFrom != '' and dateCreateTo !=null and dateCreateTo !=''">
+                <![CDATA[AND c.DateCreate BETWEEN #{dateCreateFrom,jdbcType=TIMESTAMP} AND #{dateCreateTo,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="oldCompanyId != null and oldCompanyId  != ''">
+                AND c.id != #{oldCompanyId, jdbcType=INTEGER} 
+            </if>
+            <if test="isGpSign != null">
+                AND c.isGpSign = #{isGpSign,jdbcType=INTEGER}
+            </if>
+
+        </where>
+    </select>
+    
+    <!-- 查询-根据name -->
+    <select id="getCompanyByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM dbo.Company
+        WHERE isDelete=0 AND companyName= #{name,jdbcType=NVARCHAR}
+    </select>
+    
+    <!-- 查询-根据FangyouCompanyId -->
+    <select id="getCompanyByFyCompanyId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM dbo.Company
+        WHERE isDelete=0 AND fangyouCompanyId= #{fangyouCompanyId,jdbcType=NVARCHAR}
+    </select>
+    
+    <!-- 查询-根据CompanyName模糊查询 -->
+    <select id="getCompanyByNameFuzzy" resultMap="BaseResultMap" parameterType="Map">
+        SELECT
+        	T1.*
+        FROM    dbo.Company T1
+        LEFT JOIN dbo.Contacts T2 ON T1.Id = T2.CompanyId
+                                     AND T2.IsDelete = 0
+		WHERE   T1.isDelete = 0
+        <if test="companyName != null and companyName != ''">
+        	<![CDATA[AND T1.companyName LIKE '%${companyName}%']]>
+        </if>
+        <if test="contactsName != null and contactsName != ''">
+        	<![CDATA[AND T2.name LIKE '%${contactsName}%']]>
+        </if>
+        <if test="mobilePhone != null and mobilePhone != ''">
+        	<![CDATA[AND T2.mobilePhone LIKE '%${mobilePhone}%']]>
+        </if>
+        <if test="cityNo != null and cityNo != ''">
+        	<![CDATA[AND T1.cityNo = #{cityNo,jdbcType=VARCHAR}]]>
+        </if>
+        
+    </select>
+    
+     <!-- 查询-根据多个公司编码查询公司 -->
+    <select id="getCompanyByNOs" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM dbo.Company
+        WHERE isDelete=0 AND companyNo IN  (${_parameter})
+    </select>
+    
+    <!-- 根据公司编号companyNo 查询公司信息 -->
+    <select id="getByNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT  id AS id ,
+                CompanyNo AS companyNo ,
+                CompanyName AS companyName ,
+                CityNo AS cityNo ,
+                DistrictNo AS districtNo ,
+                AreaNo AS areaNo ,
+                Address AS address ,
+                Longitude AS longitude ,
+                Latitude AS latitude ,
+                FangyouCompanyId AS fangyouCompanyId ,
+                BusinessLicenseNo AS businessLicenseNo ,
+                LegalPerson AS legalPerson ,
+                ContactNumber AS contactNumber,
+                FangyouOpenStatus AS fangyouOpenStatus
+        FROM dbo.Company
+        WHERE isDelete=0 AND companyNo = #{companyNo}
+    </select>
+    
+	<!-- OP返回判定接口, 【公司表】的【房友账号开通状态】变为：1已开通-->
+	<update id="updateFangyouOpenStatus" parameterType="java.lang.String">
+		UPDATE Company 
+		SET FangyouOpenStatus=1 
+		WHERE CompanyNo=#{companyNo,jdbcType=NVARCHAR} 
+    </update>
+    <!-- 查询名字是否重复 -->
+    <select id="queryCompanyName" resultType="cn.com.eju.deal.company.model.Company" parameterType="java.util.Map">
+		 SELECT   
+        	CompanyNo as companyNo,CompanyName as companyName
+		 FROM  
+		 	dbo.Company
+         WHERE isDelete=0 and
+         	CompanyName = #{companyName,jdbcType=VARCHAR}
+    </select>   
+</mapper>

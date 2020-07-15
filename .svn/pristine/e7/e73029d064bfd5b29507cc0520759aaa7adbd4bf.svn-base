@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.feeback.dao.FeebackMapper" >
+<resultMap id="BaseResultMap" type="cn.com.eju.deal.feeback.model.Feeback">
+	<id column="feebackId" property="feebackId" jdbcType="INTEGER" />
+	<result column="feebackNo" property="feebackNo" jdbcType="VARCHAR" />
+	<result column="feebackTitle" property="feebackTitle" jdbcType="NVARCHAR" />
+	<result column="feebackContent" property="feebackContent" jdbcType="NVARCHAR" />
+	<result column="userId" property="userId" jdbcType="INTEGER" />
+	<result column="userName" property="userName" jdbcType="NVARCHAR" />
+	<result column="userCode" property="userCode" jdbcType="VARCHAR" />
+	<result column="cellphone" property="cellphone" jdbcType="VARCHAR" />
+	<result column="feebackTime" property="feebackTime" jdbcType="TIMESTAMP" />
+	<result column="replyStatus" property="replyStatus" jdbcType="INTEGER" />
+	<result column="delFlag" property="delFlag" jdbcType="CHAR" />
+	<result column="replyUserId" property="replyUserId" jdbcType="INTEGER" />
+	<result column="replyTime" property="replyTime" jdbcType="TIMESTAMP" />
+	<result column="replyDetail" property="replyDetail" jdbcType="NVARCHAR" />
+	<result column="systemCode" property="systemCode" jdbcType="INTEGER" />
+</resultMap>
+
+<insert id="create" parameterType="cn.com.eju.deal.feeback.model.Feeback"
+	useGeneratedKeys="true" keyProperty="feebackId">
+	INSERT INTO OMS.dbo.USR_Feeback (
+		feebackNo
+		,feebackTitle
+		,feebackContent
+		,userId
+		,userName
+		,userCode
+	    ,cellphone
+	    ,replyStatus
+	    ,systemCode)
+	VALUES (
+		#{feebackNo}
+		,#{feebackTitle}
+		,#{feebackContent}
+		,#{userId}
+		,#{userName}
+		,#{userCode}
+		,#{cellphone}
+		,#{replyStatus}
+		,#{systemCode})
+</insert>
+</mapper>

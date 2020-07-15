@@ -1,0 +1,40 @@
+package cn.com.eju.pmls.performswitch.dto;
+
+import cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeek;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 开关记录model
+ */
+public class PmlsPerformSwitchWeekDto extends PmlsPerformSwitchWeek  implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 城市名称
+     */
+    private String cityName;
+
+    private String switchState;
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getSwitchState() {
+        return switchState;
+    }
+
+    public void setSwitchState(String switchState) {
+        this.switchState = switchState;
+    }
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.OaContractChangeReturnMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.OaContractChangeReturn">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="changeType" property="changeType" jdbcType="VARCHAR" />
+		<result column="oaNo" property="oaNo" jdbcType="VARCHAR" />
+		<result column="flowId" property="flowId" jdbcType="VARCHAR" />
+		<result column="approveStatus" property="approveStatus" jdbcType="INTEGER" />
+		<result column="approveDate" property="approveDate" jdbcType="TIMESTAMP" />
+		<result column="hasDeal" property="hasDeal" jdbcType="INTEGER" />
+		<result column="dealDesc" property="dealDesc" jdbcType="NVARCHAR" />
+		<result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, changeType,oaNo, flowId, approveStatus, approveDate, hasDeal, dealDesc,dateUpdate, dateCreate
+	</sql>
+
+	<!-- 获取未处理的合同终止和合同变更OA审批结果 -->
+	<select id="getOaContractChangeReturn" resultMap="BaseResultMap">
+		SELECT  * 
+		FROM   OaContractChangeReturn
+   	    WHERE  hasDeal = 0 AND changeType in ('ZZ','BG')
+	</select>
+
+	<select id="getOaContractCancelReturn" resultMap="BaseResultMap">
+		SELECT  *
+		FROM   OaContractChangeReturn
+		WHERE  hasDeal = 0 AND changeType = 'CX'
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updateOaContractChangeReturn" parameterType="cn.com.eju.deal.contract.model.OaContractChangeReturn">
+		UPDATE OaContractChangeReturn
+		<set>
+			<if test="hasDeal != null">
+				hasDeal = #{hasDeal,jdbcType=INTEGER},
+			</if>
+			<if test="dateUpdate != null">
+				dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where 
+			FlowId = #{flowId,jdbcType=NVARCHAR} and
+			oaNo = #{oaNo,jdbcType=NVARCHAR}
+	</update>
+</mapper>

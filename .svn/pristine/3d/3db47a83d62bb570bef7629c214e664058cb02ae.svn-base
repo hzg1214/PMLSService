@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.lnkAchievementSum.dao.LnkAchievementSumMapper">
+  <!-- 联动业绩汇总列表 -->
+  <select id="queryLnkAchievementSumList" resultType="cn.com.eju.deal.houseLinkage.lnkAchievementSum.model.LnkAchievementSumDto" parameterType="Map">
+  	 	--主表数据
+		SELECT
+			   --项目信息
+			   t8.regionCode,--项目归属区域编号
+			   t8.regionName,--项目归属区域名称
+			   t8.areaCityCode,--项目归属城市编号
+			   t8.areaCityName,--项目归属城市名称
+			   t6.CityNo as cityNo,--项目所在城市编号
+			   t6.CityName as cityName,--项目所在城市名称
+			   ISNULL(t9.groupId, -1) centerGroupId, --项目所在部门ID
+			   ISNULL(t9.groupName, '') centerGroupName, --项目所在部门名称
+	
+			   t1.cityGroupId,	--报备归属城市ID
+			   t1.cityGroupName, --报备归属城市名称
+			   t1.centerGroupId AS performCenterId, --报备归属中心ID
+			   t1.centerGroupName AS performCenterName,--报备归属中心名称
+			   t2.projectNo,  --项目编号
+			   t1.EstateNm AS projectName, --项目名称
+	
+			   --门店信息
+			   t1.expenderCode,  --业绩归属人工号
+			   t1.expenderName, --业绩归属人姓名
+			   t3.StoreNo AS storeNo,	--门店编号
+			   t3.name AS storeName, --门店名称
+			   t4.DistrictName as districtName, --门店区域
+			   CASE WHEN t3.ContractType IN(10302,10304) THEN '房友门店' ELSE '非房友门店' END storeType, --门店类别
+			   --公司信息
+			   t5.CompanyId as companyId, --公司编号
+			   t5.CompanyNm as companyNm, --公司名称
+			   --业绩信息
+			   t1.ReportId--报备编号
+			   INTO #base
+		FROM dbo.V_CRM_LinkDetail_Achievement t1
+			INNER JOIN dbo.LNK_Estate t2 ON t1.EstateId=t2.EstateId AND t2.DelFlg=0
+			INNER JOIN dbo.Store t3 ON t1.storeId=t3.id AND t3.IsDelete=0
+			INNER JOIN dbo.BAS_District t4 ON t3.DistrictNo=t4.DistrictNo AND t4.FlagDeleted=0
+			INNER JOIN dbo.LNK_Report t5 ON t1.ReportId=t5.ReportId AND t5.DelFlg = 0
+			INNER JOIN dbo.BAS_City t6 ON t2.realityCityNo=t6.CityNo AND t6.FlagDeleted = 0 
+			INNER JOIN dbo.BAS_City t7 ON t2.CityNo=t7.CityNo  AND t7.FlagDeleted = 0 
+			INNER JOIN (
+				SELECT DISTINCT regionCode, regionName, areaCityCode, areaCityName, cityId, cityGroupId, cityGroupName FROM dbo.V_USR_OrgHis WHERE yearly = #{organization} /*此处为选择的架构年*/
+			) t8 ON t7.id=t8.cityId
+			INNER JOIN dbo.USR_Group t9 ON t2.projectDepartmentId=t9.groupId AND t9.delFlag = 'N'
+			WHERE 1=1 
+				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+				and (
+				(t1.ReportDate &gt;=#{startDate} AND t1.ReportDate&lt;=#{endDate} ) OR 
+				(t1.seeDate &gt;=#{startDate} AND t1.seeDate&lt;=#{endDate}) OR
+		        (t1.roughDate &gt;=#{startDate} AND t1.roughDate&lt;=#{endDate} ) OR
+		        (t1.dealDate &gt;=#{startDate} AND t1.dealDate&lt;=#{endDate})
+				)
+				</if>
+				<if test="companyCondition != null and companyCondition != ''">
+					AND (t5.CompanyNm  LIKE CONCAT('%', #{companyCondition},'%') OR
+					 t5.CompanyId  LIKE CONCAT('%', #{companyCondition},'%'))
+				</if>
+				<if test="storeCondition != null and storeCondition != ''">
+					AND (t3.StoreNo  LIKE CONCAT('%', #{storeCondition},'%') OR
+					 t3.name  LIKE CONCAT('%', #{storeCondition},'%'))
+				</if>
+				<if test="projectCondition != null and projectCondition != ''">
+					AND (t2.projectNo  LIKE CONCAT('%', #{projectCondition},'%') OR
+					 t1.EstateNm  LIKE CONCAT('%', #{projectCondition},'%'))
+				</if>
+				<if test="regionCodeStr != null and regionCodeStr != ''">
+					AND t8.regionCode in
+					<foreach collection="regionCodeStr.split(',')" item="item" index="index" open="("
+					separator="," close=")">
+					'${item}'
+					</foreach>
+				</if>
+				<if test="areaCityCodeStr != null and areaCityCodeStr != ''">
+					AND t8.areaCityCode in
+					<foreach collection="areaCityCodeStr.split(',')" item="item" index="index" open="("
+					separator="," close=")">
+					'${item}'
+					</foreach>
+				</if>
+				<if test="cityIdStr != null and cityIdStr != ''">
+					AND t6.id in
+					<foreach collection="cityIdStr.split(',')" item="item" index="index" open="("
+					separator="," close=")">
+					'${item}'
+					</foreach>
+				</if>
+				<if test="centerIdStr != null and centerIdStr != ''">
+					AND t1.centerGroupId in
+					<foreach collection="centerIdStr.split(',')" item="item" index="index" open="("
+					separator="," close=")">
+					'${item}'
+					</foreach>
+				</if>
+			  <if test="deptIdStr != null and deptIdStr != ''">
+				  AND t9.groupId in
+				  <foreach collection="deptIdStr.split(',')" item="item" index="index" open="("
+						   separator="," close=")">
+					  '${item}'
+				  </foreach>
+			  </if>
+	  			<if test="channelCondition != null and channelCondition != ''">
+					AND (t1.expenderName  LIKE CONCAT('%', #{channelCondition},'%') OR
+					t1.expenderName  LIKE CONCAT('%', #{channelCondition},'%'))
+				</if>
+				;
+				
+	SELECT s1.regionCode ,
+	       s1.regionName ,
+	       s1.areaCityCode ,
+	       s1.areaCityName ,
+	       s1.cityNo ,
+	       s1.cityName ,
+	       s1.centerGroupId ,
+	       s1.centerGroupName ,
+	       s1.cityGroupId ,
+	       s1.cityGroupName ,
+	       s1.performCenterId ,
+	       s1.performCenterName ,
+	       s1.projectNo ,
+	       s1.projectName ,
+	       s1.expenderCode ,
+	       s1.expenderName ,
+	       s1.StoreNo ,
+	       s1.storeName ,
+	       s1.districtName ,
+	       s1.storeType ,
+	       s1.companyId ,
+	       s1.companyNm ,
+	
+	       SUM(ISNULL(s2.num,0)) AS dq_bbNum ,
+	       SUM(ISNULL(s3.num,0)) AS dq_dkNum,
+	       SUM(ISNULL(s4.num,0)) AS dq_ddNum,
+	       SUM(ISNULL(s4.roughArea,0)) AS dq_ddArea,
+	       SUM(ISNULL(s4.roughAmount,0)) AS dq_ddAmount,
+	       SUM(ISNULL(s5.num,0)) AS dq_cxNum,
+	       SUM(ISNULL(s5.dealArea,0)) AS dq_cxArea,
+	       SUM(ISNULL(s5.dealAmount,0)) AS dq_cxAmount,
+	
+	       SUM(ISNULL(s6.num,0)) AS dn_bbNum,
+	       SUM(ISNULL(s7.num,0)) AS  dn_dkNum,
+	       SUM(ISNULL(s8.num,0)) AS dn_ddNum,
+	       SUM(ISNULL(s8.roughArea,0)) AS dn_ddArea,
+	       SUM(ISNULL(s8.roughAmount,0)) AS dn_ddAmount,
+	       SUM(ISNULL(s9.num,0)) AS dn_cxNum,
+	       SUM(ISNULL(s9.dealArea,0)) AS dn_cxArea,
+	       SUM(ISNULL(s9.dealAmount,0)) AS  dn_cxAmount,
+	
+	       SUM(ISNULL(s10.num,0)) AS lj_bbNum,
+	       SUM(ISNULL(s11.num,0)) AS lj_dkNum,
+	       SUM(ISNULL(s12.num,0)) AS lj_ddNum,
+	       SUM(ISNULL(s12.roughArea,0)) AS lj_ddArea,
+	       SUM(ISNULL(s12.roughAmount,0)) AS lj_ddAmount,
+	       SUM(ISNULL(s13.num,0)) AS lj_cxNum,
+	       SUM(ISNULL(s13.dealArea,0)) AS lj_cxArea,
+	       SUM(ISNULL(s13.dealAmount,0)) AS lj_cxAmount
+	 FROM #base s1
+	LEFT JOIN (
+		--当期累计
+		--当期报备数
+		SELECT ReportId,SUM(tsnum) AS num FROM V_CRM_LinkDetail_Achievement WHERE ReportDate &gt;=#{startDate} AND ReportDate &lt;=#{endDate} GROUP BY ReportId
+	) s2 ON s1.ReportId=s2.ReportId
+	LEFT JOIN (
+		--当期带看
+		SELECT ReportId,SUM(tsnum) AS num FROM V_CRM_LinkDetail_Achievement WHERE seeDate &gt;=#{startDate} AND seeDate &lt;=#{endDate} GROUP BY ReportId
+	) s3 ON s1.ReportId=s3.ReportId
+	LEFT JOIN (
+		--当期大定数（套数、面积、金额）
+		SELECT ReportId,SUM(tsnum) AS num,SUM(roughArea) AS roughArea,SUM(roughAmount) AS roughAmount FROM V_CRM_LinkDetail_Achievement WHERE roughDate &gt;=#{startDate} AND roughDate &lt;=#{endDate} GROUP BY ReportId
+	) s4 ON s1.ReportId=s4.ReportId
+	LEFT JOIN (
+		--当期成销数（套数、面积、金额）
+		SELECT ReportId,SUM(tsnum) AS num,SUM(dealArea) AS dealArea,SUM(dealAmount) AS dealAmount FROM V_CRM_LinkDetail_Achievement WHERE dealDate &gt;=#{startDate} AND dealDate &lt;=#{endDate} GROUP BY ReportId
+	) s5 ON s1.ReportId=s5.ReportId
+	
+	LEFT JOIN (
+		--当年累计
+		--报备数
+		SELECT ReportId,SUM(tsnum) AS num FROM V_CRM_LinkDetail_Achievement WHERE ReportDate &gt;=(#{yearStr}+'-01-01') AND ReportDate &lt;=(#{yearStr}+'-12-31') GROUP BY ReportId
+	) s6 ON s1.ReportId=s6.ReportId
+	LEFT JOIN (	
+		--当期带看
+		SELECT ReportId,SUM(tsnum) AS num FROM V_CRM_LinkDetail_Achievement WHERE seeDate &gt;=(#{yearStr}+'-01-01') AND seeDate &lt;=(#{yearStr}+'-12-31') GROUP BY ReportId
+	) s7 ON s1.ReportId=s7.ReportId
+	LEFT JOIN (	
+		--当期大定数（套数、面积、金额）
+		SELECT ReportId,SUM(tsnum) AS num,SUM(roughArea) AS roughArea,SUM(roughAmount) AS roughAmount FROM V_CRM_LinkDetail_Achievement WHERE roughDate &gt;(#{yearStr}+'-01-01') AND roughDate &lt;=(#{yearStr}+'-12-31') GROUP BY ReportId
+	) s8 ON s1.ReportId=s8.ReportId
+	LEFT JOIN (	
+		--当期成销数（套数、面积、金额）
+		SELECT ReportId,SUM(tsnum) AS num,SUM(dealArea) AS dealArea,SUM(dealAmount) AS dealAmount FROM V_CRM_LinkDetail_Achievement WHERE dealDate &gt;=(#{yearStr}+'-01-01') AND dealDate &lt;=(#{yearStr}+'-12-31') GROUP BY ReportId
+	) s9 ON s1.ReportId=s9.ReportId
+	
+	LEFT JOIN (
+		--总累计
+		--报备数
+		SELECT ReportId,SUM(tsnum) AS num FROM V_CRM_LinkDetail_Achievement WHERE ReportDate IS NOT NULL  GROUP BY ReportId
+	) s10 ON s1.ReportId=s10.ReportId
+	LEFT JOIN (	
+		--当期带看
+		SELECT ReportId,SUM(tsnum) AS num FROM V_CRM_LinkDetail_Achievement WHERE seeDate IS NOT NULL  GROUP BY ReportId
+	) s11 ON s1.ReportId=s11.ReportId
+	LEFT JOIN (		
+		--当期大定数（套数、面积、金额）
+		SELECT ReportId,SUM(tsnum) AS num,SUM(roughArea) AS roughArea,SUM(roughAmount) AS roughAmount FROM V_CRM_LinkDetail_Achievement WHERE roughDate IS NOT NULL GROUP BY ReportId
+	) s12 ON s1.ReportId=s12.ReportId
+	LEFT JOIN (		
+		--当期成销数（套数、面积、金额）
+		SELECT ReportId,SUM(tsnum) AS num,SUM(dealArea) AS dealArea,SUM(dealAmount) AS dealAmount FROM V_CRM_LinkDetail_Achievement WHERE dealDate IS NOT NULL  GROUP BY ReportId
+	) s13 ON s1.ReportId=s13.ReportId
+	
+	GROUP BY s1.regionCode ,
+	       s1.regionName ,
+	       s1.areaCityCode ,
+	       s1.areaCityName ,
+	       s1.cityNo ,
+	       s1.cityName ,
+	       s1.centerGroupId ,
+	       s1.centerGroupName ,
+	       s1.cityGroupId ,
+	       s1.cityGroupName ,
+	       s1.performCenterId ,
+	       s1.performCenterName ,
+	       s1.projectNo ,
+	       s1.projectName ,
+	       s1.expenderCode ,
+	       s1.expenderName ,
+	       s1.StoreNo ,
+	       s1.storeName ,
+	       s1.districtName ,
+	       s1.storeType ,
+	       s1.companyId ,
+	       s1.companyNm ;
+	DROP TABLE #base;
+  </select>
+	<select id="queryCityList" resultType="cn.com.eju.deal.houseLinkage.storedepositSerial.model.StoreDepositSerialDto">
+		SELECT DISTINCT
+			bcs.cityNo as acCityNo,bc.CityName as cityName
+		FROM CRM.dbo.BAS_CityAccountProject bcs
+			INNER JOIN CRM.dbo.BAS_City bc on bc.CityNo = bcs.cityNo and bc.FlagDeleted ='0'
+		WHERE bcs.delFlag = '0'
+	</select>
+	<select id="queryAccountProject" resultType="cn.com.eju.deal.houseLinkage.storedepositSerial.model.StoreDepositSerialDto">
+		SELECT 
+			distinct
+			bcs.accountProject,bcs.accountProjectCode
+		FROM CRM.dbo.BAS_CityAccountProject bcs
+		WHERE bcs.delFlag = '0' and
+			bcs.cityNo = #{storeAcCityNo,jdbcType=VARCHAR}
+	</select>
+</mapper>

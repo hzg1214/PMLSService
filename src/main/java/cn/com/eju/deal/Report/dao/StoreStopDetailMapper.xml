@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.Report.dao.StoreStopDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.Report.model.ExpandDetail" >
+
+    <result column="rowNum" property="rowNum" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="StoreId" property="StoreId" jdbcType="INTEGER" />
+    <result column="CityId" property="CityId" jdbcType="INTEGER" />
+    <result column="CityName" property="CityName" jdbcType="VARCHAR" />
+
+    <result column="PerformanceCityNo" property="PerformanceCityNo" jdbcType="VARCHAR" />
+    <result column="PerformanceCity" property="PerformanceCity" jdbcType="VARCHAR" />
+    <result column="PerformanceDepartmentNo" property="PerformanceDepartmentNo" jdbcType="VARCHAR" />
+    <result column="PerformanceDepartment" property="PerformanceDepartment" jdbcType="VARCHAR" />
+    <result column="PerformanceCenterNo" property="PerformanceCenterNo" jdbcType="VARCHAR" />
+    <result column="PerformanceCenter" property="PerformanceCenter" jdbcType="VARCHAR" />
+    <result column="PerformanceGroupNo" property="PerformanceGroupNo" jdbcType="VARCHAR" />
+    <result column="PerformanceGroup" property="PerformanceGroup" jdbcType="VARCHAR" />
+    <result column="PerformancePeople" property="PerformancePeople" jdbcType="VARCHAR" />
+    
+    <result column="CompanyNo" property="CompanyNo" jdbcType="VARCHAR" />
+    <result column="CompanyName" property="CompanyName" jdbcType="VARCHAR" />
+    <result column="Address" property="Address" jdbcType="VARCHAR" />
+    <result column="LegalPerson" property="LegalPerson" jdbcType="VARCHAR" />
+    <result column="BusinessLicenseCompanyAddress" property="BusinessLicenseCompanyAddress" jdbcType="VARCHAR" />
+    <result column="BusinessLicenseNo" property="BusinessLicenseNo" jdbcType="VARCHAR" />
+    <result column="businessLicenseType" property="businessLicenseType" jdbcType="VARCHAR" />
+    
+    <result column="StoreNo" property="StoreNo" jdbcType="VARCHAR" />
+    <result column="StoreName" property="StoreName" jdbcType="VARCHAR" />
+    <result column="DistrictNo" property="DistrictNo" jdbcType="VARCHAR" />
+    <result column="DistrictName" property="DistrictName" jdbcType="VARCHAR" />
+    <result column="StoreGroupName" property="StoreGroupName" jdbcType="VARCHAR" />
+    <result column="StoreSignSize" property="StoreSignSize" jdbcType="VARCHAR" />
+    <result column="AddressDetail" property="AddressDetail" jdbcType="VARCHAR" />
+    <result column="ABTypeStore" property="ABTypeStore" jdbcType="VARCHAR" />
+    <result column="Contacts" property="Contacts" jdbcType="VARCHAR" />
+    <result column="MobilePhone" property="MobilePhone" jdbcType="VARCHAR" />
+    <result column="nowUserSystem" property="nowUserSystem" jdbcType="VARCHAR" />
+    <result column="storeDueTime" property="storeDueTime" jdbcType="VARCHAR" />
+    <result column="storeLeaseDueTime" property="storeLeaseDueTime" jdbcType="VARCHAR" />
+    <result column="ChainSituation" property="ChainSituation" jdbcType="VARCHAR" />
+    <result column="ChainBrand" property="ChainBrand" jdbcType="VARCHAR" />
+    <result column="AgentNum" property="AgentNum" jdbcType="VARCHAR" />
+    <result column="MainBusiness" property="MainBusiness" jdbcType="VARCHAR" />
+    <result column="ExchangeMethod" property="ExchangeMethod" jdbcType="VARCHAR" />
+    <result column="storeInfoIntegrity" property="storeInfoIntegrity" jdbcType="VARCHAR" />
+    <result column="storeSignStatus" property="storeSignStatus" jdbcType="VARCHAR" />
+
+    <result column="ContractNo" property="ContractNo" jdbcType="VARCHAR" />
+    <result column="contractId" property="contractId" jdbcType="VARCHAR" />
+    <result column="contractStatus" property="contractStatus" jdbcType="VARCHAR" />
+    <result column="CooperateMode" property="CooperateMode" jdbcType="VARCHAR" />
+    
+    <result column="CompanyBankNo" property="CompanyBankNo" jdbcType="VARCHAR" />
+    <result column="AccountName" property="AccountName" jdbcType="VARCHAR" />
+    <result column="BankAccount" property="BankAccount" jdbcType="VARCHAR" />
+    <result column="PartyB" property="PartyB" jdbcType="VARCHAR" />
+    <result column="PartyBAddress" property="PartyBAddress" jdbcType="VARCHAR" />
+    <result column="AgreementNo" property="AgreementNo" jdbcType="VARCHAR" />
+    <result column="DateLifeStart" property="DateLifeStart" jdbcType="VARCHAR" />
+    <result column="DateLifeEnd" property="DateLifeEnd" jdbcType="VARCHAR" />
+    <result column="StoreCnt" property="StoreCnt" jdbcType="VARCHAR" />
+    <result column="newStoreCnt" property="newStoreCnt" jdbcType="VARCHAR" />
+    <result column="PenaltyFee" property="PenaltyFee" jdbcType="VARCHAR" />
+    <result column="DateCreate" property="DateCreate" jdbcType="VARCHAR" />
+    <result column="ContractdistinctionName" property="ContractdistinctionName" jdbcType="VARCHAR" />
+    <result column="PerformDate" property="PerformDate" jdbcType="VARCHAR" />
+    <result column="CancelDate" property="CancelDate" jdbcType="VARCHAR" />
+    <result column="DateUpdate" property="DateUpdate" jdbcType="VARCHAR" />
+    <result column="ContractCheckStatusName" property="ContractCheckStatusName" jdbcType="VARCHAR" />
+    <result column="Valid" property="Valid" jdbcType="VARCHAR" />
+    <result column="sortFlag" property="sortFlag" jdbcType="VARCHAR" />
+    <result column="sortName" property="sortName" jdbcType="VARCHAR" />
+
+    <result column="DepositFee" property="DepositFee" jdbcType="VARCHAR" />
+    <result column="ArrivalDepositFee" property="ArrivalDepositFee" jdbcType="VARCHAR" />
+    <result column="UncollectedAccount" property="UncollectedAccount" jdbcType="VARCHAR" />
+    <result column="DateArrivalAct" property="DateArrivalAct" jdbcType="VARCHAR" />
+    <result column="RefundAmount" property="RefundAmount" jdbcType="VARCHAR" />
+    <result column="RefundDate" property="RefundDate" jdbcType="VARCHAR" />
+
+    <result column="ReceivableMoney" property="ReceivableMoney" jdbcType="VARCHAR" />
+    <result column="AccountMoney" property="AccountMoney" jdbcType="VARCHAR" />
+    <result column="AccountDate" property="AccountDate" jdbcType="VARCHAR" />
+    <result column="OverDate" property="OverDate" jdbcType="VARCHAR" />
+    <result column="PlatformStatus" property="PlatformStatus" jdbcType="VARCHAR" />
+    
+    <result column="decorateCompany10" property="decorateCompany10" jdbcType="VARCHAR" />
+    <result column="oaMdysSumJsj10" property="oaMdysSumJsj10" jdbcType="VARCHAR" />
+    <result column="flipCompleDate10" property="flipCompleDate10" jdbcType="VARCHAR" />
+    
+    <result column="payedMoney10" property="payedMoney10" jdbcType="VARCHAR" />
+    <result column="firstMoney10" property="firstMoney10" jdbcType="VARCHAR" />
+    <result column="firstTime10" property="firstTime10" jdbcType="VARCHAR" />
+    <result column="secondMoney10" property="secondMoney10" jdbcType="VARCHAR" />
+    <result column="secondTime10" property="secondTime10" jdbcType="VARCHAR" />
+    <result column="thirdMoney10" property="thirdMoney10" jdbcType="VARCHAR" />
+    <result column="thirdTime10" property="thirdTime10" jdbcType="VARCHAR" />
+    
+    <result column="decorateCompany20" property="decorateCompany20" jdbcType="VARCHAR" />
+    <result column="mdfpApplicaDate" property="mdfpApplicaDate" jdbcType="VARCHAR" />
+    <result column="oaMdfpPassDate" property="oaMdfpPassDate" jdbcType="VARCHAR" />
+    <result column="flipApplicaCode" property="flipApplicaCode" jdbcType="VARCHAR" />
+    <result column="quotatnsubtotal" property="quotatnsubtotal" jdbcType="VARCHAR" />
+    <result column="standardQuotatn" property="standardQuotatn" jdbcType="VARCHAR" />
+    <result column="addQuotation" property="addQuotation" jdbcType="VARCHAR" />
+    <result column="flipCompleDate20" property="flipCompleDate20" jdbcType="VARCHAR" />
+    <result column="flipPassDate" property="flipPassDate" jdbcType="VARCHAR" />
+    <result column="flipAcceptaceNo" property="flipAcceptaceNo" jdbcType="VARCHAR" />
+    <result column="decorateStatus" property="decorateStatus" jdbcType="VARCHAR" />
+    <result column="decorateStatusName" property="decorateStatusName" jdbcType="VARCHAR" />
+    <result column="oaMdysSumJsj20" property="oaMdysSumJsj20" jdbcType="VARCHAR" />
+    <result column="oaMdysStandardJsj" property="oaMdysStandardJsj" jdbcType="VARCHAR" />
+    <result column="oaMdysAddJsj" property="oaMdysAddJsj" jdbcType="VARCHAR" />
+    
+    <result column="payedMoney20" property="payedMoney20" jdbcType="VARCHAR" />
+    <result column="firstMoney20" property="firstMoney20" jdbcType="VARCHAR" />
+    <result column="firstTime20" property="firstTime20" jdbcType="VARCHAR" />
+    <result column="secondMoney20" property="secondMoney20" jdbcType="VARCHAR" />
+    <result column="secondTime20" property="secondTime20" jdbcType="VARCHAR" />
+    <result column="thirdMoney20" property="thirdMoney20" jdbcType="VARCHAR" />
+    <result column="thirdTime20" property="thirdTime20" jdbcType="VARCHAR" />
+    
+    <result column="decorateCount" property="decorateCount" jdbcType="VARCHAR" />
+    <result column="decorateSum" property="decorateSum" jdbcType="VARCHAR" />
+        
+    <result column="userName" property="userName" jdbcType="VARCHAR" />
+    <result column="userCode" property="userCode" jdbcType="VARCHAR" />
+    <result column="StoreDateCreate" property="StoreDateCreate" jdbcType="VARCHAR" />
+    
+    <result column="ExpandCommissioner" property="ExpandCommissioner" jdbcType="VARCHAR" />
+    <result column="ExpandCommissionerNum" property="ExpandCommissionerNum" jdbcType="VARCHAR" />
+    <result column="ExpandManager" property="ExpandManager" jdbcType="VARCHAR" />
+    <result column="ExpandManagerNum" property="ExpandManagerNum" jdbcType="VARCHAR" />
+    <result column="HeadCenter" property="HeadCenter" jdbcType="VARCHAR" />
+    <result column="HeadCenterNum" property="HeadCenterNum" jdbcType="VARCHAR" />
+    
+    <result column="BusinessUnit" property="BusinessUnit" jdbcType="VARCHAR" />
+    <result column="groupName" property="groupName" jdbcType="VARCHAR" />
+    <result column="center" property="center" jdbcType="VARCHAR" />
+    <result column="maintainerName" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="dateMtcStart" property="dateMtcStart" jdbcType="VARCHAR" />
+    <result column="b2AContractNo" property="b2AContractNo" jdbcType="VARCHAR" />
+    <result column="b2ACompanyNo" property="b2ACompanyNo" jdbcType="VARCHAR" />
+    <result column="b2ACompanyName" property="b2ACompanyName" jdbcType="VARCHAR" />
+    <result column="b2ADateLifeStart" property="b2ADateLifeStart" jdbcType="VARCHAR" />
+    <result column="b2ADateLifeEnd" property="b2ADateLifeEnd" jdbcType="VARCHAR" />
+    <result column="b2APerformDate" property="b2APerformDate" jdbcType="VARCHAR" />
+    <result column="b2APerformancePeople" property="b2APerformancePeople" jdbcType="VARCHAR" />
+    <result column="reNewContractNo" property="reNewContractNo" jdbcType="VARCHAR" />
+    <result column="reNewDateLifeStart" property="reNewDateLifeStart" jdbcType="VARCHAR" />
+    <result column="reNewDateLifeEnd" property="reNewDateLifeEnd" jdbcType="VARCHAR" />
+    <result column="reNewPerformDate" property="reNewPerformDate" jdbcType="VARCHAR" />
+    <result column="reNewPerformancePeople" property="reNewPerformancePeople" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="searchStoreStopDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
+      EXEC P_CRM_RPT_ExpandDetail 'initialDate', '${dateStart}', '${dateEnd}', '', '', '', '', '', '${cityIdStr}', '', '${centerIdStr}', '', '', ${userId},''
+  </select>
+
+</mapper>

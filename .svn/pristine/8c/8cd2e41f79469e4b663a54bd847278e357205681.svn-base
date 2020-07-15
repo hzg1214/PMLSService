@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.store.dao.StoreReceiveMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.StoreReceive">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="receiveNo" jdbcType="VARCHAR" property="receiveNo" />
+    <result column="orderType" jdbcType="INTEGER" property="orderType" />
+    <result column="contractNo" jdbcType="VARCHAR" property="contractNo" />
+    <result column="feeType" jdbcType="INTEGER" property="feeType" />
+    <result column="receiveType" jdbcType="INTEGER" property="receiveType" />
+    <result column="totalAmount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="approveStatus" jdbcType="INTEGER" property="approveStatus" />
+    <result column="submitOaStatus" jdbcType="INTEGER" property="submitOaStatus" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="confirmTime" jdbcType="TIMESTAMP" property="confirmTime" />
+    <result column="flowId" jdbcType="VARCHAR" property="flowId" />
+    <result column="traceNo" jdbcType="VARCHAR" property="traceNo" />
+    <result column="oaNo" jdbcType="VARCHAR" property="oaNo" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt" />
+    <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+    <result column="bankCode" jdbcType="VARCHAR" property="bankCode" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+    <!-- 保证金收款查询新增字段 -->
+    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="oaStatusName" jdbcType="VARCHAR" property="oaStatusName" />
+    <result column="userName" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, receiveNo, orderType, contractNo, feeType, receiveType, totalAmount, approveStatus, 
+    submitOaStatus, status, confirmTime, flowId, traceNo,oaNo, dateCreate, userIdCreate, dateUpt, 
+    userIdUpt, delFlag,bankCode,bankName
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from store_receive
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from store_receive
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.store.model.StoreReceive">
+    insert into store_receive (id, receiveNo, orderType, 
+      contractNo, feeType, receiveType, 
+      totalAmount, approveStatus, submitOaStatus, 
+      status, confirmTime, flowId, 
+      traceNo,oaNo, dateCreate, userIdCreate, 
+      dateUpt, userIdUpt, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{receiveNo,jdbcType=VARCHAR}, #{orderType,jdbcType=INTEGER}, 
+      #{contractNo,jdbcType=VARCHAR}, #{feeType,jdbcType=INTEGER}, #{receiveType,jdbcType=INTEGER}, 
+      #{totalAmount,jdbcType=DECIMAL}, #{approveStatus,jdbcType=INTEGER}, #{submitOaStatus,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{confirmTime,jdbcType=TIMESTAMP}, #{flowId,jdbcType=VARCHAR}, 
+      #{traceNo,jdbcType=VARCHAR},#{oaNo,jdbcType=VARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{dateUpt,jdbcType=TIMESTAMP}, #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.store.model.StoreReceive" useGeneratedKeys="true" keyProperty="id">
+    insert into store_receive
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="receiveNo != null">
+        receiveNo,
+      </if>
+      <if test="orderType != null">
+        orderType,
+      </if>
+      <if test="contractNo != null">
+        contractNo,
+      </if>
+      <if test="feeType != null">
+        feeType,
+      </if>
+      <if test="receiveType != null">
+        receiveType,
+      </if>
+      <if test="totalAmount != null">
+        totalAmount,
+      </if>
+      <if test="approveStatus != null">
+        approveStatus,
+      </if>
+      <if test="submitOaStatus != null">
+        submitOaStatus,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="confirmTime != null">
+        confirmTime,
+      </if>
+      <if test="flowId != null">
+        flowId,
+      </if>
+      <if test="traceNo != null">
+        traceNo,
+      </if>
+      <if test="oaNo != null">
+        oaNo,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="dateUpt != null">
+        dateUpt,
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+        <if test="accountProject != null">
+            accountProject,
+        </if>
+        <if test="accountProjectCode != null">
+            accountProjectCode,
+        </if>
+        <if test="cityNo != null">
+            cityNo,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="receiveNo != null">
+        #{receiveNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="contractNo != null">
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="feeType != null">
+        #{feeType,jdbcType=INTEGER},
+      </if>
+      <if test="receiveType != null">
+        #{receiveType,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="approveStatus != null">
+        #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="submitOaStatus != null">
+        #{submitOaStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="confirmTime != null">
+        #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="traceNo != null">
+        #{traceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+        <if test="accountProject != null">
+            #{accountProject,jdbcType=NVARCHAR},
+        </if>
+        <if test="accountProjectCode != null">
+            #{accountProjectCode,jdbcType=NVARCHAR},
+        </if>
+        <if test="cityNo != null">
+            #{cityNo,jdbcType=NVARCHAR},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.store.model.StoreReceive">
+    update store_receive
+    <set>
+      <if test="receiveNo != null">
+        receiveNo = #{receiveNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        orderType = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="contractNo != null">
+        contractNo = #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="feeType != null">
+        feeType = #{feeType,jdbcType=INTEGER},
+      </if>
+      <if test="receiveType != null">
+        receiveType = #{receiveType,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null">
+        totalAmount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="approveStatus != null">
+        approveStatus = #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="submitOaStatus != null">
+        submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="confirmTime != null">
+        confirmTime = #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowId != null">
+        flowId = #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="traceNo != null">
+        traceNo = #{traceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null">
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="accountProject != null">
+        accountProject = #{accountProject,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProjectCode != null">
+        accountProjectCode = #{accountProjectCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="costCode != null">
+        costCode = #{costCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="costName != null">
+        costName = #{costName,jdbcType=NVARCHAR},
+      </if>
+      <if test="checkBodyId != null">
+        checkBodyId = #{checkBodyId,jdbcType=NVARCHAR},
+      </if>
+      <if test="checkBodyName != null">
+        checkBodyName = #{checkBodyName,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateRecorded != null">
+        dateRecorded = #{dateRecorded,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.store.model.StoreReceive">
+    update store_receive
+    set receiveNo = #{receiveNo,jdbcType=VARCHAR},
+      orderType = #{orderType,jdbcType=INTEGER},
+      contractNo = #{contractNo,jdbcType=VARCHAR},
+      feeType = #{feeType,jdbcType=INTEGER},
+      receiveType = #{receiveType,jdbcType=INTEGER},
+      totalAmount = #{totalAmount,jdbcType=DECIMAL},
+      approveStatus = #{approveStatus,jdbcType=INTEGER},
+      submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      confirmTime = #{confirmTime,jdbcType=TIMESTAMP},
+      flowId = #{flowId,jdbcType=VARCHAR},
+      traceNo = #{traceNo,jdbcType=VARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="storeReceiveDto" type="cn.com.eju.deal.dto.store.StoreReceiveDto"></resultMap>
+  <select id="getStoreReceiveList" resultMap="storeReceiveDto" parameterType="Map">
+  	SELECT 
+  		sr.id,
+  		--编号
+  		sr.receiveNo,
+  		--合同编号
+  		sr.contractNo,
+  		--金额
+  		ISNULL(sr.totalAmount,0) as totalAmount,
+  		--申请人
+		sr.userIdCreate,
+		us.userName,
+		--申请时间
+		sr.dateCreate,
+		--Oa申请状态
+		sr.submitOaStatus,
+		dv.dicValue as oaStatusName,
+		--公司名称
+		cy.CompanyName as companyName,
+		sr.receiveType,
+      (case when sr.receiveType = 17909 then '银行转账' when sr.toolCode = 18603 then '微信' when sr.toolcode = 18604 then '支付宝' else '支付宝/微信' end ) as receiveTypeNm,
+		--sr.status,
+      (select dicValue from BAS_DictionaryValue where dicCode = sr.feeType) as feeTypeNm,
+		sr.paySeq,
+        sr.approveStatus,
+        sr.flowId,
+		submitOaStatusNm = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = sr.submitOaStatus 
+				AND typeId = 212 AND delFlag = 'N' ),
+		sr.responseTime,
+      ( CASE WHEN ( SELECT    SUM(flag)
+              FROM      ( SELECT DISTINCT
+              sd.storeNo ,
+              CASE WHEN sd.receiveAmount
+              - sd.paymentAmount
+              - sd.paymentLockAmt >= srd.amount
+              THEN 0
+              ELSE 1
+              END AS flag
+              FROM      dbo.Store_Receive_Dtl srd
+              JOIN dbo.Store_Deposit sd ON srd.storeNo = sd.storeNo
+              WHERE     srd.receiveId = sr.id
+              ) kk
+              ) > 0 THEN 1
+              ELSE ( SELECT    MAX(srr.id)
+              FROM      Store_Receive_Reverse srr
+              WHERE     sr.id = srr.receiveId
+              AND srr.approveStatus != 21604
+              AND srr.submitOaStatus != 21204
+              AND srr.delFlag = '0'
+              )
+              END ) AS reverseId ,
+		status = (CASE WHEN sr.receiveType = 17909 THEN 50
+			        					  WHEN sr.receiveType = 17906  THEN sr.status
+			                              ELSE 50
+			                         END)
+		<if test="orderTypeFlag != null and orderTypeFlag != '' and  orderTypeFlag =='21402'.toString()">	                         
+			,srd.storeNo,
+			srd.storeName,
+			s.AddressDetail as addressDetail
+		</if>
+  	FROM 
+  		dbo.store_receive sr
+  		<if test="orderTypeFlag != null and orderTypeFlag != '' and  orderTypeFlag =='21401'.toString()"> 
+  			LEFT JOIN dbo.Contract ct on ct.ContractNo=sr.contractNo
+  			LEFT JOIN dbo.Company cy ON ct.CompanyId = cy.Id AND cy.IsDelete = 0 
+  		</if>
+  		LEFT JOIN crm.dbo.USR_User us on us.userId = sr.userIdCreate and us.delFlag = 'N'
+  		LEFT JOIN dbo.BAS_DictionaryValue dv ON sr.approveStatus = dv.dicCode
+		                                                    AND dv.typeId = 216
+		                                                    AND dv.delFlag = 'N'
+		<if test="orderTypeFlag != null and orderTypeFlag != '' and  orderTypeFlag =='21402'.toString()">                                                    
+			LEFT JOIN dbo.Store_Receive_Dtl srd on srd.id = (
+					SELECT max(id) from dbo.Store_Receive_Dtl
+				 		WHERE receiveId = sr.id  and delFlag = '0')
+			LEFT JOIN dbo.Store s on s.storeNo = srd.storeNo
+			LEFT JOIN dbo.CompanyStore cs on s.Id = cs.StoreId  and cs.IsDelete= 0
+			LEFT JOIN dbo.Company cy ON cs.CompanyId = cy.Id AND cy.IsDelete = 0 
+		</if>
+  	WHERE
+  		1=1 
+  		AND sr.delFlag = '0' 
+  		<if test="searchValues != null and searchValues != ''">
+			AND (	
+				sr.receiveNo LIKE CONCAT('%', #{searchValues},'%')
+				OR sr.contractNo  LIKE CONCAT('%', #{searchValues},'%')
+				OR ct.agreementNo LIKE CONCAT('%', #{searchValues},'%')
+				OR sr.oaNo LIKE CONCAT('%', #{searchValues},'%')
+			)
+		</if>
+  		<if test="searchValues2 != null and searchValues2 != ''">
+			AND (	
+				sr.receiveNo LIKE CONCAT('%', #{searchValues2},'%')
+				OR sr.oaNo LIKE CONCAT('%', #{searchValues2},'%')
+			)
+		</if>
+		<if test="orderTypeFlag != null and orderTypeFlag != ''">
+			   and sr.orderType = #{orderTypeFlag}
+			   <if test="orderTypeFlag =='21401'.toString()">
+			   		and ((sr.receiveType = 17906 and sr.status in (20,30)) or sr.receiveType = 17909)
+			   </if>
+		</if>
+		<if test="storeName != null and storeName != ''">
+			 AND (	
+				srd.storeNo LIKE CONCAT('%', #{storeName},'%')
+				OR srd.storeName  LIKE CONCAT('%', #{storeName},'%')
+				OR s.AddressDetail LIKE CONCAT('%', #{storeName},'%')
+			)
+		</if>
+		<if test="cityNo != null and cityNo != ''">
+			   and sr.cityNo= #{cityNo}
+		</if>
+		<if test="companyName != null and companyName != '' ">
+	        AND cy.companyName LIKE CONCAT('%', #{companyName},'%')
+	    </if>
+		<if test="status != null and status != '' ">
+	        and sr.receiveType = 17906 AND sr.status = #{status,jdbcType=INTEGER}
+	    </if>
+		<if test="userName != null and userName != '' ">
+	        AND us.userName  LIKE CONCAT('%', #{userName},'%')
+	    </if>
+		<if test="approveStatus != null and approveStatus != '' ">
+	        AND sr.approveStatus = #{approveStatus,jdbcType=INTEGER}
+	    </if>
+        <if test="feeType != null and feeType != '' ">
+            AND sr.feeType = #{feeType,jdbcType = INTEGER}
+        </if>
+  		ORDER BY sr.dateCreate desc
+	</select>
+	<resultMap id="storeDto" type="cn.com.eju.deal.dto.store.StoreDto"></resultMap>
+  	<select id="getStoreInfoById" resultMap="storeDto" parameterType="java.lang.Integer">
+  		SELECT 
+  			s.Id as storeId,
+			s.storeNo,
+			--门店名称
+			s.Name as name,
+			--门店地址
+			s.AddressDetail,
+			--应收金额
+			ISNULL(srd.totalAmount,0) as totalAmount,
+			ISNULL(srd.amount,0) as amount,
+			ISNULL(srd.receiveAmount,0) as receiveAmount,
+			srd.providerName,
+			srd.providerCode,
+			srd.payoutId,
+			srd.payoutName
+	  	FROM 
+			 dbo.store_receive_dtl srd
+			LEFT JOIN dbo.Store s on s.storeNo = srd.storeNo
+			--LEFT JOIN  dbo.store_deposit sd on sd.storeNo = srd.storeNo and sd.delFlag ='0'
+		WHERE 
+			srd.delFlag = '0' and
+			srd.receiveId = #{id,jdbcType=INTEGER}
+  	</select>
+	<select id="getBriefById" resultMap="storeReceiveDto" parameterType="java.lang.Integer">
+		select 
+			sr.id,sr.receiveNo,sr.traceNo,sr.orderType,
+	  		sr.contractNo,
+			--协议书编号
+			ct.agreementNo,
+			contractTypeName = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = ct.ContractType AND delFlag = 'N' ),
+			companyName = (SELECT CompanyName FROM dbo.Company  where ct.CompanyId = Id AND IsDelete = 0 ),
+			sr.confirmTime,
+			approveStatusNm = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = sr.approveStatus 
+				AND typeId = 216 AND delFlag = 'N' ),
+			sr.receiveType,
+			ISNULL(sr.totalAmount,0) as totalAmount,
+ 			sr.userIdCreate,
+ 			us.userName,
+ 			us.userCode,
+ 			sr.oaNo,
+ 			--核算主体
+ 			sr.accountProject,
+ 			sr.accountProjectCode,
+ 			sr.dateCreate,
+ 			sr.dateRecorded,
+ 			sr.approvePassDate,
+ 			sr.toolCode,
+ 			sr.feeType,
+ 			(case when sr.receiveType = 17909 then '银行转账' when sr.toolCode = 18603 then '微信' when sr.toolcode = 18604 then '支付宝' else '支付宝/微信' end ) as receiveTypeNm,
+            (select dicValue from BAS_DictionaryValue where dicCode = sr.feeType) as feeTypeNm,
+ 			sr.paySeq,
+ 			sr.submitOaStatus,
+ 			submitOaStatusNm = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = sr.submitOaStatus 
+				AND typeId = 212 AND delFlag = 'N' ),
+			sr.responseTime,
+			srr.id  AS reverseId,
+            srr.approveStatus AS reverseApproveStatus,
+            srr.reverseOaNo,
+            srr.approveDate AS reverseApproveDate,
+            ret.description AS reverseApproveDesc,
+            bc1.dicValue AS reverseApproveStatusNm,
+            sr.oaBankId,
+            sr.oaBankName,
+            sr.remark,
+            sr.accountName
+ 		from 
+				dbo.store_receive sr
+	  		LEFT JOIN dbo.Contract ct on ct.ContractNo=sr.contractNo
+	  		LEFT JOIN crm.dbo.USR_User us on us.userId = sr.userIdCreate and us.delFlag = 'N'
+	  		LEFT JOIN BAS_DictionaryValue bc on sr.toolCode = bc.dicCode and bc.delFlag = 'N'
+	  		LEFT JOIN dbo.Store_Receive_Reverse srr ON sr.id = srr.receiveId
+                                                   AND srr.id = ( SELECT
+                                                              MAX(srrs.id)
+                                                              FROM
+                                                              Store_Receive_Reverse srrs
+                                                              WHERE
+                                                              sr.id = srrs.receiveId
+                                                              AND srrs.submitOaStatus != 21204
+                                                              AND srrs.delFlag = '0'
+                                                              )
+            LEFT JOIN OaStoreCapitalChangeReturn ret ON ret.oaNo = srr.reverseOaNo and ret.flowId = srr.flowId
+            LEFT JOIN BAS_DictionaryValue bc1 on srr.approveStatus = bc1.dicCode and bc1.delFlag = 'N'
+	  	where sr.delFlag='0' and sr.id=#{id,jdbcType=INTEGER}
+	</select>
+	
+	<update id="updateStr" parameterType="java.util.Map">
+		UPDATE dbo.store_receive
+		<set>
+                <if test="delFlag != null and delFlag != ''">
+                    delFlag = #{delFlag,jdbcType=VARCHAR},
+                </if>
+                <if test="submitOaStatus != null and submitOaStatus != ''">
+                    submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+                </if>
+                <if test="userIdUpt != null and userIdUpt != ''">
+                    userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+                    dateUpt = getDate()
+                </if>
+           </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<select id="getReceiveListForOa" resultType="cn.com.eju.deal.store.model.StoreReceive">
+	   SELECT TOP 10
+		        sr.*,
+		        d1.dicValue as receiveTypeNm,
+		        uu.userCode,
+		        uu.userName,
+		        com.CompanyName,
+		        d.dicValue as feeTypeNm
+		FROM    dbo.Store_Receive sr
+		JOIN    BAS_DictionaryValue d1 on sr.receiveType = d1.dicCode
+		JOIN    USR_USER uu on uu.userId = sr.userIdCreate
+		JOIN    Contract c ON c.ContractNo = sr.ContractNo
+		JOIN    Company com ON c.CompanyId = com.Id
+		join    BAS_DictionaryValue d on sr.feeType = d.dicCode
+		WHERE   sr.delFlag = '0'
+		        AND sr.orderType = 21401
+		        AND sr.submitOaStatus = 21201
+		        AND feeType in (17904,17905)
+		        AND sr.status = 30
+	</select>
+	
+	<update id="bathUpdate" parameterType="java.util.Map">
+	   UPDATE Store_Receive 
+	      SET submitOaStatus = #{submitOaStatus,jdbcType=INTEGER} 
+	    WHERE id IN
+            <foreach collection="idList" item="item" index="index" open="("
+                separator="," close=")">
+                #{item}
+            </foreach>
+	</update>
+
+    <select id="getReceiveTDListForOa" resultType="cn.com.eju.deal.store.model.StoreReceive">
+        SELECT TOP 10
+                sr.* ,
+                uu.userCode ,
+                uu.userName ,
+                srd.storeNo ,
+                d.dicValue as feeTypeNm
+        FROM    dbo.Store_Receive sr
+                JOIN USR_USER uu ON uu.userId = sr.userIdCreate
+                JOIN dbo.Store_Receive_dtl srd ON sr.id = srd.receiveId
+                join BAS_DictionaryValue d on sr.feeType = d.dicCode
+        WHERE   sr.delFlag = '0'
+                AND sr.orderType = 21402
+                AND sr.submitOaStatus = 21201
+		        AND feeType in (17904,17905)
+                AND sr.status = 30
+                AND srd.delFlag = '0'
+                AND srd.amount > 0
+    </select>
+</mapper>

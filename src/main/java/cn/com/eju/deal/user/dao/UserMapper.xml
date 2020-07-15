@@ -1,0 +1,1003 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.User">
+		<id column="userId" property="userId" jdbcType="INTEGER" />
+		<result column="userCode" property="userCode" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="credentialsNum" property="credentialsNum"
+			jdbcType="VARCHAR" />
+		<result column="cellphone" property="cellphone" jdbcType="VARCHAR" />
+		<result column="userName" property="userName" jdbcType="NVARCHAR" />
+		<result column="sex" property="sex" jdbcType="CHAR" />
+		<result column="groupId" property="groupId" jdbcType="INTEGER" />
+		<result column="postId" property="postId" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="inDate" property="inDate" jdbcType="TIMESTAMP" />
+		<result column="outDate" property="outDate" jdbcType="TIMESTAMP" />
+		<result column="inStatus" property="inStatus" jdbcType="INTEGER" />
+		<result column="credentials" property="credentials" jdbcType="INTEGER" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+		<result column="email" property="email" jdbcType="NVARCHAR" />
+		<result column="postName" property="postName" jdbcType="VARCHAR" />
+		<result column="groupName" property="groupName" jdbcType="VARCHAR" />
+		<result column="centerName" property="centerName" jdbcType="VARCHAR" />
+		<result column="centerId" property="centerId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="BaseResultUserInfoMap" type="cn.com.eju.deal.base.model.UserInfo">
+		<id column="userId" property="userId" jdbcType="INTEGER" />
+		<result column="userCode" property="userCode" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="userName" property="userName" jdbcType="NVARCHAR" />
+		<result column="credentialsNum" property="credentialsNum"
+			jdbcType="INTEGER" />
+		<result column="cellphone" property="cellphone" jdbcType="NVARCHAR" />
+		<result column="credentials" property="credentials" jdbcType="NVARCHAR" />
+		<result column="sex" property="sex" jdbcType="CHAR" />
+		<result column="groupName" property="groupName" jdbcType="NVARCHAR" />
+		<result column="groupId" property="groupId" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="inDate" property="inDate" jdbcType="TIMESTAMP" />
+		<result column="outDate" property="outDate" jdbcType="TIMESTAMP" />
+		<result column="inStatus" property="inStatus" jdbcType="INTEGER" />
+		<result column="entryTime" property="entryTime" jdbcType="TIMESTAMP" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+		<result column="email" property="email" jdbcType="NVARCHAR" />
+		<result column="clientLoginFlag" property="clientLoginFlag"
+			jdbcType="CHAR" />
+		<result column="wechatUserId" property="wechatUserId" jdbcType="VARCHAR" />
+		<result column="bigDistrictName" property="bigDistrictName" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+
+	<resultMap id="BaseResultRole" type="cn.com.eju.deal.user.model.Role">
+		<result column="roleId" property="roleId" jdbcType="INTEGER" />
+		<result column="roleName" property="roleName" jdbcType="NVARCHAR" />
+		<result column="roleDesc" property="roleDesc" jdbcType="NVARCHAR" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+	</resultMap>
+	<resultMap id="ExchangeCenterMap" type="cn.com.eju.deal.user.model.ExchangeCenter"></resultMap>
+
+
+	<sql id="Base_Column_List">
+		userId, userCode, password, userName, sex, groupId,postId,
+		dateCreate, userIdCreate,
+		delFlag,inDate,outDate,inStatus,credentials,credentialsNum,cellphone,email
+	</sql>
+
+	<sql id="Base_Column_Role">
+		roleId, roleName, roleDesc, dateCreate, userIdCreate,
+		delFlag
+	</sql>
+
+	<sql id="Base_Column_UserInfoList">
+		userId, userCode, password, userName,cellphone,entryTime,
+		sex,
+		groupName,a.groupId, CONVERT(VARCHAR(19),a.dateCreate,21) as
+		dateCreate
+		, a.userIdCreate as userIdCreate, a.delFlag as
+		delFlag,a.inDate,a.outDate,a.inStatus,a.credentialsNum,a.cellphone,a.email,a.clientLoginFlag,wechatUserId
+	</sql>
+
+	<!-- 获取所有用户 -->
+	<select id="getAllUser" resultMap="BaseResultMap" parameterType="Map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM USR_User
+		<where>
+			delFlag = 'N'
+			AND inStatus = 1073
+			<if test="userCode != null and  userCode != ''">
+  		  		<![CDATA[
+    				AND userCode LIKE '%${userCode}%'
+    			]]>
+			</if>
+
+			<if test="userName != null and userName != ''">
+  		  		<![CDATA[
+    				AND userName LIKE '%${userName}%'
+    			]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryRoleByUserId" resultMap="BaseResultRole"
+		parameterType="java.lang.Integer">
+		select
+		r.*
+		FROM crm.dbo.USR_User u ,crm.dbo.USR_UserRoleMapping ur
+		,dbo.USR_Role r
+		WHERE u.userId=ur.userId AND ur.roleId = r.roleId AND
+		u.userId=#{userId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryByUserCode" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+
+		SELECT COUNT(*) FROM crm.dbo.USR_User WHERE userCode =
+		#{userCode
+		,jdbcType=NVARCHAR};
+	</select>
+
+	<select id="queryBycredentialsNum" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+
+		SELECT COUNT(*) FROM crm.dbo.USR_User WHERE credentialsNum =
+		#{credentialsNum
+		,jdbcType=NVARCHAR};
+	</select>
+
+	<select id="queryUserListByAuthId" resultMap="BaseResultUserInfoMap"
+		parameterType="Map">
+		SELECT u.*
+		FROM dbo.USR_Auth a, dbo.USR_RoleAuthMapping
+		ra, dbo.USR_Role r,
+		crm.dbo.USR_UserRoleMapping ur, crm.dbo.USR_User u
+		WHERE
+		a.authId = ra.authId AND ra.roleId =r.roleId AND ur.userId = u.userId
+		AND a.authId =#{authId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryAuthByUserId" resultType="cn.com.eju.deal.user.model.Auth"
+		parameterType="java.lang.Integer">
+		SELECT DISTINCT a.*FROM crm.dbo.USR_User u
+		LEFT JOIN
+		crm.dbo.USR_UserPostMapping up ON up.userId = u.userId
+		LEFT JOIN
+		dbo.USR_Post p ON p.postId = up.postId
+		LEFT JOIN
+		dbo.USR_PostRoleMapping pr ON pr.postId = p.postId
+		LEFT JOIN
+		dbo.USR_Role r ON r.roleId = pr.roleId
+		LEFT JOIN
+		dbo.USR_RoleAuthMapping ra ON ra.roleId = r.roleId
+		LEFT JOIN
+		dbo.USR_Auth a ON a.authId = ra.authId
+		WHERE
+		u.userId=#{userId,jdbcType=INTEGER};
+	</select>
+
+	<select id="selectByLoginName" resultMap="BaseResultUserInfoMap"
+		parameterType="java.lang.String">
+		select top 1
+		<include refid="Base_Column_UserInfoList" />
+		FROM
+		USR_User a left join USR_Group b on a.groupId=b.groupId
+		WHERE
+		a.delFlag='N' and a.inStatus = 1073 and a.userCode = #{userCode,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from USR_User
+		where userId = #{userId,jdbcType=INTEGER} AND delFlag =
+		'N'
+	</select>
+
+	<select id="getUserByWechatId" resultMap="BaseResultUserInfoMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_UserInfoList" />
+		FROM
+		USR_User a left join USR_Group b on a.groupId=b.groupId
+		WHERE
+		a.delFlag='N' and a.wechatUserId =#{wechatId,jdbcType=VARCHAR}
+	</select>
+
+
+	<!-- 查询 -->
+	<select id="queryList" parameterType="Map"
+		resultType="cn.com.eju.deal.base.model.UserInfo">
+		SELECT
+		userId, userCode, password, userName,cellphone,entryTime, sex,
+		groupName,a.groupId, CONVERT(VARCHAR(19),a.dateCreate,21) as
+		dateCreate
+		, a.userIdCreate as userIdCreate, a.delFlag as
+		delFlag,a.inDate,a.outDate,a.inStatus,c.dicValue as
+		inStatusValue,a.credentialsNum,a.cellphone,a.email
+		FROM
+		USR_User a left
+		join USR_Group b on a.groupId=b.groupId
+		left join USR_DictionaryValue c
+		on a.inStatus=c.diccode
+		<where>
+			a.delFlag = 'N'
+
+			<if test="userCode != null and userCode !=''">
+                <![CDATA[
+    				AND userCode = #{userCode}
+    			]]>
+			</if>
+			<if test="groupId != null and groupId !=''">
+                <![CDATA[
+    				AND a.groupId = #{groupId}
+    			]]>
+			</if>
+
+			<if test="credentialsNum != null and credentialsNum !=''">
+                <![CDATA[
+    				AND credentialsNum = #{credentialsNum}
+    			]]>
+			</if>
+
+			<if test="userName != null and userName !=''">
+                <![CDATA[
+    				AND userName LIKE '%${userName}%'
+    			]]>
+			</if>
+
+			<if test="cellphone != null and cellphone !=''">
+                <![CDATA[
+    				AND cellphone LIKE '%${cellphone}%'
+    			]]>
+			</if>
+			ORDER BY entryTime DESC
+		</where>
+	</select>
+	<select id="queryByUserId" resultMap="BaseResultUserInfoMap">
+		select
+		<include refid="Base_Column_UserInfoList" />
+		from USR_User a left join USR_Group b on a.groupId=b.groupId WHERE
+		a.userId=#{userId ,jdbcType=INTEGER}
+	</select>
+	<select id="getUserInfoListByGroupAndPost" resultMap="BaseResultUserInfoMap"
+		parameterType="Map">
+		SELECT
+		distinct
+		uu.userId,
+		uu.userCode,
+		uu.userName
+		from
+		USR_UserPostMapping uup
+		inner join USR_User uu on uup.userId =
+		uu.userId and uu.delFlag='N'
+		inner join USR_Post up on uup.postId =
+		up.postId and up.delFlag='N'
+		inner join USR_PostType upt on up.postId
+		=upt.typeId
+		<if test="typeId != null and typeId !=''">
+            <![CDATA[
+    				and upt.typeId=#{typeId}
+    			]]>
+		</if>
+		<if test="typeCode != null and typeCode !=''">
+            <![CDATA[
+    				and upt.typeCode=#{typeCode}
+    			]]>
+		</if>
+		inner join (
+		select ug.groupId
+		from USR_Group ug
+		where ug.delFlag='N' and
+		ug.orgId.ToString() like (select
+		a.orgId.ToString()+'%' from USR_Group
+		a where a.groupId =#{groupId})
+		) t
+		on up.groupId = t.groupId
+	</select>
+	<select id="getSubordinatesUser" resultMap="BaseResultMap"
+		parameterType="Map">
+		select
+		u.* ,
+		t.postName
+		from
+		USR_User u
+		inner join (
+		select
+		up1.*
+		from
+		usr_post up1
+		inner join usr_post up2
+		on up1.groupId =
+		up2.groupId
+		and up1.approveIdx &lt; up2.approveIdx
+		and up1.postId
+		&lt;&gt; up2.postId
+		where up1.delFlag='N'
+		and up2.postId = #{postId}) t
+		on t.postId = u.postId
+		and t.groupId = u.groupId
+		and u.delFlag='N'
+		union
+		select u.*,up1.postName
+		from Usr_user u
+		inner join (
+		select upm.*
+		from
+		USR_UserPostMapping upm
+		where upm.postId = #{postId}
+		and
+		upm.userApproveIdx &lt;(select upm2.userApproveIdx from
+		USR_UserPostMapping upm2
+		where upm2.postId =#{postId} and upm2.userId=
+		#{userId}
+		)
+		) t
+		on u.userId =t.userId
+		inner join usr_post up1
+		on u.postId
+		=up1.postId
+		and u.postId = #{postId}
+		and u.delFlag='N'
+	</select>
+
+	<!-- 查询用户同组及子组下属用户以及本身用户 -->
+	<select id="getAllSubordinatesUser" resultMap="BaseResultMap"
+		parameterType="Map">
+		SELECT u.*,p.postName FROM crm.dbo.USR_User u
+		LEFT JOIN crm.dbo.USR_UserPostMapping um ON u.userId = um.userId AND um.delFlag = 'N'
+        LEFT JOIN USR_Post up ON um.postId = up.postId
+		INNER JOIN (
+					SELECT up1.postId,up1.postName
+					FROM   usr_post up1
+					INNER JOIN usr_post up2 ON up1.groupId = up2.groupId AND up2.delFlag='N'
+					WHERE up1.delFlag='N' AND up1.approveIdx &lt; up2.approveIdx
+						AND up1.postId &lt;&gt;up2.postId
+						AND up2.postId = #{postId}) p
+		ON up.postId = p.postId
+		WHERE   u.delFlag = 'N'
+		UNION
+		SELECT DISTINCT
+		        u.* ,
+		        up.postName
+		FROM    USR_User u
+				LEFT JOIN crm.dbo.USR_UserPostMapping um ON u.userId = um.userId and um.delFlag = 'N'
+		        INNER JOIN USR_Post up ON um.postId = up.postId
+		        INNER JOIN ( SELECT ug.groupId
+		                     FROM   USR_Group ug
+		                     WHERE  ug.delFlag = 'N'
+		                            AND ug.orgId.ToString() LIKE ( SELECT
+		                                                              a.orgId.ToString()
+		                                                              + '%'
+		                                                           FROM
+		                                                              USR_Group a
+		                                                           WHERE
+		                                                              a.groupId = #{groupId}
+		                                                         )
+		                            AND ug.groupId  &lt;&gt; #{groupId}
+		                   ) t ON up.groupId = t.groupId
+		WHERE   u.delFlag = 'N'
+	</select>
+	<select id="selectUserListByPostId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		u.*
+		from
+		USR_UserPostMapping up
+		inner join USR_User u
+		on u.userId = up.userId
+		and up.delFlag ='N'
+		inner join USR_Post p
+		on
+		p.postId =up.postId
+		and p.delFlag='N'
+		and u.groupId = p.groupId
+		and
+		u.postId = up.postId
+		where up.postId = #{postId}
+		and u.delFlag ='N'
+		order by up.userApproveIdx;
+	</select>
+	<select id="selectApUserListByPostId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		u.*
+		from USR_UserPostMapping up
+		inner join USR_User
+		u
+		on u.userId = up.userId
+		and up.delFlag ='N'
+		where u.postId =#{postId}
+		and u.delFlag ='N'
+		order by up.userApproveIdx
+	</select>
+	<select id="queryByUserCodeShiro" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		userId, userCode, password, userName
+		from USR_User
+		a WHERE a.userCode=#{userCode ,jdbcType=VARCHAR} AND
+		a.delFlag='N'
+	</select>
+	<select id="getCityNoByUserId" resultMap="BaseResultUserInfoMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		c.cityNO, c.cityName,d.centerId,d.centerName,d.groupName wxGroupName
+		FROM USR_User a
+		left join USR_Group b on a.groupId=b.groupId
+		left join BAS_City c on b.cityId=c.id
+		left join V_CRM_Center_Group_ref d on a.groupId = d.groupId
+		where a.delFlag = 'N' AND a.userId=#{userId ,jdbcType=INTEGER}
+	</select>
+	<select id="getCenterListByUserId" resultMap="ExchangeCenterMap" parameterType="java.lang.Integer">
+		<!--
+		SELECT DISTINCT v.cityNo ,
+       	v.CityName ,
+       	v.centerId exchangeCenterId,
+       	v.centerName exchangeCenterName
+       	FROM  crm.dbo.USR_User u , dbo.USR_UserPostMapping up, dbo.USR_Post p ,dbo.V_CRM_Group_Center_All v
+		WHERE u.userId=up.userId
+		AND up.postId=p.postId
+		AND p.groupId=v.groupId
+		AND u.delFlag='N'
+		AND up.delFlag='N'
+		AND p.delFlag='N'
+		AND u.userId=#{userId ,jdbcType=INTEGER}
+		-->
+
+		<!--SELECT DISTINCT t2.cityNo,t2.cityName,centerGroupId exchangeCenterId,centerGroupName exchangeCenterName FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM') t1
+		INNER JOIN dbo.BAS_City t2
+		ON t1.cityId = t2.ID
+		where t1.timeTag=(SELECT MAX(timeTag) FROM USR_Group)-->
+
+			SELECT DISTINCT t2.cityNo,t2.cityName,centerGroupId exchangeCenterId,centerGroupName exchangeCenterName FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM') t1
+		INNER JOIN dbo.BAS_City t2
+		ON t1.cityId = t2.ID
+		where t1.yearly=(SELECT MAX(yearly) FROM dbo.V_USR_OrgHis)
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="cn.com.eju.deal.user.model.User">
+
+		UPDATE USR_User
+		SET
+		delFlag='Y'
+		<where>
+			userId = #{userId,jdbcType=INTEGER}
+		</where>
+	</delete>
+
+	<insert id="insert" parameterType="cn.com.eju.deal.user.model.User">
+		insert into USR_User (userId,
+		userCode, password,
+		userName, sex, groupId,
+		dateCreate, userIdCreate,
+		delFlag,
+		inDate,outDate,inStatus
+		)
+		values (#{userId,jdbcType=INTEGER},
+		#{userCode,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{userName,jdbcType=NVARCHAR}, #{sex,jdbcType=CHAR},
+		#{groupId,jdbcType=INTEGER},
+		#{dateCreate,jdbcType=TIMESTAMP},
+		#{userIdCreate,jdbcType=INTEGER},
+		#{delFlag,jdbcType=BIT},
+		#{inDate,jdbcType=TIMESTAMP},#{outDate,jdbcType=TIMESTAMP},#{inStatus,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.com.eju.deal.user.model.User"
+		useGeneratedKeys="true" keyProperty="userId">
+		insert into USR_User
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				userId,
+			</if>
+			<if test="userCode != null">
+				userCode,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="userName != null">
+				userName,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="credentialsNum != null">
+				credentialsNum,
+			</if>
+			<if test="cellphone != null">
+				cellphone,
+			</if>
+			<if test="groupId != null">
+				groupId,
+			</if>
+			<if test="dateCreate != null">
+				dateCreate,
+			</if>
+			<if test="userIdCreate != null">
+				userIdCreate,
+			</if>
+			<if test="delFlag != null">
+				delFlag,
+			</if>
+			<if test="inDate != null">
+				inDate,
+			</if>
+			<if test="outDate != null">
+				outDate,
+			</if>
+			<if test="inStatus != null">
+				inStatus,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="userCode != null">
+				#{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=NVARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=CHAR},
+			</if>
+			<if test="credentialsNum != null">
+				#{credentialsNum,jdbcType=VARCHAR},
+			</if>
+			<if test="cellphone != null">
+				#{cellphone,jdbcType=VARCHAR},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=INTEGER},
+			</if>
+			<if test="dateCreate != null">
+				#{dateCreate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userIdCreate != null">
+				#{userIdCreate,jdbcType=INTEGER},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=BIT},
+			</if>
+			<if test="inDate != null">
+				#{inDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="outDate != null">
+				#{outDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="inStatus != null">
+				#{inStatus,jdbcType=INTEGER},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=NVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.user.model.User">
+		update USR_User
+		<set>
+			<if test="userCode != null">
+				userCode = #{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				userName = #{userName,jdbcType=NVARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=CHAR},
+			</if>
+			<if test="credentialsNum != null">
+				credentialsNum = #{credentialsNum,jdbcType=VARCHAR},
+			</if>
+			<if test="cellphone != null">
+				cellphone = #{cellphone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="groupId != null">
+				groupId = #{groupId,jdbcType=INTEGER},
+			</if>
+			<if test="dateCreate != null">
+				dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userIdCreate != null">
+				userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+			</if>
+			<if test="delFlag != null">
+				delFlag = #{delFlag,jdbcType=BIT},
+			</if>
+			<if test="inDate != null">
+				inDate = #{inDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="outDate != null">
+				outDate = #{outDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="inStatus != null">
+				inStatus = #{inStatus,jdbcType=INTEGER},
+			</if>
+		</set>
+		where userId = #{userId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.user.model.User">
+		update USR_User
+		set userCode = #{userCode,jdbcType=VARCHAR},
+		password =
+		#{password,jdbcType=VARCHAR},
+		userName = #{userName,jdbcType=NVARCHAR},
+		sex = #{sex,jdbcType=CHAR},
+		groupId = #{groupId,jdbcType=INTEGER},
+		dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+		userIdCreate =
+		#{userIdCreate,jdbcType=INTEGER},
+		delFlag = #{delFlag,jdbcType=BIT}
+		where userId = #{userId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByGroupId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from USR_User
+        where groupId = #{groupId,jdbcType=INTEGER} AND delFlag = 'N'
+    </select>
+	<select id="getHouseLinkUserList" resultMap="BaseResultMap" parameterType="java.lang.String">
+	SELECT DISTINCT a.userId,a.userName,a.userCode,
+	e.groupName,vr.centername,vr.centerid FROM dbo.USR_User a
+	LEFT JOIN USR_UserPostMapping b ON b.userId = a.userId AND b.delFlag = 'N'
+	LEFT JOIN dbo.USR_Post c ON c.postId = b.postId AND c.delFlag = 'N'
+	LEFT JOIN dbo.USR_PostType d ON d.typeId = c.typeId AND d.delFlag = 'N'
+	LEFT JOIN dbo.USR_Group e ON e.groupId = c.groupId AND e.delFlag = 'N'
+	LEFT JOIN dbo.BAS_City f ON f.ID = e.cityId AND a.delFlag = 'N'
+	LEFT JOIN V_CRM_Center_Group_ref vr ON e.groupId = vr.groupId
+	WHERE a.delFlag='N' AND d.typeCode IN ('PT_XFLDZJL','PT_XFLDZXZJ','PT_XFLDZXZY') AND f.CityNo = #{cityNo,jdbcType=VARCHAR}
+	AND a.inStatus  ='1073'
+	ORDER BY userName
+	</select>
+	<select id="getHouseLinkUserList2" resultMap="BaseResultMap" parameterType="java.util.Map">
+	SELECT DISTINCT a.userId,a.userName,a.userCode,a.cellphone,
+	e.groupName,vr.centername,vr.centerid FROM dbo.USR_User a
+	LEFT JOIN USR_UserPostMapping b ON b.userId = a.userId AND b.delFlag = 'N'
+	LEFT JOIN dbo.USR_Post c ON c.postId = b.postId AND c.delFlag = 'N'
+	LEFT JOIN dbo.USR_PostType d ON d.typeId = c.typeId AND d.delFlag = 'N'
+	LEFT JOIN dbo.USR_Group e ON e.groupId = c.groupId AND e.delFlag = 'N'
+	LEFT JOIN dbo.BAS_City f ON f.ID = e.cityId AND a.delFlag = 'N'
+	LEFT JOIN V_CRM_Center_Group_ref vr ON e.groupId = vr.groupId
+	WHERE a.delFlag='N' AND d.typeCode IN ('PT_PMLS_LDKF') AND f.CityNo = #{cityNo,jdbcType=VARCHAR}
+	AND a.inStatus  ='1073'
+	<if test="userCode != null and  userCode != ''">
+ 		<![CDATA[
+			AND a.userCode LIKE '%' + RTrim(LTrim('${userCode}')) + '%'
+		]]>
+	</if>
+	<if test="userName != null and userName != ''">
+ 		<![CDATA[
+			AND a.userName LIKE '%' + RTrim(LTrim('${userName}')) + '%'
+		]]>
+	</if>
+	ORDER BY userName
+	</select>
+
+	<!-- 根据岗位Id获取城市编号和城市名 -->
+	<select id="getCityNoByPostId" resultMap="BaseResultUserInfoMap"
+		parameterType="java.lang.Integer">
+		   SELECT   T3.cityNO ,T3.cityName
+		   FROM     dbo.USR_Post T1
+		            LEFT JOIN dbo.USR_Group T2 ON T1.groupId = T2.groupId
+		                                          AND T2.delFlag = 'N'
+		            LEFT JOIN dbo.BAS_City T3 ON T2.cityId = T3.ID
+		                                         AND T3.FlagDeleted = 0
+		   WHERE    T1.delFlag = 'N'
+		            AND T1.postId = #{postId ,jdbcType=INTEGER}
+		   ORDER BY T1.postId
+	</select>
+
+	<!-- 根据组织架构查询所属大区名称 -->
+	<select id="getGNBySelectOrgId" resultMap="BaseResultUserInfoMap" parameterType="java.lang.String">
+		SELECT  T1.groupName
+        FROM    USR_Group T1
+        WHERE   T1.delFlag = 'N'
+                AND T1.typeId = 7
+                AND #{selectOrgId ,jdbcType=NVARCHAR} LIKE T1.orgId.ToString() + '%'
+        UNION
+        SELECT  T1.groupName
+        FROM    USR_Group T1
+        WHERE   T1.delFlag = 'N'
+                AND T1.typeId = 7
+                AND T1.orgId.ToString() LIKE #{selectOrgId ,jdbcType=NVARCHAR} + '%'
+	</select>
+
+	<!-- 根据Code查用户-->
+	<select id="getUserByCode" resultType="cn.com.eju.deal.user.model.User"
+		parameterType="java.lang.String">
+		SELECT  *
+		FROM    dbo.USR_User
+		WHERE   userCode = #{userCode,jdbcType=VARCHAR}
+				and delFlag = 'N'
+	</select>
+
+	<!-- 查询拓展人员 -->
+	<select id="getExpanderUser" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT  DISTINCT
+				u.*
+		FROM  USR_User  u
+				INNER JOIN dbo.USR_Group g
+				ON u.groupId=g.groupId
+				INNER JOIN dbo.BAS_City bc
+				ON g.cityId=bc.ID
+				INNER JOIN  dbo.Achievement_Setting ast
+				ON bc.CityNo=ast.cityNo
+				AND ast.dicCode='17901'
+				INNER JOIN  dbo.USR_UserPostMapping  upm
+				ON u.userId=upm.userId
+				INNER JOIN dbo.USR_PostRoleMapping  prm
+				ON upm.postId=prm.postId
+				INNER JOIN dbo.USR_Role r
+				ON prm.roleId=r.roleId
+				INNER JOIN dbo.USR_RoleType rt
+				ON  r.roleTypeId=rt.typeId
+				AND rt.typeCode= ast.roleTypeCode
+
+		WHERE   u.delFlag = 'N'
+		        AND u.inStatus = 1073
+				AND u.postId IS  NOT NULL
+				AND g.delFlag='N'
+				AND upm.delFlag='N'
+				AND prm.delFlag='N'
+				AND r.delFlag='N'
+				AND rt.delFlag='N'
+        		AND bc.cityNo = #{cityNo,jdbcType=VARCHAR}
+				<if test="userCode != null and  userCode != ''">
+	  		  		<![CDATA[
+	  		  		        AND u.userCode LIKE  '%' + RTrim(LTrim('${userCode}')) + '%'
+	    			]]>
+				</if>
+				<if test="userName != null and userName != ''">
+	  		  		<![CDATA[
+	    				AND u.userName LIKE '%' + RTrim(LTrim('${userName}')) + '%'
+	    			]]>
+				</if>
+	</select>
+
+	<!-- 查询拓展人员 -->
+	<select id="getWeiHuUser" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT  DISTINCT
+		        u.* ,
+		        g.groupName ,
+		        vr.centername AS centerName ,
+		        vr.centerid AS centerId
+		FROM    USR_User u
+		        INNER JOIN dbo.USR_Group g ON u.groupId = g.groupId
+		        INNER JOIN dbo.BAS_City bc ON g.cityId = bc.ID
+		        INNER JOIN dbo.Achievement_Setting ast ON bc.CityNo = ast.cityNo
+		                                                  AND ast.dicCode = '17901'
+		        INNER JOIN dbo.USR_UserPostMapping upm ON u.userId = upm.userId
+		        INNER JOIN dbo.USR_PostRoleMapping prm ON upm.postId = prm.postId
+		        INNER JOIN dbo.USR_Role r ON prm.roleId = r.roleId
+		        INNER JOIN dbo.USR_RoleType rt ON r.roleTypeId = rt.typeId
+		                                          AND rt.typeCode = ast.roleTypeCode
+		        INNER JOIN dbo.V_CRM_Center_Group_ref vr ON u.groupId = vr.groupId
+		WHERE   u.delFlag = 'N'
+		        AND u.inStatus = 1073
+		        AND u.postId IS  NOT NULL
+		        AND g.delFlag = 'N'
+		        AND upm.delFlag = 'N'
+		        AND prm.delFlag = 'N'
+		        AND r.delFlag = 'N'
+		        AND rt.delFlag = 'N'
+        		AND bc.cityNo = #{cityNo,jdbcType=VARCHAR}
+        		<if test="storeCenterId != null and  storeCenterId != ''">
+	  		  		<![CDATA[
+	    				AND vr.centerid= #{storeCenterId}
+	    			]]>
+				</if>
+				<if test="userCode != null and  userCode != ''">
+	  		  		<![CDATA[
+	    				AND u.userCode LIKE '%' + RTrim(LTrim('${userCode}')) + '%'
+	    			]]>
+				</if>
+				<if test="userName != null and userName != ''">
+	  		  		<![CDATA[
+	    				AND u.userName LIKE '%' + RTrim(LTrim('${userName}')) + '%'
+	    			]]>
+				</if>
+				ORDER BY u.dateCreate DESC
+	</select>
+
+	<!-- 查询联动业绩人员 -->
+	<select id="getLinkUser" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT  DISTINCT
+		        u.*
+		        <if test="adjutFlag != '1'.toString()">
+			        ,g.groupName ,
+			        vr.centername AS centerName ,
+			        vr.centerid AS centerId
+		        </if>
+		FROM    USR_User u
+		        INNER JOIN dbo.USR_Group g ON u.groupId = g.groupId
+		        INNER JOIN dbo.BAS_City bc ON g.cityId = bc.ID
+		        INNER JOIN dbo.Achievement_Setting ast ON bc.CityNo = ast.cityNo
+		                                                  AND ast.dicCode = '17902'
+		        INNER JOIN dbo.USR_UserPostMapping upm ON u.userId = upm.userId
+		        INNER JOIN dbo.USR_PostRoleMapping prm ON upm.postId = prm.postId
+		        INNER JOIN dbo.USR_Role r ON prm.roleId = r.roleId
+		        INNER JOIN dbo.USR_RoleType rt ON r.roleTypeId = rt.typeId
+		                                          AND rt.typeCode = ast.roleTypeCode
+		        <if test="adjutFlag != '1'.toString()">
+		        	INNER JOIN dbo.V_CRM_Center_Group_ref vr ON u.groupId = vr.groupId
+		        </if>
+		WHERE   u.delFlag = 'N'
+		        AND u.inStatus = 1073
+		        AND u.postId IS  NOT NULL
+		        AND g.delFlag = 'N'
+		        AND upm.delFlag = 'N'
+		        AND prm.delFlag = 'N'
+		        AND r.delFlag = 'N'
+		        AND rt.delFlag = 'N'
+		        <if test="adjutFlag != '1'.toString()">
+			       AND bc.cityNo = #{cityNo,jdbcType=VARCHAR}
+		        </if>
+		        <if test="adjutFlag2 == '2'.toString()">
+			       AND bc.cityNo = '${cityNo}'
+		        </if>
+				<if test="userCode != null and  userCode != ''">
+	  		  		<![CDATA[
+	    				AND u.userCode LIKE '%' + RTrim(LTrim('${userCode}')) + '%'
+	    			]]>
+				</if>
+				<if test="userName != null and userName != ''">
+	  		  		<![CDATA[
+	    				AND u.userName LIKE '%' + RTrim(LTrim('${userName}')) + '%'
+	    			]]>
+				</if>
+	</select>
+	<!-- 查询维护人员列表 -->
+	<select id="getMaintenanceUser" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT  DISTINCT
+		        u.* ,
+		        g.groupName ,
+		        vr.centername AS centerName ,
+		        vr.centerid AS centerId
+		FROM    USR_User u
+		        INNER JOIN dbo.USR_Group g ON u.groupId = g.groupId
+		        INNER JOIN dbo.BAS_City bc ON g.cityId = bc.ID
+		        INNER JOIN dbo.Achievement_Setting ast ON bc.CityNo = ast.cityNo
+		                                                  AND ast.dicCode = '17902'
+		        INNER JOIN dbo.USR_UserPostMapping upm ON u.userId = upm.userId
+		        INNER JOIN dbo.USR_PostRoleMapping prm ON upm.postId = prm.postId
+		        INNER JOIN dbo.USR_Role r ON prm.roleId = r.roleId
+		        INNER JOIN dbo.USR_RoleType rt ON r.roleTypeId = rt.typeId
+		                                          AND rt.typeCode = ast.roleTypeCode
+		        INNER JOIN dbo.V_CRM_Center_Group_ref vr ON u.groupId = vr.groupId
+		WHERE   u.delFlag = 'N'
+		        AND u.inStatus = 1073
+		        AND u.postId IS  NOT NULL
+		        AND g.delFlag = 'N'
+		        AND upm.delFlag = 'N'
+		        AND prm.delFlag = 'N'
+		        AND r.delFlag = 'N'
+		        AND rt.delFlag = 'N'
+        		AND bc.cityNo = #{cityNo,jdbcType=VARCHAR}
+				<if test="userCode != null and  userCode != ''">
+	  		  		<![CDATA[
+	    				AND u.userCode LIKE '%' + RTrim(LTrim('${userCode}')) + '%'
+	    			]]>
+				</if>
+				<if test="userName != null and userName != ''">
+	  		  		<![CDATA[
+	    				AND u.userName LIKE '%' + RTrim(LTrim('${userName}')) + '%'
+	    			]]>
+				</if>
+				<if test="storeCenterId != null and  storeCenterId != ''">
+	  		  		<![CDATA[
+	    				AND vr.centerid= #{storeCenterId}
+	    			]]>
+				</if>
+	</select>
+
+
+
+	<!-- 根据UserId查用户-->
+	<select id="getUserByUserId" resultType="cn.com.eju.deal.user.model.User"
+		parameterType="java.lang.Integer">
+		SELECT  *
+		FROM    dbo.USR_User
+		WHERE   userId = #{userId,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据房友APP传入的经服人员工号或手机号码 -->
+	<select id="getUserForFYAPP" resultType="cn.com.eju.deal.api.user.dto.APPUserDto" parameterType="java.util.Map">
+		SELECT  DISTINCT userCode,userName,cellphone
+		FROM    USR_User u
+		INNER JOIN dbo.USR_Group g ON u.groupId = g.groupId
+		INNER JOIN dbo.BAS_City bc ON g.cityId = bc.ID
+		INNER JOIN dbo.Achievement_Setting ast ON bc.CityNo = ast.cityNo
+		AND ast.dicCode = '17902'
+		INNER JOIN dbo.USR_UserPostMapping upm ON u.userId = upm.userId
+		INNER JOIN dbo.USR_PostRoleMapping prm ON upm.postId = prm.postId
+		INNER JOIN dbo.USR_Role r ON prm.roleId = r.roleId
+		INNER JOIN dbo.USR_RoleType rt ON r.roleTypeId = rt.typeId
+		AND rt.typeCode = ast.roleTypeCode
+		INNER JOIN dbo.V_CRM_Center_Group_ref vr ON u.groupId = vr.groupId
+		WHERE   u.delFlag = 'N'
+		AND u.inStatus = 1073
+		AND u.postId IS  NOT NULL
+		AND g.delFlag = 'N'
+		AND upm.delFlag = 'N'
+		AND prm.delFlag = 'N'
+		AND r.delFlag = 'N'
+		AND rt.delFlag = 'N'
+		<if test="userCode != null and  userCode != ''">
+			AND u.userCode = #{userCode,jdbcType=VARCHAR}
+		</if>
+		<if test="cellphone != null and cellphone != ''">
+			AND u.cellphone = #{cellphone,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+
+	<!-- 获取所有用户 -->
+	<select id="getUserByUserCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+			top 1
+		<include refid="Base_Column_List" />
+		FROM USR_User
+		where delFlag = 'N'
+			AND inStatus = 1073
+			AND userCode = #{userCode,jdbcType=VARCHAR}
+	</select>
+	<!-- 模糊查询业绩归属人 -->
+	<select id="getLinkUserByCondition" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT  DISTINCT
+		        u.* , g.groupName  ,bc.CityName
+		FROM    USR_User u
+		        INNER JOIN dbo.USR_Group g ON u.groupId = g.groupId
+		        INNER JOIN dbo.BAS_City bc ON g.cityId = bc.ID
+		        INNER JOIN dbo.Achievement_Setting ast ON bc.CityNo = ast.cityNo
+		                                                  AND ast.dicCode = '17902'
+		        INNER JOIN dbo.USR_UserPostMapping upm ON u.userId = upm.userId
+		        INNER JOIN dbo.USR_PostRoleMapping prm ON upm.postId = prm.postId
+		        INNER JOIN dbo.USR_Role r ON prm.roleId = r.roleId
+		        INNER JOIN dbo.USR_RoleType rt ON r.roleTypeId = rt.typeId
+		                                          AND rt.typeCode = ast.roleTypeCode
+		WHERE   u.delFlag = 'N'
+		        AND u.inStatus = 1073
+		        AND u.postId IS  NOT NULL
+		        AND g.delFlag = 'N'
+		        AND upm.delFlag = 'N'
+		        AND prm.delFlag = 'N'
+		        AND r.delFlag = 'N'
+		        AND rt.delFlag = 'N'
+				<if test="inputLinkUserName != null and  inputLinkUserName != ''">
+	  		  		<![CDATA[
+	    				AND (u.userCode LIKE '%' + RTrim(LTrim('${inputLinkUserName}')) + '%'
+	    					OR
+	    					u.userName LIKE '%' + RTrim(LTrim('${inputLinkUserName}')) + '%'
+	    				)
+	    			]]>
+				</if>
+		ORDER BY u.dateCreate DESC
+	</select>
+
+<!-- 项目负责人 -->
+	<select id="getProjectLeaderList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT DISTINCT uu.userId,uu.userCode,uu.userName,uu.cellphone,
+				ug.groupName 
+		FROM dbo.USR_User uu
+			LEFT JOIN dbo.USR_Group ug ON uu.groupId = ug.groupId AND ug.delFlag = 'N'
+			LEFT JOIN dbo.BAS_City bc ON bc.ID = ug.cityId
+			WHERE  uu.delFlag='N' AND uu.inStatus  ='1073' --有效在职
+			AND ISNUMERIC(uu.userCode)=1 --是数字
+			AND bc.CityNo = #{cityNo,jdbcType=VARCHAR} --归属城市
+	<if test="userCode != null and  userCode != ''">
+ 		<![CDATA[
+			AND uu.userCode LIKE '%' + RTrim(LTrim('${userCode}')) + '%'
+		]]>
+	</if>
+	<if test="userName != null and userName != ''">
+ 		<![CDATA[
+			AND uu.userName LIKE '%' + RTrim(LTrim('${userName}')) + '%'
+		]]>
+	</if>
+		ORDER BY uu.userName
+	</select>
+</mapper>

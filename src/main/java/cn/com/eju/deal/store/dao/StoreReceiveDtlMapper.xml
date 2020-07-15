@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.store.dao.StoreReceiveDtlMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.StoreReceiveDtl">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="receiveId" jdbcType="INTEGER" property="receiveId" />
+    <result column="storeNo" jdbcType="VARCHAR" property="storeNo" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="providerCode" jdbcType="VARCHAR" property="providerCode" />
+    <result column="providerName" jdbcType="VARCHAR" property="providerName" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt" />
+    <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, receiveId, storeNo, amount, providerCode, providerName, dateCreate, userIdCreate, 
+    dateUpt, userIdUpt, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from store_receive_dtl
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from store_receive_dtl
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.store.model.StoreReceiveDtl">
+    insert into store_receive_dtl (id, receiveId, storeNo, 
+      amount, providerCode, providerName, 
+      dateCreate, userIdCreate, dateUpt, 
+      userIdUpt, delFlag)
+    values (#{id,jdbcType=INTEGER}, #{receiveId,jdbcType=INTEGER}, #{storeNo,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{providerCode,jdbcType=VARCHAR}, #{providerName,jdbcType=VARCHAR}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{dateUpt,jdbcType=TIMESTAMP}, 
+      #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.store.model.StoreReceiveDtl">
+    insert into store_receive_dtl
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="receiveId != null">
+        receiveId,
+      </if>
+      <if test="storeNo != null">
+        storeNo,
+      </if>
+      <if test="storeName != null">
+        storeName,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="providerCode != null">
+        providerCode,
+      </if>
+      <if test="providerName != null">
+        providerName,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="dateUpt != null">
+        dateUpt,
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="receiveId != null">
+        #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="storeNo != null">
+        #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null">
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="providerCode != null">
+        #{providerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="providerName != null">
+        #{providerName,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.store.model.StoreReceiveDtl">
+    update store_receive_dtl
+    <set>
+      <if test="receiveId != null">
+        receiveId = #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="storeNo != null">
+        storeNo = #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="providerCode != null">
+        providerCode = #{providerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="providerName != null">
+        providerName = #{providerName,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.store.model.StoreReceiveDtl">
+    update store_receive_dtl
+    set receiveId = #{receiveId,jdbcType=INTEGER},
+      storeNo = #{storeNo,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      providerCode = #{providerCode,jdbcType=VARCHAR},
+      providerName = #{providerName,jdbcType=VARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getListByParentId" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM dbo.Store_Receive_Dtl where delFlag = '0' and receiveId = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <update id="batchUpdateDtl" parameterType="cn.com.eju.deal.store.model.StoreReceiveDtl">
+    update store_receive_dtl
+    <set>
+      <if test="storeNo != null">
+        storeNo = #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="providerCode != null">
+        providerCode = #{providerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="providerName != null">
+        providerName = #{providerName,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where receiveId = #{receiveId,jdbcType=INTEGER}
+  </update>
+</mapper>

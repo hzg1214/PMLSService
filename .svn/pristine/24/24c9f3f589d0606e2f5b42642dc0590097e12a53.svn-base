@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.oa.dao.OaOperatorMapper">
+
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.oa.model.OaOperator">
+
+		<id column="operId" property="operId" jdbcType="INTEGER" />
+
+		<result column="operCode" property="operCode" jdbcType="VARCHAR" />
+		<result column="operName" property="operName" jdbcType="NVARCHAR" />
+		<result column="busCode" property="busCode" jdbcType="VARCHAR" />
+
+		<result column="userCreate" property="userCreate" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="isDelete" property="isDelete" jdbcType="BIT" />
+
+		<result column="isCombine" property="isCombine" jdbcType="BIT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		operId, operCode, operName, busCode,
+		userCreate,dateCreate,isDelete,isCombine
+	</sql>
+
+	<!-- 查询-根据id -->
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM OaOperator
+		<where>
+			IsDelete=0 AND id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
+
+	<!-- 查询-根据id -->
+	<select id="getByUserCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM OaOperator
+		<where>
+			IsDelete=0
+			<if test="operCode != null and operCode != ''">
+  		  		<![CDATA[
+    				AND operCode = #{operCode,jdbcType=VARCHAR}
+    			]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询 list -->
+	<select id="queryList" parameterType="Map" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		OaOperator
+		<where>
+			IsDelete=0
+			<if test="operId != null and operId != ''">
+  		  		<![CDATA[
+    				AND operId = #{operId,jdbcType=INTEGER}
+    			]]>
+			</if>
+
+			<if test="operCode != null and operCode != ''">
+  		  		<![CDATA[
+    				AND operCode = #{operCode,jdbcType=VARCHAR}
+    			]]>
+			</if>
+
+			<if test="operName != null and operName != ''">
+  		  		<![CDATA[
+    				AND operName LIKE '%${operName}%'
+    			]]>
+			</if>
+
+			<if test="busCode != null and busCode != ''">
+  		  		<![CDATA[
+    				AND busCode LIKE '%${busCode}%'
+    			]]>
+			</if>
+
+			<if test="dateCreate != null and dateCreate != ''">
+  		  		<![CDATA[
+    				AND dateCreate = #{dateCreate,jdbcType=TIMESTAMP}
+    			]]>
+			</if>
+
+			<if test="isCombine != null and isCombine != ''">
+  		  		<![CDATA[
+    				AND isCombine = #{isCombine,jdbcType=BIT}
+    			]]>
+			</if>
+
+		</where>
+	</select>
+
+
+	<!-- 新增 -->
+	<insert id="create" parameterType="cn.com.eju.deal.oa.model.OaOperator"
+		useGeneratedKeys="true" keyProperty="operId">
+		INSERT INTO OaOperator
+		(
+		operCode,
+		operName,
+		busCode,
+		userCreate,dateCreate,isDelete,isCombine
+		)
+		VALUES
+		(
+		#{operCode},
+		#{operName},
+		#{busCode},
+		#{userCreate},
+		getDate(),
+		0,
+		#{isCombine}
+		)
+	</insert>
+
+
+	<!-- 逻辑删除 -->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		UPDATE OaOperator
+		SET
+		IsDelete = 1
+		<where>
+			operId = #{operId,jdbcType=INTEGER}
+		</where>
+	</delete>
+
+</mapper>

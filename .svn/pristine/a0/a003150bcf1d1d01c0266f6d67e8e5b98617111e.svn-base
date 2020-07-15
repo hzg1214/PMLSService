@@ -1,0 +1,225 @@
+package cn.com.eju.pmls.remittanceTrack.dto;
+
+import java.math.BigDecimal;
+
+import cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack;
+
+public class RemittanceTrackDto extends RemittanceTrack{
+	private Integer rowNo;
+	private String projectNo;//项目编号
+	private String projectName;//项目名称
+	private Integer projectStatus;//项目状态
+	private String projectStatusStr;
+	
+	private BigDecimal hkTotal;//回款合计
+	
+	private BigDecimal weekTotal1;//第一周合计
+	private BigDecimal weekTotal2;
+	private BigDecimal weekTotal3;
+	private BigDecimal weekTotal4;
+	private BigDecimal weekTotal5;
+	private BigDecimal weekTotal6;
+	
+	private BigDecimal xjAccount1;//现金
+	private BigDecimal xjAccount2;
+	private BigDecimal xjAccount3;
+	private BigDecimal xjAccount4;
+	private BigDecimal xjAccount5;
+	private BigDecimal xjAccount6;
+	
+	private BigDecimal dfAccount1;//抵房
+	private BigDecimal dfAccount2;
+	private BigDecimal dfAccount3;
+	private BigDecimal dfAccount4;
+	private BigDecimal dfAccount5;
+	private BigDecimal dfAccount6;
+	
+	//周表头
+	private String weekDate1;
+	private String weekDate2;
+	private String weekDate3;
+	private String weekDate4;
+	private String weekDate5;
+	private String weekDate6;
+	
+	public Integer getRowNo() {
+		return rowNo;
+	}
+	public void setRowNo(Integer rowNo) {
+		this.rowNo = rowNo;
+	}
+	public String getWeekDate1() {
+		return weekDate1;
+	}
+	public void setWeekDate1(String weekDate1) {
+		this.weekDate1 = weekDate1;
+	}
+	public String getWeekDate2() {
+		return weekDate2;
+	}
+	public void setWeekDate2(String weekDate2) {
+		this.weekDate2 = weekDate2;
+	}
+	public String getWeekDate3() {
+		return weekDate3;
+	}
+	public void setWeekDate3(String weekDate3) {
+		this.weekDate3 = weekDate3;
+	}
+	public String getWeekDate4() {
+		return weekDate4;
+	}
+	public void setWeekDate4(String weekDate4) {
+		this.weekDate4 = weekDate4;
+	}
+	public String getWeekDate5() {
+		return weekDate5;
+	}
+	public void setWeekDate5(String weekDate5) {
+		this.weekDate5 = weekDate5;
+	}
+	public String getWeekDate6() {
+		return weekDate6;
+	}
+	public void setWeekDate6(String weekDate6) {
+		this.weekDate6 = weekDate6;
+	}
+	public String getProjectNo() {
+		return projectNo;
+	}
+	public void setProjectNo(String projectNo) {
+		this.projectNo = projectNo;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public Integer getProjectStatus() {
+		return projectStatus;
+	}
+	public void setProjectStatus(Integer projectStatus) {
+		this.projectStatus = projectStatus;
+	}
+	public String getProjectStatusStr() {
+		return projectStatusStr;
+	}
+	public void setProjectStatusStr(String projectStatusStr) {
+		this.projectStatusStr = projectStatusStr;
+	}
+	public BigDecimal getHkTotal() {
+		return hkTotal;
+	}
+	public void setHkTotal(BigDecimal hkTotal) {
+		this.hkTotal = hkTotal;
+	}
+	public BigDecimal getWeekTotal1() {
+		return weekTotal1;
+	}
+	public void setWeekTotal1(BigDecimal weekTotal1) {
+		this.weekTotal1 = weekTotal1;
+	}
+	public BigDecimal getWeekTotal2() {
+		return weekTotal2;
+	}
+	public void setWeekTotal2(BigDecimal weekTotal2) {
+		this.weekTotal2 = weekTotal2;
+	}
+	public BigDecimal getWeekTotal3() {
+		return weekTotal3;
+	}
+	public void setWeekTotal3(BigDecimal weekTotal3) {
+		this.weekTotal3 = weekTotal3;
+	}
+	public BigDecimal getWeekTotal4() {
+		return weekTotal4;
+	}
+	public void setWeekTotal4(BigDecimal weekTotal4) {
+		this.weekTotal4 = weekTotal4;
+	}
+	public BigDecimal getWeekTotal5() {
+		return weekTotal5;
+	}
+	public void setWeekTotal5(BigDecimal weekTotal5) {
+		this.weekTotal5 = weekTotal5;
+	}
+	public BigDecimal getWeekTotal6() {
+		return weekTotal6;
+	}
+	public void setWeekTotal6(BigDecimal weekTotal6) {
+		this.weekTotal6 = weekTotal6;
+	}
+	public BigDecimal getXjAccount1() {
+		return xjAccount1;
+	}
+	public void setXjAccount1(BigDecimal xjAccount1) {
+		this.xjAccount1 = xjAccount1;
+	}
+	public BigDecimal getXjAccount2() {
+		return xjAccount2;
+	}
+	public void setXjAccount2(BigDecimal xjAccount2) {
+		this.xjAccount2 = xjAccount2;
+	}
+	public BigDecimal getXjAccount3() {
+		return xjAccount3;
+	}
+	public void setXjAccount3(BigDecimal xjAccount3) {
+		this.xjAccount3 = xjAccount3;
+	}
+	public BigDecimal getXjAccount4() {
+		return xjAccount4;
+	}
+	public void setXjAccount4(BigDecimal xjAccount4) {
+		this.xjAccount4 = xjAccount4;
+	}
+	public BigDecimal getXjAccount5() {
+		return xjAccount5;
+	}
+	public void setXjAccount5(BigDecimal xjAccount5) {
+		this.xjAccount5 = xjAccount5;
+	}
+	public BigDecimal getXjAccount6() {
+		return xjAccount6;
+	}
+	public void setXjAccount6(BigDecimal xjAccount6) {
+		this.xjAccount6 = xjAccount6;
+	}
+	public BigDecimal getDfAccount1() {
+		return dfAccount1;
+	}
+	public void setDfAccount1(BigDecimal dfAccount1) {
+		this.dfAccount1 = dfAccount1;
+	}
+	public BigDecimal getDfAccount2() {
+		return dfAccount2;
+	}
+	public void setDfAccount2(BigDecimal dfAccount2) {
+		this.dfAccount2 = dfAccount2;
+	}
+	public BigDecimal getDfAccount3() {
+		return dfAccount3;
+	}
+	public void setDfAccount3(BigDecimal dfAccount3) {
+		this.dfAccount3 = dfAccount3;
+	}
+	public BigDecimal getDfAccount4() {
+		return dfAccount4;
+	}
+	public void setDfAccount4(BigDecimal dfAccount4) {
+		this.dfAccount4 = dfAccount4;
+	}
+	public BigDecimal getDfAccount5() {
+		return dfAccount5;
+	}
+	public void setDfAccount5(BigDecimal dfAccount5) {
+		this.dfAccount5 = dfAccount5;
+	}
+	public BigDecimal getDfAccount6() {
+		return dfAccount6;
+	}
+	public void setDfAccount6(BigDecimal dfAccount6) {
+		this.dfAccount6 = dfAccount6;
+	}
+}

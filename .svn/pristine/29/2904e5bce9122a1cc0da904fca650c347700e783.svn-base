@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.badDebts.dao.BadDebtsDetailMapper">
+
+	<select id="queryBadDebtsList" parameterType="Map" resultType="cn.com.eju.deal.dto.houseLinkage.badDebts.BadDebtsDetailDto">
+		SELECT row_number() OVER(ORDER BY org.regionCode, org.areaCityCode, item.cityGroupId, d.reportNo desc,item.suitNum desc) rowNum,
+		dbo.F_ClearNullStr(item.accountProject) accountProject,
+		dbo.F_ClearNullStr(item.accountProjectNo) accountProjectNo,
+		dbo.F_ClearNullStr(org.regionName) regionName,
+		dbo.F_ClearNullStr(org.areaCityName) cityGroupName,
+		dbo.F_ClearNullStr(item.cityGroupName) cityGroupName,
+		dbo.F_ClearNullStr(item.areaGroupName) areaGroupName,
+		dbo.F_ClearNullStr(item.centerGroupName) centerGroupName,
+		dbo.F_ClearNullStr(item.groupName) groupName,
+		dbo.F_ClearNullStr(item.expenderName) expenderName,
+		dbo.F_ClearNullStr(item.expenderCode) expenderCode,
+		dbo.F_ClearNullStr(item.projectCityName) projectCityName,
+		dbo.F_ClearNullStr(item.projectDepartmentName) projectDepartmentName,
+		dbo.F_ClearNullStr(item.projectCityName) srCityName,
+		dbo.F_ClearNullStr(h.projectNo) projectNo,
+		dbo.F_ClearNullStr(item.estateNm) estateNm,
+		dbo.F_ClearNullStr(item.partnerNm) partnerNm,
+		dbo.F_ClearNullStr(item.bigCustomerName) bigCustomerName,
+		dbo.F_ClearNullStr(item.bigCustomerFlagStr) bigCustomerFlagStr,
+		dbo.F_ClearNullStr(d.reportNo) reportId,
+		dbo.F_ClearNullStr(item.buildingNo) buildingNo,
+		dbo.F_ClearNullInt(item.suitNum) suitNum,
+		dbo.F_ClearNullMoney(item.roughArea) roughArea,
+		dbo.F_ClearNullMoney(item.roughPrice) roughPrice,
+		dbo.F_ClearNullMoney(item.roughAmount) roughAmount,
+		dbo.F_ClearNullDate(item.roughAuditTime) roughAuditTime,
+		dbo.F_ClearNullDate(item.roughDate) roughDate,
+		dbo.F_ClearNullMoney(item.dealArea) dealArea,
+		dbo.F_ClearNullMoney(item.dealPrice) dealPrice,
+		dbo.F_ClearNullMoney(item.dealAmount) dealAmount,
+		dbo.F_ClearNullDate(item.dealDate) dealDate,
+		dbo.F_ClearNullStr(item.incomeStatusStr) incomeStatusStr,
+		dbo.F_ClearNullMoney(SUM(yjsrBefTaxAmount)) yjsrTotalBef,
+		dbo.F_ClearNullMoney(SUM(yjsrAftTaxAmount)) yjsrTotalAft,
+		dbo.F_ClearNullMoney(SUM(yj_bcjt)) yjJtTotal,
+		dbo.F_ClearNullDate(accruedDate) yjJtDate,
+		dbo.F_ClearNullMoney(SUM(yjsrBefTaxAmount)-SUM(sssrBefTaxAmount)-SUM(b.ljyjhzAmount)) yjYue,
+		dbo.F_ClearNullStr(hbl_khName) yjJtKhname,
+		dbo.F_ClearNullMoney(SUM(hbl_Amount)) yjHblAmount,
+		dbo.F_ClearNullMoney(SUM(yssrBefTaxAmount)) yssrTotalBef,
+		dbo.F_ClearNullMoney(SUM(yssrAftTaxAmount)) yssrTotalAft,
+		dbo.F_ClearNullMoney(SUM(ys_bcjt)) ysJtTotal,
+		dbo.F_ClearNullDate(accruedDate) ysJtDate,
+		dbo.F_ClearNullMoney(SUM(yssrBefTaxAmount)-SUM(sssrBefTaxAmount)-SUM(b.ljyjhzAmount)) ysYue,
+		dbo.F_ClearNullMoney(SUM(kp_bcjt)) kpJtTotal,
+		dbo.F_ClearNullDate(accruedDate) kpJtDate
+		FROM dbo.OA_Cash_Bad_Debts h (NOLOCK)
+		LEFT JOIN dbo.OA_Cash_Bad_Debts_Detail d (NOLOCK) ON d.delFlag=0 AND d.badDebtsId=h.id
+		LEFT JOIN dbo.V_CRM_CASHBILL_LJ_DATA b (NOLOCK) ON b.reportId=d.reportNo
+		LEFT JOIN dbo.RPT_LinkDetail item (NOLOCK) ON item.ReportId = b.reportId
+		LEFT JOIN (
+		SELECT distinct yearly, regionCode, regionName, areaCityCode, areaCityName, cityGroupId, cityGroupName
+		FROM dbo.V_USR_OrgHis
+		<if test="organization != null and organization != ''">
+			WHERE yearly = #{organization, jdbcType=VARCHAR}
+		</if>
+		) org ON org.cityGroupId = item.cityGroupId
+		WHERE h.incomeType='联动'
+		<if test="roughDateStart != null and roughDateStart != ''">
+			AND item.roughDate >= convert(datetime, '${roughDateStart}')
+		</if>
+		<if test="roughDateEnd != null and roughDateEnd != ''">
+			AND item.roughDate &lt; convert(datetime, '${roughDateEnd}') + 1
+		</if>
+		<if test="dealDateStart != null and dealDateStart != ''">
+			AND item.dealDate >= convert(datetime, '${dealDateStart}')
+		</if>
+		<if test="dealDateEnd != null and dealDateEnd != ''">
+			AND item.dealDate &lt; convert(datetime, '${dealDateEnd}') + 1
+		</if>
+		<if test="estateId != null and estateId != ''">
+			AND (item.estateId LIKE CONCAT('', #{estateId, jdbcType=NVARCHAR}) OR item.projectNo LIKE CONCAT('%', #{estateId, jdbcType=NVARCHAR}))
+		</if>
+		<if test="estateNm != null and estateNm != ''">
+			AND item.EstateNm LIKE CONCAT('%', #{estateNm, jdbcType=NVARCHAR}, '%')
+		</if>
+		<if test="reportId != null and reportId != ''">
+			AND item.reportId LIKE CONCAT('%', #{reportId, jdbcType=NVARCHAR})
+		</if>
+		<if test="organization != null and organization != ''">
+			AND item.year = #{organization}
+		</if>
+		<if test="customerFromId != null and customerFromId != ''">
+			AND item.customerFrom = #{customerFromId}
+		</if>
+		<if test="accountProjectList != null">
+			AND item.accountProjectNo IN
+			<foreach collection="accountProjectList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="regionCodeList != null">
+			AND org.regionCode IN
+			<foreach collection="regionCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="areaCityCodeList != null">
+			AND org.areaCityCode IN
+			<foreach collection="areaCityCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="cityIdList != null">
+			AND item.cityId IN
+			<foreach collection="cityIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="centerIdList != null">
+			AND item.centerGroupId IN
+			<foreach collection="centerIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="userId != null and userId != ''">
+			AND (
+			(
+			item.centerGroupId is null AND item.cityId in (SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter(#{userId}, 'CRM'))
+			) OR (
+			item.centerGroupId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+			) OR (
+			item.projectDepartmentId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+			)
+			)
+		</if>
+		GROUP BY org.regionCode, org.areaCityCode, item.cityGroupId,item.accountProject,item.accountProjectNo,
+		org.regionName,org.areaCityName,item.cityGroupName,item.areaGroupName,item.centerGroupName,item.groupName,
+		item.expenderName,item.expenderCode, item.projectCityName,item.projectDepartmentName,item.projectCityName,
+		h.projectNo,item.estateNm,item.partnerNm,item.bigCustomerName ,item.bigCustomerFlagStr,
+		item.roughArea,item.roughPrice,item.roughAmount,item.roughAuditTime,item.roughDate,
+		item.dealArea,item.dealPrice,item.dealAmount,item.dealDate,item.incomeStatusStr,
+		d.reportNo,item.buildingNo,item.suitNum,accruedDate,hbl_khName
+		ORDER BY rowNum
+	</select>
+
+	<select id="queryLongBadDebtsList" parameterType="Map" resultType="cn.com.eju.deal.dto.houseLinkage.badDebts.LongBadDebtsDto">
+		EXEC P_CRM_RPT_LongBadDebts #{cityNo}, #{projectNo},#{reportNo}, #{currentYear}, #{endDate},#{userCode},#{zlminMonth},#{checkType}
+	</select>
+</mapper>

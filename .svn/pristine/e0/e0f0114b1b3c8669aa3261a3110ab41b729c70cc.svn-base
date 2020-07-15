@@ -1,0 +1,67 @@
+package cn.com.eju.pmls.rptCompany.controller;
+
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import cn.com.eju.deal.base.controller.BaseController;
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.pmls.rptCompany.service.RptCompanyDetailService;
+
+@RestController
+@RequestMapping("rptCompanyDetail")
+public class RptCompanyDetailController extends BaseController {
+	
+    @Resource
+    private RptCompanyDetailService rptCompanyDetailService;
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    /**
+     * desc:经纪公司明细列表
+     * 2020年6月17日
+     */
+    @RequestMapping(value = "/queryCompanyDetailList/{param}", method = RequestMethod.GET)
+    public String queryCompanyDetailList(@PathVariable String param)
+    {
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        ResultData resultData = new ResultData();
+        try{
+            resultData = rptCompanyDetailService.queryCompanyDetailList(queryParam);
+        }catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("rptCompany", "RptCompanyDetailController", "queryCompanyDetailList", "", null, "", "获取经纪公司明细列表失败", e);
+        }
+        return resultData.toString();
+    }
+    
+	/**
+	 * desc:获取表头
+	 * 2020年6月18日
+	 */
+    @RequestMapping(value = "/getTitle", method = RequestMethod.POST)
+    public String getTitle(@RequestBody String json)
+    {
+        ResultData resultData = new ResultData();
+        Map<String, Object> queryParam = JsonUtil.parseToObject(json, Map.class);
+        try{
+        	resultData = rptCompanyDetailService.getTitle(queryParam);
+        }catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("rptCompany", "RptCompanyDetailController", "getTitle", "",
+					null, "", "获取经纪公司明细表头失败", e);
+        }
+        return resultData.toString();
+    }
+    
+}

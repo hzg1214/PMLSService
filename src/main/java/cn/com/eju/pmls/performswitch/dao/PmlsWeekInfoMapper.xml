@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.performswitch.dao.PmlsWeekInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.performswitch.model.PmlsWeekInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="year" jdbcType="VARCHAR" property="year" />
+    <result column="month" jdbcType="VARCHAR" property="month" />
+    <result column="weekNo" jdbcType="INTEGER" property="weekNo" />
+    <result column="weekStartDate" jdbcType="DATE" property="weekStartDate" />
+    <result column="weekEndDate" jdbcType="DATE" property="weekEndDate" />
+    <result column="weekStartDateStr" jdbcType="VARCHAR" property="weekStartDateStr" />
+    <result column="weekEndDateStr" jdbcType="VARCHAR" property="weekEndDateStr" />
+    <result column="yearWeek" jdbcType="INTEGER" property="yearWeek" />
+    <result column="sortNo" jdbcType="INTEGER" property="sortNo" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="createUserCode" jdbcType="VARCHAR" property="createUserCode" />
+    <result column="updateDate" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="updateUserCode" jdbcType="VARCHAR" property="updateUserCode" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+
+    <result column="monthWeekNum" jdbcType="INTEGER" property="monthWeekNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, year, month, weekNo, weekStartDate, weekEndDate, weekStartDateStr, weekEndDateStr, 
+    yearWeek, sortNo, createDate, createUserCode, updateDate, updateUserCode, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Pmls_Week_Info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Pmls_Week_Info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.performswitch.model.PmlsWeekInfo">
+    insert into Pmls_Week_Info (id, year, month, 
+      weekNo, weekStartDate, weekEndDate, 
+      weekStartDateStr, weekEndDateStr, yearWeek, 
+      sortNo, createDate, createUserCode, 
+      updateDate, updateUserCode, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{year,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, 
+      #{weekNo,jdbcType=INTEGER}, #{weekStartDate,jdbcType=DATE}, #{weekEndDate,jdbcType=DATE}, 
+      #{weekStartDateStr,jdbcType=VARCHAR}, #{weekEndDateStr,jdbcType=VARCHAR}, #{yearWeek,jdbcType=INTEGER}, 
+      #{sortNo,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{createUserCode,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{updateUserCode,jdbcType=VARCHAR}, #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.performswitch.model.PmlsWeekInfo">
+    insert into Pmls_Week_Info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="year != null">
+        year,
+      </if>
+      <if test="month != null">
+        month,
+      </if>
+      <if test="weekNo != null">
+        weekNo,
+      </if>
+      <if test="weekStartDate != null">
+        weekStartDate,
+      </if>
+      <if test="weekEndDate != null">
+        weekEndDate,
+      </if>
+      <if test="weekStartDateStr != null">
+        weekStartDateStr,
+      </if>
+      <if test="weekEndDateStr != null">
+        weekEndDateStr,
+      </if>
+      <if test="yearWeek != null">
+        yearWeek,
+      </if>
+      <if test="sortNo != null">
+        sortNo,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="createUserCode != null">
+        createUserCode,
+      </if>
+      <if test="updateDate != null">
+        updateDate,
+      </if>
+      <if test="updateUserCode != null">
+        updateUserCode,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="year != null">
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+        #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="weekNo != null">
+        #{weekNo,jdbcType=INTEGER},
+      </if>
+      <if test="weekStartDate != null">
+        #{weekStartDate,jdbcType=DATE},
+      </if>
+      <if test="weekEndDate != null">
+        #{weekEndDate,jdbcType=DATE},
+      </if>
+      <if test="weekStartDateStr != null">
+        #{weekStartDateStr,jdbcType=VARCHAR},
+      </if>
+      <if test="weekEndDateStr != null">
+        #{weekEndDateStr,jdbcType=VARCHAR},
+      </if>
+      <if test="yearWeek != null">
+        #{yearWeek,jdbcType=INTEGER},
+      </if>
+      <if test="sortNo != null">
+        #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserCode != null">
+        #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserCode != null">
+        #{updateUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.performswitch.model.PmlsWeekInfo">
+    update Pmls_Week_Info
+    <set>
+      <if test="year != null">
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+        month = #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="weekNo != null">
+        weekNo = #{weekNo,jdbcType=INTEGER},
+      </if>
+      <if test="weekStartDate != null">
+        weekStartDate = #{weekStartDate,jdbcType=DATE},
+      </if>
+      <if test="weekEndDate != null">
+        weekEndDate = #{weekEndDate,jdbcType=DATE},
+      </if>
+      <if test="weekStartDateStr != null">
+        weekStartDateStr = #{weekStartDateStr,jdbcType=VARCHAR},
+      </if>
+      <if test="weekEndDateStr != null">
+        weekEndDateStr = #{weekEndDateStr,jdbcType=VARCHAR},
+      </if>
+      <if test="yearWeek != null">
+        yearWeek = #{yearWeek,jdbcType=INTEGER},
+      </if>
+      <if test="sortNo != null">
+        sortNo = #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserCode != null">
+        createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserCode != null">
+        updateUserCode = #{updateUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.performswitch.model.PmlsWeekInfo">
+    update Pmls_Week_Info
+    set year = #{year,jdbcType=VARCHAR},
+      month = #{month,jdbcType=VARCHAR},
+      weekNo = #{weekNo,jdbcType=INTEGER},
+      weekStartDate = #{weekStartDate,jdbcType=DATE},
+      weekEndDate = #{weekEndDate,jdbcType=DATE},
+      weekStartDateStr = #{weekStartDateStr,jdbcType=VARCHAR},
+      weekEndDateStr = #{weekEndDateStr,jdbcType=VARCHAR},
+      yearWeek = #{yearWeek,jdbcType=INTEGER},
+      sortNo = #{sortNo,jdbcType=INTEGER},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      updateUserCode = #{updateUserCode,jdbcType=VARCHAR},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+<!--   回款跟踪数据初始化-年月-周 -->
+  <select id="getWeeks" parameterType="map" resultMap="BaseResultMap">
+    select 
+    	t1.*,
+    	t2.monthWeekNum
+    from Pmls_Week_Info t1
+        inner join (
+            	SELECT year,month,COUNT(weekNo) AS monthWeekNum FROM dbo.Pmls_Week_Info where delFlag=0 GROUP BY year,month
+        ) t2 on t1.year = t2.year and t1.month = t2.month
+    where t1.delFlag=0
+    <if test="year != null ">
+        AND t1.year=#{year}
+    </if>
+    <if test="month != null ">
+        AND t1.month=#{month}
+    </if>
+    ORDER BY CAST( t1.year AS int),CAST( t1.month AS int),t1.weekNo
+  </select>
+
+
+    <select id="getWeekInfoBySelective" parameterType="map" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+          from Pmls_Week_Info t1
+          where t1.delFlag=0
+          <if test="year != null and year !='' ">
+              AND t1.year=#{year}
+          </if>
+          <if test="month != null and month !='' ">
+              AND t1.month=#{month}
+          </if>
+          <if test="weekNo != null">
+              AND t1.weekNo=#{weekNo}
+          </if>
+          <if test="sortNo != null">
+              AND t1.sortNo=#{sortNo}
+          </if>
+  </select>
+
+</mapper>

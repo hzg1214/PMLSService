@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.ConcernedStoreMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.ConcernedStore" >
+    <id column="concernedId" property="concernedId" jdbcType="INTEGER" />
+    <result column="userId" property="userId" jdbcType="INTEGER" />
+    <result column="storeId" property="storeId" jdbcType="INTEGER" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="isDelete" property="isDelete" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    concernedId, userId, storeId, dateCreate, isDelete
+  </sql>
+  <!-- 查询-根据id -->
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM ConcernedStore
+    WHERE concernedId = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询 list -->
+   <select id='queryList' parameterType="Map" resultMap="BaseResultMap">
+    SELECT cs.* 
+	FROM dbo.ConcernedStore (NOLOCK) cs
+	LEFT JOIN dbo.Follow (NOLOCK) f ON f.StoreId = cs.storeId AND f.IsDelete=0
+	LEFT JOIN dbo.Store (NOLOCK) s ON s.Id=cs.storeId AND s.IsDelete=0
+    <where>
+    	cs.isDelete=0
+    	<if test="userId != null and userId != ''">
+            <![CDATA[AND cs.userId = #{userId,jdbcType=INTEGER}]]>
+        </if>
+        <if test="storeId != null and storeId != ''">
+            <![CDATA[AND cs.storeId = #{storeId,jdbcType=INTEGER}]]>
+        </if>
+        <if test="dateCreate != null and dateCreate != ''">
+            <![CDATA[AND cs.dateCreate = #{dateCreate,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="contractStatus != null and contractStatus != ''"><!-- 查询条件: 未签（即 contractType 为null 或0 的场合） -->
+            <![CDATA[
+            	AND (contractType = 0 OR contractType IS NULL )
+            	]]>
+        </if>
+        <if test="contractType != null and contractType != ''">
+            <![CDATA[AND ContractType = #{contractType,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="dateFollowFrom != null and dateFollowFrom != '' and dateFollowTo != null and dateFollowTo != ''">
+ 		  	<![CDATA[
+ 		  		AND f.DateCreate BETWEEN #{dateFollowFrom,jdbcType=TIMESTAMP} AND #{dateFollowTo,jdbcType=TIMESTAMP}
+   			]]>
+		</if>
+    </where>
+    GROUP BY cs.concernedId,cs.dateCreate,cs.isDelete,cs.storeId,cs.userId
+   </select>
+   <!-- 新增 -->
+  <insert id="create" parameterType="cn.com.eju.deal.store.model.ConcernedStore" useGeneratedKeys="true" keyProperty="concernedId">
+    INSERT INTO ConcernedStore (userId, storeId, 
+      dateCreate, isDelete)
+    values (#{userId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, 
+      GETDATE(), 0)
+  </insert>
+  <!-- 修改 -->
+  <update id="update" parameterType="cn.com.eju.deal.store.model.ConcernedStore" >
+    update ConcernedStore
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        storeId = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        isDelete = #{isDelete,jdbcType=BIT},
+      </if>
+    </set>
+    where concernedId = #{concernedId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 逻辑删除 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    UPDATE ConcernedStore
+    SET isDelete = 1
+    where concernedId = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.settleconfirm.dao.SettleConfirmMapper" >
+
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.dto.scene.padCommission.PadCommissionResultDto" ></resultMap>
+
+  
+  <select id="getSettleConfirmList" parameterType="Map" resultMap="BaseResultMap">
+      SELECT  DISTINCT
+      ROW_NUMBER() OVER (ORDER BY report.estateId,reportDetail.buildingNo) rowNo
+      ,report.estateId
+      ,report.estateNm
+      ,report.reportId
+      ,Estate.projectNo
+      ,reportDetail.buildingNo
+      ,cast(round(reportDetail.dealAmount,2)         AS numeric(20,2)) dealAmount
+      ,convert(char(10),reportDetail.dealDate,120)   AS dealDate
+      ,reportDetail.tsnum AS num
+      ,reportDetail.dealArea as area
+      ,convert(char(10),reportDetail.settleConfirmDate,120) as settleConfirmDate
+      FROM dbo.LNK_Report report
+      INNER JOIN (
+          SELECT * FROM (
+            SELECT ROW_NUMBER() OVER(PARTITION BY kk.reportId ORDER BY kk.roughDate desc)  AS w, * FROM
+<!--               (SELECT  x1.Id,LEFT(x1.CountId,15) reportId,x1.buildingNo,x1.roughAmount,x1.roughArea,x1.roughDate, -->
+              (SELECT  x1.Id,x1.reportNo reportId,x1.buildingNo,x1.roughAmount,x1.roughArea,x1.roughDate,
+                x1.settleConfirmDate,
+              CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE x1.dealAmount END dealAmount,
+              CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE x1.area END dealArea,
+              CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE x1.dealDate END dealDate,
+              1 tsnum,x1.pledgedDate
+              FROM dbo.LNK_ReportDetail x1 WITH(NOLOCK)
+              WHERE x1.Progress = 13505
+              AND x1.DelFlg =0) kk
+          ) t WHERE t.w=1
+      ) reportDetail
+      ON report.ReportId = reportDetail.reportId
+      INNER JOIN LNK_Estate Estate
+      ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+      where 1=1
+      AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+      <if test="projectDepartmentId != null and projectDepartmentId != ''">
+	  AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+	  </if>
+      <if test="reportId != null and reportId != ''">
+          <![CDATA[AND report.reportId LIKE '%' + RTrim(LTrim('${reportId}')) + '%']]>
+      </if>
+	  <if test="searchKey != null and searchKey != ''">
+	  <![CDATA[
+	   AND (Estate.projectNo LIKE '%${searchKey}%'
+	   OR report.CustomerNm LIKE '%${searchKey}%'
+	   OR report.CustomerTel LIKE '%${searchKey}%'
+	   OR Estate.DevCompany LIKE '%${searchKey}%'
+	   OR reportDetail.buildingNo LIKE  '%${searchKey}%' )
+	  ]]>
+	  </if>
+      <if test="estateNmKey != null and estateNmKey != ''">
+          AND report.estateNm IN (${estateNmKey})
+      </if>
+      and report.ConfirmStatus = 13601
+      and report.LatestProgress = 13505
+      and  reportDetail.dealDate>=#{countDateStart} and reportDetail.dealDate &lt;=#{countDateEnd}
+	  ORDER BY report.estateId,reportDetail.buildingNo
+  </select>
+
+    <update id="updateSettleConfirmDate" parameterType="cn.com.eju.deal.dto.houseLinkage.report.ReportDto">
+      UPDATE  dbo.LNK_ReportDetail WITH(ROWLOCK)
+        SET     settleConfirmDate = #{settleConfirmDate} ,
+                UptDt = GETDATE() ,
+                UptEmpId = #{uptEmpId}
+        FROM    LNK_ReportDetail rd
+                JOIN dbo.Lnk_report r ON rd.estateId = r.estateId
+                                         AND rd.companyId = r.companyId
+                                         AND rd.customerId = r.customerId
+                                         AND r.reportId = #{reportId}
+                                         AND r.dealDate &lt;= #{settleConfirmDate}
+    </update>
+
+</mapper>

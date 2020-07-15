@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.jsStatement.dao.PmlsJsStatementDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="jssId" property="jssId" jdbcType="INTEGER" />
+    <result column="reportId" property="reportId" jdbcType="VARCHAR" />
+    <result column="customerName" property="customerName" jdbcType="NVARCHAR" />
+    <result column="customerTel" property="customerTel" jdbcType="VARCHAR" />
+    <result column="buildingNo" property="buildingNo" jdbcType="NVARCHAR" />
+    <result column="cxArea" property="cxArea" jdbcType="DECIMAL" />
+    <result column="cxAmount" property="cxAmount" jdbcType="DECIMAL" />
+    <result column="jsbl" property="jsbl" jdbcType="DECIMAL" />
+    <result column="jsAmount" property="jsAmount" jdbcType="DECIMAL" />
+    <result column="jyAmount" property="jyAmount" jdbcType="DECIMAL" />
+    <result column="kpAmount" property="kpAmount" jdbcType="DECIMAL" />
+    <result column="kpTaxAmount" property="kpTaxAmount" jdbcType="DECIMAL" />
+    <result column="kpTaxAmountAfter" property="kpTaxAmountAfter" jdbcType="DECIMAL" />
+    <result column="contractYdAmount" property="contractYdAmount" jdbcType="DECIMAL" />
+    <result column="yjsAmount" property="yjsAmount" jdbcType="DECIMAL" />
+    <result column="projectCode" property="projectCode" jdbcType="VARCHAR" />
+    <result column="projectName" property="projectName" jdbcType="VARCHAR" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="userIdUpdate" property="userIdUpdate" jdbcType="INTEGER" />
+    <result column="jsStatementType" property="jsStatementType" jdbcType="INTEGER" />
+    <result column="offSetFlag" property="offSetFlag" jdbcType="INTEGER" />
+    <result column="requestAmount" property="requestAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, jssId, reportId, customerName, customerTel, buildingNo, cxArea, cxAmount, jsbl, 
+    jsAmount, jyAmount, kpAmount, kpTaxAmount, kpTaxAmountAfter, contractYdAmount, yjsAmount, 
+    projectCode, projectName, delFlag, dateCreate, userIdCreate, dateUpdate, userIdUpdate, 
+    jsStatementType, offSetFlag, requestAmount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from PMLS_JsStatement_Dtl
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from PMLS_JsStatement_Dtl
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl" >
+    insert into PMLS_JsStatement_Dtl (id, jssId, reportId, 
+      customerName, customerTel, buildingNo, 
+      cxArea, cxAmount, jsbl, 
+      jsAmount, jyAmount, kpAmount, 
+      kpTaxAmount, kpTaxAmountAfter, contractYdAmount, 
+      yjsAmount, projectCode, projectName, 
+      delFlag, dateCreate, userIdCreate, 
+      dateUpdate, userIdUpdate, jsStatementType, 
+      offSetFlag, requestAmount)
+    values (#{id,jdbcType=INTEGER}, #{jssId,jdbcType=INTEGER}, #{reportId,jdbcType=VARCHAR}, 
+      #{customerName,jdbcType=NVARCHAR}, #{customerTel,jdbcType=VARCHAR}, #{buildingNo,jdbcType=NVARCHAR}, 
+      #{cxArea,jdbcType=DECIMAL}, #{cxAmount,jdbcType=DECIMAL}, #{jsbl,jdbcType=DECIMAL}, 
+      #{jsAmount,jdbcType=DECIMAL}, #{jyAmount,jdbcType=DECIMAL}, #{kpAmount,jdbcType=DECIMAL}, 
+      #{kpTaxAmount,jdbcType=DECIMAL}, #{kpTaxAmountAfter,jdbcType=DECIMAL}, #{contractYdAmount,jdbcType=DECIMAL}, 
+      #{yjsAmount,jdbcType=DECIMAL}, #{projectCode,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=BIT}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{dateUpdate,jdbcType=TIMESTAMP}, #{userIdUpdate,jdbcType=INTEGER}, #{jsStatementType,jdbcType=INTEGER}, 
+      #{offSetFlag,jdbcType=INTEGER}, #{requestAmount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl" >
+    insert into PMLS_JsStatement_Dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="jssId != null" >
+        jssId,
+      </if>
+      <if test="reportId != null" >
+        reportId,
+      </if>
+      <if test="customerName != null" >
+        customerName,
+      </if>
+      <if test="customerTel != null" >
+        customerTel,
+      </if>
+      <if test="buildingNo != null" >
+        buildingNo,
+      </if>
+      <if test="cxArea != null" >
+        cxArea,
+      </if>
+      <if test="cxAmount != null" >
+        cxAmount,
+      </if>
+      <if test="jsbl != null" >
+        jsbl,
+      </if>
+      <if test="jsAmount != null" >
+        jsAmount,
+      </if>
+      <if test="jyAmount != null" >
+        jyAmount,
+      </if>
+      <if test="kpAmount != null" >
+        kpAmount,
+      </if>
+      <if test="kpTaxAmount != null" >
+        kpTaxAmount,
+      </if>
+      <if test="kpTaxAmountAfter != null" >
+        kpTaxAmountAfter,
+      </if>
+      <if test="contractYdAmount != null" >
+        contractYdAmount,
+      </if>
+      <if test="yjsAmount != null" >
+        yjsAmount,
+      </if>
+      <if test="projectCode != null" >
+        projectCode,
+      </if>
+      <if test="projectName != null" >
+        projectName,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate,
+      </if>
+      <if test="jsStatementType != null" >
+        jsStatementType,
+      </if>
+      <if test="offSetFlag != null" >
+        offSetFlag,
+      </if>
+      <if test="requestAmount != null" >
+        requestAmount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="jssId != null" >
+        #{jssId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="customerTel != null" >
+        #{customerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null" >
+        #{buildingNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="cxArea != null" >
+        #{cxArea,jdbcType=DECIMAL},
+      </if>
+      <if test="cxAmount != null" >
+        #{cxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jsbl != null" >
+        #{jsbl,jdbcType=DECIMAL},
+      </if>
+      <if test="jsAmount != null" >
+        #{jsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jyAmount != null" >
+        #{jyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpAmount != null" >
+        #{kpAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTaxAmount != null" >
+        #{kpTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTaxAmountAfter != null" >
+        #{kpTaxAmountAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="contractYdAmount != null" >
+        #{contractYdAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsAmount != null" >
+        #{yjsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="projectCode != null" >
+        #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="jsStatementType != null" >
+        #{jsStatementType,jdbcType=INTEGER},
+      </if>
+      <if test="offSetFlag != null" >
+        #{offSetFlag,jdbcType=INTEGER},
+      </if>
+      <if test="requestAmount != null" >
+        #{requestAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl" >
+    update PMLS_JsStatement_Dtl
+    <set >
+      <if test="jssId != null" >
+        jssId = #{jssId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        reportId = #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        customerName = #{customerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="customerTel != null" >
+        customerTel = #{customerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null" >
+        buildingNo = #{buildingNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="cxArea != null" >
+        cxArea = #{cxArea,jdbcType=DECIMAL},
+      </if>
+      <if test="cxAmount != null" >
+        cxAmount = #{cxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jsbl != null" >
+        jsbl = #{jsbl,jdbcType=DECIMAL},
+      </if>
+      <if test="jsAmount != null" >
+        jsAmount = #{jsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jyAmount != null" >
+        jyAmount = #{jyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpAmount != null" >
+        kpAmount = #{kpAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTaxAmount != null" >
+        kpTaxAmount = #{kpTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTaxAmountAfter != null" >
+        kpTaxAmountAfter = #{kpTaxAmountAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="contractYdAmount != null" >
+        contractYdAmount = #{contractYdAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsAmount != null" >
+        yjsAmount = #{yjsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="projectCode != null" >
+        projectCode = #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        projectName = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="jsStatementType != null" >
+        jsStatementType = #{jsStatementType,jdbcType=INTEGER},
+      </if>
+      <if test="offSetFlag != null" >
+        offSetFlag = #{offSetFlag,jdbcType=INTEGER},
+      </if>
+      <if test="requestAmount != null" >
+        requestAmount = #{requestAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl" >
+    update PMLS_JsStatement_Dtl
+    set jssId = #{jssId,jdbcType=INTEGER},
+      reportId = #{reportId,jdbcType=VARCHAR},
+      customerName = #{customerName,jdbcType=NVARCHAR},
+      customerTel = #{customerTel,jdbcType=VARCHAR},
+      buildingNo = #{buildingNo,jdbcType=NVARCHAR},
+      cxArea = #{cxArea,jdbcType=DECIMAL},
+      cxAmount = #{cxAmount,jdbcType=DECIMAL},
+      jsbl = #{jsbl,jdbcType=DECIMAL},
+      jsAmount = #{jsAmount,jdbcType=DECIMAL},
+      jyAmount = #{jyAmount,jdbcType=DECIMAL},
+      kpAmount = #{kpAmount,jdbcType=DECIMAL},
+      kpTaxAmount = #{kpTaxAmount,jdbcType=DECIMAL},
+      kpTaxAmountAfter = #{kpTaxAmountAfter,jdbcType=DECIMAL},
+      contractYdAmount = #{contractYdAmount,jdbcType=DECIMAL},
+      yjsAmount = #{yjsAmount,jdbcType=DECIMAL},
+      projectCode = #{projectCode,jdbcType=VARCHAR},
+      projectName = #{projectName,jdbcType=VARCHAR},
+      delFlag = #{delFlag,jdbcType=BIT},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      jsStatementType = #{jsStatementType,jdbcType=INTEGER},
+      offSetFlag = #{offSetFlag,jdbcType=INTEGER},
+      requestAmount = #{requestAmount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

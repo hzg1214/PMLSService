@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.rptStore.dao.RptStoreDetailMapper">
+
+  <!--获取门店明细列表-->
+  <select id="queryStoreDetailList"  parameterType="Map" resultType="cn.com.eju.pmls.rptStore.dto.RptStoreDetailDto">
+    	
+
+		--当年大定金额
+		--SELECT  storeId ,
+                --SUM(yearlyAmount) thisTotal
+		--INTO #rough_this
+        --FROM    dbo.RPT_StoreDetail
+        --WHERE   roughYear = #{roughYear}  --大定数据年份
+        --GROUP BY storeId;
+
+		--门店所属公司
+        SELECT  x1.Id companyid ,
+                x1.CompanyNo ,
+                x1.CompanyName ,
+                x2.StoreId
+		INTO #rough_company
+        FROM    dbo.Company x1 ,
+                dbo.CompanyStore x2
+        WHERE   x1.Id = x2.CompanyId
+                AND x1.IsDelete = 0
+                AND x2.IsDelete = 0
+                AND x2.flag = 0;
+        
+        
+        --海波龙数据
+        SELECT DISTINCT
+        		c.id,
+                CityNo ,           --所在城市
+                CityName ,
+                ref.qyCode ,       --归属区域
+                ref.qyName ,
+                ref.areaCityCode , --归属城市
+                ref.areaCityName
+		INTO #rough_hbl
+        FROM    dbo.cloud_shy_fy_city_ref_new ref
+                INNER JOIN dbo.USR_Group g WITH ( NOLOCK ) ON ref.cityGroupId = g.groupId
+                INNER JOIN dbo.BAS_City c WITH ( NOLOCK ) ON c.ID = g.cityId
+        WHERE   year = #{organization}    --架构年份
+                AND orgType = 'FYYJCS'
+                AND cityGroupId NOT IN ( -2, -4, 1733 );  
+		
+
+		SELECT
+		 ROW_NUMBER() OVER(ORDER BY  t1.DateCreate desc) AS rowNum  
+		,t2.* 
+        ,t1.Id id
+		,t1.StoreNo storeNo             --门店
+        ,t1.Name storeName 
+		,t1.Address storeAddress        --门店地址
+		,t1.ContractType  contractType  --是否房友门店
+		,isFyStoreStr = CASE WHEN (t1.ContractType=10302 or t1.ContractType=10304 ) THEN '是'
+			 ELSE '否' end 
+        ,t1.brandType                   --业务类型
+        ,brandTypeStr = ( CASE WHEN t1.brandType =29401
+                                         THEN '分销'
+							   WHEN t1.brandType =29402
+                                         THEN '其他'
+										 ELSE '-'
+                                    END )
+		,t1.pmlsMaintainCode            --联动维护人工号
+		,t1.pmlsMaintainName            --联动维护人名称
+        ,t3.CityNo acCityNo             --业绩所在城市  CRM
+        ,t3.CityName acCityName 
+        ,t3.areaCityCode areaCityNo          --业绩归属城市  海波龙
+        ,t3.areaCityName areaCityName 
+        ,t3.qyCode regionCode           --业绩归属区域  海波龙
+        ,t3.qyName regionName
+        ,t4.companyNo comCompanyNo      --门店所属公司
+		,t4.CompanyName companyName
+		,t5.groupId groupId             --联动维护中心
+		,t5.groupName pmlsGroupName       
+		,dbo.F_ClearNullMoney(ISNULL(t2.yearlyAmount,0)+ISNULL(t2.preAmount,0)) totalAmount--总累计
+		,dbo.F_ClearNullMoney(t2.preAmount) preTotal--当年以前
+		,dbo.F_ClearNullMoney(t2.yearlyAmount) thisTotal--当前新增
+FROM    dbo.Store t1 
+		LEFT JOIN dbo.RPT_StoreDetail  t2 WITH(NOLOCK) ON t1.Id = t2.storeId  and roughYear=#{roughYear}    --大定数据  年份
+		LEFT JOIN #rough_hbl     t3 WITH(NOLOCK) ON t1.AcCityNo = t3.CityNo        
+        LEFT JOIN #rough_company t4 WITH(NOLOCK) ON t1.Id = t4.StoreId
+		LEFT JOIN dbo.USR_Group t5  WITH(NOLOCK) ON t1.pmlsCenterId=t5.groupId AND t5.delFlag='N'
+WHERE   t1.IsDelete = 0
+<!-- 			业务类型 -->
+	    <if test="brandType != null and brandType!=''">
+            AND t1.brandType=#{brandType}
+        </if>
+        <!-- 		归属城市 -->
+	    <if test="areaCityCodeList != null">
+			AND t3.areaCityCode IN
+			<foreach collection="areaCityCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+<!-- 		所在城市 -->
+		<if test="cityIdList != null">
+			AND t3.id IN
+			<foreach collection="cityIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- 房友门店 -->
+        <if test="isFyStore != null and isFyStore != '' and isFyStore==1">
+            AND t1.ContractType in(10302,10304)
+        </if>
+        <if test="isFyStore != null and isFyStore != '' and isFyStore==0">
+            AND t1.ContractType NOT in(10302,10304)
+        </if>
+<!-- 	    门店 -->
+        <if test="storeNo!=null and storeNo!=''">
+	      <![CDATA[
+  				AND (t1.storeNo LIKE '%${storeNo}%' or t1.name LIKE '%${storeNo}%')
+  				]]>
+	    </if>
+<!-- 	    所属公司 -->
+        <if test="companyNo!=null and companyNo!=''">
+	      <![CDATA[
+  				AND (t4.companyNo LIKE '%${companyNo}%' or t4.companyName LIKE '%${companyNo}%')
+  				]]>
+	    </if>
+	    ORDER BY  rowNum;
+	    
+--DROP TABLE #rough_this;
+DROP TABLE #rough_hbl;
+DROP TABLE #rough_company;
+
+  </select>
+  
+  <!--获取经纪公司明细列表-->
+  	<select id="queryStoreDetailListNew"  parameterType="Map" statementType="CALLABLE" resultType="cn.com.eju.pmls.rptStore.dto.RptStoreDetailDto">
+  		EXEC P_PMLS_RPT_StoreDetail #{organization},#{areaCityCodes}, #{cityIds}, #{brandType},#{isFyStore},#{storeNo},#{companyNo},#{roughYear},#{offset},#{rows},#{total,jdbcType=INTEGER,mode=OUT}
+  	</select>
+</mapper>

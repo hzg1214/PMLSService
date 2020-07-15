@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.gpSignContract.GpSignContractMapper" >
+
+	<resultMap id="storeNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="Name" property="storeName" />
+	</resultMap>
+
+	<resultMap id="companyNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.CompanyNewDto">
+		<result column="Id" property="companyId" />
+		<collection property="storeList" column="id" ofType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" select="selectRelationStore"/>
+	</resultMap>
+
+	<select id="selectRelationStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		SELECT
+		gcts.storeState,
+		c.ContractStatus,
+		s.Id
+		,s.StoreNo
+		,s.Name
+		,s.NamePinyin
+		,s.Longitude
+		,s.Latitude
+		,s.IsDelete
+		,s.CityNo
+		,s.DistrictNo
+		,s.AreaNo
+		,s.Address
+		,s.UserCreate
+		,s.StoreStatus
+		,s.DateCreate
+		,s.UserUpdate
+		,s.DateUpdate
+		,s.AddressDetail
+		,s.UserGroupId
+		,s.SubName
+		,s.Maintainer
+		,s.Contacts
+		,s.StoreScale
+		,s.maintainerName
+		,s.decorationState
+		,s.deposit
+		,s.decoractionFeeOne
+		,s.decoractionFeeTwo
+		,s.datePayDcrtFeeOne
+		,s.datePayDcrtFeeTwo
+		,s.pleasePayNoOne
+		,s.pleasePayNoTwo
+		,s.dateAccountDeposit
+		,s.decorationCompNm
+		,s.decorationContractNo
+		,s.dateDecorationBill
+		,s.oaFlopNo
+		,s.dateFlopCkAccept
+		,s.inputSource
+		,s.dataFromType
+		,s.RenewFlag
+		,s.NeededRenew
+		,s.StoreManager
+		,s.StoreManagerPhone
+		,s.LinkageSituation
+		,s.ChainBrand
+		,s.StoreDueTime
+		,s.StorePersonNum
+		,s.NowUserSystem
+		,s.MainBusiness
+		,s.TransactionMode
+		,s.PictureRefId
+		,s.AuditStatus
+		,s.CreateLongitude
+		,s.CreateLatitude
+		,s.Distance
+		,s.storeLeaseDueTime
+		,s.ABTypeStore
+		,s.BTypeStore
+		,s.centerId
+		,isnull(v.centername,'') centerName
+		,s.AcCityNo,s.businessStatus,s.isGpSign
+		FROM dbo.Store(NOLOCK) s
+		LEFT JOIN dbo.GP_CompanyStore cs
+		ON cs.StoreId = s.Id AND cs.IsDelete = 0
+		LEFT JOIN (
+		SELECT MAX(Id) csId ,CS.StoreId,MAX(GpContractId) AS cId
+		FROM
+		dbo.GP_ContractStore CS
+		WHERE cs.IsDelete = 0
+		GROUP BY CS.StoreId
+		) cts
+		ON cts.StoreId = cs.StoreId
+		LEFT JOIN dbo.GP_Contract c
+		ON c.id = cts.cid
+		LEFT JOIN dbo.GP_ContractStore gcts ON cts.csId=  gcts.id AND gcts.storeId = cts.StoreId
+		AND cts.cId = gcts.gpContractId AND gcts.isDelete = 0
+		LEFT JOIN dbo.USR_User u ON s.Maintainer=u.userCode AND u.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] v ON u.groupId=v.groupId
+		WHERE cs.companyId = #{companyId}
+	</select>
+
+	<select id="getCompanyList" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="companyNewDtoMap">
+		SELECT t1.centerId as centerGroupId INTO #temp_centerId FROM dbo.cloud_hbl_fy_org_ref t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId=t2.id AND t2.FlagDeleted=0
+		WHERE t1.orgType ='CENTER' AND t1.year='FY'+RIGHT(YEAR(GETDATE()),2)
+		AND t2.CityNo=#{cityNo};
+
+		SELECT  t.*, CityName + DistrictName + Address AS addressDetail
+		FROM    ( SELECT    ROW_NUMBER() OVER ( ORDER BY c.id DESC ) rowNum ,
+                    COUNT(1) OVER ( ) AS dataCount ,
+                    c.Id,
+                    c.CompanyNo ,
+                    c.CompanyName ,
+                    c.CompanyNamePinyin ,
+                    c.StoreName ,
+                    c.SourceId ,
+                    c.CityNo ,
+                    c.DistrictNo ,
+					bc.CityName ,
+					bd.DistrictName ,
+                    c.AreaNo ,
+                    c.Address ,
+                    c.ContractType ,
+                    c.CompanyScale ,
+                    c.PredictAccountCount ,
+                    c.OriginalVersions ,
+                    c.CompanyStatus ,
+                    COUNT(cs.companyId) AS storeNumber
+          FROM      dbo.Company c
+					LEFT JOIN GP_CompanyStore cs ON c.id = cs.CompanyId AND cs.isDelete = 0
+					LEFT JOIN dbo.Store s ON cs.StoreId = s.Id AND s.IsDelete = 0
+                    LEFT JOIN BAS_City bc ON c.CityNo = bc.CityNo
+                    LEFT JOIN BAS_District bd ON c.DistrictNo = bd.DistrictNo
+          WHERE     c.IsDelete = 0 AND (c.centerId IN (SELECT centerGroupId FROM #temp_centerId) OR s.centerId IN (SELECT centerGroupId FROM #temp_centerId))
+		<if test="searchText != null and searchText != ''">
+			AND (c.CompanyNo LIKE '%' + RTrim(LTrim('${searchText}')) + '%' OR c.CompanyName  LIKE '%' + RTrim(LTrim('${searchText}')) + '%')
+		</if>
+          GROUP BY  c.Id ,
+                    c.CompanyNo ,
+                    c.CompanyName ,
+                    c.CompanyNamePinyin ,
+                    c.StoreName ,
+                    c.SourceId ,
+                    c.CityNo ,
+                    c.DistrictNo ,
+					bc.CityName ,
+					bd.DistrictName ,
+                    c.AreaNo ,
+                    c.Address ,
+                    c.ContractType ,
+                    c.CompanyScale ,
+                    c.PredictAccountCount ,
+                    c.OriginalVersions ,
+                    c.CompanyStatus
+        ) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize});
+
+		drop table #temp_centerId;
+	</select>
+
+	<select id="getSignedStoreByCompanyId" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="storeNewDtoMap">
+		SELECT  s.Id ,
+        s.StoreNo ,
+        s.Name
+		FROM    dbo.GP_CompanyStore cs
+				INNER JOIN dbo.Store s ON cs.StoreId = s.Id
+		WHERE   s.IsDelete = 0
+				AND s.isGpSign = '12501'
+				AND cs.IsDelete = 0
+				AND cs.CompanyId = #{companyId}
+	</select>
+
+	<select id="getRelativeStoreList" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="storeNewDtoMap">
+		SELECT t1.centerId as centerGroupId INTO #temp_centerId FROM dbo.cloud_hbl_fy_org_ref t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId=t2.id AND t2.FlagDeleted=0
+		WHERE t1.orgType ='CENTER' AND t1.year='FY'+RIGHT(YEAR(GETDATE()),2)
+		AND t2.CityNo=#{cityNo};
+
+		SELECT  top 20 s.*
+		FROM    store s
+		WHERE   s.AuditStatus = 20
+				AND s.centerId in (SELECT centerGroupId FROM #temp_centerId)
+				AND NOT EXISTS ( SELECT storeId
+								 FROM   dbo.GP_CompanyStore
+								 WHERE  isDelete = 0
+										AND StoreId = s.id )
+				<if test="searchText!=null and searchText!=''">
+					AND (s.StoreNo LIKE '%${searchText}%' OR s.Name LIKE '%${searchText}%')
+				</if>
+	</select>
+
+	<insert id="addRelativeStore" parameterType="java.util.List">
+		<foreach collection="list" item="item">
+			UPDATE dbo.GP_CompanyStore SET IsDelete = 1 WHERE CompanyId = '${item.companyId}';
+		</foreach>
+
+		INSERT INTO dbo.GP_CompanyStore
+		( CompanyId ,
+		StoreId ,
+		IsDelete ,
+		userCreate ,
+		dateCreate
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.companyId},#{item.storeId},0,#{item.userCreate}, GETDATE())
+		</foreach>
+	</insert>
+
+	<select id="getCompanyById" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultMap="companyNewDtoMap">
+		SELECT  t1.id ,
+        t1.CompanyNo ,
+        t1.CompanyName ,
+        t3.CityNo ,
+        t4.DistrictNo,
+        t3.CityName,
+        t4.DistrictName,
+        t1.Address,
+        ( t3.cityName + t4.districtName + t1.address ) AS addressDetail ,
+        t1.BusinessLicenseNo ,
+        t1.legalPerson ,
+        t1.contactNumber ,
+        ISNULL(t5.depositFee, 0) depositFee
+		FROM    dbo.Company t1
+				LEFT JOIN dbo.BAS_City t3 ON t1.CityNo = t3.CityNo
+				LEFT JOIN dbo.BAS_District t4 ON t1.DistrictNo = t4.DistrictNo
+				LEFT JOIN ( SELECT  CompanyId ,
+									SUM(ISNULL(arrivalDepositFee, 0))
+									- SUM(ISNULL(totalRefundAmount, 0)) AS depositFee
+							FROM    dbo.Contract
+							WHERE   contractStatus in (10403,10406)
+									AND ContractType = 10302
+									AND CompanyId = #{companyId}
+							GROUP BY CompanyId
+						  ) t5 ON t1.Id = t5.CompanyId
+		WHERE   t1.IsDelete = 0
+				AND t1.id = #{companyId}
+	</select>
+
+	<select id="getTodoList" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultType="cn.com.eju.deal.model.signContract.ContractNewDto">
+		SELECT t1.centerId as centerGroupId INTO #temp_centerId FROM dbo.cloud_hbl_fy_org_ref t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId=t2.id AND t2.FlagDeleted=0
+		WHERE t1.orgType ='CENTER' AND t1.year='FY'+RIGHT(YEAR(GETDATE()),2)
+		AND t2.CityNo=#{cityNo};
+
+		SELECT  t.*, partyBCityName + partyBDistrictName + partyBAddress AS addressDetail
+		FROM    ( SELECT  ROW_NUMBER() OVER ( ORDER BY c.DateCreate desc ) rowNum ,
+			COUNT(1) OVER ( ) AS dataCount ,
+			c.id AS contractId,c.gpContractNo AS contractNo,partyB,c.legalPerson,partyBCityNo,partyBCityName,partyBDistrictNo,partyBDistrictName,partyBAddress,
+			gpAgreementNo AS agreementNo,registerId AS businessLicenseNo,ourFullId,ourFullName,storeNum,depositFee,dateLifeStart,dateLifeEnd,exPersonId AS expandingPersonnelId,exPerson AS expandingPersonnel,c.centerId,
+			centerName,accountNm AS accountName,accountProvinceNo AS provinceNo,accountProvinceNm AS provinceName,accountCityNo AS cityNo,accountCityNm AS cityName,bankAccountNm,bankAccount AS accountNo,partyBNm AS authRepresentative,
+			partyBTel AS agentContact,remark, c.cityNo AS cityNo4GpContract,companyId,c.companyName,accountProject,accountProjectNo,contractStatus,c.contractType,
+			dic1.dicValue as contractTypeNm,dic3.dicValue AS contractStatusNm, c.userCreate, us.userName,cy.CompanyNo as companyNo
+			FROM dbo.GP_Contract c
+			LEFT JOIN dbo.BAS_DictionaryValue dic1 ON dic1.dicCode = c.contractType
+			LEFT JOIN dbo.BAS_DictionaryValue dic3 ON dic3.dicCode = c.contractStatus
+			LEFT JOIN dbo.USR_User us on us.userId = c.userCreate and us.delFlag = 'N'
+			LEFT JOIN dbo.Company cy on cy.id = c.companyId and cy.IsDelete = 0
+			WHERE  c.delFlag = 0 AND c.contractStatus IN (10401, 10404) AND c.centerId  in (SELECT centerGroupId FROM #temp_centerId)
+			<if test="searchText != null and searchText != ''">
+				AND (c.gpContractNo LIKE '%${searchText}%' OR c.gpAgreementNo LIKE '%${searchText}%' OR cy.companyNo  LIKE '%${searchText}%' OR cy.CompanyName LIKE '%${searchText}%')
+			</if>
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+
+		DROP TABLE #temp_centerId
+	</select>
+
+	<!-- 根据协议书编号查询合同 -->
+	<select id="getListByAgreementNo" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultType="cn.com.eju.deal.gpContract.model.GpContract">
+		SELECT * FROM GP_Contract
+		WHERE delFlag = 0 AND contractStatus in (10401,10402,10403) AND gpAgreementNo= #{agreementNo,jdbcType=NVARCHAR}
+		<if test="contractId != null and contractId != 0">
+			AND id != #{contractId}
+		</if>
+	</select>
+
+	<select id="checkAcCityNoForCompany" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto" resultType="int">
+		SELECT COUNT(*) FROM dbo.Company(NOLOCK) c
+		LEFT JOIN dbo.GP_CompanyStore(NOLOCK) cs ON cs.CompanyId=c.Id AND cs.isDelete=0 and cs.flag=0
+		LEFT JOIN dbo.Store(NOLOCK) s ON cs.StoreId=s.Id AND s.IsDelete=0
+		WHERE c.Id=#{companyId} AND s.AcCityNo!=c.AcCityNo
+	</select>
+</mapper>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.fangyou.dao.FangyouAccountMapper" >
+   <resultMap id="BaseResultMap" type="cn.com.eju.deal.fangyou.model.FangyouAccount" >
+    <id column="Id" property="id" jdbcType="INTEGER" /> 
+    <result column="StoreId" property="storeId" jdbcType="INTEGER" />
+    <result column="StoreId" property="storeNo" jdbcType="NVARCHAR" />
+    <result column="Name" property="name" jdbcType="NVARCHAR" />
+    <result column="FangyouNo" property="fangyouNo" jdbcType="NVARCHAR" />
+    <result column="OperType" property="operType" jdbcType="NVARCHAR" />
+    <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="UserIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <!--   扩展字段 -->
+    <result column="UserName" property="userName" jdbcType="NVARCHAR" />
+     <result column="userCode" property="userCode" jdbcType="VARCHAR" />
+    <!--   门店房友账号关联表字段 -->
+    <result column="OpenStatus" property="openStatus" jdbcType="NVARCHAR" />
+  </resultMap> 
+  
+   <resultMap id="OpResultMap" type="cn.com.eju.deal.dto.op.OpCompanyDto" />
+
+  <!-- 查询 门店房友账号关联日志表list -->
+  <select id="queryList" parameterType="Map" resultMap="BaseResultMap">
+  	SELECT f.*
+  	,u.userName,u.userCode
+	FROM dbo.LOG_StoreFangyouAccount f 
+	LEFT JOIN USR_User u
+		ON f.UserIdCreate=u.userId
+	<where>
+		f.delFlag = 0
+		<if test="storeId != null">
+ 		  	AND f.storeId = #{storeId,jdbcType=INTEGER}
+		</if>
+	</where>
+	ORDER BY f.id DESC
+  </select>
+  
+<!-- 门店房友账号关联日志表绑定添加 -->
+ <insert id="create" parameterType="Map" useGeneratedKeys="true" keyProperty="Id">
+  	INSERT INTO LOG_StoreFangyouAccount (
+  		storeId,
+  		storeNo,
+  		name,
+  		fangyouNo,
+  		operType,
+  		dateCreate,
+  		userIdCreate,
+  		delFlag)
+	VALUES(
+		#{storeId,jdbcType=INTEGER},
+		#{storeNo,jdbcType=NVARCHAR},
+		#{name,jdbcType=NVARCHAR},
+		#{fangyouNo,jdbcType=NVARCHAR},
+		#{operType,jdbcType=NVARCHAR},
+		getDate(),
+		#{userIdCreate,jdbcType=INTEGER},
+		'0'
+	)
+  </insert>
+  
+  <!-- 门店房友账号关联表 添加 -->
+ <insert id="createAccount" parameterType="Map" useGeneratedKeys="true" keyProperty="Id">
+  	INSERT INTO StoreFangyouAccount (
+  		storeId,
+  		storeNo,
+  		name,
+  		fangyouNo,
+  		operType,
+  		openStatus,
+  		dateCreate,
+  		userIdCreate,
+  		delFlag)
+	VALUES(
+		#{storeId,jdbcType=INTEGER},
+		#{storeNo,jdbcType=NVARCHAR},
+		#{name,jdbcType=NVARCHAR},
+		#{fangyouNo,jdbcType=NVARCHAR},
+		#{operType,jdbcType=NVARCHAR},
+		#{openStatus,jdbcType=NVARCHAR},
+		getDate(),
+		#{userIdCreate,jdbcType=INTEGER},
+		'0'
+	)
+  </insert>
+  
+    <!-- 门店房友账号关联表 修改 -->
+ <update id="updateAccount" parameterType="Map">
+  	UPDATE StoreFangyouAccount SET
+  		fangyouNo = #{fangyouNo,jdbcType=NVARCHAR},
+  		operType = #{operType,jdbcType=NVARCHAR},
+  		openStatus = #{openStatus,jdbcType=NVARCHAR}
+  	WHERE storeId = #{storeId,jdbcType=INTEGER}
+  </update>
+  
+   <!-- 门店房友账号关联表 根据门店ID查询 -->
+  <select id="getById" parameterType="int" resultMap="BaseResultMap">
+  	SELECT * FROM StoreFangyouAccount
+  	WHERE storeId = #{storeId,jdbcType=INTEGER}
+  	AND delFlag = 0
+  </select>
+  
+  <!-- 根据门店ID查询门店信息和公司No -->
+  <select id="getOPByStoreId" parameterType="int" resultType="hashmap">
+  	SELECT 
+	s.*,
+	Company.CompanyNo	 
+	FROM Store s
+	LEFT JOIN CompanyStore c
+		ON c.StoreId=s.Id AND c.IsDelete=0
+	LEFT JOIN Company
+		ON Company.Id=c.companyId AND Company.IsDelete=0
+	where s.Id = #{storeId,jdbcType=INTEGER}
+	AND s.IsDelete=0
+  </select>
+  
+   <!-- 公司修改，取得公司信息，调用op接口 -->
+   <select id="getOPCompanyById" resultMap="OpResultMap" parameterType="int">
+      SELECT  
+               y.CompanyNo AS companyNo ,
+               y.CompanyName AS companyName ,
+               y.CityNo AS cityNo ,
+               d.CityName AS cityName,
+               y.DistrictNo AS districtNo ,
+               d.DistrictName,
+               y.AreaNo AS areaNo ,
+               '' AS areaName,
+               y.Address AS companyAddr,
+               y.LegalPerson AS linkMan,
+               y.ContactNumber AS linkPhone,
+               y.Longitude AS longitude ,
+               y.Latitude AS latitude ,
+               y.FangyouCompanyId AS fyCompanyId
+       FROM dbo.Company y
+	   LEFT JOIN [dbo].[BAS_District] d
+			ON d.DistrictNo=y.DistrictNo AND d.CityNo=y.CityNo
+       WHERE y.IsDelete=0 AND y.Id = #{companyId,jdbcType=INTEGER}
+   </select>
+
+	<!-- 公司修改营业执照号，取得公司息，调用op接口 -->
+	<select id="getOPCompanyCreditCodeById" resultType="cn.com.eju.deal.dto.op.OpCompanyCreditCodeDto">
+ 			SELECT y.CompanyNo AS companyNo
+                   ,y.BusinessLicenseNo AS creditCode
+			  FROM dbo.Company y
+			 WHERE y.IsDelete=0
+			 AND y.Id = #{companyId,jdbcType=INTEGER}
+	</select>
+
+
+   <!-- 根据门店id查询其房友账号变更日志 -->
+   <select id="getFangyouAccountList" resultType="cn.com.eju.deal.fangyou.model.FangyouAccountLog" parameterType="java.lang.Integer">
+     SELECT  
+            fc.*,
+            CONVERT(varchar(120), fc.dateCreate, 20)  as createDate
+     FROM 
+       	Store_FyAccountChangeLog fc
+     WHERE fc.delFlag = 0 AND fc.storeId =   #{storeId,jdbcType=INTEGER}
+     order by fc.dateCreate desc
+   </select>
+   <insert id="insertfangyouAccountLog" parameterType="cn.com.eju.deal.fangyou.model.FangyouAccountLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into Store_FyAccountChangeLog (
+			 storeId, storeNo,description, oldFyAccount, newFyAccount, 
+	     	 dateCreate, userIdCreate, userName, userCode, delFlag)
+	    values (
+		    #{storeId,jdbcType=INTEGER}, #{storeNo,jdbcType=VARCHAR}, #{description,jdbcType=NVARCHAR},
+			#{oldFyAccount,jdbcType=VARCHAR}, #{newFyAccount,jdbcType=VARCHAR}, getDate(), 
+			#{userIdCreate,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+		      #{userCode,jdbcType=VARCHAR}, 0)
+	</insert>
+</mapper>

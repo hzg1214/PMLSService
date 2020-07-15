@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.frameContract.dao.FrameContractMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.frameContract.model.FrameContract">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="contractNo" jdbcType="VARCHAR" property="contractNo"/>
+        <result column="companyNo" jdbcType="VARCHAR" property="companyNo"/>
+        <result column="dateLifeStart" jdbcType="TIMESTAMP" property="dateLifeStart"/>
+        <result column="dateLifeEnd" jdbcType="TIMESTAMP" property="dateLifeEnd"/>
+        <result column="signDate" jdbcType="TIMESTAMP" property="signDate"/>
+        <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate"/>
+        <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate"/>
+        <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt"/>
+        <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt"/>
+        <result column="accountNm" jdbcType="VARCHAR" property="accountNm"/>
+        <result column="bankAccountNm" jdbcType="VARCHAR" property="bankAccountNm"/>
+        <result column="bankAccount" jdbcType="VARCHAR" property="bankAccount"/>
+        <result column="partyBNm" jdbcType="NVARCHAR" property="partyBNm"/>
+        <result column="partyBTel" jdbcType="VARCHAR" property="partyBTel"/>
+        <result column="fyAccountNm" jdbcType="NVARCHAR" property="fyAccountNm"/>
+        <result column="fyAccountNmTel" jdbcType="VARCHAR" property="fyAccountNmTel"/>
+        <result column="approveState" jdbcType="INTEGER" property="approveState"/>
+        <result column="validStatus" jdbcType="INTEGER" property="validStatus"/>
+        <result column="remark" jdbcType="NVARCHAR" property="remark"/>
+        <result column="contractNote" jdbcType="NVARCHAR" property="contractNote"/>
+        <result column="delFlag" jdbcType="CHAR" property="delFlag"/>
+        <result column="submitOAStatus" jdbcType="INTEGER" property="submitOAStatus"/>
+        <result column="submitOAUserId" jdbcType="INTEGER" property="submitOAUserId"/>
+        <result column="submitTime" jdbcType="TIMESTAMP" property="submitTime"/>
+        <result column="fyNoticeStatus" jdbcType="CHAR" property="fyNoticeStatus"/>
+        <result column="flowId" jdbcType="NVARCHAR" property="flowId"/>
+        <result column="accountProvinceNo" jdbcType="NVARCHAR" property="accountProvinceNo"/>
+        <result column="accountProvinceNm" jdbcType="NVARCHAR" property="accountProvinceNm"/>
+        <result column="accountCityNo" jdbcType="NVARCHAR" property="accountCityNo"/>
+        <result column="accountCityNm" jdbcType="NVARCHAR" property="accountCityNm"/>
+        <result column="autoToOa" jdbcType="INTEGER" property="autoToOa"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, contractNo, companyNo, convert(varchar(10),dateLifeStart,120) as dateLifeStart, convert(varchar(10),dateLifeEnd,120) as dateLifeEnd, convert(varchar(10),signDate,120) as signDate, dateCreate, userIdCreate,
+    dateUpt, userIdUpt, accountNm, bankAccountNm, bankAccount, partyBNm, partyBTel, fyAccountNm,
+    fyAccountNmTel, approveState, validStatus, remark, contractNote, delFlag, submitOAStatus,
+    submitOAUserId, submitTime, fyNoticeStatus,flowId,accountProvinceNo,accountProvinceNm,accountCityNo,accountCityNm,autoToOa
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from LNK_FrameContract
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from LNK_FrameContract
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="cn.com.eju.deal.frameContract.model.FrameContract">
+    insert into LNK_FrameContract (id, contractNo, companyNo,
+      dateLifeStart, dateLifeEnd, signDate,
+      dateCreate, userIdCreate, dateUpt,
+      userIdUpt, accountNm, bankAccountNm,
+      bankAccount, partyBNm, partyBTel,
+      approveState,
+      validStatus, remark, contractNote,
+      delFlag, submitOAStatus, submitOAUserId,
+      submitTime, fyNoticeStatus)
+    values (#{id,jdbcType=INTEGER}, #{contractNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR},
+      #{dateLifeStart,jdbcType=TIMESTAMP}, #{dateLifeEnd,jdbcType=TIMESTAMP}, #{signDate,jdbcType=TIMESTAMP},
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{dateUpt,jdbcType=TIMESTAMP},
+      #{userIdUpt,jdbcType=INTEGER}, #{accountNm,jdbcType=VARCHAR}, #{bankAccountNm,jdbcType=VARCHAR},
+      #{bankAccount,jdbcType=VARCHAR}, #{partyBNm,jdbcType=NVARCHAR}, #{partyBTel,jdbcType=VARCHAR},
+      #{approveState,jdbcType=INTEGER},
+      #{validStatus,jdbcType=INTEGER}, #{remark,jdbcType=NVARCHAR}, #{contractNote,jdbcType=NVARCHAR},
+      #{delFlag,jdbcType=CHAR}, #{submitOAStatus,jdbcType=INTEGER}, #{submitOAUserId,jdbcType=INTEGER},
+      #{submitTime,jdbcType=TIMESTAMP}, #{fyNoticeStatus,jdbcType=CHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.eju.deal.frameContract.model.FrameContract">
+        insert into LNK_FrameContract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="contractNo != null">
+                contractNo,
+            </if>
+            <if test="companyNo != null">
+                companyNo,
+            </if>
+            <if test="dateLifeStart != null">
+                dateLifeStart,
+            </if>
+            <if test="dateLifeEnd != null">
+                dateLifeEnd,
+            </if>
+            <if test="signDate != null">
+                signDate,
+            </if>
+            <if test="dateCreate != null">
+                dateCreate,
+            </if>
+            <if test="userIdCreate != null">
+                userIdCreate,
+            </if>
+            <if test="dateUpt != null">
+                dateUpt,
+            </if>
+            <if test="userIdUpt != null">
+                userIdUpt,
+            </if>
+            <if test="accountNm != null">
+                accountNm,
+            </if>
+            <if test="bankAccountNm != null">
+                bankAccountNm,
+            </if>
+            <if test="bankAccount != null">
+                bankAccount,
+            </if>
+            <if test="partyBNm != null">
+                partyBNm,
+            </if>
+            <if test="partyBTel != null">
+                partyBTel,
+            </if>
+            <if test="fyAccountNm != null">
+                fyAccountNm,
+            </if>
+            <if test="fyAccountNmTel != null">
+                fyAccountNmTel,
+            </if>
+            <if test="approveState != null">
+                approveState,
+            </if>
+            <if test="validStatus != null">
+                validStatus,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="contractNote != null">
+                contractNote,
+            </if>
+            <if test="delFlag != null">
+                delFlag,
+            </if>
+            <if test="submitOAStatus != null">
+                submitOAStatus,
+            </if>
+            <if test="submitOAUserId != null">
+                submitOAUserId,
+            </if>
+            <if test="submitTime != null">
+                submitTime,
+            </if>
+            <if test="fyNoticeStatus != null">
+                fyNoticeStatus,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="contractNo != null">
+                #{contractNo,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNo != null">
+                #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="dateLifeStart != null">
+                #{dateLifeStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateLifeEnd != null">
+                #{dateLifeEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="signDate != null">
+                #{signDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateCreate != null">
+                #{dateCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIdCreate != null">
+                #{userIdCreate,jdbcType=INTEGER},
+            </if>
+            <if test="dateUpt != null">
+                #{dateUpt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIdUpt != null">
+                #{userIdUpt,jdbcType=INTEGER},
+            </if>
+            <if test="accountNm != null">
+                #{accountNm,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccountNm != null">
+                #{bankAccountNm,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccount != null">
+                #{bankAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="partyBNm != null">
+                #{partyBNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyBTel != null">
+                #{partyBTel,jdbcType=VARCHAR},
+            </if>
+            <if test="fyAccountNm != null">
+                #{fyAccountNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="fyAccountNmTel != null">
+                #{fyAccountNmTel,jdbcType=VARCHAR},
+            </if>
+            <if test="approveState != null">
+                #{approveState,jdbcType=INTEGER},
+            </if>
+            <if test="validStatus != null">
+                #{validStatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=NVARCHAR},
+            </if>
+            <if test="contractNote != null">
+                #{contractNote,jdbcType=NVARCHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="submitOAStatus != null">
+                #{submitOAStatus,jdbcType=INTEGER},
+            </if>
+            <if test="submitOAUserId != null">
+                #{submitOAUserId,jdbcType=INTEGER},
+            </if>
+            <if test="submitTime != null">
+                #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fyNoticeStatus != null">
+                #{fyNoticeStatus,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.frameContract.model.FrameContract">
+        update LNK_FrameContract
+        <set>
+            <if test="contractNo != null">
+                contractNo = #{contractNo,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNo != null">
+                companyNo = #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="dateLifeStart != null">
+                dateLifeStart = #{dateLifeStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateLifeEnd != null">
+                dateLifeEnd = #{dateLifeEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="signDate != null">
+                signDate = #{signDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateCreate != null">
+                dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIdCreate != null">
+                userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+            </if>
+            <if test="dateUpt != null">
+                dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIdUpt != null">
+                userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+            </if>
+            <if test="accountNm != null">
+                accountNm = #{accountNm,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccountNm != null">
+                bankAccountNm = #{bankAccountNm,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccount != null">
+                bankAccount = #{bankAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="partyBNm != null">
+                partyBNm = #{partyBNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyBTel != null">
+                partyBTel = #{partyBTel,jdbcType=VARCHAR},
+            </if>
+            <if test="fyAccountNm != null">
+                fyAccountNm = #{fyAccountNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="fyAccountNmTel != null">
+                fyAccountNmTel = #{fyAccountNmTel,jdbcType=VARCHAR},
+            </if>
+            <if test="approveState != null">
+                approveState = #{approveState,jdbcType=INTEGER},
+            </if>
+            <if test="approvePassDate != null">
+                approvePassDate= #{approvePassDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="validStatus != null">
+                validStatus = #{validStatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=NVARCHAR},
+            </if>
+            <if test="contractNote != null">
+                contractNote = #{contractNote,jdbcType=NVARCHAR},
+            </if>
+            <if test="delFlag != null">
+                delFlag = #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="submitOAStatus != null">
+                submitOAStatus = #{submitOAStatus,jdbcType=INTEGER},
+            </if>
+            <if test="submitOAUserId != null">
+                submitOAUserId = #{submitOAUserId,jdbcType=INTEGER},
+            </if>
+            <if test="submitTime != null">
+                submitTime = #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fyNoticeStatus != null">
+                fyNoticeStatus = #{fyNoticeStatus,jdbcType=CHAR},
+            </if>
+            <if test="flowId != null">
+                flowId = #{flowId,jdbcType=NVARCHAR},
+            </if>
+            <if test="oaNo != null">
+                oaNo = #{oaNo,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.frameContract.model.FrameContract">
+    update LNK_FrameContract
+    set contractNo = #{contractNo,jdbcType=VARCHAR},
+      companyNo = #{companyNo,jdbcType=VARCHAR},
+      dateLifeStart = #{dateLifeStart,jdbcType=TIMESTAMP},
+      dateLifeEnd = #{dateLifeEnd,jdbcType=TIMESTAMP},
+      signDate = #{signDate,jdbcType=TIMESTAMP},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      accountNm = #{accountNm,jdbcType=VARCHAR},
+      bankAccountNm = #{bankAccountNm,jdbcType=VARCHAR},
+      bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      partyBNm = #{partyBNm,jdbcType=NVARCHAR},
+      partyBTel = #{partyBTel,jdbcType=VARCHAR},
+      fyAccountNm = #{fyAccountNm,jdbcType=NVARCHAR},
+      fyAccountNmTel = #{fyAccountNmTel,jdbcType=VARCHAR},
+      approveState = #{approveState,jdbcType=INTEGER},
+      validStatus = #{validStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=NVARCHAR},
+      contractNote = #{contractNote,jdbcType=NVARCHAR},
+      delFlag = #{delFlag,jdbcType=CHAR},
+      submitOAStatus = #{submitOAStatus,jdbcType=INTEGER},
+      submitOAUserId = #{submitOAUserId,jdbcType=INTEGER},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      fyNoticeStatus = #{fyNoticeStatus,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <!-- 查询联动框架合同列表 -->
+    <select id="getFrameContractList" resultType="cn.com.eju.deal.frameContract.model.FrameContractDto"
+            parameterType="Map">
+        SELECT
+        fc.id,
+        fc.contractNo,
+        fc.userIdCreate,
+        us.userName,
+        fc.companyNo,
+        fc.companyName,
+        fc.dateCreate,
+        fc.approveState,
+        dv.dicValue as approveStatusNm,
+        fc.validStatus,
+        dv3.dicValue as validStatusNm,
+        fc.submitOAStatus,
+        dv2.dicValue as submitOAStatusNm,
+        fc.flowId,
+        fc.autoToOa,
+        fc.dateLifeStart,
+        fc.dateLifeEnd
+        FROM
+        dbo.LNK_FrameContract fc
+        LEFT JOIN crm.dbo.USR_User us on us.userId = fc.userIdCreate and us.delFlag = 'N'
+        LEFT JOIN dbo.BAS_DictionaryValue dv ON fc.approveState = dv.dicCode
+        AND dv.typeId = 104
+        AND dv.delFlag = 'N'
+        LEFT JOIN dbo.BAS_DictionaryValue dv2 ON fc.submitOAStatus = dv2.dicCode
+        AND dv2.typeId = 212
+        AND dv2.delFlag = 'N'
+        LEFT JOIN dbo.BAS_DictionaryValue dv3 ON fc.validStatus = dv3.dicCode
+        AND dv3.typeId = 184
+        AND dv3.delFlag = 'N'
+        WHERE
+        fc.delFlag = '0'
+        <if test="searchValues != null and searchValues != ''">
+            AND fc.contractNo LIKE CONCAT('%', #{searchValues},'%')
+        </if>
+        <if test="cityNo != null and cityNo != ''">
+            and fc.cityNo= #{cityNo}
+        </if>
+        <if test="companyNo != null and companyNo != '' ">
+            AND fc.companyNo =#{companyNo}
+        </if>
+        <if test="companyName != null and companyName != '' ">
+            AND fc.companyName LIKE CONCAT('%', #{companyName},'%')
+        </if>
+        <if test="userName != null and userName != '' ">
+            AND us.userName LIKE CONCAT('%', #{userName},'%')
+        </if>
+        <if test="dateStart != null and dateStart != ''">
+            AND convert(varchar(10),fc.dateCreate,120) &gt;= #{dateStart}
+        </if>
+        <if test="dateEnd != null and dateEnd != ''">
+            AND convert(varchar(10),fc.dateCreate,120) &lt;= #{dateEnd}
+        </if>
+        <if test="approveState != null and approveState != ''">
+            AND fc.approveState = #{approveState}
+        </if>
+        ORDER BY fc.dateCreate desc
+    </select>
+    <!-- 查询框架合同详情 -->
+    <select id="getBriefById" resultType="cn.com.eju.deal.frameContract.model.FrameContractDto"
+            parameterType="java.lang.Integer">
+		SELECT
+		fc.id,
+		fc.contractNo,
+		fc.userIdCreate,
+		us.userName,
+		fc.companyNo,
+		fc.dateCreate,
+		fc.approveState,
+		dv.dicValue as approveStatusNm,
+		fc.validStatus,
+		dv3.dicValue as validStatusNm,
+		fc.submitOAStatus,
+		dv2.dicValue as submitOAStatusNm,
+		fc.companyName,
+		fc.businessLicenseNo,
+		fc.lealPerson as legalPerson,
+		fc.companyAddress as address,
+		fc.dateLifeStart,
+		fc.dateLifeEnd,
+		fc.signDate,
+		fc.accountNm,fc.bankAccountNm,fc.bankAccount,
+		fc.fyAccountNm,fc.fyAccountNmTel,
+		fc.contractNote,fc.remark,
+		fc.companyDistrictNo as districtNo,
+		fc.companyCityNo,
+		fc.cityNo,
+		fc.partyBNm,
+		fc.partyBTel,
+		fc.oaNo,
+		fc.companyContactTel,
+		fc.agreementType,
+		fc.accountProvinceNo,
+		fc.accountProvinceNm,
+		fc.accountProjectCode,
+		fc.accountProject,
+		fc.accountCityNo,
+		fc.accountCityNm,
+		fc.agreementType,
+		dv4.dicValue as agreementTypeVal,
+		fc.approvePassDate,
+		fc.reAgreeFlag,
+		dv5.dicValue as reAgreeFlagVal
+		,fc.autoToOa
+  	FROM
+  		dbo.LNK_FrameContract fc
+  		LEFT JOIN crm.dbo.USR_User us on us.userId = fc.userIdCreate and us.delFlag = 'N'
+  		LEFT JOIN dbo.BAS_DictionaryValue dv ON fc.approveState = dv.dicCode
+		                                                    AND dv.typeId = 104
+		                                                    AND dv.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv2 ON fc.submitOAStatus = dv2.dicCode
+	                                                    AND dv2.typeId = 212
+	                                                    AND dv2.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv3 ON fc.validStatus = dv3.dicCode
+	                                                    AND dv3.typeId = 184
+	                                                    AND dv3.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv4 ON fc.agreementType = dv4.dicCode
+	                                                    AND dv4.typeId = 221
+	                                                    AND dv4.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv5 ON fc.reAgreeFlag = dv5.dicCode
+	                                                    AND dv5.typeId = 222
+	                                                    AND dv5.delFlag = 'N'
+  	WHERE
+  		fc.delFlag = '0'
+	  	and fc.id=#{id,jdbcType=INTEGER}
+	</select>
+
+
+    <!-- 根据id更新框架合同信息 -->
+    <update id="updateStr" parameterType="java.util.Map">
+        UPDATE dbo.LNK_FrameContract
+        <set>
+            <if test="contractNo != null">
+                contractNo = #{contractNo,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNo != null">
+                companyNo = #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="dateLifeStart != null">
+                dateLifeStart = #{dateLifeStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateLifeEnd != null">
+                dateLifeEnd = #{dateLifeEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="signDate != null">
+                signDate = #{signDate,jdbcType=TIMESTAMP},
+            </if>
+
+            <if test="userIdUpt != null">
+                userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+                dateUpt = getDate(),
+            </if>
+            <if test="accountNm != null">
+                accountNm = #{accountNm,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccountNm != null">
+                bankAccountNm = #{bankAccountNm,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccount != null">
+                bankAccount = #{bankAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="partyBNm != null">
+                partyBNm = #{partyBNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="partyBTel != null">
+                partyBTel = #{partyBTel,jdbcType=VARCHAR},
+            </if>
+            <if test="fyAccountNm != null">
+                fyAccountNm = #{fyAccountNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="fyAccountNmTel != null">
+                fyAccountNmTel = #{fyAccountNmTel,jdbcType=VARCHAR},
+            </if>
+            <if test="approveState != null">
+                approveState = #{approveState,jdbcType=INTEGER},
+            </if>
+            <if test="validStatus != null">
+                validStatus = #{validStatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=NVARCHAR},
+            </if>
+            <if test="contractNote != null">
+                contractNote = #{contractNote,jdbcType=NVARCHAR},
+            </if>
+            <if test="delFlag != null">
+                delFlag = #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="submitOAStatus != null">
+                submitOAStatus = #{submitOAStatus,jdbcType=INTEGER},
+            </if>
+            <if test="submitOAUserId != null">
+                submitOAUserId = #{submitOAUserId,jdbcType=INTEGER},
+            </if>
+            <if test="submitTime != null">
+                submitTime = #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fyNoticeStatus != null">
+                fyNoticeStatus = #{fyNoticeStatus,jdbcType=CHAR},
+            </if>
+            <if test="accountProvinceNo != null">
+                accountProvinceNo = #{accountProvinceNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountProvinceNm != null">
+                accountProvinceNm = #{accountProvinceNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountCityNo != null">
+                accountCityNo = #{accountCityNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountCityNm != null">
+                accountCityNm = #{accountCityNm,jdbcType=NVARCHAR},
+            </if>
+            <if test="accountProject != null">
+                accountProject = #{accountProject,jdbcType=VARCHAR},
+            </if>
+            <if test="accountProjectCode != null">
+                accountProjectCode = #{accountProjectCode,jdbcType=VARCHAR},
+            </if>
+            <if test="reAgreeFlag != null">
+                reAgreeFlag = #{reAgreeFlag,jdbcType=INTEGER}
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+    <!-- 查询公司列表 -->
+    <select id="getFrameContractCompanyList" resultType="cn.com.eju.deal.dto.company.CompanyDto" parameterType="Map">
+
+        SELECT c.*, ccb.brandCode , ccb.brandName
+        , pcb.Id as topbranchId ,pcb.brandCode AS topbrandCode ,ISNULL(pcb.brandName,'房友') AS topbrandName
+        ,ISNULL(center.groupName,'') AS centerName
+        FROM dbo.Company c
+        LEFT JOIN  dbo.USR_Group center ON center.groupId = c.centerId AND center.delFlag = 'N'
+        LEFT JOIN PMLS_ChannelBrand ccb ON c.brandId = ccb.id AND ccb.delFlag = 0
+        LEFT JOIN PMLS_ChannelBrand pcb ON pcb.id = SUBSTRING(ccb.orgId.ToString()
+        , CHARINDEX( '/',ccb.orgId.ToString(),1)+1, CHARINDEX( '/',ccb.orgId.ToString(),2)-2)
+        AND pcb.delFlag = 0
+        WHERE c.IsDelete=0
+        <if test="companyNo != null and companyNo != ''">
+            <![CDATA[AND c.CompanyNo LIKE '%' + RTrim(LTrim('${companyNo}')) + '%']]>
+        </if>
+        <if test="companyName != null and companyName != ''">
+            <![CDATA[AND c.CompanyName LIKE '%' + RTrim(LTrim('${companyName}')) + '%']]>
+        </if>
+        <if test="cityNo != null and cityNo != ''">
+            AND (c.accityNO = #{cityNo}
+                <if test="estateId != null and estateId != ''">
+                    OR c.accityNO IN (SELECT cm.cityNo FROM dbo.LNK_EstateCityMapping cm
+                    WHERE cm.estateId = #{estateId}
+                    AND cm.delflag=0)
+                </if>
+            OR EXISTS(SELECT rc.ReleaseCityNo FROM dbo.Company_Release_City rc
+            WHERE rc.IsDelete = 0
+            AND c.id = rc.CompanyId
+            AND rc.ReleaseCityNo = #{cityNo,jdbcType=VARCHAR}))
+        </if>
+        ORDER BY c.Id DESC
+    </select>
+    <!-- 通过公司id查询其信息 -->
+    <select id="getCompanyInfoById" resultType="cn.com.eju.deal.dto.company.CompanyDto"
+            parameterType="java.lang.Integer">
+		select c.AcCityNo as AcCityNo,
+			c.Address as Address,c.CompanyName as companyName,
+			c.BusinessLicenseNo as businessLicenseNo,c.LegalPerson as legalPerson,c.DistrictNo as districtNo,
+			c.CityNo as cityNo
+		from Company c where
+	  	 	c.Id=#{id,jdbcType=INTEGER}
+	</select>
+    <!-- 新增框架合同 -->
+    <insert id="create" parameterType="cn.com.eju.deal.frameContract.model.FrameContractDto"
+            useGeneratedKeys="true" keyProperty="id">
+		 insert into LNK_FrameContract (contractNo, companyNo,
+      dateLifeStart, dateLifeEnd, signDate,
+      dateCreate, userIdCreate, dateUpt,
+      userIdUpt, accountNm, bankAccountNm,
+      bankAccount, partyBNm, partyBTel,
+      fyAccountNm, fyAccountNmTel, approveState,
+      validStatus, remark, contractNote,
+      delFlag, submitOAStatus, submitOAUserId,
+      submitTime, fyNoticeStatus,cityNo
+      ,companyName,companyCityNo,companyDistrictNo,companyAddress,businessLicenseNo,lealPerson,
+      companyContactTel,agreementType,accountProvinceNo,accountProvinceNm,accountCityNo,accountCityNm,accountProject,accountProjectCode,reAgreeFlag)
+    values ( #{contractNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR},
+      #{dateLifeStart,jdbcType=TIMESTAMP}, #{dateLifeEnd,jdbcType=TIMESTAMP}, #{signDate,jdbcType=TIMESTAMP},
+      getDate(), #{userIdCreate,jdbcType=INTEGER}, #{dateUpt,jdbcType=TIMESTAMP},
+      #{userIdUpt,jdbcType=INTEGER}, #{accountNm,jdbcType=VARCHAR}, #{bankAccountNm,jdbcType=VARCHAR},
+      #{bankAccount,jdbcType=VARCHAR}, #{partyBNm,jdbcType=NVARCHAR}, #{partyBTel,jdbcType=VARCHAR},
+      #{fyAccountNm,jdbcType=NVARCHAR}, #{fyAccountNmTel,jdbcType=VARCHAR}, #{approveState,jdbcType=INTEGER},
+      #{validStatus,jdbcType=INTEGER}, #{remark,jdbcType=NVARCHAR}, #{contractNote,jdbcType=NVARCHAR},
+      #{delFlag,jdbcType=CHAR}, #{submitOAStatus,jdbcType=INTEGER}, #{submitOAUserId,jdbcType=INTEGER},
+      #{submitTime,jdbcType=TIMESTAMP}, #{fyNoticeStatus,jdbcType=CHAR}, #{cityNo,jdbcType=VARCHAR}
+      ,#{companyName,jdbcType=VARCHAR},#{companyCityNo,jdbcType=VARCHAR},#{companyDistrictNo,jdbcType=VARCHAR}
+      ,#{address,jdbcType=VARCHAR},#{businessLicenseNo,jdbcType=VARCHAR},#{legalPerson,jdbcType=VARCHAR}
+      ,#{companyContactTel,jdbcType=VARCHAR}
+      ,#{agreementType,jdbcType=INTEGER}
+      ,#{accountProvinceNo,jdbcType=VARCHAR},#{accountProvinceNm,jdbcType=VARCHAR}
+      ,#{accountCityNo,jdbcType=VARCHAR},#{accountCityNm,jdbcType=VARCHAR}
+      ,#{accountProject,jdbcType=VARCHAR},#{accountProjectCode,jdbcType=VARCHAR}
+      ,#{reAgreeFlag,jdbcType=INTEGER})
+	</insert>
+    <update id="updateByCompanyNo" parameterType="java.util.Map">
+        UPDATE dbo.Company
+        <set>
+            <if test="userIdUpt != null and userIdUpt != ''">
+                UserUpdate = #{userIdUpt,jdbcType=NVARCHAR},
+                DateUpdate = getDate(),
+            </if>
+            <if test="bizType != null and bizType != ''">
+                bizType = #{bizType}
+            </if>
+        </set>
+        WHERE CompanyNo = #{companyNo,jdbcType=NVARCHAR}
+        AND (bizType != '21801|21802' OR bizType is NULL)
+    </update>
+    <!-- 通过公司No查询其信息 -->
+    <select id="getCompanyInfoByCompanyNo" resultType="cn.com.eju.deal.dto.company.CompanyDto"
+            parameterType="java.lang.String">
+		select c.Id as id,c.AcCityNo as AcCityNo,
+			c.Address as Address,c.CompanyName as companyName,
+			c.BusinessLicenseNo as businessLicenseNo,c.LegalPerson as legalPerson,c.DistrictNo as districtNo,
+			c.CityNo as cityNo
+		from Company c where
+	  	 	c.CompanyNo=#{companyNo,jdbcType=NVARCHAR}
+	</select>
+    <!-- 根据OA flowId 查询合同 -->
+    <select id="getByFlowId" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        SELECT *
+        FROM LNK_FrameContract
+        <where>
+            flowId = #{flowId,jdbcType=NVARCHAR}
+        </where>
+    </select>
+
+    <update id="updateCompanyBizType" parameterType="java.util.Map">
+        UPDATE  dbo.Company
+        SET     bizType = ''
+        FROM    dbo.Company c
+                JOIN LNK_FrameContract f ON c.CompanyNo = f.companyNo
+        WHERE   c.bizType = '21802'
+                AND f.id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="getFrameContractByCompanyNo" resultType="cn.com.eju.deal.frameContract.model.FrameContractDto"
+            parameterType="java.lang.String">
+		SELECT
+		 id, contractNo, companyNo, dateLifeStart, dateLifeEnd, signDate, dateCreate, userIdCreate,
+    dateUpt, userIdUpt, accountNm, bankAccountNm, bankAccount, partyBNm, partyBTel, fyAccountNm,
+    fyAccountNmTel, approveState, validStatus, remark, contractNote, delFlag, submitOAStatus,
+    submitOAUserId, submitTime, fyNoticeStatus,flowId,companyName,companyCityNo,companyDistrictNo as districtNo,
+    companyAddress as address,businessLicenseNo,lealPerson as legalPerson,companyContactTel
+  	FROM
+  		dbo.LNK_FrameContract fc
+  	WHERE
+  		fc.delFlag = '0'
+	  	and fc.companyNo=#{companyNo,jdbcType=VARCHAR}
+	</select>
+    <!-- 根据id更新框架合同信息 -->
+    <update id="updateCompanyInfo" parameterType="java.util.Map">
+        UPDATE dbo.LNK_FrameContract
+        <set>
+            <if test="userIdUpt != null">
+                userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+                dateUpt = getDate(),
+            </if>
+            <if test="companyName != null">
+                companyName = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyCityNo != null">
+                companyCityNo = #{companyCityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="companyDistrictNo != null">
+                companyDistrictNo = #{companyDistrictNo,jdbcType=VARCHAR},
+            </if>
+            <if test="companyAddress != null">
+                companyAddress = #{companyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseNo != null">
+                businessLicenseNo = #{businessLicenseNo,jdbcType=VARCHAR},
+            </if>
+            <if test="lealPerson != null">
+                lealPerson = #{lealPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="companyContactTel != null">
+                companyContactTel = #{companyContactTel,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateCompanyByCompanyNo" parameterType="cn.com.eju.deal.model.sweepStreets.CompanyNewDto">
+        UPDATE dbo.LNK_FrameContract
+        <set>
+            <if test="userUpdate != null">
+                userIdUpt = #{userUpdate,jdbcType=INTEGER},
+                dateUpt = getDate(),
+            </if>
+            <if test="companyName != null">
+                companyName = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="cityNo != null">
+                companyCityNo = #{cityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="districtNo != null">
+                companyDistrictNo = #{districtNo,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                companyAddress = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPerson != null">
+                lealPerson = #{legalPerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE companyNo = #{companyNo,jdbcType=VARCHAR} AND approveState IN ('10401','10404')
+    </update>
+    <!-- 根据业绩城市编号查询其核算主体 -->
+    <select id="queryAccountProject" resultType="cn.com.eju.deal.frameContract.model.FrameContractDto">
+		SELECT
+			bcs.accountProject as accountProject,bcs.accountProjectCode as accountProjectCode,bcs.id
+		FROM CRM.dbo.Bas_CitySetting bcs
+		WHERE bcs.delFlag = 'N' and
+			bcs.cityNo = #{userCityNo,jdbcType=VARCHAR}
+		ORDER BY bcs.id
+	</select>
+    <!-- 根据usercode查询其人所有的核算主体 -->
+    <select id="getUserMappingAccountProject"
+            resultType="cn.com.eju.deal.frameContract.model.FrameAccountProjectMappingDto"
+            parameterType="java.lang.String">
+		select
+			id,userCode,accountProject,accountProjectCode
+		from LNK_FrameAccountProjectMapping WHERE 1=1
+			and delFlag='0'
+		 	and usercode = #{userCode,jdbcType=VARCHAR}
+		 ORDER BY id
+	</select>
+    <!-- 根据id查询其框架协议 -->
+    <select id="getFrameContractAccountProject" parameterType="java.lang.Integer"
+            resultType="cn.com.eju.deal.frameContract.model.FrameContractDto">
+    select
+   		 *
+    	from LNK_FrameContract
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectNewestContractByCompanyId" parameterType="java.lang.Integer"
+            resultType="cn.com.eju.deal.frameContract.model.FrameContract">
+        SELECT LNK_FrameContract.id ,
+                LNK_FrameContract.ContractNo
+        FROM    dbo.LNK_FrameContract
+        JOIN    Company on Company.CompanyNo = LNK_FrameContract.CompanyNo
+        WHERE   Company.Id = #{companyId,jdbcType=INTEGER}
+                AND LNK_FrameContract.approveState IN ( 10401,10403,10404 )
+        ORDER BY id DESC
+    </select>
+    <insert id="insertFrameContractReturn" parameterType="map">
+		 INSERT INTO dbo.OaLnkFrameContractReturn
+        ( ContractNo ,
+          FlowId ,
+          approveStatus ,
+          approveDate ,
+          hasDeal ,
+          dateUpdate ,
+          dateCreate
+        )
+		SELECT  ContractNo,flowId,10404 approveStatus,GETDATE() approveDate,1 hasDeal,GETDATE() dateUpdate,GETDATE()dateCreate
+		 FROM  dbo.LNK_FrameContract
+		 WHERE Id = #{id,jdbcType=INTEGER}
+	</insert>
+    <select id="getOldFtBankInfo" parameterType="map" resultType="cn.com.eju.deal.frameContract.model.FrameContractDto">
+        SELECT TOP 1 * FROM dbo.LNK_FrameContract WHERE
+         approveState = 10403 AND delFlag =0 AND companyNo = #{companyNo,jdbcType=VARCHAR}
+         ORDER BY id DESC
+    </select>
+    <insert id="insertFromSpContract" parameterType="map">
+
+		INSERT INTO dbo.LNK_FrameContract    ( contractNo ,          companyNo ,          dateLifeStart ,          dateLifeEnd ,          signDate ,          dateCreate ,
+		          userIdCreate ,          dateUpt ,          userIdUpt ,          accountNm ,          bankAccountNm ,          bankAccount ,          partyBNm ,          partyBTel ,
+		          approveState ,          validStatus ,          delFlag ,          submitOAStatus ,          cityNo ,          companyName ,          companyCityNo ,          companyDistrictNo ,
+		          companyAddress ,          businessLicenseNo ,          lealPerson ,          companyContactTel ,          agreementType ,          accountProvinceNo ,          accountProvinceNm ,
+		          accountCityNo ,          accountCityNm ,          accountProject ,          accountProjectCode ,          reAgreeFlag ,          autoToOa  ,contractNote ,spContractNo    )
+		SELECT   #{lnkContractNo},        c.companyNo ,        dateLifeStart ,        dateLifeEnd ,        ct.dateLifeStart  signDate ,        GETDATE()  dateCreate ,         2221 userIdCreate ,
+		         GETDATE() dateUpt ,         2221 userIdUpt ,         ct.accountName accountNm ,        ct.bankAccount  bankAccountNm ,    ct.companyBankNo  bankAccount   ,       c.CompanyName  partyBNm ,
+		        c.ContactNumber  partyBTel ,		10401   approveState,		18401    validStatus ,		0   delFlag ,		21201 submitOAStatus,         ct.AcCityNo cityNo ,
+		         c.CompanyName companyName ,         c.CityNo companyCityNo ,         c.DistrictNo companyDistrictNo ,         c.Address companyAddress ,         c.BusinessLicenseNo businessLicenseNo ,
+		         c.LegalPerson lealPerson ,         c.ContactNumber  companyContactTel ,         22101  agreementType ,          ct.accountProvinceNo ,         ct.accountProvinceName accountProvinceNm ,
+		         ct.accountCityNo accountCityNo ,         ct.accountCityName accountCityNm ,         ct.accountProject accountProject ,          ct.accountProjectNo  accountProjectCode ,
+		        22202  reAgreeFlag ,        1  autoToOa ,'' contractNote,ct.contractNo
+		        FROM contract ct,dbo.Company c 		WHERE  ct.id=#{contractId}  AND  ct.ContractType='10307' AND  ct.shoupaiType=24603		AND  ct.CompanyId=c.Id
+  </insert>
+    <insert id="insertFromSpContractFile" parameterType="map">
+	INSERT INTO dbo.FIL_FileRecordMain (   RefId ,	  FileTypeId , FileFullName , FileSourceId ,  DateCreate ,   UserCreate ,  IsDelete ,  fileSuffix ,  fileAbbrUrl , url50 ,fileUrl ,sellFileNo ,sfImage  )
+      SELECT (select id  from  LNK_FrameContract where  contractNo=#{lnkContractNo}) RefId,
+       		 CASE   FileTypeId WHEN 1  THEN  1028
+			  		WHEN 3 THEN 1029
+			  		WHEN 6 THEN 1030
+			  END AS FileTypeId,
+        	FileFullName ,
+       		8  FileSourceId ,
+       		 GETDATE() DateCreate ,
+        		2221 UserCreate ,
+        		IsDelete ,
+        		fileSuffix ,
+        		fileAbbrUrl ,
+       			 url50 ,
+        			fileUrl ,
+        		sellFileNo ,
+        		sfImage
+			FROM    dbo.FIL_FileRecordMain fm
+		WHERE   fm.IsDelete = 0
+      	 AND fm.FileTypeId IN ( '1', '3','6' )
+       	 AND fm.FileSourceId = '1'
+       	 AND fm.RefId = #{contractId}
+  </insert>
+    <!-- 查询框架合同详情 -->
+    <select id="getBriefList" resultType="cn.com.eju.deal.frameContract.model.FrameContractDto">
+		SELECT TOP 20
+		fc.id,
+		fc.contractNo,
+		fc.userIdCreate,
+		us.userName,
+		fc.companyNo,
+		fc.dateCreate,
+		fc.approveState,
+		dv.dicValue as approveStatusNm,
+		fc.validStatus,
+		dv3.dicValue as validStatusNm,
+		fc.submitOAStatus,
+		dv2.dicValue as submitOAStatusNm,
+		fc.companyName,
+		fc.businessLicenseNo,
+		fc.lealPerson as legalPerson,
+		fc.companyAddress as address,
+		fc.dateLifeStart,
+		fc.dateLifeEnd,
+		fc.signDate,
+		fc.accountNm,fc.bankAccountNm,fc.bankAccount,
+		fc.fyAccountNm,fc.fyAccountNmTel,
+		fc.contractNote,fc.remark,
+		fc.companyDistrictNo as districtNo,
+		fc.companyCityNo,
+		fc.cityNo,
+		fc.partyBNm,
+		fc.partyBTel,
+		fc.oaNo,
+		fc.companyContactTel,
+		fc.agreementType,
+		fc.accountProvinceNo,
+		fc.accountProvinceNm,
+        fc.accountProjectCode,
+        fc.accountProject,
+		fc.accountCityNo,
+		fc.accountCityNm,
+		fc.agreementType,
+		dv4.dicValue as agreementTypeVal,
+		fc.approvePassDate,
+		fc.reAgreeFlag,
+		dv5.dicValue as reAgreeFlagVal
+		,fc.autoToOa
+  	FROM
+  		dbo.LNK_FrameContract fc
+  		LEFT JOIN crm.dbo.USR_User us on us.userId = fc.userIdCreate and us.delFlag = 'N'
+  		LEFT JOIN dbo.BAS_DictionaryValue dv ON fc.approveState = dv.dicCode
+		                                                    AND dv.typeId = 104
+		                                                    AND dv.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv2 ON fc.submitOAStatus = dv2.dicCode
+	                                                    AND dv2.typeId = 212
+	                                                    AND dv2.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv3 ON fc.validStatus = dv3.dicCode
+	                                                    AND dv3.typeId = 184
+	                                                    AND dv3.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv4 ON fc.agreementType = dv4.dicCode
+	                                                    AND dv4.typeId = 221
+	                                                    AND dv4.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue dv5 ON fc.reAgreeFlag = dv5.dicCode
+	                                                    AND dv5.typeId = 222
+	                                                    AND dv5.delFlag = 'N'
+  	WHERE
+  		fc.delFlag = '0'
+		AND fc.autoToOa='1'
+		AND fc.submitOAStatus='21201'
+		AND fc.approveState ='10401'
+	order  by fc.id
+	</select>
+    <!-- 查询对公账户列表 -->
+    <select id="getBankInfoList" resultType="cn.com.eju.deal.frameContract.model.FrameContractDto" parameterType="Map">
+        SELECT ROW_NUMBER() OVER(ORDER BY dateCreate desc) rowNum, * FROM CompanyBankInfo where delFlag=0 and companyNo=#{companyNo} order by dateCreate desc
+    </select>
+    <update id="deleteBankInfo" parameterType="Map">
+        update CompanyBankInfo set delFlag=1 where id=#{id}
+    </update>
+    <insert id="addCompanyBandInfo" parameterType="cn.com.eju.deal.frameContract.model.FrameContractDto">
+        MERGE CompanyBankInfo t
+        USING (
+            SELECT companyNo,accountNm,bankAccountNm,bankAccount,accountProvinceNo,accountProvinceNm,accountCityNo,accountCityNm,0 AS delFlag,'' AS userCreate,GETDATE() dateCreate
+            FROM dbo.LNK_FrameContract WHERE id=#{id}
+        ) s ON t.bankAccount=s.bankAccount AND t.companyNo=s.companyNo
+        WHEN MATCHED THEN UPDATE SET
+            t.accountNm=s.accountNm,
+            t.bankAccountNm=s.bankAccountNm,
+            t.accountProvinceNo=s.accountProvinceNo,
+            t.accountProvinceNm=s.accountProvinceNm,
+            t.accountCityNo=s.accountCityNo
+        WHEN NOT MATCHED THEN INSERT  (
+               companyNo ,
+               accountNm ,
+               bankAccountNm ,
+               bankAccount ,
+               accountProvinceNo ,
+               accountProvinceNm ,
+               accountCityNo ,
+               accountCityNm ,
+               delFlag ,
+               userCreate ,
+               dateCreate
+        ) VALUES(
+               s.companyNo ,
+               s.accountNm ,
+               s.bankAccountNm ,
+               s.bankAccount ,
+               s.accountProvinceNo ,
+               s.accountProvinceNm ,
+               s.accountCityNo ,
+               s.accountCityNm ,
+               s.delFlag ,
+               s.userCreate ,
+               s.dateCreate
+        );
+    </insert>
+
+    <!--获取oa盖章合同附件列表-->
+    <select id="getOaFileList" resultType="cn.com.eju.deal.frameContract.model.OaLnkFrameContractFileReturnDto"
+            parameterType="cn.com.eju.deal.frameContract.model.FrameContractDto">
+        SELECT replace(fileCreateDay,'-','/')+'/'+fileId AS fileUrl,* FROM dbo.OaLnkFrameContractFileReturn WHERE contractNo=#{contractNo}
+    </select>
+
+    <!--更新渠道公司的供应商信息-->
+    <update id="updateCompanyVendorInfo" parameterType="cn.com.eju.deal.frameContract.model.FrameContract">
+          UPDATE t1 SET t1.vendor_id=t3.vendor_id,t1.vendor_number=t3.vendor_number,t1.vendor_name=t3.vendor_name
+          FROM dbo.Company t1
+          INNER JOIN LNK_FrameContract t2 ON t1.CompanyNo=t2.companyNo
+          INNER JOIN OaLnkFrameContractReturn t3 ON t2.contractNo=t3.ContractNo
+          WHERE t1.IsDelete=0 AND t2.delFlag=0 AND t3.approveStatus='10403'
+          AND t2.id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjSatisfactionMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjSatisfaction">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dcNo" jdbcType="VARCHAR" property="dcNo" />
+    <result column="StoreNo" jdbcType="VARCHAR" property="storeNo" />
+    <result column="wjCode" jdbcType="VARCHAR" property="wjCode" />
+    <result column="wjdcdate" jdbcType="TIMESTAMP" property="wjdcdate" />
+    <result column="wjdcjd" jdbcType="VARCHAR" property="wjdcjd" />
+    <result column="wjdcStatus" jdbcType="VARCHAR" property="wjdcStatus" />
+    <result column="storeStatus" jdbcType="VARCHAR" property="storeStatus" />
+    <result column="dcObjectName" jdbcType="NVARCHAR" property="dcObjectName" />
+    <result column="dcObjectTel" jdbcType="VARCHAR" property="dcObjectTel" />
+    <result column="dzStatus" jdbcType="VARCHAR" property="dzStatus" />
+    <result column="bjqStatus" jdbcType="VARCHAR" property="bjqStatus" />
+    <result column="ktbStatus" jdbcType="VARCHAR" property="ktbStatus" />
+    <result column="otherRemark" jdbcType="NVARCHAR" property="otherRemark" />
+    <result column="comments" jdbcType="NVARCHAR" property="comments" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+    <result column="wjfkdate" jdbcType="TIMESTAMP" property="wjfkdate" />
+    <result column="wjfkTel" jdbcType="VARCHAR" property="wjfkTel" />
+    <result column="wjdcTotalscore" jdbcType="NUMERIC" property="wjdcTotalscore" />
+    <result column="acCityNo" jdbcType="VARCHAR" property="acCityNo" />
+    <result column="cpTotalScore" jdbcType="NUMERIC" property="cpTotalScore" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, dcNo, StoreNo, wjCode, wjdcdate, wjdcjd, wjdcStatus, storeStatus, dcObjectName, 
+    dcObjectTel, dzStatus, bjqStatus, ktbStatus, otherRemark, comments, userCreate,
+    dateCreate, delFlag, wjfkdate, wjfkTel, wjdcTotalscore,acCityNo,cpTotalScore
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_Satisfaction
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Wj_Satisfaction
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfaction"  useGeneratedKeys="true" keyProperty="id">
+    insert into Kefu_Wj_Satisfaction (dcNo, StoreNo,
+      wjCode, wjdcdate, wjdcjd, 
+      wjdcStatus, storeStatus, dcObjectName, 
+      dcObjectTel, dzStatus, bjqStatus, 
+      ktbStatus, otherRemark, comments,
+      userCreate, dateCreate, delFlag, 
+      wjfkdate, wjfkTel, wjdcTotalscore,acCityNo
+      )
+    values (#{dcNo,jdbcType=VARCHAR}, #{storeNo,jdbcType=VARCHAR},
+      #{wjCode,jdbcType=VARCHAR}, #{wjdcdate,jdbcType=TIMESTAMP}, #{wjdcjd,jdbcType=VARCHAR},
+      #{wjdcStatus,jdbcType=VARCHAR}, #{storeStatus,jdbcType=VARCHAR}, #{dcObjectName,jdbcType=NVARCHAR}, 
+      #{dcObjectTel,jdbcType=VARCHAR}, #{dzStatus,jdbcType=VARCHAR}, #{bjqStatus,jdbcType=VARCHAR}, 
+      #{ktbStatus,jdbcType=VARCHAR}, #{otherRemark,jdbcType=NVARCHAR}, #{comments,jdbcType=NVARCHAR},
+      #{userCreate,jdbcType=INTEGER}, getdate(), 0,
+      #{wjfkdate,jdbcType=TIMESTAMP}, #{wjfkTel,jdbcType=VARCHAR}, #{wjdcTotalscore,jdbcType=NUMERIC}
+      , #{acCityNo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfaction">
+    insert into Kefu_Wj_Satisfaction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dcNo != null">
+        dcNo,
+      </if>
+      <if test="storeNo != null">
+        StoreNo,
+      </if>
+      <if test="wjCode != null">
+        wjCode,
+      </if>
+      <if test="wjdcdate != null">
+        wjdcdate,
+      </if>
+      <if test="wjdcjd != null">
+        wjdcjd,
+      </if>
+      <if test="wjdcStatus != null">
+        wjdcStatus,
+      </if>
+      <if test="storeStatus != null">
+        storeStatus,
+      </if>
+      <if test="dcObjectName != null">
+        dcObjectName,
+      </if>
+      <if test="dcObjectTel != null">
+        dcObjectTel,
+      </if>
+      <if test="dzStatus != null">
+        dzStatus,
+      </if>
+      <if test="bjqStatus != null">
+        bjqStatus,
+      </if>
+      <if test="ktbStatus != null">
+        ktbStatus,
+      </if>
+      <if test="otherRemark != null">
+        otherRemark,
+      </if>
+      <if test="comments != null">
+        comments,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+      <if test="wjfkdate != null">
+        wjfkdate,
+      </if>
+      <if test="wjfkTel != null">
+        wjfkTel,
+      </if>
+      <if test="wjdcTotalscore != null">
+        wjdcTotalscore,
+      </if>
+      <if test="acCityNo != null">
+        acCityNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="dcNo != null">
+        #{dcNo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null">
+        #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wjCode != null">
+        #{wjCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdcdate != null">
+        #{wjdcdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wjdcjd != null">
+        #{wjdcjd,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdcStatus != null">
+        #{wjdcStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStatus != null">
+        #{storeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dcObjectName != null">
+        #{dcObjectName,jdbcType=NVARCHAR},
+      </if>
+      <if test="dcObjectTel != null">
+        #{dcObjectTel,jdbcType=VARCHAR},
+      </if>
+      <if test="dzStatus != null">
+        #{dzStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="bjqStatus != null">
+        #{bjqStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="ktbStatus != null">
+        #{ktbStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRemark != null">
+        #{otherRemark,jdbcType=NVARCHAR},
+      </if>
+      <if test="comments != null">
+        #{comments,jdbcType=NVARCHAR},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="wjfkdate != null">
+        #{wjfkdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wjfkTel != null">
+        #{wjfkTel,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdcTotalscore != null">
+        #{wjdcTotalscore,jdbcType=NUMERIC},
+      </if>
+      <if test="acCityNo != null">
+        #{acCityNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfaction">
+    update Kefu_Wj_Satisfaction
+    <set>
+      <if test="dcNo != null">
+        dcNo = #{dcNo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null">
+        StoreNo = #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wjCode != null">
+        wjCode = #{wjCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdcdate != null">
+        wjdcdate = #{wjdcdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wjdcjd != null">
+        wjdcjd = #{wjdcjd,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdcStatus != null">
+        wjdcStatus = #{wjdcStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStatus != null">
+        storeStatus = #{storeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dcObjectName != null">
+        dcObjectName = #{dcObjectName,jdbcType=NVARCHAR},
+      </if>
+      <if test="dcObjectTel != null">
+        dcObjectTel = #{dcObjectTel,jdbcType=VARCHAR},
+      </if>
+      <if test="dzStatus != null">
+        dzStatus = #{dzStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="bjqStatus != null">
+        bjqStatus = #{bjqStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="ktbStatus != null">
+        ktbStatus = #{ktbStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRemark != null">
+        otherRemark = #{otherRemark,jdbcType=NVARCHAR},
+      </if>
+      <if test="comments != null">
+        comments = #{comments,jdbcType=NVARCHAR},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="wjfkdate != null">
+        wjfkdate = #{wjfkdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wjfkTel != null">
+        wjfkTel = #{wjfkTel,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdcTotalscore != null">
+        wjdcTotalscore = #{wjdcTotalscore,jdbcType=NUMERIC},
+      </if>
+      <if test="acCityNo != null">
+        acCityNo = #{acCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cpTotalScore != null">
+        cpTotalScore = #{cpTotalScore,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfaction">
+    update Kefu_Wj_Satisfaction
+    set dcNo = #{dcNo,jdbcType=VARCHAR},
+      StoreNo = #{storeNo,jdbcType=VARCHAR},
+      wjCode = #{wjCode,jdbcType=VARCHAR},
+      wjdcdate = #{wjdcdate,jdbcType=TIMESTAMP},
+      wjdcjd = #{wjdcjd,jdbcType=VARCHAR},
+      wjdcStatus = #{wjdcStatus,jdbcType=VARCHAR},
+      storeStatus = #{storeStatus,jdbcType=VARCHAR},
+      dcObjectName = #{dcObjectName,jdbcType=NVARCHAR},
+      dcObjectTel = #{dcObjectTel,jdbcType=VARCHAR},
+      dzStatus = #{dzStatus,jdbcType=VARCHAR},
+      bjqStatus = #{bjqStatus,jdbcType=VARCHAR},
+      ktbStatus = #{ktbStatus,jdbcType=VARCHAR},
+      otherRemark = #{otherRemark,jdbcType=NVARCHAR},
+      comments = #{comments,jdbcType=NVARCHAR},
+      acCityNo = #{acCityNo,jdbcType=VARCHAR},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT},
+      wjfkdate = #{wjfkdate,jdbcType=TIMESTAMP},
+      wjfkTel = #{wjfkTel,jdbcType=VARCHAR},
+      wjdcTotalscore = #{wjdcTotalscore,jdbcType=NUMERIC}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getStoreData" resultType="Map" parameterType="java.lang.Integer">
+    select t1.id storeId,t1.StoreNo storeNo,
+		t1.name storeName,
+		t1.addressDetail,
+		t1.maintainer,
+		t1.maintainerName,
+		isnull(t4.centername,'') as centerName,
+		ISNULL(CompanyName,'') companyName,
+		ISNULL(CompanyNo,'') companyNo,t1.AcCityNo as cityNo,ISNULL(t1.StoreManagerPhone,'') StoreManagerPhone,
+		storeSizeScale,isnull(d1.dicValue,'') storeSizeScaleStr
+		from Store t1
+		LEFT JOIN dbo.CompanyStore cs ON cs.StoreId=t1.Id AND cs.IsDelete=0 AND flag=0
+		LEFT JOIN dbo.Company c ON c.Id=cs.CompanyId AND c.IsDelete=0
+		LEFT JOIN crm.dbo.USR_User t3 ON t1.Maintainer=t3.userCode AND t3.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] t4 ON t3.groupId=t4.groupId
+		LEFT JOIN dbo.BAS_DictionaryValue d1 ON d1.dicCode=storeSizeScale
+		 where t1.id=#{storeId}
+		and t1.isDelete=0
+  </select>
+
+  <select id="getSurveyData" parameterType="java.lang.Integer" resultType="Map">
+    SELECT s.*,d1.dicValue AS 'storeStatusStr',d2.dicValue AS 'dzStatusStr', d3.dicValue AS 'bjqStatusStr',
+    d4.dicValue AS 'ktbStatusStr',u.userName
+    FROM dbo.Kefu_Wj_Satisfaction s
+    LEFT JOIN dbo.BAS_DictionaryValue d1 ON s.storeStatus=d1.dicCode
+    LEFT JOIN dbo.BAS_DictionaryValue d2 ON s.dzStatus=d2.dicCode
+    LEFT JOIN dbo.BAS_DictionaryValue d3 ON s.bjqStatus=d3.dicCode
+    LEFT JOIN dbo.BAS_DictionaryValue d4 ON s.ktbStatus=d4.dicCode
+    LEFT JOIN crm.dbo.USR_User u ON u.userId=s.userCreate
+    where s.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="checkSurvey"  resultType="Integer"  parameterType="Map">
+   SELECT COUNT(1) FROM Kefu_Wj_Satisfaction WHERE delFlag=0 AND StoreNo=#{storeNo} AND wjdcjd=#{wjdcdate}
+  </select>
+
+  <insert id="savePushInfo" parameterType="Map"  useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO dbo.Phone_Push_info
+        ( pushTelphone ,
+          pushContent ,
+          pushResult ,
+          dateCreate
+        )
+VALUES  ( #{pushTelphone,jdbcType=VARCHAR} ,
+          #{pushContent,jdbcType=VARCHAR} ,
+          #{pushResult,jdbcType=VARCHAR} ,
+          getdate()
+        )
+  </insert>
+
+
+  <select id="querySatisfaction" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(1) from Kefu_Wj_Satisfaction where id = #{id} and wjdcStatus = '25001' and delFlag = 0;
+  </select>
+
+  <select id="selectTelCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select count(1) from Kefu_Wj_Satisfaction where wjfkTel = #{wjfkTel,jdbcType=VARCHAR} and delFlag = 0;
+  </select>
+
+  <select id="queryWjNumber" parameterType="Map" resultType="Map">
+    SELECT
+        DISTINCT
+	    kws.wjCode,
+        h.wjName
+    FROM
+        (
+    SELECT CONVERT
+        ( VARCHAR, datename ( qq, wjdcdate ) ) jd,
+        CONVERT ( VARCHAR, datename(yy,wjdcdate) ) YEAR,
+        wjCode,
+        StoreNo
+    FROM
+        Kefu_Wj_Satisfaction
+        WHERE wjdcStatus = 25002
+        and delFlag = 0
+        ) kws
+        INNER JOIN Store s ON kws.StoreNo = s.StoreNo
+        AND s.IsDelete = 0
+        LEFT JOIN dbo.CompanyStore cs ON cs.StoreId = s.Id
+        AND cs.IsDelete = 0
+        LEFT JOIN dbo.Company c ON c.Id = cs.CompanyId
+        AND c.IsDelete = 0
+        inner JOIN dbo.Kefu_Wj_H h ON h.wjCode = kws.wjCode
+        AND h.delFlag = 0
+    WHERE
+        kws.YEAR = #{year}
+        AND kws.jd = #{quarter}
+        AND s.acCityNo = #{affiliationCityNo}
+        <if test="placeCityNo != null and placeCityNo != ''">
+          AND s.CityNo = #{placeCityNo}
+        </if>
+        <if test="store != null and store != ''">
+          AND ( kws.StoreNo LIKE CONCAT('%', #{store},'%') OR s.NAME LIKE CONCAT('%', #{store},'%') )
+        </if>
+        <if test="company != null and company != ''">
+          AND ( c.CompanyNo LIKE CONCAT('%', #{company},'%') OR c.CompanyName LIKE CONCAT('%', #{company},'%') )
+        </if>
+        ORDER BY kws.wjCode desc
+  </select>
+
+  <select id="queryWjFlListByCode" parameterType="java.lang.String" resultType="Map">
+    SELECT DISTINCT
+        a.wjtmflType,
+        count( a.id ) flCount,
+        d.dicValue
+    FROM
+        Kefu_Wj_D_TM a
+        LEFT JOIN BAS_DictionaryValue d ON a.wjtmflType = d.dicCode
+    WHERE
+        a.wjhid = ( SELECT id FROM Kefu_Wj_H WHERE wjCode = #{wjCode} AND delFlag = 0 )
+    GROUP BY
+        wjtmflType,
+        d.dicValue
+    ORDER BY
+        a.wjtmflType ASC
+  </select>
+
+
+  <resultMap id="WjAnalyseMap" type="cn.com.eju.deal.keFuWj.dto.KeFuWjAnalyseDto">
+    <collection column="{satisfactionId=id}" property="wjAnalyseTmScores"
+                select="cn.com.eju.deal.keFuWj.dao.KefuWjSatisfactionDMapper.queryWjAnalyseTmScores"/>
+    <collection column="{satisfactionId=id}" property="wjAnalyseFlScores"
+                select="cn.com.eju.deal.keFuWj.dao.KefuWjSatisfactionFlMapper.queryWjAnalyseFlScores"/>
+  </resultMap>
+
+
+  <select id="getWjAnalyseList" parameterType="Map" resultMap="WjAnalyseMap">
+      SELECT
+      b.id,
+      b.acCityName,
+      b.cityName,
+      b.centerName,
+      b.companyNo,
+      b.companyName,
+      b.storeNo,
+      b.storeName,
+      b.storeAddress,
+      b.storeManager,
+      b.storeManagerPhone,
+      b.wjfkTel,
+      b.dateCreate,
+      b.wjdcStatusName,
+      b.wjdcTotalscore,
+      b.storeStatusName,
+      b.wjType
+      FROM
+      (
+      SELECT
+      kws.id,
+      kws.wjCode,
+      kws.wjdcdate,
+      bc.cityName acCityName,
+      bc1.cityName,
+      cst.centerName,
+      c.companyNo,
+      c.companyName,
+      s.storeNo,
+      s.NAME storeName,
+      s.addressDetail storeAddress,
+      s.storeManager,
+      s.storeManagerPhone,
+      s.acCityNo,
+      s.CityNo,
+      kws.wjfkTel,
+      kws.dateCreate,
+      dv.dicValue wjdcStatusName,
+      ISNULL( kws.wjdcTotalscore, 0 ) wjdcTotalscore,
+      dv2.dicValue storeStatusName,
+      CASE
+
+      WHEN ( kws.storeStatus = 24801 AND kws.wjdcStatus = 25002 )
+      OR ( kws.storeStatus != 24801 ) THEN
+      2
+      WHEN kws.storeStatus = 24801
+      AND kws.wjdcStatus = 25001 THEN
+      1
+      WHEN s.decorationState = 16304
+      AND kws.id IS NULL THEN
+      0
+      END AS wjType
+      FROM
+      Store s
+      LEFT JOIN Kefu_Wj_Satisfaction kws ON kws.StoreNo = s.StoreNo
+      AND kws.delFlag = 0
+      LEFT JOIN BAS_CenterSetting cst ON s.centerId = cst.centerId
+      AND cst.delFlag = 0
+      LEFT JOIN dbo.CompanyStore cs ON cs.StoreId = s.Id
+      AND cs.flag = 0
+      AND cs.IsDelete = 0
+      LEFT JOIN dbo.Company c ON c.Id = cs.CompanyId
+      AND c.IsDelete = 0
+      LEFT JOIN BAS_City bc ON s.acCityNo = bc.cityNo
+      AND bc.flagDeleted = 0
+      LEFT JOIN BAS_City bc1 ON s.cityNo = bc1.cityNo
+      AND bc1.flagDeleted = 0
+      LEFT JOIN BAS_DictionaryValue dv ON kws.wjdcStatus = dv.dicCode
+      AND dv.delFlag = 'N'
+      LEFT JOIN BAS_DictionaryValue dv2 ON kws.storeStatus = dv2.dicCode
+      AND dv2.delFlag = 'N'
+      WHERE
+      s.IsDelete = 0
+      ) b
+      where 1=1
+      and (b.wjCode = #{wjCode} or  b.id is null)
+      and ((CONVERT ( VARCHAR, datename ( yy, b.wjdcdate) ) = #{year}
+      AND CONVERT ( VARCHAR, datename ( qq, b.wjdcdate ) ) = #{quarter}) or  b.id is null)
+      AND b.acCityNo = #{affiliationCityNo}
+      and b.wjType in
+      <foreach collection="wjTypeList" item="item" index="index"
+               open="(" separator="," close=")">
+          #{item}
+      </foreach>
+      <if test="placeCityNo != null and placeCityNo != ''">
+        AND b.CityNo = #{placeCityNo}
+      </if>
+      <if test="store != null and store != ''">
+        AND ( b.StoreNo LIKE CONCAT('%', #{store},'%') OR b.storeName LIKE CONCAT('%', #{store},'%') )
+      </if>
+      <if test="company != null and company != ''">
+        AND ( b.CompanyNo LIKE CONCAT('%', #{company},'%') OR b.CompanyName LIKE CONCAT('%', #{company},'%') )
+      </if>
+      ORDER BY b.wjType desc,b.wjCode desc,b.storeNo asc
+  </select>
+
+  <select id="getWjEvaluationList" parameterType="Map" resultType="cn.com.eju.deal.keFuWj.dto.KeFuWjEvaluationDto">
+    --各项测评的合计及行转列
+    SELECT * INTO #tabHJRow
+    FROM (SELECT satisfactionId,cpTitle,SUM(cpScore) cpScore
+    FROM Kefu_Wj_Satisfaction_Evaluation GROUP BY satisfactionId,cpTitle)tabHJCol
+    PIVOT( SUM(cpScore) FOR cpTitle IN ([25601],[25602],[25603],[25604],[25605],[25606],[25607],[25608],[25609],[25610],[25611],[25612] ) ) a;
+
+    --区域、门店规模、凝聚力
+    SELECT * INTO #tabStr
+    FROM(
+    SELECT satisfactionId,cpTitle,cpAnswerStr
+    FROM Kefu_Wj_Satisfaction_Evaluation
+    WHERE cpTitle IN (25601,25602,25605)
+    GROUP BY satisfactionId,cpTitle,cpAnswerStr) t1
+    PIVOT (MAX(cpAnswerStr) FOR cpTitle IN ([25601],[25602],[25605]))a
+
+    --一多选 列转多行
+    SELECT * INTO #tabMulti
+    FROM (
+    SELECT satisfactionId, cpTitle, a.cpTitleStr,b.cpAnswer,5 cpScore
+    FROM (SELECT satisfactionId, cpTitle, cpTitleStr,cpAnswer=<![CDATA[CAST('<v>'+REPLACE(cpAnswer,',','</v><v>')+'</v>']]> AS xml)
+    FROM Kefu_Wj_Satisfaction_Evaluation
+    WHERE cpTitle IN (25603,25604,25606)
+    ) a
+    OUTER APPLY (SELECT cpAnswer=T.C.value('.','varchar(50)') FROM a.cpAnswer.nodes('/v') AS T(C)) b
+    ) tbl
+
+    --25603,25604,25606
+    SELECT * INTO #tabMulti25603
+    FROM (SELECT satisfactionId,cpAnswer,cpScore FROM #tabMulti WHERE cpTitle=25603) t1
+    PIVOT (SUM(cpScore) FOR cpAnswer IN ([25901],[25902],[25903],[25904],[25905],[25906],[25907],[25908]))a
+
+    SELECT * INTO #tabMulti25604
+    FROM (SELECT satisfactionId,cpAnswer,cpScore FROM #tabMulti WHERE cpTitle=25604) t1
+    PIVOT (SUM(cpScore) FOR cpAnswer IN ([25901],[25902],[25903],[25904],[25905],[25906],[25907],[25908]))a
+
+    SELECT * INTO #tabMulti25606
+    FROM (SELECT satisfactionId,cpAnswer,cpScore FROM #tabMulti WHERE cpTitle=25606) t1
+    PIVOT (SUM(cpScore) FOR cpAnswer IN ([26001],[26002],[26003],[26004]))a
+
+    --结果整合
+    SELECT t1.satisfactionId, t1.[25601] 'qy',t2.[25601] 'qyfs',t1.[25605] 'mdgm',t2.[25605] 'mdgmfs',t1.[25602] 'njl',t2.[25602] 'njlfs',
+    ISNULL(t3.[25901],0) 'fwxq_pp',ISNULL(t3.[25902],0) 'fwxq_zp',ISNULL(t3.[25903],0) 'fwxq_px',ISNULL(t3.[25904],0) 'fwxq_fw',
+    ISNULL(t3.[25905],0) 'fwxq_xt',ISNULL(t3.[25906],0) 'fwxq_jy',ISNULL(t3.[25907],0) 'fwxq_gp',ISNULL(t3.[25908],0) 'fwxq_ld',
+    t2.[25603] 'fwxq_hj',
+    ISNULL(t4.[25901],0) 'fwql_pp',ISNULL(t4.[25902],0) 'fwql_zp',ISNULL(t4.[25903],0) 'fwql_px',ISNULL(t4.[25904],0) 'fwql_fw',
+    ISNULL(t4.[25905],0) 'fwql_xt',ISNULL(t4.[25906],0) 'fwql_jy',ISNULL(t4.[25907],0) 'fwql_gp',ISNULL(t4.[25908],0) 'fwql_ld',
+    t2.[25604] 'fwql_hj',
+    ISNULL(t5.[26001],0) 'ppfw_dzhg',ISNULL(t5.[26002],0) 'ppfw_tyzz',ISNULL(t5.[26003],0) 'ppfw_csgf',ISNULL(t5.[26004],0) 'ppfw_wfmbd',
+    t2.[25606] 'ppfw_hj',
+    t2.[25607] 'xtfw',t2.[25608] 'pxfw',t2.[25609] 'zpfw',t2.[25610] 'jyfw',t2.[25611] 'ldyw',t2.[25612] 'gpyw'
+    INTO #tabReport
+    FROM #tabStr t1
+    INNER JOIN #tabHJRow t2 ON t2.satisfactionId = t1.satisfactionId
+    INNER JOIN #tabMulti25603 t3 ON t3.satisfactionId = t1.satisfactionId
+    INNER JOIN #tabMulti25604 t4 ON t4.satisfactionId = t1.satisfactionId
+    INNER JOIN #tabMulti25606 t5 ON t5.satisfactionId = t1.satisfactionId
+
+    --列表前几列
+    SELECT ROW_NUMBER() OVER (ORDER BY kws.id DESC) rowNo,
+    kws.id,
+    bc.cityName acCityName,
+    bc1.cityName,
+    cst.centerName,
+    c.companyNo,
+    c.companyName,
+    s.storeNo,
+    s.name storeName,
+    s.addressDetail storeAddress,
+    s.storeManager,
+    s.storeManagerPhone,
+    r.*,
+    ISNULL(kws.cpTotalScore,0) cpTotalScore
+    FROM
+    Kefu_Wj_Satisfaction kws
+    INNER JOIN Store s ON kws.StoreNo = s.StoreNo AND s.IsDelete = 0
+    LEFT JOIN BAS_CenterSetting cst ON s.centerId = cst.centerId AND cst.delFlag = 0
+    LEFT JOIN dbo.CompanyStore cs ON cs.StoreId = s.Id AND cs.IsDelete = 0 and cs.flag = 0
+    LEFT JOIN dbo.Company c ON c.Id = cs.CompanyId AND c.IsDelete = 0
+    LEFT JOIN BAS_City bc ON s.acCityNo = bc.cityNo AND bc.flagDeleted = 0
+    LEFT JOIN BAS_City bc1 ON s.cityNo = bc1.cityNo AND bc1.flagDeleted = 0
+    LEFT JOIN #tabReport r ON r.satisfactionId=kws.id
+    WHERE kws.wjdcStatus = 25002 and kws.delFlag = 0
+    and CONVERT ( VARCHAR, datename ( yy, kws.wjdcdate) ) = #{year}
+    AND CONVERT ( VARCHAR, datename ( qq, kws.wjdcdate ) ) = #{quarter}
+    AND s.acCityNo = #{acCityNo}
+    <if test="cityNo != null and cityNo != ''">
+      AND s.CityNo = #{cityNo}
+    </if>
+    <if test="store != null and store != ''">
+      AND ( kws.StoreNo LIKE CONCAT('%', #{store},'%') OR s.NAME LIKE CONCAT('%', #{store},'%') )
+    </if>
+    <if test="company != null and company != ''">
+      AND ( c.CompanyNo LIKE CONCAT('%', #{company},'%') OR c.CompanyName LIKE CONCAT('%', #{company},'%') )
+    </if>
+    ORDER BY kws.id desc
+
+    DROP TABLE #tabHJRow
+    DROP TABLE #tabStr
+    DROP TABLE #tabMulti
+    DROP TABLE #tabMulti25603
+    DROP TABLE #tabMulti25604
+    DROP TABLE #tabMulti25606
+    DROP TABLE #tabReport
+
+  </select>
+
+</mapper>

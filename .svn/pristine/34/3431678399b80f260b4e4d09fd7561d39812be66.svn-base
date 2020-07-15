@@ -1,0 +1,571 @@
+package cn.com.eju.deal.houseLinkage.report.controller;
+
+import cn.com.eju.deal.base.code.model.Code;
+import cn.com.eju.deal.base.controller.BaseController;
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.support.SystemParam;
+import cn.com.eju.deal.common.util.BuildingNoUtil;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.dto.houseLinkage.report.ReportDto;
+import cn.com.eju.deal.dto.houseLinkage.report.ReportInfoDto;
+import cn.com.eju.deal.dto.houseLinkage.report.ReportSearchResultDto;
+import cn.com.eju.deal.houseLinkage.report.model.Report;
+import cn.com.eju.deal.houseLinkage.report.service.ReportService;
+import cn.com.eju.deal.houseLinkage.report.service.YFInterfaceService;
+import cn.com.eju.deal.user.model.ExchangeCenter;
+import com.alibaba.fastjson.JSON;
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 服务层
+ *
+ * @author qianwei
+ * @date 2016年3月22日 下午6:05:44
+ */
+
+@RestController
+@RequestMapping(value = "report")
+public class ReportController extends BaseController {
+
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Resource(name = "reportService")
+    private ReportService reportService;
+
+    @Resource
+    private YFInterfaceService yFInterfaceService;
+
+    /**
+     * 查询-对象
+     *
+     * @return
+     */
+    @RequestMapping(value = "/{estateId}/{companyId}/{customerId}", method = RequestMethod.GET)
+    public String getReport(@PathVariable String estateId, @PathVariable String companyId, @PathVariable String customerId) {
+        //构建返回
+        ResultData<ReportInfoDto> resultData = new ResultData<ReportInfoDto>();
+
+        //查询
+        ReportInfoDto ctaDto = new ReportInfoDto();
+        try {
+            ctaDto = reportService.getReport(estateId, companyId, customerId);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkagew", "ReportController", "getReport", "", null, "", "查询-对象", e);
+        }
+
+        resultData.setReturnData(ctaDto);
+
+        return resultData.toString();
+    }
+
+    /**
+     * 查询-list
+     *
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/q/{param}", method = RequestMethod.GET)
+    public String list(@PathVariable String param) {
+        //构建返回
+        ResultData<List<ReportSearchResultDto>> resultData = new ResultData<List<ReportSearchResultDto>>();
+
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+
+        //权限控制,参数转换
+        authParam(queryParam);
+
+        try {
+            resultData = reportService.queryList(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkagew", "ReportController", "list", "", null, "", " 查询-list", e);
+        }
+
+        return resultData.toString();
+    }
+
+    /**
+     * 查询进度列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/process", method = RequestMethod.GET)
+    public String getGroupList() {
+        //构建返回
+        ResultData<List<Code>> resultData = new ResultData<List<Code>>();
+
+        List<Code> returnList = new ArrayList<Code>();
+        List<Code> codeList = SystemParam.getCodeListByKey("135");
+        for (int i = 0; i < codeList.size(); i++) {
+            if (codeList.get(i).getDicCode() == 13507) {
+                continue;
+            }
+            returnList.add(codeList.get(i));
+        }
+        resultData.setReturnData(returnList);
+        return resultData.toString();
+    }
+
+    /**
+     * 退回带看已确认的状态
+     *
+     * @return
+     */
+    @RequestMapping(value = "/reback", method = RequestMethod.POST)
+    public String updateReback(@RequestBody String reportDtoJson) {
+
+        //构建返回
+        ResultData<Integer> resultData = new ResultData<Integer>();
+        Map<String, Object> queryParam = JsonUtil.parseToObject(reportDtoJson, Map.class);
+        try {
+            resultData = reportService.updateReback(queryParam);
+        } catch (Exception e) {
+            logger.error("Report", "ReportController", "updateReback", "", 0, "", "", e);
+
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/getOperDetail/{param}", method = RequestMethod.GET)
+    public String getOperDetail(@PathVariable String param) {
+        //构建返回
+        ResultData<ReportSearchResultDto> resultData = new ResultData<>();
+
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+
+        try {
+            resultData = reportService.getOperDetail(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "getOperDetail", "", null, "", "查询业务节点明细", e);
+        }
+
+        return resultData.toString();
+    }
+
+    /**
+     * desc:业务节点-查看
+     * 2019年11月14日
+     */
+    @RequestMapping(value = "/getFyData/{param}", method = RequestMethod.GET)
+    public String getJyFyData(@PathVariable String param) {
+        //构建返回
+        ResultData resultData = new ResultData<>();
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        String fyFlag = (String) queryParam.get("fyFlag");
+        try {
+            if ("1".equals(fyFlag)) {//成销
+                resultData = reportService.getCxFyData(queryParam);
+            } else if ("2".equals(fyFlag)) {//结佣
+                resultData = reportService.getJyFyData(queryParam);
+            }
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "getFyData", "", null, "", "查询业务节点明细", e);
+        }
+
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/operDetailUpdate/{param}", method = RequestMethod.GET)
+    public String operDetailUpdate(@PathVariable String param, HttpServletRequest request) {
+        //构建返回
+        ResultData<?> resultData = new ResultData<>();
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        BuildingNoUtil.unparse(queryParam);
+        try {
+            resultData = reportService.operDetailUdpate(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "operDetailUpdate", param, null, "", "修改业务节点明细异常", e);
+        }
+
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/operDetailUpdate", method = RequestMethod.POST)
+    public String operDetailUpdate(@RequestBody String param) {
+        //构建返回
+        ResultData<?> resultData = new ResultData<>();
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.operDetailUdpate(queryParam);
+            if (resultData != null && "200".equals(resultData.getReturnCode()) && "13504".equals(queryParam.get("progress").toString())) {
+                String reportId = (String) queryParam.get("reportNo");
+                String old_house_id = "0";
+                if (queryParam.get("oldBuildingNoId") != null//String类型
+                        && StringUtil.isNotEmpty((String) queryParam.get("oldBuildingNoId"))) {
+                    old_house_id = (String) queryParam.get("oldBuildingNoId");
+                }
+                yFInterfaceService.noticeYx(reportId, "14", (String) queryParam.get("userCode"), old_house_id);
+            }
+        } catch (Exception e) {
+            logger.error("operDetailUpdate,提交失败，请联系管理员", e);
+            resultData.setFail("提交失败，请联系管理员");
+            logger.error("report", "ReportController", "operDetailUpdate", param, null, "", "修改业务节点明细异常", e);
+        }
+
+        return resultData.toString();
+
+    }
+
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String getById(@PathVariable int id) {
+        //构建返回
+        ResultData<Report> resultData = new ResultData<>();
+
+        try {
+            Report report = reportService.getById(id);
+            if (report != null) {
+                resultData.setReturnData(report);
+            }
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "getById", "", null, "", "根据报备id查询报备信息异常", e);
+        }
+
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public String update(@RequestBody String reportDtoJson) {
+        ResultData<Integer> resultData = new ResultData<>();
+        ReportDto dto = JsonUtil.parseToObject(reportDtoJson, ReportDto.class);
+        try {
+            Report mo = new Report();
+            BeanUtils.copyProperties(dto, mo);
+            int count;
+            count = reportService.update(mo);
+            if (count == 0) {
+                resultData.setFail("大定审核信息同步友房通失败，请重新审核！");
+            }
+        } catch (Exception e) {
+            logger.error("Report", "ReportController", "update", "", 0, "", "更新报备失败", e);
+            resultData.setFail();
+        }
+
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/updateDetailRoughDate", method = RequestMethod.PUT)
+    public String updateDetailRoughDate(@RequestBody String param) {
+        //构建返回
+        ResultData<?> resultData = new ResultData<>();
+
+        ReportDto dto = JsonUtil.parseToObject(param, ReportDto.class);
+
+        try {
+            resultData = reportService.updateDetailRoughDate(dto);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "updateDetailRoughDate", "", null, "", "更新报备明细表大定审核日期异常", e);
+        }
+
+        return resultData.toString();
+    }
+
+
+    @RequestMapping(value = "/getYHApproveCheck/{id}", method = RequestMethod.GET)
+    public String getYHApproveCheck(@PathVariable int id) {
+        //构建返回
+        ResultData<Boolean> resultData = new ResultData<>();
+        try {
+            Boolean flag = reportService.getYHApproveCheck(id);
+            resultData.setReturnData(flag);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "getYHApproveCheck", "", null, "", "大定审核判断异常", e);
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/getYHApproveCheckArteryType/{id}", method = RequestMethod.GET)
+    public String getYHApproveCheckArteryType(@PathVariable int id) {
+        //构建返回
+        ResultData<Integer> resultData = new ResultData<>();
+        try {
+            resultData = reportService.getYHApproveCheckArteryType(id);
+        } catch (Exception e) {
+            logger.error("大定审核判断异常,getYHApproveCheckArteryType:" + id, e);
+            resultData.setFail("操作发生异常，请联系管理人员！");
+        }
+        return resultData.toString();
+    }
+
+
+
+    @RequestMapping(value = "/selectBuildingNoRepeatCount", method = RequestMethod.POST)
+    public String selectBuildingNoRepeatCount(@RequestBody String reportDtoJson) {
+        //构建返回
+        ResultData<String> resultData = new ResultData<>();
+        ReportDto dto = JsonUtil.parseToObject(reportDtoJson, ReportDto.class);
+        try {
+            String reportIdStr = reportService.selectBuildingNoRepeatCount(dto.getBuildingNo(), dto.getReportId());
+            resultData.setReturnData(reportIdStr);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "selectBuildingNoRepeatCount", reportDtoJson, null, "", "楼室号判重查询异常", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 获取业绩人的登陆中心
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getLinkUserCenter/{userCode}", method = RequestMethod.GET)
+    public String getLinkUserCenter(@PathVariable String userCode) {
+        //构建返回
+        ResultData<List<ExchangeCenter>> resultData = new ResultData<List<ExchangeCenter>>();
+        try {
+            List<ExchangeCenter> centerList = reportService.getLinkUserCenter(userCode);
+            resultData.setReturnData(centerList);
+        } catch (Exception e) {
+            logger.error("report", "ReportController", "getLinkUserCenter", "", 0, "", "获取用户所属中心 ", e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 保存业绩
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/saveAchievementAdjut", method = RequestMethod.POST)
+    public ResultData saveAchievementAdjut(@RequestBody String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.saveAchievementAdjut(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+                resultData.setFail("保存联动业绩调整异常！");
+            }
+            logger.error("CRM", "ReportController", "saveAchievementAdjut", reqMap.toString(), null, "", "保存联动业绩调整异常", e);
+        }
+        return resultData;
+    }
+
+    /**
+     * 保存客户调整信息
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/saveCustomerInfoAdjut", method = RequestMethod.POST)
+    public ResultData saveCustomerInfoAdjut(@RequestBody String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.saveCustomerInfoAdjut(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+                resultData.setFail("保存客户修改信息异常！");
+            }
+            logger.error("CRM", "ReportController", "saveCustomerInfoAdjut", reqMap.toString(), null, "", "保存客户修改信息异常", e);
+        }
+        return resultData;
+    }
+
+    /**
+     * 添加返佣对象表
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/insertYjReport", method = RequestMethod.PUT)
+    public String insertYjReport(@RequestBody String param) {
+        //构建返回
+        ResultData<?> resultData = new ResultData<>();
+
+        ReportDto dto = JsonUtil.parseToObject(param, ReportDto.class);
+
+        try {
+            resultData = reportService.insertYjReport(dto);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("report", "ReportController", "insertYjReport", param, null, "", "添加返佣对象表异常", e);
+        }
+
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/getAccountProject/{cityNo}", method = RequestMethod.GET)
+    public String getAccountProject(@PathVariable String cityNo) {
+        //构建返回
+        ResultData<List<Map<String, Object>>> resultData = new ResultData<List<Map<String, Object>>>();
+        try {
+            List<Map<String, Object>> centerList = reportService.getAccountProject(cityNo);
+            resultData.setReturnData(centerList);
+        } catch (Exception e) {
+            logger.error("report", "ReportController", "getAccountProject", "", 0, "", "获取核算主体 ", e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/unlockReback", method = RequestMethod.POST)
+    public ResultData unlockReback(@RequestBody String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.unlockReback(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+                resultData.setFail("退房解锁异常！");
+            }
+            logger.error("CRM", "ReportController", "unlockReback", param, null, "", "退房解锁异常", e);
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取项目发布城市
+     */
+    @RequestMapping(value = "/getProjectCityNoList", method = RequestMethod.POST)
+    public ResultData getProjectCityNoList(@RequestBody String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.getProjectCityNoList(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+                resultData.setFail("获取项目发布城市异常！");
+            }
+            logger.error("PMLS", "ReportController", "getProjectCityNoList", param, null, "", "获取项目发布城市异常", e);
+        }
+        return resultData;
+    }
+
+    @RequestMapping(value = "/getYJtableList", method = RequestMethod.POST)
+    public ResultData getYJtableList(@RequestBody String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.getYJtableList(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+                resultData.setFail("查询发生异常！");
+            }
+            logger.error("PMLS", "ReportController", "getYJtableList", param, null, "", "报备详情取得佣金列表信息异常", e);
+        }
+        return resultData;
+    }
+
+    @RequestMapping(value = "/getStatistcsBrokerage", method = RequestMethod.POST)
+    public ResultData getStatistcsBrokerage(@RequestBody String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.getStatistcsBrokerage(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+                resultData.setFail("查询发生异常！");
+            }
+            logger.error("PMLS", "ReportController", "getYJtableList", param, null, "", "报备详情取得收入&返佣异常", e);
+        }
+        return resultData;
+    }
+
+
+
+    @RequestMapping(value = "/uptPreBack", method = RequestMethod.POST)
+    public ResultData uptPreBack(@RequestBody String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.uptPreBack(reqMap);
+        } catch (Exception e) {
+            logger.error("交易管理##预退操作##异常"+ JSON.toJSONString(reqMap));
+            if (resultData == null) {
+                resultData = new ResultData();
+                resultData.setFail("操作异常！");
+            }
+            logger.error("CRM", "ReportController", "uptPreBack", param, null, "", "预退操作异常", e);
+        }
+        return resultData;
+    }
+
+    @RequestMapping(value = "/getReport", method = RequestMethod.POST)
+    public ResultData getReport(@RequestBody String param) {
+        ResultData resultData = null;
+
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.getReport(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+            }
+            logger.error("查询报备信息getReport error"+param);
+            resultData.setFail("查询发生异常！");
+            logger.error("reportController", "ReportController", "getReport", param, null, "", "查询报备信息getReport异常", e);
+        }
+        return resultData;
+    }
+    
+    /**
+     * 
+     * desc:大定审核-获取垫佣控制规则
+     * 2020年5月20日
+     */
+    @RequestMapping(value = "/getNewDyRatio", method = RequestMethod.POST)
+    public ResultData getNewDyRatio(@RequestBody String param) {
+        ResultData resultData = null;
+
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = reportService.getNewDyRatio(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+            }
+            logger.error("大定审核-获取垫佣控制规则 error"+param);
+            resultData.setFail("查询发生异常！");
+            logger.error("reportController", "ReportController", "getNewDyRatio", param, null, "", "大定审核-获取垫佣控制规则异常", e);
+        }
+        return resultData;
+    }
+    
+    /**
+     * desc:获取项目对应收入类合同得核算主体
+     * 2020年7月1日
+     */
+    @RequestMapping(value = "/getAccountProjectByProjectNo/{projectNo}", method = RequestMethod.GET)
+    public String getAccountProjectByProjectNo(@PathVariable String projectNo) {
+        //构建返回
+        ResultData<List<Map<String, Object>>> resultData = new ResultData<List<Map<String, Object>>>();
+        try {
+            List<Map<String, Object>> centerList = reportService.getAccountProjectByProjectNo(projectNo);
+            resultData.setReturnData(centerList);
+        } catch (Exception e) {
+            logger.error("report", "ReportController", "getAccountProjectByProjectNo", "", 0, "", "获取项目对应收入类合同得核算主体 ", e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+}

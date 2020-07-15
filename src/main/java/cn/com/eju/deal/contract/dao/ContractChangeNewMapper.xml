@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ContractChangeNewMapper">
+	<select id="queryContractChangeNewList" resultType="cn.com.eju.deal.contract.model.ContractChange"
+			parameterType="java.lang.Integer">
+		SELECT  T1.* ,
+			     dv.dicValue as changeTypeNm,
+			     t3.userName,
+			     t3.userCode
+		FROM    ContractChange T1
+        LEFT JOIN crm.dbo.USR_User T3 ON T3.userId = T1.userIdCreate
+        left join BAS_DictionaryValue dv on dv.dicCode = T1.changeType
+		WHERE   T1.contractId = #{contractId,jdbcType=INTEGER}
+		and T1.changeType in (17002,17003,17004)
+		AND T1.delFlag = 0
+	</select>
+
+	<select id="getContractById" resultType="cn.com.eju.deal.dto.contract.ContractDto" parameterType="Integer">
+		SELECT  c.* ,
+				com.companyName,
+				com.CompanyNo AS companyNo
+		FROM    dbo.Contract c
+				JOIN dbo.Company com ON c.CompanyId = com.Id
+		WHERE   c.Id = #{contractId}
+	</select>
+
+	<select id="getStoreById" resultType="cn.com.eju.deal.dto.store.StoreDto" parameterType="Integer">
+		SELECT * FROM dbo.Store WHERE Id = #{storeId}
+	</select>
+
+	<insert id="saveContractChange" parameterType="cn.com.eju.deal.dto.contract.ContractChangeDto"
+			useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ContractChange
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="contractStopNo != null">
+				contractStopNo,
+			</if>
+			<if test="contractId != null">
+				contractId,
+			</if>
+			<if test="remarks != null">
+				remarks,
+			</if>
+			<if test="dateCreate != null">
+				dateCreate,
+			</if>
+			<if test="userIdCreate != null">
+				userIdCreate,
+			</if>
+			<if test="delFlag != null">
+				delFlag,
+			</if>
+			<if test="changeType != null">
+				changeType,
+			</if>
+			<if test="approveState != null">
+				approveState,
+			</if>
+			<if test="newCompanyName != null">
+				newCompanyName,
+			</if>
+			<if test="newLegalPerson != null">
+				newLegalPerson,
+			</if>
+			<if test="newCompanyAddressCityNo != null">
+				newCompanyAddressCityNo,
+			</if>
+			<if test="newCompanyAddressDistrictNo != null">
+				newCompanyAddressDistrictNo,
+			</if>
+			<if test="newCompanyAddress != null">
+				newCompanyAddress,
+			</if>
+			<if test="newAgreementNo != null">
+				newAgreementNo,
+			</if>
+			<if test="newDateLifeStart != null">
+				newDateLifeStart,
+			</if>
+			<if test="newDateLifeEnd != null">
+				newDateLifeEnd,
+			</if>
+			<if test="oldCompanyId != null">
+				oldCompanyId,
+			</if>
+			<if test="newCompanyId != null">
+				newCompanyId,
+			</if>
+			<if test="updateCompanyName != null">
+				updateCompanyName,
+			</if>
+			<if test="newUpdateCompanyName != null">
+				newUpdateCompanyName,
+			</if>
+			<if test="oldUpdateCompanyName != null">
+				oldUpdateCompanyName,
+			</if>
+			<if test="authRepresentative != null">
+				authRepresentative,
+			</if>
+			<if test="agentContact != null">
+				agentContact,
+			</if>
+			<if test="totleDepositFee != null">
+				totleDepositFee,
+			</if>
+			<if test="penaltyFee != null">
+				penaltyFee,
+			</if>
+			<if test="companyBankNo != null">
+				companyBankNo,
+			</if>
+			<if test="bankAccount != null">
+				bankAccount,
+			</if>
+			<if test="accountName != null">
+				accountName,
+			</if>
+			<if test="recipients != null">
+				recipients,
+			</if>
+			<if test="submitOAStatus != null">
+				submitOAStatus,
+			</if>
+            <if test="contractType != null">
+                contractType,
+            </if>
+            <if test="threePartChangeType != null">
+                threePartChangeType,
+            </if>
+			<if test="cityNo != null">
+				cityNo,
+			</if>
+			<if test="districtNo != null">
+				districtNo,
+			</if>
+			<if test="recipientsAddress != null">
+				recipientsAddress,
+			</if>
+			<if test="changeCompany != null">
+				changeCompany,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="contractStopNo != null">
+				#{contractStopNo,jdbcType=VARCHAR},
+			</if>
+			<if test="contractId != null">
+                #{contractId,jdbcType=INTEGER},
+			</if>
+			<if test="remarks != null">
+                #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="dateCreate != null">
+                #{dateCreate,jdbcType=DATE},
+			</if>
+			<if test="userIdCreate != null">
+                #{userIdCreate,jdbcType=INTEGER},
+			</if>
+			<if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+			</if>
+			<if test="changeType != null">
+                #{changeType,jdbcType=INTEGER},
+			</if>
+			<if test="approveState != null">
+                #{approveState,jdbcType=INTEGER},
+			</if>
+			<if test="newCompanyName != null">
+                #{newCompanyName,jdbcType=VARCHAR},
+			</if>
+			<if test="newLegalPerson != null">
+                #{newLegalPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="newCompanyAddressCityNo != null">
+                #{newCompanyAddressCityNo,jdbcType=VARCHAR},
+			</if>
+			<if test="newCompanyAddressDistrictNo != null">
+                #{newCompanyAddressDistrictNo,jdbcType=VARCHAR},
+			</if>
+			<if test="newCompanyAddress != null">
+                #{newCompanyAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="newAgreementNo != null">
+                #{newAgreementNo,jdbcType=VARCHAR},
+			</if>
+			<if test="newDateLifeStart != null">
+                #{newDateLifeStart,jdbcType=DATE},
+			</if>
+			<if test="newDateLifeEnd != null">
+                #{newDateLifeEnd,jdbcType=DATE},
+			</if>
+			<if test="oldCompanyId != null">
+                #{oldCompanyId,jdbcType=INTEGER},
+			</if>
+			<if test="newCompanyId != null">
+                #{newCompanyId,jdbcType=INTEGER},
+			</if>
+			<if test="updateCompanyName != null">
+                #{updateCompanyName,jdbcType=VARCHAR},
+			</if>
+			<if test="newUpdateCompanyName != null">
+                #{newUpdateCompanyName,jdbcType=VARCHAR},
+			</if>
+			<if test="oldUpdateCompanyName != null">
+                #{oldUpdateCompanyName,jdbcType=VARCHAR},
+			</if>
+			<if test="authRepresentative != null">
+                #{authRepresentative,jdbcType=VARCHAR},
+			</if>
+			<if test="agentContact != null">
+                #{agentContact,jdbcType=VARCHAR},
+			</if>
+			<if test="totleDepositFee != null">
+                #{totleDepositFee,jdbcType=DECIMAL},
+			</if>
+			<if test="penaltyFee != null">
+                #{penaltyFee,jdbcType=DECIMAL},
+			</if>
+			<if test="companyBankNo != null">
+                #{companyBankNo,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccount != null">
+                #{bankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+                #{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="recipients != null">
+                #{recipients,jdbcType=VARCHAR},
+			</if>
+			<if test="submitOAStatus != null">
+                #{submitOAStatus,jdbcType=INTEGER},
+			</if>
+            <if test="contractType != null">
+                #{contractType,jdbcType=INTEGER},
+            </if>
+            <if test="threePartChangeType != null">
+                #{threePartChangeType,jdbcType=INTEGER},
+            </if>
+			<if test="cityNo != null">
+				#{cityNo,jdbcType=VARCHAR},
+			</if>
+			<if test="districtNo != null">
+				#{districtNo,jdbcType=VARCHAR},
+			</if>
+			<if test="recipientsAddress != null">
+				#{recipientsAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="changeCompany!=null">
+				#{changeCompany,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateContractChange" parameterType="cn.com.eju.deal.dto.contract.ContractChangeDto">
+		UPDATE ContractChange
+		<set>
+			<if test="contractStopNo != null">
+				contractStopNo = #{contractStopNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="contractId != null">
+				contractId = #{contractId,jdbcType=INTEGER},
+			</if>
+			<if test="stopType != null">
+				stopType = #{stopType,jdbcType=INTEGER},
+			</if>
+			<if test="stopReason != null">
+				stopReason = #{stopReason,jdbcType=NVARCHAR},
+			</if>
+			<if test="decorateCNTSituate != null">
+				decorateCNTSituate = #{decorateCNTSituate,jdbcType=INTEGER},
+			</if>
+			<if test="decorateSituate != null">
+				decorateSituate = #{decorateSituate,jdbcType=INTEGER},
+			</if>
+			<if test="decorateCompany != null">
+				decorateCompany = #{decorateCompany,jdbcType=NVARCHAR},
+			</if>
+			<if test="flopMode != null">
+				flopMode = #{flopMode,jdbcType=INTEGER},
+			</if>
+			<if test="decorateAmount != null">
+				decorateAmount = #{decorateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="payAmount != null">
+				payAmount = #{payAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isReleaseFlag != null">
+				isReleaseFlag = #{isReleaseFlag,jdbcType=INTEGER},
+			</if>
+			<if test="stopDate != null">
+				stopDate = #{stopDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isaTob != null">
+				isaTob = #{isaTob,jdbcType=INTEGER},
+			</if>
+			<if test="stopDescribe != null">
+				stopDescribe = #{stopDescribe,jdbcType=NVARCHAR},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=NVARCHAR},
+			</if>
+			<if test="flowEndDate != null">
+				flowEndDate = #{flowEndDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateCreate != null">
+				dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userIdCreate != null">
+				userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+			</if>
+			<if test="updateCreate != null">
+				updateCreate = #{updateCreate,jdbcType=INTEGER},
+			</if>
+			<if test="updateDate != null">
+				updateDate = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				delFlag = #{delFlag,jdbcType=BIT},
+			</if>
+			<if test="changeType != null">
+				changeType = #{changeType,jdbcType=INTEGER},
+			</if>
+			<if test="receivedAmount != null">
+				receivedAmount = #{receivedAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="approveState != null">
+				approveState = #{approveState,jdbcType=INTEGER},
+			</if>
+			<if test="flowId != null">
+				flowId = #{flowId,jdbcType=NVARCHAR},
+			</if>
+			<if test="changeCompanyName != null">
+				changeCompanyName = #{changeCompanyName,jdbcType=INTEGER},
+			</if>
+			<if test="changeCompanyAdress != null">
+				changeCompanyAddress = #{changeCompanyAdress,jdbcType=INTEGER},
+			</if>
+			<if test="changeStoreAdress != null">
+				changeStoreAddress = #{changeStoreAdress,jdbcType=INTEGER},
+			</if>
+			<if test="changeCompany != null">
+				changeCompany = #{changeCompany,jdbcType=INTEGER},
+			</if>
+			<if test="companyCity != null">
+				companyCity = #{companyCity,jdbcType=NVARCHAR},
+			</if>
+			<if test="companyDistrict != null">
+				companyDistrict = #{companyDistrict,jdbcType=NVARCHAR},
+			</if>
+			<if test="companyAdresss != null">
+				companyAddress = #{companyAdresss,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeCity != null">
+				storeCity = #{storeCity,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeDistrict != null">
+				storeDistrict = #{storeDistrict,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeAdresss != null">
+				storeAddress = #{storeAdresss,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyName != null">
+				newCompanyName = #{newCompanyName,jdbcType=NVARCHAR},
+			</if>
+			<if test="newLegalPerson != null">
+				newLegalPerson = #{newLegalPerson,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyAddressCityNo != null">
+				newCompanyAddressCityNo = #{newCompanyAddressCityNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyAddressDistrictNo != null">
+				newCompanyAddressDistrictNo = #{newCompanyAddressDistrictNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyAddress != null">
+				newCompanyAddress = #{newCompanyAddress,jdbcType=NVARCHAR},
+			</if>
+			<if test="newAgreementNo != null">
+				newAgreementNo = #{newAgreementNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="newDateLifeStart != null">
+				newDateLifeStart = #{newDateLifeStart,jdbcType=TIMESTAMP},
+			</if>
+			<if test="newDateLifeEnd != null">
+				newDateLifeEnd = #{newDateLifeEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="oldCompanyId != null and oldCompanyId != ''">
+				oldCompanyId = #{oldCompanyId,jdbcType=INTEGER},
+			</if>
+			<if test="newCompanyId != null and newCompanyId != ''">
+				newCompanyId = #{newCompanyId,jdbcType=INTEGER},
+			</if>
+			<if test="updateCompanyName != null and updateCompanyName != ''">
+				updateCompanyName = #{updateCompanyName,jdbcType=INTEGER},
+			</if>
+			<if test="newUpdateCompanyName != null and newUpdateCompanyName != ''">
+				newUpdateCompanyName = #{newUpdateCompanyName,jdbcType=NVARCHAR}
+			</if>
+			<if test="agreementType != null and agreementType != ''">
+				agreementType = #{agreementType,jdbcType=INTEGER},
+			</if>
+			<if test="authRepresentative != null and authRepresentative != ''">
+				authRepresentative = #{authRepresentative ,jdbcType=NVARCHAR},
+			</if>
+			<if test="agentContact != null and agentContact != ''">
+				agentContact = #{agentContact ,jdbcType=NVARCHAR},
+			</if>
+			<if test=" totleDepositFee != null and totleDepositFee != ''">
+				totleDepositFee = #{totleDepositFee ,jdbcType=DECIMAL},
+			</if>
+			<if test="penaltyFee != null and penaltyFee != ''">
+				penaltyFee = #{penaltyFee ,jdbcType=DECIMAL},
+			</if>
+			<if test="companyBankNo != null and companyBankNo != ''">
+				companyBankNo = #{companyBankNo ,jdbcType=NVARCHAR},
+			</if>
+			<if test="bankAccount != null and bankAccount != ''">
+				bankAccount = #{bankAccount ,jdbcType=NVARCHAR},
+			</if>
+			<if test="accountName != null and accountName != ''">
+				accountName = #{accountName ,jdbcType=NVARCHAR},
+			</if>
+			<if test="recipients != null and recipients != ''">
+				recipients = #{recipients ,jdbcType=NVARCHAR},
+			</if>
+			<if test="cityNo != null and cityNo != ''">
+				cityNo = #{cityNo ,jdbcType=NVARCHAR},
+			</if>
+			<if test="districtNo != null and districtNo != ''">
+				districtNo = #{districtNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="recipientsAddress != null and recipientsAddress != ''">
+				recipientsAddress = #{recipientsAddress,jdbcType=NVARCHAR},
+			</if>
+			<if test="oldUpdateCompanyName != null and oldUpdateCompanyName != ''">
+				oldUpdateCompanyName = #{oldUpdateCompanyName,jdbcType=NVARCHAR},
+			</if>
+			<if test="oldStoreAddressDetail != null and oldStoreAddressDetail != ''">
+				oldStoreAddressDetail = #{oldStoreAddressDetail,jdbcType=NVARCHAR},
+			</if>
+			<if test="threePartChangeType != null">
+				threePartChangeType = #{threePartChangeType,jdbcType=INTEGER},
+			</if>
+			<if test="submitOAStatus!=null">
+				submitOAStatus = #{submitOAStatus,jdbcType=INTEGER}
+			</if>
+		</set>
+		<where>
+			delFlag = 0
+			<if test="id != null">
+				<![CDATA[AND id = #{id,jdbcType=INTEGER}]]>
+			</if>
+			<if test="flowId != null">
+				<![CDATA[AND flowId = #{flowId,jdbcType=NVARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+    <insert id="saveContractChangeStore" parameterType="cn.com.eju.deal.dto.store.StoreDto" useGeneratedKeys="true" keyProperty="id">
+        insert into contractChangeStore(
+          contractStopId,storeId,delFlag,contractId,StoreManager,StoreManagerPhone,ABTypeStore,BTypeStore
+        )
+        values (
+          #{contractStopId,jdbcType=INTEGER},
+          #{storeId,jdbcType=INTEGER},
+          0,
+          #{contractId,jdbcType=INTEGER},
+          #{storeManager,jdbcType=VARCHAR},
+          #{storeManagerPhone,jdbcType=VARCHAR},
+          #{ABTypeStore,jdbcType=INTEGER},
+          #{BTypeStore,jdbcType=VARCHAR}
+        )
+    </insert>
+
+	<update id="updateContractChangeStore" parameterType="cn.com.eju.deal.dto.store.StoreDto">
+        update contractChangeStore
+        set StoreManager = #{storeManager,jdbcType=VARCHAR},
+          StoreManagerPhone = #{storeManagerPhone,jdbcType=VARCHAR},
+          ABTypeStore = #{ABTypeStore,jdbcType=INTEGER},
+          BTypeStore = #{BTypeStore,jdbcType=VARCHAR}
+        where contractStopId = #{contractStopId,jdbcType=INTEGER}
+    </update>
+
+	<select id="findContractChangeNewById" resultType="cn.com.eju.deal.dto.contract.ContractChangeDto" parameterType="java.lang.Integer">
+		SELECT  dv1.dicValue AS changeTypeName ,
+				dv2.dicValue AS threePartChangeTypeNm ,
+				dv3.dicValue AS submitOAStatusName ,
+				CASE cc.approveState
+				  WHEN 0 THEN '待提交审核'
+				  WHEN 1 THEN '审核中'
+				  WHEN 2 THEN '审核通过'
+				  WHEN 3 THEN '审核未通过'
+				  ELSE '查询状态失败'
+				END AS approveStateName ,
+				c.contractNo,
+				c.dateLifeStart,
+				dv4.dicValue as contractTypeNm,
+				u.userName AS userCreateName,
+				CONCAT(district.CityName,district.DistrictName,cc.newCompanyAddress) as newCompanyAddressDetail,
+				CONCAT(district1.CityName,district1.DistrictName,cc.recipientsAddress)as recipientsAddressDetail,
+				cc.*
+		FROM    dbo.ContractChange cc
+				JOIN contract c ON cc.contractId = c.Id
+				JOIN dbo.BAS_DictionaryValue dv1 ON cc.changeType = dv1.dicCode
+													AND dv1.delFlag = 'N'
+				JOIN dbo.BAS_DictionaryValue dv2 ON cc.threePartChangeType = dv2.dicCode
+													AND dv1.delFlag = 'N'
+				JOIN dbo.BAS_DictionaryValue dv3 ON cc.threePartChangeType = dv3.dicCode
+													AND dv1.delFlag = 'N'
+				JOIN dbo.BAS_DictionaryValue dv4 ON cc.contractType = dv4.dicCode
+													AND dv1.delFlag = 'N'
+				JOIN crm.dbo.USR_User u ON u.userId = cc.userIdCreate
+				join dbo.BAS_District district on district.districtNo = cc.newCompanyAddressDistrictNo
+				left join dbo.BAS_District district1 on district1.districtNo = cc.districtNo
+		WHERE   cc.id = #{id}
+	</select>
+
+	<select id="findContractChangeNewStoreById" resultType="cn.com.eju.deal.dto.store.StoreDto" parameterType="java.lang.Integer">
+		SELECT  dv1.dicValue AS ABTypeStoreName ,
+				dv2.dicValue AS BTypeStoreName ,
+				s.storeNo,
+				s.name,
+				s.addressDetail,
+				ccs.storeId,
+				ccs.storeManager,
+				ccs.storeManagerPhone,
+				ccs.ABTypeStore,
+				ccs.BTypeStore,
+				s.abTypeStore as oldAbtypeStore,
+				ccs.contractStopId
+		FROM    dbo.ContractChangeStore ccs
+				JOIN dbo.Store s ON ccs.storeId = s.Id
+				JOIN dbo.BAS_DictionaryValue dv1 ON dv1.dicCode = ccs.ABTypeStore
+				LEFT JOIN dbo.BAS_DictionaryValue dv2 ON dv2.dicCode = ccs.BTypeStore
+		WHERE   contractStopId = #{id}
+	</select>
+
+	<select id="getContractChangeNewFileList" resultType="cn.com.eju.deal.dto.contract.ContractFileDto" parameterType="java.lang.Integer" >
+        SELECT  fm.FileRecordMainId AS fileRecordMainId ,
+				fm.FileFullName AS fileName ,
+				fm.fileAbbrUrl ,
+				fm.fileUrl ,
+				fm.url50 ,
+				fm.FileSourceId,
+				fm.FileTypeId ,
+				ft.FileTypeName
+		FROM    dbo.FIL_FileRecordMain fm
+				LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+				LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+		WHERE   fm.IsDelete = 0
+				AND fm.FileSourceId = 10
+				AND fm.RefId = #{refId}
+		ORDER BY fm.FileRecordMainId ASC
+    </select>
+</mapper>

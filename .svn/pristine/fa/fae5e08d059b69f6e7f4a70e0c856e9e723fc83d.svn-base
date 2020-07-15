@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.linkConversionRate.dao.LinkConversionRateMapper">
+
+	<select id="queryList" parameterType="Map" resultType="cn.com.eju.deal.dto.houseLinkage.linkConversionRate.LinkConversionRateDto">
+		--数据源
+		SELECT org.regionCode,--业绩归属区域编号
+		org.regionName,--业绩归属区域名称
+		org.areaCityCode,--业绩归属城市编号
+		org.areaCityName,--业绩归属城市名称
+		t2.projectNo,
+		t2.projectDepartmentId,g.groupName,
+		a.*
+		INTO #va
+		FROM V_CRM_LinkDetail_Achievement a
+		INNER JOIN dbo.LNK_Estate t2 ON a.EstateId=t2.EstateId AND t2.DelFlg=0
+		LEFT JOIN dbo.USR_Group g ON t2.projectDepartmentId=g.groupId AND g.delFlag='N'
+		LEFT JOIN (
+		SELECT distinct yearly, regionCode, regionName, areaCityCode, areaCityName, cityGroupId, cityGroupName,cityId
+		FROM dbo.V_USR_OrgHis
+		WHERE yearly = #{organization, jdbcType=VARCHAR}
+		) org ON a.cityGroupId = org.cityGroupId
+		WHERE a.cityGroupId!=1733
+		<if test="regionCodeList != null">
+			AND org.regionCode IN
+			<foreach collection="regionCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="areaCityCodeList != null">
+			AND org.areaCityCode IN
+			<foreach collection="areaCityCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="cityIdList != null">
+			AND org.cityId IN
+			<foreach collection="cityIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="estateNmKey != null and estateNmKey != ''">
+			AND (t2.projectNo like '${estateNmKey}%' OR t2.estateNm like '%${estateNmKey}%')
+-- 			AND a.estateNm IN (${estateNmKey})
+		</if>
+		<if test="userId != null and userId != ''">
+<!-- 			AND ( -->
+<!-- 			( -->
+<!-- 			a.centerGroupId is null AND a.cityGroupId in (SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter(#{userId}, 'CRM')) -->
+<!-- 			) OR ( -->
+<!-- 			a.centerGroupId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')) -->
+<!-- 			)) -->
+			AND (
+					(
+					  a.centerGroupId is null AND a.cityGroupId in (
+					  		SELECT DISTINCT m.cityId FROM dbo.BAS_PMLS_UserCenterCitySetting m
+									JOIN dbo.USR_User u ON u.userCode=m.userCode AND u.delFlag='N'
+									 WHERE m.delFlag=0 AND u.userId=#{userId}
+						)
+					) OR (
+					  a.centerGroupId in (
+					  		SELECT DISTINCT m.centerId FROM dbo.BAS_PMLS_UserCenterCitySetting m
+								JOIN dbo.USR_User u ON u.userCode=m.userCode AND u.delFlag='N'
+								WHERE m.delFlag=0 AND u.userId=#{userId}
+					  )
+					) 
+				)
+		</if>
+
+		--查询周期内的项目对应的结转大定、新增大定、新增成销、累计大定、结转成销转化率、新增成销转化率、整体成销转化率、大定转成销周期
+		SELECT regionCode,gsRegion,areaCityCode,gsCity,projectNo,estateName,EstateId,
+		SUM(ISNULL(dqJzdd,0)) dqJzdd,SUM(ISNULL(dqXzdd,0)) dqXzdd,SUM(ISNULL(dqJzdd,0))+SUM(ISNULL(dqXzdd,0)) dqLjdd,SUM(ISNULL(xzcx,0)) dqXzcx,SUM(ISNULL(xzcxBefdq,0)) xzcxBefdq,SUM(ISNULL(xzcxdq,0)) xzcxdq
+		, CASE SUM(ISNULL(dqJzdd,0)) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(ISNULL(xzcxBefdq,0))*100/SUM(ISNULL(dqJzdd,0)),0) AS INT) END dqJzcxRate,
+		CASE SUM(ISNULL(dqXzdd,0)) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(ISNULL(xzcxdq,0))*100/SUM(ISNULL(dqXzdd,0)),0) AS INT) END dqXzcxRate,
+		CASE SUM(ISNULL(dqJzdd,0))+SUM(ISNULL(dqXzdd,0)) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(ISNULL(xzcx,0))*100/(SUM(ISNULL(dqJzdd,0))+SUM(ISNULL(dqXzdd,0))),0) AS INT) END dqZtcxRate,
+		SUM(sumDay) sumDay,SUM(sumNum) sumNum,
+		CASE SUM(sumNum) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(ISNULL(sumDay,0))/SUM(ISNULL(sumNum,0)),0) AS INT) END dqDdzcxzq
+		INTO #tbl_dq
+		FROM (
+		--结转大定
+		SELECT regionCode,regionName gsRegion,areaCityCode,areaCityName gsCity,projectNo,EstateNm estateName,EstateId,
+		SUM(ISNULL(roughAmount,0)) dqJzdd,0 dqXzdd,0 xzcx,0 xzcxBefdq,0 xzcxdq,0 sumDay,0 sumNum FROM  #va
+		WHERE  roughDate &lt; convert(datetime, '${dateStart}') AND (dealDate IS NULL OR dealDate >= convert(datetime, '${dateStart}'))
+		GROUP BY regionCode,regionName,areaCityCode,areaCityName,projectNo,EstateNm,EstateId
+		UNION
+		--新增大定
+		SELECT regionCode,regionName gsRegion,areaCityCode,areaCityName gsCity,projectNo,EstateNm estateName,EstateId,
+		0 dqJzdd,SUM(ISNULL(roughAmount,0)) dqXzdd,0 xzcx,0 xzcxBefdq,0 xzcxdq,0 sumDay,0 sumNum FROM  #va
+		WHERE  roughDate >=convert(datetime, '${dateStart}') AND roughDate &lt; convert(datetime, '${dateEnd}')
+		GROUP BY regionCode,regionName,areaCityCode,areaCityName,projectNo,EstateNm,EstateId
+		UNION
+		--新增成销
+		SELECT regionCode,regionName gsRegion,areaCityCode,areaCityName gsCity,projectNo,EstateNm estateName,EstateId,
+		0 dqJzdd,0 dqXzdd,SUM(ISNULL(dealAmount,0)) xzcx,0 xzcxBefdq,0 xzcxdq,0 sumDay,0 sumNum
+		FROM #va
+		WHERE dealDate>=convert(datetime, '${dateStart}') AND dealDate &lt; convert(datetime, '${dateEnd}')
+		GROUP BY regionCode,regionName,areaCityCode,areaCityName,projectNo,EstateNm,EstateId
+		UNION
+		--大定转成销周期
+		SELECT regionCode,regionName gsRegion,areaCityCode,areaCityName gsCity,projectNo,EstateNm estateName,EstateId,
+		0 dqJzdd,0 dqXzdd,0 xzcx,0 xzcxBefdq,0 xzcxdq,
+		SUM(DATEDIFF(DAY,roughDate,dealDate)) sumDay,SUM(tsnum) sumNum
+		FROM #va
+		WHERE dealDate>=convert(datetime, '${dateStart}') AND dealDate &lt; convert(datetime, '${dateEnd}') AND tsnum>0
+		GROUP BY regionCode,regionName,areaCityCode,areaCityName,projectNo,EstateNm,EstateId
+		UNION
+		--新增成销（大定日期在当期之前）
+		SELECT  regionCode,regionName gsRegion,areaCityCode,areaCityName gsCity,projectNo,EstateNm estateName,EstateId,
+		0 dqJzdd,0 dqXzdd,0 xzcx,SUM(ISNULL(dealAmount,0)) xzcxBefdq,0 xzcxdq,0 sumDay,0 sumNum FROM  #va
+		WHERE dealDate >=convert(datetime, '${dateStart}') AND dealDate &lt; convert(datetime, '${dateEnd}') AND roughDate &lt; convert(datetime, '${dateStart}')
+		GROUP BY regionCode,regionName,areaCityCode,areaCityName,projectNo,EstateNm,EstateId
+		UNION
+		--新增成销 (当期大定)
+		SELECT  regionCode,regionName gsRegion,areaCityCode,areaCityName gsCity,projectNo,EstateNm estateName,EstateId,
+		0 dqJzdd,0 dqXzdd,0 xzcx,0 xzcxBefdq,SUM(ISNULL(dealAmount,0)) xzcxdq,0 sumDay,0 sumNum FROM  #va
+		WHERE  dealDate >=convert(datetime, '${dateStart}') AND dealDate  &lt; convert(datetime, '${dateEnd}')
+		AND roughDate >=convert(datetime, '${dateStart}') AND roughDate  &lt; convert(datetime, '${dateEnd}')
+		GROUP BY regionCode,regionName,areaCityCode,areaCityName,projectNo,EstateNm,EstateId
+		) tbl
+		GROUP BY regionCode,gsRegion,areaCityCode,gsCity,projectNo,estateName,EstateId
+
+		--每个归属城市计算合计
+
+		INSERT INTO #tbl_dq (regionCode,gsRegion,areaCityCode,gsCity,projectNo,estateName,
+		dqJzdd,dqXzdd,dqLjdd,dqXzcx,xzcxBefdq,xzcxdq,dqJzcxRate,dqXzcxRate,dqZtcxRate,sumDay,sumNum,dqDdzcxzq)
+		SELECT regionCode,gsRegion,areaCityCode,gsCity,'' projectNo, '合计' estateName,
+		SUM(dqJzdd) dqJzdd,SUM(dqXzdd) dqXzdd,SUM(dqLjdd) dqLjdd,SUM(dqXzcx) dqXzcx,SUM(xzcxBefdq) xzcxBefdq,SUM(xzcxdq) xzcxdq,
+		CASE SUM(dqJzdd) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(xzcxBefdq)*100/SUM(dqJzdd),0) AS INT) END dqJzcxRate,
+		CASE SUM(dqXzdd) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(xzcxdq)*100/SUM(dqXzdd),0) AS INT) END dqXzcxRate,
+		CASE SUM(dqJzdd)+SUM(dqXzdd) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(dqXzcx)*100/(SUM(dqJzdd)+SUM(dqXzdd)),0) AS INT) END dqZtcxRate,
+		SUM(sumDay) sumDay,SUM(sumNum) sumNum,
+		CASE SUM(sumNum) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(ISNULL(sumDay,0))/SUM(ISNULL(sumNum,0)),0) AS INT) END dqDdzcxzq
+		FROM #tbl_dq
+		GROUP BY regionCode,gsRegion,areaCityCode,gsCity
+
+		--全国合计
+		INSERT INTO #tbl_dq (regionCode,gsRegion,areaCityCode,gsCity,projectNo,estateName,
+		dqJzdd,dqXzdd,dqLjdd,dqXzcx,xzcxBefdq,xzcxdq,dqJzcxRate,dqXzcxRate,dqZtcxRate,sumDay,sumNum,dqDdzcxzq)
+		SELECT NULL regionCode,NULL gsRegion,'-1' areaCityCode,'全国' gsCity,NULL projectNo, '合计' estateName,
+		SUM(dqJzdd) dqJzdd,SUM(dqXzdd) dqXzdd,SUM(dqLjdd) dqLjdd,SUM(dqXzcx) dqXzcx,SUM(xzcxBefdq) xzcxBefdq,SUM(xzcxdq) xzcxdq,
+		CASE SUM(dqJzdd) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(xzcxBefdq)*100/SUM(dqJzdd),0) AS INT) END dqJzcxRate,
+		CASE SUM(dqXzdd) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(xzcxdq)*100/SUM(dqXzdd),0) AS INT) END dqXzcxRate,
+		CASE SUM(dqJzdd)+SUM(dqXzdd) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(dqXzcx)*100/(SUM(dqJzdd)+SUM(dqXzdd)),0) AS INT) END dqZtcxRate,
+		SUM(sumDay) sumDay,SUM(sumNum) sumNum,
+		CASE SUM(sumNum) WHEN 0 THEN 999 ELSE CAST(ROUND(SUM(ISNULL(sumDay,0))/SUM(ISNULL(sumNum,0)),0) AS INT) END dqDdzcxzq
+		FROM #tbl_dq
+		WHERE estateName!='合计'
+
+		SELECT * FROM (
+		SELECT ROW_NUMBER() OVER (ORDER BY CASE WHEN areaCityCode='-1' THEN 1 ELSE 2 END, regionCode,areaCityCode,CASE WHEN estateName='合计' THEN 2 ELSE 3 END,projectNo) rowNum,
+		gsRegion,gsCity,projectNo,estateName,
+		dbo.F_ClearNullMoney(dqJzdd) dqJzdd,dbo.F_ClearNullMoney(dqXzdd) dqXzdd,dbo.F_ClearNullMoney(dqLjdd) dqLjdd,dbo.F_ClearNullMoney(dqXzcx) dqXzcx,
+		CASE dqJzcxRate WHEN 999 THEN '-' ELSE CONVERT(VARCHAR(3),dqJzcxRate)+'%' END dqJzcxRate,
+		CASE dqXzcxRate WHEN 999 THEN '-' ELSE CONVERT(VARCHAR(3),dqXzcxRate)+'%' END dqXzcxRate,
+		CASE dqZtcxRate WHEN 999 THEN '-' ELSE CONVERT(VARCHAR(3),dqZtcxRate)+'%' END dqZtcxRate,
+		CASE dqDdzcxzq WHEN 999 THEN '-' ELSE CONVERT(VARCHAR(3),dqDdzcxzq) END dqDdzcxzq
+		FROM #tbl_dq) tbl order BY rowNum
+
+		DROP TABLE #va
+		DROP TABLE #tbl_dq
+	</select>
+</mapper>

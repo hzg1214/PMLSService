@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.Report.dao.ExcelTaskMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.Report.model.ExcelTask" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="fileName" property="fileName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="downLoadUrl" property="downloadurl" jdbcType="VARCHAR" />
+    <result column="urlParam" property="urlParam" jdbcType="VARCHAR" />
+    <result column="exportType" property="exportType" jdbcType="VARCHAR" />
+    <result column="createUserId" property="createuserid" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="cn.com.eju.deal.Report.model.ExcelTask" keyProperty="id" useGeneratedKeys="true">
+    insert into REP_EXCELTASK (fileName, status, 
+      downLoadUrl,urlParam,exportType, createUserId, createTime
+      )
+    values (#{fileName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{downloadurl,jdbcType=VARCHAR},#{urlParam,jdbcType=VARCHAR},#{exportType,jdbcType=VARCHAR}, 
+      #{createuserid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+	<update id="update" parameterType="cn.com.eju.deal.Report.model.ExcelTask" >
+	  		 update dbo.REP_EXCELTASK
+	    <set>
+	        <if test="status != null">
+		   	 status =  #{status},
+		    </if>
+		     <if test="downloadurl != null">
+		   	 downloadurl =  #{downloadurl},
+		    </if>
+	    </set>
+	     where id = #{id}
+	</update>
+	
+  <select id="queryExcelTaskByParam" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select *
+    from REP_EXCELTASK
+    where 1=1
+		<if test="id != null">
+			and id =  #{id}
+		</if>
+		<if test="createUserId != null">
+			and createUserId =  #{createUserId}
+		</if>
+		<if test="status != null">
+			and status =  #{status}
+		</if>
+		<if test="noStatus != null">
+			and status !=  #{noStatus}
+		</if>
+		<if test="SearchfileName != null and SearchfileName !=''">
+			<![CDATA[
+   				 AND fileName LIKE '%${SearchfileName}%'
+   			]]>
+		</if>
+		order by id desc
+  </select>
+  
+</mapper>

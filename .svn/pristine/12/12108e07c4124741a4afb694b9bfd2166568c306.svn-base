@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.jsStatement.dao.PmlsStatementCashBillRelateMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.pmls.jsStatement.model.PmlsStatementCashBillRelate">
+        <id column="relateId" property="relateId" jdbcType="INTEGER"/>
+        <result column="compId" property="compId" jdbcType="INTEGER"/>
+        <result column="pscompId" property="pscompId" jdbcType="INTEGER"/>
+        <result column="delFlag" property="delFlag" jdbcType="INTEGER"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    relateId, compId, pscompId, delFlag, dateCreate, userIdCreate
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from PMLS_StatementCashBill_Relate
+        where relateId = #{relateId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from PMLS_StatementCashBill_Relate
+    where relateId = #{relateId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsStatementCashBillRelate">
+    insert into PMLS_StatementCashBill_Relate (relateId, compId, pscompId, 
+      delFlag, dateCreate, userIdCreate
+      )
+    values (#{relateId,jdbcType=INTEGER}, #{compId,jdbcType=INTEGER}, #{pscompId,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsStatementCashBillRelate">
+        insert into PMLS_StatementCashBill_Relate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="relateId != null">
+                relateId,
+            </if>
+            <if test="compId != null">
+                compId,
+            </if>
+            <if test="pscompId != null">
+                pscompId,
+            </if>
+            <if test="delFlag != null">
+                delFlag,
+            </if>
+            <if test="dateCreate != null">
+                dateCreate,
+            </if>
+            <if test="userIdCreate != null">
+                userIdCreate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="relateId != null">
+                #{relateId,jdbcType=INTEGER},
+            </if>
+            <if test="compId != null">
+                #{compId,jdbcType=INTEGER},
+            </if>
+            <if test="pscompId != null">
+                #{pscompId,jdbcType=INTEGER},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="dateCreate != null">
+                #{dateCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIdCreate != null">
+                #{userIdCreate,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="cn.com.eju.pmls.jsStatement.model.PmlsStatementCashBillRelate">
+        update PMLS_StatementCashBill_Relate
+        <set>
+            <if test="compId != null">
+                compId = #{compId,jdbcType=INTEGER},
+            </if>
+            <if test="pscompId != null">
+                pscompId = #{pscompId,jdbcType=INTEGER},
+            </if>
+            <if test="delFlag != null">
+                delFlag = #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="dateCreate != null">
+                dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIdCreate != null">
+                userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+            </if>
+        </set>
+        where relateId = #{relateId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsStatementCashBillRelate">
+    update PMLS_StatementCashBill_Relate
+    set compId = #{compId,jdbcType=INTEGER},
+      pscompId = #{pscompId,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER}
+    where relateId = #{relateId,jdbcType=INTEGER}
+  </update>
+
+    <select id="getTopByStatementId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select top 1
+        <include refid="Base_Column_List"/>
+        from PMLS_StatementCashBill_Relate
+        where pscompId = #{pscompId,jdbcType=INTEGER}
+        and delFlag = '0'
+    </select>
+</mapper>

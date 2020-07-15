@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.followMap.FollowMapMapper" >
+
+	<resultMap id="storeNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="Longitude" property="longitude" />
+		<result column="Latitude" property="latitude" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="StoreManager" property="storeManager" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" />
+		<result column="LinkageSituation" property="linkageSituation" />
+		<result column="ChainBrand" property="chainBrand" />
+		<result column="ChainBrandName" property="chainBrandName" />
+		<result column="StoreDueTime" property="storeDueTime" />
+		<result column="StorePersonNum" property="storePersonNum" />
+		<result column="NowUserSystem" property="nowUserSystem" />
+		<result column="NowUserSystemName" property="nowUserSystemName" />
+		<result column="MainBusiness" property="mainBusiness" />
+		<result column="MainBusinessName" property="mainBusinessName" />
+		<result column="TransactionMode" property="transactionMode" />
+		<result column="TransactionModeName" property="transactionModeName" />
+		<result column="Address" property="address" />
+		<result column="AddressDetail" property="addressDetail" />
+		<result column="AuditStatus" property="auditStatus" />
+		<result column="AuditStatusName" property="auditStatusName" />
+		<result column="companyId" property="companyId" />
+		<result column="distance" property="distance" />
+		<result column="followId" property="followId" />
+		<result column="signTime" property="signTime" />
+		<result column="signOutTime" property="signOutTime" />
+		<result column="mapMarkerStyle" property="mapMarkerStyle" />
+		<result column="showType" property="showType" />
+		<result column="isCollection" property="isCollection" />
+		<result column="maintainer" property="maintainer" />
+		<result column="maintainerName" property="maintainerName" />
+		<result column="centerName" property="centerName" />
+		<result column="authCheckStatus" property="authCheckStatus" />
+		<result column="contractType" property="contractType" />
+		<result column="contractStatus" property="contractStatus" />
+		<result column="contractTypeNameStr" property="contractTypeNameStr" />
+		<result column="contractStatusStr" property="contractStatusStr" />
+		<result column="fpStatusStr" property="fpStatusStr" />
+		<result column="decorationState" property="decorationState" />
+	</resultMap>
+
+	<resultMap id="contactsDtoMap" type="cn.com.eju.deal.model.followMap.ContactsDto">
+		<result column="id" property="contactsId" />
+		<result column="storeNo" property="storeNo" />
+		<result column="storeName" property="storeName" />
+		<result column="contactsNo" property="contactsNo" />
+		<result column="contactsName" property="contactsName" />
+		<result column="contactsPhone" property="contactsPhone" />
+        <result column="employDirectFlag" property="employDirectFlag" />
+	</resultMap>
+	
+	<resultMap id="wjdcRecordDtoMap" type="cn.com.eju.deal.model.followMap.WjdcRecordDto">
+		<result column="id" property="id" />
+		<result column="storeId" property="storeId" />
+		<result column="wjdcjd" property="wjdcjd" />
+		<result column="storeStatus" property="storeStatus" />
+		<result column="storeStatusStr" property="storeStatusStr" />
+		<result column="wjdcTotalscore" property="wjdcTotalscore" />
+		<result column="cpTotalScore" property="cpTotalScore" />
+	</resultMap>
+
+	<resultMap id="followRecordDtoMap" type="cn.com.eju.deal.model.followMap.FollowRecordDto">
+		<result column="id" property="followId" />
+		<result column="storeNo" property="storeNo" />
+		<result column="storeName" property="storeName" />
+		<result column="userCreate" property="userCreate" />
+		<result column="dateCreate" property="dateCreate" />
+		<result column="followType" property="followType" />
+		<result column="followTypeName" property="followTypeName" />
+		<result column="followPurpose" property="followPurpose" />
+		<result column="followPurposeName" property="followPurposeName" />
+		<result column="signTime" property="signTime" />
+		<result column="signLongitude" property="signLongitude" />
+		<result column="signLatitude" property="signLatitude" />
+		<result column="signAddress" property="signAddress" />
+		<result column="signDistance" property="signDistance" />
+		<result column="signOutTime" property="signOutTime" />
+		<result column="signOutLongitude" property="signOutLongitude" />
+		<result column="signOutLatitude" property="signOutLatitude" />
+		<result column="signOutAddress" property="signOutAddress" />
+		<result column="signOutDistance" property="signOutDistance" />
+		<result column="operationType" property="operationType" />
+		<result column="agentNum" property="agentNum" />
+		<collection property="signPicList" column="signPictureRefId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+		<collection property="signOutPicList" column="signOutPictureRefId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+
+	</resultMap>
+	<resultMap id="workSummaryDtoMap" type="cn.com.eju.deal.model.followMap.WorkSummaryDto">
+		<result column="wsId" property="wsId" />
+		<result column="wsSubId" property="wsSubId" />
+		<result column="wsDetailId" property="wsDetailId" />
+		<result column="wsName" property="wsName" />
+		<result column="wsType" property="wsType" />
+		<result column="wsTypeName" property="wsTypeName" />
+		<result column="sort" property="sort" />
+		<result column="answerType" property="answerType" />
+		<result column="followId" property="followId" />
+		<result column="answerId" property="answerId" />
+		<result column="answerName" property="answerName" />
+		<result column="pictureRefId" property="pictureRefId" />
+		<collection property="answerList" column="answerType" ofType="cn.com.eju.deal.model.followMap.WorkSummaryDto" select="selectAnswerList"/>
+		<collection property="workSummaryPicList" column="pictureRefId" ofType="cn.com.eju.deal.model.followMap.WorkSummaryDto" select="selectPicture"/>
+	</resultMap>
+	<resultMap id="answersDtoMap" type="cn.com.eju.deal.model.followMap.AnswersDto">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+	</resultMap>
+
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.model.sweepStreets.WXPictureDto"></resultMap>
+
+
+	<select id="getLocalStoreList" parameterType="Map" resultMap="storeNewDtoMap">
+		select t.* from(
+			select
+				<if test="storeName!=null and storeName!=''">
+					top 100
+				</if>
+			CASE WHEN t1.maintainer=#{userCode}
+				THEN 'my_notBrand_notContract' ELSE 'my_Brand_notContract'
+				END mapMarkerStyle,
+		    case when t1.maintainer=#{userCode} then 'show'
+				ELSE
+					CASE WHEN ISNULL(t4.contractType,'')='' THEN
+					'show'
+					WHEN ISNULL(t4.contractType,'')='A' THEN
+					'notShow'
+					WHEN ISNULL(t4.contractType,'')='B' THEN
+					'notShow'
+					END
+			end showType,
+			t1.id,
+			t1.storeNo,
+			t1.name,
+			t1.addressDetail,
+			t1.longitude,
+			t1.latitude,
+			ISNULL(t1.auditStatus,0) AS auditStatus,
+			t3.id as followId,
+			LEFT(CONVERT(VARCHAR,t3.signTime,120),16) as signTime,
+			LEFT(CONVERT(VARCHAR,t3.signOutTime,120),16) as signOutTime,
+			case when t3.signTime is not null then 0
+				  when t3.signOutTime is not null then 0
+			else
+				6378137.0*ACOS(SIN(${latitude}/180*PI())*SIN(t1.Latitude/180*PI())+COS(${latitude}/180*PI())*COS(t1.Latitude/180*PI())*COS((${longitude}-t1.Longitude)/180*PI()))
+			end  distance
+			from Store t1
+			LEFT JOIN (
+				SELECT * FROM dbo.Follow WHERE IsDelete=0
+				AND CONVERT(VARCHAR,signTime,23)=CONVERT(VARCHAR,getdate(),23)
+				and userCreate=#{userCreate}
+			) t3 ON t1.id=t3.StoreId
+			LEFT JOIN (
+				SELECT
+				v.storeId,
+				CASE WHEN v.contractType=10301 THEN 'A'
+				WHEN v.contractType=10302 THEN 'B'
+				WHEN v.contractType=10304 THEN 'B'
+				ELSE ''
+				END contractType
+				FROM V_CRM_ContractStore_NOW  v WHERE v.contractStatus  IN('10401','10402','10403','10404')
+			) t4 ON t1.id=t4.StoreId
+			where 1=1
+			and t1.isDelete=0
+			and isnull(auditStatus,0)=20
+			<!--不显示停业门店-->
+			and t1.businessStatus!=20903
+			<if test="cityNo!=null and cityNo!=''">
+				and t1.acCityNo=#{cityNo}
+			</if>
+			<if test="storeName!=null and storeName!=''">
+				and (t1.name like '%${storeName}%' or t1.storeNo like '%${storeName}%' or t1.addressDetail like  '%${storeName}%')
+			</if>
+		) t where 1=1
+		<if test="storeName==null or storeName==''">
+		   <if test="distance!=null and distance!=''">
+				and t.distance &lt;=${distance}
+			</if>
+			 <if test="distance ==null or distance==''">
+				and t.distance &lt;=1000
+			</if>
+		</if>
+		order by  t.signTime desc, t.signOutTime DESC ,t.distance
+
+	</select>
+
+	<select id="getStoreById" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		select t1.id,t1.storeNo,
+		t1.name,
+		t1.addressDetail,
+		t1.Longitude,
+		t1.Latitude,
+		case when t2.concernedId is null then 0
+			else 1
+		end isCollection,
+		t1.maintainer,
+		t1.maintainerName,
+		t6.decorationStatus decorationState,
+		isnull(t4.centername,'') as centerName,
+		t1.authCheckStatus,
+		lst.contractType,
+		CASE WHEN lst.ContractType=10301 THEN 'A'
+			WHEN lst.ContractType=10302 THEN 'B'
+			WHEN lst.ContractType=10303 THEN 'C'
+			WHEN lst.ContractType=10304 THEN 'A转B'
+			WHEN lst.ContractType=10306 THEN 'D'
+			WHEN lst.ContractType=10307 THEN '授牌'
+			ELSE ''
+			END contractTypeNameStr,
+			CASE WHEN lst.ContractStatus=10401 THEN '草签'
+			WHEN lst.ContractStatus=10402 THEN '审核中'
+			WHEN lst.ContractStatus=10403 THEN '审核通过'
+			WHEN lst.ContractStatus=10404 THEN '审核未通过'
+			WHEN lst.ContractStatus=10405 THEN '作废'
+			WHEN lst.ContractStatus=10406 THEN '终止'
+			ELSE ''
+			END contractStatusStr,
+			CASE WHEN lst.ContractType=10307 and (t1.authCheckStatus is null or t1.authCheckStatus =23300) then '未验收'
+	        WHEN lst.ContractType=10307 and t1.authCheckStatus=23301 then '验收中'
+	        WHEN lst.ContractType=10307 and t1.authCheckStatus=23302 then '验收通过'
+	        WHEN lst.ContractType=10307 and t1.authCheckStatus=23303 then '验收不通过'
+	        WHEN t6.decorationStatus=16301 THEN '未装修'
+			WHEN t6.decorationStatus=16302 THEN '装修中'
+			WHEN t6.decorationStatus=16303 THEN '翻牌完成'
+			WHEN t6.decorationStatus=16304 THEN '翻牌验收完成'
+			ELSE ''
+			END fpStatusStr,
+			t1.businessStatus,
+		lst.contractStatus
+		from Store t1 left join ConcernedStore t2 on t1.id=t2.storeId and t2.isDelete=0 and t2.userId=#{userCreate}
+		LEFT JOIN crm.dbo.USR_User t3 ON t1.Maintainer=t3.userCode AND t3.delFlag='N'
+		LEFT JOIN [V_CRM_Center_Group_ref] t4 ON t3.groupId=t4.groupId
+		left join dbo.v_crm_StoreContract_last lst on t1.id = lst.storeId
+		LEFT JOIN (
+			SELECT sd.storeId,MIN(decorationStatus) AS decorationStatus
+			FROM dbo.Store_Decoration sd
+			WHERE sd.delFlag = 0
+			GROUP BY storeId
+			) t6 ON t1.id=t6.storeId
+		 where t1.id=#{storeId}
+		and t1.isDelete=0
+	</select>
+
+	<!--获取跟进列表-->
+	<select id="selectFollowRecordList" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="followRecordDtoMap">
+		SELECT t1.id,
+			t1.StoreId,
+			t1.FollowType,
+			t2.dicValue AS followTypeName,
+			t1.followPurpose,
+			followPurposeName= STUFF(( SELECT ',' + bd.dicValue
+                         FROM   dbo.BAS_DictionaryValue bd
+                         where   PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.followPurpose + ',')>0
+                         ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.followPurpose + ',')
+                          FOR XML PATH('')), 1, 1,''),
+			t1.content,
+			t1.userCreate,
+			t4.userName as userNameCreate,
+			CONVERT(VARCHAR,t1.dateCreate,23) as dateCreate,
+			( CASE WHEN (SELECT COUNT(*) FROM F_WX_UserCenterAuth(#{userCode}, 'CRM') WHERE centerGroupId = #{centerId}) = 0 THEN 0 ELSE 1 END ) AS auth ,
+			case when CONVERT(VARCHAR,t1.dateCreate,23)=CONVERT(VARCHAR,getdate(),23) and t1.userCreate=#{userCreate} then 'update'
+				else 'show' end operationType
+		 FROM dbo.Follow t1
+		LEFT JOIN dbo.BAS_DictionaryValue t2 ON t1.FollowType=t2.dicCode
+		LEFT JOIN crm.dbo.USR_User t4 on t1.userCreate=t4.userId
+		WHERE StoreId=#{storeId}
+		and t1.isDelete=0
+		order by t1.dateCreate desc
+	</select>
+
+	<!--获取联系人列表-->
+	<select id="selectContactsList" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="contactsDtoMap">
+		SELECT DISTINCT t.id,t.contactsName,t.contactsPhone,t.employDirectFlag FROM (
+		SELECT T1.id,t1.name as contactsName,
+		t1.MobilePhone as contactsPhone,
+		CASE WHEN t4.ContractType IS NULL THEN  t2.userCode
+				ELSE t4.Maintainer
+		END userCode,
+		t1.dateCreate,
+        t1.employDirectFlag
+		FROM Contacts t1
+		inner JOIN crm.dbo.USR_User t2 ON t1.UserCreate=t2.userId AND t2.delFlag='N'
+		inner join Store t3 on t1.storeId=t3.id and t3.isDelete=0
+		left join dbo.V_CRM_ContractStore_NOW t4 ON t1.storeId=t4.StoreId AND t4.ContractStatus IN('10401','10402','10403','10404')
+		WHERE t1.storeId=#{storeId}
+		and t1.isDelete=0
+		) t WHERE 1=1
+	
+
+	</select>
+	
+	<!--获取门店问卷调查列表-->
+	<select id="getWjdcRecordList" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="wjdcRecordDtoMap">
+		SELECT kws.id,
+			   s.id storeId,
+			   kws.wjdcjd,
+			   kws.storeStatus,
+			   dbd.dicValue storeStatusStr,
+			   ISNULL(convert(varchar,kws.wjdcTotalscore),'-') wjdcTotalscore,
+			   ISNULL(convert(varchar,kws.cpTotalScore),'-') cpTotalScore
+		FROM dbo.Kefu_Wj_Satisfaction kws
+		LEFT JOIN dbo.BAS_DictionaryValue dbd ON dbd.dicCode= kws.storeStatus AND dbd.delFlag='N'
+		LEFT JOIN dbo.Store s ON s.StoreNo = kws.StoreNo AND s.IsDelete = 0
+		WHERE kws.delFlag=0 AND s.id=#{storeId}
+		ORDER BY kws.dateCreate DESC
+	</select>
+
+	<select id="getAllFollowComment" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultType="cn.com.eju.deal.model.followMap.FollowCommentDto">
+		SELECT id,follow_id AS followId,content,userCode,userName
+		FROM dbo.follow_comment
+	</select>
+
+	<insert id="saveFollowComment" parameterType="cn.com.eju.deal.model.followMap.FollowCommentDto">
+		INSERT INTO dbo.follow_comment
+        ( follow_id ,
+          content ,
+          userCode ,
+          userName ,
+          createDate
+        )
+		VALUES  ( #{followId} ,
+          #{content} ,
+          #{userCode} ,
+          #{userName} ,
+          GETDATE()
+        )
+	</insert>
+
+	<select id="selectPicture" parameterType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" resultMap="pictureDtoMap">
+		select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+		from Pic_Picture_Ref where pictureRefId=#{pictureRefId}  and pictureStatus=0
+	</select>
+
+	<select id="checkContacts" parameterType="cn.com.eju.deal.model.followMap.ContactsDto" resultType="int">
+		select count(*) from Contacts where mobilePhone=#{contactsPhone}
+		and storeId=#{storeId}
+		<if test="userCreate!=null and userCreate!=0">
+			and userCreate=#{userCreate}
+		</if>
+		<if test="contactsId!=null and contactsId!=0">
+			and id!=#{contactsId}
+		</if>
+		and isDelete=0
+	</select>
+
+	<insert id="addContacts" parameterType="cn.com.eju.deal.model.followMap.ContactsDto">
+		insert into Contacts(
+			contactsNo,
+			Name,
+			MobilePhone,
+			isDelete,
+			isDefault,
+			DateCreate,
+			UserCreate,
+			StoreId
+		) values(
+			#{contactsNo},
+			#{contactsName},
+			#{contactsPhone},
+			0,
+			0,
+			getdate(),
+			#{userCreate},
+			#{storeId}
+		)
+	</insert>
+
+	<update id="updateContacts" parameterType="cn.com.eju.deal.model.followMap.ContactsDto">
+		update Contacts
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="contactsName!=null and contactsName!=''">
+				name=#{contactsName},
+			</if>
+			<if test="contactsPhone!=null and contactsPhone!=''">
+				mobilePhone=#{contactsPhone},
+			</if>
+			<if test="isDelete!=null and isDelete!=0">
+				isDelete=#{isDelete},
+			</if>
+            <if test="employDirectFlag!=null">
+				employDirectFlag=#{employDirectFlag},
+			</if>
+		</trim>
+		where id=#{contactsId}
+	</update>
+
+	<insert id="addFollow" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto"  useGeneratedKeys="true" keyProperty="followId">
+		insert into Follow(
+			storeId,
+			followType,
+			dateCreate,
+			content,
+			userCreate,
+			isDelete,
+			followPurpose,
+			agentNum
+		) values(
+			#{storeId},
+			#{followType},
+			getdate(),
+			#{content},
+			#{userCreate},
+			0,
+			#{followPurpose},
+			#{agentNum}
+		)
+	</insert>
+	<update id="updateFollow" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto">
+		update Follow
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="followType!=null and followType!=''">
+				followType=#{followType},
+			</if>
+			<if test="followPurpose!=null and followPurpose!=''">
+				followPurpose=#{followPurpose},
+			</if>
+			<if test="agentNum!=null and agentNum!=0">
+				agentNum=#{agentNum},
+			</if>
+			<if test="content!=null and content!=''">
+				content=#{content},
+			</if>
+		</trim>
+		where id=#{followId}
+	</update>
+
+	<insert id="addFollowSign" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto" useGeneratedKeys="true" keyProperty="followId">
+		insert into Follow(
+			storeId,
+			followType,
+			dateCreate,
+			userCreate,
+			isDelete,
+			signTime,
+			signLongitude,
+			signLatitude,
+			signDistance,
+			signAddress,
+			signPictureRefId
+		) values(
+			#{storeId},
+			10703,
+			getdate(),
+			#{userCreate},
+			0,
+			getdate(),
+			#{signLongitude},
+			#{signLatitude},
+			#{signDistance},
+			#{signAddress},
+			#{signPictureRefId}
+		)
+	</insert>
+
+	<update id="updateFollowSignOut" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto">
+		update Follow
+		<trim prefix="SET" suffixOverrides=",">
+			signOutTime=getdate(),
+			signOutLongitude=#{signOutLongitude},
+			signOutLatitude=#{signOutLatitude},
+			signOutDistance=#{signOutDistance},
+			signOutAddress=#{signOutAddress},
+			signOutPictureRefId=#{signOutPictureRefId}
+		</trim>
+		where id=#{followId}
+	</update>
+
+	<select id="getFollowById" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto" resultMap="followRecordDtoMap">
+		select
+		 	t1.id as followId,
+		 	t1.storeId,
+		 	t2.Name as storeName,
+		 	t1.content,
+		 	t1.followType,
+		 	t3.dicValue as followTypeName,
+		 	t1.followPurpose,
+		 	case when t1.title is null then
+		 	STUFF(( SELECT ',' + bd.dicValue
+                         FROM   dbo.BAS_DictionaryValue bd
+                         where   PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.followPurpose + ',')>0
+                         ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.followPurpose + ',')
+                          FOR XML PATH('')), 1, 1,'')
+                else t1.title end followPurposeName,
+		 	t1.signPictureRefId,
+		 	LEFT(CONVERT(VARCHAR,t1.signTime,120),16) as signTime,
+		 	t1.signLongitude,
+		 	t1.signLatitude,
+		 	t1.signDistance,
+		 	t1.signAddress,
+		 	t1.signOutPictureRefId,
+		 	LEFT(CONVERT(VARCHAR,t1.signOutTime,120),16) as signOutTime,
+		 	t1.signOutLongitude,
+		 	t1.signOutLatitude,
+		 	t1.signOutDistance,
+		 	t1.signOutAddress,
+		 	CONVERT(VARCHAR,t1.dateCreate,23) as dateCreate,
+		 	case when CONVERT(VARCHAR,t1.dateCreate,23)=CONVERT(VARCHAR,getdate(),23) and t1.userCreate=#{userCreate} then 'update'
+				else 'show' end operationType,
+			t1.agentNum
+		from Follow t1
+		inner join Store t2 on t1.storeId=t2.id and t2.isDelete=0
+		left join BAS_DictionaryValue t3 on t1.followType=t3.dicCode
+
+		where t1.id=#{followId}
+	</select>
+
+	<select id="getFollowCommentById" parameterType="int" resultType="cn.com.eju.deal.model.followMap.FollowCommentDto">
+		SELECT id,follow_id AS followId,content,userCode,userName
+		FROM dbo.follow_comment
+		WHERE follow_id = #{followId}
+	</select>
+
+	<select id="getWorkSummaryType" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto" resultMap="workSummaryDtoMap">
+		select
+		 wsId,
+		 wsName,
+		 wsType,
+		 case when wsType=10 then '服务项目'
+		 	  when wsType=20 then '调查项目'
+		 	  when wsType=30 then '检查项目'
+		 end wsTypeName,
+		 sort,
+		 answerType
+		 from WorkSummaryType order by wsType asc,sort asc
+	</select>
+
+	<select id="getWorkSummaryByFollowId" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto" resultMap="workSummaryDtoMap">
+		SELECT
+			t2.wsDetailId,
+		    t1.followId,
+			t1.wsType,
+			case when t1.wsType=10 then '服务项目'
+		 	  	when t1.wsType=20 then '调查项目'
+		 	  	when t1.wsType=30 then '检查项目'
+		 	end wsTypeName,
+			t3.wsId,
+			t3.wsName,
+			t3.answerType,
+			t2.answerId,
+			t1.pictureRefId,
+			t4.dicValue AS answerName
+		  FROM Follow_workSummarySub t1
+		 inner JOIN Follow_WorkSummaryDetail t2 ON t1.wsSubId=t2.wsSubId and t2.isDelete=0
+		 LEFT JOIN WorkSummaryType t3 ON t2.wsId=t3.wsId and t3.isDelete=0
+		 LEFT JOIN dbo.BAS_DictionaryValue t4 ON t2.answerId=t4.dicCode and t4.delFlag='N'
+		 WHERE t1.followId=#{followId}
+		 and t1.isDelete=0
+		 ORDER BY t3.wsType ASC,t3.sort asc
+	</select>
+
+	<select id="selectAnswerList" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto" resultMap="answersDtoMap">
+		SELECT dicCode as code ,dicValue as name FROM dbo.BAS_DictionaryValue WHERE typeId=#{answerType} order by dicSortNo
+	</select>
+
+	<insert id="addWorkSummarySub" parameterType="cn.com.eju.deal.model.followMap.WorkSummaryDto" useGeneratedKeys="true" keyProperty="wsSubId">
+		insert into Follow_WorkSummarySub(
+			followId,
+			wsType,
+			createTime,
+			createUser,
+			pictureRefId,
+			isDelete
+		) values(
+			#{followId},
+			#{wsType},
+			getdate(),
+			#{createUser},
+			#{pictureRefId},
+			0
+		);
+	</insert>
+
+	<insert id="addWorkSummaryDetail" parameterType="cn.com.eju.deal.model.followMap.WorkSummaryDto">
+		insert into Follow_WorkSummaryDetail(
+			wsSubId,
+			wsId,
+			answerId,
+			createUser,
+			createTime,
+			isDelete
+		) values
+		<foreach collection="list" item="item" index="index" separator="," >
+		(
+			#{item.wsSubId},
+			#{item.wsId},
+			#{item.answerId},
+			#{item.createUser},
+			getdate(),
+			0
+		)
+		</foreach>
+	</insert>
+
+	<delete id="deleteWorkSummaryDetail" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto">
+		 update  Follow_workSummarySub  set isDelete=1 where followId=#{followId};
+
+		 update t1 set isDelete=1
+		 from Follow_workSummaryDetail t1
+		 INNER  JOIN Follow_workSummarySub t2 ON t1.wsSubId=t2.wsSubId
+		 WHERE t2.followId=#{followId};
+	</delete>
+
+	<update id="updateStore" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto">
+		UPDATE Store SET StorePersonNum=#{storePersonNum},agentNum=#{agentNum},DateUpdate=getdate() WHERE id=#{storeId}
+	</update>
+
+	<select id="checkStoreFollowSign" parameterType="cn.com.eju.deal.model.followMap.FollowRecordDto" resultType="int">
+		SELECT count(1) FROM dbo.Follow WHERE StoreId=#{storeId} and userCreate=#{userCreate}  AND IsDelete=0 AND signTime>CONVERT(VARCHAR(10),GETDATE(),120)
+	</select>
+
+    <update id="updateEmployDirectFlagToNot" parameterType="java.lang.Integer">
+        UPDATE  dbo.Contacts
+        SET     employDirectFlag = 0
+        WHERE   storeId = #{storeId}
+                AND employDirectFlag = 1
+    </update>
+
+	<select id="getContactsInfo" parameterType="java.lang.Integer" resultType="java.util.Map">
+		SELECT  c.Name AS userName ,
+				c.MobilePhone AS telephone ,
+				s.StoreNo AS storeNo
+		FROM    dbo.Contacts c
+				INNER JOIN dbo.Store s ON c.storeId = s.Id
+		WHERE   c.Id = #{contactsId}
+	</select>
+</mapper>

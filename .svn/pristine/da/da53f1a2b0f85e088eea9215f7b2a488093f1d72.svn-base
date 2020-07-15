@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.batchSale.dao.BatchSaleMapper">
+
+    <insert id="insertBatchSale" parameterType="cn.com.eju.deal.scene.batchSale.dto.BatchSale" useGeneratedKeys="true" keyProperty="batchId">
+        INSERT INTO
+        LNK_BatchSale
+        (projectNo,estateNm,cityNo,delFlag,userCode,estateId)
+        VALUES
+        (#{projectNo},
+        #{estateNm},
+        #{cityNo},
+        'N',
+        #{userCode},
+        #{estateId})
+    </insert>
+
+    <delete id="deleteBatchSaleById" parameterType="java.lang.Integer">
+      update LNK_BatchSale set delFlag='Y' where batchId = #{batchId,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateBatchSaleByBatchId" parameterType="java.util.Map">
+      UPDATE LNK_BatchSale
+        <set>
+            <if test="saleDate!=null and saleDate!=''">
+                saleDate=#{saleDate},
+            </if>
+
+            <if test="saleDate==null or saleDate==''">
+                saleDate=null ,
+            </if>
+
+            <if test="settlementDate!=null and settlementDate!=''">
+                settlementDate=#{settlementDate},
+            </if>
+
+			<if test="settlementDate==null or settlementDate==''">
+				settlementDate=null ,
+			</if>
+        </set>
+        WHERE   batchId = #{batchId,jdbcType=INTEGER}
+    </update>
+
+    <select id="getBatchSaleByProjectNo" parameterType="java.util.Map" resultType="cn.com.eju.deal.scene.batchSale.dto.BatchSale">
+        SELECT
+          batchId,
+          projectNo,
+          estateNm,
+          saleDate,
+          settlementDate,
+          cityNo,
+          delFlag,
+          userCode,
+          estateId
+        FROM LNK_BatchSale
+        WHERE
+          delFlag='N' AND projectNo= #{projectNo,jdbcType=VARCHAR} AND userCode= #{userCode,jdbcType=VARCHAR}
+    </select>
+
+    <select id="whetherExistenceBatchSale" parameterType="java.util.Map" resultType="java.lang.Integer">
+       SELECT
+        COUNT(1)
+       FROM LNK_BatchSale
+       WHERE
+        delFlag='N' AND projectNo= #{projectNo,jdbcType=VARCHAR} AND userCode= #{userCode,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getReportDetail" parameterType="java.lang.String" resultType="cn.com.eju.deal.scene.batchSale.dto.ReportDetailDto" >
+      SELECT
+      	    r.Id ,
+        	r.EstateNm ,
+			r.ReportId,
+			estate.projectNo,
+		    r.EstateId,
+		    r.contactNm ,
+			r.CustomerId ,
+		    r.CustomerNm ,
+		    r.CustomerTel,
+		    d.buildingNo ,
+		    d.roughArea ,
+		    d.roughAmount ,
+		    d.dealAmount ,
+		    r.customerIdTwo,
+			r.customerNmTwo,
+			r.customerTelTwo,
+			estate.cityNo as estateCityNo
+		FROM    dbo.LNK_Report r WITH(NOLOCK)
+				JOIN LNK_Estate estate WITH(NOLOCK) ON estate.EstateId = r.EstateId
+		        JOIN dbo.LNK_ReportDetail d WITH(NOLOCK) ON r.EstateId = d.EstateId
+		                                       AND r.CompanyId = d.CompanyId
+		                                       AND r.CustomerId = d.CustomerId
+		        LEFT JOIN dbo.BAS_DictionaryValue d1 WITH(NOLOCK) ON d1.dicCode = r.CustomerNum
+		                                                AND d1.delFlag = 'N'
+		        LEFT JOIN dbo.BAS_DictionaryValue d2 WITH(NOLOCK) ON d2.dicCode = d.ConfirmStatus
+		                                                AND d2.delFlag = 'N'
+		        LEFT JOIN dbo.BAS_DictionaryValue d3 WITH(NOLOCK) ON d3.dicCode = r.customerFrom
+		                                                AND d3.delFlag = 'N'
+		        LEFT JOIN crm.dbo.USR_User u WITH(NOLOCK) ON u.userId = d.CrtEmpId
+		                                    AND u.delFlag = 'N'
+		        LEFT JOIN crm.dbo.USR_User u2 WITH(NOLOCK) ON u2.userId = r.roughAuditId
+		                                    AND u2.delFlag = 'N'
+		        LEFT JOIN dbo.BAS_DictionaryValue d4 WITH(NOLOCK) ON d4.dicCode = r.brokerageStatus
+		                               AND d4.delFlag = 'N'
+		WHERE   d.isValid = 0
+		AND r.ReportId=#{reportId} AND d.Progress='13505' AND d.ConfirmStatus='13603'
+    </select>
+
+
+	<select id="getFileList" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.dto.common.FileRecordMainDto" >
+		select
+		FileRecordMainId ,
+		CompanyId ,
+		RefId ,
+		FileId ,
+		FileTypeId ,
+		FileFullName ,
+		FileSourceId ,
+		Remark ,
+		DateCreate ,
+		UserCreate ,
+		IsDelete ,
+		fileNo ,
+		picUrl ,
+		fileSuffix ,
+		fileAbbrUrl ,
+		url50 ,
+		fileUrl ,
+		sellFileNo ,
+		sfImage
+     from FIL_FileRecordMain
+      where RefId = #{batchId,jdbcType=INTEGER}
+    AND FileTypeId = 1025
+    AND FileSourceId = '5'
+    AND IsDelete = '0'
+    ORDER BY  FileRecordMainId ASC
+	</select>
+
+	<insert id="saveFileInfo" parameterType="cn.com.eju.deal.dto.common.FileRecordMainDto" useGeneratedKeys="true" keyProperty="fileRecordMainId">
+		insert into FIL_FileRecordMain
+		(
+		CompanyId ,
+		RefId ,
+		FileId ,
+		FileTypeId ,
+		FileFullName ,
+		FileSourceId ,
+		Remark ,
+		DateCreate ,
+		UserCreate ,
+		IsDelete ,
+		fileNo ,
+		picUrl ,
+		fileSuffix ,
+		fileAbbrUrl ,
+		url50 ,
+		fileUrl ,
+		sellFileNo ,
+		sfImage)
+		values
+		(
+		#{companyId },
+		#{refId },
+		#{fileId} ,
+		#{fileTypeId} ,
+		#{fileFullName} ,
+		#{fileSourceId} ,
+		#{remark},
+		#{dateCreate} ,
+		#{userCreate} ,
+		#{isDelete} ,
+		#{fileNo} ,
+		#{picUrl} ,
+		#{fileSuffix} ,
+		#{fileAbbrUrl} ,
+		#{url50} ,
+		#{fileUrl} ,
+		#{sellFileNo} ,
+		#{sfImage}
+		)
+	</insert>
+
+</mapper>

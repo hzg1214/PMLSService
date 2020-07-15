@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuOrder.dao.KeFuOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuOrder.model.KeFuOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+    <result column="cityNo" jdbcType="VARCHAR" property="cityNo" />
+    <result column="companyId" jdbcType="INTEGER" property="companyId" />
+    <result column="storeId" jdbcType="INTEGER" property="storeId" />
+    <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+    <result column="customerTel" jdbcType="VARCHAR" property="customerTel" />
+    <result column="consultProduct" jdbcType="NVARCHAR" property="consultProduct" />
+    <result column="categoryOne" jdbcType="INTEGER" property="categoryOne" />
+    <result column="categoryTwo" jdbcType="INTEGER" property="categoryTwo" />
+    <result column="questionTopic" jdbcType="NVARCHAR" property="questionTopic" />
+    <result column="questionDesc" jdbcType="NVARCHAR" property="questionDesc" />
+    <result column="questionLevel" jdbcType="INTEGER" property="questionLevel" />
+    <result column="userCode" jdbcType="VARCHAR" property="userCode" />
+    <result column="dealStatus" jdbcType="INTEGER" property="dealStatus" />
+    <result column="checkStatus" jdbcType="INTEGER" property="checkStatus" />
+    <result column="verifyUserId" jdbcType="INTEGER" property="verifyUserId" />
+    <result column="dealDate" jdbcType="TIMESTAMP" property="dealDate" />
+    <result column="checkDate" jdbcType="TIMESTAMP" property="checkDate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateUpdate" jdbcType="TIMESTAMP" property="dateUpdate" />
+    <result column="userUpdate" jdbcType="INTEGER" property="userUpdate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, orderNo, cityNo, companyId, storeId, customerName, customerTel, consultProduct, 
+    categoryOne, categoryTwo, questionTopic, questionDesc, questionLevel, userCode, dealStatus, 
+    checkStatus, dealDate, checkDate, verifyUserId, dateCreate, userCreate, dateUpdate, userUpdate,
+    delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrder">
+    insert into Kefu_Order (id, orderNo, cityNo, 
+      companyId, storeId, customerName, 
+      customerTel, consultProduct, categoryOne, 
+      categoryTwo, questionTopic, questionDesc, 
+      questionLevel, userCode, dealStatus, 
+      checkStatus, dealDate, checkDate, verifyUserId,
+      dateCreate, userCreate, dateUpdate, 
+      userUpdate, delFlag)
+    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{cityNo,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, 
+      #{customerTel,jdbcType=VARCHAR}, #{consultProduct,jdbcType=NVARCHAR}, #{categoryOne,jdbcType=INTEGER}, 
+      #{categoryTwo,jdbcType=INTEGER}, #{questionTopic,jdbcType=NVARCHAR}, #{questionDesc,jdbcType=NVARCHAR}, 
+      #{questionLevel,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{dealStatus,jdbcType=INTEGER}, 
+      #{checkStatus,jdbcType=INTEGER}, #{dealDate,jdbcType=TIMESTAMP}, #{checkDate,jdbcType=TIMESTAMP}, #{ verifyUserId,jdbcType=INTEGER}
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userCreate,jdbcType=INTEGER}, #{dateUpdate,jdbcType=TIMESTAMP}, 
+      #{userUpdate,jdbcType=INTEGER}, #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrder" useGeneratedKeys="true" keyProperty="id">
+    insert into Kefu_Order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderNo != null">
+        orderNo,
+      </if>
+      <if test="cityNo != null">
+        cityNo,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+      <if test="storeId != null">
+        storeId,
+      </if>
+      <if test="customerName != null">
+        customerName,
+      </if>
+      <if test="customerTel != null">
+        customerTel,
+      </if>
+      <if test="consultProduct != null">
+        consultProduct,
+      </if>
+      <if test="categoryOne != null">
+        categoryOne,
+      </if>
+      <if test="categoryTwo != null">
+        categoryTwo,
+      </if>
+      <if test="questionTopic != null">
+        questionTopic,
+      </if>
+      <if test="questionDesc != null">
+        questionDesc,
+      </if>
+      <if test="questionLevel != null">
+        questionLevel,
+      </if>
+      <if test="userCode != null">
+        userCode,
+      </if>
+      <if test="dealStatus != null">
+        dealStatus,
+      </if>
+      <if test="checkStatus != null">
+        checkStatus,
+      </if>
+      <if test="dealDate != null">
+        dealDate,
+      </if>
+      <if test="checkDate != null">
+        checkDate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate,
+      </if>
+      <if test="userUpdate != null">
+        userUpdate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null">
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerTel != null">
+        #{customerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="consultProduct != null">
+        #{consultProduct,jdbcType=NVARCHAR},
+      </if>
+      <if test="categoryOne != null">
+        #{categoryOne,jdbcType=INTEGER},
+      </if>
+      <if test="categoryTwo != null">
+        #{categoryTwo,jdbcType=INTEGER},
+      </if>
+      <if test="questionTopic != null">
+        #{questionTopic,jdbcType=NVARCHAR},
+      </if>
+      <if test="questionDesc != null">
+        #{questionDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="questionLevel != null">
+        #{questionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dealStatus != null">
+        #{dealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealDate != null">
+        #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkDate != null">
+        #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="verifyUserId != null">
+         #{verifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdate != null">
+        #{userUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrder">
+    update Kefu_Order
+    <set>
+      <if test="orderNo != null">
+        orderNo = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null">
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        companyId = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null">
+        storeId = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null">
+        customerName = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerTel != null">
+        customerTel = #{customerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="consultProduct != null">
+        consultProduct = #{consultProduct,jdbcType=NVARCHAR},
+      </if>
+      <if test="categoryOne != null">
+        categoryOne = #{categoryOne,jdbcType=INTEGER},
+      </if>
+      <if test="categoryTwo != null">
+        categoryTwo = #{categoryTwo,jdbcType=INTEGER},
+      </if>
+      <if test="questionTopic != null">
+        questionTopic = #{questionTopic,jdbcType=NVARCHAR},
+      </if>
+      <if test="questionDesc != null">
+        questionDesc = #{questionDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="questionLevel != null">
+        questionLevel = #{questionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        userCode = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dealStatus != null">
+        dealStatus = #{dealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        checkStatus = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealDate != null">
+        dealDate = #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkDate != null">
+        checkDate = #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="verifyUserId != null">
+          verifyUserId = #{verifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdate != null">
+        userUpdate = #{userUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuOrder.model.KeFuOrder">
+    update Kefu_Order
+    set orderNo = #{orderNo,jdbcType=VARCHAR},
+      cityNo = #{cityNo,jdbcType=VARCHAR},
+      companyId = #{companyId,jdbcType=INTEGER},
+      storeId = #{storeId,jdbcType=INTEGER},
+      customerName = #{customerName,jdbcType=VARCHAR},
+      customerTel = #{customerTel,jdbcType=VARCHAR},
+      consultProduct = #{consultProduct,jdbcType=NVARCHAR},
+      categoryOne = #{categoryOne,jdbcType=INTEGER},
+      categoryTwo = #{categoryTwo,jdbcType=INTEGER},
+      questionTopic = #{questionTopic,jdbcType=NVARCHAR},
+      questionDesc = #{questionDesc,jdbcType=NVARCHAR},
+      questionLevel = #{questionLevel,jdbcType=INTEGER},
+      userCode = #{userCode,jdbcType=VARCHAR},
+      dealStatus = #{dealStatus,jdbcType=INTEGER},
+      checkStatus = #{checkStatus,jdbcType=INTEGER},
+      dealDate = #{dealDate,jdbcType=TIMESTAMP},
+      checkDate = #{checkDate,jdbcType=TIMESTAMP},
+      verifyUserId = #{verifyUserId,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userUpdate = #{userUpdate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 查询列表 -->
+  <select id="getKeFuOrderList" parameterType="map" resultType="cn.com.eju.deal.keFuOrder.model.KeFuOrderDto">
+		 SELECT  ko.* ,
+		        us1.userName AS createName ,
+		        us2.userName AS userName ,
+		        us2.userId AS operatorId,
+			    bd1.dicValue AS dealStatusNm,
+				ISNULL(bd2.dicValue,'-') AS checkStatusNm,
+				bd3.dicValue AS categoryOneNm,
+				bd4.dicValue AS categoryTwoNm,
+               c.CompanyName AS companyName,
+               c.CompanyNo AS companyNo,
+               c.Id AS companyId,
+              ISNULL(s.Name,'-') AS storeName,
+              ISNULL(s.StoreNo,'-') AS storeNo,
+              s.AcCityNo AS storeAcCityNo ,
+              s.CityNo AS storeCityNo ,
+              bc.CityName AS storeCityName ,
+              ISNULL(s.Address,'-') AS storeAddress ,
+              s.contractType ,
+              (CASE WHEN s.id IS NULL THEN NULL
+                    ELSE (CASE WHEN  s.ContractType ='0' OR  s.ContractType IS NULL THEN '未签' ELSE d.dicValue END)
+               END) As contractTypeName,
+              bct.CityName AS cityName
+		FROM    Kefu_Order ko
+				LEFT JOIN dbo.Store s ON s.Id = ko.storeId AND s.IsDelete=0
+				INNER JOIN dbo.BAS_City bc ON ko.CityNo = bc.CityNo AND bc.FlagDeleted = 0
+                LEFT JOIN BAS_DictionaryValue d ON d.dicCode = s.ContractType AND d.delFlag='N'
+                LEFT JOIN dbo.Company c ON c.Id = ko.companyId AND c.IsDelete=0
+		        LEFT JOIN crm.dbo.USR_User us1 ON us1.userId = ko.userCreate AND us1.delFlag = 'N'
+		        LEFT JOIN crm.dbo.USR_User us2 ON us2.userCode = ko.userCode  AND us2.delFlag = 'N'
+				LEFT JOIN dbo.BAS_DictionaryValue bd1 ON bd1.dicCode = ko.dealStatus AND bd1.delFlag='N'
+				LEFT JOIN dbo.BAS_DictionaryValue bd2 ON bd2.dicCode = ko.checkStatus AND bd2.delFlag='N'
+				LEFT JOIN dbo.BAS_DictionaryValue bd3 ON bd3.dicCode = ko.categoryOne AND bd3.delFlag='N'
+				LEFT JOIN dbo.BAS_DictionaryValue bd4 ON bd4.dicCode = ko.categoryTwo AND bd4.delFlag='N'
+				LEFT JOIN dbo.BAS_City bct ON ko.CityNo = bct.CityNo AND bct.FlagDeleted = 0
+				WHERE ko.delFlag = 0 AND  ko.dateCreate is not NULL
+               <if test="authCityIds!=null ">
+                  and bc.id in(${authCityIds})
+               </if>
+
+			<if test="cityNo != null and cityNo != ''">
+				   and ko.cityNo = '${cityNo}'
+			</if> 
+            <if test="dateCreate != null and dateCreate != ''">
+	    		AND Convert(varchar(10),ko.dateCreate,120) &gt;= #{dateCreate}
+            </if>
+            <if test="dateCreateEnd != null and dateCreateEnd != ''">
+	    		AND Convert(varchar(10),ko.dateCreate,120) &lt;= #{dateCreateEnd}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND us2.userName LIKE CONCAT('%', #{userName},'%')
+            </if>
+            <if test="categoryOne != null and categoryOne != ''">
+                AND ko.categoryOne = #{categoryOne}
+            </if>
+            <if test="categoryTwo != null and categoryTwo != ''">
+                AND ko.categoryTwo = #{categoryTwo}
+            </if>
+		    <!-- 问题状态筛选 -->
+            <if test="dealStatus != null and dealStatus != ''">
+                AND ko.dealStatus = #{dealStatus}
+            </if>
+		    <!-- 检验状态筛选 -->
+            <if test="checkStatus != null and checkStatus != ''">
+                AND ko.checkStatus = #{checkStatus}
+            </if>
+            <!-- 门店名称、编号 -->
+            <if test="companyValue != null and companyValue != '' ">
+		        AND (c.companyNo LIKE CONCAT('%', #{companyValue},'%') or c.companyName LIKE CONCAT('%', #{companyValue},'%'))
+		    </if>
+		    <!-- 门店城市 -->
+            <if test="storeCity != null and storeCity != '' ">
+		        AND te.storeCityName = #{storeCity}
+		    </if>
+	 	ORDER BY ko.dateCreate desc
+  </select>
+  <select id="getKeFuOrderById" resultType="cn.com.eju.deal.keFuOrder.model.KeFuOrderDto" parameterType="java.lang.Integer">
+		SELECT ko.*,
+			dbc.CityName cityName,
+			ISNULL(s.Name,'-') AS storeName,
+            ISNULL(s.StoreNo,'-') AS storeNo,
+            s.AcCityNo AS storeAcCityNo ,
+            s.CityNo AS storeCityNo ,
+            bc.CityName AS storeCityName ,
+            ISNULL(s.Address,'-') AS storeAddress,
+			c.CompanyName AS companyName,c.CompanyNo AS companyNo,c.Id AS companyId
+			,us.userId AS operatorId,us.userName,duu.userName createName,
+			ko.checkDate, vuu.userName AS verifyUserName, vuu.userCode AS verifyUserCode,
+			dic3.dicValue AS dealStatusStr,dic4.dicValue AS checkStatusStr,
+			bd3.dicValue AS categoryOneNm,bd4.dicValue AS categoryTwoNm,
+			ql.dicValue AS questionLevelNm,
+			consultProductNm= STUFF(( SELECT ',' + bd.dicValue
+					        FROM dbo.BAS_DictionaryValue bd
+					        where PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + consultProduct + ',')>0
+					        ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + consultProduct + ',')
+					        FOR XML PATH('')), 1, 1,'')
+        FROM  Kefu_Order ko
+        LEFT JOIN dbo.Store s  ON  s.id = ko.storeId AND s.IsDelete=0
+        LEFT JOIN dbo.BAS_City bc ON ko.CityNo = bc.CityNo AND bc.FlagDeleted = 0
+        LEFT JOIN dbo.Company c ON c.Id = ko.companyId AND c.IsDelete=0
+        LEFT JOIN crm.dbo.USR_User us ON us.userCode = ko.userCode AND us.delFlag = 'N'
+        LEFT JOIN dbo.BAS_City dbc ON ko.cityNo= dbc.CityNo AND dbc.FlagDeleted = 0
+        LEFT JOIN crm.dbo.USR_User duu ON duu.userId = ko.userCreate AND duu.delFlag = 'N'
+        LEFT JOIN crm.dbo.USR_User vuu ON vuu.userId = ko.verifyUserId AND us.delFlag = 'N'
+
+        LEFT JOIN dbo.BAS_DictionaryValue dic3 ON dic3.dicCode = ko.dealStatus AND dic3.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue dic4 ON dic4.dicCode = ko.checkStatus AND dic4.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd3 ON bd3.dicCode = ko.categoryOne AND bd3.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd4 ON bd4.dicCode = ko.categoryTwo AND bd4.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue ql ON ql.dicCode = ko.questionLevel AND ql.delFlag='N'
+
+		WHERE ko.delFlag=0 AND ko.id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getOperatorList" resultType="cn.com.eju.deal.user.model.User" parameterType="map">
+		SELECT
+          userCode,userName
+		FROM
+          crm.dbo.USR_User
+		where
+        delFlag='N'
+            AND inStatus ='1073'
+			<if test="userCode != null and userCode != ''">
+  		  		<![CDATA[
+    				AND userCode = #{userCode,jdbcType=VARCHAR}
+    			]]>
+			</if>
+			<if test="userName != null and userName != ''">
+  		  		<![CDATA[
+    				AND userName LIKE CONCAT('%', #{userName},'%')
+    			]]>
+			</if>
+		ORDER BY userCode DESC
+	</select>
+  <select id="getCategoryTwo" resultType="cn.com.eju.deal.base.dto.code.CommonCodeDto" parameterType="map">
+		SELECT  * FROM    dbo.BAS_DictionaryValue 
+			WHERE delFlag='N' and typeId = 241 
+			<if test="categoryOne != null and categoryOne != ''">
+    			AND dicCode LIKE CONCAT('%', #{categoryOne},'%') 
+			</if>
+			ORDER BY dicSortNo
+	</select>
+
+    <select id="getKeFuOrderByIdForWx" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.keFuOrder.model.WxKefuOrder">
+        SELECT  ko.* ,
+                c.CompanyNo ,
+                c.CompanyName ,
+                s.StoreNo ,
+                s.Name AS storeName ,
+                s.AddressDetail AS storeAddress ,
+                consultProductNm = STUFF(( SELECT   ',' + bd.dicValue
+                                           FROM     dbo.BAS_DictionaryValue bd
+                                           WHERE    PATINDEX('%,' + RTRIM(bd.dicCode)
+                                                             + ',%',
+                                                             ',' + consultProduct
+                                                             + ',') > 0
+                                           ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode)
+                                                             + ',%',
+                                                             ',' + consultProduct
+                                                             + ',')
+                                         FOR
+                                           XML PATH('')
+                                         ), 1, 1, '') ,
+                questionLevelNm = ( SELECT  dicValue
+                                    FROM    BAS_DictionaryValue
+                                    WHERE   dicCode = ko.questionLevel
+                                            AND delFlag = 'N'
+                                  ),
+				u.userName
+        FROM    Kefu_Order ko
+                LEFT JOIN dbo.Company c ON ko.companyId = c.Id
+                LEFT JOIN dbo.Store s ON ko.storeId = s.Id
+                LEFT JOIN crm.dbo.USR_User u ON ko.userCode = u.userCode AND u.delFlag = 'N'
+        WHERE   ko.delFlag = 0
+                AND ko.id = #{id}
+    </select>
+
+    <select id="getReplyListById" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.keFuOrder.model.WxKefuOrderReply">
+        SELECT  kor.* ,
+                duu.userCode ,
+                duu.userName ,
+                kor.dateCreate AS sortDateCreate
+        FROM    Kefu_Order_Reply kor
+                INNER JOIN dbo.Kefu_Order ko ON kor.orderId = ko.id
+                                                AND ko.delFlag = '0'
+                LEFT JOIN crm.dbo.USR_User duu ON duu.userId = kor.userCreate
+                                              AND duu.delFlag = 'N'
+        WHERE   ko.id = #{id}
+                AND kor.delFlag = '0'
+        UNION ALL
+        SELECT  kov.* ,
+                duu.userCode ,
+                duu.userName ,
+                kov.dateCreate AS sortDateCreate
+        FROM    Kefu_Order_Verify kov
+                INNER JOIN dbo.Kefu_Order ko ON kov.orderId = ko.id
+                                                AND ko.delFlag = '0'
+                LEFT JOIN crm.dbo.USR_User duu ON duu.userId = kov.userCreate
+                                              AND duu.delFlag = 'N'
+        WHERE   ko.id = #{id}
+                AND kov.delFlag = '0'
+        ORDER BY sortDateCreate DESC
+    </select>
+
+    <insert id="insertReply" parameterType="cn.com.eju.deal.keFuOrder.model.WxKefuOrderReply" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dbo.Kefu_Order_Reply
+                ( orderId ,
+                  replyDate ,
+                  replyDesc ,
+                  dealStatus ,
+                  dateCreate ,
+                  userCreate ,
+                  delFlag
+                )
+        VALUES  ( #{orderId} ,
+                  GETDATE() ,
+                  #{replyDesc} ,
+                  #{dealStatus} ,
+                  GETDATE() ,
+                  #{userCreate} ,
+                  0
+                )
+    </insert>
+    <select id="getKeFuOrderListByStoreId" resultType="cn.com.eju.deal.keFuOrder.model.KeFuOrderDto" parameterType="java.lang.Integer">
+		 SELECT 
+		 		ko.id, 
+		 		ko.orderNo ,
+                ko.storeId ,
+                ko.userCode ,us2.userName,
+                ko.userCreate ,us1.userName AS createName,
+                ko.dateCreate,
+				ko.dealStatus ,ISNULL(bd1.dicValue,'-') AS dealStatusNm,
+				ko.checkStatus ,ISNULL(bd2.dicValue,'-') AS checkStatusNm, 
+				ko.categoryOne ,ISNULL(bd3.dicValue,'-') AS categoryOneNm,
+				ko.categoryTwo ,ISNULL(bd4.dicValue,'-') AS categoryTwoNm
+        FROM    dbo.Kefu_Order ko
+		LEFT JOIN crm.dbo.USR_User us1 ON us1.userId = ko.userCreate AND us1.delFlag = 'N'
+		LEFT JOIN crm.dbo.USR_User us2 ON us2.userCode = ko.userCode  AND us2.delFlag = 'N'
+		LEFT JOIN dbo.BAS_DictionaryValue bd1 ON bd1.dicCode = ko.dealStatus AND bd1.delFlag='N'
+		LEFT JOIN dbo.BAS_DictionaryValue bd2 ON bd2.dicCode = ko.checkStatus AND bd2.delFlag='N'
+		LEFT JOIN dbo.BAS_DictionaryValue bd3 ON bd3.dicCode = ko.categoryOne AND bd3.delFlag='N'
+		LEFT JOIN dbo.BAS_DictionaryValue bd4 ON bd4.dicCode = ko.categoryTwo AND bd4.delFlag='N'
+        WHERE   ko.delFlag = 0 AND ko.storeId = #{storeId,jdbcType=INTEGER}
+        ORDER BY ko.id DESC
+	</select>
+
+    <select id="getKefuOrderDtls" parameterType="map" resultType="cn.com.eju.deal.keFuOrder.model.KeFuOrderCkDto">
+
+    SELECT
+    	kor.id id ,kor.orderId,
+    	kor.replyDate ckDate,
+    	kor.replyDesc ckDesc,
+    	duu.userCode userCode,
+    	duu.userName ckUserName,
+    	kor.dateCreate sortDateCreate,
+    	1059 AS type
+    FROM Kefu_Order_Reply kor
+    INNER JOIN dbo.Kefu_Order ko ON kor.orderId=ko.id AND ko.delFlag = '0'
+    LEFT JOIN crm.dbo.USR_User duu ON duu.userId = kor.userCreate AND duu.delFlag = 'N'
+    WHERE ko.id=#{orderId,jdbcType=INTEGER}
+    AND kor.delFlag = '0'
+    UNION ALL
+    SELECT
+    	kov.id id ,kov.orderId,
+    	kov.checkDate ckDate,
+    	kov.checkDesc ckDesc,
+    	duu.userCode userCode ,
+    	duu.userName ckUserName,
+    	kov.dateCreate sortDateCreate,
+    	1060 AS type
+    FROM Kefu_Order_Verify kov
+    INNER JOIN dbo.Kefu_Order ko ON kov.orderId=ko.id AND ko.delFlag = '0'
+    LEFT JOIN crm.dbo.USR_User duu ON duu.userId = kov.userCreate  AND duu.delFlag = 'N'
+    WHERE ko.id= #{orderId,jdbcType=INTEGER}
+    AND kov.delFlag = '0'
+    ORDER BY sortDateCreate DESC
+    </select>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.storedepositSerial.dao.StoreDepositSerialMapper">
+  <!-- 查询联动框架合同列表 -->
+  <select id="queryStoreDepositSerialList" resultType="cn.com.eju.deal.houseLinkage.storedepositSerial.model.StoreDepositSerialDto" parameterType="Map">
+  	 EXEC P_CRM_RPT_StoreDepositSerial #{dateCreateStart}, #{dateCreateEnd},
+  	  #{accountProjectCodeList}, #{storeCondition}, #{companyCondition},#{agreementNo},#{oaNo},#{orderType}
+  </select>
+	<select id="queryCityList" resultType="cn.com.eju.deal.houseLinkage.storedepositSerial.model.StoreDepositSerialDto">
+		SELECT DISTINCT
+			bcs.cityNo as acCityNo,bc.CityName as cityName
+		FROM CRM.dbo.BAS_CityAccountProject bcs
+			INNER JOIN CRM.dbo.BAS_City bc on bc.CityNo = bcs.cityNo and bc.FlagDeleted ='0'
+		WHERE bcs.delFlag = '0'
+	</select>
+	<select id="queryAccountProject" resultType="cn.com.eju.deal.houseLinkage.storedepositSerial.model.StoreDepositSerialDto">
+		SELECT 
+			distinct
+			bcs.accountProject,bcs.accountProjectCode
+		FROM CRM.dbo.BAS_CityAccountProject bcs
+		WHERE bcs.delFlag = '0'
+	</select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.report.refund.dao.PmlsRefundTraceMapper">
+
+    <sql id="Base_Column_List">
+    id, datecreate
+    </sql>
+
+    <select id="queryList" parameterType="map" statementType="CALLABLE" resultType="map">
+        EXEC P_PMLS_RPT_ProjectPartA_Week_Track #{cityNo},#{project},#{userCode},#{yearMonth} ,#{year},#{month},#{weekNo},#{sortNo} ,#{clickType},#{offset},#{rows},#{total,jdbcType=INTEGER,mode=OUT}
+    </select>
+
+    <update id="export" parameterType="map">
+        EXEC usp_EXPORTDATA_BCP  #{sqlstr},#{filePathName};
+    </update>
+</mapper>

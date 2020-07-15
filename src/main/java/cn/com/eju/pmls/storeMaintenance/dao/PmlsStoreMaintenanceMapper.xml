@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.storeMaintenance.dao.PmlsStoreMaintenanceMapper">
+
+  <!--门店维护列表-->
+  <select id="queryList"  parameterType="Map" resultType="Map">
+    	SELECT  
+	    	 t1.Id id
+	    	,t1.StoreNo storeNo
+			,t1.Name storeName
+			,t1.pmlsCenterId
+			,t2.groupName pmlsGroupName 
+			,t1.AddressDetail addressDetail
+			,t3.CompanyNo companyNo
+			,t3.CompanyName companyName
+			,isFyStoreStr = CASE WHEN (t1.ContractType=10302 or t1.ContractType=10304 ) THEN '是'
+				 ELSE '否' end 
+			,t1.pmlsMaintainCode
+			,t1.pmlsMaintainName
+			,t1.DateCreate dateCreate
+			
+		FROM    Store t1
+	        LEFT JOIN dbo.USR_Group t2 WITH(NOLOCK) ON t1.pmlsCenterId = t2.groupId
+	                                      AND t2.delFlag = 'N'
+	        LEFT JOIN ( SELECT  x1.Id companyid ,
+                            x1.CompanyNo ,
+                            x1.CompanyName ,
+                            x2.StoreId
+                    FROM    dbo.Company x1 ,
+                            dbo.CompanyStore x2
+                    WHERE   x1.Id = x2.CompanyId
+                            AND x1.IsDelete = 0
+                            AND x2.IsDelete = 0
+                            AND x2.flag = 0
+                  ) t3 ON t1.Id = t3.StoreId
+             WHERE t1.IsDelete =0 and t1.AuditStatus = 20 AND t1.brandType=29401
+             
+			 <!--归属城市 -->
+            <if test="cityNo != null and cityNo != ''">
+	            AND t1.AcCityNo = #{cityNo,jdbcType=NVARCHAR}
+	        </if>
+			 <!--所在城市 -->
+			<if test="storeCityNo != null and storeCityNo != ''">
+           		 AND t1.CityNo = #{storeCityNo,jdbcType=NVARCHAR}
+        	</if>
+	         <!-- 房友门店 -->
+	        <if test="isFyStore != null and isFyStore != '' and isFyStore==1">
+	            AND t1.ContractType in(10302,10304)
+	        </if>
+	        <if test="isFyStore != null and isFyStore != '' and isFyStore==0">
+	            AND t1.ContractType NOT in(10302,10304)
+	        </if>
+			 <!--联动维护中心 -->
+            <if test="groupId != null and groupId != ''">
+	            AND t1.pmlsCenterId = #{groupId,jdbcType=INTEGER}
+	        </if>
+			 <!--门店 -->
+	        <if test="storeNo != null and storeNo != ''">
+				AND (	
+					t1.StoreNo LIKE CONCAT('%', #{storeNo})
+					OR t1.Name LIKE CONCAT('%', #{storeNo},'%')
+				)
+			</if>
+			 <!--维护人 -->
+	        <if test="maintenanceCode != null and maintenanceCode != ''">
+				AND (	
+					t1.pmlsMaintainCode LIKE CONCAT('%', #{maintenanceCode})
+					OR t1.pmlsMaintainName LIKE CONCAT('%', #{maintenanceCode},'%')
+				)
+			</if>
+			
+			ORDER BY t1.DateCreate DESC
+  </select>
+  
+</mapper>

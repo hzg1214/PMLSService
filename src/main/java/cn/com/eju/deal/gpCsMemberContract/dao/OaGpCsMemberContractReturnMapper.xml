@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.gpCsMemberContract.dao.OaGpCsMemberContractReturnMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.gpCsMemberContract.model.OaGpCsMemberContractReturn">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="gpCsMemberContractNo" jdbcType="VARCHAR" property="gpCsMemberContractNo" />
+    <result column="flowId" jdbcType="VARCHAR" property="flowId" />
+    <result column="oaNo" jdbcType="VARCHAR" property="oaNo" />
+    <result column="approveDate" jdbcType="TIMESTAMP" property="approveDate" />
+    <result column="hasDeal" jdbcType="INTEGER" property="hasDeal" />
+    <result column="dateUpdate" jdbcType="TIMESTAMP" property="dateUpdate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="approveStatus" jdbcType="INTEGER" property="approveStatus" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, gpCsMemberContractNo, flowId, oaNo, approveDate, hasDeal, dateUpdate, dateCreate, 
+    approveStatus, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from OaGpCsMemberContractReturn
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from OaGpCsMemberContractReturn
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.gpCsMemberContract.model.OaGpCsMemberContractReturn">
+    insert into OaGpCsMemberContractReturn (id, gpCsMemberContractNo, flowId, 
+      oaNo, approveDate, hasDeal, 
+      dateUpdate, dateCreate, approveStatus, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{gpCsMemberContractNo,jdbcType=VARCHAR}, #{flowId,jdbcType=VARCHAR}, 
+      #{oaNo,jdbcType=VARCHAR}, #{approveDate,jdbcType=TIMESTAMP}, #{hasDeal,jdbcType=INTEGER}, 
+      #{dateUpdate,jdbcType=TIMESTAMP}, #{dateCreate,jdbcType=TIMESTAMP}, #{approveStatus,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.gpCsMemberContract.model.OaGpCsMemberContractReturn">
+    insert into OaGpCsMemberContractReturn
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gpCsMemberContractNo != null">
+        gpCsMemberContractNo,
+      </if>
+      <if test="flowId != null">
+        flowId,
+      </if>
+      <if test="oaNo != null">
+        oaNo,
+      </if>
+      <if test="approveDate != null">
+        approveDate,
+      </if>
+      <if test="hasDeal != null">
+        hasDeal,
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="approveStatus != null">
+        approveStatus,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gpCsMemberContractNo != null">
+        #{gpCsMemberContractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null">
+        #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="approveDate != null">
+        #{approveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasDeal != null">
+        #{hasDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approveStatus != null">
+        #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.gpCsMemberContract.model.OaGpCsMemberContractReturn">
+    update OaGpCsMemberContractReturn
+    <set>
+      <if test="gpCsMemberContractNo != null">
+        gpCsMemberContractNo = #{gpCsMemberContractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="flowId != null">
+        flowId = #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null">
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="approveDate != null">
+        approveDate = #{approveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasDeal != null">
+        hasDeal = #{hasDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null">
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approveStatus != null">
+        approveStatus = #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.gpCsMemberContract.model.OaGpCsMemberContractReturn">
+    update OaGpCsMemberContractReturn
+    set gpCsMemberContractNo = #{gpCsMemberContractNo,jdbcType=VARCHAR},
+      flowId = #{flowId,jdbcType=VARCHAR},
+      oaNo = #{oaNo,jdbcType=VARCHAR},
+      approveDate = #{approveDate,jdbcType=TIMESTAMP},
+      hasDeal = #{hasDeal,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      approveStatus = #{approveStatus,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 查找未处理的OA审批信息 -->
+	<select id="getOaGpCsMemberContractReturn" resultType="cn.com.eju.deal.gpCsMemberContract.model.OaGpCsMemberContractReturn" >
+		SELECT  * 
+		FROM   OaGpCsMemberContractReturn
+   	    WHERE  hasDeal = 0 AND delFlag=0
+	</select>
+	<!-- 更新 -->
+	<update id="updateOaGpCsMemberContract" parameterType="cn.com.eju.deal.gpCsMemberContract.model.OaGpCsMemberContractReturn">
+		UPDATE OaGpCsMemberContractReturn
+		<set>
+			<if test="hasDeal != null">
+				hasDeal = #{hasDeal,jdbcType=INTEGER},
+			</if>
+			<if test="oaNo != null">
+				oaNo = #{oaNo,jdbcType=VARCHAR},
+			</if>
+			<if test="dateUpdate != null">
+				dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where 
+			flowId = #{flowId} and
+		gpCsMemberContractNo = #{gpCsMemberContractNo}
+	</update>
+</mapper>

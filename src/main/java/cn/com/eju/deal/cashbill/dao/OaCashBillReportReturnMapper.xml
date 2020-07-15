@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.cashbill.dao.OaCashBillReportReturnMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.cashbill.model.OaCashBillReportReturn" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="oaRetId" property="oaRetId" jdbcType="INTEGER" />
+    <result column="oaNo" property="oaNo" jdbcType="VARCHAR" />
+    <result column="reportNo" property="reportNo" jdbcType="VARCHAR" />
+    <result column="befTaxAmount" property="befTaxAmount" jdbcType="DECIMAL" />
+    <result column="taxAmount" property="taxAmount" jdbcType="DECIMAL" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, oaRetId, oaNo, reportNo, befTaxAmount, taxAmount, description, dateCreate, dateUpdate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from OaCashBillReportReturn
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from OaCashBillReportReturn
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReportReturn" >
+    insert into OaCashBillReportReturn (id, oaRetId, oaNo, 
+      reportNo, befTaxAmount, taxAmount, 
+      description, dateCreate, dateUpdate
+      )
+    values (#{id,jdbcType=INTEGER}, #{oaRetId,jdbcType=INTEGER}, #{oaNo,jdbcType=VARCHAR}, 
+      #{reportNo,jdbcType=VARCHAR}, #{befTaxAmount,jdbcType=DECIMAL}, #{taxAmount,jdbcType=DECIMAL}, 
+      #{description,jdbcType=VARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}, #{dateUpdate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReportReturn" >
+    insert into OaCashBillReportReturn
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="oaRetId != null" >
+        oaRetId,
+      </if>
+      <if test="oaNo != null" >
+        oaNo,
+      </if>
+      <if test="reportNo != null" >
+        reportNo,
+      </if>
+      <if test="befTaxAmount != null" >
+        befTaxAmount,
+      </if>
+      <if test="taxAmount != null" >
+        taxAmount,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="oaRetId != null" >
+        #{oaRetId,jdbcType=INTEGER},
+      </if>
+      <if test="oaNo != null" >
+        #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="reportNo != null" >
+        #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="befTaxAmount != null" >
+        #{befTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxAmount != null" >
+        #{taxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReportReturn" >
+    update OaCashBillReportReturn
+    <set >
+      <if test="oaRetId != null" >
+        oaRetId = #{oaRetId,jdbcType=INTEGER},
+      </if>
+      <if test="oaNo != null" >
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="reportNo != null" >
+        reportNo = #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="befTaxAmount != null" >
+        befTaxAmount = #{befTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxAmount != null" >
+        taxAmount = #{taxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReportReturn" >
+    update OaCashBillReportReturn
+    set oaRetId = #{oaRetId,jdbcType=INTEGER},
+      oaNo = #{oaNo,jdbcType=VARCHAR},
+      reportNo = #{reportNo,jdbcType=VARCHAR},
+      befTaxAmount = #{befTaxAmount,jdbcType=DECIMAL},
+      taxAmount = #{taxAmount,jdbcType=DECIMAL},
+      description = #{description,jdbcType=VARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getCashBillAdjustTax" resultType="cn.com.eju.deal.cashbill.model.CashBillReportAdjustTax" parameterType="java.util.Map">
+
+      SELECT  cr.id repParentId
+         , cr.reportNo
+         , cr.taxAmount AS adjustBeforeTaxAmount
+         , ( ISNULL(ocr.taxAmount, 0) - ISNULL(cr.taxAmount, 0) ) AS adjustTaxAmount
+         , ocr.taxAmount AS adjustAfterTaxAmount
+         , cr.requestType
+         , 0  hasDeal
+         , GETDATE() dateUpdate
+         , GETDATE() dateCreate
+         , 0  delFlag
+     FROM  dbo.Cash_Bill_Report cr
+    INNER JOIN dbo.OaCashBillReportReturn ocr
+       ON oaRetId = #{oaRetId,jdbcType=INTEGER}
+      AND ocr.reportNo = cr.reportNo
+      AND ocr.befTaxAmount = cr.requestAmount
+      AND ocr.taxAmount != cr.taxAmount
+    WHERE cr.comParentId = #{comParentId,jdbcType=INTEGER}
+      AND cr.delFlag = 0
+
+  </select>
+
+</mapper>

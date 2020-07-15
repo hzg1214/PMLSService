@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.gpContract.dao.GpBankInfoChangeLogMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="companyId" jdbcType="INTEGER" property="companyId" />
+    <result column="partyB" jdbcType="NVARCHAR" property="partyB" />
+    <result column="gpContractId" jdbcType="INTEGER" property="gpContractId" />
+    <result column="gpContractNo" jdbcType="VARCHAR" property="gpContractNo" />
+    <result column="changeContent" jdbcType="NVARCHAR" property="changeContent" />
+    <result column="oldAccountNm" jdbcType="NVARCHAR" property="oldAccountNm" />
+    <result column="oldAccountProvinceNo" jdbcType="VARCHAR" property="oldAccountProvinceNo" />
+    <result column="oldAccountProvinceNm" jdbcType="NVARCHAR" property="oldAccountProvinceNm" />
+    <result column="oldAccountCityNo" jdbcType="VARCHAR" property="oldAccountCityNo" />
+    <result column="oldAccountCityNm" jdbcType="NVARCHAR" property="oldAccountCityNm" />
+    <result column="oldBankAccountNm" jdbcType="NVARCHAR" property="oldBankAccountNm" />
+    <result column="oldBankAccount" jdbcType="VARCHAR" property="oldBankAccount" />
+    <result column="accountNm" jdbcType="NVARCHAR" property="accountNm" />
+    <result column="accountProvinceNo" jdbcType="VARCHAR" property="accountProvinceNo" />
+    <result column="accountProvinceNm" jdbcType="NVARCHAR" property="accountProvinceNm" />
+    <result column="accountCityNo" jdbcType="VARCHAR" property="accountCityNo" />
+    <result column="accountCityNm" jdbcType="NVARCHAR" property="accountCityNm" />
+    <result column="bankAccountNm" jdbcType="NVARCHAR" property="bankAccountNm" />
+    <result column="bankAccount" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="startFlag" jdbcType="INTEGER" property="startFlag" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="userName" jdbcType="VARCHAR" property="userName" />
+    <result column="userCode" jdbcType="VARCHAR" property="userCode" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, companyId, partyB, gpContractId, gpContractNo, changeContent, oldAccountNm, oldAccountProvinceNo, 
+    oldAccountProvinceNm, oldAccountCityNo, oldAccountCityNm, oldBankAccountNm, oldBankAccount, 
+    accountNm, accountProvinceNo, accountProvinceNm, accountCityNo, accountCityNm, bankAccountNm, 
+    bankAccount, startFlag, dateCreate, userIdCreate, userName, userCode, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from GP_BankInfoChangeLog
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from GP_BankInfoChangeLog
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLog">
+    insert into GP_BankInfoChangeLog (id, companyId, partyB, 
+      gpContractId, gpContractNo, changeContent, 
+      oldAccountNm, oldAccountProvinceNo, oldAccountProvinceNm, 
+      oldAccountCityNo, oldAccountCityNm, oldBankAccountNm, 
+      oldBankAccount, accountNm, accountProvinceNo, 
+      accountProvinceNm, accountCityNo, accountCityNm, 
+      bankAccountNm, bankAccount, startFlag, 
+      dateCreate, userIdCreate, userName, 
+      userCode, delFlag)
+    values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{partyB,jdbcType=NVARCHAR}, 
+      #{gpContractId,jdbcType=INTEGER}, #{gpContractNo,jdbcType=VARCHAR}, #{changeContent,jdbcType=NVARCHAR}, 
+      #{oldAccountNm,jdbcType=NVARCHAR}, #{oldAccountProvinceNo,jdbcType=VARCHAR}, #{oldAccountProvinceNm,jdbcType=NVARCHAR}, 
+      #{oldAccountCityNo,jdbcType=VARCHAR}, #{oldAccountCityNm,jdbcType=NVARCHAR}, #{oldBankAccountNm,jdbcType=NVARCHAR}, 
+      #{oldBankAccount,jdbcType=VARCHAR}, #{accountNm,jdbcType=NVARCHAR}, #{accountProvinceNo,jdbcType=VARCHAR}, 
+      #{accountProvinceNm,jdbcType=NVARCHAR}, #{accountCityNo,jdbcType=VARCHAR}, #{accountCityNm,jdbcType=NVARCHAR}, 
+      #{bankAccountNm,jdbcType=NVARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{startFlag,jdbcType=INTEGER}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{userCode,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLog" useGeneratedKeys="true" keyProperty="id">
+    insert into GP_BankInfoChangeLog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+      <if test="partyB != null">
+        partyB,
+      </if>
+      <if test="gpContractId != null">
+        gpContractId,
+      </if>
+      <if test="gpContractNo != null">
+        gpContractNo,
+      </if>
+      <if test="changeContent != null">
+        changeContent,
+      </if>
+      <if test="oldAccountNm != null">
+        oldAccountNm,
+      </if>
+      <if test="oldAccountProvinceNo != null">
+        oldAccountProvinceNo,
+      </if>
+      <if test="oldAccountProvinceNm != null">
+        oldAccountProvinceNm,
+      </if>
+      <if test="oldAccountCityNo != null">
+        oldAccountCityNo,
+      </if>
+      <if test="oldAccountCityNm != null">
+        oldAccountCityNm,
+      </if>
+      <if test="oldBankAccountNm != null">
+        oldBankAccountNm,
+      </if>
+      <if test="oldBankAccount != null">
+        oldBankAccount,
+      </if>
+      <if test="accountNm != null">
+        accountNm,
+      </if>
+      <if test="accountProvinceNo != null">
+        accountProvinceNo,
+      </if>
+      <if test="accountProvinceNm != null">
+        accountProvinceNm,
+      </if>
+      <if test="accountCityNo != null">
+        accountCityNo,
+      </if>
+      <if test="accountCityNm != null">
+        accountCityNm,
+      </if>
+      <if test="bankAccountNm != null">
+        bankAccountNm,
+      </if>
+      <if test="bankAccount != null">
+        bankAccount,
+      </if>
+      <if test="startFlag != null">
+        startFlag,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="userName != null">
+        userName,
+      </if>
+      <if test="userCode != null">
+        userCode,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="partyB != null">
+        #{partyB,jdbcType=NVARCHAR},
+      </if>
+      <if test="gpContractId != null">
+        #{gpContractId,jdbcType=INTEGER},
+      </if>
+      <if test="gpContractNo != null">
+        #{gpContractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="changeContent != null">
+        #{changeContent,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldAccountNm != null">
+        #{oldAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldAccountProvinceNo != null">
+        #{oldAccountProvinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oldAccountProvinceNm != null">
+        #{oldAccountProvinceNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldAccountCityNo != null">
+        #{oldAccountCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oldAccountCityNm != null">
+        #{oldAccountCityNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldBankAccountNm != null">
+        #{oldBankAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldBankAccount != null">
+        #{oldBankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNm != null">
+        #{accountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProvinceNo != null">
+        #{accountProvinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvinceNm != null">
+        #{accountProvinceNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountCityNo != null">
+        #{accountCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCityNm != null">
+        #{accountCityNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccountNm != null">
+        #{bankAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="startFlag != null">
+        #{startFlag,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLog">
+    update GP_BankInfoChangeLog
+    <set>
+      <if test="companyId != null">
+        companyId = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="partyB != null">
+        partyB = #{partyB,jdbcType=NVARCHAR},
+      </if>
+      <if test="gpContractId != null">
+        gpContractId = #{gpContractId,jdbcType=INTEGER},
+      </if>
+      <if test="gpContractNo != null">
+        gpContractNo = #{gpContractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="changeContent != null">
+        changeContent = #{changeContent,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldAccountNm != null">
+        oldAccountNm = #{oldAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldAccountProvinceNo != null">
+        oldAccountProvinceNo = #{oldAccountProvinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oldAccountProvinceNm != null">
+        oldAccountProvinceNm = #{oldAccountProvinceNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldAccountCityNo != null">
+        oldAccountCityNo = #{oldAccountCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oldAccountCityNm != null">
+        oldAccountCityNm = #{oldAccountCityNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldBankAccountNm != null">
+        oldBankAccountNm = #{oldBankAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="oldBankAccount != null">
+        oldBankAccount = #{oldBankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNm != null">
+        accountNm = #{accountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProvinceNo != null">
+        accountProvinceNo = #{accountProvinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvinceNm != null">
+        accountProvinceNm = #{accountProvinceNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountCityNo != null">
+        accountCityNo = #{accountCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCityNm != null">
+        accountCityNm = #{accountCityNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccountNm != null">
+        bankAccountNm = #{bankAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="startFlag != null">
+        startFlag = #{startFlag,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        userCode = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLog">
+    update GP_BankInfoChangeLog
+    set companyId = #{companyId,jdbcType=INTEGER},
+      partyB = #{partyB,jdbcType=NVARCHAR},
+      gpContractId = #{gpContractId,jdbcType=INTEGER},
+      gpContractNo = #{gpContractNo,jdbcType=VARCHAR},
+      changeContent = #{changeContent,jdbcType=NVARCHAR},
+      oldAccountNm = #{oldAccountNm,jdbcType=NVARCHAR},
+      oldAccountProvinceNo = #{oldAccountProvinceNo,jdbcType=VARCHAR},
+      oldAccountProvinceNm = #{oldAccountProvinceNm,jdbcType=NVARCHAR},
+      oldAccountCityNo = #{oldAccountCityNo,jdbcType=VARCHAR},
+      oldAccountCityNm = #{oldAccountCityNm,jdbcType=NVARCHAR},
+      oldBankAccountNm = #{oldBankAccountNm,jdbcType=NVARCHAR},
+      oldBankAccount = #{oldBankAccount,jdbcType=VARCHAR},
+      accountNm = #{accountNm,jdbcType=NVARCHAR},
+      accountProvinceNo = #{accountProvinceNo,jdbcType=VARCHAR},
+      accountProvinceNm = #{accountProvinceNm,jdbcType=NVARCHAR},
+      accountCityNo = #{accountCityNo,jdbcType=VARCHAR},
+      accountCityNm = #{accountCityNm,jdbcType=NVARCHAR},
+      bankAccountNm = #{bankAccountNm,jdbcType=NVARCHAR},
+      bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      startFlag = #{startFlag,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      userName = #{userName,jdbcType=VARCHAR},
+      userCode = #{userCode,jdbcType=VARCHAR},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getGPBankInfoChangeLogId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT  TOP 1 *
+    FROM GP_BankInfoChangeLog WHERE gpContractId = #{gpContractId}
+	ORDER BY id DESC
+  </select>
+</mapper>

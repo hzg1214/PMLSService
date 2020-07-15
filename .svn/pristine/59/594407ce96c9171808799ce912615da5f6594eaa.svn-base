@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.EstateRuleMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.EstateRule">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="EstateId" property="estateId" jdbcType="VARCHAR"/>
+        <result column="RuleId" property="ruleId" jdbcType="VARCHAR"/>
+        <result column="AuthenticationKbn" property="authenticationKbn" jdbcType="INTEGER"/>
+        <result column="RelationProtectPeriod" property="relationProtectPeriod" jdbcType="INTEGER"/>
+        <result column="RelationReward" property="relationReward" jdbcType="DECIMAL"/>
+        <result column="RelationDtStart" property="relationDtStart" jdbcType="TIMESTAMP"/>
+        <result column="RelationDtEnd" property="relationDtEnd" jdbcType="TIMESTAMP"/>
+        <result column="PledgedReward" property="pledgedReward" jdbcType="DECIMAL"/>
+        <result column="PledgedDtStart" property="pledgedDtStart" jdbcType="TIMESTAMP"/>
+        <result column="PledgedDtEnd" property="pledgedDtEnd" jdbcType="TIMESTAMP"/>
+        <result column="SubscribedReward" property="subscribedReward" jdbcType="DECIMAL"/>
+        <result column="SubscribedDtStart" property="subscribedDtStart" jdbcType="TIMESTAMP"/>
+        <result column="SubscribedDtEnd" property="subscribedDtEnd" jdbcType="TIMESTAMP"/>
+        <result column="BargainReward" property="bargainReward" jdbcType="DECIMAL"/>
+        <result column="CommissionPeriod" property="commissionPeriod" jdbcType="INTEGER"/>
+        <result column="CommissionKbn" property="commissionKbn" jdbcType="INTEGER"/>
+        <result column="Commission" property="commission" jdbcType="DECIMAL"/>
+        <result column="CommissionSort" property="commissionSort" jdbcType="DECIMAL"/>
+        <result column="CommissionMemo" property="commissionMemo" jdbcType="NVARCHAR"/>
+        <result column="PayKbn" property="payKbn" jdbcType="INTEGER"/>
+        <result column="SaleKbn" property="saleKbn" jdbcType="INTEGER"/>
+        <result column="ReportDtStart" property="reportDtStart" jdbcType="TIMESTAMP"/>
+        <result column="ReportDtEnd" property="reportDtEnd" jdbcType="TIMESTAMP"/>
+        <result column="ReportKbn" property="reportKbn" jdbcType="INTEGER"/>
+        <result column="HideNumberFlg" property="hideNumberFlg" jdbcType="VARCHAR"/>
+        <result column="ReportRule" property="reportRule" jdbcType="NVARCHAR"/>
+        <result column="CommissionRule" property="commissionRule" jdbcType="NVARCHAR"/>
+        <result column="advanceReportHH" property="advanceReportHH" jdbcType="VARCHAR"/>
+        <result column="advanceReportMM" property="advanceReportMM" jdbcType="VARCHAR"/>
+        <result column="CrtEmpId" property="crtEmpId" jdbcType="INTEGER"/>
+        <result column="UptEmpId" property="uptEmpId" jdbcType="INTEGER"/>
+        <result column="DelFlg" property="delFlg" jdbcType="BIT"/>
+        <result column="CrtDt" property="crtDt" jdbcType="TIMESTAMP"/>
+        <result column="UptDt" property="uptDt" jdbcType="TIMESTAMP"/>
+        <result column="rtnCommission" property="rtnCommission" jdbcType="VARCHAR"/>
+        <result column="rtnCommissionMemo" property="rtnCommissionMemo" jdbcType="VARCHAR"/>
+        <result column="incomeSubject" property="incomeSubject" jdbcType="VARCHAR"/>
+        <result column="commissionCondition" property="commissionCondition" jdbcType="INTEGER"/>
+        <result column="commissionConditionNm" property="commissionConditionNm" jdbcType="VARCHAR"/>
+        <result column="isHbPadding" property="isHbPadding" jdbcType="BIT"/>
+        <result column="isShow" property="isShow" jdbcType="BIT"/>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    Id,EstateId,RuleId,AuthenticationKbn,RelationProtectPeriod,RelationReward,RelationDtStart,
+RelationDtEnd,PledgedReward,PledgedDtStart,PledgedDtEnd,SubscribedReward,SubscribedDtStart,SubscribedDtEnd,BargainReward,CommissionPeriod,CommissionKbn,Commission,CommissionSort,CommissionMemo,
+PayKbn,SaleKbn,ReportDtStart,ReportDtEnd,ReportKbn,HideNumberFlg,ReportRule,CommissionRule,advanceReportHH,advanceReportMM,CrtEmpId,
+UptEmpId,DelFlg,CrtDt,UptDt,rtnCommission,rtnCommissionMemo,incomeSubject,commissionCondition,isHbPadding,isShow
+  </sql>
+
+    <resultMap id="estateContractMap" type="cn.com.eju.deal.houseLinkage.estate.model.EstateContractDto">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="contractType" property="contractType" jdbcType="VARCHAR"/>
+        <result column="projectNo" property="projectNo" jdbcType="VARCHAR"/>
+        <result column="htOaNo" property="htOaNo" jdbcType="VARCHAR"/>
+        <result column="hsCode" property="hsCode" jdbcType="VARCHAR"/>
+        <result column="hsName" property="hsName" jdbcType="VARCHAR"/>
+        <result column="htDateStart" property="htDateStart" jdbcType="TIMESTAMP"/>
+        <result column="htDateEnd" property="htDateEnd" jdbcType="TIMESTAMP"/>
+        <result column="incomeSubject" property="incomeSubject" jdbcType="VARCHAR"/>
+        <result column="commissionMemo" property="commissionMemo" jdbcType="VARCHAR"/>
+        <result column="commissionMemoRemark" property="commissionMemoRemark" jdbcType="VARCHAR"/>
+        <result column="rtnCommission" property="rtnCommission" jdbcType="VARCHAR"/>
+        <result column="rtnCommissionMemo" property="rtnCommissionMemo" jdbcType="VARCHAR"/>
+        <result column="oaCreateDate" property="oaCreateDate" jdbcType="TIMESTAMP"/>
+        <result column="oapassDate" property="oapassDate" jdbcType="TIMESTAMP"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <collection property="fileList" ofType="cn.com.eju.deal.houseLinkage.estate.model.OaLnkFileReturnDto">
+            <id column="fId" property="id"/>
+            <result column="oaNo" property="oaNo"/>
+            <result column="fileUrl" property="fileUrl"/>
+            <result column="fileName" property="fileName"/>
+        </collection>
+    </resultMap>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_EstateRule
+        <where>
+            Id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+
+	<select id="selectEstateRuleInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_EstateRule
+        <where>
+            EstateId = #{estateId,jdbcType=VARCHAR}
+        </where>
+    </select>
+    
+    <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.estate.model.EstateRule"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_EstateRule (EstateId,RuleId,AuthenticationKbn,RelationProtectPeriod,RelationReward,RelationDtStart,
+RelationDtEnd,PledgedReward,PledgedDtStart,PledgedDtEnd,SubscribedReward,SubscribedDtStart,SubscribedDtEnd,BargainReward,CommissionPeriod,CommissionKbn,Commission,CommissionSort,CommissionMemo,
+PayKbn,SaleKbn,ReportDtStart,ReportDtEnd,ReportKbn,HideNumberFlg,ReportRule,CommissionRule,advanceReportHH,advanceReportMM,CrtEmpId,
+UptEmpId,DelFlg,CrtDt,UptDt,rtnCommission,rtnCommissionMemo,incomeSubject,commissionCondition,isHbPadding,isShow
+      )
+    values (#{estateId, jdbcType=VARCHAR},#{ruleId, jdbcType=VARCHAR},#{authenticationKbn, jdbcType=INTEGER},#{relationProtectPeriod, jdbcType=INTEGER},
+    #{relationReward, jdbcType=DECIMAL},#{relationDtStart, jdbcType=TIMESTAMP},
+#{relationDtEnd, jdbcType=TIMESTAMP},#{pledgedReward, jdbcType=DECIMAL},#{pledgedDtStart, jdbcType=TIMESTAMP},#{pledgedDtEnd, jdbcType=TIMESTAMP},
+#{subscribedReward, jdbcType=DECIMAL},
+#{subscribedDtStart, jdbcType=TIMESTAMP},#{subscribedDtEnd, jdbcType=TIMESTAMP},#{bargainReward, jdbcType=DECIMAL},#{commissionPeriod, jdbcType=INTEGER},
+#{commissionKbn, jdbcType=INTEGER},
+#{commission, jdbcType=DECIMAL},#{commissionSort, jdbcType=DECIMAL},#{commissionMemo, jdbcType=NVARCHAR},#{payKbn, jdbcType=INTEGER},
+#{saleKbn, jdbcType=INTEGER},#{reportDtStart, jdbcType=TIMESTAMP},
+#{reportDtEnd, jdbcType=TIMESTAMP},#{reportKbn, jdbcType=INTEGER},#{hideNumberFlg, jdbcType=VARCHAR},#{reportRule, jdbcType=NVARCHAR},
+#{commissionRule, jdbcType=NVARCHAR},
+#{advanceReportHH, jdbcType=VARCHAR},#{advanceReportMM, jdbcType=VARCHAR},
+#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg, jdbcType=BIT},#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP},
+#{rtnCommission, jdbcType=VARCHAR},#{rtnCommissionMemo, jdbcType=VARCHAR},#{incomeSubject,jdbcType=VARCHAR},#{commissionCondition, jdbcType=INTEGER},0, 0
+      )
+  </insert>
+	<!-- 查询 list -->
+    <select id='queryList' parameterType="Map" resultMap="BaseResultMap">
+        SELECT Id,EstateId,RuleId,AuthenticationKbn,RelationProtectPeriod,RelationReward,RelationDtStart,
+		RelationDtEnd,PledgedReward,PledgedDtStart,PledgedDtEnd,SubscribedReward,SubscribedDtStart,SubscribedDtEnd,BargainReward,isnull(CommissionPeriod,0) as CommissionPeriod,isnull(CommissionKbn,1481) as CommissionKbn,isnull(Commission,0) as Commission,CommissionSort,CommissionMemo,
+		PayKbn,SaleKbn,ReportDtStart,ReportDtEnd,ReportKbn,HideNumberFlg,ReportRule,CommissionRule,advanceReportHH,advanceReportMM,CrtEmpId,
+		UptEmpId,DelFlg,CrtDt,UptDt,rtnCommission,rtnCommissionMemo,incomeSubject,commissionCondition,
+		bdc.dicValue as commissionConditionNm,isHbPadding
+        FROM LNK_EstateRule 
+        	LEFT JOIN BAS_DictionaryValue bdc on bdc.dicCode = LNK_EstateRule.commissionCondition
+        		AND typeId = 219 and delFlag = 'N'
+        <where>
+            DelFlg=0
+            <if test="estateId != null and estateId != ''">
+                <![CDATA[AND EstateId=#{estateId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="ruleId != null and ruleId != ''">
+                <![CDATA[AND RuleId = #{ruleId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="authenticationKbn != null and authenticationKbn != ''">
+                <![CDATA[AND AuthenticationKbn = #{authenticationKbn, jdbcType=Integer}]]>
+            </if>
+            <if test="relationProtectPeriod != null and relationProtectPeriod != ''">
+                <![CDATA[AND RelationProtectPeriod = #{relationProtectPeriod,jdbcType=DECIMAL}]]>
+            </if>
+            <if test="relationReward != null and relationReward != ''">
+                <![CDATA[AND RelationReward = #{relationReward,jdbcType=DECIMAL}]]>
+            </if>
+        </where>
+    </select>
+    <update id="update" parameterType="cn.com.eju.deal.houseLinkage.estate.model.EstateRule">
+        update LNK_EstateRule
+        <set>
+            <if test="estateId != null">
+			EstateId = #{estateId, jdbcType=VARCHAR},
+			</if>
+			<if test="ruleId != null">
+			RuleId = #{ruleId, jdbcType=VARCHAR},
+			</if>
+			<if test="authenticationKbn != null">
+			AuthenticationKbn = #{authenticationKbn, jdbcType=INTEGER},
+			</if>
+			<if test="relationProtectPeriod != null">
+			RelationProtectPeriod = #{relationProtectPeriod, jdbcType=INTEGER},
+			</if>
+			<!-- <if test="relationReward != null"> -->
+			RelationReward = #{relationReward, jdbcType=DECIMAL},
+			<!-- </if> -->
+			<if test="relationDtStart != null">
+			RelationDtStart = #{relationDtStart, jdbcType=TIMESTAMP},
+			</if>
+			<if test="relationDtEnd != null">
+			RelationDtEnd = #{relationDtEnd, jdbcType=TIMESTAMP},
+			</if>
+			<!-- <if test="pledgedReward != null"> -->
+			PledgedReward = #{pledgedReward, jdbcType=DECIMAL},
+			<!-- </if> -->
+			<if test="pledgedDtStart != null">
+			PledgedDtStart = #{pledgedDtStart, jdbcType=TIMESTAMP},
+			</if>
+			<if test="pledgedDtEnd != null">
+			PledgedDtEnd = #{pledgedDtEnd, jdbcType=TIMESTAMP},
+			</if>
+			<!-- <if test="subscribedReward != null"> -->
+			SubscribedReward = #{subscribedReward, jdbcType=DECIMAL},
+			<!-- </if> -->
+			<if test="subscribedDtStart != null">
+			SubscribedDtStart = #{subscribedDtStart, jdbcType=TIMESTAMP},
+			</if>
+			<if test="subscribedDtEnd != null">
+			SubscribedDtEnd = #{subscribedDtEnd, jdbcType=TIMESTAMP},
+			</if>
+			<!-- <if test="bargainReward != null"> -->
+			BargainReward = #{bargainReward, jdbcType=DECIMAL},
+			<!-- </if> -->
+			<if test="commissionPeriod != null">
+			CommissionPeriod = #{commissionPeriod, jdbcType=INTEGER},
+			</if>
+			<if test="commissionKbn != null">
+			CommissionKbn = #{commissionKbn, jdbcType=INTEGER},
+			</if>
+			<if test="commission != null">
+			Commission = #{commission, jdbcType=DECIMAL},
+			</if>
+			<if test="commissionSort != null">
+			CommissionSort = #{commissionSort, jdbcType=DECIMAL},
+			</if>
+			<if test="commissionMemo != null">
+			CommissionMemo = #{commissionMemo, jdbcType=NVARCHAR},
+			</if>
+			<if test="payKbn != null">
+			payKbn = #{payKbn, jdbcType=INTEGER},
+			</if>
+			<if test="saleKbn != null">
+			saleKbn = #{saleKbn, jdbcType=INTEGER},
+			</if>
+			<if test="reportDtStart != null">
+			reportDtStart = #{reportDtStart, jdbcType=TIMESTAMP},
+			</if>
+			<if test="reportDtEnd != null">
+			reportDtEnd = #{reportDtEnd, jdbcType=TIMESTAMP},
+			</if>
+			<if test="reportKbn != null">
+			reportKbn = #{reportKbn, jdbcType=INTEGER},
+			</if>
+			<if test="hideNumberFlg != null">
+			hideNumberFlg = #{hideNumberFlg, jdbcType=VARCHAR},
+			</if>
+			<if test="reportRule != null">
+			reportRule = #{reportRule, jdbcType=NVARCHAR},
+			</if>
+			<if test="commissionRule != null">
+			commissionRule = #{commissionRule, jdbcType=NVARCHAR},
+			</if>
+			<if test="advanceReportHH != null">
+			advanceReportHH = #{advanceReportHH, jdbcType=VARCHAR},
+			</if>
+			<if test="advanceReportMM != null">
+			advanceReportMM = #{advanceReportMM, jdbcType=VARCHAR},
+			</if>
+			<if test="uptEmpId != null">
+			uptEmpId = #{uptEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="delFlg != null">
+			delFlg = #{delFlg, jdbcType=BIT},
+			</if>
+			<if test="uptDt != null">
+			uptDt = #{uptDt, jdbcType=TIMESTAMP},
+			</if>
+			<if test="rtnCommission != null">
+			rtnCommission = #{rtnCommission, jdbcType=VARCHAR},
+			</if>
+			<if test="rtnCommissionMemo != null">
+			rtnCommissionMemo = #{rtnCommissionMemo, jdbcType=VARCHAR},
+			</if>
+			<if test="incomeSubject != null">
+			incomeSubject = #{incomeSubject, jdbcType=VARCHAR},
+			</if>
+			<if test="commissionCondition != null">
+			commissionCondition = #{commissionCondition, jdbcType=INTEGER}
+			</if>
+        </set>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryHtRecord" parameterType="Map" resultType="cn.com.eju.deal.houseLinkage.estate.model.EstateRuleHisDto">
+        SELECT * FROM (
+            SELECT  ler.EstateId AS estateId ,
+                    ler.rtnCommissionMemo ,
+                    ler.rtnCommission ,
+                    ler.commissionMemo ,
+                    bdc.dicValue AS commissionConditionVal ,
+                    ler.incomeSubject AS incomeSubject ,
+                    le.cooperationDtStart AS cooperationDtStart ,
+                    le.cooperationDtEnd AS cooperationDtEnd
+            FROM    LNK_EstateRule ler
+                    LEFT JOIN LNK_Estate le ON le.EstateId = ler.EstateId
+                                               AND le.DelFlg = '0'
+                    LEFT JOIN BAS_DictionaryValue bdc ON bdc.dicCode = ler.commissionCondition
+                                                         AND typeId = 219
+                                                         AND delFlag = 'N'
+            WHERE   ler.delFlg = 0 AND ler.isShow=1
+                <if test="estateId != null and estateId != ''">
+                    AND ler.EstateId=#{estateId}
+                </if>
+            UNION
+            SELECT  EstateId AS estateId ,
+                    rtnCommissionMemo ,
+                    rtnCommission ,
+                    commissionMemo ,
+                    bdc.dicValue AS commissionConditionVal ,
+                    incomeSubject ,
+                    cooperationDtStart ,
+                    cooperationDtEnd
+            FROM    LNK_EstateRuleHis
+                    LEFT JOIN BAS_DictionaryValue bdc ON bdc.dicCode = LNK_EstateRuleHis.commissionConditionVal
+                                                         AND bdc.typeId = 219
+                                                         AND bdc.delFlag = 'N'
+            WHERE   LNK_EstateRuleHis.delFlag = 0 and LNK_EstateRuleHis.isShow=1
+                <if test="estateId != null and estateId != ''">
+                    AND LNK_EstateRuleHis.EstateId=#{estateId}
+                </if>
+            ) tab ORDER BY tab.cooperationDtStart DESC
+    </select>
+
+	<!--<select id='queryListNow' parameterType="Map" resultType="cn.com.eju.deal.houseLinkage.estate.model.EstateRuleHisDto">
+       SELECT ler.id,ler.EstateId as estateId,ler.rtnCommissionMemo,ler.rtnCommission,ler.commissionMemo,
+        	bdc.dicValue AS commissionConditionVal,ler.incomeSubject as incomeSubject,le.cooperationDtStart as cooperationDtStart,le.cooperationDtEnd as cooperationDtEnd
+        FROM LNK_EstateRule  ler
+        	left join LNK_Estate le on le.EstateId = ler.EstateId and le.DelFlg ='0'
+        	LEFT JOIN BAS_DictionaryValue bdc on bdc.dicCode = ler.commissionCondition
+        		AND typeId = 219 and delFlag = 'N'
+        <where>
+            ler.delFlg=0
+            <if test="estateId != null and estateId != ''">
+                AND ler.EstateId=#{estateId}
+            </if>
+            order by ler.id desc 
+        </where>
+    </select>
+	<select id='queryListHistory' parameterType="Map" resultType="cn.com.eju.deal.houseLinkage.estate.model.EstateRuleHisDto">
+        SELECT id,EstateId as estateId,rtnCommissionMemo,rtnCommission,commissionMemo,bdc.dicValue as commissionConditionVal,incomeSubject,cooperationDtStart,cooperationDtEnd
+        FROM LNK_EstateRuleHis 
+        	LEFT JOIN BAS_DictionaryValue bdc on bdc.dicCode = LNK_EstateRuleHis.commissionConditionVal
+        		AND bdc.typeId = 219 and bdc.delFlag = 'N'
+        <where>
+            LNK_EstateRuleHis.delFlag=0
+            <if test="estateId != null and estateId != ''">
+                AND LNK_EstateRuleHis.EstateId=#{estateId}
+            </if>
+            order by LNK_EstateRuleHis.id desc 
+        </where>
+    </select>-->
+    
+    <select id="queryDyRecord" parameterType="Map" resultType="cn.com.eju.deal.houseLinkage.estate.model.EstateDyRecord">
+        SELECT id,estateId,projectNo,dyStartDate,dyEndDate,dyAmount,crtDt,delFlg,dyscale
+        FROM LNK_EstateDyRecord
+        WHERE delFlg=0 AND estateId = #{estateId}
+    </select>
+
+    <select id="querySrlHtRecord" parameterType="Map" resultMap="estateContractMap">
+        SELECT
+        t1.*,srlhtOaNo htOaNo
+        ,t2.id fId
+        ,t2.oaNo
+        ,replace(t2.fileCreateDay,'-','/')+'/'+t2.fileId AS fileUrl
+        ,t2.fileName
+        FROM LNK_Estate_Srlht t1
+        LEFT JOIN OaLnkFileReturn t2 on t1.srlhtOaNo = t2.oaNo AND t1.fileId = t2.fileNewId
+        WHERE t1.delFlag=0 AND t1.projectNo = #{projectNo}
+        order by t1.id desc
+    </select>
+
+    <select id="queryJCQRHRecord" parameterType="Map" resultMap="estateContractMap">
+        SELECT
+        t1.*
+        ,t2.id fId
+        ,t2.oaNo
+        ,replace(t2.fileCreateDay,'-','/')+'/'+t2.fileId AS fileUrl
+        ,t2.fileName
+        FROM LNK_Estate_JCQRH t1
+        LEFT JOIN OaLnkFileReturn t2 on t1.htOaNo = t2.oaNo AND t1.fileId = t2.fileNewId
+        WHERE t1.delFlag=0 AND t1.projectNo = #{projectNo}
+        order by t1.id desc
+    </select>
+
+
+</mapper>

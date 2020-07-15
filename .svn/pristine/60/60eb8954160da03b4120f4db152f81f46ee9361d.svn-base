@@ -1,0 +1,716 @@
+package cn.com.eju.deal.houseLinkage.estate.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import cn.com.eju.deal.base.code.model.Code;
+import cn.com.eju.deal.base.controller.BaseController;
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.support.SystemParam;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.deal.dto.contract.ContractDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.EstateDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.EstateInfoDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.EstateRuleDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.EstateSearchResultDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.EstateSupportDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.EstateTypeDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.LnkYjPlanDto;
+import cn.com.eju.deal.dto.houseLinkage.estate.PhotoDto;
+import cn.com.eju.deal.dto.user.UserDto;
+import cn.com.eju.deal.houseLinkage.estate.model.Estate;
+import cn.com.eju.deal.houseLinkage.estate.service.EstateService;
+import cn.com.eju.deal.user.api.impl.UserAPIImpl;
+import cn.com.eju.deal.user.model.Group;
+import cn.com.eju.deal.user.model.User;
+
+/**
+ * 服务层
+ *
+ * @author qianwei
+ * @date 2016年3月22日 下午6:05:44
+ */
+
+@RestController
+@RequestMapping(value = "estate")
+public class EstateController extends BaseController {
+
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Resource(name = "estatetService")
+    private EstateService estateService;
+
+    @Resource
+    private UserAPIImpl userAPIImpl;
+
+    /**
+     * 查询-对象
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String getById(@PathVariable int id) {
+        ResultData<EstateInfoDto> resultData = new ResultData<EstateInfoDto>();
+        EstateInfoDto estateInfoDto = null;
+        try {
+            estateInfoDto = estateService.getById(id);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getById", "", null, "", "查询-对象", e);
+        }
+
+        resultData.setReturnData(estateInfoDto);
+
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/lastProject/{param}", method = RequestMethod.GET)
+    public String getLastProjectByCity(@PathVariable String param){
+        ResultData<Estate> resultData = new ResultData<Estate>();
+        try
+        {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = estateService.getLastProjectByCity(queryParam);
+        }
+        catch (Exception e)
+        {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getLastProjectByCity", "", null, "",
+                    "查询-城市的下一个需要审批项目", e);
+        }
+        return resultData.toString();
+    }
+    /**
+     * 查询-list
+     *
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/q/{param}", method = RequestMethod.GET)
+    public String list(@PathVariable String param) {
+        //构建返回
+        ResultData<List<EstateSearchResultDto>> resultData = new ResultData<List<EstateSearchResultDto>>();
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+
+        //权限控制,参数转换
+        authParam(queryParam);
+
+        try {
+            resultData = estateService.queryList(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "list", "", null, "", "查询-list", e);
+        }
+
+        return resultData.toString();
+    }
+
+    /**
+     * 获取日期类型列表
+     *
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/dateTypeKbn/{dateTypeKbn}", method = RequestMethod.GET)
+    public String getDateKbnList(@PathVariable String dateTypeKbn) {
+        //构建返回
+        ResultData<List<Code>> dateKbnResultData = new ResultData<>();
+        List<Code> codeDtos = SystemParam.getCodeListByKey(dateTypeKbn);
+        dateKbnResultData.setReturnData(codeDtos);
+        return dateKbnResultData.toString();
+    }
+
+    /**
+     * 查询部门列表
+     *
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/groupId/{groupId}", method = RequestMethod.GET)
+    public String getGroupList(@PathVariable String groupId) {
+        //构建返回
+        ResultData<List<Group>> groupResultData = new ResultData<List<Group>>();
+        try {
+            groupResultData = this.userAPIImpl.selectAllChildrenByGroupId(Integer.valueOf(groupId));
+        } catch (Exception e) {
+            groupResultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getGroupList", "", null, "", "查询部门列表", e);
+        }
+        //ResultData<List<User>> userResultData= this.userAPIImpl.getUserByGroupId(1, Integer.valueOf(groupId));
+        return groupResultData.toString();
+    }
+
+    /**
+     * @return
+     * @Title: getSceneUserList
+     * @Description: 获取案场的部门
+     */
+    @RequestMapping(value = "/scene/{cityNo}", method = RequestMethod.GET)
+    public String getSceneUserList(@PathVariable String cityNo) {
+        //构建返回
+        ResultData<List<UserDto>> groupResultData = new ResultData<List<UserDto>>();
+        try {
+            groupResultData = this.estateService.getHouseLinkUserList(cityNo);
+        } catch (Exception e) {
+            groupResultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getSceneUserList", "", null, "", "获取案场的部门", e);
+        }
+        return groupResultData.toString();
+    }
+
+    /**
+     * @return
+     * @Title: getSceneUserList
+     * @Description: 获取案场的部门
+     */
+    @RequestMapping(value = "/scene1/{param}", method = RequestMethod.GET)
+    public String getProjectLoaderList(@PathVariable String param) {
+        //构建返回
+        ResultData<List<UserDto>> groupResultData = new ResultData<List<UserDto>>();
+        try {
+            Map<?, ?> queryParam = JsonUtil.parseToObject(param, Map.class);
+            queryParam.remove("orderName");
+            groupResultData = this.estateService.getHouseLinkUserList2(queryParam);
+        } catch (Exception e) {
+            groupResultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getSceneUserList", "", null, "", "获取案场的部门", e);
+        }
+        return groupResultData.toString();
+    }
+
+    /**
+     * 查询员工列表
+     *
+     * @param param 查询条件
+     * @return
+     */
+    @RequestMapping(value = "/user/{groupId}", method = RequestMethod.GET)
+    public String getUserList(@PathVariable String groupId) {
+        //构建返回
+        ResultData<List<User>> userResultData = new ResultData<>();
+        try {
+            userResultData = this.userAPIImpl.getUserByGroupId(1, Integer.valueOf(groupId));
+        } catch (Exception e) {
+            userResultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getSceneUserList", "", null, "", "查询员工列表", e);
+        }
+        return userResultData.toString();
+    }
+
+    /**
+     * 创建
+     *
+     * @param jsonDto 对象字符串
+     * @return
+     */
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ResultData<?> create(@RequestBody String jsonDto) {
+
+        //构建返回
+        ResultData<?> resultData = new ResultData<>();
+
+        EstateInfoDto estateInfoDto = JsonUtil.parseToObject(jsonDto, EstateInfoDto.class);
+        try {
+            int count = estateService.create(estateInfoDto);
+            if (count <= 0) {
+                resultData.setFail();
+                if (count == -2) {
+                    resultData.setReturnMsg("不能添加项目名称、城市、合作方名称重复的楼盘！");
+                }
+            }
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("Estate", "EstateController", "create", jsonDto, 0, "", "创建", e);
+
+        }
+        return resultData;
+    }
+
+    /**
+     * @param id
+     * @return
+     * @Title: getEstateDetailById
+     * @Description: 根据自增楼盘编号获取楼盘基本信息和楼盘详情
+     */
+    @RequestMapping(value = "/qd/{id}/", method = RequestMethod.GET)
+    public String getEstateDetailById(@PathVariable int id) {
+        //构建返回
+        ResultData<EstateDto> resultData = new ResultData<>();
+        EstateDto estateDto = new EstateDto();
+        try {
+            estateDto = this.estateService.getEstateDetailById(id);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getEstateDetailById", "", null, "", "", e);
+        }
+        resultData.setReturnData(estateDto);
+        return resultData.toString();
+    }
+
+    /**
+     * @param param
+     * @return
+     * @Title: getEstateRuleByEstateId
+     * @Description: 根据楼盘编号获取联动规则
+     */
+    @RequestMapping(value = "/qru/{param}/", method = RequestMethod.GET)
+    public String getEstateRuleByEstateId(@PathVariable("param") String param) {
+        //构建返回
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        ResultData<EstateRuleDto> resultData = new ResultData<EstateRuleDto>();
+        try {
+            resultData = this.estateService.getEstateRuleByEstateId(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getEstateRuleByEstateId", "", null, "", "根据自增楼盘编号获取楼盘基本信息和楼盘详情", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * @param param
+     * @return
+     * @Title: getEstateTypeByEstateId
+     * @Description: 根据楼盘编号获取在售户型
+     */
+    @RequestMapping(value = "/qt/{param}/", method = RequestMethod.GET)
+    public String getEstateTypeByEstateId(@PathVariable String param) {
+        //构建返回
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        ResultData<List<EstateTypeDto>> resultData = new ResultData<List<EstateTypeDto>>();
+        try {
+            resultData = this.estateService.getEstateTypeByEstateId(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getEstateTypeByEstateId", "", null, "", "根据楼盘编号获取在售户型", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * @param param
+     * @return
+     * @Title: getEstateSupportByEstateId
+     * @Description: 根据楼盘编号获取周边配套
+     */
+    @RequestMapping(value = "/qs/{param}/", method = RequestMethod.GET)
+    public String getEstateSupportByEstateId(@PathVariable String param) {
+        //构建返回
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        ResultData<List<EstateSupportDto>> resultData = new ResultData<List<EstateSupportDto>>();
+        try {
+            resultData = this.estateService.getEstateSupportByEstateId(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getEstateSupportByEstateId", "", null, "", "根据楼盘编号获取周边配套", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * @param param
+     * @return
+     * @Title: getPhotoByEstateId
+     * @Description: 根据楼盘编号获取楼盘图片
+     */
+    @RequestMapping(value = "/qp/{param}/", method = RequestMethod.GET)
+    public String getPhotoByEstateId(@PathVariable String param) {
+        //构建返回
+        @SuppressWarnings("unchecked")
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        ResultData<List<PhotoDto>> resultData = new ResultData<List<PhotoDto>>();
+        try {
+            resultData = this.estateService.getPhotoByEstateId(queryParam);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getPhotoByEstateId", "", null, "", "根据楼盘编号获取楼盘图片失败", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 更新
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResultData<?> update(@RequestBody String jsonDto) {
+
+        //构建返回
+        ResultData<?> resultData = new ResultData<>();
+
+        EstateInfoDto estateInfoDto = JsonUtil.parseToObject(jsonDto, EstateInfoDto.class);
+
+        int count = 0;
+        try {
+            count = estateService.update(estateInfoDto);
+            if (count <= 0) {
+                resultData.setFail();
+                if (count == -2) {
+                    resultData.setReturnMsg("不能添加项目名称、城市、合作方名称重复的楼盘！");
+                }
+            }
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "update", "", null, "", "更新失败", e);
+        }
+
+        return resultData;
+    }
+
+    /**
+     * 删除
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/{id}/{updateId}", method = RequestMethod.DELETE)
+    public String delete(@PathVariable int id, @PathVariable int updateId) {
+        //构建返回
+        ResultData<ContractDto> resultData = new ResultData<ContractDto>();
+
+        int count = 0;
+        try {
+            count = estateService.delete(id, updateId);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "delete", "", null, "", "删除失败", e);
+        }
+
+        if (count <= 0) {
+            resultData.setFail();
+        }
+
+        return resultData.toString();
+    }
+
+    /**
+     * @param jsonDto
+     * @return
+     * @Title: createEstateType
+     * @Description: 添加在售户型
+     */
+    @RequestMapping(value = "/ct", method = RequestMethod.POST)
+    public String createEstateType(@RequestBody String jsonDto) {
+        //构建返回
+        ResultData<EstateInfoDto> resultData = new ResultData<EstateInfoDto>();
+        EstateInfoDto estateInfoDto = JsonUtil.parseToObject(jsonDto, EstateInfoDto.class);
+        try {
+            estateService.createEstateType(estateInfoDto);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "createEstateType", "", null, "", "添加在售户型", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * @param typeId
+     * @return
+     * @Title: getEstateTypeById
+     * @Description: 根据编号获取在售户型明细
+     */
+    @RequestMapping(value = "/qtid/{typeId}/", method = RequestMethod.GET)
+    public String getEstateTypeById(@PathVariable int typeId) {
+        //构建返回
+        ResultData<EstateTypeDto> resultData = new ResultData<EstateTypeDto>();
+        try {
+            resultData = this.estateService.getEstateTypeById(typeId);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getEstateTypeById", "", null, "", "根据编号获取在售户型明细", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 更新
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/ut", method = RequestMethod.PUT)
+    public String editEstateType(@RequestBody String jsonDto) {
+        //构建返回
+        ResultData<EstateInfoDto> resultData = new ResultData<EstateInfoDto>();
+        EstateInfoDto estateInfoDto = JsonUtil.parseToObject(jsonDto, EstateInfoDto.class);
+        try {
+            estateService.editEstateType(estateInfoDto);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "editEstateType", "", null, "", "更新", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 删除
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "dt/{id}/{updateId}", method = RequestMethod.DELETE)
+    public String delEstateType(@PathVariable int id, @PathVariable int updateId) {
+        //构建返回
+        ResultData<EstateTypeDto> resultData = new ResultData<EstateTypeDto>();
+        int count = 0;
+        try {
+            count = estateService.delEstateType(id, updateId);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("houseLinkage", "EstateController", "delEstateType", "", null, "", "删除失败", e);
+        }
+        if (count <= 0) {
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * 查询归属项目部
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/getProjectDepartment/{param}", method = RequestMethod.GET)
+    public String getProjectDepartment(@PathVariable String param) {
+        //构建返回
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        ResultData<List<EstateDto>> resultData = new ResultData<List<EstateDto>>();
+        List<EstateDto> list = estateService.getProjectDepartment(queryParam);
+        if (list != null) {
+            resultData.setReturnData(list);
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/selectFromOpCheck/{opEstateId}/{estId}", method = RequestMethod.GET)
+    public String selectFromOpCheck(@PathVariable String opEstateId, @PathVariable Integer estId) {
+        //构建返回
+        ResultData<Integer> resultData = new ResultData<Integer>();
+
+        try {
+            List<Estate> list = estateService.queryByOpEstateId(opEstateId);
+            if (!list.isEmpty()) {
+                if (!(list.size() == 1 && list.get(0).getId().equals(estId))) {
+                    resultData.setFail("该楼盘已建项，请选择其他楼盘！");
+                }
+            }
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("estate", "EstateController", "selectFromOpCheck", "", 0, "", "验证处理失败", e);
+        }
+
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/queryCountryList/", method = RequestMethod.GET)
+    public String queryCountryList() {
+        //构建返回
+        ResultData<List<Map<String, String>>> resultData = new ResultData<>();
+
+        try {
+            List<Map<String, String>> list = estateService.queryCountryList();
+            resultData.setReturnData(list);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("estate", "EstateController", "queryCountryList", "", 0, "", "查询国家列表失败", e);
+        }
+
+        return resultData.toString();
+    }
+
+    /**
+     * 查询大客户
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getBigCustomerList", method = RequestMethod.GET)
+    public String getBigCustomerList() {
+        //构建返回
+        ResultData resultData = null;
+        try {
+            resultData = this.estateService.getBigCustomerList();
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+            }
+            resultData.setFail();
+            logger.error("estate", "EstateController", "getBigCustomerList", "", null, "", "", e);
+        }
+        return resultData.toString();
+    }
+
+    /**
+     * desc:获取垫佣甲方列表
+     * 2019年4月24日
+     * author:zhenggang.Huang
+     */
+    @RequestMapping(value = "/getMattressNail", method = RequestMethod.GET)
+    public String getMattressNail() {
+        //构建返回
+        ResultData resultData = null;
+        try {
+            resultData = this.estateService.getMattressNail();
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+            }
+            resultData.setFail();
+            logger.error("estate", "EstateController", "getMattressNail", "", null, "", "", e);
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/getEstateNmList/{param}", method = RequestMethod.GET)
+    public String getEstateNmList(@PathVariable String param) {
+        //构建返回
+        Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+        ResultData<List<String>> resultData = new ResultData<>();
+
+        try {
+            List<String> list = estateService.getEstateNmList(queryParam);
+            resultData.setReturnData(list);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("estate", "EstateController", "getEstateNmList", "", 0, "", "查询楼盘名称失败", e);
+        }
+
+        return resultData.toString();
+    }
+
+    /**
+     * desc:项目-佣金方案列表
+     * 2020年2月28日
+     */
+    @RequestMapping(value = "/getYjPlanByProjectNo/{param}", method = RequestMethod.GET)
+    public String getYjPlanByProjectNo(@PathVariable String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = estateService.getYjPlanByProjectNo(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+            }
+            resultData.setFail();
+            logger.error("estate", "EstateController", "getYjPlanByProjectNo", "", 0, "", "查询佣金方案列表失败", e);
+        }
+        return resultData.toString();
+    }
+
+
+    @RequestMapping(value = "/getProgrammeList/{param}", method = RequestMethod.GET)
+    public String getProgrammeList(@PathVariable String param) {
+        ResultData resultData = new ResultData();
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = estateService.getProgrammeList(reqMap);
+        } catch (Exception e) {
+            logger.error("查询getProgrammeList佣金方案异常，param:" + param, e);
+            resultData.setFail();
+            logger.error("estate", "EstateController", "getProgrammeList", param,
+                    0, "", "查询getProgrammeList佣金方案列表失败", e);
+        }
+        return resultData.toString();
+    }
+    
+    /**
+     * desc:保存/编辑-佣金方案
+     * 2020年3月2日
+     */
+    @RequestMapping(value = "/saveYjPlanInfo", method = RequestMethod.POST)
+    public String saveYjPlanInfo(@RequestBody String param) {
+    	LnkYjPlanDto lnkYjPlanDto = JsonUtil.parseToObject(param, LnkYjPlanDto.class);
+        //构建返回
+        ResultData<LnkYjPlanDto> resultData = new ResultData<>();
+        try {
+            resultData = estateService.saveYjPlanInfo(lnkYjPlanDto);
+        } catch (Exception e) {
+            resultData.setFail();
+            logger.error("estate", "EstateController", "getSignDetail", "", null, "", "保存佣金方案失败", e);
+        }
+
+        return resultData.toString();
+    }
+
+
+    /**
+     * desc:项目-详情信息
+     * 2020年3月04日
+     */
+    @RequestMapping(value = "/getLnkYjPlanDto/{planId}", method = RequestMethod.GET)
+    public String getYjPlanByProjectNo(@PathVariable Integer planId) {
+        ResultData resultData = null;
+        try {
+            resultData = estateService.getLnkYjPlanDto(planId);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+            }
+            resultData.setFail();
+            logger.error("estate", "EstateController", "getYjPlanByProjectNo", "", 0, "", "查询佣金方案列表失败", e);
+        }
+        return resultData.toString();
+    }
+    
+    /**
+     * desc:项目-佣金方案日志列表
+     * 2020年2月28日
+     */
+    @RequestMapping(value = "/queryChangeLogList/{param}", method = RequestMethod.GET)
+    public String queryChangeLogList(@PathVariable String param) {
+        ResultData resultData = null;
+        Map<String, Object> reqMap = JsonUtil.parseToObject(param, Map.class);
+        try {
+            resultData = estateService.queryChangeLogList(reqMap);
+        } catch (Exception e) {
+            if (resultData == null) {
+                resultData = new ResultData();
+            }
+            resultData.setFail();
+            logger.error("estate", "EstateController", "queryChangeLogList", "", 0, "", "查询佣金方案日志列表失败", e);
+        }
+        return resultData.toString();
+    }
+    
+    /**
+     * @return
+     * @Title: getProjectLeaderSelList
+     * @Description: 项目负责人
+     */
+    @RequestMapping(value = "/getProjectLeaderSelList/{param}", method = RequestMethod.GET)
+    public String getProjectLeaderSelList(@PathVariable String param) {
+        //构建返回
+    	ResultData<List<UserDto>> groupResultData = new ResultData<List<UserDto>>();
+        try {
+            Map<?, ?> queryParam = JsonUtil.parseToObject(param, Map.class);
+            queryParam.remove("orderName");
+            groupResultData = this.estateService.getProjectLeaderSelList(queryParam);
+        } catch (Exception e) {
+            groupResultData.setFail();
+            logger.error("houseLinkage", "EstateController", "getProjectLeaderSelList", "", null, "", "获取项目列表失败", e);
+        }
+        return groupResultData.toString();
+    }
+
+}

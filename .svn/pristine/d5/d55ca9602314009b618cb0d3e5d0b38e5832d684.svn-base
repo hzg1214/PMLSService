@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.Report.dao.MembershipMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.Report.model.Membership">
+        <result column="rowNum" property="rowNum" jdbcType="INTEGER"/>
+        <result column="regionName" property="regionName" jdbcType="VARCHAR"/>
+        <result column="areaCityName" property="areaCityName" jdbcType="VARCHAR"/>
+        <result column="performanceCity" property="performanceCity" jdbcType="VARCHAR"/>
+        <result column="performanceDepartment" property="performanceDepartment" jdbcType="VARCHAR"/>
+        <result column="performanceCenter" property="performanceCenter" jdbcType="VARCHAR"/>
+        <result column="performancePeople" property="performancePeople" jdbcType="VARCHAR"/>
+        <result column="companyNo" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="companyName" property="companyName" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="legalPerson" property="legalPerson" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="businessLicenseCompanyAddress" property="businessLicenseCompanyAddress" jdbcType="VARCHAR"/>
+        <result column="businessLicenseNo" property="businessLicenseNo" jdbcType="VARCHAR"/>
+        <result column="businessLicenseType" property="businessLicenseType" jdbcType="VARCHAR"/>
+        <result column="storeNo" property="storeNo" jdbcType="VARCHAR"/>
+        <result column="storeName" property="storeName" jdbcType="VARCHAR"/>
+        <result column="storeCityName" property="storeCityName" jdbcType="VARCHAR"/>
+        <result column="districtName" property="districtName" jdbcType="VARCHAR"/>
+        <result column="storeGroupName" property="storeGroupName" jdbcType="VARCHAR"/>
+        <result column="addressDetail" property="addressDetail" jdbcType="VARCHAR"/>
+        <result column="storeSizeScaleName" property="storeSizeScaleName" jdbcType="VARCHAR"/>
+        <result column="businessPlaceTypeName" property="businessPlaceTypeName" jdbcType="VARCHAR"/>
+        <result column="fyAccount" property="fyAccount" jdbcType="VARCHAR"/>
+        <result column="linkageSituation" property="linkageSituation" jdbcType="VARCHAR"/>
+        <result column="brandName" property="brandName" jdbcType="VARCHAR"/>
+        <result column="agentNum" property="agentNum" jdbcType="VARCHAR"/>
+        <result column="businessStatus" property="businessStatus" jdbcType="VARCHAR"/>
+        <result column="gpContractNo" property="gpContractNo" jdbcType="VARCHAR"/>
+        <result column="contractType" property="contractType" jdbcType="VARCHAR"/>
+        <result column="partyBNm" property="partyBNm" jdbcType="VARCHAR"/>
+        <result column="partyBTel" property="partyBTel" jdbcType="VARCHAR"/>
+        <result column="accountNm" property="accountNm" jdbcType="VARCHAR"/>
+        <result column="bankAccountNm" property="bankAccountNm" jdbcType="VARCHAR"/>
+        <result column="accountProvinceCityNm" property="accountProvinceCityNm" jdbcType="VARCHAR"/>
+        <result column="bankAccount" property="bankAccount" jdbcType="VARCHAR"/>
+        <result column="gpAgreementNo" property="gpAgreementNo" jdbcType="VARCHAR"/>
+        <result column="dateLifeStart" property="dateLifeStart" jdbcType="VARCHAR"/>
+        <result column="dateLifeEnd" property="dateLifeEnd" jdbcType="VARCHAR"/>
+        <result column="storeCnt" property="storeCnt" jdbcType="VARCHAR"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="VARCHAR"/>
+        <result column="performDate" property="performDate" jdbcType="VARCHAR"/>
+        <result column="contractCheckStatusName" property="contractCheckStatusName" jdbcType="VARCHAR"/>
+        <result column="isFirst" property="isFirst" jdbcType="VARCHAR"/>
+        <result column="gpContractStopNo" property="gpContractStopNo" jdbcType="VARCHAR"/>
+        <result column="stopType" property="stopType" jdbcType="VARCHAR"/>
+        <result column="stopDate" property="stopDate" jdbcType="VARCHAR"/>
+        <result column="approvePassDate" property="approvePassDate" jdbcType="VARCHAR"/>
+        <result column="stopApproveStatus" property="stopApproveStatus" jdbcType="VARCHAR"/>
+        <result column="depositFee" property="depositFee" jdbcType="VARCHAR"/>
+        <result column="isArrival" property="isArrival" jdbcType="VARCHAR"/>
+        <result column="pastTrialDate" property="pastTrialDate" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="userCode" property="userCode" jdbcType="VARCHAR"/>
+        <result column="storeDateCreate" property="storeDateCreate" jdbcType="VARCHAR"/>
+        <result column="expandCommissioner" property="expandCommissioner" jdbcType="VARCHAR"/>
+        <result column="expandCommissionerNum" property="expandCommissionerNum" jdbcType="VARCHAR"/>
+        <result column="expandManager" property="expandManager" jdbcType="VARCHAR"/>
+        <result column="expandManagerNum" property="expandManagerNum" jdbcType="VARCHAR"/>
+        <result column="centerLeaderName" property="centerLeaderName" jdbcType="VARCHAR"/>
+        <result column="centerLeaderCode" property="centerLeaderCode" jdbcType="VARCHAR"/>
+        <result column="areaGroupName" property="areaGroupName" jdbcType="VARCHAR"/>
+        <result column="centerGroupName" property="centerGroupName" jdbcType="VARCHAR"/>
+        <result column="groupName" property="groupName" jdbcType="VARCHAR"/>
+        <result column="maintainerName" property="maintainerName" jdbcType="VARCHAR"/>
+        <result column="maintainer" property="maintainer" jdbcType="VARCHAR"/>
+        <result column="dateMtcStart" property="dateMtcStart" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <select id="queryList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+        ROW_NUMBER() OVER(ORDER BY v.areaCityCode,c.id,gp.gpContractNo,s.Id) AS rowNum,
+        v.qyName AS regionName,
+        v.areaCityName AS areaCityName,
+        v.areaCityName AS performanceCity,
+        v.sybName AS performanceDepartment ,
+        v.centerGroupName AS performanceCenter ,
+        v.expenderName AS performancePeople,
+        v.CompanyNo AS companyNo,
+        gp.partyB AS companyName,
+        c.CompanyAddress AS address,
+        gp.legalPerson AS legalPerson,
+        c.ContactNumber AS contactNumber,
+        ct.CityName+dt1.DistrictName+c.Address AS businessLicenseCompanyAddress,
+        gp.registerId AS businessLicenseNo,
+        d1.dicValue AS businessLicenseType,
+        s.StoreNo AS storeNo,
+        s.Name AS storeName,
+        c2.CityName AS storeCityName,
+        dt2.DistrictName AS districtName,
+        g.groupName AS storeGroupName,
+        s.AddressDetail AS addressDetail,
+        d3.dicValue AS storeSizeScaleName,
+        d2.dicValue AS businessPlaceTypeName,
+        '' AS fyAccount,
+        s.LinkageSituation AS linkageSituation,
+        cb.brandName AS brandName,
+        s.agentNum AS agentNum,
+        d4.dicValue AS businessStatus,
+        gp.gpContractNo AS gpContractNo,
+        '新签' AS contractType,
+        gp.partyBNm AS partyBNm,
+        gp.partyBTel AS partyBTel,
+        gp.accountNm AS accountNm,
+        gp.bankAccountNm AS bankAccountNm,
+        gp.accountProvinceNm +gp.accountCityNm AS accountProvinceCityNm,
+        gp.bankAccount AS bankAccount,
+        gp.gpAgreementNo AS gpAgreementNo,
+        CONVERT(VARCHAR(10),gp.dateLifeStart,120) AS dateLifeStart,
+        CONVERT(VARCHAR(10),gp.dateLifeEnd,120) AS dateLifeEnd,
+        --CASE  WHEN t5.gpContractNo IS NOT NULL  AND  t5.gpContractno != gp.gpContractNo THEN 0 ELSE  1 END AS storeCnt,
+        gp.storeCnt,
+        CONVERT(VARCHAR(10),gp.dateCreate,120) AS dateCreate,
+        CONVERT(VARCHAR(10),gp.performDate,120) AS performDate,
+        d5.dicValue AS contractCheckStatusName,
+        CASE WHEN t3.gpContractNo IS NOT NULL THEN '是' ELSE '否' END AS isFirst,
+        gp.stopType,
+		gp.stopDate,
+		gp.approvePassDate,
+        dbo.F_ClearNullMoney(gp.depositFee) AS depositFee,
+        CASE WHEN ISNULL(gp.depositFee,0)>0 AND t4.gpContractNo IS NOT NULL THEN '是'
+        WHEN ISNULL(gp.depositFee,0)>0 AND t4.gpContractNo IS NULL THEN '否'
+        WHEN ISNULL(gp.depositFee,0)=0 THEN '是'
+        END AS isArrival,
+        CASE WHEN ISNULL(gp.depositFee,0)>0 AND t4.gpContractNo IS NOT NULL THEN
+        CONVERT(VARCHAR(10),t4.pastTrialDate,120)
+        WHEN ISNULL(gp.depositFee,0)=0 THEN CONVERT(VARCHAR(10),gp.performDate,120)
+        END AS pastTrialDate,
+        u.userName AS userName,
+        u.userCode AS userCode,
+        CONVERT(VARCHAR(10),s.DateCreate ,120) AS storeDateCreate,
+        a.expenderName AS expandCommissioner,
+        u2.userCode AS expandCommissionerNum,
+        '' AS expandManager,
+        '' AS expandManagerNum,
+        a.centerLeaderName AS centerLeaderName,
+        a.centerLeaderCode AS centerLeaderCode,
+        aas.areaGroupName AS areaGroupName,
+        aas.centerGroupName AS centerGroupName,
+        '' AS groupName,
+        s.maintainerName AS maintainerName,
+        s.Maintainer AS maintainer,
+        CONVERT(VARCHAR(10),t2.startdate,120) AS dateMtcStart,
+        '' AS remark
+
+        FROM dbo.v_gp_achiv_info v
+	        INNER join dbo.v_gp_contract_member gp ON v.gpContractNo=gp.gpContractNo and v.storeId= gp.storeId
+	        INNER join dbo.Company c ON v.CompanyNo=c.CompanyNo
+	        INNER join dbo.Store s ON s.StoreNo=v.StoreNo
+	        INNER JOIN dbo.GP_ContractStore gpcs ON gp.id=gpcs.gpContractId AND gpcs.storeId=s.id
+	        INNER join dbo.BAS_City ct ON c.CityNo=ct.CityNo
+	        INNER JOIN dbo.BAS_District dt1 on dt1.DistrictNo=c.DistrictNo
+	        LEFT JOIN dbo.BAS_DictionaryValue d1 ON c.BusinessLicenseNature=d1.dicCode AND d1.typeId=193
+	        LEFT JOIN bas_city c2 ON s.CityNo=c2.CityNo
+	        LEFT JOIN dbo.BAS_District dt2 ON s.DistrictNo=dt2.DistrictNo
+	        LEFT JOIN dbo.USR_Group g ON s.centerId=g.groupId
+	        LEFT JOIN dbo.BAS_DictionaryValue d2 ON s.businessPlaceType=d2.dicCode
+	        LEFT JOIN dbo.BAS_DictionaryValue d3 ON s.storeSizeScale = d3.dicCode
+	        LEFT JOIN dbo.BAS_DictionaryValue d4 ON s.businessStatus = d4.dicCode
+	        LEFT JOIN BAS_CityBrand cb ON s.ChainBrand=cb.brandNo
+	        LEFT JOIN dbo.BAS_DictionaryValue d5 ON gp.contractStatus = d5.dicCode
+	        LEFT JOIN 
+	        	(SELECT
+			        gpcc.gpContractId,gpcc.gpContractStopNo,gpccs.storeId,gpcc.stopDate,gpcc.approvePassDate,gpcc.stopType
+			        FROM dbo.GP_ContractChange gpcc,dbo.GP_ContractChangeStore gpccs
+			        WHERE gpcc.id=gpccs.gpContractStopId
+			        AND gpcc.approveState=2
+			        AND gpcc.delFlag=0
+			        AND gpccs.delFlag=0
+			      ) t
+        	ON gp.id=t.gpContractId AND t.storeId=gpcs.storeId
+	        LEFT JOIN dbo.BAS_DictionaryValue d6 ON t.stopType = d6.dicCode
+	        LEFT JOIN crm.dbo.USR_User u ON s.UserCreate=u.userId
+	        LEFT JOIN dbo.Achiv_Achievement a ON a.relateId=gp.id AND a.delFlag=0 AND a.achieveType=17914
+	        LEFT JOIN crm.dbo.USR_User u2 ON a.expenderCode=u2.userId
+	        LEFT JOIN dbo.Achiv_AchievementLevel_Setting aas ON aas.centerGroupId=s.centerId AND aas.achieveType=17914
+	        LEFT JOIN (SELECT gp.gpContractNo,gpcs.storeId
+					        FROM gp_contract gp,dbo.GP_ContractStore gpcs
+					        WHERE gp.id=gpcs.gpContractId
+					        AND gp.delFlag=0
+					        AND gp.contractStatus IN (10403,10406)) t3
+		        ON t3.storeId = s.Id
+		        AND t3.gpContractNo=gp.gpContractNo
+        LEFT JOIN 
+        	(SELECT storeId,MAX(dateMtcStart) startdate FROM dbo.StoreMaintainer WHERE delFlag='N' GROUP BY
+        	storeId ) t2
+        	 ON s.id=t2.storeId
+        LEFT JOIN (SELECT gpContractNo,MAX(pastTrialDate) pastTrialDate FROM dbo.Fangyou_Movement_Deposit WHERE
+		        delFlag=0 GROUP BY gpContractNo) t4
+		        ON gp.gpContractNo=t4.gpContractNo
+        LEFT  JOIN ( SELECT MIN( gpcc.gpContractNo) gpContractNo,gpccs.storeId
+                        FROM  dbo.GP_ContractChange gpcc ,dbo.GP_ContractChangeStore  gpccs
+                       WHERE gpcc.id =gpccs.gpContractStopId
+                        AND gpccs.delFlag=0 AND gpcc.delFlag=0 AND gpcc.approveState=2 GROUP BY gpccs.storeId
+        ) t5 ON  t5.storeId=s.id
+        WHERE gp.delFlag=0        
+		AND  gp.oaNo  IS not NULL
+        AND (gp.storeCnt = 1 OR (gp.storeCnt = -1 AND t.storeid IS NOT NULL))
+        <!--业务阶段 -->
+        <if test="stageList != null and stageList.size>0 ">
+
+            AND(
+                <foreach collection="stageList" index="index" item="stage" open=" (" separator="OR" close=")">
+                    <if test="stage != null and stage == 'performDate'">
+                         1=1
+                        <!-- 审核通过日期 -->
+                        <if test="startDate != null and startDate != ''">
+                            <![CDATA[
+                                AND Convert(varchar(10),gp.performDate,120) >= #{startDate,jdbcType=NVARCHAR}
+                            ]]>
+                        </if>
+                        <if test="endDate != null and endDate != ''">
+                            <![CDATA[
+                                AND Convert(varchar(10),gp.performDate,120) <= #{endDate,jdbcType=NVARCHAR}
+                            ]]>
+                        </if>
+                    </if>
+
+                    <if test="stage != null and stage == 'dateArrivalAct'">
+                         1=1
+                        <!-- 保证金到账日期 -->
+                        <if test="startDate != null and startDate != ''">
+                            <![CDATA[
+                                AND Convert(varchar(10), t4.pastTrialDate,120) >= #{startDate,jdbcType=NVARCHAR}
+                            ]]>
+                        </if>
+                        <if test="endDate != null and endDate != ''">
+                            <![CDATA[
+                                AND Convert(varchar(10), t4.pastTrialDate,120) <= #{endDate,jdbcType=NVARCHAR}
+                            ]]>
+                        </if>
+                    </if>
+                </foreach>
+            )
+        </if>
+
+        <!--经纪公司 -->
+        <if test="company != null and company != ''">
+            and ( v.companyNo LIKE CONCAT('%', #{company},'%')
+                OR gp.companyName LIKE CONCAT('%', #{company},'%')
+            )
+        </if>
+        <!--合同编号 -->
+        <if test="contractNo != null and contractNo != ''">
+            AND gp.gpContractNo LIKE CONCAT('%', #{contractNo},'%')
+        </if>
+        <!--门店 -->
+        <if test="storeNo != null and storeNo != ''">
+            and ( s.StoreNo LIKE CONCAT('%', #{storeNo},'%')
+            OR s.Name LIKE CONCAT('%', #{storeNo},'%')
+            )
+        </if>
+        <!--架构年份 -->
+
+        <!--归属区域 -->
+        <if test="regionCodeStr != null and regionCodeStr != ''">
+            AND v.qyCode IN(SELECT distinct col FROM dbo.F_Split(#{regionCodeStr}, ','))
+        </if>
+        <!--归属城市 -->
+        <if test="areaCityCodeStr != null and areaCityCodeStr != ''">
+            AND v.areaCityCode IN(SELECT distinct col FROM dbo.F_Split(#{areaCityCodeStr}, ','))
+        </if>
+        <!--所在城市 -->
+        <if test="cityIdStr != null and cityIdStr != ''">
+            AND ct.id IN(SELECT distinct col FROM dbo.F_Split(#{cityIdStr}, ','))
+        </if>
+        <!--归属中心 -->
+        <if test="centerIdStr != null and centerIdStr != ''">
+            AND v.centerGroupId IN(SELECT distinct col FROM dbo.F_Split(#{centerIdStr}, ','))
+        </if>
+        <!--归属人员 -->
+        <if test="maintainer != null and maintainer != ''">
+            and ( v.expenderCode LIKE CONCAT('%', #{maintainer},'%')
+            OR v.expenderName LIKE CONCAT('%', #{maintainer},'%')
+            )
+        </if>
+
+        ORDER BY v.areaCityCode,c.id,gp.gpContractNo,s.Id,gp.storeCnt desc
+    </select>
+
+</mapper>

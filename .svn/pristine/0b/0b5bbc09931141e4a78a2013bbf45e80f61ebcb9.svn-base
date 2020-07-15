@@ -1,0 +1,17 @@
+package cn.com.eju.pmls.skStatement.dao;
+
+import cn.com.eju.pmls.skStatement.model.PmlsSkAllocateLog;
+
+public interface PmlsSkAllocateLogMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(PmlsSkAllocateLog record);
+
+    int insertSelective(PmlsSkAllocateLog record);
+
+    PmlsSkAllocateLog selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(PmlsSkAllocateLog record);
+
+    int updateByPrimaryKey(PmlsSkAllocateLog record);
+}

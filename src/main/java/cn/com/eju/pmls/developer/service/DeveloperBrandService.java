@@ -1,0 +1,318 @@
+package cn.com.eju.pmls.developer.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.pmls.developer.dao.DeveloperBrandMapper;
+import cn.com.eju.pmls.developer.dto.DeveloperBrandDto;
+import cn.com.eju.pmls.developer.model.Developer;
+import cn.com.eju.pmls.developer.model.PmlsBcMattressNaillog;
+
+@Service("developerBrandService")
+public class DeveloperBrandService  extends BaseService {
+	
+	private final LogHelper logger = LogHelper.getLogger(this.getClass());
+	
+    @Resource
+    private DeveloperBrandMapper developerBrandMapper;
+    //获取开发商品牌列表
+    public ResultData getDeveloperBrandList(Map<String, Object> queryParam) {
+        ResultData<List<DeveloperBrandDto>> resultData = new ResultData<List<DeveloperBrandDto>>();
+        List<DeveloperBrandDto> list = developerBrandMapper.getDeveloperBrandList(queryParam);
+
+        List<DeveloperBrandDto> newList=new ArrayList<DeveloperBrandDto>();
+//        for(DeveloperBrandDto developer:list){
+//        	developer.setName(developer.getDeveloperBrandName());
+//            if(developer.getParentId()==0){
+//                newList.add(developer);
+//            }
+//        }
+        for(DeveloperBrandDto developer:list){
+        	developer.setName(developer.getDeveloperBrandName());
+            recursionTree(developer,newList);
+        }
+
+        resultData.setReturnData(newList);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        return resultData;
+    }
+    //获取开发商品牌信息
+    public ResultData getDeveloperBrandInfo(Map<String, Object> queryParam) {
+        ResultData<DeveloperBrandDto> resultData = new ResultData<>();
+        DeveloperBrandDto channelBrandDto = developerBrandMapper.getDeveloperBrandInfo(queryParam);
+        resultData.setReturnData(channelBrandDto);
+        return resultData;
+    }
+    //新增开发商品牌
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData addDeveloperBrand(DeveloperBrandDto dto) {
+        ResultData resultData = new ResultData();
+        //校验开发商品牌名称是否存在
+        int resultNum=developerBrandMapper.checkDeveloperInfo(dto);
+        if(resultNum>0){
+            resultData.setFail("该合作方品牌名称已存在，请修改后在提交");
+            return resultData;
+        }
+        if(dto.getParentId()!=0) {//添加下级 不插入大客户和垫佣
+        	dto.setBigCustomerFlag(null);
+        	dto.setBigCustomerId(null);
+        	dto.setBigCustomerName(null);
+        	dto.setIsYjDy(null);
+        	dto.setMattressNailId(null);
+        	dto.setMattressNailName(null);
+        }
+        int count = developerBrandMapper.addDeveloperBrand(dto);
+        int updateResult=0;
+        if(dto.getId()!=null && dto.getId()!=0){
+            if(dto.getParentId()==0){
+                dto.setOrgId("/"+dto.getId()+"/");
+            }else{
+                Map req=new HashMap();
+                req.put("id",dto.getParentId());
+                DeveloperBrandDto channelBrandDto=developerBrandMapper.getDeveloperBrandInfo(req);
+                dto.setOrgId(channelBrandDto.getOrgId()+dto.getId()+"/");
+            }
+            updateResult=developerBrandMapper.updateDeveloperBrand(dto);
+        }
+        if(count>0 && updateResult>0){
+            resultData.setSuccess("新增成功");
+        }else{
+            resultData.setFail("新增失败");
+        }
+        return resultData;
+    }
+    //修改开发商品牌
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData updateDeveloperBrand(DeveloperBrandDto dto) {
+        ResultData resultData = new ResultData();
+        //校验开发商品牌名称是否存在
+        int resultNum=developerBrandMapper.checkDeveloperInfo(dto);
+        if(resultNum>0){
+            resultData.setFail("该合作方品牌名称已存在，请修改后在提交");
+            return resultData;
+        }
+        
+        int count = developerBrandMapper.updateDeveloperBrandById(dto);
+        Integer oldBigCustomerFlag = dto.getOldBigCustomerFlag();
+        Integer oldBigCustomerId = dto.getOldBigCustomerId();
+        Integer oldIsYjDy = dto.getOldIsYjDy();
+        Integer oldMattressNailId = dto.getOldMattressNailId();
+        
+        Integer bigCustomerFlag = dto.getBigCustomerFlag();
+        Integer bigCustomerId = dto.getBigCustomerId();
+        Integer isYjDy = dto.getIsYjDy();
+        Integer mattressNailId = dto.getMattressNailId();
+        String businessNo ="";
+        String businessNm ="";
+        String businessType = "0";
+        Integer brandId = dto.getId();
+        String orgId = "/"+brandId+"/";
+        if(count>0){
+        	if(oldBigCustomerFlag!=bigCustomerFlag || oldIsYjDy!=isYjDy 
+        			||oldBigCustomerId!=bigCustomerId || oldMattressNailId!=mattressNailId) {
+        		//1、合作方品牌插入日志
+        		businessType = "1";//合作方品牌
+        		businessNo = dto.getDeveloperBrandCode();
+        		businessNm = dto.getDeveloperBrandName();
+        		PmlsBcMattressNaillog pmlsBcMattressNaillog = getPmlsBcMattressNaillog(dto,businessNo,businessNm,businessType,1);
+        		if(!StringUtils.isEmpty(pmlsBcMattressNaillog)) {
+        			int insertLogCount = developerBrandMapper.addBcMattressNailLog(pmlsBcMattressNaillog);
+        			logger.info("合作方品牌，编辑。修改品牌添加日志记录。入参品牌编号:"+dto.getDeveloperBrandCode()+",插入影响行数:"+insertLogCount);
+        		}
+        		//2、合作方插入日志(合作方选择了该品牌)
+        		List<Developer> developerList = developerBrandMapper.selDeveloperByBrandId(orgId);
+        		if(CollectionUtils.isNotEmpty(developerList)) {
+        			businessType = "2";//合作方
+        			Map<String,Object> queryParam = new HashMap<>();
+        			for (Developer developer : developerList) {
+        				//更新合作方
+        				queryParam.put("bigCustomerFlag", bigCustomerFlag);
+						queryParam.put("bigCustomerId", bigCustomerId);
+						queryParam.put("isYjDy", isYjDy);
+        				queryParam.put("mattressNailId", mattressNailId);
+						queryParam.put("id", developer.getId());
+						int updateDeveloperCount = developerBrandMapper.updateDeveloperByBrandId(queryParam);
+						logger.info("合作方品牌，编辑。修改合作方品牌对应合作方。入参合作方编号:"+developer.getDeveloperCode()+",影响行数:"+updateDeveloperCount);
+        				businessNo = developer.getDeveloperCode();
+        				businessNm = developer.getDeveloperName();
+        				PmlsBcMattressNaillog developerlog = getPmlsBcMattressNaillog(dto,businessNo,businessNm,businessType,2);
+        				if(!StringUtils.isEmpty(developerlog)) {
+        					int insertLogCount = developerBrandMapper.addBcMattressNailLog(developerlog);
+        					logger.info("合作方品牌，编辑。修改合作方品牌对应合作方添加日志记录。入参合作方编号:"+developer.getDeveloperCode()+",插入影响行数:"+insertLogCount);
+        				}
+        			}
+        		}
+        	}
+        	count = developerBrandMapper.updateDeveloperBrandByOrgId(dto);
+        	//更新项目
+        	//大客户
+        	List<Map<String,Object>> estateBigCustomerList = developerBrandMapper.getEstateBigCustomerListByBrandId(orgId);
+        	if(CollectionUtils.isNotEmpty(estateBigCustomerList)) {
+        		businessType = "3";//项目
+        		Map<String,Object> queryParam = new HashMap<>();
+        		for (Map<String, Object> map : estateBigCustomerList) {
+					Integer EstateId = (Integer) map.get("id");
+					Integer oldEstateBigCustomerFlag = (Integer) map.get("bigCustomerFlag");
+					Integer oldEstateBigCustomerId = (Integer) map.get("bigCustomerId");
+					String oldEstateBigCustomerName= (String)map.get("bigCustomerName");
+					if(bigCustomerFlag!=oldEstateBigCustomerFlag || bigCustomerId!=oldEstateBigCustomerId) {
+						queryParam.put("bigCustomerFlag", bigCustomerFlag);
+						queryParam.put("bigCustomerId", bigCustomerId);
+						queryParam.put("id", EstateId);
+						developerBrandMapper.updateEstateByBrand(queryParam);
+						//3、项目(大客户)插入日志
+						businessNo = (String) map.get("projectNo");
+	                	businessNm = (String) map.get("projectName");
+	                	PmlsBcMattressNaillog estatelog = getPmlsBcMattressNaillog(dto,businessNo,businessNm,businessType,3);
+	                	if(!StringUtils.isEmpty(estatelog)) {
+	                		int insertLogCount = developerBrandMapper.addBcMattressNailLog(estatelog);
+	            			logger.info("合作方品牌，编辑。修改合作方品牌对应项目大客户添加日志记录。入参项目编号:"+businessNo+",大客户id:"+bigCustomerId+",插入影响行数:"+insertLogCount);
+	                	}
+					}
+				}
+        	}
+        	//是否垫佣
+        	List<Map<String,Object>> estateMattressNailList = developerBrandMapper.getEstateMattressNailListByBrandId(orgId);
+        	if(CollectionUtils.isNotEmpty(estateMattressNailList)) {
+        		Map<String,Object> queryParam = new HashMap<>();
+        		for (Map<String, Object> map : estateMattressNailList) {
+        			Integer EstateId = (Integer) map.get("id");
+        			Integer custodyFlg = (Integer) map.get("custodyFlg");
+        			Integer oldEstateMattressNailId = (Integer) map.get("mattressNailId");
+        			String oldEstateMattressNailName= (String)map.get("mattressNailName");
+        			if(isYjDy!=custodyFlg || mattressNailId!=oldEstateMattressNailId) {
+        				queryParam.put("isYjDy", isYjDy);
+        				queryParam.put("mattressNailId", mattressNailId);
+        				queryParam.put("id", EstateId);
+        				developerBrandMapper.updateEstateByBrand(queryParam);
+        				//3、项目(垫佣甲方)插入日志
+        				businessNo = (String) map.get("projectNo");
+	                	businessNm = (String) map.get("projectName");
+	                	PmlsBcMattressNaillog estatelog = getPmlsBcMattressNaillog(dto,businessNo,businessNm,businessType,4);
+	                	if(!StringUtils.isEmpty(estatelog)) {
+	                		int insertLogCount = developerBrandMapper.addBcMattressNailLog(estatelog);
+	            			logger.info("合作方品牌，编辑。修改合作方品牌对应项目垫佣甲方，添加日志记录。入参项目编号:"+businessNo+",垫佣甲方id:"+mattressNailId+",插入影响行数:"+insertLogCount);
+	                	}
+        			}
+        		}
+        	}
+            resultData.setSuccess("修改成功");
+        }else{
+            resultData.setFail("修改失败");
+        }
+        return resultData;
+    }
+    
+    /**
+     * 
+     * desc:获取日志entity
+     * 2020年5月12日
+     */
+    private PmlsBcMattressNaillog getPmlsBcMattressNaillog(DeveloperBrandDto dto,
+    		String businessNo,String businessNm,String businessType,Integer flag) {
+    	PmlsBcMattressNaillog pmlsBcMattressNaillog = new PmlsBcMattressNaillog();
+    	pmlsBcMattressNaillog.setBusinessType(businessType);
+    	pmlsBcMattressNaillog.setBusinessNo(businessNo);
+    	pmlsBcMattressNaillog.setBusinessNm(businessNm);
+    	
+    	if(flag!=4) {
+    		pmlsBcMattressNaillog.setOldBigCustomerFlag(dto.getOldBigCustomerFlag());
+    		pmlsBcMattressNaillog.setOldBigCustomerId(dto.getOldBigCustomerId());
+    		pmlsBcMattressNaillog.setOldBigCustomerName(dto.getOldBigCustomerName());
+    		pmlsBcMattressNaillog.setBigCustomerFlag(dto.getBigCustomerFlag());
+    		pmlsBcMattressNaillog.setBigCustomerId(dto.getBigCustomerId());
+    		pmlsBcMattressNaillog.setBigCustomerName(dto.getBigCustomerName());
+    	}
+    	
+    	if(flag!=3) {
+    		pmlsBcMattressNaillog.setOldIsYjDy(dto.getOldIsYjDy());
+    		pmlsBcMattressNaillog.setOldMattressNailId(dto.getOldBigCustomerId());
+    		pmlsBcMattressNaillog.setOldMattressNailName(dto.getOldMattressNailName());
+    		pmlsBcMattressNaillog.setIsYjDy(dto.getIsYjDy());
+    		pmlsBcMattressNaillog.setMattressNailId(dto.getMattressNailId());
+    		pmlsBcMattressNaillog.setMattressNailName(dto.getMattressNailName());
+    	}
+    	
+    	pmlsBcMattressNaillog.setCreateUserCode(dto.getUserCode());
+		return pmlsBcMattressNaillog;
+	}
+    
+	//删除开发商品牌
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData deleteDeveloperBrand(DeveloperBrandDto dto) {
+        ResultData resultData = new ResultData();
+        //校验开发商品牌是否有对应的开发商，如果有不让删除
+        int num=developerBrandMapper.checkDeveloper(dto);
+        if(num>0){
+            resultData.setFail("该合作方品牌已有开发商数据，不允许删除！");
+            return resultData;
+        }
+        int count = developerBrandMapper.deleteDeveloperBrand(dto);
+        if(count>0){
+            resultData.setSuccess("删除成功");
+        }else{
+            resultData.setFail("删除失败");
+        }
+        return resultData;
+    }
+
+    //递归生成树结构json数据
+    private void recursionTree(DeveloperBrandDto menu,List<DeveloperBrandDto> newList){
+        //重新组织结果list
+        if(menu.getParentId()==0){//主
+            newList.add(menu);
+        }else{
+            boolean flag=false;
+            for(DeveloperBrandDto brand:newList){
+                if(menu.getParentId().equals(brand.getId())){
+                	menu.setBigCustomerFlag(brand.getBigCustomerFlag());
+                	menu.setIsYjDy(brand.getIsYjDy());
+                    brand.getChildren().add(menu);
+                    flag=true;
+                }
+            }
+            if(!flag){
+                for(DeveloperBrandDto brand:newList){
+                    recursionTree(menu,brand.getChildren());
+                }
+            }
+        }
+
+    }
+    
+    //是否可以修改合作方品牌信息
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData updateCheck(DeveloperBrandDto dto) {
+        ResultData resultData = new ResultData();
+        //校验开发商品牌名称是否存在
+        int count=developerBrandMapper.updateCheck(dto);
+        resultData.setReturnData(count);
+        return resultData;
+    }
+
+
+    //获取开发商品牌列表
+    public ResultData getDeveloperBrandListByPage(Map<String, Object> queryParam) {
+        ResultData<List<DeveloperBrandDto>> resultData = new ResultData<List<DeveloperBrandDto>>();
+        List<DeveloperBrandDto> list = developerBrandMapper.getDeveloperBrandListByPage(queryParam);
+
+        resultData.setReturnData(list);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        return resultData;
+    }
+
+}

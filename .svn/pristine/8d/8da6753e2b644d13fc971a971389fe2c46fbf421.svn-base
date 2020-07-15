@@ -1,0 +1,119 @@
+package cn.com.eju.deal.common.dao;
+
+import cn.com.eju.deal.common.model.FileRecordMain;
+import cn.com.eju.deal.core.dao.IDao;
+import cn.com.eju.deal.dto.common.FileRecordMainDto;
+
+import java.util.List;
+import java.util.Map;
+
+public interface FileRecordMainMapper extends IDao<FileRecordMain>{
+    
+	int updateStatusByContractId(Integer contractId) throws Exception;
+	
+	int deleteByContractIdStatus(Integer contractId) throws Exception;
+	
+	int deleteByContractId(Integer contractId) throws Exception;
+	
+	List<FileRecordMain> selectFileByContractId(Integer contractId) throws Exception;
+	List<FileRecordMain> getNoticeByContractId(FileRecordMain noticeFile) throws Exception;
+	List<FileRecordMain> getComplementByContractId(FileRecordMain complementFile) throws Exception;
+	List<FileRecordMain> getBusinessByContractId(FileRecordMain businessFile) throws Exception;
+	List<FileRecordMain> getAttachmentFileByReceiveId(FileRecordMain attachmentFile) throws Exception;
+	
+	List<FileRecordMain> getCardByContractId(FileRecordMain cardFile) throws Exception;
+	
+	List<FileRecordMain> getPhotoByContractId(FileRecordMain photoFile) throws Exception;
+	
+	List<FileRecordMain> getStoreByContractId(FileRecordMain storeFile) throws Exception;
+	
+	List<FileRecordMain> getInstallByContractId(FileRecordMain installFile) throws Exception;
+	
+	List<FileRecordMain> getOtherByContractId(FileRecordMain otherFile) throws Exception;
+	
+	List<FileRecordMain> getByStoreId(Integer refId) throws Exception;
+
+    List<FileRecordMainDto> getContractChangePics(FileRecordMain getFilesParam) throws Exception;
+    
+    List<FileRecordMain> getBusinessByCompanyId(FileRecordMain businessFile) throws Exception;
+    List<FileRecordMain> getById(Integer fileRecordMainId) throws Exception;
+
+
+    void createFromB2A(Map<String, Integer> map) throws Exception;
+
+	List<FileRecordMainDto> getFilesByContractId(Map<String,Object> param);
+
+	List<FileRecordMainDto> getContractChangeList(Map<String,Object> param);
+
+	List<FileRecordMainDto> getContractChangeNewList(Map<String,Object> param);
+
+	void deleteByCondition(Map<String,Object> map);
+	
+	void updateByCondition(Map<String,Object> map);
+
+	List<FileRecordMain> getAttachmentFileByPaymentId(FileRecordMain attachmentFile) throws Exception;
+
+    List<FileRecordMain> getBondByCashierId(FileRecordMain fileBond);
+    List<FileRecordMain> getAttachmentFileByFrameContractId(FileRecordMain attachmentFile) throws Exception;
+    List<FileRecordMain> getContractFileByFrameContractId(FileRecordMain attachmentFile) throws Exception;
+    List<FileRecordMain> getBusinessByFrameContractId(FileRecordMain attachmentFile) throws Exception;
+
+    void deletePartReportFile(Map<String, Object> fileRecMap);
+	//公盘图片
+	List<FileRecordMain> getBusinessByGpContractId(FileRecordMain businessFile) throws Exception;
+	List<FileRecordMain> getCardByGpContractId(FileRecordMain cardFile) throws Exception;
+	List<FileRecordMain> getPhotoByGpContractId(FileRecordMain photoFile) throws Exception;
+	List<FileRecordMain> getProxyByGpContractId(FileRecordMain proxyFile) throws Exception;
+
+	List<FileRecordMain> getCheckByGpContractId(FileRecordMain checkFile) throws Exception;
+
+	List<FileRecordMain> getRuleByGpContractId(FileRecordMain ruleFile) throws Exception;
+	List<FileRecordMain> getAccountChangeByGpContractId(FileRecordMain accountFile) throws Exception;
+	List<FileRecordMain> getOtherByGpContractId(FileRecordMain otherFile) throws Exception;
+
+	List<FileRecordMainDto> getFilesByGpContractId(Map<String,Object> param);
+
+	void createFromThreePart(Map<String, Integer> map) throws Exception;
+	//公盘终止图片
+	List<FileRecordMain> getStopGpContractFileListByStopId(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getReceiptFileListByStopId(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getOthersFileListByStopId(FileRecordMain attachmentFile) throws Exception;
+	//公司附件  
+	List<FileRecordMain> getBusinessLicenceByCompanyId(FileRecordMain businessFile) throws Exception;
+
+	List<FileRecordMain> getAccountChangeByLogId(Map<String, Object> hashMap);
+	//List<FileRecordMain> getReceiptFileListByStopId(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getfileComplementListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getfileFyConfirmationById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getfileStorePhotoById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getfileOtherListById(FileRecordMain attachmentFile) throws Exception;
+	
+	List<FileRecordMain> getPlateFileListById(FileRecordMain attachmentFile) throws Exception;
+	
+	List<FileRecordMain> getCsMemberFileBusinessListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getCsMemberFileIdCardListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getCsMemberFileContractListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getCsMemberFileListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getCsMemberPayFileListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getCsMemberOthersFileListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getKeFuOrderListById(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getCashBillImageListByProjectId(FileRecordMain attachmentFile) throws Exception;
+	List<FileRecordMain> getKeFuOrderReplyListById(FileRecordMain fileRecordMain) throws Exception;
+	List<FileRecordMain> getKeFuOrderVerifyListById(FileRecordMain fileRecordMain) throws Exception;
+
+    List<FileRecordMain> getBusinessByGpContractIdTwo(FileRecordMain businessFile) throws Exception;
+
+	List<FileRecordMain> getCardByGpContractIdTwo(FileRecordMain cardFile) throws Exception;
+
+    void createTwo(FileRecordMain fileRecordMain2) throws Exception;
+
+    List<FileRecordMain> getBusinessOrderByCreate(FileRecordMain businessFile) throws Exception;
+
+	List<FileRecordMain> getCardOrderByCreate(FileRecordMain cardFile) throws Exception;
+	//借佣框架协议-营业执照
+	List<FileRecordMain> getJYBusinessByFrameContractId(FileRecordMain attachmentFile) throws Exception;
+    //借佣框架协议-合同
+	List<FileRecordMain> getJYContractFileByFrameContractId(FileRecordMain attachmentFile) throws Exception;
+    //借佣框架协议-其它
+    List<FileRecordMain> getJYAttachmentFileByFrameContractId(FileRecordMain attachmentFile) throws Exception;
+}

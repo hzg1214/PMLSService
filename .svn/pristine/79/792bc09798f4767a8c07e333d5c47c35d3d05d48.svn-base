@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.performswitch.dao.PerformSwitchMapper">
+
+	<resultMap id="BaseResultMap" type="cn.com.eju.pmls.performswitch.model.PerformSwitch">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="relateSystem" property="relateSystem" jdbcType="INTEGER" />
+		<result column="cityNo" property="cityNo" jdbcType="NVARCHAR" />
+		<result column="switchYear" property="switchYear" jdbcType="NVARCHAR" />
+		<result column="switchMonth" property="switchMonth" jdbcType="NVARCHAR" />
+		<result column="closeDate" property="closeDate" jdbcType="TIMESTAMP" />
+		<result column="closeUserName" property="closeUserName" jdbcType="NVARCHAR" />
+		<result column="closeUserCode" property="closeUserCode" jdbcType="NVARCHAR" />
+		<result column="openDate" property="openDate" jdbcType="TIMESTAMP" />
+		<result column="openUserName" property="openUserName" jdbcType="NVARCHAR" />
+		<result column="openUserCode" property="openUserCode" jdbcType="NVARCHAR" />
+		<result column="switchState" property="switchState" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="createUserName" property="createUserName" jdbcType="NVARCHAR" />
+		<result column="createUserCode" property="createUserCode" jdbcType="NVARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+
+		<result column="updateUserName" property="updateUserName" jdbcType="NVARCHAR" />
+		<result column="updateUserCode" property="updateUserCode" jdbcType="NVARCHAR" />
+		<result column="exchangeCenterId" property="exchangeCenterId" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="BaseDtoMap" type="cn.com.eju.pmls.performswitch.dto.PerformSwitchDto"></resultMap>
+	<sql id="Base_Column_List">
+		id, relateSystem, cityNo, switchYear, switchMonth, closeDate,closeUserName,closeUserCode,
+		openDate,openUserName,openUserCode,switchState,createDate,createUserName,createUserCode,
+		updateDate,updateUserName,updateUserCode,exchangeCenterId
+	</sql>
+
+	<!-- 查询-根据id -->
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM Pmls_Perform_Switch
+		<where>
+			delFlag = 0 AND id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
+
+	<!-- 新增 -->
+	<insert id="create" parameterType="cn.com.eju.pmls.performswitch.model.PerformSwitch" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO Pmls_Perform_Switch
+		(
+		relateSystem,
+		cityNo,
+		switchYear,
+		switchMonth,
+		closeDate,
+		closeUserName,
+		closeUserCode,
+		openDate,
+		openUserName,
+		openUserCode,
+		switchState,
+		createDate,
+		createUserName,
+		createUserCode,
+		updateDate,
+		updateUserName,
+		updateUserCode,
+		exchangeCenterId,
+		delFlag
+		)
+		VALUES
+		(
+		#{relateSystem},
+		#{cityNo},
+		#{switchYear},
+		#{switchMonth},
+		#{closeDate,jdbcType=TIMESTAMP},
+		#{closeUserName},
+		#{closeUserCode},
+		#{openDate,jdbcType=TIMESTAMP},
+		#{openUserName},
+		#{openUserCode},
+		#{switchState},
+		getDate(),
+		#{createUserName},
+		#{createUserCode},
+		#{updateDate,jdbcType=TIMESTAMP},
+		#{updateUserName},
+		#{updateUserCode},
+		#{exchangeCenterId},
+		0
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="cn.com.eju.pmls.performswitch.model.PerformSwitch">
+		UPDATE Pmls_Perform_Switch
+		<set>
+			<if test="closeDate != null">
+				closeDate = #{closeDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeUserName != null">
+				closeUserName = #{closeUserName,jdbcType=NVARCHAR},
+			</if>
+			<if test="closeUserCode != null">
+				closeUserCode = #{closeUserCode,jdbcType=NVARCHAR},
+			</if>
+			<if test="openDate != null">
+				openDate = #{openDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="openUserName != null">
+				openUserName = #{openUserName,jdbcType=NVARCHAR},
+			</if>
+			<if test="openUserCode != null">
+				openUserCode = #{openUserCode,jdbcType=NVARCHAR},
+			</if>
+			<if test="switchState != null">
+				switchState = #{switchState,jdbcType=INTEGER},
+			</if>
+			<if test="updateUserName != null">
+				updateUserName = #{updateUserName,jdbcType=NVARCHAR},
+			</if>
+			<if test="updateUserCode != null">
+				updateUserCode = #{updateUserCode,jdbcType=NVARCHAR},
+			</if>
+			<if test="exchangeCenterId != null">
+				exchangeCenterId = #{exchangeCenterId,jdbcType=INTEGER},
+			</if>
+			updateDate = getDate()
+		</set>
+		<where>
+			id = #{id, jdbcType=INTEGER}
+		</where>
+	</update>
+
+
+	<!-- 查询 list map -->
+	<select id="queryLisDto" resultType="cn.com.eju.pmls.performswitch.dto.PerformSwitchDto" parameterType="java.util.Map">
+		SELECT ccu.cityNo,cityName,ISNULL(switchState,27501) switchState FROM BAS_City ccu
+		LEFT JOIN Pmls_Perform_Switch cps ON ccu.cityNo = cps.cityNo
+			AND cps.delFlag =0
+			<if test="switchYear != null and switchYear !=''">
+				AND cps.switchYear = ${switchYear}
+			</if>
+			<if test="switchMonth != null and switchMonth !=''">
+				AND cps.switchMonth = ${switchMonth}
+			</if>
+			<if test="relateSystem != null and relateSystem !=''">
+				AND cps.relateSystem = ${relateSystem}
+			</if>
+		<where>
+			1=1
+
+			<if test="cityList != null">
+				<![CDATA[
+   					AND ccu.cityNo in
+   				]]>
+				<foreach collection="cityList" item="item" index="index"
+						 open="(" separator="," close=")">
+					<![CDATA[
+						#{item}
+					]]>
+				</foreach>
+			</if>
+		</where>
+		ORDER BY ccu.id DESC
+	</select>
+
+	<select id="selectBYSwitch" parameterType="cn.com.eju.pmls.performswitch.model.PerformSwitch" resultMap="BaseResultMap" >
+		SELECT TOP 1 <include refid="Base_Column_List" /> FROM  Pmls_Perform_Switch
+		<where>
+			delFlag = 0
+			<if test="cityNo != null">
+				AND cityNo= #{cityNo,jdbcType=VARCHAR}
+			</if>
+			<if test="switchState == 27501 and switchYear != null and switchYear !='' and switchMonth != null and switchMonth !='' ">
+				AND CONCAT(switchYear,switchMonth) &gt;  #{switchYearMonth}
+				AND switchState=27502
+			</if>
+			<if test="switchState == 27502 and switchYear != null and switchYear !='' and switchMonth != null and switchMonth !='' ">
+				AND CONCAT(switchYear,switchMonth)  &lt;  #{switchYearMonth}
+				AND switchState=27501
+			</if>
+			<if test="relateSystem != null ">
+				AND relateSystem=#{relateSystem,jdbcType=INTEGER}
+			</if>
+			<if test="exchangeCenterId != null">
+				AND exchangeCenterId=#{exchangeCenterId,jdbcType=INTEGER}
+			</if>
+		</where>
+		ORDER BY switchYear DESC,switchMonth DESC
+	</select>
+
+	<select id="checkAroundDate" parameterType="cn.com.eju.pmls.performswitch.model.PerformSwitch" resultMap="BaseResultMap" >
+		SELECT TOP 1 <include refid="Base_Column_List" /> FROM  Pmls_Perform_Switch
+		<where>
+			delFlag = 0
+			<if test="cityNo != null">
+				AND cityNo= #{cityNo,jdbcType=VARCHAR}
+			</if>
+			<if test="switchState == 27502 ">
+				AND CONCAT(switchYear,switchMonth) = #{switchYearMonth}
+			</if>
+			<if test="relateSystem != null ">
+				AND relateSystem=#{relateSystem,jdbcType=INTEGER}
+			</if>
+			<if test="exchangeCenterId != null">
+				AND exchangeCenterId=#{exchangeCenterId,jdbcType=INTEGER}
+			</if>
+		</where>
+		ORDER BY switchYear DESC,switchMonth DESC
+	</select>
+
+	<select id="checkInDate" parameterType="cn.com.eju.pmls.performswitch.model.PerformSwitch" resultMap="BaseResultMap" >
+		SELECT TOP 1 <include refid="Base_Column_List" /> FROM  Pmls_Perform_Switch
+		<where>
+			delFlag = 0
+			<if test="cityNo != null">
+				AND cityNo= #{cityNo,jdbcType=VARCHAR}
+			</if>
+			<if test="switchYear != null and switchYear !='' and switchMonth != null and switchMonth !='' ">
+				AND CONCAT(switchYear,switchMonth) = #{switchYearMonth}
+			</if>
+			<if test="relateSystem != null ">
+				AND relateSystem=#{relateSystem,jdbcType=INTEGER}
+			</if>
+			<if test="exchangeCenterId != null">
+				AND exchangeCenterId=#{exchangeCenterId,jdbcType=INTEGER}
+			</if>
+		</where>
+		ORDER BY switchYear DESC,switchMonth DESC
+	</select>
+
+
+	<!-- 查看该月份下城市是否尚有大定待审核的记录 -->
+	<select id="checkRoughToValid" resultType="cn.com.eju.pmls.performswitch.dto.CheckRoughDate" parameterType="java.util.Map">
+		SELECT
+			roughDate,p.CityNo as cityNo,c.CityName as cityName
+		FROM LNK_Report P
+		LEFT JOIN BAS_City c on c.CityNo = p.CityNo and FlagDeleted = 0
+		WHERE
+		p.roughAuditStatus ='0' AND P.latestProgress = 13505 AND p.ConfirmStatus = 13603
+		and p.cityNo = #{cityNo,jdbcType=VARCHAR}
+			and CONVERT(varchar(7), roughInputDate, 120 ) = #{switchDate,jdbcType=VARCHAR}
+			and p.DelFlg='0'
+	</select>
+</mapper>

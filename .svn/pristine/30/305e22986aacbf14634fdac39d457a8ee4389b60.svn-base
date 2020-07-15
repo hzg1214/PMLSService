@@ -1,0 +1,9 @@
+package cn.com.eju.pmls.skStatement.dao;
+
+import cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl;
+
+public interface PmlsSkAllocateDtlMapper {
+    int insert(PmlsSkAllocateDtl record);
+
+    int insertSelective(PmlsSkAllocateDtl record);
+}

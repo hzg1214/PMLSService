@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.LnkEstateIncomeplanMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.LnkEstateIncomeplan">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="projectNo" jdbcType="VARCHAR" property="projectNo" />
+    <result column="planName" jdbcType="NVARCHAR" property="planName" />
+    <result column="planType" jdbcType="INTEGER" property="planType" />
+    <result column="fixAmount" jdbcType="DECIMAL" property="fixAmount" />
+    <result column="totalPercentage" jdbcType="DECIMAL" property="totalPercentage" />
+    <result column="isEnable" jdbcType="BIT" property="isEnable" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="updateDate" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="userIdUpdate" jdbcType="INTEGER" property="userIdUpdate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, projectNo, planName, planType, fixAmount, totalPercentage, isEnable, createDate, 
+    userIdCreate, updateDate, userIdUpdate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from LNK_Estate_IncomePlan
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from LNK_Estate_IncomePlan
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkEstateIncomeplan">
+    insert into LNK_Estate_IncomePlan (id, projectNo, planName, 
+      planType, fixAmount, totalPercentage, 
+      isEnable, createDate, userIdCreate, 
+      updateDate, userIdUpdate, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectNo,jdbcType=VARCHAR}, #{planName,jdbcType=NVARCHAR}, 
+      #{planType,jdbcType=INTEGER}, #{fixAmount,jdbcType=DECIMAL}, #{totalPercentage,jdbcType=DECIMAL}, 
+      #{isEnable,jdbcType=BIT}, #{createDate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{userIdUpdate,jdbcType=INTEGER}, #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkEstateIncomeplan">
+    insert into LNK_Estate_IncomePlan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectNo != null">
+        projectNo,
+      </if>
+      <if test="planName != null">
+        planName,
+      </if>
+      <if test="planType != null">
+        planType,
+      </if>
+      <if test="fixAmount != null">
+        fixAmount,
+      </if>
+      <if test="totalPercentage != null">
+        totalPercentage,
+      </if>
+      <if test="isEnable != null">
+        isEnable,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="updateDate != null">
+        updateDate,
+      </if>
+      <if test="userIdUpdate != null">
+        userIdUpdate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectNo != null">
+        #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null">
+        #{planName,jdbcType=NVARCHAR},
+      </if>
+      <if test="planType != null">
+        #{planType,jdbcType=INTEGER},
+      </if>
+      <if test="fixAmount != null">
+        #{fixAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPercentage != null">
+        #{totalPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=BIT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null">
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkEstateIncomeplan">
+    update LNK_Estate_IncomePlan
+    <set>
+      <if test="projectNo != null">
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null">
+        planName = #{planName,jdbcType=NVARCHAR},
+      </if>
+      <if test="planType != null">
+        planType = #{planType,jdbcType=INTEGER},
+      </if>
+      <if test="fixAmount != null">
+        fixAmount = #{fixAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPercentage != null">
+        totalPercentage = #{totalPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="isEnable != null">
+        isEnable = #{isEnable,jdbcType=BIT},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null">
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkEstateIncomeplan">
+    update LNK_Estate_IncomePlan
+    set projectNo = #{projectNo,jdbcType=VARCHAR},
+      planName = #{planName,jdbcType=NVARCHAR},
+      planType = #{planType,jdbcType=INTEGER},
+      fixAmount = #{fixAmount,jdbcType=DECIMAL},
+      totalPercentage = #{totalPercentage,jdbcType=DECIMAL},
+      isEnable = #{isEnable,jdbcType=BIT},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryCountByProject" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(1) from LNK_Estate_IncomePlan where delFlag = 0 and projectNo = #{projectNo,jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryPlanListByProjectNo" parameterType="map" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkEstateIncomeplanDto">
+   select l.*,
+    b.dicValue
+    + CASE WHEN l.fixAmount is null or l.fixAmount = 0 THEN ''
+        ELSE '，'+convert(varchar(20),l.fixAmount)+'元'
+    END
+    + CASE WHEN l.totalPercentage is null or l.totalPercentage = 0 THEN ''
+        ELSE CASE WHEN l.fixAmount is null or l.fixAmount = 0 THEN '，总价*'+convert(varchar(20),Convert(decimal(18,2),l.totalPercentage))+'%'
+        ELSE '+总价*'+convert(varchar(20),Convert(decimal(18,2),l.totalPercentage))+'%'
+    END
+    END planInfo,
+    CASE WHEN l.isEnable = 0 THEN '启用'
+        ELSE '禁用'
+    END enableType,
+    u.userName userNameCreate,
+	(select count(1) from LNK_Report where DelFlg = 0 and planId = l.id) planNum
+    from LNK_Estate_IncomePlan l
+    left join BAS_DictionaryValue b on l.planType = b.dicCode and b.delFlag = 'N'
+    left join USR_User u on l.userIdCreate = u.userId and u.delFlag = 'N'
+    where 1=1 and l.delFlag = 0 and l.projectNo = #{projectNo}
+  </select>
+
+  <select id="queryPlanById" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkEstateIncomeplanDto">
+   select l.*,
+    b.dicValue planTypeName
+    from LNK_Estate_IncomePlan l
+    left join BAS_DictionaryValue b on l.planType = b.dicCode and b.delFlag = 'N'
+    where 1=1 and l.delFlag = 0 and l.id = #{id}
+  </select>
+
+  <select id="queryCXSQAmount" parameterType="map" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkEstateIncomeplanDto">
+    select *,
+      (select cast(round(isnull(fixAmount,0)+#{dealAmount}*(isnull(totalPercentage,0)/100),2) as numeric(18,2)) from LNK_Estate_IncomePlan where id = l.id) sqAmount
+    from LNK_Estate_IncomePlan l
+    where 1=1 and l.delFlag = 0
+    and l.projectNo = #{projectNo}
+    and l.id = #{id}
+  </select>
+
+  <select id="queryTopCXSQAmount" parameterType="map" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkEstateIncomeplanDto">
+    select top 1 *,
+		(select top 1 cast(round(isnull(fixAmount,0)+#{dealAmount}*(isnull(totalPercentage,0)/100),2) as numeric(18,2))	from LNK_Estate_IncomePlan where projectNo = #{projectNo} ORDER BY createDate desc) sqAmount
+    from LNK_Estate_IncomePlan l
+    where 1=1 and l.delFlag = 0 and l.projectNo = #{projectNo} ORDER BY l.createDate desc
+  </select>
+
+  <select id="queryIncomeplanList" parameterType="map" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkEstateIncomeplanDto">
+    SELECT l.*,
+           (b.dicValue
+              + CASE WHEN l.fixAmount is null or l.fixAmount = 0 THEN ''
+                     ELSE '，'+convert(varchar(20),l.fixAmount)+'元'
+                END
+              + CASE WHEN l.totalPercentage is null or l.totalPercentage = 0 THEN ''
+                     ELSE CASE WHEN l.fixAmount is null or l.fixAmount = 0 THEN '，总价*'+convert(varchar(20),Convert(decimal(18,2),l.totalPercentage))+'%'
+                                ELSE '+总价*'+convert(varchar(20),Convert(decimal(18,2),l.totalPercentage))+'%'
+                           END
+                END
+           ) planInfo
+    FROM LNK_Estate_IncomePlan l
+    LEFT JOIN BAS_DictionaryValue b on l.planType = b.dicCode and b.delFlag = 'N'
+    WHERE l.delFlag = 0
+      AND l.isEnable = 0
+     AND l.projectNo = #{projectNo}
+    <if test="planName != null and planName != ''">
+        AND l.planName LIKE CONCAT('%', #{planName},'%')
+    </if>
+    ORDER BY l.createDate desc
+  </select>
+
+  <update id="updatePlan" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkEstateIncomeplan">
+    update LNK_Estate_IncomePlan
+    <set>
+      <if test="planType != null">
+        planType = #{planType,jdbcType=INTEGER},
+      </if>
+        fixAmount = #{fixAmount,jdbcType=DECIMAL},
+        totalPercentage = #{totalPercentage,jdbcType=DECIMAL},
+      <if test="isEnable != null">
+        isEnable = #{isEnable,jdbcType=BIT},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null">
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryById" parameterType="map" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkEstateIncomeplanDto">
+    select l.*,
+    b.dicValue
+    + CASE WHEN l.fixAmount is null or l.fixAmount = 0 THEN ''
+    ELSE '，'+convert(varchar(20),l.fixAmount)+'元'
+    END
+    + CASE WHEN l.totalPercentage is null or l.totalPercentage = 0 THEN ''
+    ELSE CASE WHEN l.fixAmount is null or l.fixAmount = 0 THEN '，总价*'+convert(varchar(20),Convert(decimal(18,2),l.totalPercentage))+'%'
+    ELSE '+总价*'+convert(varchar(20),Convert(decimal(18,2),l.totalPercentage))+'%'
+    END
+    END planInfo,
+    CASE WHEN l.isEnable = 0 THEN '启用'
+    ELSE '禁用'
+    END enableType,
+    u.userName userNameCreate,
+    (select count(1) from LNK_Report where DelFlg = 0 and planId = l.id) planNum,
+    (select id from LNK_Estate where projectNo = (select projectNo from LNK_Estate_IncomePlan where id = #{id}) and DelFlg = 0) EstateId
+    from LNK_Estate_IncomePlan l
+    left join BAS_DictionaryValue b on l.planType = b.dicCode and b.delFlag = 'N'
+    left join USR_User u on l.userIdCreate = u.userId and u.delFlag = 'N'
+    where 1=1 and l.delFlag = 0 and l.id = #{id}
+  </select>
+  
+<!--   佣金方案-选择经纪公司 -->
+   <select id="getCompanyList"  parameterType="Map" resultType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+        SELECT
+        	DISTINCT t1.companyNo,t1.companyName 
+        FROM PMLS_Cooperation t1
+        WHERE t1.delFlag=0
+            <if test="cityNo!=null and cityNo!=''">
+                AND t1.cityNo = #{cityNo}
+            </if>
+            <if test="projectNo!=null and projectNo!=''">
+                AND t1.projectNo = #{projectNo}
+            </if>
+            <if test="companyKey!=null and companyKey!=''">
+                and (t1.companyNo like '%'+#{companyKey}+'%' OR t1.companyName like '%'+#{companyKey}+'%')
+            </if>
+        order by t1.companyNo,t1.companyName desc
+    </select>
+</mapper>

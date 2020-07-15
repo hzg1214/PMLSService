@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.exception.ExceptionMapper" >
+
+	<resultMap id="exceptionDtoMap" type="cn.com.eju.deal.dto.exception.ExceptionDto" />
+
+	<select id="getExceptionList" parameterType="cn.com.eju.deal.dto.exception.ExceptionDto" resultMap="exceptionDtoMap">
+		SELECT s1.NAME + '(' + s1.storeNo + ')' AS storeName,s1.Id storeId,s1.AddressDetail,
+			ISNULL(s2.groupName, '-') AS storeCenter,
+			CASE WHEN ISNULL(s1.Maintainer,'')!='' then
+			s1.maintainerName + '(' + s1.Maintainer + ')'
+			ELSE '-' END  username,
+			s1.Maintainer userCode,
+			CASE
+				WHEN CHARINDEX(s2.groupName,s4.centername) = 0 OR (s2.groupName IS NOT NULL AND s4.centername IS NULL)
+					OR (s2.groupName IS NULL AND s4.centername IS NOT NULL) THEN -1
+				WHEN s3.userCode IS NULL THEN 0
+				ELSE 1
+				END status,
+			ISNULL(s4.centername, '-') AS usernameCenter,
+			ISNULL(t2.contractType,'') as contractType
+		FROM Store s1
+		LEFT JOIN dbo.USR_Group s2 ON s1.centerId = s2.groupId
+			AND s2.delFlag = 'N'
+		LEFT JOIN (
+			SELECT DISTINCT userCode
+			FROM crm.dbo.USR_User
+			WHERE delFlag = 'N'
+				AND inStatus != '1075'
+			) s3 ON s1.Maintainer = s3.userCode
+		LEFT JOIN WX_Maintainer_Center s4 ON s1.Maintainer = s4.userCode
+		LEFT JOIN ( SELECT  storeId ,
+			CASE WHEN contractType = 10301
+			THEN 'A'
+			WHEN contractType = 10302
+			THEN 'B'
+			WHEN contractType = 10304
+			THEN 'A转B'
+			ELSE ''
+			END contractType
+			FROM    V_CRM_ContractStore_NOW
+			WHERE   contractStatus IN ( '10401', '10402', '10403', '10404' )
+		) t2 ON s1.id = t2.StoreId
+		WHERE s1.IsDelete = 0
+			AND s1.AuditStatus = 20
+			AND s1.centerId = #{centerId}
+			<if test="storeName != null and storeName != ''">
+			AND (s1.storeNo LIKE '%${storeName}%' OR s1.NAME LIKE '%${storeName}%' OR s2.groupName LIKE '%${storeName}%'
+				OR s1.maintainerName LIKE '%${storeName}%' OR s1.Maintainer LIKE '%${storeName}%')
+			</if>
+		ORDER BY status
+	</select>
+
+	<select id="queryMaintainerByCenterId" parameterType="cn.com.eju.deal.dto.exception.ExceptionDto" resultMap="exceptionDtoMap">
+		SELECT  DISTINCT u.userCode,u.userName,u.dateCreate
+		FROM    crm.dbo.USR_User u
+		INNER JOIN dbo.USR_Group g ON u.groupId = g.groupId
+		INNER JOIN dbo.BAS_City bc ON g.cityId = bc.ID
+		INNER JOIN dbo.Achievement_Setting ast ON bc.CityNo = ast.cityNo
+		AND ast.dicCode = '17901'
+		INNER JOIN crm.dbo.USR_UserPostMapping upm ON u.userId = upm.userId
+		INNER JOIN dbo.USR_PostRoleMapping prm ON upm.postId = prm.postId
+		INNER JOIN dbo.USR_Role r ON prm.roleId = r.roleId
+		INNER JOIN dbo.USR_RoleType rt ON r.roleTypeId = rt.typeId
+		AND rt.typeCode = ast.roleTypeCode
+		INNER JOIN dbo.V_CRM_Center_Group_ref vr ON u.groupId = vr.groupId
+		WHERE   u.delFlag = 'N'
+		AND u.inStatus = 1073
+		AND u.postId IS  NOT NULL
+		AND g.delFlag = 'N'
+		AND upm.delFlag = 'N'
+		AND prm.delFlag = 'N'
+		AND r.delFlag = 'N'
+		AND rt.delFlag = 'N'
+	    AND vr.centerid= #{centerId}
+	    ORDER BY u.dateCreate DESC
+	</select>
+
+	<update id="updateMaintainer" parameterType="cn.com.eju.deal.dto.exception.ExceptionDto">
+		INSERT INTO dbo.StoreMaintainer (storeId,userCode,userIdCreate,delFlag,dateCreate,setUserName,setUserCode,dateMtcStart,Reason)
+		SELECT Id, '${userCode}' userCode,'${createrId}' userIdCreate,'N' delFlag,getdate() dateCreate,'${createrName}' setUserName,'${createrCode}' setUserCode,getdate() dateMtcStart,'${reason}' Reason
+		FROM dbo.Store WHERE Id IN (${storeIdStr});
+
+		UPDATE dbo.Store SET Maintainer = '${userCode}',maintainerName = '${username}' WHERE Id IN (${storeIdStr});
+	</update>
+</mapper>

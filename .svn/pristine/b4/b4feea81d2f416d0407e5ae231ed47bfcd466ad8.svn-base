@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.RoleAuthMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.RoleAuthMapping" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="roleId" property="roleId" jdbcType="INTEGER" />
+    <result column="authId" property="authId" jdbcType="INTEGER" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, roleId, authId, dateCreate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_RoleAuthMapping
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="quertAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_RoleAuthMapping
+    where roleId=#{roleId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="queryList" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_RoleAuthMapping where delFlag='N'
+    and roleId = #{roleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from USR_RoleAuthMapping
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.Integer" >
+    UPDATE USR_RoleAuthMapping
+		SET
+		delFlag='Y'
+		<where>
+			roleId = #{roleId,jdbcType=INTEGER}
+		</where>
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.user.model.RoleAuthMapping" >
+    insert into USR_RoleAuthMapping ( roleId, authId,userIdCreate
+      )
+    values ( #{roleId,jdbcType=INTEGER}, #{authId,jdbcType=INTEGER}, #{userIdCreate,jdbcType=INTEGER}
+      ) 
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.user.model.RoleAuthMapping" >
+    insert into USR_RoleAuthMapping
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleId != null" >
+        roleId,
+      </if>
+      <if test="authId != null" >
+        authId,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="authId != null" >
+        #{authId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.user.model.RoleAuthMapping" >
+    update USR_RoleAuthMapping
+    <set >
+      <if test="roleId != null" >
+        roleId = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="authId != null" >
+        authId = #{authId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.user.model.RoleAuthMapping" >
+    update USR_RoleAuthMapping
+    set roleId = #{roleId,jdbcType=INTEGER},
+      authId = #{authId,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByRoleIdAndAuthId" parameterType="cn.com.eju.deal.user.model.RoleAuthMapping" >
+    update USR_RoleAuthMapping 
+    SET
+		delFlag='N'
+    where roleId = #{roleId,jdbcType=INTEGER} AND  authId = #{authId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <insert id="batchSave" parameterType="list">
+		INSERT INTO USR_RoleAuthMapping
+		( roleId, authId,userIdCreate
+		)
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			(
+			#{obj.roleId,jdbcType=INTEGER},
+			#{obj.authId,jdbcType=INTEGER},
+            #{obj.userIdCreate,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+  
+  
+  
+</mapper>

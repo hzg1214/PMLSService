@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.StoreFangyouAccountMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.StoreFangyouAccount">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="storeId" property="storeId" jdbcType="INTEGER" />
+		<result column="storeNo" property="storeNo" jdbcType="NVARCHAR" />
+		<result column="name" property="name" jdbcType="NVARCHAR" />
+		<result column="fangyouNo" property="fangyouNo" jdbcType="NVARCHAR" />
+		<result column="openStatus" property="openStatus" jdbcType="NVARCHAR" />
+		<result column="operType" property="operType" jdbcType="NVARCHAR" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+	</resultMap>
+    
+	<sql id="Base_Column_List">
+		id, storeId, storeNo, name, fangyouNo, openStatus, operType, userIdCreate, dateCreate, delFlag
+	</sql>
+
+	<!-- 查找门店房友账号关联表信息 -->
+	<select id="getStoreFangyouAccount" parameterType="java.util.Map" resultMap="BaseResultMap" >	
+		SELECT    *
+		FROM      StoreFangyouAccount
+   	    WHERE     delFlag = 0
+   	      AND     FangyouNo = #{fangyouNo,jdbcType=NVARCHAR} 
+   	      AND     storeNo = #{storeNo,jdbcType=NVARCHAR} 
+	</select>
+
+	<!-- 插入门店房友账号关联表信息 -->
+	<insert id="createStoreFangyouAccount" parameterType="cn.com.eju.deal.contract.model.StoreFangyouAccount">
+	  	insert into StoreFangyouAccount 
+	  	(storeId, storeNo, name, fangyouNo, openStatus, operType, userIdCreate, dateCreate, delFlag)
+	     values 
+	    (#{storeId,jdbcType=INTEGER}, #{storeNo,jdbcType=NVARCHAR}, 
+	     #{name,jdbcType=NVARCHAR}, #{fangyouNo,jdbcType=NVARCHAR}, 
+	     #{openStatus,jdbcType=NVARCHAR}, #{operType,jdbcType=NVARCHAR},
+	     #{userIdCreate,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, 
+	     #{delFlag,jdbcType=NVARCHAR}
+	    )
+	</insert>
+	
+	<!-- 更新门店房友账号关联的开通绑定状态 -->
+	<update id="updateStoreFangyouAccountStatus" parameterType="cn.com.eju.deal.contract.model.StoreFangyouAccount">
+		UPDATE StoreFangyouAccount 
+		SET
+			<if test="fangyouNo!='' and fangyouNo!=null">
+				fangyouNo = #{fangyouNo},
+			</if>			
+			openStatus=#{openStatus},
+			OperType=#{operType}
+		WHERE id=#{id};
+	</update>
+	
+	<!-- OP返回判定接口, 【门店房友账号关联表】的【开通状态】变为：2已开通-->
+	<update id="updateStoreFangyouAccountByOp" parameterType="java.lang.String">
+		update StoreFangyouAccount 
+		SET openStatus=2 
+		WHERE openStatus=1 AND operType=1 AND fangyouNo=#{companyNo,jdbcType=NVARCHAR} 
+    </update>
+       
+</mapper>

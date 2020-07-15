@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.LnkYjPlanDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="planId" property="planId" jdbcType="INTEGER" />
+    <result column="equationType" property="equationType" jdbcType="VARCHAR" />
+    <result column="conditionBegin" property="conditionBegin" jdbcType="DECIMAL" />
+    <result column="conditionEnd" property="conditionEnd" jdbcType="DECIMAL" />
+    <result column="fixAmount" property="fixAmount" jdbcType="DECIMAL" />
+    <result column="totalPercentage" property="totalPercentage" jdbcType="DECIMAL" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, planId, equationType, conditionBegin, conditionEnd, fixAmount, totalPercentage, 
+    createDate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from LNK_Yj_Plan_Detail
+    where delFlag=0 and id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from LNK_Yj_Plan_Detail
+    where delFlag=0 and id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanDetail" >
+    insert into LNK_Yj_Plan_Detail (id, planId, equationType, 
+      conditionBegin, conditionEnd, fixAmount, 
+      totalPercentage, createDate, userIdCreate, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{equationType,jdbcType=VARCHAR}, 
+      #{conditionBegin,jdbcType=DECIMAL}, #{conditionEnd,jdbcType=DECIMAL}, #{fixAmount,jdbcType=DECIMAL}, 
+      #{totalPercentage,jdbcType=DECIMAL}, #{createDate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanDetail" >
+    insert into LNK_Yj_Plan_Detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="planId != null" >
+        planId,
+      </if>
+      <if test="equationType != null" >
+        equationType,
+      </if>
+      <if test="conditionBegin != null" >
+        conditionBegin,
+      </if>
+      <if test="conditionEnd != null" >
+        conditionEnd,
+      </if>
+      <if test="fixAmount != null" >
+        fixAmount,
+      </if>
+      <if test="totalPercentage != null" >
+        totalPercentage,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="equationType != null" >
+        #{equationType,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionBegin != null" >
+        #{conditionBegin,jdbcType=DECIMAL},
+      </if>
+      <if test="conditionEnd != null" >
+        #{conditionEnd,jdbcType=DECIMAL},
+      </if>
+      <if test="fixAmount != null" >
+        #{fixAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPercentage != null" >
+        #{totalPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanDetail" >
+    update LNK_Yj_Plan_Detail
+    <set >
+      <if test="planId != null" >
+        planId = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="equationType != null" >
+        equationType = #{equationType,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionBegin != null" >
+        conditionBegin = #{conditionBegin,jdbcType=DECIMAL},
+      </if>
+      <if test="conditionEnd != null" >
+        conditionEnd = #{conditionEnd,jdbcType=DECIMAL},
+      </if>
+      <if test="fixAmount != null" >
+        fixAmount = #{fixAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPercentage != null" >
+        totalPercentage = #{totalPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanDetail" >
+    update LNK_Yj_Plan_Detail
+    set planId = #{planId,jdbcType=INTEGER},
+      equationType = #{equationType,jdbcType=VARCHAR},
+      conditionBegin = #{conditionBegin,jdbcType=DECIMAL},
+      conditionEnd = #{conditionEnd,jdbcType=DECIMAL},
+      fixAmount = #{fixAmount,jdbcType=DECIMAL},
+      totalPercentage = #{totalPercentage,jdbcType=DECIMAL},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+	<select id="getYjPlanDetailListByPlanId" parameterType="Map"
+		resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkYjPlanDetailDto">
+		select
+			bd1.dicValue equationTypeName,detail.id, detail.planId, detail.equationType,
+			detail.conditionBegin, detail.conditionEnd, detail.fixAmount,
+			detail.totalPercentage,
+			detail.createDate, detail.userIdCreate, detail.delFlag
+		from dbo.LNK_Yj_Plan_Detail detail
+		LEFT JOIN dbo.BAS_DictionaryValue bd1 ON bd1.dicCode=detail.equationType AND bd1.delFlag='N'
+		where detail.delFlag = 0 AND detail.planId = #{planId,jdbcType=INTEGER}
+		ORDER BY detail.conditionBegin
+	</select>
+
+
+    <select id ="queryQueryYJAmount" parameterType="Map"
+            resultType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanDetailActDto">
+       SELECT TOP 1 d.* ,
+              sqAmount =  CASE WHEN equationType = '28102' THEN CAST(ROUND(ISNULL(fixAmount,0) * #{dealArea} ,2) AS NUMERIC(18,2))
+                                ELSE CAST(ROUND(ISNULL(fixAmount,0) + #{dealAmount} * (ISNULL(totalPercentage,0)/100),2) AS NUMERIC(18,2))
+              END
+         FROM dbo.LNK_Yj_Plan_Detail d
+        WHERE d.delFlag =0
+          AND d.planId = #{planId,jdbcType=INTEGER}
+
+          AND (d.equationType = '28101'
+              OR d.equationType ='28102'
+              <![CDATA[
+              OR (d.equationType = '28103' AND (d.conditionBegin<#{dealAmount} AND (#{dealAmount} <= d.conditionEnd OR conditionEnd IS NULL)))
+              ]]>
+              <![CDATA[
+              OR (d.equationType = '28104' AND (d.conditionBegin<#{dealArea}   AND (#{dealArea} <= d.conditionEnd OR conditionEnd IS NULL)))
+              ]]>
+          )
+    </select>
+    
+    <update id="updateByPlanId" parameterType="map" >
+	    update LNK_Yj_Plan_Detail set
+	      delFlag = 1
+	    where planId = #{planId,jdbcType=INTEGER}
+  	</update>
+
+</mapper>

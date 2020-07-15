@@ -1,0 +1,190 @@
+package cn.com.eju.deal.houseLinkage.linkDetail.service;
+
+import cn.com.eju.deal.accountproject.dao.AccountProjectMapper;
+import cn.com.eju.deal.accountproject.model.AccountProject;
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.base.support.SystemParam;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.dto.common.CityDto;
+import cn.com.eju.deal.dto.houseLinkage.linkDetail.LinkDetailDto;
+import cn.com.eju.deal.dto.houseLinkage.linkProjectDetail.LinkProjectDetailDto;
+import cn.com.eju.deal.dto.houseLinkage.linkProjectTrace.LinkProjectTraceDto;
+import cn.com.eju.deal.houseLinkage.linkDetail.dao.LinkDetailMapper;
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Joiner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
+import javax.json.Json;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+/**
+ * Service层
+ *
+ * @author tanlang
+ */
+@Service("linkDetailService")
+public class LinkDetailService extends BaseService<LinkDetailDto> {
+
+    @Autowired
+    private LinkDetailMapper linkDetailMapper;
+    @Resource
+    private AccountProjectMapper accountProjectMapper;
+
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+    /**
+     * 查询-list
+     */
+    public ResultData queryLinkDetailList(Map<?, ?> param) throws Exception {
+        //构建返回
+        ResultData resultData = new ResultData();
+
+        logger.info("联动明细查询开始：param:" + JSON.toJSONString(param));
+        //查询
+        List<LinkDetailDto> moList = linkDetailMapper.queryLinkDetailList(param);
+        logger.info("联动明细查询结束（" + moList.size() + "）：param:" + JSON.toJSONString(param));
+        // 转换
+        resultData.setTotalCount((String) param.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(moList);
+
+        return resultData;
+
+    }
+
+    /**
+     * 查询-list
+     */
+    public List<LinkProjectDetailDto> queryLinkProjectDetailList(Map<?, ?> param) throws Exception {
+        //查询
+        List<LinkProjectDetailDto> moList = null;
+
+        String searchType = (String) param.get("searchType");
+        if("1".equals(searchType)){//按项目
+            moList = linkDetailMapper.queryLinkProjectDetailListByProject(param);
+        }else{
+            moList = linkDetailMapper.queryLinkProjectDetailList(param);
+        }
+        return moList;
+
+    }
+
+    /**
+     * 查询-list
+     */
+    public List<LinkProjectTraceDto> queryLinkProjectTraceList(Map<?, ?> param) throws Exception {
+        //查询
+        //return new ArrayList<LinkProjectTraceDto>();
+        return linkDetailMapper.queryLinkProjectTraceList(param);
+    }
+
+    public List<CityDto> queryCityList(Map<String, Object> queryParam) throws Exception {
+        return linkDetailMapper.queryCityList(queryParam);
+    }
+
+    public ResultData getAccountProject() throws Exception {
+        ResultData resultData = new ResultData();
+        Map<String, Object> queryParam = new HashMap<>();
+        List<AccountProject> accountProjectList = accountProjectMapper.selBasAPBycondition(queryParam);
+        resultData.setReturnData(accountProjectList);
+        return resultData;
+    }
+
+
+
+    public ResultData<String> export(Map<String, Object> param) {
+        logger.info("联动明细##CSV生成 start：param:" + JSON.toJSONString(param));
+        ResultData<String> resultData = new ResultData<String>();
+        String uuId = UUID.randomUUID().toString().replaceAll("-", "");
+
+        String webUrl = SystemParam.getWebConfigValue("exportWebUrl");
+        String filePath = SystemParam.getWebConfigValue("rptQTLnkDetail_filePath");
+        String fileName = "linkDetailReport" + uuId + ".csv";
+
+
+        String organization 		     = (String)param.get("organization");
+        String reportDateStart 		     = (String)param.get("reportDateStart");
+        String reportDateEnd  			 = (String)param.get("reportDateEnd");
+        String roughDateStart 			 = (String)param.get("roughDateStart");
+        String roughDateEnd 			 = (String)param.get("roughDateEnd");
+        String dealDateStart 			 = (String)param.get("dealDateStart");
+        String dealDateEnd 				 = (String)param.get("dealDateEnd");
+        String estateId 				 = (String)param.get("estateId");
+        String estateNm 				 = (String)param.get("estateNm");
+        String reportId 				 = (String)param.get("reportId");
+        String storeNo 				     = (String)param.get("storeNo");
+        String customerFromId 		     = (String)param.get("customerFromId");
+        String serachKey 			     = (String)param.get("serachKey");
+        String centerIdList 			 = (String)param.get("centerIdList");
+        String userId 				     = param.get("userId").toString();
+
+        List<String> accountProjectListS = (List<String>)param.get("accountProjectList");
+        List<String> regionCodeListS = (List<String>)param.get("regionCodeList");
+        List<String> areaCityCodeListS = (List<String>)param.get("areaCityCodeList");
+        List<String> cityIdListS = (List<String>)param.get("cityIdList");
+        String accountProjectList = "";
+        if(!CollectionUtils.isEmpty(accountProjectListS)){
+            accountProjectList = Joiner.on(",").join(accountProjectListS);
+        }
+
+        String regionCodeList = "";
+        if(!CollectionUtils.isEmpty(regionCodeListS)){
+            regionCodeList = Joiner.on(",").join(regionCodeListS);
+        }
+
+        String areaCityCodeList = "";
+        if(!CollectionUtils.isEmpty(areaCityCodeListS)){
+            areaCityCodeList = Joiner.on(",").join(areaCityCodeListS);
+        }
+        String cityIdList = "";
+        if(!CollectionUtils.isEmpty(cityIdListS)){
+            cityIdList = Joiner.on(",").join(cityIdListS);
+        }
+
+        if(centerIdList==null){
+            centerIdList = "";
+        }
+
+
+        StringBuffer sql = new StringBuffer();
+        sql.append(" EXEC crm.dbo.P_CRM_RPT_LinkDetail_Str_CSV  ");
+        sql.append(" '" + TransactSQLInjection(organization) + "'");
+        sql.append(" ,'" + TransactSQLInjection(reportDateStart) + "'");
+        sql.append(" ,'" + TransactSQLInjection(reportDateEnd) + "'");
+        sql.append(" ,'" + TransactSQLInjection(roughDateStart) + "'");
+        sql.append(" ,'" + TransactSQLInjection(roughDateEnd) + "'");
+        sql.append(" ,'" + TransactSQLInjection(dealDateStart) + "'");
+        sql.append(" ,'" + TransactSQLInjection(dealDateEnd) + "'");
+        sql.append(" ,'" + TransactSQLInjection(estateId) + "'");
+        sql.append(" ,'" + TransactSQLInjection(estateNm) + "'");
+        sql.append(" ,'" + TransactSQLInjection(reportId) + "'");
+        sql.append(" ,'" + TransactSQLInjection(storeNo) + "'");
+        sql.append(" ,'" + TransactSQLInjection(customerFromId) + "'");
+        sql.append(" ,'" + TransactSQLInjection(accountProjectList) + "'");
+        sql.append(" ,'" + TransactSQLInjection(regionCodeList) + "'");
+        sql.append(" ,'" + TransactSQLInjection(serachKey) + "'");
+        sql.append(" ,'" + TransactSQLInjection(areaCityCodeList) + "'");
+        sql.append(" ,'" + TransactSQLInjection(cityIdList) + "'");
+        sql.append(" ,'" + TransactSQLInjection(centerIdList) + "'");
+        sql.append(" ,'" + TransactSQLInjection(userId) + "'");
+
+
+        Map<String, Object> imparm = new HashMap<>();
+        imparm.put("sqlstr", sql.toString());
+        imparm.put("filePathName", filePath + "//" + fileName);
+        linkDetailMapper.export(imparm);
+
+        resultData.setReturnData(webUrl + "/" + fileName);
+        logger.info("联动明细##CSV生成 end：param:" + JSON.toJSONString(param) +"imparm="+ JSON.toJSONString(imparm));
+        return resultData;
+    }
+}

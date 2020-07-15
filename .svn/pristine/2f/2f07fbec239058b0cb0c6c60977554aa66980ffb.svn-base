@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjDTmMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjDTm">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="wjhid" jdbcType="INTEGER" property="wjhid" />
+    <result column="wjtmType" jdbcType="VARCHAR" property="wjtmType" />
+    <result column="wjtmMaxScore" jdbcType="INTEGER" property="wjtmMaxScore" />
+    <result column="wjtmflType" jdbcType="VARCHAR" property="wjtmflType" />
+    <result column="wjtmValue" jdbcType="NVARCHAR" property="wjtmValue" />
+    <result column="wjtmSortindex" jdbcType="INTEGER" property="wjtmSortindex" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, wjhid, wjtmType, wjtmMaxScore, wjtmflType, wjtmValue, wjtmSortindex, userCreate, 
+    dateCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_D_TM
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Wj_D_TM
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDTm">
+    insert into Kefu_Wj_D_TM (id, wjhid, wjtmType, 
+      wjtmMaxScore, wjtmflType, wjtmValue, 
+      wjtmSortindex, userCreate, dateCreate, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{wjhid,jdbcType=INTEGER}, #{wjtmType,jdbcType=VARCHAR}, 
+      #{wjtmMaxScore,jdbcType=INTEGER}, #{wjtmflType,jdbcType=VARCHAR}, #{wjtmValue,jdbcType=NVARCHAR}, 
+      #{wjtmSortindex,jdbcType=INTEGER}, #{userCreate,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDTm" useGeneratedKeys="true" keyProperty="id">
+    insert into Kefu_Wj_D_TM
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="wjhid != null">
+        wjhid,
+      </if>
+      <if test="wjtmType != null">
+        wjtmType,
+      </if>
+      <if test="wjtmMaxScore != null">
+        wjtmMaxScore,
+      </if>
+      <if test="wjtmflType != null">
+        wjtmflType,
+      </if>
+      <if test="wjtmValue != null">
+        wjtmValue,
+      </if>
+      <if test="wjtmSortindex != null">
+        wjtmSortindex,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="wjhid != null">
+        #{wjhid,jdbcType=INTEGER},
+      </if>
+      <if test="wjtmType != null">
+        #{wjtmType,jdbcType=VARCHAR},
+      </if>
+      <if test="wjtmMaxScore != null">
+        #{wjtmMaxScore,jdbcType=INTEGER},
+      </if>
+      <if test="wjtmflType != null">
+        #{wjtmflType,jdbcType=VARCHAR},
+      </if>
+      <if test="wjtmValue != null">
+        #{wjtmValue,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjtmSortindex != null">
+        #{wjtmSortindex,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDTm">
+    update Kefu_Wj_D_TM
+    <set>
+      <if test="wjhid != null">
+        wjhid = #{wjhid,jdbcType=INTEGER},
+      </if>
+      <if test="wjtmType != null">
+        wjtmType = #{wjtmType,jdbcType=VARCHAR},
+      </if>
+      <if test="wjtmMaxScore != null">
+        wjtmMaxScore = #{wjtmMaxScore,jdbcType=INTEGER},
+      </if>
+      <if test="wjtmflType != null">
+        wjtmflType = #{wjtmflType,jdbcType=VARCHAR},
+      </if>
+      <if test="wjtmValue != null">
+        wjtmValue = #{wjtmValue,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjtmSortindex != null">
+        wjtmSortindex = #{wjtmSortindex,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDTm">
+    update Kefu_Wj_D_TM
+    set wjhid = #{wjhid,jdbcType=INTEGER},
+      wjtmType = #{wjtmType,jdbcType=VARCHAR},
+      wjtmMaxScore = #{wjtmMaxScore,jdbcType=INTEGER},
+      wjtmflType = #{wjtmflType,jdbcType=VARCHAR},
+      wjtmValue = #{wjtmValue,jdbcType=NVARCHAR},
+      wjtmSortindex = #{wjtmSortindex,jdbcType=INTEGER},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <resultMap id="KeFuWjTmResultMap" extends="BaseResultMap" type="cn.com.eju.deal.keFuWj.dto.KefuWjDTmDto">
+    <collection column="{wjhid=wjhid,wjdid=id}" property="wjDDaList"
+                select="cn.com.eju.deal.keFuWj.dao.KefuWjDDaMapper.getListByWjHIdAndWjDId"/>
+  </resultMap>
+
+  <select id="getListByWjHId" parameterType="Map" resultMap="KeFuWjTmResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_D_TM
+    where wjhid = #{wjhid,jdbcType=INTEGER} AND delFlag = 0
+    ORDER BY wjtmSortindex ASC
+  </select>
+
+  <select id="getWjTmByWjcode" resultType="Map" parameterType="String">
+    SELECT id FROM Kefu_Wj_D_TM t
+    WHERE wjhid =(SELECT id FROM dbo.Kefu_Wj_H WHERE delFlag=0 AND wjCode=#{wjCode,jdbcType=VARCHAR})
+    ORDER BY wjtmSortindex
+  </select>
+
+
+  <select id="getFlDtoList" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.dto.statisfactionSurvey.SurveyFlDto">
+    select
+      wjtmflType wjtmflType,
+      sum(wjtmMaxScore) wjflScore
+    from Kefu_Wj_D_TM
+    where wjhid = #{hid,jdbcType=INTEGER} GROUP BY wjtmflType
+  </select>
+
+  <select id="queryWjTMListByCode" parameterType="java.lang.String" resultType="Map">
+    SELECT
+        id,
+        wjtmflType,
+        wjtmValue
+    FROM
+        Kefu_Wj_D_TM
+    WHERE
+        wjhid = ( SELECT id FROM Kefu_Wj_H WHERE wjCode = #{wjCode} AND delFlag = 0 )
+    ORDER BY
+        wjtmflType ASC,
+        id ASC
+  </select>
+</mapper>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.skStatement.dao.PmlsSkStatementMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.skStatement.model.PmlsSkStatement" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="oaNo" property="oaNo" jdbcType="VARCHAR" />
+    <result column="skTypeId" property="skTypeId" jdbcType="INTEGER" />
+    <result column="hsCode" property="hsCode" jdbcType="VARCHAR" />
+    <result column="hsName" property="hsName" jdbcType="NVARCHAR" />
+    <result column="skAmountTotal" property="skAmountTotal" jdbcType="DECIMAL" />
+    <result column="customerCode" property="customerCode" jdbcType="VARCHAR" />
+    <result column="customerName" property="customerName" jdbcType="NVARCHAR" />
+    <result column="recordDate" property="recordDate" jdbcType="TIMESTAMP" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="userIdUpdate" property="userIdUpdate" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, oaNo, skTypeId, hsCode, hsName, skAmountTotal, customerCode, customerName, recordDate, 
+    delFlag, dateCreate, userIdCreate, dateUpdate, userIdUpdate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from PMLS_SkStatement
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from PMLS_SkStatement
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkStatement" >
+    insert into PMLS_SkStatement (id, oaNo, skTypeId, 
+      hsCode, hsName, skAmountTotal, 
+      customerCode, customerName, recordDate, 
+      delFlag, dateCreate, userIdCreate, 
+      dateUpdate, userIdUpdate)
+    values (#{id,jdbcType=INTEGER}, #{oaNo,jdbcType=VARCHAR}, #{skTypeId,jdbcType=INTEGER}, 
+      #{hsCode,jdbcType=VARCHAR}, #{hsName,jdbcType=NVARCHAR}, #{skAmountTotal,jdbcType=DECIMAL}, 
+      #{customerCode,jdbcType=VARCHAR}, #{customerName,jdbcType=NVARCHAR}, #{recordDate,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=BIT}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{dateUpdate,jdbcType=TIMESTAMP}, #{userIdUpdate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkStatement" >
+    insert into PMLS_SkStatement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="oaNo != null" >
+        oaNo,
+      </if>
+      <if test="skTypeId != null" >
+        skTypeId,
+      </if>
+      <if test="hsCode != null" >
+        hsCode,
+      </if>
+      <if test="hsName != null" >
+        hsName,
+      </if>
+      <if test="skAmountTotal != null" >
+        skAmountTotal,
+      </if>
+      <if test="customerCode != null" >
+        customerCode,
+      </if>
+      <if test="customerName != null" >
+        customerName,
+      </if>
+      <if test="recordDate != null" >
+        recordDate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="oaNo != null" >
+        #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skTypeId != null" >
+        #{skTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="hsCode != null" >
+        #{hsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hsName != null" >
+        #{hsName,jdbcType=NVARCHAR},
+      </if>
+      <if test="skAmountTotal != null" >
+        #{skAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="customerCode != null" >
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="recordDate != null" >
+        #{recordDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkStatement" >
+    update PMLS_SkStatement
+    <set >
+      <if test="oaNo != null" >
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skTypeId != null" >
+        skTypeId = #{skTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="hsCode != null" >
+        hsCode = #{hsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hsName != null" >
+        hsName = #{hsName,jdbcType=NVARCHAR},
+      </if>
+      <if test="skAmountTotal != null" >
+        skAmountTotal = #{skAmountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="customerCode != null" >
+        customerCode = #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        customerName = #{customerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="recordDate != null" >
+        recordDate = #{recordDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkStatement" >
+    update PMLS_SkStatement
+    set oaNo = #{oaNo,jdbcType=VARCHAR},
+      skTypeId = #{skTypeId,jdbcType=INTEGER},
+      hsCode = #{hsCode,jdbcType=VARCHAR},
+      hsName = #{hsName,jdbcType=NVARCHAR},
+      skAmountTotal = #{skAmountTotal,jdbcType=DECIMAL},
+      customerCode = #{customerCode,jdbcType=VARCHAR},
+      customerName = #{customerName,jdbcType=NVARCHAR},
+      recordDate = #{recordDate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userIdUpdate = #{userIdUpdate,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryList" parameterType="Map" resultType="cn.com.eju.pmls.skStatement.dto.PmlsSkStatementDto">
+
+  </select>
+  <select id="getSkStatementById" parameterType="Map"
+          resultType="cn.com.eju.pmls.skStatement.dto.PmlsSkStatementDto">
+
+  </select>
+
+</mapper>

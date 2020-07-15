@@ -1,0 +1,24 @@
+package cn.com.eju.pmls.developer.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import cn.com.eju.pmls.developer.dto.DeveloperBrandDto;
+
+
+public interface DeveloperBrandMapper {
+    //新增渠道品牌
+    int addDeveloperBrand(DeveloperBrandDto dto);
+    //删除渠道品牌
+    int deleteDeveloperBrand(DeveloperBrandDto dto);
+    //修改渠道品牌
+    int updateDeveloperBrand(DeveloperBrandDto dto);
+    //获取渠道品牌信息
+    DeveloperBrandDto getDeveloperBrandInfo(Map<String, Object> queryParam);
+    //获取渠道品牌列表
+    List<DeveloperBrandDto> getDeveloperBrandList(Map<String, Object> queryParam);
+    //校验开发商品牌名称是否存在
+    int checkDeveloperInfo(DeveloperBrandDto dto);
+    //校验开发商品牌是否有对应的开发商，如果有不让删除
+    int checkDeveloper(DeveloperBrandDto dto);
+}

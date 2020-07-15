@@ -1,0 +1,98 @@
+package cn.com.eju.pmls.cooperation.dao;
+
+import cn.com.eju.deal.core.dao.IDao;
+import cn.com.eju.deal.frameContract.model.FrameContract;
+import cn.com.eju.deal.houseLinkage.estate.model.EstateContractDto;
+import cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto;
+import cn.com.eju.pmls.cooperation.model.CooperationDto;
+
+import java.util.List;
+import java.util.Map;
+
+public interface CooperationMapper extends IDao<CooperationDto> {
+
+    /**
+     * 合作确认函 列表
+     * @param queryParam
+     * @return
+     */
+    List<CooperationDto> getCooperationList(Map<String, Object> queryParam);
+
+    /**
+     * 新增合作确认函 合同
+     * @param dto
+     * @return
+     */
+    int addCooperation(CooperationDto dto);
+
+    /**
+     * 修改合作确认函 合同
+     * @param dto
+     * @return
+     */
+    int updateCooperation(CooperationDto dto);
+
+    /**
+     * 获取合作确认函 合同
+     * @param dto
+     * @return
+     */
+    CooperationDto getCooperationInfo(CooperationDto dto);
+
+    /**
+     * 获取经纪公司列表
+     * @param queryParam
+     * @return
+     */
+    List<BusinessManagerDto> getCompanyList(Map<String, Object> queryParam);
+
+    /**
+     * 获取经纪公司详情
+     * @param dto
+     * @return
+     */
+    BusinessManagerDto getCompanyInfo(BusinessManagerDto dto);
+
+    /**
+     * 根据公司信息 获取框架协议（生效）
+     * @param queryParam
+     * @return
+     */
+    FrameContract getCompanyFrameContractInfo(Map<String, Object> queryParam);
+
+    /**
+     * 根据营业执照号 获取OA供应商信息
+     * @param queryParam
+     * @return
+     */
+    BusinessManagerDto getCompanyVendorInfo(Map<String, Object> queryParam);
+
+    /**
+     * 修改公司信息 供应商信息
+     * @param dto
+     * @return
+     */
+    int updateCompanyVendor(BusinessManagerDto dto);
+
+    /**
+     * 根据项目编号和公司编号获取最新的分销合同
+     * */
+    CooperationDto getCooperationNew(Map<String, Object> queryParam);
+
+    /**
+     * 发起OA申请 合作协议
+     * @param dto
+     * @return
+     */
+    int updateSendOACooperation(CooperationDto dto);
+
+    /**
+     * 项目 合同记录  包含收入类合同和进场确认函
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    List<EstateContractDto> queryEstateHtRecord(Map<?, ?> param) throws Exception;
+
+    int updateById(CooperationDto dto);
+}

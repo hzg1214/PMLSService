@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.EstateTypeMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.EstateType">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="EstateId" property="estateId" jdbcType="VARCHAR"/>
+        <result column="TypeId" property="typeId" jdbcType="VARCHAR"/>
+        <result column="CountFlg" property="countFlg" jdbcType="INTEGER"/>
+        <result column="CountF" property="countF" jdbcType="VARCHAR"/>
+        <result column="CountT" property="countT" jdbcType="VARCHAR"/>
+        <result column="CountW" property="countW" jdbcType="VARCHAR"/>
+        <result column="CountY" property="countY" jdbcType="VARCHAR"/>
+        <result column="BuildSquare" property="buildSquare" jdbcType="DECIMAL"/>
+        <result column="UseSquare" property="useSquare" jdbcType="DECIMAL"/>
+        <result column="DirectionKbn" property="directionKbn" jdbcType="INTEGER"/>
+        <result column="Label" property="label" jdbcType="NVARCHAR"/>
+        <result column="CrtEmpId" property="crtEmpId" jdbcType="INTEGER"/>
+        <result column="UptEmpId" property="uptEmpId" jdbcType="INTEGER"/>
+        <result column="DelFlg" property="delFlg" jdbcType="BIT"/>
+        <result column="CrtDt" property="crtDt" jdbcType="TIMESTAMP"/>
+        <result column="UptDt" property="uptDt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    Id,EstateId,TypeId,CountFlg,CountF,CountT,CountW,CountY,BuildSquare,UseSquare,DirectionKbn,Label,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt
+  </sql>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_EstateType
+        <where>
+            Id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.estate.model.EstateType"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_EstateType (EstateId,TypeId,CountFlg,CountF,CountT,CountW,CountY,BuildSquare,UseSquare,DirectionKbn,Label,
+    	CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt
+      )
+    values (#{estateId, jdbcType=VARCHAR},#{typeId, jdbcType=VARCHAR},#{countFlg, jdbcType=INTEGER},#{countF, jdbcType=VARCHAR},#{countT, jdbcType=VARCHAR},#{countW, jdbcType=VARCHAR},
+#{countY, jdbcType=VARCHAR},#{buildSquare, jdbcType=DECIMAL},#{useSquare, jdbcType=DECIMAL},#{directionKbn, jdbcType=INTEGER},#{label, jdbcType=NVARCHAR},
+#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg, jdbcType=BIT},#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+<!-- 查询 list -->
+    <select id='queryList' parameterType="Map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM LNK_EstateType
+        <where>
+            DelFlg=0
+            <if test="estateId != null and estateId != ''">
+                <![CDATA[AND EstateId=#{estateId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="typeId != null and typeId != ''">
+                <![CDATA[AND TypeId = #{typeId, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </select>
+    <update id="update" parameterType="cn.com.eju.deal.houseLinkage.estate.model.EstateType">
+        update LNK_EstateType
+        <set>
+            <if test="estateId != null">
+			EstateId = #{estateId, jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+			TypeId = #{typeId, jdbcType=VARCHAR},
+			</if>
+			<if test="countFlg != null">
+			CountFlg = #{countFlg, jdbcType=INTEGER},
+			</if>
+			<if test="countF != null">
+			CountF = #{countF, jdbcType=VARCHAR},
+			</if>
+			<if test="countT != null">
+			CountT = #{countT, jdbcType=VARCHAR},
+			</if>
+			<if test="countW != null">
+			CountW = #{countW, jdbcType=VARCHAR},
+			</if>
+			<if test="countY != null">
+			CountY = #{countY, jdbcType=VARCHAR},
+			</if>
+			<if test="buildSquare != null">
+			BuildSquare = #{buildSquare, jdbcType=DECIMAL},
+			</if>
+			<if test="useSquare != null">
+			UseSquare = #{useSquare, jdbcType=DECIMAL},
+			</if>
+			<if test="directionKbn != null">
+			DirectionKbn = #{directionKbn, jdbcType=INTEGER},
+			</if>
+			<if test="label != null">
+			Label = #{label, jdbcType=NVARCHAR},
+			</if>
+			<if test="crtEmpId != null">
+			crtEmpId = #{crtEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="uptEmpId != null">
+			uptEmpId = #{uptEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="delFlg != null">
+			delFlg = #{delFlg, jdbcType=BIT},
+			</if>
+			<if test="crtDt != null">
+			crtDt = #{crtDt, jdbcType=TIMESTAMP},
+			</if>
+			<if test="uptDt != null">
+			uptDt = #{uptDt, jdbcType=TIMESTAMP},
+			</if>
+        </set>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+    
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		UPDATE dbo.LNK_EstateType SET DelFlg=1,UptDt=GETDATE(),UptEmpId=#{updateId,jdbcType=INTEGER} WHERE Id=#{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

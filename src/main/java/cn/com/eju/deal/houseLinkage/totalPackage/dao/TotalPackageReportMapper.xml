@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.totalPackage.dao.TotalPackageReportMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageReport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="settlementNo" jdbcType="VARCHAR" property="settlementNo" />
+    <result column="orderNumber" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="projectNo" jdbcType="VARCHAR" property="projectNo" />
+    <result column="buildingNo" jdbcType="NVARCHAR" property="buildingNo" />
+    <result column="salesMoney" jdbcType="DECIMAL" property="salesMoney" />
+    <result column="salesDate" jdbcType="TIMESTAMP" property="salesDate" />
+    <result column="preTaxTotalServiceFee" jdbcType="DECIMAL" property="preTaxTotalServiceFee" />
+    <result column="afterTaxTotalServiceFee" jdbcType="DECIMAL" property="afterTaxTotalServiceFee" />
+    <result column="preTaxIncome" jdbcType="DECIMAL" property="preTaxIncome" />
+    <result column="afterTaxIncome" jdbcType="DECIMAL" property="afterTaxIncome" />
+    <result column="oaPastTrialDate" jdbcType="TIMESTAMP" property="oaPastTrialDate" />
+    <result column="hasBBDeal" jdbcType="INTEGER" property="hasBBDeal" />
+    <result column="dealBBDate" jdbcType="TIMESTAMP" property="dealBBDate" />
+    <result column="hasIncomeDeal" jdbcType="INTEGER" property="hasIncomeDeal" />
+    <result column="dealIncomeDate" jdbcType="TIMESTAMP" property="dealIncomeDate" />
+    <result column="hasRakebackDeal" jdbcType="INTEGER" property="hasRakebackDeal" />
+    <result column="dealRakebackDate" jdbcType="TIMESTAMP" property="dealRakebackDate" />
+    <result column="hasPadDeal" jdbcType="INTEGER" property="hasPadDeal" />
+    <result column="dealPadDate" jdbcType="TIMESTAMP" property="dealPadDate" />
+    <result column="dealDesc" jdbcType="NVARCHAR" property="dealDesc" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, settlementNo,orderNumber, projectNo, buildingNo, salesMoney, salesDate, preTaxTotalServiceFee,afterTaxTotalServiceFee,
+    preTaxIncome,afterTaxIncome,oaPastTrialDate,hasBBDeal,dealBBDate,hasIncomeDeal,dealIncomeDate,
+    hasRakebackDeal,dealRakebackDate,hasPadDeal,dealPadDate,dealDesc,createDate,delFlag
+  </sql>
+  <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageReport" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO dbo.LNK_TotalPackageReport
+        ( settlementNo ,
+          orderNumber,
+          projectNo ,
+          buildingNo ,
+          salesMoney ,
+          salesDate ,
+          preTaxTotalServiceFee ,
+          afterTaxTotalServiceFee ,
+          preTaxIncome ,
+          afterTaxIncome ,
+          oaPastTrialDate ,
+          hasBBDeal ,
+          dealBBDate ,
+          hasIncomeDeal ,
+          dealIncomeDate ,
+          hasRakebackDeal ,
+          dealRakebackDate ,
+          hasPadDeal ,
+          dealPadDate ,
+          dealDesc ,
+          createDate,
+          delFlag
+        )
+    VALUES  (#{settlementNo,jdbcType=VARCHAR} ,
+          #{orderNumber,jdbcType=VARCHAR} ,
+          #{projectNo,jdbcType=VARCHAR} ,
+          #{buildingNo,jdbcType=NVARCHAR} ,
+          #{salesMoney,jdbcType=DECIMAL} ,
+          #{salesDate,jdbcType=TIMESTAMP} ,
+          #{preTaxTotalServiceFee,jdbcType=DECIMAL} ,
+          #{afterTaxTotalServiceFee,jdbcType=DECIMAL} ,
+          #{preTaxIncome,jdbcType=DECIMAL} ,
+          #{afterTaxIncome,jdbcType=DECIMAL} ,
+          #{oaPastTrialDate,jdbcType=TIMESTAMP} ,
+          0 ,
+          #{dealBBDate,jdbcType=TIMESTAMP} ,
+          0 ,
+          #{dealIncomeDate,jdbcType=TIMESTAMP} ,
+          0 ,
+          #{dealRakebackDate,jdbcType=TIMESTAMP} ,
+          0 ,
+          #{dealPadDate,jdbcType=TIMESTAMP} ,
+          #{dealDesc,jdbcType=NVARCHAR} ,
+          #{createDate,jdbcType=TIMESTAMP},
+          'N'
+        )
+  </insert>
+  <update id="update" parameterType="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageReport">
+    update LNK_TotalPackageReport
+    <set>
+      <if test="settlementNo != null">
+        settlementNo = #{settlementNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        orderNumber = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null">
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null">
+        buildingNo = #{buildingNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="salesMoney != null">
+        salesMoney = #{salesMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="salesDate != null">
+        salesDate = #{salesDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preTaxTotalServiceFee != null">
+        preTaxTotalServiceFee = #{preTaxTotalServiceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="afterTaxTotalServiceFee != null">
+        afterTaxTotalServiceFee = #{afterTaxTotalServiceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="preTaxIncome != null">
+        preTaxIncome = #{preTaxIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="afterTaxIncome != null">
+        afterTaxIncome = #{afterTaxIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="oaPastTrialDate != null">
+        oaPastTrialDate = #{oaPastTrialDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasBBDeal != null">
+        hasBBDeal = #{hasBBDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dealBBDate != null">
+        dealBBDate = #{dealBBDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasIncomeDeal != null">
+        hasIncomeDeal = #{hasIncomeDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dealIncomeDate != null">
+        dealIncomeDate = #{dealIncomeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasRakebackDeal != null">
+        hasRakebackDeal = #{hasRakebackDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dealRakebackDate != null">
+        dealRakebackDate = #{dealRakebackDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasPadDeal != null">
+        hasPadDeal = #{hasPadDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dealPadDate != null">
+        dealPadDate = #{dealPadDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealDesc != null">
+        dealDesc = #{dealDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap type="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageReport" id="reportMap"></resultMap>
+  <select id="getTotalPackageReportListForHandle" resultMap="reportMap">
+    SELECT <include refid="Base_Column_List"/> FROM dbo.LNK_TotalPackageReport WHERE delFlag='N' AND hasBBDeal=0
+  </select>
+  <resultMap id="reportdyMap" type="cn.com.eju.deal.dto.scene.commission.ReportdyDto"></resultMap>
+  <select id="getReportdy" parameterType="java.util.Map" resultMap="reportdyMap">
+    SELECT * FROM dbo.LNK_Reportdy
+    WHERE DelFlg=0
+    AND ReportId=#{reportId,jdbcType=VARCHAR}
+    AND CONVERT(varchar(100), RecordDate, 23) = CONVERT(varchar(100), #{recordDate,jdbcType=TIMESTAMP}, 23)
+    <if test="type == 1">
+      AND BefTaxYjAmount IS NOT NULL AND AftTaxYjAmount IS NOT NULL
+    </if>
+    <if test="type == 2">
+      AND BefTaxSjAmount IS NOT NULL AND AftTaxSjAmount IS NOT NULL
+    </if>
+  </select>
+  <insert id="createReportdy" parameterType="cn.com.eju.deal.dto.scene.commission.ReportdyDto">
+    INSERT INTO LNK_Reportdy
+            ( ReportId ,
+              BefTaxYjAmount ,
+              AftTaxYjAmount ,
+              BefTaxSjAmount ,
+              AftTaxSjAmount ,
+              RecordDate ,
+              DelFlg ,
+              CrtDt ,
+              CrtEmpId
+            )
+    VALUES  ( #{reportId,jdbcType=VARCHAR} , -- ReportId - nvarchar(50)
+              #{befTaxYjAmount,jdbcType=DECIMAL} , -- BefTaxYjAmount - decimal
+              #{aftTaxYjAmount,jdbcType=DECIMAL} , -- AftTaxYjAmount - decimal
+              #{befTaxSjAmount,jdbcType=DECIMAL} , -- BefTaxSjAmount - decimal
+              #{aftTaxSjAmount,jdbcType=DECIMAL} , -- AftTaxSjAmount - decimal
+              #{recordDate,jdbcType=TIMESTAMP} , -- RecordDate - datetime
+              0 , -- DelFlg - bit
+              getdate() , -- CrtDt - datetime
+              2221
+            )
+  </insert>
+  <update id="updateReportdy" parameterType="cn.com.eju.deal.dto.scene.commission.ReportdyDto">
+    UPDATE LNK_Reportdy
+    <set>
+      <if test="befTaxYjAmount != null">
+        befTaxYjAmount = #{befTaxYjAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="aftTaxYjAmount != null">
+        aftTaxYjAmount = #{aftTaxYjAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="befTaxSjAmount != null">
+        befTaxSjAmount = #{befTaxSjAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="aftTaxSjAmount != null">
+        aftTaxSjAmount = #{aftTaxSjAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="recordDate != null">
+        recordDate = #{recordDate,jdbcType=TIMESTAMP},
+      </if>
+      UptEmpId=2221,UptDt=getdate()
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+</mapper>

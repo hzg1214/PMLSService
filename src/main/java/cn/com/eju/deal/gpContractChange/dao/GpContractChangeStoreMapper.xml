@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.gpContractChange.dao.GpContractChangeStoreMapper">
+	<!-- 新增公盘合同终止门店信息 -->
+	<insert id="create" parameterType="cn.com.eju.deal.gpContractChange.model.GpContractChangeStore"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into GP_ContractChangeStore (
+			  gpContractStopId, storeId, 
+		      storeNo, storeName, storeAddress, 
+		      storeManager, storeManagerPhone, maintainer, 
+		      maintainerName, dateCreate, userIdCreate, 
+		      dateUpt, userIdUpt, delFlag,cancelStatus)
+	    values ( #{gpContractStopId,jdbcType=INTEGER}, 
+	    	#{storeId,jdbcType=INTEGER}, #{storeNo,jdbcType=VARCHAR},#{storeName,jdbcType=VARCHAR},
+	    	#{storeAddress,jdbcType=VARCHAR},#{storeManager},
+	    	#{storeManagerPhone,jdbcType=VARCHAR},#{maintainer},
+	    	#{maintainerName,jdbcType=VARCHAR},getDate(), 
+	    	#{userIdCreate,jdbcType=INTEGER}, 
+	    	#{dateUpt,jdbcType=TIMESTAMP},#{userIdUpt,jdbcType=INTEGER},
+	      	#{delFlag,jdbcType=CHAR},#{cancelStatus,jdbcType=INTEGER})
+	</insert>
+	<!-- 根据id更新公盘合同终止门店信息 -->
+	<update id="updateStr" parameterType="cn.com.eju.deal.gpContractChange.model.GpContractChangeStore">
+		UPDATE dbo.GP_ContractChangeStore
+		   <set>
+		      <if test="gpContractStopId != null">
+		        gpContractStopId = #{gpContractStopId,jdbcType=INTEGER},
+		      </if>
+		      <if test="storeId != null">
+		        storeId = #{storeId,jdbcType=INTEGER},
+		      </if>
+		      <if test="storeNo != null">
+		        storeNo = #{storeNo,jdbcType=VARCHAR},
+		      </if>
+		      <if test="storeName != null">
+		        storeName = #{storeName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="storeAddress != null">
+		        storeAddress = #{storeAddress,jdbcType=VARCHAR},
+		      </if>
+		      <if test="storeManager != null">
+		        storeManager = #{storeManager,jdbcType=VARCHAR},
+		      </if>
+		      <if test="storeManagerPhone != null">
+		        storeManagerPhone = #{storeManagerPhone,jdbcType=VARCHAR},
+		      </if>
+		      <if test="maintainer != null">
+		        maintainer = #{maintainer},
+		      </if>
+		      <if test="maintainerName != null">
+		        maintainerName = #{maintainerName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="userIdUpt != null">
+		        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+		       	dateUpt = getDate(),
+		      </if>
+		      <if test="delFlag != null">
+		        delFlag = #{delFlag,jdbcType=CHAR}
+		      </if>
+		    </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="getGpContractStopStoreInfoById" resultType="cn.com.eju.deal.gpContractChange.model.GpContractChangeStore" parameterType="java.lang.Integer">
+		SELECT * FROM GP_ContractChangeStore gtc 
+	  	where gtc.delFlag=0  
+	  		and gtc.gpContractStopId=#{gpContractStopId,jdbcType=INTEGER}
+	</select>
+	<select id="getGpContractById" resultType="cn.com.eju.deal.gpContract.model.GpContract" parameterType="java.lang.Integer">
+		SELECT * FROM GP_Contract gt 
+	  	where gt.delFlag=0  
+	  		and gt.id=#{gpContractId,jdbcType=INTEGER}
+	</select>
+	<!-- 作废 -->
+	<update id="updateStatus" parameterType="map">
+		UPDATE dbo.GP_ContractChangeStore
+		  <set> 
+	   		<if test="userIdUpt != null">
+	        	userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+	       		dateUpt = getDate(),
+	     	</if>
+	   		<if test="cancelStatus != null">
+	        	cancelStatus = #{cancelStatus,jdbcType=INTEGER}
+	     	</if>
+		   </set>
+        WHERE gpContractStopId = #{id}
+	</update>
+	<update id="updateById"  parameterType="java.lang.Integer">
+			UPDATE GP_ContractChangeStore
+				SET delFlag = 1 
+				WHERE  gpContractStopId = #{id,jdbcType=INTEGER} 
+    </update>
+
+	<select id="checkGPContractStoreForZZ" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT  COUNT(*) AS num
+		FROM    dbo.GP_ContractChange c
+		JOIN dbo.GP_ContractChangeStore cs ON c.id = cs.gpContractStopId
+		WHERE   c.changeType = 17001 AND c.approveState &lt; 4
+		AND c.delFlag = '0'
+		AND cs.delFlag = '0'
+		AND c.gpContractId = #{gpContractId}
+		AND cs.storeId = #{storeId}
+	</select>
+</mapper>

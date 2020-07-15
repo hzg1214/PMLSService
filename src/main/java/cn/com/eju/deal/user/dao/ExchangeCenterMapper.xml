@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.ExchangeCenterMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.ExchangeCenter">
+		<id column="exchangeCenterId" property="exchangeCenterId" jdbcType="INTEGER" />
+		<result column="exchangeCenterCode" property="exchangeCenterCode" jdbcType="NVARCHAR" />
+		<result column="exchangeCenterName" property="exchangeCenterName" jdbcType="NVARCHAR" />
+		<result column="cityId" property="cityId" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+		<result column="address" property="address" jdbcType="NVARCHAR" />
+		<result column="lng" property="lng" jdbcType="FLOAT" />
+		<result column="lat" property="lat" jdbcType="FLOAT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		exchangeCenterId,
+		exchangeCenterCode,
+		exchangeCenterName,
+		cityId,
+		dateCreate,
+		userIdCreate,
+		delFlag,
+		address
+	</sql>
+	
+	<!-- <select id="queryExchangeByUserId" resultMap="BaseResultMap" parameterType="Map"> 
+	  SELECT * FROM  dbo.USR_ExchangeCenter WHERE delFlag = 'N'
+	</select> -->
+	<select id="selectExchange" resultMap="BaseResultMap"> 
+	  SELECT 
+	   	ue.exchangeCenterId,
+		ue.exchangeCenterCode,
+		bc.cityName +'·' +ue.exchangeCenterName exchangeCenterName,
+		ue.cityId,
+		ue.dateCreate,
+		ue.userIdCreate,
+		ue.delFlag,
+		ue.address
+	   FROM  dbo.USR_ExchangeCenter ue
+	   Left join BAS_city bc
+	   on ue.cityId = bc.Id
+	   WHERE ue.delFlag = 'N'   
+	</select>
+	
+	
+	<select id="getExchangeCenterByExchangeCenterId" resultMap="BaseResultMap" parameterType="java.lang.Integer"> 
+	   SELECT 
+	   	ue.exchangeCenterId,
+		ue.exchangeCenterCode,
+		bc.cityName +'·' +ue.exchangeCenterName exchangeCenterName,
+		ue.cityId,
+		ue.dateCreate,
+		ue.userIdCreate,
+		ue.delFlag,
+		ue.address
+	   FROM  dbo.USR_ExchangeCenter ue
+	   Left join BAS_city bc
+	   on ue.cityId = bc.Id
+	   WHERE ue.delFlag = 'N' AND ue.exchangeCenterId = #{exchangeCenterId}
+	</select>
+	
+	<select id="getByCityId" resultMap="BaseResultMap"> 
+
+	 SELECT 
+	   	ue.exchangeCenterId,
+		ue.exchangeCenterCode,
+		bc.cityName +'·' +ue.exchangeCenterName exchangeCenterName,
+		ue.cityId,
+		ue.dateCreate,
+		ue.userIdCreate,
+		ue.delFlag,
+		ue.address,
+		ue.lng,
+		ue.lat
+	   FROM  dbo.USR_ExchangeCenter ue
+	   Left join BAS_city bc
+	   on ue.cityId = bc.Id
+	   WHERE ue.delFlag = 'N' AND ue. cityId = #{cityId}
+	</select>
+	
+	<select id="queryExchangeCenterByExchangeCode" parameterType="java.lang.String" resultMap="BaseResultMap"> 
+	   SELECT 
+	   	ue.exchangeCenterId,
+		ue.exchangeCenterCode,
+		bc.cityName +'·' +ue.exchangeCenterName exchangeCenterName,
+		ue.cityId,
+		ue.dateCreate,
+		ue.userIdCreate,
+		ue.delFlag,
+		ue.address
+	   FROM  dbo.USR_ExchangeCenter ue
+	   Left join BAS_city bc
+	   on ue.cityId = bc.Id
+	   WHERE ue.delFlag = 'N' AND ue.exchangeCenterCode = #{exchangeCenterCode}
+	</select>
+	
+	<select id="checkExchangeCenterName" resultType="java.lang.Integer" parameterType="java.lang.String"> 
+	  SELECT COUNT(*) FROM  dbo.USR_ExchangeCenter WHERE exchangeCenterName=#{exchangeCenterName} AND delFlag = 'N'
+	</select>
+	
+	<select id="getCityByCityNo" parameterType="java.lang.String" resultType="cn.com.eju.deal.user.model.City">
+	  SELECT * FROM dbo.BAS_City WHERE CityNo = #{CityNo}
+	</select>	
+	
+	<select id="getDefaultExchangeCenterByExchangeCenterId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	   SELECT  DISTINCT
+			ue.exchangeCenterId,
+			ue.exchangeCenterCode,
+			bc.cityName +'·' +ue.exchangeCenterName exchangeCenterName,
+			ue.cityId,
+			ue.dateCreate,
+			ue.userIdCreate,
+			ue.delFlag,
+			ue.address	   
+	    FROM USR_UserExchangeCenterMapping up 
+	    INNER JOIN USR_ExchangeCenter ue
+	    ON  up.exchangeCenterId = ue.exchangeCenterId
+	    Left join BAS_city bc
+	   	on ue.cityId = bc.Id
+	    WHERE up.userId = #{userId } 
+	    AND up.delFlag = 'N'
+		AND up.defaultFlag = 'Y'
+		AND ue.delFlag = 'N'
+	</select>
+	
+	<insert id="addExchangeCenter" parameterType="cn.com.eju.deal.user.model.ExchangeCenter" >
+	     insert into dbo.USR_ExchangeCenter (exchangeCenterCode, exchangeCenterName ,cityId,userIdCreate)
+		          values ( #{exchangeCenterCode,jdbcType=VARCHAR}, #{exchangeCenterName,jdbcType=VARCHAR},#{cityId},#{userIdCreate})
+	
+	</insert>
+	
+	<update id="updateExchangeCenter" parameterType="cn.com.eju.deal.user.model.ExchangeCenter" >
+	    update dbo.USR_ExchangeCenter
+		    set exchangeCenterCode = #{exchangeCenterCode,jdbcType=VARCHAR},
+		      exchangeCenterName = #{exchangeCenterName,jdbcType=VARCHAR},
+		      cityId = #{cityId,jdbcType=INTEGER},
+		      userIdCreate = #{userIdCreate,jdbcType=INTEGER}
+		    where exchangeCenterId = #{exchangeCenterId,jdbcType=INTEGER} AND delFlag = 'N'
+	</update>
+	
+	<delete id="deleteExchangeCenter" parameterType="cn.com.eju.deal.user.model.ExchangeCenter">
+	     update dbo.USR_ExchangeCenter
+		    set  delFlag = 'Y'
+		    where exchangeCenterId = #{exchangeCenterId,jdbcType=INTEGER}
+	
+	</delete>
+	
+	 <select id="queryExchangeCenterByUserId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.user.model.ExchangeCenter">
+	  DECLARE @orgId HIERARCHYID
+				SELECT @orgId=orgId FROM USR_Group 
+				INNER JOIN crm.dbo.USR_User ON dbo.USR_Group.groupId =crm.dbo.USR_User.groupId WHERE crm.dbo.USR_User.userId= #{userId}
+						
+				SELECT DISTINCT t.*
+			 	FROM(
+				SELECT 
+					ue.exchangeCenterId,
+					ue.exchangeCenterCode,
+					bc.cityName +'·' +ue.exchangeCenterName exchangeCenterName,
+					ue.cityId,
+					ue.dateCreate,
+					ue.userIdCreate,
+					ue.delFlag,
+					ue.address	   
+				 FROM USR_Group  ug
+				LEFT JOIN dbo.USR_ExchangeCenter  ue
+				ON ue.exchangeCenterId = ug.exchangeCenterId	
+				LEFT JOIN    BAS_city bc
+	   			on ue.cityId = bc.Id
+				WHERE @orgId.IsDescendantOf(orgId)=1 AND typeId = 2
+	
+	
+	
+				UNION ALL
+				SELECT 
+					ue.exchangeCenterId,
+					ue.exchangeCenterCode,
+					bc.cityName +'·' +ue.exchangeCenterName exchangeCenterName,
+					ue.cityId,
+					ue.dateCreate,
+					ue.userIdCreate,
+					ue.delFlag,
+					ue.address	 
+				 FROM dbo.USR_ExchangeCenter ue
+				INNER JOIN crm.dbo.USR_UserExchangeCenterMapping uep
+				 ON uep.exchangeCenterId = ue.exchangeCenterId
+				 LEFT JOIN    BAS_city bc
+	   			on ue.cityId = bc.Id
+				INNER JOIN crm.dbo.USR_User uu
+				ON uu.userId = uep.userId
+				WHERE uu.userId = #{userId}
+)t
+	
+	</select> 
+		
+</mapper>

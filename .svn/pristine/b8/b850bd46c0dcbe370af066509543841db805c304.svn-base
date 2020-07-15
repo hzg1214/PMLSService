@@ -1,0 +1,846 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.common.dao.FileRecordMainMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.common.model.FileRecordMain" >
+    <id column="FileRecordMainId" property="fileRecordMainId" jdbcType="INTEGER" />
+    <result column="CompanyId" property="companyId" jdbcType="INTEGER" />
+    <result column="RefId" property="refId" jdbcType="INTEGER" />
+    <result column="FileId" property="fileId" jdbcType="NVARCHAR" />
+    <result column="FileTypeId" property="fileTypeId" jdbcType="INTEGER" />
+    <result column="FileFullName" property="fileFullName" jdbcType="VARCHAR" />
+    <result column="FileSourceId" property="fileSourceId" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="UserCreate" property="userCreate" jdbcType="INTEGER" />
+    <result column="IsDelete" property="isDelete" jdbcType="BIT" />
+    <result column="FileTypeName" property="fileTypeName" jdbcType="NVARCHAR" />
+    <result column="FileSourceName" property="fileSourceName" jdbcType="NVARCHAR" />
+    <result column="fileNo" property="fileNo" jdbcType="VARCHAR" />
+    <result column="picId" property="picId" jdbcType="INTEGER" />
+    
+    <result column="fileSuffix" property="fileSuffix"  jdbcType="VARCHAR"/>
+    <result column="fileUrl" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="fileAbbrUrl" property="fileAbbrUrl" jdbcType="VARCHAR" />
+    <result column="url50" property="url50" jdbcType="VARCHAR" />
+    <result column="sellFileNo" property="sellFileNo" jdbcType="VARCHAR" />
+    <result column="sfImage" property="sfImage" jdbcType="BIT" />
+  </resultMap>
+   <resultMap id="FileRecordMainDtoMap" type="cn.com.eju.deal.dto.common.FileRecordMainDto" >
+    <id column="FileRecordMainId" property="fileRecordMainId" jdbcType="INTEGER" />
+    <result column="CompanyId" property="companyId" jdbcType="INTEGER" />
+    <result column="RefId" property="refId" jdbcType="INTEGER" />
+    <result column="FileId" property="fileId" jdbcType="NVARCHAR" />
+    <result column="FileTypeId" property="fileTypeId" jdbcType="INTEGER" />
+    <result column="FileFullName" property="fileFullName" jdbcType="VARCHAR" />
+    <result column="FileSourceId" property="fileSourceId" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="UserCreate" property="userCreate" jdbcType="INTEGER" />
+    <result column="IsDelete" property="isDelete" jdbcType="BIT" />
+    <result column="FileTypeName" property="fileTypeName" jdbcType="NVARCHAR" />
+    <result column="FileSourceName" property="fileSourceName" jdbcType="NVARCHAR" />
+    <result column="fileNo" property="fileNo" jdbcType="VARCHAR" />
+    <result column="picId" property="picId" jdbcType="INTEGER" />
+    
+    <result column="fileSuffix" property="fileSuffix"  jdbcType="VARCHAR"/>
+    <result column="fileUrl" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="fileAbbrUrl" property="fileAbbrUrl" jdbcType="VARCHAR" />
+    <result column="url50" property="url50" jdbcType="VARCHAR" />
+    <result column="sellFileNo" property="sellFileNo" jdbcType="VARCHAR" />
+    <result column="sfImage" property="sfImage" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    FileRecordMainId, CompanyId, RefId, FileId, FileTypeId, FileFullName, FileSourceId, 
+    Remark, DateCreate, UserCreate, IsDelete,fileNo
+    ,fileUrl, fileAbbrUrl,fileSuffix,url50,sellFileNo,sfImage
+  </sql>
+  
+  <!-- 根据文件表编号查询 -->
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where FileRecordMainId = #{fileRecordMainId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据门店编号查询 -->
+  <select id="getByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=0 AND fm.FileTypeId=4 and fm.FileSourceId=2 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  
+  <!-- 查询 list -->
+  <select id='queryList' parameterType="Map" resultMap="BaseResultMap">
+	SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeId = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceId = fm.FileSourceId
+	<where>
+		fm.IsDelete=0
+		<if test="companyId != null and companyId != ''">
+	  		<![CDATA[AND fm.CompanyId = #{companyId,jdbcType=INTEGER}]]>
+		</if>
+		<if test="refId != null and refId != ''">
+	  		<![CDATA[AND fm.RefId = #{refId,jdbcType=INTEGER}]]>
+		</if>
+		<if test="fileId != null and fileId != ''">
+ 		  	<![CDATA[AND fm.FileId = #{fileId,jdbcType=NVARCHAR}]]>
+		</if>
+		<if test="fileTypeId != null and fileTypeId != ''">
+	  		<![CDATA[AND fm.FileTypeId = #{fileTypeId,jdbcType=INTEGER}]]>
+		</if>
+		<if test="fileFullName != null and fileFullName != ''">
+ 		  	<![CDATA[AND fm.FileFullName LIKE '%${fileFullName}%']]>
+		</if>
+		<if test="fileSourceId != null and fileSourceId != ''">
+	  		<![CDATA[AND fm.FileSourceId = #{fileSourceId,jdbcType=INTEGER}]]>
+		</if>
+		<if test="remark != null and remark != ''">
+ 		  	<![CDATA[AND fm.Remark LIKE '%${remark}%']]>
+		</if>
+		<if test="userCreate != null" >
+			<![CDATA[AND fm.UserCreate = #{userCreate,jdbcType=INTEGER}]]>
+	    </if>
+		<if test="dateCreateFrom != null and dateCreateFrom != '' and dateCreateTo !=null and dateCreateTo !=''">
+	  		<![CDATA[AND fm.DateCreate BETWEEN #{dateCreateFrom,jdbcType=TIMESTAMP} AND #{dateCreateTo,jdbcType=TIMESTAMP}]]>
+		</if>
+	</where>
+  </select>
+  
+  <!-- 新增 -->
+  <insert id="create" parameterType="cn.com.eju.deal.common.model.FileRecordMain" useGeneratedKeys="true" keyProperty="fileRecordMainId">
+    insert into FIL_FileRecordMain (CompanyId, RefId, 
+      FileId, FileTypeId, FileFullName, 
+      FileSourceId, Remark, DateCreate, 
+      UserCreate, IsDelete,fileNo,picUrl,
+      fileUrl, fileAbbrUrl,fileSuffix,
+      url50,sellFileNo,sfImage)
+    values (#{companyId,jdbcType=INTEGER}, #{refId,jdbcType=INTEGER}, 
+      #{fileId,jdbcType=NVARCHAR}, #{fileTypeId,jdbcType=INTEGER}, #{fileFullName,jdbcType=VARCHAR}, 
+      #{fileSourceId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, GETDATE(), 
+      #{userCreate,jdbcType=INTEGER}, 0,#{fileNo,jdbcType=VARCHAR},#{picUrl},
+      #{fileUrl,jdbcType=VARCHAR},#{fileAbbrUrl,jdbcType=VARCHAR},#{fileSuffix,jdbcType=VARCHAR},
+      #{url50,jdbcType=VARCHAR},#{sellFileNo,jdbcType=VARCHAR},#{sfImage,jdbcType=BIT})
+  </insert>
+
+  <insert id="createTwo" parameterType="cn.com.eju.deal.common.model.FileRecordMain">
+    insert into FIL_FileRecordMain (CompanyId, RefId,
+      FileId, FileTypeId, FileFullName,
+      FileSourceId, Remark, DateCreate,
+      UserCreate, IsDelete,fileNo,picUrl,
+      fileUrl, fileAbbrUrl,fileSuffix,
+      url50,sellFileNo,sfImage)
+    values (#{companyId,jdbcType=INTEGER}, #{refId,jdbcType=INTEGER},
+      #{fileId,jdbcType=NVARCHAR}, #{fileTypeId,jdbcType=INTEGER}, #{fileFullName,jdbcType=VARCHAR},
+      #{fileSourceId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, GETDATE(),
+      #{userCreate,jdbcType=INTEGER}, 0,#{fileNo,jdbcType=VARCHAR},#{picUrl},
+      #{fileUrl,jdbcType=VARCHAR},#{fileAbbrUrl,jdbcType=VARCHAR},#{fileSuffix,jdbcType=VARCHAR},
+      #{url50,jdbcType=VARCHAR},#{sellFileNo,jdbcType=VARCHAR},#{sfImage,jdbcType=BIT})
+  </insert>
+  <!-- 修改 -->
+  <update id="update" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    UPDATE FIL_FileRecordMain
+    <set >
+      <if test="companyId != null" >
+        CompanyId = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null" >
+        RefId = #{refId,jdbcType=INTEGER},
+      </if>
+      <if test="fileId != null" >
+        FileId = #{fileId,jdbcType=NVARCHAR},
+      </if>
+      <if test="fileTypeId != null" >
+        FileTypeId = #{fileTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="fileFullName != null" >
+        FileFullName = #{fileFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSourceId != null" >
+        FileSourceId = #{fileSourceId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null" >
+        DateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCreate != null" >
+        UserCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        IsDelete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="fileNo != null" >
+        fileNo = #{fileNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+ where FileRecordMainId = #{fileRecordMainId,jdbcType=INTEGER}
+  </update>
+  <!-- 删除某个文件 -->
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    UPDATE FIL_FileRecordMain
+    SET IsDelete=1
+    WHERE FileRecordMainId = #{id,jdbcType=INTEGER}
+  </delete>
+  <!-- 根据合同编号查询文件 -->
+  <select id="selectFileByContractId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    from FIL_FileRecordMain
+    where RefId = #{contractId,jdbcType=INTEGER}
+    	and IsDelete = 0
+  </select>
+  
+  
+  <!-- 根据合同ID查询营业证 -->
+  <select id="getBusinessByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+    <!-- 根据公盘合同ID查询营业证 -->
+    <select id="getBusinessByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1  and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    <!-- 根据公盘合同ID查询营业证按创建时间排 -->
+    <select id="getBusinessOrderByCreate" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1  and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.DateCreate ASC
+    </select>
+    <!-- 根据公盘合同ID查询营业证2 -->
+    <select id="getBusinessByGpContractIdTwo" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1  and fm.FileSourceId=#{fileSourceId,jdbcType=INTEGER} AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+  <!-- 根据合同ID查询重要提示函 -->
+  <select id="getNoticeByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1020 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据合同ID查询补充协议 -->
+  <select id="getComplementByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1026 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据合同ID查询身份证 -->
+  <select id="getCardByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=2 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+    <!-- 根据公盘合同ID查询身份证 -->
+    <select id="getCardByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=2  and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    <!-- 根据公盘合同ID查询身份证按创建时间排 -->
+    <select id="getCardOrderByCreate" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=2  and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.DateCreate ASC
+    </select>
+    <!-- 根据公盘合同ID查询身份证2 -->
+    <select id="getCardByGpContractIdTwo" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=2  and fm.FileSourceId=#{fileSourceId,jdbcType=INTEGER} AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+  <!-- 根据合同ID查询合同照片 -->
+  <select id="getPhotoByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=3 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+    <!-- 根据公盘合同ID查询合同照片 -->
+    <select id="getPhotoByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=3 and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    <!-- 根据公盘合同ID查询易居房友经纪业务共享平台规则 -->
+    <select id="getRuleByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1062 and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    <!-- 根据公盘合同ID查询直联盘勾选表 -->
+    <select id="getCheckByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1061 and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    <!-- 根据公盘合同ID查询授权委托书 -->
+    <select id="getProxyByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1042 and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    <!-- 根据公盘合同ID查询账户变更申请书 -->
+    <select id="getAccountChangeByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1043 and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+  <!-- 根据合同ID查询门店照片 -->
+  <select id="getStoreByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=4 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据合同ID查询房友系统申请安装单 -->
+  <select id="getInstallByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=5 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据合同ID查询其他文件 -->
+  <select id="getOtherByContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=6 and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+    <!-- 根据公盘合同ID查询其他文件 -->
+    <select id="getOtherByGpContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=6 and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+
+	<select id="getBondByCashierId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1027 and fm.FileSourceId=6 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   
+  <!-- 逻辑删除某个合同的所有文件 -->
+  <delete id="updateStatusByContractId" parameterType="java.lang.Integer" >
+    UPDATE FIL_FileRecordMain
+    SET IsDelete=1
+    WHERE RefId = #{contractId,jdbcType=INTEGER}
+  </delete>
+  <!-- 删除某个合同的所有标记删除的文件 -->
+	<delete id="deleteByContractIdStatus" parameterType="java.lang.Integer" >
+	    delete from FIL_FileRecordMain
+	    where RefId = #{contractId,jdbcType=INTEGER}
+	    and IsDelete=1
+	  </delete>
+	<!-- 删除某个合同的所有文件 -->
+	<delete id="deleteByContractId" parameterType="java.lang.Integer" >
+	    delete from FIL_FileRecordMain
+	    where RefId = #{contractId,jdbcType=INTEGER}
+	</delete>
+	<!-- 查询合同变更所有的文件 -->
+	<select id="getContractChangePics" resultMap="FileRecordMainDtoMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+		SELECT fm.*,fs.FileSourceName,ft.FileTypeName,oa.id AS picId
+		FROM dbo.FIL_FileRecordMain fm
+		LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+		LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+		LEFT JOIN dbo.OaAttachment oa ON oa.fileRecordMainId = fm.fileRecordMainId
+	    where fm.IsDelete=0  and fm.FileSourceId=4 AND fm.RefId = #{refId,jdbcType=INTEGER}
+	    <if test="fileTypeId!=null">
+            AND fm.FileTypeId= #{fileTypeId,jdbcType=INTEGER}
+        </if>
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+	
+	 <!-- 根据公司ID查询营业执照 -->
+  <select id="getBusinessByCompanyId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1 and fm.FileSourceId=3 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  
+  <insert id="createFromB2A" parameterType="java.util.Map">
+    INSERT  INTO dbo.FIL_FileRecordMain
+        ( CompanyId ,
+          RefId ,
+          FileId ,
+          FileTypeId ,
+          FileFullName ,
+          FileSourceId ,
+          Remark ,
+          DateCreate ,
+          UserCreate ,
+          IsDelete ,
+          fileNo ,
+          picUrl ,
+          fileSuffix ,
+          fileAbbrUrl ,
+          url50 ,
+          fileUrl ,
+          sellFileNo ,
+          sfImage
+        )
+        SELECT  CompanyId ,
+                #{contractId,jdbcType=INTEGER} ,
+                FileId ,
+                (case FileTypeId when 1011 then 1 when 1017 then 3 when 1014 then 4 when 1013 then 5 when 1019 then 6 else FileTypeId end),
+                FileFullName ,
+                1 ,
+                Remark ,
+                DateCreate ,
+                UserCreate ,
+                IsDelete ,
+                fileNo ,
+                picUrl ,
+                fileSuffix ,
+                fileAbbrUrl ,
+                url50 ,
+                fileUrl ,
+                sellFileNo ,
+                sfImage
+        FROM    dbo.FIL_FileRecordMain
+        WHERE   refId = #{contractChangeId,jdbcType=INTEGER} and FileSourceId = 4
+  </insert>
+
+    <select id="getFilesByContractId" resultMap="FileRecordMainDtoMap" parameterType="map" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=0 AND fm.FileTypeId= #{fileTypeId,jdbcType=INTEGER} and fm.FileSourceId=1 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+
+    <select id="getFilesByGpContractId" resultMap="FileRecordMainDtoMap" parameterType="map" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=0 AND fm.FileTypeId= #{fileTypeId,jdbcType=INTEGER} and fm.FileSourceId=12 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+
+    <!-- 查询合同变更的文件 -->
+    <select id="getContractChangeList" resultMap="FileRecordMainDtoMap" parameterType="map" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=0  and fm.FileSourceId=4 AND fm.RefId = #{refId,jdbcType=INTEGER}
+        AND fm.FileTypeId= #{fileTypeId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+
+    <select id="getContractChangeNewList" resultMap="FileRecordMainDtoMap" parameterType="map" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=0  and fm.FileSourceId=10 AND fm.RefId = #{refId,jdbcType=INTEGER}
+        AND fm.FileTypeId= #{fileTypeId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    
+    <update id="deleteByCondition" parameterType="map" >
+        UPDATE FIL_FileRecordMain SET IsDelete=1
+	    WHERE RefId = #{contractId,jdbcType=INTEGER}
+	    <if test="fileTypeId != null">
+            AND fileTypeId = #{fileTypeId,jdbcType=INTEGER}
+        </if>
+	    AND fileSourceId = #{fileSourceId,jdbcType=INTEGER}
+    </update>
+    
+    <update id="updateByCondition" parameterType="map" >
+        UPDATE FIL_FileRecordMain SET IsDelete=0,refId = #{contractId,jdbcType=INTEGER}
+	    WHERE fileRecordMainId in
+	    <foreach item="item" index="index" collection="ids" open="("  
+            separator="," close=")">  
+            #{item}  
+        </foreach>  
+    </update>
+  <!-- 根据收款ID查询附件信息 -->
+  <select id="getAttachmentFileByReceiveId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1027 and fm.FileSourceId=6 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据退款ID查询附件信息 -->
+  <select id="getAttachmentFileByPaymentId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1027 and fm.FileSourceId=7 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据框架合同ID查询附件其他文件 -->
+  <select id="getAttachmentFileByFrameContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1030 and fm.FileSourceId=8 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据框架合同ID查询营业执照文件 -->
+  <select id="getBusinessByFrameContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1028 and fm.FileSourceId=8 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据框架合同ID查询合同文件 -->
+  <select id="getContractFileByFrameContractId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1029 and fm.FileSourceId=8 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+
+    <update id="deletePartReportFile" parameterType="java.util.Map">
+        UPDATE  dbo.FIL_FileRecordMain
+        SET     IsDelete = 1
+        WHERE   RefId = #{refId,jdbcType=INTEGER}
+                AND IsDelete = 0
+                AND FileSourceId = 5
+                AND FileTypeId IN ( 1023, 1024, 1025 )
+    </update>
+
+    <insert id="createFromThreePart" parameterType="java.util.Map">
+    INSERT  INTO dbo.FIL_FileRecordMain
+        ( CompanyId ,
+          RefId ,
+          FileId ,
+          FileTypeId ,
+          FileFullName ,
+          FileSourceId ,
+          Remark ,
+          DateCreate ,
+          UserCreate ,
+          IsDelete ,
+          fileNo ,
+          picUrl ,
+          fileSuffix ,
+          fileAbbrUrl ,
+          url50 ,
+          fileUrl ,
+          sellFileNo ,
+          sfImage
+        )
+        select * from
+        (SELECT  CompanyId ,
+                #{contractId,jdbcType=INTEGER} RefId,
+                FileId ,
+                (case FileTypeId when 1033 then 1 when 1035 then 2 when 1036 then 3 when 1038 then 6 end) FileTypeId,
+                FileFullName ,
+                1 FileSourceId,
+                Remark ,
+                DateCreate ,
+                UserCreate ,
+                IsDelete ,
+                fileNo ,
+                picUrl ,
+                fileSuffix ,
+                fileAbbrUrl ,
+                url50 ,
+                fileUrl ,
+                sellFileNo ,
+                sfImage
+        FROM    dbo.FIL_FileRecordMain
+        WHERE   refId = #{contractChangeId,jdbcType=INTEGER} and FileSourceId = 10 and fileTypeId in (1033,1035,1036,1038)
+        union all
+        (
+        SELECT  CompanyId ,
+                #{contractId,jdbcType=INTEGER} RefId,
+                FileId ,
+                FileTypeId,
+                FileFullName ,
+                1 FileSourceId,
+                Remark ,
+                DateCreate ,
+                UserCreate ,
+                IsDelete ,
+                fileNo ,
+                picUrl ,
+                fileSuffix ,
+                fileAbbrUrl ,
+                url50 ,
+                fileUrl ,
+                sellFileNo ,
+                sfImage
+        FROM    dbo.FIL_FileRecordMain
+        WHERE   refId = #{oldContractId,jdbcType=INTEGER} and FileSourceId = 1 and fileTypeId = 4
+        )) t
+  </insert>
+  <!-- 根据公盘合同终止ID查询终止合作协议书 -->
+  <select id="getStopGpContractFileList" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1039 and fm.FileSourceId=11 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘合同终止ID查询终止合作协议书 -->
+  <select id="getStopGpContractFileListByStopId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1039 and fm.FileSourceId=11 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘合同终止ID查询保证金收据 -->
+  <select id="getReceiptFileListByStopId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1040 and fm.FileSourceId=11 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘合同终止ID查询其他 -->
+  <select id="getOthersFileListByStopId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1041 and fm.FileSourceId=11 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公司ID查询营业执照 -->
+    <select id="getBusinessLicenceByCompanyId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1044 and fm.FileSourceId=3 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+    <!-- 根据公盘合同ID和日志id查询账户变更申请书 -->
+    <select id="getAccountChangeByLogId" resultMap="BaseResultMap" parameterType="map" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete= 0 AND fm.FileTypeId=1043 and fm.FileSourceId=12 
+        AND fm.FileRecordMainId IN( 
+        	SELECT fileRecordMainId FROM GP_BankInfoChangeLogFile WHERE gpContractId = #{gpContractId,jdbcType=INTEGER} 
+        		AND gpBankInfoChangeLogId = #{gpBankInfoChangeLogId,jdbcType=INTEGER}  
+        		AND delFlag =0
+        )
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+   <!-- 根据ID查询补充协议 -->
+  <select id="getfileComplementListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1045 and fm.FileSourceId=13 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   <!-- 根据ID查询房友确认单 -->
+  <select id="getfileFyConfirmationById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1046 and fm.FileSourceId=13 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   <!-- 根据ID查询门店照片 -->
+  <select id="getfileStorePhotoById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1047 and fm.FileSourceId=13 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   <!-- 根据ID查询其他 -->
+  <select id="getfileOtherListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1048 and fm.FileSourceId=13 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   <!-- 根据ID查询其他 -->
+  <select id="getPlateFileListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1051 and fm.FileSourceId=15 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘初始会员ID查询营业执照 -->
+  <select id="getCsMemberFileBusinessListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1057 and fm.FileSourceId=16 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘初始会员ID查询法人身份证 -->
+  <select id="getCsMemberFileIdCardListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1052 and fm.FileSourceId=16 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘初始会员ID查询公盘系统服务协议 -->
+  <select id="getCsMemberFileContractListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1053 and fm.FileSourceId=16 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘初始会员ID查询初始会员协议 -->
+  <select id="getCsMemberFileListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1054 and fm.FileSourceId=16 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘初始会员ID查询初始会员协议 -->
+  <select id="getCsMemberPayFileListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1056 and fm.FileSourceId=16 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+  <!-- 根据公盘初始会员ID查询其他 -->
+  <select id="getCsMemberOthersFileListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1055 and fm.FileSourceId=16 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   <!-- 根据客服工单ID查询附件 -->
+  <select id="getKeFuOrderListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1058 and fm.FileSourceId=17 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   <!-- 根据cash_bill_project ID查询附件 -->
+  <select id="getCashBillImageListByProjectId" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1032 and fm.FileSourceId=9 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+   <!-- 根据客服回复ID查询附件 -->
+  <select id="getKeFuOrderReplyListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+    SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+	FROM dbo.FIL_FileRecordMain fm
+	LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+	LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+    where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1059 and fm.FileSourceId=17 AND RefId = #{refId,jdbcType=INTEGER}
+    ORDER BY fm.FileRecordMainId ASC
+  </select>
+
+    <select id="getKeFuOrderVerifyListById" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.common.model.FileRecordMain" >
+        SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=#{isDelete,jdbcType=BIT} AND fm.FileTypeId=1060 and fm.FileSourceId=17 AND RefId = #{refId,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+    </select>
+</mapper>

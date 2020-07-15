@@ -1,0 +1,421 @@
+package cn.com.eju.pmls.cooperation.service;
+
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.base.support.SystemParam;
+import cn.com.eju.deal.common.dao.FileRecordMainMapper;
+import cn.com.eju.deal.common.model.FileRecordMain;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.DateUtil;
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.dto.company.CompanyDto;
+import cn.com.eju.deal.frameContract.dao.FrameContractMapper;
+import cn.com.eju.deal.frameContract.model.FrameContract;
+import cn.com.eju.deal.houseLinkage.estate.dao.EstateRuleMapper;
+import cn.com.eju.deal.houseLinkage.estate.model.EstateContractDto;
+import cn.com.eju.deal.houseLinkage.report.dao.ReportMapper;
+import cn.com.eju.deal.houseLinkage.report.model.Report;
+import cn.com.eju.deal.store.dao.StoreMapper;
+import cn.com.eju.deal.store.model.Store;
+import cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto;
+import cn.com.eju.pmls.cooperation.dao.CooperationMapper;
+import cn.com.eju.pmls.cooperation.model.CooperationDto;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("cooperationService")
+public class CooperationService extends BaseService {
+
+    @Resource
+    private CooperationMapper cooperationMapper;
+
+    @Resource
+    private FileRecordMainMapper fileRecordMainMapper;
+
+    @Resource
+    private EstateRuleMapper estateRuleMapper;
+
+    @Resource
+    private ReportMapper reportMapper;
+
+    @Resource
+    private FrameContractMapper frameContractMapper;
+
+    @Resource
+    private StoreMapper storeMapper;
+
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    /**
+     * 合作确认函 列表
+     * @param queryParam
+     * @return
+     */
+    public ResultData getCooperationList(Map<String, Object> queryParam) {
+        ResultData<List<CooperationDto>> resultData = new ResultData<List<CooperationDto>>();
+        List<CooperationDto> list = cooperationMapper.getCooperationList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /**
+     * 新增合作确认函
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData addCooperation(CooperationDto dto) throws Exception{
+        ResultData resultData = new ResultData();
+        int count = cooperationMapper.addCooperation(dto);
+        cooperationMapper.updateById(dto);
+        //如果有图片，更新信息
+        if(dto.getId()!=null && dto.getId()!=0){
+            if(dto.getFileIds()!=null && !"".equals(dto.getFileIds())){
+                String fileIdArray[]=dto.getFileIds().split(",");
+                for(int i=0;i<fileIdArray.length;i++){
+                    FileRecordMain fileRecordMain=new FileRecordMain();
+                    fileRecordMain.setRefId(dto.getId());
+                    fileRecordMain.setFileRecordMainId(Integer.parseInt(fileIdArray[i]));
+                    fileRecordMainMapper.update(fileRecordMain);
+                }
+            }
+        }
+        if(count>0){
+            //更新公司的供应商信息
+            Map<String, Object> queryParam = new HashMap<String, Object>();
+            queryParam.put("businessLicenseNo",dto.getBusinessLicenseNo());
+            BusinessManagerDto vendorDto = cooperationMapper.getCompanyVendorInfo(queryParam);
+            vendorDto.setCompanyNo(dto.getCompanyNo());
+            vendorDto.setUserUpdate(dto.getUserIdCreate());
+            cooperationMapper.updateCompanyVendor(vendorDto);
+            resultData.setSuccess("新增成功");
+        }else{
+            resultData.setFail("新增失败");
+        }
+        return resultData;
+    }
+
+    /**
+     * 修改合作确认函
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData updateCooperation(CooperationDto dto) throws Exception{
+        ResultData resultData = new ResultData();
+        int count = cooperationMapper.updateCooperation(dto);
+        cooperationMapper.updateById(dto);
+        if(dto.getFileIds()!=null && !"".equals(dto.getFileIds())){
+            //先删除图片
+            fileRecordMainMapper.updateStatusByContractId(Integer.parseInt(dto.getId().toString()));
+            String fileIdArray[]=dto.getFileIds().split(",");
+            for(int i=0;i<fileIdArray.length;i++){
+                FileRecordMain fileRecordMain=new FileRecordMain();
+                fileRecordMain.setRefId(dto.getId());
+                fileRecordMain.setIsDelete(false);
+                fileRecordMain.setFileRecordMainId(Integer.parseInt(fileIdArray[i]));
+                fileRecordMainMapper.update(fileRecordMain);
+            }
+        }
+        if(count>0){
+            //更新公司的供应商信息
+            Map<String, Object> queryParam = new HashMap<String, Object>();
+            queryParam.put("businessLicenseNo",dto.getBusinessLicenseNo());
+            BusinessManagerDto vendorDto = cooperationMapper.getCompanyVendorInfo(queryParam);
+            vendorDto.setCompanyNo(dto.getCompanyNo());
+            vendorDto.setUserUpdate(dto.getUserIdUpt());
+            cooperationMapper.updateCompanyVendor(vendorDto);
+            resultData.setSuccess("修改成功");
+        }else{
+            resultData.setFail("修改失败");
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取合作确认函详情
+     * @param dto
+     * @return
+     */
+    public ResultData getCooperationInfo(CooperationDto dto) {
+        ResultData<CooperationDto> resultData = new ResultData<CooperationDto>();
+        CooperationDto cooperationDto = cooperationMapper.getCooperationInfo(dto);
+        if(cooperationDto!=null && cooperationDto.getId()!=0){
+            Map<String,String> map=new HashMap<String, String>();
+            map.put("refId",cooperationDto.getId().toString());
+            map.put("fileTypeId","1067");
+            List<FileRecordMain> fileList1 = fileRecordMainMapper.queryList(map);
+            map.put("fileTypeId","1068");
+            List<FileRecordMain> fileList2 = fileRecordMainMapper.queryList(map);
+            fileList1.addAll(fileList2);
+            cooperationDto.setFileList(fileList1);
+        }
+        resultData.setReturnData(cooperationDto);
+        return resultData;
+    }
+
+
+    /**
+     * 作废合作确认函
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData invalidCooperation(CooperationDto dto) throws Exception{
+        ResultData resultData = new ResultData();
+        CooperationDto oldDto = cooperationMapper.getCooperationInfo(dto);
+        if(oldDto.getApproveState()!=10401){
+            resultData.setFail("该分销合同不能作废！");
+            return resultData;
+        }
+        int count = cooperationMapper.updateCooperation(dto);
+        if(count>0){
+            resultData.setSuccess("修改成功");
+        }else{
+            resultData.setFail("修改失败");
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取经纪公司列表
+     * @param queryParam
+     * @return
+     */
+    public ResultData getCompanyList(Map<String, Object> queryParam) {
+        ResultData<List<BusinessManagerDto>> resultData = new ResultData<List<BusinessManagerDto>>();
+        List<BusinessManagerDto> list = cooperationMapper.getCompanyList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /**
+     * 检查经纪公司是否可选
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public ResultData checkCompany(BusinessManagerDto dto) throws Exception{
+        ResultData resultData = new ResultData();
+        BusinessManagerDto businessManagerDto = cooperationMapper.getCompanyInfo(dto);
+        Map<String, Object> queryParam = new HashMap<String, Object>();
+        queryParam.put("companyNo",businessManagerDto.getCompanyNo());
+        queryParam.put("businessLicenseNo",businessManagerDto.getBusinessLicenseNo());
+
+        if(businessManagerDto !=null &&
+                businessManagerDto.getBrandId()!=null &&
+                !businessManagerDto.getBrandId().isEmpty()
+        ){
+            FrameContract frameContract = cooperationMapper.getCompanyFrameContractInfo(queryParam);
+            if(frameContract==null){
+                resultData.setFail("该渠道无框架协议，请先新建框架协议！");
+                return resultData;
+            }
+        }
+        BusinessManagerDto vendorDto = cooperationMapper.getCompanyVendorInfo(queryParam);
+        if(vendorDto==null){
+            resultData.setFail("该经纪公司没有对应的供应商，请先在OA做供应商入库！");
+            return resultData;
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取项目合同列表
+     * 收入类合同 进场确认函
+     * @param queryParam
+     * @return
+     */
+    public ResultData queryEstateHtRecord(Map<String, Object> queryParam) throws Exception{
+        ResultData<List<EstateContractDto>> resultData = new ResultData<List<EstateContractDto>>();
+        List<EstateContractDto> list = cooperationMapper.queryEstateHtRecord(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /**
+     * 获取经纪公司详情
+     * @param dto
+     * @return
+     */
+    public ResultData getCompanyInfo(BusinessManagerDto dto) {
+        ResultData<BusinessManagerDto> resultData = new ResultData<BusinessManagerDto>();
+        BusinessManagerDto businessManagerDto = cooperationMapper.getCompanyInfo(dto);
+        resultData.setReturnData(businessManagerDto);
+        return resultData;
+    }
+
+
+    /**
+     * 更新分销合同信息及房友中心信息
+     * @param reportId
+     * ***/
+    public ResultData updateReportCooperation(String reportId){
+        ResultData resultData = new ResultData();
+        try{
+            Map<String, Object> reportMap = new HashMap<String, Object>();
+            reportMap.put("reportId", reportId);
+            Report reportDb = reportMapper.getReport(reportMap).get(0);
+            if(reportDb==null){
+                resultData.setFail();
+                return resultData;
+            }
+
+            Map<String, Object> queryParam = new HashMap<>();
+            queryParam.put("projectNo",reportDb.getProjectNo());
+            queryParam.put("companyNo",reportDb.getCompanyId());
+            CooperationDto cooperationDtoDb = cooperationMapper.getCooperationNew(queryParam);
+            if(cooperationDtoDb!=null //存在分销合同
+                    && StringUtil.isEmpty(reportDb.getContractNo())){//报备记录还未更新分销合同编号
+                Report reportUpt = new Report();
+                reportUpt.setId(reportDb.getId());
+                reportUpt.setContractNo(cooperationDtoDb.getContractNo());
+                reportUpt.setHtedition(cooperationDtoDb.getHtedition());
+                int count = reportMapper.updateContractNo(reportUpt);
+
+                //更新中心
+                if("28302".equals(cooperationDtoDb.getHtedition())
+                        && reportDb.getBranchId()==null && StringUtil.isNotEmpty(reportDb.getStoreId())){
+                    Store storeDb = storeMapper.getCenterInfo(Integer.parseInt(reportDb.getStoreId()));
+                    if(storeDb!=null && storeDb.getCenterId()!=null){
+                        reportUpt.setFyCenterId(storeDb.getCenterId());
+                        reportUpt.setFyCenterName(storeDb.getCenterName());
+                        int count2 = reportMapper.updateFyCenter(reportUpt);
+                    }
+                }
+
+                //更新中心
+                if("28302".equals(cooperationDtoDb.getHtedition())
+                        && reportDb.getBranchId()!=null && StringUtil.isNotEmpty(reportDb.getCompanyId())){
+                    Map<String, Object> companyParam = new HashMap<>();
+                    companyParam.put("companyNo",reportDb.getCompanyId());
+                    List<CompanyDto> list = frameContractMapper.getFrameContractCompanyList(companyParam);
+                    if(!CollectionUtils.isEmpty(list) && list.get(0).getCenterId()!=null){
+                        reportUpt.setFyCenterId(list.get(0).getCenterId());
+                        reportUpt.setFyCenterName(list.get(0).getCenterName());
+                        int count2 = reportMapper.updateFyCenter(reportUpt);
+                    }
+                }
+
+                if("28301".equals(cooperationDtoDb.getHtedition())){
+                        reportUpt.setFyCenterId(null);
+                        reportUpt.setFyCenterName(null);
+                        int count2 = reportMapper.updateFyCenter(reportUpt);
+
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("cooperationService", "CooperationService", "updateReportCooperation", reportId, null, "", "", e);
+        }
+        resultData.setSuccess();
+        return resultData;
+    }
+
+
+    /**
+     * check报备的分销合同信息
+     * @param reportId
+     * ***/
+    public ResultData checkReportCooperation(String reportId){
+        ResultData resultData = new ResultData();
+        resultData.setSuccess();
+        try{
+            this.updateReportCooperation(reportId);
+
+            Map<String, Object> reportMap = new HashMap<String, Object>();
+            reportMap.put("reportId", reportId);
+            Report reportDb = reportMapper.getReport(reportMap).get(0);
+            if(reportDb==null){
+                resultData.setFail("该报备不存在");
+                return resultData;
+            }
+
+            String auditDateEnd = SystemParam.getWebConfigValue("auditDateEnd");
+            Date endDate = DateUtil.getDate(auditDateEnd,"yyyy-MM-dd HH:mm:ss");
+            if(StringUtil.isEmpty(reportDb.getContractNo())){//报备记录还未更新分销合同编号
+                if(new Date().after(endDate)){
+                    resultData.setFail("审核失败：该经纪公司没有分销合同。");
+                    return resultData;
+                }
+                if(endDate.after(new Date())){
+                    Report reportUpt = new Report();
+                    reportUpt.setId(reportDb.getId());
+                    reportUpt.setHtedition("28302");
+                    int count = reportMapper.updateContractNo(reportUpt);
+
+                    //更新中心
+                    if(reportDb.getBranchId()==null && StringUtil.isNotEmpty(reportDb.getStoreId())){
+                        Store storeDb = storeMapper.getCenterInfo(Integer.parseInt(reportDb.getStoreId()));
+                        if(storeDb!=null && storeDb.getCenterId()!=null){
+                            reportUpt.setFyCenterId(storeDb.getCenterId());
+                            reportUpt.setFyCenterName(storeDb.getCenterName());
+                            int count2 = reportMapper.updateFyCenter(reportUpt);
+                        }
+                    }
+                    //更新中心
+                    if(reportDb.getBranchId()!=null && StringUtil.isNotEmpty(reportDb.getCompanyId())){
+                        Map<String, Object> companyParam = new HashMap<>();
+                        companyParam.put("companyNo",reportDb.getCompanyId());
+                        List<CompanyDto> list = frameContractMapper.getFrameContractCompanyList(companyParam);
+                        if(!CollectionUtils.isEmpty(list) && list.get(0).getCenterId()!=null){
+                            reportUpt.setFyCenterId(list.get(0).getCenterId());
+                            reportUpt.setFyCenterName(list.get(0).getCenterName());
+                            int count2 = reportMapper.updateFyCenter(reportUpt);
+                        }
+                    }
+                }
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            resultData.setFail("检查业绩信息失败 请重试");
+            logger.error("cooperationService", "CooperationService", "checkReportCooperation", reportId, null, "", "", e);
+        }
+        return resultData;
+    }
+
+    /**
+     * 发起OA申请 合作协议
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData sendOACooperation(CooperationDto dto) throws Exception{
+        ResultData resultData = new ResultData();
+        CooperationDto oldDto = cooperationMapper.getCooperationInfo(dto);
+        if(oldDto.getApproveState()!=10401){
+            resultData.setFail("该分销合同不能发起OA申请！");
+            return resultData;
+        }
+        int count = cooperationMapper.updateSendOACooperation(dto);
+        if(count>0){
+            resultData.setSuccess("发起OA申请成功");
+        }else{
+            resultData.setFail("发起OA申请失败");
+        }
+        return resultData;
+    }
+
+
+}

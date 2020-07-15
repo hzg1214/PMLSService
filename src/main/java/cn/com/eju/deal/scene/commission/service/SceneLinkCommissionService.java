@@ -1,0 +1,597 @@
+package cn.com.eju.deal.scene.commission.service;
+
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.base.support.SystemParam;
+import cn.com.eju.deal.common.dao.CommonMapper;
+import cn.com.eju.deal.common.util.AmountUtils;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.dto.scene.commission.CommissionResultDto;
+import cn.com.eju.deal.scene.commission.dao.*;
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * Created by eju on 2019/4/3.
+ */
+@Service("sceneLinkCommissionService")
+public class SceneLinkCommissionService extends BaseService {
+
+    @Resource
+    LnkYjNyMapper lnkYjNyMapper;
+
+    @Resource
+    LnkYjYjsrMapper lnkYjYjsrMapper;
+
+    @Resource
+    LnkYjYjfyMapper lnkYjYjfyMapper;
+
+    @Resource
+    LnkYjYjssMapper lnkYjYjssMapper;
+
+    @Resource
+    LnkYjSjfyMapper lnkYjSjfyMapper;
+
+    @Resource
+    LnkYjYssrMapper lnkYjYssrMapper;
+
+    @Resource
+    CommonMapper commonMapper;
+
+    @Resource
+    LnkYjImportspecialuserMapper lnkYjImportspecialuserMapper;
+
+    public ResultData<List<CommissionResultDto>> getLinkCommissionList(Map<String, Object> map) {
+        ResultData<List<CommissionResultDto>> resultData = new ResultData<>();
+        List<CommissionResultDto> list = null;
+        try {
+            int pageIndex = 1;
+            int pageSize = 10;
+            int curPage = 1;
+
+            if (map.get("pageIndex") != null)
+                pageIndex = Integer.parseInt(map.get("pageIndex").toString());
+            if (map.get("pageSize") != null)
+                pageSize = Integer.parseInt(map.get("pageSize").toString());
+            if (map.get("curPage") != null)
+                curPage = Integer.parseInt(map.get("curPage").toString());
+
+            map.remove("pageIndex");
+            map.remove("pageSize");
+            map.remove("curPage");
+
+            Integer estateType = Integer.valueOf(map.get("estateType").toString());
+            if (estateType == 24501) {
+                list = lnkYjYssrMapper.getYSSRCommissionList(map);
+            } else if (estateType == 24502) {
+                list = lnkYjYjsrMapper.getYJSRCommissionList(map);
+            } else if (estateType == 24503) {
+                list = lnkYjYjfyMapper.getYJFYCommissionList(map);
+            } else if (estateType == 24504) {
+                list = lnkYjYjssMapper.getYJSSCommissionList(map);
+            } else if (estateType == 24505) {
+                list = lnkYjSjfyMapper.getSJFYCommissionList(map);
+            }
+
+            if (null != list && list.size() > 0) {
+                int size = list.size();
+                resultData.setTotalCount(String.valueOf(size));
+                if (map.get("optFlag") == null) {//导出标记
+                    int endRow = pageIndex * pageSize;
+                    list = list.subList((pageIndex - 1) * pageSize, endRow > size ? size : endRow);
+
+                    map.put("pageIndex", pageIndex);
+                    map.put("pageSize", pageSize);
+                    map.put("curPage", curPage);
+                }
+                resultData.setReturnData(list);
+            }
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+        }
+        return resultData;
+    }
+
+    public ResultData<String> insertLnkImport(CommissionResultDto dto) throws ParseException {
+        ResultData resultData = new ResultData();
+        List<CommissionResultDto> commissionResultList = dto.getCommissionResultDtoList();
+        int count = 0;
+        boolean flag = false;
+        String msg = "";
+        String gzLastMonth = "";
+        Integer estateType = commissionResultList.get(0).getEstateType();
+        Integer empId = new Integer(0);
+        String userCode = commissionResultList.get(0).getUserCode();
+        Integer userCount = lnkYjImportspecialuserMapper.checkUserImport(userCode);
+        String checkFlag = SystemParam.getWebConfigValue("yjCheckFlag");
+        if (commissionResultList != null && commissionResultList.size() > 0) {
+            //modify by haidan 实际返佣 Cash_Bill_Company中id >='15144' AND approveStatus IN (25401,25402,25403)的记录不可以导入
+            List<Map<String, Object>> checkRelMapList = new ArrayList<>();
+
+            if (estateType == 24505 && StringUtil.isNotEmpty(checkFlag) && "1".equals(checkFlag)) {
+                Map<String, Object> checkMap = new HashMap<>();
+                checkMap.put("mapList", commissionResultList);
+                checkRelMapList = lnkYjYjsrMapper.checkSj(checkMap);
+                if (CollectionUtils.isNotEmpty(checkRelMapList)&&userCount==0) {
+                    for (Map<String, Object> checkRelMap : checkRelMapList) {
+                        String reportId = (String) checkRelMap.get("reportId");
+                        msg = msg + reportId + ",";
+                    }
+                    if (StringUtil.isNotEmpty(msg)) {
+                        msg = msg.substring(0, msg.length() - 1);
+                    }
+                }
+            }
+//            // Start Add by huangmc 2020-07-07  收款单功能上线后，应计实收仅白名单用户可以导入
+//            if (estateType == 24505 && userCount == 0) {
+//                resultData.setFail("非白名单用户，不允许导入！如有疑问，请联系集团结算！");
+//                return resultData;
+//            }
+//            // End Add by huangmc 2020-07-07  收款单功能上线后，仅白名单用户可以导入
+
+            /*if(estateType == 24504){
+                *//*判定应计收入税前是否为空或为0，如是，则提示：BB201900001,BB201900002应计收入为空，请先导入应计收入！
+                当应计收入税前不为空且不为0：
+                判断报备正记录行的应计实收小计（税前/税后）<=应计收入小计（税前/税后）
+                判断报备负记录行的应计实收小计（税前/税后）>=应计收入小计（税前/税后）*//*
+                Map<String, Object> checkMap = new HashMap<>();
+                checkMap.put("mapList", commissionResultList);
+                List<Map<String, Object>> checkRelMapList = lnkYjYjsrMapper.checkYjsrTotal(checkMap);
+                if (CollectionUtils.isNotEmpty(checkRelMapList)) {
+                    String aType = "", bType = "", cType = "";
+                    for (Map<String, Object> checkRelMap : checkRelMapList) {
+                        String relType = (String) checkRelMap.get("relType");
+                        String reportId = (String) checkRelMap.get("reportId");
+                        switch (relType) {
+                            case "a":
+                                aType = aType + reportId + ",";
+                                break;
+                            case "b":
+                                bType = bType + reportId + ",";
+                                break;
+                            case "c":
+                                cType = cType + reportId + ",";
+                                break;
+                        }
+                    }
+                    String msg = "";
+                    if (StringUtil.isNotEmpty(aType)) {
+                        aType = aType.substring(0, aType.length() - 1);
+                        msg = msg + aType + "应计收入为空，请先导入应计收入！\r\n";
+                    }
+                    if (StringUtil.isNotEmpty(bType)) {
+                        bType = bType.substring(0, bType.length() - 1);
+                        msg = msg + bType + "应计实收小计（税前）应当小于等于应计收入小计（税前）！\r\n";
+                    }
+                    if (StringUtil.isNotEmpty(cType) && !cType.equals(bType)) {
+                        cType = cType.substring(0, cType.length() - 1);
+                        msg = msg + cType + "应计实收小计（税后）应当小于等于应计收入小计（税后）！\r\n";
+                    }
+                    resultData.setFail("导入表中，" + msg + "请调整后再次导入！");
+                    return resultData;
+                }
+            }else if(estateType == 24505) {
+                *//*做实际返佣佣金导入时，判定应计返佣税前是否为空或为0，如是，则提示：BB201900001,BB201900002应计返佣为空，请先导入应计返佣！
+                当应计返佣税前不为空且不为0：
+                判断报备正记录行的实际返佣小计（税前/税后）<=应计返佣小计（税前/税后）
+                判断报备负记录行的实际返佣小计（税前/税后）>=应计返佣小计（税前/税后）*//*
+                Map<String, Object> checkMap = new HashMap<>();
+                checkMap.put("mapList", commissionResultList);
+                List<Map<String, Object>> checkRelMapList = lnkYjYjfyMapper.checkYjfyTotal(checkMap);
+                if (CollectionUtils.isNotEmpty(checkRelMapList)) {
+                    String aType = "", bType = "", cType = "";
+                    for (Map<String, Object> checkRelMap : checkRelMapList) {
+                        String relType = (String) checkRelMap.get("relType");
+                        String reportId = (String) checkRelMap.get("reportId");
+                        switch (relType) {
+                            case "a":
+                                aType = aType + reportId + ",";
+                                break;
+                            case "b":
+                                bType = bType + reportId + ",";
+                                break;
+                            case "c":
+                                cType = cType + reportId + ",";
+                                break;
+                        }
+                    }
+                    String msg = "";
+                    if (StringUtil.isNotEmpty(aType)) {
+                        aType = aType.substring(0, aType.length() - 1);
+                        msg = msg + aType + "应计返佣为空，请先导入应计收入！\r\n";
+                    }
+                    if (StringUtil.isNotEmpty(bType)) {
+                        bType = bType.substring(0, bType.length() - 1);
+                        msg = msg + bType + "实际返佣小计（税前）应当小于等于应计返佣小计（税前）！\r\n";
+                    }
+                    if (StringUtil.isNotEmpty(cType) && !cType.equals(bType)) {
+                        cType = cType.substring(0, cType.length() - 1);
+                        msg = msg + cType + "实际返佣小计（税后）应当小于等于应计返佣小计（税后）！\r\n";
+                    }
+                    resultData.setFail("导入表中，" + msg + "请调整后再次导入！");
+                    return resultData;
+                }
+            }*/
+            empId = Integer.valueOf(commissionResultList.get(0).getCrtEmpId());
+            //获取当前城市关账到的月份
+            Map<?, ?> map = commonMapper.checkCitySwitchMonth(commissionResultList.get(0).getCityNo());
+            Calendar c = Calendar.getInstance();
+            Date closeLastDay = null;
+            DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+            if (map != null && map.size() > 0) {
+                gzLastMonth = map.get("year").toString() + "年" + map.get("month").toString() + "月";
+                String closeLastDayStr = map.get("year").toString() + "-" + (Integer.valueOf((String) map.get("month")) + 1) + "-01";
+                closeLastDay = format1.parse(closeLastDayStr);
+            }
+
+            boolean imperfectFlag = false;
+            boolean DataErrorFlag = false;
+            for (CommissionResultDto cDto : commissionResultList) {
+                if(StringUtil.isNotEmpty(cDto.getRecordDate())
+                        && StringUtil.isNotEmpty(cDto.getBefTaxAmount()) && StringUtil.isNotEmpty(cDto.getAftTaxAmount())){
+                    //正常数据
+                    if(!AmountUtils.isValidAmount(cDto.getBefTaxAmount()) || !AmountUtils.isValidAmount(cDto.getAftTaxAmount())){
+                        DataErrorFlag = true;
+                        break;
+                    }
+
+                }else {
+                    if(StringUtil.isNotEmpty(cDto.getRecordDate())
+                            || StringUtil.isNotEmpty(cDto.getBefTaxAmount()) || StringUtil.isNotEmpty(cDto.getAftTaxAmount()) ){
+                        imperfectFlag = true;
+                        break;
+                    }
+                }
+
+                if(StringUtil.isNotEmpty(cDto.getRecordDate1())
+                        && StringUtil.isNotEmpty(cDto.getBefTaxAmount1()) && StringUtil.isNotEmpty(cDto.getAftTaxAmount1())){
+                    //正常数据
+                    if(!AmountUtils.isValidAmount(cDto.getBefTaxAmount1()) || !AmountUtils.isValidAmount(cDto.getAftTaxAmount1())){
+                        DataErrorFlag = true;
+                        break;
+                    }
+                }else {
+                    if(StringUtil.isNotEmpty(cDto.getRecordDate1())
+                            || StringUtil.isNotEmpty(cDto.getBefTaxAmount1()) || StringUtil.isNotEmpty(cDto.getAftTaxAmount1()) ){
+                        imperfectFlag = true;
+                        break;
+                    }
+                }
+
+                if(StringUtil.isNotEmpty(cDto.getRecordDate2())
+                        && StringUtil.isNotEmpty(cDto.getBefTaxAmount2()) && StringUtil.isNotEmpty(cDto.getAftTaxAmount2())){
+                    //正常数据
+                    if(!AmountUtils.isValidAmount(cDto.getBefTaxAmount2()) || !AmountUtils.isValidAmount(cDto.getAftTaxAmount2())){
+                        DataErrorFlag = true;
+                        break;
+                    }
+                }else {
+                    if(StringUtil.isNotEmpty(cDto.getRecordDate2())
+                            || StringUtil.isNotEmpty(cDto.getBefTaxAmount2()) || StringUtil.isNotEmpty(cDto.getAftTaxAmount2()) ){
+                        imperfectFlag = true;
+                        break;
+                    }
+                }
+
+                if(StringUtil.isNotEmpty(cDto.getRecordDate3())
+                        && StringUtil.isNotEmpty(cDto.getBefTaxAmount3()) && StringUtil.isNotEmpty(cDto.getAftTaxAmount3())){
+                    //正常数据
+                    if(!AmountUtils.isValidAmount(cDto.getBefTaxAmount3()) || !AmountUtils.isValidAmount(cDto.getAftTaxAmount3())){
+                        DataErrorFlag = true;
+                        break;
+                    }
+                }else {
+                    if(StringUtil.isNotEmpty(cDto.getRecordDate3())
+                            || StringUtil.isNotEmpty(cDto.getBefTaxAmount3()) || StringUtil.isNotEmpty(cDto.getAftTaxAmount3()) ){
+                        imperfectFlag = true;
+                        break;
+                    }
+                }
+
+                if(StringUtil.isNotEmpty(cDto.getRecordDate4())
+                        && StringUtil.isNotEmpty(cDto.getBefTaxAmount4()) && StringUtil.isNotEmpty(cDto.getAftTaxAmount4())){
+                    //正常数据
+                    if(!AmountUtils.isValidAmount(cDto.getBefTaxAmount4()) || !AmountUtils.isValidAmount(cDto.getAftTaxAmount4())){
+                        DataErrorFlag = true;
+                        break;
+                    }
+                }else {
+                    if(StringUtil.isNotEmpty(cDto.getRecordDate4())
+                            || StringUtil.isNotEmpty(cDto.getBefTaxAmount4()) || StringUtil.isNotEmpty(cDto.getAftTaxAmount4()) ){
+                        imperfectFlag = true;
+                        break;
+                    }
+                }
+
+                if(StringUtil.isNotEmpty(cDto.getRecordDate5())
+                        && StringUtil.isNotEmpty(cDto.getBefTaxAmount5()) && StringUtil.isNotEmpty(cDto.getAftTaxAmount5())){
+                    //正常数据
+                    if(!AmountUtils.isValidAmount(cDto.getBefTaxAmount5()) || !AmountUtils.isValidAmount(cDto.getAftTaxAmount5())){
+                        DataErrorFlag = true;
+                        break;
+                    }
+                }else {
+                    if(StringUtil.isNotEmpty(cDto.getRecordDate5())
+                            || StringUtil.isNotEmpty(cDto.getBefTaxAmount5()) || StringUtil.isNotEmpty(cDto.getAftTaxAmount5()) ){
+                        imperfectFlag = true;
+                        break;
+                    }
+                }
+
+                if(StringUtil.isNotEmpty(cDto.getRecordDate6())
+                        && StringUtil.isNotEmpty(cDto.getBefTaxAmount6()) && StringUtil.isNotEmpty(cDto.getAftTaxAmount6())){
+                    //正常数据
+                    if(!AmountUtils.isValidAmount(cDto.getBefTaxAmount6()) || !AmountUtils.isValidAmount(cDto.getAftTaxAmount6())){
+                        DataErrorFlag = true;
+                        break;
+                    }
+                }else {
+                    if(StringUtil.isNotEmpty(cDto.getRecordDate6())
+                            || StringUtil.isNotEmpty(cDto.getBefTaxAmount6()) || StringUtil.isNotEmpty(cDto.getAftTaxAmount6()) ){
+                        imperfectFlag = true;
+                        break;
+                    }
+                }
+            }
+            if(imperfectFlag){
+                resultData.setFail();
+                resultData.setReturnMsg("由于数据缺少税前、税后、日期，导入不成功，请确认！");
+                return resultData;
+            }
+
+            if(DataErrorFlag){
+                resultData.setFail();
+                resultData.setReturnMsg("由于数据金额格式不正确，导入不成功，请确认！");
+                return resultData;
+            }
+
+
+            for (CommissionResultDto cDto : commissionResultList) {
+                boolean sjfyFlag = true;
+                if (estateType == 24505 && CollectionUtils.isNotEmpty(checkRelMapList)) {
+                    for (Map<String, Object> checkRelMap : checkRelMapList) {
+                        String reportId = (String) checkRelMap.get("reportId");
+                        if (cDto.getReportId().equals(reportId)) {
+                            if(userCount==0){
+                                sjfyFlag = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                //应收收入
+                if (StringUtil.isNotEmpty(cDto.getRecordDate())) {
+                    count++;
+                    cDto.setRecordDate(cDto.getRecordDate());
+                    cDto.setBefTaxAmount(cDto.getBefTaxAmount().trim());
+                    cDto.setAftTaxAmount(cDto.getAftTaxAmount().trim());
+                    //验证当前记录是否关账
+                    Integer switchFlag = cDto.getSwitchFlag();
+                    if (switchFlag == null || switchFlag <= 0) {
+                        Date recordDate = format1.parse(cDto.getRecordDate());
+                        if (closeLastDay != null && closeLastDay.getTime() <= recordDate.getTime()) {
+                            if (estateType == 24501) {
+                                lnkYjYssrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24502) {
+                                lnkYjYjsrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24503) {
+                                lnkYjYjfyMapper.mergeInsert(cDto);
+                            } else if (estateType == 24504) {
+                                lnkYjYjssMapper.mergeInsert(cDto);
+                            } else if (estateType == 24505 && sjfyFlag) {
+                                lnkYjSjfyMapper.mergeInsert(cDto);
+                            }
+                        } else {
+                            flag = true;
+                        }
+                    }
+                }
+
+                //调整1
+                if (StringUtil.isNotEmpty(cDto.getRecordDate1())) {
+                    count++;
+                    cDto.setRecordDate(cDto.getRecordDate1());
+                    //验证当前记录是否关账
+                    Integer switchFlag = cDto.getSwitchFlag1();
+                    if (switchFlag == null || switchFlag <= 0) {
+                        Date recordDate = format1.parse(cDto.getRecordDate());
+                        if (closeLastDay != null && closeLastDay.getTime() <= recordDate.getTime()) {
+                            cDto.setBefTaxAmount(cDto.getBefTaxAmount1().trim());
+                            cDto.setAftTaxAmount(cDto.getAftTaxAmount1().trim());
+                            if (estateType == 24501) {
+                                lnkYjYssrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24502) {
+                                lnkYjYjsrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24503) {
+                                lnkYjYjfyMapper.mergeInsert(cDto);
+                            } else if (estateType == 24504) {
+                                lnkYjYjssMapper.mergeInsert(cDto);
+                            } else if (estateType == 24505 && sjfyFlag) {
+                                lnkYjSjfyMapper.mergeInsert(cDto);
+                            }
+                        } else {
+                            flag = true;
+                        }
+                    }
+                }
+                //调整2
+                if (StringUtil.isNotEmpty(cDto.getRecordDate2())) {
+                    count++;
+                    cDto.setRecordDate(cDto.getRecordDate2());
+                    //验证当前记录是否关账
+                    Integer switchFlag = cDto.getSwitchFlag2();
+                    if (switchFlag == null || switchFlag <= 0) {
+                        Date recordDate = format1.parse(cDto.getRecordDate());
+                        if (closeLastDay != null && closeLastDay.getTime() <= recordDate.getTime()) {
+                            cDto.setBefTaxAmount(cDto.getBefTaxAmount2().trim());
+                            cDto.setAftTaxAmount(cDto.getAftTaxAmount2().trim());
+                            if (estateType == 24501) {
+                                lnkYjYssrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24502) {
+                                lnkYjYjsrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24503) {
+                                lnkYjYjfyMapper.mergeInsert(cDto);
+                            } else if (estateType == 24504) {
+                                lnkYjYjssMapper.mergeInsert(cDto);
+                            } else if (estateType == 24505 && sjfyFlag) {
+                                lnkYjSjfyMapper.mergeInsert(cDto);
+                            }
+                        } else {
+                            flag = true;
+                        }
+                    }
+                }
+                //调整3
+                if (StringUtil.isNotEmpty(cDto.getRecordDate3())) {
+                    count++;
+                    cDto.setRecordDate(cDto.getRecordDate3());
+                    //验证当前记录是否关账
+                    Integer switchFlag = cDto.getSwitchFlag3();
+                    if (switchFlag == null || switchFlag <= 0) {
+                        Date recordDate = format1.parse(cDto.getRecordDate());
+                        if (closeLastDay != null && closeLastDay.getTime() <= recordDate.getTime()) {
+                            cDto.setBefTaxAmount(cDto.getBefTaxAmount3().trim());
+                            cDto.setAftTaxAmount(cDto.getAftTaxAmount3().trim());
+                            if (estateType == 24501) {
+                                lnkYjYssrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24502) {
+                                lnkYjYjsrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24503) {
+                                lnkYjYjfyMapper.mergeInsert(cDto);
+                            } else if (estateType == 24504) {
+                                lnkYjYjssMapper.mergeInsert(cDto);
+                            } else if (estateType == 24505 && sjfyFlag) {
+                                lnkYjSjfyMapper.mergeInsert(cDto);
+                            }
+                        } else {
+                            flag = true;
+                        }
+                    }
+                }
+                //调整4
+                if (StringUtil.isNotEmpty(cDto.getRecordDate4())) {
+                    count++;
+                    cDto.setRecordDate(cDto.getRecordDate4());
+                    //验证当前记录是否关账
+                    Integer switchFlag = cDto.getSwitchFlag4();
+                    if (switchFlag == null || switchFlag <= 0) {
+                        Date recordDate = format1.parse(cDto.getRecordDate());
+                        if (closeLastDay != null && closeLastDay.getTime() <= recordDate.getTime()) {
+                            cDto.setBefTaxAmount(cDto.getBefTaxAmount4().trim());
+                            cDto.setAftTaxAmount(cDto.getAftTaxAmount4().trim());
+                            if (estateType == 24501) {
+                                lnkYjYssrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24502) {
+                                lnkYjYjsrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24503) {
+                                lnkYjYjfyMapper.mergeInsert(cDto);
+                            } else if (estateType == 24504) {
+                                lnkYjYjssMapper.mergeInsert(cDto);
+                            } else if (estateType == 24505 && sjfyFlag) {
+                                lnkYjSjfyMapper.mergeInsert(cDto);
+                            }
+                        } else {
+                            flag = true;
+                        }
+                    }
+                }
+                //调整5
+                if (StringUtil.isNotEmpty(cDto.getRecordDate5())) {
+                    count++;
+                    cDto.setRecordDate(cDto.getRecordDate5());
+                    //验证当前记录是否关账
+                    Integer switchFlag = cDto.getSwitchFlag5();
+                    if (switchFlag == null || switchFlag <= 0) {
+                        Date recordDate = format1.parse(cDto.getRecordDate());
+                        if (closeLastDay != null && closeLastDay.getTime() <= recordDate.getTime()) {
+                            cDto.setBefTaxAmount(cDto.getBefTaxAmount5().trim());
+                            cDto.setAftTaxAmount(cDto.getAftTaxAmount5().trim());
+                            if (estateType == 24501) {
+                                lnkYjYssrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24502) {
+                                lnkYjYjsrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24503) {
+                                lnkYjYjfyMapper.mergeInsert(cDto);
+                            } else if (estateType == 24504) {
+                                lnkYjYjssMapper.mergeInsert(cDto);
+                            } else if (estateType == 24505 && sjfyFlag) {
+                                lnkYjSjfyMapper.mergeInsert(cDto);
+                            }
+                        } else {
+                            flag = true;
+                        }
+                    }
+                }
+                //调整6
+                if (StringUtil.isNotEmpty(cDto.getRecordDate6())) {
+                    count++;
+                    cDto.setRecordDate(cDto.getRecordDate6());
+                    //验证当前记录是否关账
+                    Integer switchFlag = cDto.getSwitchFlag6();
+                    if (switchFlag == null || switchFlag <= 0) {
+                        Date recordDate = format1.parse(cDto.getRecordDate());
+                        if (closeLastDay != null && closeLastDay.getTime() <= recordDate.getTime()) {
+                            cDto.setBefTaxAmount(cDto.getBefTaxAmount6().trim());
+                            cDto.setAftTaxAmount(cDto.getAftTaxAmount6().trim());
+                            if (estateType == 24501) {
+                                lnkYjYssrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24502) {
+                                lnkYjYjsrMapper.mergeInsert(cDto);
+                            } else if (estateType == 24503) {
+                                lnkYjYjfyMapper.mergeInsert(cDto);
+                            } else if (estateType == 24504) {
+                                lnkYjYjssMapper.mergeInsert(cDto);
+                            } else if (estateType == 24505 && sjfyFlag) {
+                                lnkYjSjfyMapper.mergeInsert(cDto);
+                            }
+                        } else {
+                            flag = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (flag) {
+            resultData.setReturnMsg("由于联动业务已关账至" + gzLastMonth + "，部分数据导入不成功，请确认！");
+        } else if (StringUtil.isNotEmpty(msg)) {
+            resultData.setReturnMsg("部分数据导入成功！" + msg + "无需手动导入实返信息！");
+        } else {
+            resultData.setReturnMsg("导入数据成功！");
+        }
+
+        //同步LNK_Import表
+
+        Map<String, Object> syncMap = new HashMap<>();
+        syncMap.put("empId", empId);
+        if (estateType == 24501) {
+            syncMap.put("tabName", "LNK_YJ_YSSR");
+            lnkYjNyMapper.syncLnkImport(syncMap);
+        } else if (estateType == 24502) {
+            syncMap.put("tabName", "LNK_YJ_YJSR");
+            lnkYjNyMapper.syncLnkImport(syncMap);
+        } else if (estateType == 24503) {
+            syncMap.put("tabName", "LNK_YJ_YJFY");
+            lnkYjNyMapper.syncLnkImport(syncMap);
+        } else if (estateType == 24504) {
+            syncMap.put("tabName", "LNK_YJ_YJSS");
+            lnkYjNyMapper.syncLnkImport(syncMap);
+        } else if (estateType == 24505) {
+            syncMap.put("tabName", "LNK_YJ_SJFY");
+            lnkYjNyMapper.syncLnkImport(syncMap);
+        }
+
+
+        System.out.println("===更新数据：" + count + "条");
+        resultData.setReturnData(count);
+        return resultData;
+    }
+}

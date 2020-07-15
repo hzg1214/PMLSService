@@ -1,0 +1,138 @@
+package cn.com.eju.pmls.developer.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.pmls.developer.dao.DeveloperBrandMapper;
+import cn.com.eju.pmls.developer.dto.DeveloperBrandDto;
+
+@Service("developerBrandService")
+public class DeveloperBrandService  extends BaseService {
+    @Resource
+    private DeveloperBrandMapper developerBrandMapper;
+    //获取开发商品牌列表
+    public ResultData getDeveloperBrandList(Map<String, Object> queryParam) {
+        ResultData<List<DeveloperBrandDto>> resultData = new ResultData<List<DeveloperBrandDto>>();
+        List<DeveloperBrandDto> list = developerBrandMapper.getDeveloperBrandList(queryParam);
+
+        List<DeveloperBrandDto> newList=new ArrayList<DeveloperBrandDto>();
+//        for(DeveloperBrandDto developer:list){
+//        	developer.setName(developer.getDeveloperBrandName());
+//            if(developer.getParentId()==0){
+//                newList.add(developer);
+//            }
+//        }
+        for(DeveloperBrandDto developer:list){
+        	developer.setName(developer.getDeveloperBrandName());
+            recursionTree(developer,newList);
+        }
+
+        resultData.setReturnData(newList);
+        return resultData;
+    }
+    //获取开发商品牌信息
+    public ResultData getDeveloperBrandInfo(Map<String, Object> queryParam) {
+        ResultData<DeveloperBrandDto> resultData = new ResultData<>();
+        DeveloperBrandDto channelBrandDto = developerBrandMapper.getDeveloperBrandInfo(queryParam);
+        resultData.setReturnData(channelBrandDto);
+        return resultData;
+    }
+    //新增开发商品牌
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData addDeveloperBrand(DeveloperBrandDto dto) {
+        ResultData resultData = new ResultData();
+        //校验开发商品牌名称是否存在
+        int resultNum=developerBrandMapper.checkDeveloperInfo(dto);
+        if(resultNum>0){
+            resultData.setFail("该开发商名称已存在，请修改后在提交");
+            return resultData;
+        }
+        int count = developerBrandMapper.addDeveloperBrand(dto);
+        int updateResult=0;
+        if(dto.getId()!=null && dto.getId()!=0){
+            if(dto.getParentId()==0){
+                dto.setOrgId("/"+dto.getId()+"/");
+            }else{
+                Map req=new HashMap();
+                req.put("id",dto.getParentId());
+                DeveloperBrandDto channelBrandDto=developerBrandMapper.getDeveloperBrandInfo(req);
+                dto.setOrgId(channelBrandDto.getOrgId()+dto.getId()+"/");
+            }
+            updateResult=developerBrandMapper.updateDeveloperBrand(dto);
+        }
+        if(count>0 && updateResult>0){
+            resultData.setSuccess("新增成功");
+        }else{
+            resultData.setFail("新增失败");
+        }
+        return resultData;
+    }
+    //修改开发商品牌
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData updateDeveloperBrand(DeveloperBrandDto dto) {
+        ResultData resultData = new ResultData();
+        //校验开发商品牌名称是否存在
+        int resultNum=developerBrandMapper.checkDeveloperInfo(dto);
+        if(resultNum>0){
+            resultData.setFail("该开发商名称已存在，请修改后在提交");
+            return resultData;
+        }
+        int count = developerBrandMapper.updateDeveloperBrandById(dto);
+        if(count>0){
+        	count = developerBrandMapper.updateDeveloperBrandByOrgId(dto);
+            resultData.setSuccess("修改成功");
+        }else{
+            resultData.setFail("修改失败");
+        }
+        return resultData;
+    }
+    //删除开发商品牌
+    @Transactional(rollbackFor=Exception.class)
+    public ResultData deleteDeveloperBrand(DeveloperBrandDto dto) {
+        ResultData resultData = new ResultData();
+        //校验开发商品牌是否有对应的开发商，如果有不让删除
+        int num=developerBrandMapper.checkDeveloper(dto);
+        if(num>0){
+            resultData.setFail("该开发商品牌已有开发商数据，不允许删除！");
+            return resultData;
+        }
+        int count = developerBrandMapper.deleteDeveloperBrand(dto);
+        if(count>0){
+            resultData.setSuccess("删除成功");
+        }else{
+            resultData.setFail("删除失败");
+        }
+        return resultData;
+    }
+
+    //递归生成树结构json数据
+    private void recursionTree(DeveloperBrandDto menu,List<DeveloperBrandDto> newList){
+        //重新组织结果list
+        if(menu.getParentId()==0){
+            newList.add(menu);
+        }else{
+            boolean flag=false;
+            for(DeveloperBrandDto brand:newList){
+                if(menu.getParentId().equals(brand.getId())){
+                    brand.getChildren().add(menu);
+                    flag=true;
+                }
+            }
+            if(!flag){
+                for(DeveloperBrandDto brand:newList){
+                    recursionTree(menu,brand.getChildren());
+                }
+            }
+        }
+
+    }
+}

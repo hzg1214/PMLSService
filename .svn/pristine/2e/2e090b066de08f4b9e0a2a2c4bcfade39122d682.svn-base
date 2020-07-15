@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.company.dao.CompanyStoreMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.company.model.CompanyStore">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="CompanyId" property="companyId" jdbcType="NVARCHAR" />
+		<result column="StoreId" property="storeId" jdbcType="NVARCHAR" />
+		<result column="IsDelete" property="isDelete" jdbcType="BIT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, CompanyId, StoreId, IsDelete
+	</sql>
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from CompanyStore
+		where Id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="getCompanyStoreList" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		from CompanyStore
+		where CompanyId=#{companyId,jdbcType=INTEGER}
+			and IsDelete=0
+	</select>
+
+	<select id="getCompanyStoreListNew" resultType="cn.com.eju.deal.dto.store.StoreDto" parameterType="Map">
+		SELECT s.id AS storeId,s.name,s.storeNo,s.address,s.addressDetail,s.maintainer,s.maintainerName,
+			s.centerId,ISNULL(center.groupName,'') AS centerName,
+			s.cityNo,s.businessStatus,s.storeManager,s.storeManagerPhone,
+			s.abtypeStore,s.contractType,s.btypeStore,dbo.F_CRM_SplitCodeToName(2, BTypeStore) AS btypeStoreName,
+		    c.cityNo AS companyCityNo,city.CityName AS companyCityName,city1.cityName 'acCityName'
+		    ,s.pmlsCenterId ,ISNULL(pmlsCenter.groupName,'') AS pmlsGroupName
+		    ,s.brandType ,s.pmlsMaintainCode ,s.pmlsMaintainName
+		FROM dbo.Store s
+		INNER JOIN dbo.CompanyStore cs ON s.Id = cs.StoreId
+		INNER JOIN dbo.Company c ON c.id = cs.CompanyId AND c.IsDelete = 0
+		INNER JOIN dbo.BAS_City city ON c.CityNo = city.CityNo
+		INNER JOIN dbo.BAS_City city1 ON s.acCityNo = city1.CityNo
+		LEFT JOIN  dbo.USR_Group center ON center.groupId = s.centerId AND center.delFlag = 'N'
+		LEFT JOIN  dbo.USR_Group pmlsCenter ON pmlsCenter.groupId = s.centerId AND center.delFlag = 'N'
+		WHERE s.IsDelete = 0 AND cs.IsDelete = 0 AND cs.flag =0
+		and s.brandType = '29401'
+		and cs.CompanyId=#{companyId,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById">
+		UPDATE dbo.CompanyStore SET IsDelete=1
+		<where>CompanyId=#{companyId} and StoreId=#{storeId}</where>
+	</delete>
+
+
+	<delete id="deleteCompanyStore">
+		UPDATE dbo.CompanyStore SET IsDelete=1
+		<where>CompanyId=#{companyId}</where>
+	</delete>
+
+
+	<insert id="create" parameterType="cn.com.eju.deal.company.model.CompanyStore"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into CompanyStore (Id, CompanyId, StoreId,
+		IsDelete)
+		values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=NVARCHAR},
+		#{storeId,jdbcType=NVARCHAR},
+		#{isDelete,jdbcType=BIT})
+	</insert>
+
+	<insert id="batchCreate" parameterType="java.util.List">
+		INSERT INTO CompanyStore
+		( 
+		CompanyId ,
+		StoreId ,
+		IsDelete
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.companyId},#{item.storeId},0)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="cn.com.eju.deal.company.model.CompanyStore">
+		update CompanyStore
+		set CompanyId = #{companyId,jdbcType=NVARCHAR},
+		StoreId = #{storeId,jdbcType=NVARCHAR},
+		IsDelete = #{isDelete,jdbcType=BIT}
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="deleteRelate" parameterType="cn.com.eju.deal.company.model.CompanyStore">
+		UPDATE dbo.CompanyStore SET IsDelete=1
+		<where>CompanyId=#{companyId} and StoreId=#{storeId}</where>
+	</update>
+</mapper>

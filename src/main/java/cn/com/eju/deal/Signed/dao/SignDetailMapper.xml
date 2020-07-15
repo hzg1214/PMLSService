@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.Signed.dao.SignDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.Signed.model.SignDetail" >
+    <result column="yearly" property="yearly" jdbcType="VARCHAR" />
+    <result column="regionCode" property="regionCode" jdbcType="VARCHAR" />
+    <result column="regionName" property="regionName" jdbcType="VARCHAR" />
+    <result column="areaCityCode" property="areaCityCode" jdbcType="VARCHAR" />
+    <result column="areaCityName" property="areaCityName" jdbcType="VARCHAR" />
+    <result column="centerGroupId" property="centerGroupId" jdbcType="VARCHAR" />
+    <result column="centerGroupName" property="centerGroupName" jdbcType="VARCHAR" />
+    <result column="cityGroupId" property="cityGroupId" jdbcType="VARCHAR" />
+    <result column="cityGroupName" property="cityGroupName" jdbcType="VARCHAR" />
+    <result column="districtName" property="districtName" jdbcType="VARCHAR" />
+    <result column="storeId" property="storeId" jdbcType="VARCHAR" />
+    <result column="storeNo" property="storeNo" jdbcType="VARCHAR" />
+    <result column="storeName" property="storeName" jdbcType="VARCHAR" />
+    <result column="dateCreate" property="dateCreate" jdbcType="VARCHAR" />
+    <result column="contractType" property="contractType" jdbcType="VARCHAR"/>
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="districtName" property="districtName" jdbcType="VARCHAR" />
+    <result column="addressDetail" property="addressDetail" jdbcType="VARCHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="mobilePhone" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="storeScale" property="storeScale" jdbcType="VARCHAR" />
+    <result column="cooperateMode" property="cooperateMode" jdbcType="VARCHAR" />
+    <result column="contractDateCreate" property="contractDateCreate" jdbcType="VARCHAR" />
+    <result column="performDate" property="performDate" jdbcType="VARCHAR" />
+    <result column="depositFee" property="depositFee" jdbcType="VARCHAR" />
+    <result column="dateFlopCkAccept" property="dateFlopCkAccept" jdbcType="VARCHAR" />
+    <result column="businessStatusName" property="businessStatus" jdbcType="VARCHAR" />
+    <result column="receivableMoney" property="receivableMoney" jdbcType="VARCHAR" />
+    <result column="accountMoney" property="accountMoney" jdbcType="VARCHAR" />
+    <result column="overDate" property="overDate" jdbcType="VARCHAR" />
+    <result column="platformStatus" property="platformStatus" jdbcType="VARCHAR" />
+    <result column="exchangeReportNum" property="exchangeReportNum" jdbcType="VARCHAR" />
+    <result column="exchangeSignedNum" property="exchangeSignedNum" jdbcType="VARCHAR" />
+    <result column="exchangeLoanedNum" property="exchangeLoanedNum" jdbcType="VARCHAR" />
+    <result column="exchangeEvaluateNum" property="exchangeEvaluateNum" jdbcType="VARCHAR" />
+    <result column="exchangePermitNum" property="exchangePermitNum" jdbcType="VARCHAR" />
+    <result column="exchangeHandleEndNum" property="exchangeHandleEndNum" jdbcType="VARCHAR" />
+    <result column="exchangeProfit" property="exchangeProfit" jdbcType="VARCHAR" />
+    <result column="linkReportNum" property="linkReportNum" jdbcType="VARCHAR" />
+    <result column="linkSeeNum" property="linkSeeNum" jdbcType="VARCHAR" />
+    <result column="linkRoughNum" property="linkRoughNum" jdbcType="VARCHAR" />
+    <result column="linkRoughAmount" property="linkRoughAmount" jdbcType="VARCHAR" />
+    <result column="linkDealNum" property="linkDealNum" jdbcType="VARCHAR" />
+    <result column="linkDealAmount" property="linkDealAmount" jdbcType="VARCHAR" />
+    <result column="linkDeveloperCommissionAccrued" property="linkDeveloperCommissionAccrued" jdbcType="VARCHAR" />
+    <result column="linkDeveloperCommissionReceivable" property="linkDeveloperCommissionReceivable" jdbcType="VARCHAR" />
+    <result column="linkDeveloperCommissionReal" property="linkDeveloperCommissionReal" jdbcType="VARCHAR" />
+    <result column="linkStoreCommissionAccrued" property="linkStoreCommissionAccrued" jdbcType="VARCHAR" />
+    <result column="linkStoreCommissionReal" property="linkStoreCommissionReal" jdbcType="VARCHAR" />
+    <result column="fangyouSystem" property="fangyouSystem" jdbcType="VARCHAR" />
+    <result column="fangyouMachineNum" property="fangyouMachineNum" jdbcType="VARCHAR" />
+    <result column="fangyouLive" property="fangyouLive" jdbcType="VARCHAR" />
+    <result column="fangyouIPAddress" property="fangyouIPAddress" jdbcType="VARCHAR" />
+    <result column="createName" property="createName" jdbcType="VARCHAR" />
+    <result column="createNameNo" property="createNameNo" jdbcType="VARCHAR" />
+    <result column="signedName" property="signedName" jdbcType="VARCHAR" />
+    <result column="signedNameNo" property="signedNameNo" jdbcType="VARCHAR" />
+    <result column="maintainerName" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="maintainerCode" property="maintainerCode" jdbcType="VARCHAR" />
+    <result column="centerName" property="centerName" jdbcType="VARCHAR" />
+    <result column="dateFollowUpNew" property="dateFollowUpNew" jdbcType="VARCHAR" />
+    <result column="storeStatus" property="storeStatus" jdbcType="VARCHAR"/>
+    <result column="exchangeEstateNum" property="exchangeEstateNum" jdbcType="VARCHAR"/>
+    <result column="companyName" property="companyName" jdbcType="VARCHAR"/>
+    <result column="businessCompanyAddress" property="businessCompanyAddress" jdbcType="VARCHAR"/>
+    <result column="contractNo" property="contractNo" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+   <resultMap type="cn.com.eju.deal.Report.model.UserCenterAuthDto" id="UserCenterAuthMap"></resultMap>
+  
+	<select id="getById" parameterType="Map" resultMap="BaseResultMap">
+        SELECT
+            org.yearly, org.regionCode, org.regionName, org.areaCityCode, org.areaCityName,
+            org.cityGroupId, org.cityGroupName, org.centerGroupId, org.centerGroupName,
+            rpt.storeId, rpt.storeNo, rpt.storeName, rpt.dateCreate, rpt.contractNo, rpt.cityNo, rpt.cityId, rpt.cityName, rpt.acCityNo, rpt.acCityId, rpt.acCity ,
+            rpt.companyName, rpt.businessCompanyAddress, rpt.contractType, rpt.cooperateMode, rpt.districtNo, rpt.districtName, rpt.addressDetail ,
+            rpt.contacts, rpt.mobilePhone, rpt.storeScale, rpt.storeStatus, rpt.contractdistinctionName ,
+            rpt.contractDateCreate, rpt.performDate, rpt.depositFee, rpt.dateFlopCkAccept, rpt.businessStatus, rpt.businessStatusName ,
+            rpt.receivableMoney, rpt.accountMoney, rpt.overDate, rpt.platformStatus ,
+            rpt.exchangeReportNum, rpt.exchangeSignedNum, rpt.exchangeEstateNum, rpt.exchangeHandleEndNum, rpt.exchangeLoanedNum ,
+            rpt.exchangeEvaluateNum, rpt.exchangePermitNum, rpt.exchangeProfit ,
+            rpt.linkReportNum, rpt.linkSeeNum, rpt.linkRoughNum, rpt.linkRoughAmount, rpt.linkDealNum, rpt.linkDealAmount ,
+            rpt.linkDeveloperCommissionAccrued, rpt.linkDeveloperCommissionReceivable, rpt.linkDeveloperCommissionReal ,
+            rpt.linkStoreCommissionAccrued, rpt.linkStoreCommissionReal ,
+            rpt.fangyouSystem, rpt.fangyouMachineNum, rpt.fangyouLive, rpt.fangyouIPAddress ,
+            rpt.createName, rpt.createNameNo, rpt.signedName, rpt.signedNameNo ,
+            rpt.maintainerName, rpt.maintainerCode, rpt.centerId, rpt.centerName, rpt.dateFollowUpNew
+          FROM V_CRM_SignedStore_Detail rpt
+            LEFT JOIN (
+                SELECT
+                    yearly, regionCode, regionName, areaCityCode, areaCityName,
+                    cityGroupId, cityGroupName, centerGroupId, centerGroupName
+                  FROM dbo.V_USR_OrgHis
+                <if test="organization != null and organization != ''">
+                    WHERE yearly = #{organization, jdbcType=VARCHAR}
+                </if>
+            ) org ON rpt.centerId = org.centerGroupId
+         WHERE 1 = 1
+        <if test="userId != null and userId != ''">
+            AND (
+                (
+                  rpt.centerId is null AND rpt.cityId in (SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter(#{userId}, 'CRM'))
+                ) OR (
+                  rpt.centerId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+                )
+            )
+        </if>
+		<!--创建日期-->
+		<if test="dateCreateStart != null and dateCreateStart != ''">
+			    <![CDATA[
+						AND rpt.dateCreate is not null
+						AND Convert(varchar(10),DateCreate,120) >= #{dateCreateStart,jdbcType=NVARCHAR}
+			    ]]>
+		</if>
+		<if test="dateCreateEnd != null and dateCreateEnd != ''">
+			    <![CDATA[
+				        AND rpt.dateCreate is not null
+				        AND Convert(varchar(10),DateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+			    ]]>
+		</if>
+        <if test="regionCodeList != null">
+            AND org.regionCode IN
+            <foreach collection="regionCodeList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="areaCityCodeList != null">
+            AND org.areaCityCode IN
+            <foreach collection="areaCityCodeList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="cityIdList != null">
+            AND rpt.cityId IN
+            <foreach collection="cityIdList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="centerIdList != null">
+            AND org.centerGroupId IN
+            <foreach collection="centerIdList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		<!--门店所属城市-->
+		<if test="cityNoList != null">
+            AND rpt.cityNo IN
+			<foreach collection="cityNoList" item="item" index="index"
+                 open="(" separator="," close=")">
+                    #{item}
+			</foreach>
+		</if>
+
+        <if test="allCityIdList != null">
+            AND rpt.acCityId IN
+            <foreach collection="allCityIdList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <!--合作模式-->
+        <if test="contractTypeList != null">
+            AND rpt.contractType IN
+            <foreach collection="contractTypeList" item="item" index="index"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		<!--门店编号、门店店招、门店地址或维护人-->
+        <if test="searchKey != null and searchKey != ''">
+			    <![CDATA[
+			            AND (rpt.storeNo LIKE '%' + RTrim(LTrim('${searchKey}')) + '%' OR rpt.storeName LIKE '%' + RTrim(LTrim('${searchKey}')) + '%'
+			            OR rpt.addressDetail LIKE '%' + RTrim(LTrim('${searchKey}')) + '%' OR rpt.maintainerName  LIKE '%' + RTrim(LTrim('${searchKey}')) + '%')
+			    ]]>
+		</if>
+        ORDER BY org.regionCode, org.areaCityCode, rpt.cityId, rpt.storeNo
+	</select>
+
+     <!-- 根据登录人ID,城市ID 拿到对应部门/中心-->
+     <select id="getCenterGroupName" parameterType="Map" resultMap="UserCenterAuthMap">
+            select distinct centerGroupId,centerGroupName,timeTag from dbo.F_USR_UserGroupAuth(#{userId,jdbcType=INTEGER}, 'CRM')
+            where timeTag = 1082
+            <if test="list != null">
+				     AND  cityId in 
+				     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				       #{item}
+				    </foreach>
+		   </if>
+     </select>
+
+    
+</mapper>

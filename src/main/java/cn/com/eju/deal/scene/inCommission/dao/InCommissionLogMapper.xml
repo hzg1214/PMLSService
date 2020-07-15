@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.inCommission.dao.InCommissionLogMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.scene.inCommission.model.InCommissionLog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="operType" property="operType" jdbcType="VARCHAR"/>
+        <result column="fileName" property="fileName" jdbcType="VARCHAR"/>
+        <result column="operUserId" property="operUserId" jdbcType="INTEGER"/>
+        <result column="operUserName" property="operUserName" jdbcType="VARCHAR"/>
+        <result column="operDt" property="operDt" jdbcType="TIMESTAMP"/>
+        <result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+	</resultMap>
+    
+    <sql id="Base_Column_List">
+    	id, operType, fileName, operUserId, operUserName, operDt, remarks
+  	</sql>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LOG_LNK_Import
+        <where>
+            id = #{id, jdbcType=INTEGER}
+        </where>
+    </select>
+    
+    <insert id="create" parameterType="cn.com.eju.deal.scene.inCommission.model.InCommissionLog"
+            useGeneratedKeys="true" keyProperty="id">
+            INSERT INTO [dbo].[LOG_LNK_Import]
+           ([operType]
+           ,[fileName]
+           ,[operUserId]
+           ,[operUserName]
+           ,[operDt]
+           ,[remarks]
+           ,[templateType]
+           ,[amountType]
+           ,[year]
+           ,[projectNo]
+           ,[estateId]
+           ,[estateNm]
+           ,[reportId]
+           ,[detailId]
+           ,[buildingNo]
+           ,[num]
+           ,[dealAmount]
+           ,[dealDate]
+           ,[subTotalPreTax]
+           ,[beforeAmountPreTax]
+           ,[janPreTax]
+           ,[febPreTax]
+           ,[marPreTax]
+           ,[aprPreTax]
+           ,[mayPreTax]
+           ,[junPreTax]
+           ,[julPreTax]
+           ,[augPreTax]
+           ,[sepPreTax]
+           ,[octPreTax]
+           ,[novPreTax]
+           ,[decPreTax]
+           ,[subTotalAfterTax]
+           ,[beforeAmountAfterTax]
+           ,[janAfterTax]
+           ,[febAfterTax]
+           ,[marAfterTax]
+           ,[aprAfterTax]
+           ,[mayAfterTax]
+           ,[junAfterTax]
+           ,[julAfterTax]
+           ,[augAfterTax]
+           ,[sepAfterTax]
+           ,[octAfterTax]
+           ,[novAfterTax]
+           ,[decAfterTax])
+     VALUES(
+     		#{operType,jdbcType=VARCHAR}
+           ,#{fileName,jdbcType=VARCHAR}
+           ,#{operUserId,jdbcType=INTEGER}
+           ,#{operUserName,jdbcType=VARCHAR}
+           ,#{operDt,jdbcType=TIMESTAMP}
+           ,#{remarks,jdbcType=VARCHAR}
+           ,#{templateType,jdbcType=VARCHAR}
+           ,#{amountType,jdbcType=VARCHAR}
+           ,#{year,jdbcType=INTEGER}
+           ,#{projectNo,jdbcType=VARCHAR}
+           ,#{estateId,jdbcType=VARCHAR}
+           ,#{estateNm,jdbcType=VARCHAR}
+           ,#{reportId,jdbcType=VARCHAR}
+           ,#{detailId,jdbcType=INTEGER}
+           ,#{buildingNo,jdbcType=VARCHAR}
+           ,#{num,jdbcType=INTEGER}
+           ,#{dealAmount,jdbcType=DECIMAL}
+           ,#{dealDate,jdbcType=TIMESTAMP}
+           ,#{subTotalPreTax,jdbcType=DECIMAL}
+           ,#{beforeAmountPreTax,jdbcType=DECIMAL}
+           ,#{janPreTax,jdbcType=DECIMAL}
+           ,#{febPreTax,jdbcType=DECIMAL}
+           ,#{marPreTax,jdbcType=DECIMAL}
+           ,#{aprPreTax,jdbcType=DECIMAL}
+           ,#{mayPreTax,jdbcType=DECIMAL}
+           ,#{junPreTax,jdbcType=DECIMAL}
+           ,#{julPreTax,jdbcType=DECIMAL}
+           ,#{augPreTax,jdbcType=DECIMAL}
+           ,#{sepPreTax,jdbcType=DECIMAL}
+           ,#{octPreTax,jdbcType=DECIMAL}
+           ,#{novPreTax,jdbcType=DECIMAL}
+           ,#{decPreTax,jdbcType=DECIMAL}
+           ,#{subTotalAfterTax,jdbcType=DECIMAL}
+           ,#{beforeAmountAfterTax,jdbcType=DECIMAL}
+           ,#{janAfterTax,jdbcType=DECIMAL}
+           ,#{febAfterTax,jdbcType=DECIMAL}
+           ,#{marAfterTax,jdbcType=DECIMAL}
+           ,#{aprAfterTax,jdbcType=DECIMAL}
+           ,#{mayAfterTax,jdbcType=DECIMAL}
+           ,#{junAfterTax,jdbcType=DECIMAL}
+           ,#{julAfterTax,jdbcType=DECIMAL}
+           ,#{augAfterTax,jdbcType=DECIMAL}
+           ,#{sepAfterTax,jdbcType=DECIMAL}
+           ,#{octAfterTax,jdbcType=DECIMAL}
+           ,#{novAfterTax,jdbcType=DECIMAL}
+           ,#{decAfterTax,jdbcType=DECIMAL}
+     )
+  	</insert>
+</mapper>

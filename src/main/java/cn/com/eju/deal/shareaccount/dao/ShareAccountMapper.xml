@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.shareaccount.dao.ShareAccountMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.shareaccount.model.ShareAccount">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="companyNo" jdbcType="NVARCHAR" property="companyNo" />
+		<result column="shopName" jdbcType="VARCHAR" property="shopName" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+		<result column="dateUpdate" jdbcType="TIMESTAMP" property="dateUpdate" />
+		<result column="delFlag" jdbcType="BIT" property="delFlag" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, companyNo, shopName, phone, dateCreate,
+		dateUpdate,delFlag
+	</sql>
+	
+	
+<!-- 	根据公盘合同编号查询 -->
+	<select id="selectByPrimaryKey" parameterType="string"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from Fangyou_Movement_Share_Account
+		where companyNo = #{companyNo,jdbcType=INTEGER}
+	</select>
+
+	<!-- 新增 -->
+	<insert id="insert" parameterType="cn.com.eju.deal.shareaccount.model.ShareAccount">
+		insert into Fangyou_Movement_Share_Account (companyNo, shopName, phone, dateCreate,
+		dateUpdate,delFlag
+	    )
+	    values (#{companyNo,jdbcType=VARCHAR}, #{shopName,jdbcType=DECIMAL},
+	    #{phone,jdbcType=TIMESTAMP}, #{dateCreate,jdbcType=TIMESTAMP},
+	    #{dateUpdate,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=BIT}
+	    )
+	</insert>
+
+</mapper>

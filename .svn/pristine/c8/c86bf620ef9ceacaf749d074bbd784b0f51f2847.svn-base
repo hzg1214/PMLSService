@@ -1,0 +1,25 @@
+package cn.com.eju.deal.scene.commission.dao;
+
+import cn.com.eju.deal.dto.scene.commission.CommissionResultDto;
+import cn.com.eju.deal.scene.commission.model.LnkYjBrokerage;
+import cn.com.eju.deal.scene.commission.model.LnkYjYjss;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 佣金-应计实收
+ */
+public interface LnkYjYjssMapper {
+    List<LnkYjYjss> queryList(LnkYjYjss lnkYjYjss);
+
+    void mergeInsert(CommissionResultDto cDto);
+
+    List<CommissionResultDto> getYJSSCommissionList(Map<String, Object> map);
+
+    List<LnkYjBrokerage> getYJtableList(Map<String, Object> map);
+
+    LnkYjYjss getStatistcsBrokerage (Map<String, Object> map);
+
+    void mergeUpdate(CommissionResultDto cDto);
+}

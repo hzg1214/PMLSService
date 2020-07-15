@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.jsStatement.dao.PmlsJsStatementMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.jsStatement.model.PmlsJsStatement" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="templateCode" property="templateCode" jdbcType="VARCHAR" />
+    <result column="templateName" property="templateName" jdbcType="NVARCHAR" />
+    <result column="plate" property="plate" jdbcType="VARCHAR" />
+    <result column="jssNo" property="jssNo" jdbcType="VARCHAR" />
+    <result column="hsCode" property="hsCode" jdbcType="VARCHAR" />
+    <result column="hsName" property="hsName" jdbcType="NVARCHAR" />
+    <result column="khCode" property="khCode" jdbcType="VARCHAR" />
+    <result column="khName" property="khName" jdbcType="NVARCHAR" />
+    <result column="jssType" property="jssType" jdbcType="VARCHAR" />
+    <result column="businessType" property="businessType" jdbcType="VARCHAR" />
+    <result column="projectNo" property="projectNo" jdbcType="VARCHAR" />
+    <result column="projectName" property="projectName" jdbcType="NVARCHAR" />
+    <result column="yyType" property="yyType" jdbcType="VARCHAR" />
+    <result column="sendUserName" property="sendUserName" jdbcType="VARCHAR" />
+    <result column="sendUserCode" property="sendUserCode" jdbcType="VARCHAR" />
+    <result column="sqdate" property="sqdate" jdbcType="TIMESTAMP" />
+    <result column="companyId" property="companyId" jdbcType="INTEGER" />
+    <result column="companyName" property="companyName" jdbcType="NVARCHAR" />
+    <result column="vender_id" property="vender_id" jdbcType="VARCHAR" />
+    <result column="vender_code" property="vender_code" jdbcType="VARCHAR" />
+    <result column="vender_name" property="vender_name" jdbcType="NVARCHAR" />
+    <result column="remark" property="remark" jdbcType="NVARCHAR" />
+    <result column="flowId" property="flowId" jdbcType="VARCHAR" />
+    <result column="oaNo" property="oaNo" jdbcType="VARCHAR" />
+    <result column="approveStatus" property="approveStatus" jdbcType="VARCHAR" />
+    <result column="approvedDate" property="approvedDate" jdbcType="TIMESTAMP" />
+    <result column="dzqStatus" property="dzqStatus" jdbcType="VARCHAR" />
+    <result column="dzqapprovedDate" property="dzqapprovedDate" jdbcType="TIMESTAMP" />
+    <result column="dzqNo" property="dzqNo" jdbcType="VARCHAR" />
+    <result column="cityNo" property="cityNo" jdbcType="VARCHAR" />
+    <result column="formState" property="formState" jdbcType="INTEGER" />
+    <result column="errmsg" property="errmsg" jdbcType="VARCHAR" />
+    <result column="jsTotalAmount" property="jsTotalAmount" jdbcType="DECIMAL" />
+    <result column="jyTotalAmount" property="jyTotalAmount" jdbcType="DECIMAL" />
+    <result column="kpTotalAmount" property="kpTotalAmount" jdbcType="DECIMAL" />
+    <result column="kpTotalTaxAmount" property="kpTotalTaxAmount" jdbcType="DECIMAL" />
+    <result column="kpTotalTaxAfterAmount" property="kpTotalTaxAfterAmount" jdbcType="DECIMAL" />
+    <result column="sendUserTel" property="sendUserTel" jdbcType="VARCHAR" />
+    <result column="vender_qy_userName" property="vender_qy_userName" jdbcType="NVARCHAR" />
+    <result column="vender_qy_userTel" property="vender_qy_userTel" jdbcType="VARCHAR" />
+    <result column="contractYdTotalAmount" property="contractYdTotalAmount" jdbcType="DECIMAL" />
+    <result column="yjsTotalAmount" property="yjsTotalAmount" jdbcType="DECIMAL" />
+    <result column="oaStartDate" property="oaStartDate" jdbcType="TIMESTAMP" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="userIdUpdate" property="userIdUpdate" jdbcType="INTEGER" />
+    <result column="offSetFlag" property="offSetFlag" jdbcType="INTEGER" />
+    <result column="requestAmount" property="requestAmount" jdbcType="DECIMAL" />
+    <result column="terminationDesc" property="terminationDesc" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, templateCode, templateName, plate, jssNo, hsCode, hsName, khCode, khName, jssType, 
+    businessType, projectNo, projectName, yyType, sendUserName, sendUserCode, sqdate, 
+    companyId, companyName, vender_id, vender_code, vender_name, remark, flowId, oaNo, 
+    approveStatus, approvedDate, dzqStatus, dzqapprovedDate, dzqNo, cityNo, formState, 
+    errmsg, jsTotalAmount, jyTotalAmount, kpTotalAmount, kpTotalTaxAmount, kpTotalTaxAfterAmount, 
+    sendUserTel, vender_qy_userName, vender_qy_userTel, contractYdTotalAmount, yjsTotalAmount, 
+    oaStartDate, delFlag, dateCreate, userIdCreate, dateUpdate, userIdUpdate, offSetFlag, 
+    requestAmount, terminationDesc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from PMLS_JsStatement
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from PMLS_JsStatement
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatement" >
+    insert into PMLS_JsStatement (id, templateCode, templateName, 
+      plate, jssNo, hsCode, 
+      hsName, khCode, khName, 
+      jssType, businessType, projectNo, 
+      projectName, yyType, sendUserName, 
+      sendUserCode, sqdate, companyId, 
+      companyName, vender_id, vender_code, 
+      vender_name, remark, flowId, 
+      oaNo, approveStatus, approvedDate, 
+      dzqStatus, dzqapprovedDate, dzqNo, 
+      cityNo, formState, errmsg, 
+      jsTotalAmount, jyTotalAmount, kpTotalAmount, 
+      kpTotalTaxAmount, kpTotalTaxAfterAmount, 
+      sendUserTel, vender_qy_userName, vender_qy_userTel, 
+      contractYdTotalAmount, yjsTotalAmount, 
+      oaStartDate, delFlag, dateCreate, 
+      userIdCreate, dateUpdate, userIdUpdate, 
+      offSetFlag, requestAmount, terminationDesc
+      )
+    values (#{id,jdbcType=INTEGER}, #{templateCode,jdbcType=VARCHAR}, #{templateName,jdbcType=NVARCHAR}, 
+      #{plate,jdbcType=VARCHAR}, #{jssNo,jdbcType=VARCHAR}, #{hsCode,jdbcType=VARCHAR}, 
+      #{hsName,jdbcType=NVARCHAR}, #{khCode,jdbcType=VARCHAR}, #{khName,jdbcType=NVARCHAR}, 
+      #{jssType,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{projectNo,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=NVARCHAR}, #{yyType,jdbcType=VARCHAR}, #{sendUserName,jdbcType=VARCHAR}, 
+      #{sendUserCode,jdbcType=VARCHAR}, #{sqdate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=INTEGER}, 
+      #{companyName,jdbcType=NVARCHAR}, #{vender_id,jdbcType=VARCHAR}, #{vender_code,jdbcType=VARCHAR}, 
+      #{vender_name,jdbcType=NVARCHAR}, #{remark,jdbcType=NVARCHAR}, #{flowId,jdbcType=VARCHAR}, 
+      #{oaNo,jdbcType=VARCHAR}, #{approveStatus,jdbcType=VARCHAR}, #{approvedDate,jdbcType=TIMESTAMP}, 
+      #{dzqStatus,jdbcType=VARCHAR}, #{dzqapprovedDate,jdbcType=TIMESTAMP}, #{dzqNo,jdbcType=VARCHAR}, 
+      #{cityNo,jdbcType=VARCHAR}, #{formState,jdbcType=INTEGER}, #{errmsg,jdbcType=VARCHAR}, 
+      #{jsTotalAmount,jdbcType=DECIMAL}, #{jyTotalAmount,jdbcType=DECIMAL}, #{kpTotalAmount,jdbcType=DECIMAL}, 
+      #{kpTotalTaxAmount,jdbcType=DECIMAL}, #{kpTotalTaxAfterAmount,jdbcType=DECIMAL}, 
+      #{sendUserTel,jdbcType=VARCHAR}, #{vender_qy_userName,jdbcType=NVARCHAR}, #{vender_qy_userTel,jdbcType=VARCHAR}, 
+      #{contractYdTotalAmount,jdbcType=DECIMAL}, #{yjsTotalAmount,jdbcType=DECIMAL}, 
+      #{oaStartDate,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=BIT}, #{dateCreate,jdbcType=TIMESTAMP}, 
+      #{userIdCreate,jdbcType=INTEGER}, #{dateUpdate,jdbcType=TIMESTAMP}, #{userIdUpdate,jdbcType=INTEGER}, 
+      #{offSetFlag,jdbcType=INTEGER}, #{requestAmount,jdbcType=DECIMAL}, #{terminationDesc,jdbcType=NVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatement" >
+    insert into PMLS_JsStatement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="templateCode != null" >
+        templateCode,
+      </if>
+      <if test="templateName != null" >
+        templateName,
+      </if>
+      <if test="plate != null" >
+        plate,
+      </if>
+      <if test="jssNo != null" >
+        jssNo,
+      </if>
+      <if test="hsCode != null" >
+        hsCode,
+      </if>
+      <if test="hsName != null" >
+        hsName,
+      </if>
+      <if test="khCode != null" >
+        khCode,
+      </if>
+      <if test="khName != null" >
+        khName,
+      </if>
+      <if test="jssType != null" >
+        jssType,
+      </if>
+      <if test="businessType != null" >
+        businessType,
+      </if>
+      <if test="projectNo != null" >
+        projectNo,
+      </if>
+      <if test="projectName != null" >
+        projectName,
+      </if>
+      <if test="yyType != null" >
+        yyType,
+      </if>
+      <if test="sendUserName != null" >
+        sendUserName,
+      </if>
+      <if test="sendUserCode != null" >
+        sendUserCode,
+      </if>
+      <if test="sqdate != null" >
+        sqdate,
+      </if>
+      <if test="companyId != null" >
+        companyId,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="vender_id != null" >
+        vender_id,
+      </if>
+      <if test="vender_code != null" >
+        vender_code,
+      </if>
+      <if test="vender_name != null" >
+        vender_name,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="flowId != null" >
+        flowId,
+      </if>
+      <if test="oaNo != null" >
+        oaNo,
+      </if>
+      <if test="approveStatus != null" >
+        approveStatus,
+      </if>
+      <if test="approvedDate != null" >
+        approvedDate,
+      </if>
+      <if test="dzqStatus != null" >
+        dzqStatus,
+      </if>
+      <if test="dzqapprovedDate != null" >
+        dzqapprovedDate,
+      </if>
+      <if test="dzqNo != null" >
+        dzqNo,
+      </if>
+      <if test="cityNo != null" >
+        cityNo,
+      </if>
+      <if test="formState != null" >
+        formState,
+      </if>
+      <if test="errmsg != null" >
+        errmsg,
+      </if>
+      <if test="jsTotalAmount != null" >
+        jsTotalAmount,
+      </if>
+      <if test="jyTotalAmount != null" >
+        jyTotalAmount,
+      </if>
+      <if test="kpTotalAmount != null" >
+        kpTotalAmount,
+      </if>
+      <if test="kpTotalTaxAmount != null" >
+        kpTotalTaxAmount,
+      </if>
+      <if test="kpTotalTaxAfterAmount != null" >
+        kpTotalTaxAfterAmount,
+      </if>
+      <if test="sendUserTel != null" >
+        sendUserTel,
+      </if>
+      <if test="vender_qy_userName != null" >
+        vender_qy_userName,
+      </if>
+      <if test="vender_qy_userTel != null" >
+        vender_qy_userTel,
+      </if>
+      <if test="contractYdTotalAmount != null" >
+        contractYdTotalAmount,
+      </if>
+      <if test="yjsTotalAmount != null" >
+        yjsTotalAmount,
+      </if>
+      <if test="oaStartDate != null" >
+        oaStartDate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate,
+      </if>
+      <if test="offSetFlag != null" >
+        offSetFlag,
+      </if>
+      <if test="requestAmount != null" >
+        requestAmount,
+      </if>
+      <if test="terminationDesc != null" >
+        terminationDesc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="templateCode != null" >
+        #{templateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="templateName != null" >
+        #{templateName,jdbcType=NVARCHAR},
+      </if>
+      <if test="plate != null" >
+        #{plate,jdbcType=VARCHAR},
+      </if>
+      <if test="jssNo != null" >
+        #{jssNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hsCode != null" >
+        #{hsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hsName != null" >
+        #{hsName,jdbcType=NVARCHAR},
+      </if>
+      <if test="khCode != null" >
+        #{khCode,jdbcType=VARCHAR},
+      </if>
+      <if test="khName != null" >
+        #{khName,jdbcType=NVARCHAR},
+      </if>
+      <if test="jssType != null" >
+        #{jssType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null" >
+        #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=NVARCHAR},
+      </if>
+      <if test="yyType != null" >
+        #{yyType,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUserName != null" >
+        #{sendUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUserCode != null" >
+        #{sendUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sqdate != null" >
+        #{sqdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=NVARCHAR},
+      </if>
+      <if test="vender_id != null" >
+        #{vender_id,jdbcType=VARCHAR},
+      </if>
+      <if test="vender_code != null" >
+        #{vender_code,jdbcType=VARCHAR},
+      </if>
+      <if test="vender_name != null" >
+        #{vender_name,jdbcType=NVARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=NVARCHAR},
+      </if>
+      <if test="flowId != null" >
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null" >
+        #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="approveStatus != null" >
+        #{approveStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvedDate != null" >
+        #{approvedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dzqStatus != null" >
+        #{dzqStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dzqapprovedDate != null" >
+        #{dzqapprovedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dzqNo != null" >
+        #{dzqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="formState != null" >
+        #{formState,jdbcType=INTEGER},
+      </if>
+      <if test="errmsg != null" >
+        #{errmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="jsTotalAmount != null" >
+        #{jsTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jyTotalAmount != null" >
+        #{jyTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTotalAmount != null" >
+        #{kpTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTotalTaxAmount != null" >
+        #{kpTotalTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTotalTaxAfterAmount != null" >
+        #{kpTotalTaxAfterAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendUserTel != null" >
+        #{sendUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="vender_qy_userName != null" >
+        #{vender_qy_userName,jdbcType=NVARCHAR},
+      </if>
+      <if test="vender_qy_userTel != null" >
+        #{vender_qy_userTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contractYdTotalAmount != null" >
+        #{contractYdTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsTotalAmount != null" >
+        #{yjsTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="oaStartDate != null" >
+        #{oaStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="offSetFlag != null" >
+        #{offSetFlag,jdbcType=INTEGER},
+      </if>
+      <if test="requestAmount != null" >
+        #{requestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="terminationDesc != null" >
+        #{terminationDesc,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatement" >
+    update PMLS_JsStatement
+    <set >
+      <if test="templateCode != null" >
+        templateCode = #{templateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="templateName != null" >
+        templateName = #{templateName,jdbcType=NVARCHAR},
+      </if>
+      <if test="plate != null" >
+        plate = #{plate,jdbcType=VARCHAR},
+      </if>
+      <if test="jssNo != null" >
+        jssNo = #{jssNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hsCode != null" >
+        hsCode = #{hsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hsName != null" >
+        hsName = #{hsName,jdbcType=NVARCHAR},
+      </if>
+      <if test="khCode != null" >
+        khCode = #{khCode,jdbcType=VARCHAR},
+      </if>
+      <if test="khName != null" >
+        khName = #{khName,jdbcType=NVARCHAR},
+      </if>
+      <if test="jssType != null" >
+        jssType = #{jssType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        businessType = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null" >
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        projectName = #{projectName,jdbcType=NVARCHAR},
+      </if>
+      <if test="yyType != null" >
+        yyType = #{yyType,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUserName != null" >
+        sendUserName = #{sendUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUserCode != null" >
+        sendUserCode = #{sendUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sqdate != null" >
+        sqdate = #{sqdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyId != null" >
+        companyId = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName,jdbcType=NVARCHAR},
+      </if>
+      <if test="vender_id != null" >
+        vender_id = #{vender_id,jdbcType=VARCHAR},
+      </if>
+      <if test="vender_code != null" >
+        vender_code = #{vender_code,jdbcType=VARCHAR},
+      </if>
+      <if test="vender_name != null" >
+        vender_name = #{vender_name,jdbcType=NVARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=NVARCHAR},
+      </if>
+      <if test="flowId != null" >
+        flowId = #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null" >
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="approveStatus != null" >
+        approveStatus = #{approveStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvedDate != null" >
+        approvedDate = #{approvedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dzqStatus != null" >
+        dzqStatus = #{dzqStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dzqapprovedDate != null" >
+        dzqapprovedDate = #{dzqapprovedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dzqNo != null" >
+        dzqNo = #{dzqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="formState != null" >
+        formState = #{formState,jdbcType=INTEGER},
+      </if>
+      <if test="errmsg != null" >
+        errmsg = #{errmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="jsTotalAmount != null" >
+        jsTotalAmount = #{jsTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jyTotalAmount != null" >
+        jyTotalAmount = #{jyTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTotalAmount != null" >
+        kpTotalAmount = #{kpTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTotalTaxAmount != null" >
+        kpTotalTaxAmount = #{kpTotalTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="kpTotalTaxAfterAmount != null" >
+        kpTotalTaxAfterAmount = #{kpTotalTaxAfterAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendUserTel != null" >
+        sendUserTel = #{sendUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="vender_qy_userName != null" >
+        vender_qy_userName = #{vender_qy_userName,jdbcType=NVARCHAR},
+      </if>
+      <if test="vender_qy_userTel != null" >
+        vender_qy_userTel = #{vender_qy_userTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contractYdTotalAmount != null" >
+        contractYdTotalAmount = #{contractYdTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="yjsTotalAmount != null" >
+        yjsTotalAmount = #{yjsTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="oaStartDate != null" >
+        oaStartDate = #{oaStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="offSetFlag != null" >
+        offSetFlag = #{offSetFlag,jdbcType=INTEGER},
+      </if>
+      <if test="requestAmount != null" >
+        requestAmount = #{requestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="terminationDesc != null" >
+        terminationDesc = #{terminationDesc,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.jsStatement.model.PmlsJsStatement" >
+    update PMLS_JsStatement
+    set templateCode = #{templateCode,jdbcType=VARCHAR},
+      templateName = #{templateName,jdbcType=NVARCHAR},
+      plate = #{plate,jdbcType=VARCHAR},
+      jssNo = #{jssNo,jdbcType=VARCHAR},
+      hsCode = #{hsCode,jdbcType=VARCHAR},
+      hsName = #{hsName,jdbcType=NVARCHAR},
+      khCode = #{khCode,jdbcType=VARCHAR},
+      khName = #{khName,jdbcType=NVARCHAR},
+      jssType = #{jssType,jdbcType=VARCHAR},
+      businessType = #{businessType,jdbcType=VARCHAR},
+      projectNo = #{projectNo,jdbcType=VARCHAR},
+      projectName = #{projectName,jdbcType=NVARCHAR},
+      yyType = #{yyType,jdbcType=VARCHAR},
+      sendUserName = #{sendUserName,jdbcType=VARCHAR},
+      sendUserCode = #{sendUserCode,jdbcType=VARCHAR},
+      sqdate = #{sqdate,jdbcType=TIMESTAMP},
+      companyId = #{companyId,jdbcType=INTEGER},
+      companyName = #{companyName,jdbcType=NVARCHAR},
+      vender_id = #{vender_id,jdbcType=VARCHAR},
+      vender_code = #{vender_code,jdbcType=VARCHAR},
+      vender_name = #{vender_name,jdbcType=NVARCHAR},
+      remark = #{remark,jdbcType=NVARCHAR},
+      flowId = #{flowId,jdbcType=VARCHAR},
+      oaNo = #{oaNo,jdbcType=VARCHAR},
+      approveStatus = #{approveStatus,jdbcType=VARCHAR},
+      approvedDate = #{approvedDate,jdbcType=TIMESTAMP},
+      dzqStatus = #{dzqStatus,jdbcType=VARCHAR},
+      dzqapprovedDate = #{dzqapprovedDate,jdbcType=TIMESTAMP},
+      dzqNo = #{dzqNo,jdbcType=VARCHAR},
+      cityNo = #{cityNo,jdbcType=VARCHAR},
+      formState = #{formState,jdbcType=INTEGER},
+      errmsg = #{errmsg,jdbcType=VARCHAR},
+      jsTotalAmount = #{jsTotalAmount,jdbcType=DECIMAL},
+      jyTotalAmount = #{jyTotalAmount,jdbcType=DECIMAL},
+      kpTotalAmount = #{kpTotalAmount,jdbcType=DECIMAL},
+      kpTotalTaxAmount = #{kpTotalTaxAmount,jdbcType=DECIMAL},
+      kpTotalTaxAfterAmount = #{kpTotalTaxAfterAmount,jdbcType=DECIMAL},
+      sendUserTel = #{sendUserTel,jdbcType=VARCHAR},
+      vender_qy_userName = #{vender_qy_userName,jdbcType=NVARCHAR},
+      vender_qy_userTel = #{vender_qy_userTel,jdbcType=VARCHAR},
+      contractYdTotalAmount = #{contractYdTotalAmount,jdbcType=DECIMAL},
+      yjsTotalAmount = #{yjsTotalAmount,jdbcType=DECIMAL},
+      oaStartDate = #{oaStartDate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      offSetFlag = #{offSetFlag,jdbcType=INTEGER},
+      requestAmount = #{requestAmount,jdbcType=DECIMAL},
+      terminationDesc = #{terminationDesc,jdbcType=NVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.report.frontPanel.dao.PmlsNumWeekMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.report.frontPanel.model.PmlsNumWeek" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="hblCode" property="hblCode" jdbcType="VARCHAR" />
+    <result column="projectNo" property="projectNo" jdbcType="VARCHAR" />
+    <result column="projectName" property="projectName" jdbcType="VARCHAR" />
+    <result column="cityNo" property="cityNo" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="weekIndex" property="weekIndex" jdbcType="VARCHAR" />
+    <result column="bb_Num" property="bb_Num" jdbcType="INTEGER" />
+    <result column="dk_Num" property="dk_Num" jdbcType="INTEGER" />
+    <result column="dd_Num" property="dd_Num" jdbcType="INTEGER" />
+    <result column="cx_Num" property="cx_Num" jdbcType="INTEGER" />
+    <result column="datecreate" property="datecreate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, hblCode, projectNo, projectName, cityNo, year, weekIndex, bb_Num, dk_Num, dd_Num, 
+    cx_Num, datecreate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cloud_pmls_num_week
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cloud_pmls_num_week
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.report.frontPanel.model.PmlsNumWeek" >
+    insert into cloud_pmls_num_week (id, hblCode, projectNo, 
+      projectName, cityNo, year, 
+      weekIndex, bb_Num, dk_Num, 
+      dd_Num, cx_Num, datecreate
+      )
+    values (#{id,jdbcType=INTEGER}, #{hblCode,jdbcType=VARCHAR}, #{projectNo,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{cityNo,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR}, 
+      #{weekIndex,jdbcType=VARCHAR}, #{bb_Num,jdbcType=INTEGER}, #{dk_Num,jdbcType=INTEGER}, 
+      #{dd_Num,jdbcType=INTEGER}, #{cx_Num,jdbcType=INTEGER}, #{datecreate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.report.frontPanel.model.PmlsNumWeek" >
+    insert into cloud_pmls_num_week
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="hblCode != null" >
+        hblCode,
+      </if>
+      <if test="projectNo != null" >
+        projectNo,
+      </if>
+      <if test="projectName != null" >
+        projectName,
+      </if>
+      <if test="cityNo != null" >
+        cityNo,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="weekIndex != null" >
+        weekIndex,
+      </if>
+      <if test="bb_Num != null" >
+        bb_Num,
+      </if>
+      <if test="dk_Num != null" >
+        dk_Num,
+      </if>
+      <if test="dd_Num != null" >
+        dd_Num,
+      </if>
+      <if test="cx_Num != null" >
+        cx_Num,
+      </if>
+      <if test="datecreate != null" >
+        datecreate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="hblCode != null" >
+        #{hblCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null" >
+        #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="weekIndex != null" >
+        #{weekIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="bb_Num != null" >
+        #{bb_Num,jdbcType=INTEGER},
+      </if>
+      <if test="dk_Num != null" >
+        #{dk_Num,jdbcType=INTEGER},
+      </if>
+      <if test="dd_Num != null" >
+        #{dd_Num,jdbcType=INTEGER},
+      </if>
+      <if test="cx_Num != null" >
+        #{cx_Num,jdbcType=INTEGER},
+      </if>
+      <if test="datecreate != null" >
+        #{datecreate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.report.frontPanel.model.PmlsNumWeek" >
+    update cloud_pmls_num_week
+    <set >
+      <if test="hblCode != null" >
+        hblCode = #{hblCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null" >
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        projectName = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="weekIndex != null" >
+        weekIndex = #{weekIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="bb_Num != null" >
+        bb_Num = #{bb_Num,jdbcType=INTEGER},
+      </if>
+      <if test="dk_Num != null" >
+        dk_Num = #{dk_Num,jdbcType=INTEGER},
+      </if>
+      <if test="dd_Num != null" >
+        dd_Num = #{dd_Num,jdbcType=INTEGER},
+      </if>
+      <if test="cx_Num != null" >
+        cx_Num = #{cx_Num,jdbcType=INTEGER},
+      </if>
+      <if test="datecreate != null" >
+        datecreate = #{datecreate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.report.frontPanel.model.PmlsNumWeek" >
+    update cloud_pmls_num_week
+    set hblCode = #{hblCode,jdbcType=VARCHAR},
+      projectNo = #{projectNo,jdbcType=VARCHAR},
+      projectName = #{projectName,jdbcType=VARCHAR},
+      cityNo = #{cityNo,jdbcType=VARCHAR},
+      year = #{year,jdbcType=VARCHAR},
+      weekIndex = #{weekIndex,jdbcType=VARCHAR},
+      bb_Num = #{bb_Num,jdbcType=INTEGER},
+      dk_Num = #{dk_Num,jdbcType=INTEGER},
+      dd_Num = #{dd_Num,jdbcType=INTEGER},
+      cx_Num = #{cx_Num,jdbcType=INTEGER},
+      datecreate = #{datecreate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="getPmlsFrontPanelNum" parameterType="map" resultMap="BaseResultMap">
+    SELECT cityNo
+          ,SUM(bb_Num) AS bb_Num
+          ,SUM(dk_Num) AS dk_Num
+          ,SUM(dd_Num) AS dd_Num
+          ,SUM(cx_Num) AS cx_Num
+    FROM cloud_pmls_num_week
+    WHERE cityNo = #{cityNo,jdbcType=VARCHAR}
+    AND year = #{year,jdbcType=VARCHAR}
+    AND weekIndex = #{weekIndex,jdbcType=VARCHAR}
+    GROUP BY cityNo
+  </select>
+</mapper>

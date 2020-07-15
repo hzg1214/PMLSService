@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.myCollection.MyCollectionMapper" >
+
+	<resultMap id="storeNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="Longitude" property="longitude" />
+		<result column="Latitude" property="latitude" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="StoreManager" property="storeManager" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" />
+		<result column="LinkageSituation" property="linkageSituation" />
+		<result column="ChainBrand" property="chainBrand" />
+		<result column="ChainBrandName" property="chainBrandName" />
+		<result column="StoreDueTime" property="storeDueTime" />
+		<result column="StorePersonNum" property="storePersonNum" />
+		<result column="StorePersonNumName" property="storePersonNumName" />
+		<result column="NowUserSystem" property="nowUserSystem" />
+		<result column="NowUserSystemName" property="nowUserSystemName" />
+		<result column="MainBusiness" property="mainBusiness" />
+		<result column="MainBusinessName" property="mainBusinessName" />
+		<result column="TransactionMode" property="transactionMode" />
+		<result column="TransactionModeName" property="transactionModeName" />
+		<result column="Address" property="address" />
+		<result column="AddressDetail" property="addressDetail" />
+		<result column="AuditStatus" property="auditStatus" />
+		<result column="AuditStatusName" property="auditStatusName" />
+		<result column="companyId" property="companyId" />
+		<result column="maintainer" property="maintainer" />
+		<result column="maintainerName" property="maintainerName" />
+
+		<result column="fpStatus" property="fpStatus" />
+		<result column="contractTypeName" property="contractTypeName" />
+		<result column="contractStatus" property="contractStatus" />
+		<result column="storePicUrl" property="storePicUrl" />
+		<result column="showType" property="showType" />
+	</resultMap>
+
+	<select id="getStoreListData" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		select t.* from (
+		SELECT
+			t1.id,
+			t1.StoreNo,
+			t1.Name,
+			t1.AddressDetail,
+			t1.dateCreate,
+			CASE WHEN t4.ContractType=10301 THEN '签约A'
+					 WHEN t4.ContractType=10302 THEN '签约B'
+					 WHEN t4.ContractType=10303 THEN '签约C'
+					 WHEN t4.ContractType=10304 THEN '签约A转B'
+					 WHEN t4.ContractType=10306 THEN '签约D'
+					WHEN t4.ContractType=10307 THEN '签约授牌'
+				ELSE ''
+			END contractTypeName,
+			CASE WHEN t4.ContractStatus=10401 THEN '草签'
+					 WHEN t4.ContractStatus=10402 THEN '审核中'
+					 WHEN t4.ContractStatus=10403 THEN '审核通过'
+					 WHEN t4.ContractStatus=10404 THEN '审核未通过'
+					 WHEN t4.ContractStatus=10405 THEN '作废'
+					 WHEN t4.ContractStatus=10406 THEN '终止'
+				ELSE ''
+			END contractStatus,
+			CASE WHEN t6.decorationStatus=16301 THEN '未装修'
+					WHEN t6.decorationStatus=16302 THEN '装修中'
+					WHEN t6.decorationStatus=16303 THEN '翻牌完成'
+					WHEN t6.decorationStatus=16304 THEN '翻牌验收完成'
+				ELSE ''
+			END fpStatus,
+			t7.smallPictureUrl AS storePicUrl,
+			case when t1.maintainer=#{userCode} then 'show'
+				ELSE
+					CASE WHEN t4.contractType=10301 THEN
+					'notShow'
+					WHEN t4.contractType=10302 THEN
+					'notShow'
+					WHEN t4.contractType=10304 THEN
+					'notShow'
+					else 'show'
+					END
+			end showType
+			FROM Store t1
+			LEFT JOIN (
+				SELECT
+					v.storeId,
+					v.contractType,
+					v.contractStatus
+				 FROM v_crm_StoreContract_last  v WHERE v.contractStatus  IN('10401','10402','10403','10404')
+			) t4 ON t1.id=t4.StoreId
+			LEFT JOIN (
+			SELECT sd.storeId,MIN(decorationStatus) AS decorationStatus
+							FROM dbo.Store_Decoration sd
+							WHERE sd.delFlag = 0
+							GROUP BY storeId
+			) t6 ON t1.id=t6.storeId
+			LEFT JOIN (
+				SELECT s.* FROM(SELECT pictureRefId,createTime,smallPictureUrl,ROW_NUMBER() over(PARTITION by pictureRefId order by createTime DESC) as w FROM dbo.Pic_Picture_Ref WHERE  pictureStatus=0) s WHERE s.w=1
+			) t7 ON t1.PictureRefId=t7.pictureRefId
+			inner join
+			ConcernedStore t8 on t1.id=t8.storeId and t8.isDelete=0
+
+			WHERE t1.IsDelete=0 AND t1.AuditStatus=20 AND t1.centerId = #{centerId}
+			and t1.businessStatus!=20903
+			AND t8.userId='${userCreate}'
+			<if test="storeName!=null and storeName!=''">
+				and (t1.name like '%${storeName}%' or t1.storeNo like '%${storeName}%' or t1.addressDetail like  '%${storeName}%')
+			</if>
+		) t where 1=1
+		order by t.dateCreate desc
+
+	</select>
+
+	<insert id="addCollection" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		merge into ConcernedStore t1
+			using (select #{userCreate} as userId,#{storeId} as storeId) t2
+			on t1.userId=t2.userId and t1.storeId=t2.storeId
+			when matched
+			then update set isDelete=0
+			when not matched
+		then insert values (#{userCreate},#{storeId},getdate(),0);
+	</insert>
+
+	<update id="cancelCollection" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update ConcernedStore set isDelete=1 where storeId=#{storeId} and userId=#{userCreate}
+	</update>
+
+</mapper>

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjHMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjH">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="wjCode" jdbcType="VARCHAR" property="wjCode" />
+    <result column="wjName" jdbcType="NVARCHAR" property="wjName" />
+    <result column="wjTitle" jdbcType="NVARCHAR" property="wjTitle" />
+    <result column="wjStatus" jdbcType="VARCHAR" property="wjStatus" />
+    <result column="wjConfirmUser" jdbcType="INTEGER" property="wjConfirmUser" />
+    <result column="wjConfirmDate" jdbcType="TIMESTAMP" property="wjConfirmDate" />
+    <result column="wjRemark" jdbcType="NVARCHAR" property="wjRemark" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, wjCode, wjName, wjTitle, wjStatus, wjConfirmUser, wjConfirmDate, wjRemark, userCreate, 
+    dateCreate, delFlag
+  </sql>
+  
+<!--   查询适用城市列表  去掉总包和营销二手房-->
+  <select id="getWjCityList"  resultType="cn.com.eju.deal.common.model.City">
+    SELECT  cs.cityNo,c.CityName cityName FROM  dbo.Bas_CitySetting  cs,dbo.BAS_City c
+		WHERE cs.cityNo=c.CityNo
+		AND cs.cityNo NOT IN ('B9A62204-690F-4B86-AD59-97AB6F271A3E','9776CAEE-2FF6-454D-94CA-2301BBA8B800')
+  </select>
+  
+<!--   问卷调查列表 -->
+  <select id="getKeFuWjList" parameterType="Map" resultType="Map">
+	SELECT DISTINCT h.id,h.wjCode,h.wjStatus,wjName,dv.dicValue wjStatusStr,us.userName,h.dateCreate,
+		(CASE h.wjStatus WHEN  '24703'  THEN
+			STUFF(( SELECT  ',' + CityName
+					FROM    ( SELECT    CityName
+		          FROM      Kefu_Wj_H t1
+		                    INNER JOIN Kefu_Wj_CityMapping t2 ON t1.wjCode = t2.wjCode AND t2.delFlag=0 AND t2.enbledFlag=1
+		                    LEFT JOIN dbo.BAS_City city ON t2.cityNo = city.CityNo
+		          WHERE  t2.wjCode=h.wjCode 
+		        ) AS a
+		     FOR
+		                XML PATH('')
+		              ), 1, 1, '')
+		ELSE ''
+			END ) wjCityName,
+    (select count(1) from Kefu_Wj_Satisfaction_D where wjtmid in ( select id from Kefu_Wj_D_TM where wjhid = h.id)) satisfactionNum
+	FROM dbo.Kefu_Wj_H h
+	LEFT JOIN crm.dbo.USR_User us on us.userId = h.userCreate and us.delFlag = 'N'
+	LEFT JOIN dbo.BAS_DictionaryValue dv on dv.dicCode = h.wjStatus and dv.delFlag = 'N'
+	LEFT JOIN dbo.Kefu_Wj_CityMapping dw ON dw.wjCode = h.wjCode AND dw.delFlag=0
+	WHERE h.delFlag=0
+        <if test="wjCode != null and wjCode != ''">
+            AND h.wjCode LIKE CONCAT('%', #{wjCode},'%')
+        </if>
+        <if test="wjName != null and wjName != ''">
+            AND h.wjName LIKE CONCAT('%', #{wjName},'%')
+        </if>
+        <if test="createName != null and createName != '' ">
+            AND us.userName  LIKE CONCAT('%', #{createName},'%')
+        </if>
+        <if test="wjStatus != null and wjStatus != '' ">
+            AND h.wjStatus = #{wjStatus}
+        </if>
+        <if test="wjCitys != null and wjCitys != ''">
+            AND dw.cityNo in (${wjCitys})
+        </if>
+       	<if test="dateCreate != null and dateCreate != '' and  dateCreate != 'null'">
+   			AND Convert(varchar(10),h.dateCreate,120) &gt;= #{dateCreate}
+        </if>
+        <if test="dateCreateEnd != null and dateCreateEnd != '' and  dateCreateEnd != 'null'">
+   			AND Convert(varchar(10),h.dateCreate,120) &lt;= #{dateCreateEnd}
+        </if>
+        ORDER BY h.dateCreate DESC
+    </select>
+    
+<!--   已调查列表 -->
+  <select id="getInvestedList" parameterType="Map" resultType="Map">
+	SELECT  ROW_NUMBER() OVER ( ORDER BY kw.dateCreate DESC ) rn 
+			,kw.id,s.id storeId,kw.StoreNo,kw.wjdcjd,kw.wjdcTotalscore
+			,us.userName,kw.dateCreate      
+	FROM    dbo.Kefu_Wj_Satisfaction kw
+		LEFT JOIN crm.dbo.USR_User us ON kw.userCreate = us.userId AND us.delFlag = 'N'
+		LEFT JOIN dbo.Store s ON s.StoreNo=kw.StoreNo AND s.IsDelete=0
+		WHERE kw.delFlag=0 AND kw.wjdcStatus='25002' and kw.wjdcTotalscore IS NOT NULL
+				AND s.id=#{storeId,jdbcType=INTEGER}
+	ORDER BY kw.dateCreate DESC
+    </select>
+
+  <select id="getEvaluationList" parameterType="Map" resultType="Map">
+    SELECT  ROW_NUMBER() OVER ( ORDER BY kw.dateCreate DESC ) rn
+    ,kw.id,s.id storeId,kw.StoreNo,kw.wjdcjd,kw.cpTotalScore
+    ,us.userName,kw.dateCreate
+    FROM    dbo.Kefu_Wj_Satisfaction kw
+    LEFT JOIN crm.dbo.USR_User us ON kw.userCreate = us.userId AND us.delFlag = 'N'
+    LEFT JOIN dbo.Store s ON s.StoreNo=kw.StoreNo AND s.IsDelete=0
+    WHERE kw.delFlag=0 AND kw.wjdcStatus='25002' and kw.cpTotalScore IS NOT NULL
+    AND s.id=#{storeId,jdbcType=INTEGER}
+    ORDER BY kw.dateCreate DESC
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_H
+    where id = #{id,jdbcType=INTEGER} and delFlag=0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Wj_H
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjH">
+    insert into Kefu_Wj_H (id, wjCode, wjName, 
+      wjTitle, wjStatus, wjConfirmUser, 
+      wjConfirmDate, wjRemark, userCreate, 
+      dateCreate, delFlag)
+    values (#{id,jdbcType=INTEGER}, #{wjCode,jdbcType=VARCHAR}, #{wjName,jdbcType=NVARCHAR}, 
+      #{wjTitle,jdbcType=NVARCHAR}, #{wjStatus,jdbcType=VARCHAR}, #{wjConfirmUser,jdbcType=INTEGER}, 
+      #{wjConfirmDate,jdbcType=TIMESTAMP}, #{wjRemark,jdbcType=NVARCHAR}, #{userCreate,jdbcType=INTEGER}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjH" useGeneratedKeys="true" keyProperty="id">
+    insert into Kefu_Wj_H
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="wjCode != null">
+        wjCode,
+      </if>
+      <if test="wjName != null">
+        wjName,
+      </if>
+      <if test="wjTitle != null">
+        wjTitle,
+      </if>
+      <if test="wjStatus != null">
+        wjStatus,
+      </if>
+      <if test="wjConfirmUser != null">
+        wjConfirmUser,
+      </if>
+      <if test="wjConfirmDate != null">
+        wjConfirmDate,
+      </if>
+      <if test="wjRemark != null">
+        wjRemark,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="wjCode != null">
+        #{wjCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wjName != null">
+        #{wjName,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjTitle != null">
+        #{wjTitle,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjStatus != null">
+        #{wjStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="wjConfirmUser != null">
+        #{wjConfirmUser,jdbcType=INTEGER},
+      </if>
+      <if test="wjConfirmDate != null">
+        #{wjConfirmDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wjRemark != null">
+        #{wjRemark,jdbcType=NVARCHAR},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjH">
+    update Kefu_Wj_H
+    <set>
+      <if test="wjCode != null">
+        wjCode = #{wjCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wjName != null">
+        wjName = #{wjName,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjTitle != null">
+        wjTitle = #{wjTitle,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjStatus != null">
+        wjStatus = #{wjStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="wjConfirmUser != null">
+        wjConfirmUser = #{wjConfirmUser,jdbcType=INTEGER},
+      </if>
+      <if test="wjConfirmDate != null">
+        wjConfirmDate = #{wjConfirmDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wjRemark != null">
+        wjRemark = #{wjRemark,jdbcType=NVARCHAR},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjH">
+    update Kefu_Wj_H
+    set wjCode = #{wjCode,jdbcType=VARCHAR},
+      wjName = #{wjName,jdbcType=NVARCHAR},
+      wjTitle = #{wjTitle,jdbcType=NVARCHAR},
+      wjStatus = #{wjStatus,jdbcType=VARCHAR},
+      wjConfirmUser = #{wjConfirmUser,jdbcType=INTEGER},
+      wjConfirmDate = #{wjConfirmDate,jdbcType=TIMESTAMP},
+      wjRemark = #{wjRemark,jdbcType=NVARCHAR},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <resultMap id="KeFuWjResultMap" extends="BaseResultMap" type="cn.com.eju.deal.keFuWj.dto.KeFuWjDto">
+    <collection column="{wjhid=id}" property="wjDTmList"
+                select="cn.com.eju.deal.keFuWj.dao.KefuWjDTmMapper.getListByWjHId"/>
+  </resultMap>
+
+  <select id="queryKeFuWjList" parameterType="java.lang.Integer" resultMap="KeFuWjResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_H
+    where id = #{id,jdbcType=INTEGER}
+    order by dateCreate desc
+  </select>
+
+  <select id="getSurveyDetailByCode" parameterType="java.lang.String" resultMap="KeFuWjResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_H
+    where wjCode = #{wjCode,jdbcType=VARCHAR}
+    order by dateCreate desc
+  </select>
+
+  <update id="updateByWjCode" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjH">
+    update Kefu_Wj_H
+    <set>
+      <if test="wjName != null">
+        wjName = #{wjName,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjTitle != null">
+        wjTitle = #{wjTitle,jdbcType=NVARCHAR},
+      </if>
+      <if test="wjStatus != null">
+        wjStatus = #{wjStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="wjConfirmUser != null">
+        wjConfirmUser = #{wjConfirmUser,jdbcType=INTEGER},
+      </if>
+      <if test="wjConfirmDate != null">
+        wjConfirmDate = #{wjConfirmDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wjRemark != null">
+        wjRemark = #{wjRemark,jdbcType=NVARCHAR},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where wjCode = #{wjCode,jdbcType=VARCHAR}
+  </update>
+
+
+  <update id="removeOne" parameterType="java.lang.Integer">
+    update Kefu_Wj_H set delFlag = 1 where id = #{id,jdbcType=INTEGER};
+    update Kefu_Wj_D_TM set delFlag = 1 where wjhid = #{id,jdbcType=INTEGER};
+    update Kefu_Wj_D_DA set delFlag = 1 where wjhid = #{id,jdbcType=INTEGER};
+    update Kefu_Wj_CityMapping set delFlag = 1,enbledFlag = '0' where wjCode = (select wjCode from Kefu_Wj_H where id = #{id,jdbcType=INTEGER});
+  </update>
+  
+  <select id="getWjFlByWjcode" resultType="Map" parameterType="String">
+    SELECT wjtmflType FROM Kefu_Wj_D_TM t
+    LEFT JOIN dbo.BAS_DictionaryValue d1 ON dicCode=wjtmflType
+    WHERE wjhid =(SELECT id FROM dbo.Kefu_Wj_H WHERE delFlag=0 AND wjCode=#{wjCode,jdbcType=VARCHAR})
+    GROUP BY wjtmflType,dicSortNo
+    ORDER BY d1.dicSortNo
+  </select>
+
+
+
+</mapper>

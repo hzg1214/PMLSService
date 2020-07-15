@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.borrowMoney.dao.BorrowMoneyMapper">
+
+    <!--获取借佣申请列表-->
+    <select id="getBorrowMoneyList"  parameterType="Map" resultType="cn.com.eju.pmls.borrowMoney.model.BorrowMoneyDto">
+        SELECT CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate,
+            t1.id ,
+            t1.jyapplyNo ,
+            t1.companyid ,
+            t1.companyName ,
+            t1.projectNo ,
+            t1.projectName ,
+            t1.jsTotalAmount ,
+            t1.taxRate ,
+            t1.jyTotalAmount ,
+            t1.jyMonths ,
+            t1.jyBl ,
+            t1.applyUserName ,
+            t1.applyUserPhone ,
+            t1.applyTime ,
+            t1.jssid ,
+            t1.qyid ,
+            t1.qkdid ,
+            t1.zcdid ,
+        CONVERT(VARCHAR(10),t1.jyStartDate,120) jyStartDate ,
+        CONVERT(VARCHAR(10),t1.jyEndDate,120) jyEndDate ,
+            t1.interestRate ,
+            t1.vender_qy_userName ,
+            t1.vender_qy_userTel,
+            t1.progress,
+            t2.dicValue AS progressName
+        FROM dbo.PMLS_JY_Apply t1
+        INNER JOIN dbo.BAS_DictionaryValue t2 ON t1.progress=t2.dicCode AND t2.delFlag='N'
+        where t1.delFlag=0
+        <if test="jyapplyNo!=null and jyapplyNo!=''">
+            and t1.jyapplyNo like '%'+#{jyapplyNo}+'%'
+        </if>
+        <if test="companyName!=null and companyName!=''">
+            and t1.companyName like '%'+#{companyName}+'%'
+        </if>
+        <if test="projectName!=null and projectName!=''">
+            and t1.projectName like '%'+#{projectName}+'%'
+        </if>
+        <if test="progress!=null and progress!=''">
+            and t1.progress=#{progress}
+        </if>
+        order by t1.dateCreate desc
+    </select>
+
+    <!--获取借佣明细列表-->
+    <select id="getBorrowMoneyDetailList"  parameterType="Map" resultType="cn.com.eju.pmls.borrowMoney.model.BorrowMoneyDetailDto">
+        SELECT ROW_NUMBER() OVER(ORDER BY dateCreate desc) rowNum,
+        * FROM PMLS_JsStatement_DTl where delflag=0
+        and jssId=#{jssId}
+        order by dateCreate desc
+    </select>
+
+    <!--获取借佣进度列表-->
+    <select id="getBorrowMoneyProgressList"  parameterType="Map" resultType="cn.com.eju.pmls.borrowMoney.model.BorrowMoneyDto">
+
+        <![CDATA[
+        select * from (
+        SELECT 1 AS rowNum,'28201' AS progress,'提交申请' AS progressName,CONVERT(VARCHAR(10),t1.dateCreate,120) as progressDate,
+        CONVERT(VARCHAR(50),t1.dateCreate,120)+' '+t1.companyName+'('+t2.CompanyNo+') 发起借佣申请'+
+		CASE WHEN t3.Id IS NOT NULL THEN '<br/>'+CONVERT(VARCHAR(50),t3.oaStartDate,120) +' 发起结算OA单，单号：'+t3.oaNo +' 申请状态：'+CASE WHEN t3.approveStatus='10404' THEN t4.dicValue ELSE '审核中' END ELSE '' END
+        AS remark
+        FROM PMLS_JY_Apply t1
+        INNER JOIN dbo.Company t2 ON t1.companyid=t2.id AND t2.IsDelete=0
+		LEFT JOIN PMLS_JsStatement t3 ON t1.jssid=t3.id AND t3.delFlag=0
+		LEFT JOIN dbo.BAS_DictionaryValue t4 ON t3.approveStatus=t4.dicCode AND t4.delFlag='N'
+        WHERE jssid=#{jssId}
+
+        union all
+        SELECT 2 AS rowNum,'28202' AS progress,'业绩确认' AS progressName,
+        CASE WHEN t3.approvedDate IS NOT NULL THEN CONVERT(VARCHAR(10),t3.approvedDate,120) ELSE '处理中' END progressDate,
+        CASE WHEN t3.approvedDate IS NOT NULL THEN CONVERT(VARCHAR(50),t3.approvedDate,120)+' 结算申请单审核通过并用印' ELSE '' END+
+		CASE WHEN t5.Id IS NOT NULL THEN '<br/>'+CONVERT(VARCHAR(50),t5.oaStartDate,120) +' 发起借佣签约OA单，单号：'+t5.oaNo +' 申请状态：'+CASE WHEN t5.approveStatus='10404' THEN t4.dicValue ELSE '审核中' END ELSE '' END
+        AS remark
+        FROM PMLS_JY_Apply t1
+        INNER JOIN dbo.Company t2 ON t1.companyid=t2.id AND t2.IsDelete=0
+        inner JOIN PMLS_JsStatement t3 ON t1.jssid=t3.id AND t3.delFlag=0
+		LEFT JOIN PMLS_Triple t5 ON t1.qyid=t5.id AND t5.delFlag=0
+		LEFT JOIN dbo.BAS_DictionaryValue t4 ON t5.approveStatus=t4.dicCode AND t4.delFlag='N'
+        WHERE jssid=#{jssId}
+
+        UNION ALL
+        SELECT 3 AS rowNum,'28203' AS progress,'借佣签约' AS progressName,
+        CASE WHEN t3.approvedDate IS NOT NULL THEN CONVERT(VARCHAR(10),t3.approvedDate,120) ELSE '处理中' END progressDate,
+        CASE WHEN t3.approvedDate IS NOT NULL THEN CONVERT(VARCHAR(50),t3.approvedDate,120)+' 借佣签约单审核通过并用印' ELSE '' END+
+		CASE WHEN t5.Id IS NOT NULL THEN  '<br/>'+CONVERT(VARCHAR(50),t5.oaStartDate,120) +' 发起请款OA单，单号：'+t5.oaNo +' 申请状态：'+CASE WHEN t5.approveStatus='10404' THEN t4.dicValue ELSE '审核中' END ELSE '' END
+        AS remark
+        FROM PMLS_JY_Apply t1
+        INNER JOIN dbo.Company t2 ON t1.companyid=t2.id AND t2.IsDelete=0
+        INNER JOIN PMLS_Triple t3 ON t1.qyid=t3.id AND t3.delFlag=0
+		LEFT JOIN PMLS_JY_QkBill t5 ON t1.qkdid=t5.id AND t5.delFlag=0
+		LEFT JOIN dbo.BAS_DictionaryValue t4 ON t5.approveStatus=t4.dicCode AND t4.delFlag='N'
+        WHERE jssid=#{jssId}
+
+        UNION ALL
+        SELECT 4 AS rowNum,'28204' AS progress,'请款' AS progressName,
+        CASE WHEN t3.approvedDate IS NOT NULL THEN CONVERT(VARCHAR(10),t3.approvedDate,120) ELSE '处理中' END progressDate,
+        CASE WHEN t3.approvedDate IS NOT NULL THEN CONVERT(VARCHAR(50),t3.approvedDate,120)+' 请款申请OA单审核通过' ELSE '' END+
+		CASE WHEN t5.Id IS NOT NULL THEN '<br/>'+CONVERT(VARCHAR(50),t5.oaStartDate,120) +' 发起支出单OA申请，单号：'+t5.oaNo +' 申请状态：'+CASE WHEN t5.approveStatus='10404' THEN t4.dicValue ELSE '审核中' END ELSE '' END
+        AS remark
+        FROM PMLS_JY_Apply t1
+        INNER JOIN dbo.Company t2 ON t1.companyid=t2.id AND t2.IsDelete=0
+        INNER JOIN PMLS_JY_QkBill t3 ON t1.qkdid=t3.id AND t3.delFlag=0
+		LEFT JOIN PMLS_JY_ZcBill t5 ON t1.zcdid=t5.id AND t5.delFlag=0
+        LEFT JOIN dbo.BAS_DictionaryValue t4 ON t3.approveStatus=t4.dicCode AND t4.delFlag='N'
+        WHERE jssid=#{jssId}
+
+        UNION ALL
+        SELECT 5 AS rowNum,'28205' AS progress,'放款' AS progressName,
+        CASE WHEN t3.recordDate IS NOT NULL THEN CONVERT(VARCHAR(10),t3.recordDate,120) ELSE '处理中' END progressDate,
+        CASE WHEN t3.approvedDate IS NOT NULL THEN CONVERT(VARCHAR(50),t3.approvedDate,120)+' 支出单申请审核通过' ELSE '' END+
+        CASE WHEN t3.recordDate IS NOT NULL THEN  '<br/>'+ CONVERT(VARCHAR(10),t3.recordDate,120) +' 打款' ELSE '' END
+        AS remark
+        FROM PMLS_JY_Apply t1
+        INNER JOIN dbo.Company t2 ON t1.companyid=t2.id AND t2.IsDelete=0
+        INNER JOIN PMLS_JY_ZcBill t3 ON t1.zcdid=t3.id AND t3.delFlag=0
+        LEFT JOIN dbo.BAS_DictionaryValue t4 ON t3.approveStatus=t4.dicCode AND t4.delFlag='N'
+        WHERE jssid=#{jssId}
+        ) t
+        order by t.rowNum asc
+        ]]>
+    </select>
+
+    <!--获取借佣申请详情-->
+    <select id="getBorrowMoneyInfo"  parameterType="cn.com.eju.pmls.borrowMoney.model.BorrowMoneyDto" resultType="cn.com.eju.pmls.borrowMoney.model.BorrowMoneyDto">
+        select t1.*,t2.dicValue AS progressName FROM dbo.PMLS_JY_Apply t1
+        INNER JOIN dbo.BAS_DictionaryValue t2 ON t1.progress=t2.dicCode AND t2.delFlag='N'
+        where t1.delFlag=0 and t1.id=#{id}
+    </select>
+    <!--获取还款计划列表-->
+    <select id="getHkPlanList"  parameterType="Map" resultType="cn.com.eju.pmls.borrowMoney.model.HkPlanDto">
+        SELECT t1.id ,
+        t1.jyhkplanNo ,
+        t1.jyapplyNo ,
+        t1.companyid ,
+        t1.companyName ,
+        t1.projectNo ,
+        t1.projectName ,
+        t1.jsTotalAmount ,
+        t1.jyTotalAmount ,
+        t1.jyMonths ,
+        t1.jyBl ,
+        t1.yearRate ,
+        t1.yjInterest ,
+        t1.yjhkAmount ,
+        CONVERT(VARCHAR(10),t1.jkDate,120) jkDate ,
+        CONVERT(VARCHAR(10),t1.yhkDate,120) yhkDate ,
+        t1.planStatus ,
+        t2.dicValue as planStatusName,
+        t1.sjhkDate ,
+        t1.sjInterest ,
+        t1.sjhkAmount ,
+        t1.yqFlag
+        FROM PMLS_JY_HkPlan t1
+        inner join BAS_DictionaryValue t2 on t1.planStatus=t2.dicCode and t2.delFlag='N'
+        where t1.delFlag=0
+        <if test="jyapplyNo!=null and jyapplyNo!=''">
+            and (t1.jyhkplanNo like '%'+#{jyapplyNo}+'%' or t1.jyapplyNo like '%'+#{jyapplyNo}+'%' )
+        </if>
+        <if test="companyName!=null and companyName!=''">
+            and t1.companyName like  '%'+#{companyName}+'%'
+        </if>
+        <if test="projectName!=null and projectName!=''">
+            and t1.projectName like  '%'+#{projectName}+'%'
+        </if>
+        <if test="yqFlag!=null and yqFlag!=''">
+            and t1.yqFlag =#{yqFlag}
+        </if>
+        <if test="planStatus!=null and planStatus!=''">
+            and t1.planStatus =#{planStatus}
+        </if>
+        order by t1.yhkDate asc
+    </select>
+    <!--获取还款利息列表-->
+    <select id="getHkPlanInterestList"  parameterType="Map" resultType="cn.com.eju.pmls.borrowMoney.model.HkPlanInterestDto">
+        SELECT
+        ROW_NUMBER() OVER(ORDER BY the_month asc) rowNum,
+        id ,
+        hkplanId ,
+        the_month as theMonth ,
+        interest ,
+        delFlag ,
+        dateCreate ,
+        userIdCreate ,
+        dateUpdate ,
+        userIdUpdate
+        FROM PMLS_JY_HkPlan_Interest where delFlag=0 and hkplanId=#{hkplanId} order by the_month asc
+    </select>
+    <!--获取还款计划详情-->
+    <select id="getHkPlanInfo" parameterType="cn.com.eju.pmls.borrowMoney.model.HkPlanDto" resultType="cn.com.eju.pmls.borrowMoney.model.HkPlanDto">
+        SELECT t1.id ,
+        t1.jyhkplanNo ,
+        t1.jyapplyNo ,
+        t1.companyid ,
+        t3.companyNo,
+        t1.companyName ,
+        t1.projectNo ,
+        t1.projectName ,
+        t1.jsTotalAmount ,
+        t1.jyTotalAmount ,
+        t1.jyMonths ,
+        t1.jyBl ,
+        t1.yearRate ,
+        t1.yjInterest ,
+        t1.yjhkAmount ,
+        t1.jkDate ,
+        t1.yhkDate ,
+        t1.planStatus ,
+        t4.dicValue as planStatusName,
+        t1.sjhkDate ,
+        t1.sjInterest ,
+        t1.sjhkAmount ,
+        t1.yqFlag ,
+        t1.hkType ,
+        t5.dicValue as hkTypeName,
+        t1.remark ,
+        t1.hkOperateDate ,
+        t1.hkOperateUserId ,
+        t1.delFlag ,
+        t1.dateCreate ,
+        t1.userIdCreate ,
+        t1.dateUpdate ,
+        t1.userIdUpdate,
+        t2.jssId,
+        t1.zfName
+	    FROM PMLS_JY_HkPlan t1
+	    INNER JOIN dbo.PMLS_JY_Apply t2 ON t1.jyapplyNo=t2.jyapplyNo and t2.delFlag=0
+	    inner join Company t3 on t1.companyId=t3.id and t3.isDelete=0
+	    inner join BAS_DictionaryValue t4 on t1.planStatus=t4.dicCode and t4.delFlag='N'
+	    inner join BAS_DictionaryValue t5 on t1.hkType=t5.dicCode and t5.delFlag='N'
+	    where t1.delFlag=0 and t1.id=#{id}
+    </select>
+    <!--还款-->
+    <update id="updateHkPlan" parameterType="cn.com.eju.pmls.borrowMoney.model.HkPlanDto" >
+        update t set t.hkType=#{hkType}, t.sjhkDate=#{sjhkDate},t.remark=#{remark},t.planStatus='28402',
+        t.sjInterest=t.yjInterest*CONVERT(DECIMAL(18,2),DATEDIFF(day,t.jkDate,#{sjhkDate}))/CONVERT(DECIMAL(18,2),DATEDIFF(day,t.jkDate,t.yhkDate)),
+        t.sjhkAmount=t.yjhkAmount*CONVERT(DECIMAL(18,2),DATEDIFF(day,t.jkDate,#{sjhkDate}))/CONVERT(DECIMAL(18,2),DATEDIFF(day,t.jkDate,t.yhkDate)),
+        t.hkOperateUserId=#{userIdUpdate},t.hkOperateDate=getdate()
+        from  PMLS_JY_HkPlan t
+        where t.id=#{id}
+    </update>
+</mapper>

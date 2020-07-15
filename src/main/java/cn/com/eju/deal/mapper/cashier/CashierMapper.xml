@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.cashier.CashierMapper">
+
+	<resultMap id="contractNewDtoBaseMap" type="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<result column="id" property="contractId" />
+		<result column="contractNo" property="contractNo" />
+		<result column="companyId" property="companyId" />
+		<result column="dateLifeEnd" property="dateLifeEnd" />
+		<result column="dateLifeStart" property="dateLifeStart" />
+		<result column="valid" property="valid" />
+
+		<result column="contractType" property="contractType" />
+		<result column="contractStatus" property="contractStatus" />
+		<result column="storeNum" property="storeNum" />
+		<result column="flowId" property="flowId" />
+		<result column="originalContractdistinction" property="originalContractdistinction" />
+
+		<result column="partyBAddress" property="partyBAddress" />
+
+		<result column="agreementNo" property="agreementNo" />
+		<result column="authRepresentative" property="authRepresentative" />
+		<result column="depositFee" property="depositFee" />
+		<result column="totleDepositFee" property="totleDepositFee" />
+		<result column="penaltyFee" property="penaltyFee" />
+		<result column="agentContact" property="agentContact" />
+		<result column="companyBankNo" property="companyBankNo" />
+		<result column="accountName" property="accountName" />
+		<result column="bankAccount" property="bankAccount" />
+		<result column="recipients" property="recipients" />
+		<result column="recipientsAddress" property="recipientsAddress" />
+		<result column="agreementType" property="agreementType" />
+		<result column="oaApproveType" property="oaApproveType" />
+		<result column="contractB2A" property="contractB2A" />
+		<result column="remark" property="remark" />
+		<result column="expandingPersonnel" property="expandingPersonnel" />
+	</resultMap>
+
+	<resultMap id="contractNewDtoListMap"  extends="contractNewDtoBaseMap" type="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<result column="companyNo" property="companyNo" />
+		<result column="companyName" property="companyName" />
+		<result column="contactNumber" property="contactNumber" />
+		<result column="companyAddress" property="companyAddress" />
+		<result column="businessLicenseNo" property="businessLicenseNo" />
+		<result column="legalPerson" property="legalPerson" />
+		<result column="validName" property="validName" />
+		<result column="dataCount" property="dataCount" />
+		<result column="cityNo" property="cityNo" />
+		<result column="districtNo" property="districtNo" />
+		<result column="contractVersion" property="contractVersion" />
+		<result column="AgreementNo" property="agreementNo" />
+		<result column="collectionType" property="collectionType" />
+		<result column="collectionMethod" property="collectionMethod" />
+		<result column="payMoney" property="payMoney" />
+		<result column="cashierContractId" property="cashierContractId" />
+		<result column="acCityNo" property="acCityNo" />
+
+		<collection property="contractStoreList" javaType="ArrayList" ofType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+			<result column="storeId" property="storeId" />
+			<result column="StoreNo" property="storeNo" />
+			<result column="Name" property="storeName" />
+			<result column="Address" property="address" />
+			<result column="AddressDetail" property="addressDetail" />
+			<result column="depositFee" property="depositFee" />
+			<result column="receivedMoney" property="receivedMoney" />
+			<result column="receivingMoney" property="receivingMoney" />
+			<result column="maintainerName" property="maintainerName" />
+			<result column="maintainer" property="maintainer" />
+			<result column="centerName" property="centerName" />
+			<result column="serviceAmount" property="serviceAmount" />
+			<result column="serviceLockAmt" property="serviceLockAmt" />
+		</collection>
+	</resultMap>
+
+    <select id='getBankAccountList' resultType="cn.com.eju.deal.model.cashier.BankInfo" parameterType="cn.com.eju.deal.model.cashier.BankInfo">
+        SELECT id,bankCode,bankName,accountName,cardNo,oaBankId,oaBankRemak1 FROM dbo.BAS_BankInfo
+		WHERE type = 1 AND delFlag = 0 AND cityNo = #{cityNo}
+    </select>
+
+	<select id='getCollectionMethodList' resultType="cn.com.eju.deal.base.dto.code.CommonCodeDto" parameterType="cn.com.eju.deal.model.cashier.CashierDto">
+		SELECT receiveTypeCode AS dicCode,receiveTypeName AS dicValue FROM dbo.BAS_CityReceiveType WHERE cityNo = #{cityNo}
+	</select>
+
+	<select id="getSkTypeCode" parameterType="cn.com.eju.deal.model.cashier.CashierDto" resultType="java.lang.String">
+		SELECT skTypeCode FROM dbo.Bas_CitySetting WHERE cityNo = #{cityNo}
+	</select>
+
+	<select id="getCashierContractList4" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		select DISTINCT
+		DENSE_RANK() OVER (ORDER BY c.DateCreate desc, c.id) rowNum,
+		c.id ,
+		c.ContractNo,
+		c.AgreementNo,
+		c.PartyB as CompanyName,
+		cs.companyNo,
+		cs.StoreName AS Name,
+		cs.storeAddress AS Address,
+		c.acCityNo
+		INTO #temp_cashierContract
+		from Contract c
+		INNER JOIN dbo.V_CRM_ContractStore_NOW_FOR_CASHIER cs
+		ON c.Id = cs.ContractId
+		LEFT JOIN (
+			SELECT * FROM dbo.Store_Receive WHERE status = 0 and delFlag = '0'
+		) sr
+		ON c.contractNo = sr.contractNo
+		LEFT JOIN (
+		SELECT storeNo,receiveAmount,paymentAmount,receiveLockAmt FROM dbo.Store_Deposit WHERE delFlag = '0'
+		) bond on cs.storeNo = bond.storeNo
+		LEFT JOIN (
+			SELECT * FROM BAS_CityReceiveKm WHERE kmCode='17905' AND delFlag=0
+		) crk ON c.AcCityNo=crk.cityNo
+		WHERE  c.ContractStatus IN (10401,10402,10403)
+		and crk.id is null
+		AND c.DepositFee != 0 AND c.DepositFee != ISNULL(bond.receiveAmount, 0) - ISNULL(bond.paymentAmount, 0) + ISNULL(bond.receiveLockAmt, 0)
+		<if test="userCreate!=null and userCreate!=0">
+			and (c.centerId = #{centerId}
+			or c.UserCreate=#{userCreate} or cs.Maintainer = #{userCode}
+			)
+		</if>
+		<if test="contractNo!=null and contractNo!=''">
+			and (
+			c.contractNo like  '%${contractNo}%'
+			or  c.PartyB like  '%${contractNo}%'
+			or  cs.StoreName like  '%${contractNo}%'
+			or  cs.StoreNo like  '%${contractNo}%'
+			or  cs.storeAddress like  '%${contractNo}%'
+			or  c.AgreementNo like  '%${contractNo}%'
+			)
+		</if>
+		union all
+		select DISTINCT
+		DENSE_RANK() OVER (ORDER BY c.DateCreate desc, c.id) rowNum,
+		c.id ,
+		c.ContractNo,
+		c.AgreementNo,
+		c.PartyB as CompanyName,
+		cs.companyNo,
+		cs.StoreName AS Name,
+		cs.storeAddress AS Address,
+		c.acCityNo
+		from Contract c
+		INNER JOIN dbo.V_CRM_ContractStore_NOW_FOR_CASHIER cs
+		ON c.Id = cs.ContractId
+		LEFT JOIN (
+		SELECT * FROM dbo.Store_Receive WHERE status = 0 and delFlag = '0'
+		) sr
+		ON c.contractNo = sr.contractNo
+		LEFT JOIN (
+		SELECT * FROM BAS_CityReceiveKm WHERE kmCode='17905' AND delFlag=0
+		) crk ON c.AcCityNo=crk.cityNo
+		WHERE  c.ContractStatus IN (10401,10402,10403)
+		and crk.id is not null
+		<if test="userCreate!=null and userCreate!=0">
+			and (c.centerId = #{centerId}
+			or c.UserCreate=#{userCreate} or cs.Maintainer = #{userCode}
+			)
+		</if>
+		<if test="cityNo!=null and cityNo!=''">
+			and c.AcCityNo = #{cityNo}
+		</if>
+		<if test="contractNo!=null and contractNo!=''">
+			and (
+			c.contractNo like  '%${contractNo}%'
+			or  c.PartyB like  '%${contractNo}%'
+			or  cs.StoreName like  '%${contractNo}%'
+			or  cs.StoreNo like  '%${contractNo}%'
+			or  cs.storeAddress like  '%${contractNo}%'
+			or  c.AgreementNo like  '%${contractNo}%'
+			)
+		</if>
+
+		SELECT t.* FROM (
+		SELECT *,(SELECT COUNT(DISTINCT(id)) FROM #temp_cashierContract) AS dataCount FROM #temp_cashierContract
+		) t WHERE t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+		ORDER BY t.rowNum
+
+		DROP TABLE #temp_cashierContract
+	</select>
+
+
+	<select id="getCashierContractList4Cashier" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		select
+		DENSE_RANK() OVER (ORDER BY sr.id desc) rowNum,
+		c.id ,
+		c.ContractNo,
+		c.AgreementNo,
+		c.PartyB as CompanyName,
+		sr.id AS cashierContractId,
+		CASE WHEN sr.feeType = '17904' THEN '保证金' ELSE '房友系统服务费' END AS collectionType,
+		CASE WHEN sr.receiveType = '17909' THEN '银行转账' ELSE '支付宝/微信' END AS collectionMethod,
+		sr.totalAmount AS payMoney,
+		cs.companyNo,
+		cs.StoreName AS Name,
+		cs.storeAddress AS Address
+		INTO #temp_cashierContract
+		from Contract c
+		INNER JOIN dbo.V_CRM_ContractStore_NOW_FOR_CASHIER cs
+		ON c.Id = cs.ContractId
+		LEFT JOIN dbo.Store_Receive sr
+		ON c.contractNo = sr.contractNo
+		WHERE c.ContractStatus IN (10401,10402,10403) and sr.status = 0 and sr.delFlag = '0' and sr.receiveType = 17906
+		<if test="userCreate!=null and userCreate!=0">
+			and (c.centerId = #{centerId}
+			or c.UserCreate=#{userCreate} or cs.Maintainer = #{userCode}
+			)
+		</if>
+		<if test="cityNo!=null and cityNo!=''">
+			and c.AcCityNo = #{cityNo}
+		</if>
+		<if test="contractNo!=null and contractNo!=''">
+			and (
+			c.contractNo like  '%${contractNo}%'
+			or  c.PartyB like  '%${contractNo}%'
+			or  cs.StoreName like  '%${contractNo}%'
+			or  cs.StoreNo like  '%${contractNo}%'
+			or  cs.storeAddress like  '%${contractNo}%'
+			or  c.AgreementNo like  '%${contractNo}%'
+			)
+		</if>
+
+		SELECT t.* FROM (
+		SELECT *,(SELECT COUNT(DISTINCT(id)) FROM #temp_cashierContract) AS dataCount FROM #temp_cashierContract
+		) t WHERE t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+		ORDER BY t.rowNum
+
+		DROP TABLE #temp_cashierContract
+	</select>
+
+	<select id="getCashierContractById" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		select
+		c.id ,
+		c.ContractNo,
+		c.AgreementNo,
+		c.PartyB AS CompanyName,
+		c.DepositFee,
+		c.AcCityNo AS cityNo,
+		cs.companyId,
+		cs.companyNo,
+		cs.LegalPerson,
+		cs.contactNumber,
+		cs.Address AS companyAddress,
+		cs.StoreId,
+		cs.StoreNo,
+		cs.StoreName AS Name,
+		cs.storeAddressDetail AS Address,
+		cs.Maintainer,
+		u.userName AS maintainerName,
+		ISNULL(s2.centername,'') centerName,
+		ISNULL(bond.receiveAmount, 0) - ISNULL(bond.paymentAmount, 0) AS receivedMoney,
+		ISNULL(bond.receiveLockAmt, 0) AS receivingMoney,
+		ISNULL(bond.serviceAmount, 0) AS serviceAmount,
+		ISNULL(bond.serviceLockAmt, 0) AS serviceLockAmt
+		from Contract c
+		INNER JOIN dbo.V_CRM_ContractStore_NOW_FOR_CASHIER cs
+		ON c.Id = cs.ContractId
+		INNER JOIN crm.dbo.USR_User u
+		ON cs.Maintainer=u.userCode AND u.delFlag='N'
+		LEFT JOIN V_CRM_Center_Group_ref s2
+		ON u.groupId = s2.groupId
+		LEFT JOIN (
+			SELECT storeNo,receiveAmount,paymentAmount,receiveLockAmt,serviceAmount,serviceLockAmt FROM dbo.Store_Deposit
+			WHERE delFlag = '0'
+		) bond
+		ON cs.storeNo = bond.storeNo
+		WHERE c.id = #{contractId}
+	</select>
+
+	<select id="checkCashier" parameterType="cn.com.eju.deal.model.cashier.StoreDto" resultType="cn.com.eju.deal.model.cashier.StoreDto">
+		SELECT storeNo FROM dbo.Store_Deposit WHERE storeNo = #{storeNo} AND receiveLockAmt = #{receivingMoney} AND ISNULL(receiveAmount, 0) - ISNULL(paymentAmount, 0) = #{receivedMoney}
+	</select>
+
+	<select id="checkCashier4Service" parameterType="cn.com.eju.deal.model.cashier.StoreDto" resultType="cn.com.eju.deal.model.cashier.StoreDto">
+		SELECT storeNo FROM dbo.Store_Deposit WHERE storeNo = #{storeNo} AND serviceLockAmt = #{receivingMoney} AND serviceAmount = #{receivedMoney}
+	</select>
+
+    <insert id="saveCashier" parameterType="cn.com.eju.deal.model.cashier.CashierDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO [dbo].[Store_Receive]
+        ([receiveNo],[orderType],[contractNo],[feeType],[receiveType],[approveStatus],[submitOaStatus]
+        ,[bankCode],[bankName],[accountName],[cardNo],[oaBankId],[oaBankName],[totalAmount]
+        ,[cityNo],[status],[delFlag],[dateCreate],[userIdCreate],[remark])
+         VALUES(
+          #{receiveNo},21401,#{contractNo},#{collectionType},#{collectionMethod},21601,21201
+         ,#{bankCode},#{bankName},#{accountName},#{cardNo},#{oaBankId},#{oaBankRemak1},#{payMoney}
+         ,#{cityNo}, #{status}, '0', getdate(), #{userId}, #{remark})
+    </insert>
+
+    <insert id="saveCashierDetail" parameterType="java.util.List">
+		INSERT INTO dbo.Store_Receive_Dtl(receiveId,storeNo,storeName,amount,totalAmount,receiveAmount,receiveLockAmt,delFlag,dateCreate)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(#{item.receiveId}, #{item.storeNo}, #{item.storeName}, #{item.nowMoney}, #{item.totalMoney}, #{item.receivedMoney}, #{item.receivingMoney}, '0', GETDATE())
+		</foreach>;
+
+		<foreach collection="list" index="index" item="item" separator=";">
+			UPDATE dbo.Store_Deposit SET receiveLockAmt = receiveLockAmt + #{item.nowMoney}, dateUpt = getdate(), userIdUpt = #{item.userId} WHERE storeNo = #{item.storeNo}
+		</foreach>
+    </insert>
+
+	<insert id="saveCashierDetail4Service" parameterType="java.util.List">
+		INSERT INTO dbo.Store_Receive_Dtl(receiveId,storeNo,storeName,amount,totalAmount,receiveAmount,receiveLockAmt,delFlag,dateCreate)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(#{item.receiveId}, #{item.storeNo}, #{item.storeName}, #{item.nowMoney}, #{item.totalMoney}, #{item.receivedMoney}, #{item.receivingMoney}, '0', GETDATE())
+		</foreach>;
+
+		<foreach collection="list" index="index" item="item" separator=";">
+			UPDATE dbo.Store_Deposit SET serviceLockAmt = serviceLockAmt + #{item.nowMoney}, dateUpt = getdate(), userIdUpt = #{item.userId} WHERE storeNo = #{item.storeNo}
+		</foreach>
+	</insert>
+
+	<update id="deleteCashierContractById" parameterType="cn.com.eju.deal.model.cashier.CashierDto">
+		UPDATE dbo.Store_Receive_Dtl SET delFlag = '1', dateUpt = getdate(), userIdUpt = #{userId} WHERE receiveId = #{id};
+		UPDATE dbo.Store_Deposit SET receiveLockAmt = receiveLockAmt - (SELECT totalAmount FROM dbo.Store_Receive WHERE id = #{id}), dateUpt = getdate(), userIdUpt = #{userId}
+		WHERE storeNo IN (SELECT storeNo FROM dbo.Store_Receive_Dtl WHERE receiveId = #{id});
+		UPDATE dbo.Store_Receive SET delFlag = '1', dateUpt = getdate(), userIdUpt = #{userId} WHERE id = #{id};
+	</update>
+
+	<update id="deleteServiceContractById" parameterType="cn.com.eju.deal.model.cashier.CashierDto">
+		UPDATE dbo.Store_Receive_Dtl SET delFlag = '1', dateUpt = getdate(), userIdUpt = #{userId} WHERE receiveId = #{id};
+		UPDATE dbo.Store_Deposit SET serviceLockAmt = serviceLockAmt - (SELECT totalAmount FROM dbo.Store_Receive WHERE id = #{id}), dateUpt = getdate(), userIdUpt = #{userId}
+		WHERE storeNo IN (SELECT storeNo FROM dbo.Store_Receive_Dtl WHERE receiveId = #{id});
+		UPDATE dbo.Store_Receive SET delFlag = '1', dateUpt = getdate(), userIdUpt = #{userId} WHERE id = #{id};
+	</update>
+
+    <select id='getCashierById' resultType="cn.com.eju.deal.model.cashier.CashierDto" parameterType="cn.com.eju.deal.model.cashier.CashierDto">
+        SELECT id,status,receiveNo,contractNo,cityNo,feeType AS collectionType,receiveType AS collectionMethod,totalAmount AS payMoney
+        FROM dbo.Store_Receive WHERE id = #{id} AND delFlag = '0'
+    </select>
+
+	<select id='getCashierByReceiveNo' resultType="cn.com.eju.deal.model.cashier.CashierDto" parameterType="cn.com.eju.deal.model.cashier.CashierDto">
+        SELECT id,status FROM dbo.Store_Receive WHERE receiveNo = #{receiveNo} AND delFlag = '0' AND orderType = '21401'
+    </select>
+
+    <update id="updateCashierById" parameterType="cn.com.eju.deal.model.cashier.CashierDto">
+        UPDATE dbo.Store_Receive
+        <set>
+			dateUpt = getdate(),
+            <if test="payMoney != null">
+				totalAmount = #{payMoney},
+            </if>
+			<if test="toolCode != null">
+                toolCode = #{toolCode,jdbcType=NVARCHAR},
+            </if>
+            <if test="paySeq != null">
+                paySeq = #{paySeq,jdbcType=NVARCHAR},
+            </if>
+			<if test="status == 20">
+				responseTime = getdate(),
+			</if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+        </set>
+        <where>
+            <![CDATA[AND id = #{id,jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+	<select id="getReceiveType" parameterType="cn.com.eju.deal.model.cashier.CashierDto" resultType="cn.com.eju.deal.base.dto.code.CommonCodeDto">
+		SELECT kmCode AS dicCode,kmName AS dicValue FROM  dbo.BAS_CityReceiveKm WHERE cityNo = #{cityNo} AND delFlag = '0' ORDER BY sortIndex
+	</select>
+</mapper>

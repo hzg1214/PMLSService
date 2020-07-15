@@ -1,0 +1,97 @@
+package cn.com.eju.pmls.skStatement.service;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateDtlMapper;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateMatMapper;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkStatementDtlMapper;
+import cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateDtlDto;
+import cn.com.eju.pmls.skStatement.model.PmlsSkAllocateMat;
+import cn.com.eju.pmls.skStatement.model.PmlsSkStatementDtl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
+@Service("skAllocateService")
+public class SkAllocateService {
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Autowired
+    PmlsSkAllocateDtlMapper pmlsSkAllocateDtlMapper;
+
+    @Autowired
+    PmlsSkStatementDtlMapper pmlsSkStatementDtlMapper;
+
+    @Autowired
+    PmlsSkAllocateMatMapper pmlsSkAllocateMatMapper;
+
+    /**
+     * 按成销日期优先
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData<List<PmlsSkAllocateDtlDto>> getAllocateListForDeal(Map<String, Object> queryParam) {
+        ResultData<List<PmlsSkAllocateDtlDto>> resultData = new ResultData<>();
+        List<PmlsSkAllocateDtlDto> dtlList = pmlsSkAllocateDtlMapper.getAllocateListForDeal(queryParam);
+        resultData.setReturnData(dtlList);
+        return resultData;
+    }
+
+    /**
+     * 按房源定义
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData<List<PmlsSkAllocateDtlDto>> getAllocateListForBuilding(Map<String, Object> queryParam) {
+        ResultData<List<PmlsSkAllocateDtlDto>> resultData = new ResultData<>();
+        List<PmlsSkAllocateDtlDto> dtlList = pmlsSkAllocateDtlMapper.getAllocateListForBuilding(queryParam);
+        resultData.setReturnData(dtlList);
+        return resultData;
+    }
+
+    /**
+     * 提交拆分
+     * @param queryParam
+     * @return
+     */
+    public ResultData<String> submitAllocate(Map<String, Object> queryParam) {
+        ResultData resultData = new ResultData();
+        String srId = (String)queryParam.get("srId");
+        String cityNo = (String)queryParam.get("cityNo");
+        String allocatAmountBefStr = (String)queryParam.get("allocatAmountBef");//本次拆分金额合计税前
+        String allocatAmountAftStr = (String)queryParam.get("allocatAmountAft");//本次拆分金额合计税后
+        String allocateType = (String)queryParam.get("allocateType");//拆分方式
+        String userId = (String)queryParam.get("userId");
+        if("0".equals(allocateType)){//按成销日期优先
+            List<PmlsSkAllocateDtlDto> dtlList = pmlsSkAllocateDtlMapper.getAllocateListForDeal(queryParam);
+
+        }else if("1".equals(allocateType)){//按房源自定义
+
+        }
+        PmlsSkStatementDtl dtl = pmlsSkStatementDtlMapper.selectByPrimaryKey(Integer.valueOf(srId));
+        List<Map<String,Object>> allocateDtlList = (List<Map<String, Object>>) queryParam.get("submitObj");
+        if(!CollectionUtils.isEmpty(allocateDtlList)){
+            //todo check
+
+            PmlsSkAllocateMat mat = new PmlsSkAllocateMat();
+            mat.setSkSerialNo(dtl.getSkSerialNo());
+            mat.setAmount_bef(BigDecimal.valueOf(Double.valueOf(allocatAmountBefStr)));
+            mat.setAmount_aft(BigDecimal.valueOf(Double.valueOf(allocatAmountAftStr)));
+            mat.setSerialNo("");//todo PMLS_SkAllocate_mat的SerialNo编号
+            mat.setUserIdCreate(Integer.valueOf(userId));
+            pmlsSkAllocateMatMapper.insert(mat);
+            for(Map<String,Object> allocateDtl:allocateDtlList){
+
+            }
+        }
+        return resultData;
+    }
+
+}

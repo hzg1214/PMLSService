@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.totalPackage.dao.TotalPackageSettingMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageSetting">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="totalObject" property="totalObject" jdbcType="VARCHAR" />
+		<result column="centerId" property="centerId" jdbcType="INTEGER" />
+		<result column="companyId" property="companyId" jdbcType="INTEGER" />
+		<result column="companyNm" property="companyNm" jdbcType="NVARCHAR" />
+		<result column="customerId" property="customerId" jdbcType="INTEGER" />
+		<result column="customerNm" property="customerNm" jdbcType="NVARCHAR" />
+		<result column="customerTel" property="customerTel" jdbcType="VARCHAR" />
+		<result column="storeId" property="storeId" jdbcType="INTEGER" />
+		<result column="storeNm" property="storeNm" jdbcType="NVARCHAR" />
+		<result column="delFlag" property="delFlag" jdbcType="CHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, totalObject, centerId, companyId,companyNm,customerId,customerNm,customerTel,storeId,storeNm,delFlag
+	</sql>
+
+	<!-- 根据cityNo查询模板编号 -->
+	<select id="getTotalPackageSetting" resultMap="BaseResultMap" parameterType="string">
+
+SELECT t.* FROM LNK_TotalPackageSetting t
+LEFT JOIN dbo.LNK_Estate e ON t.totalObject = e.projectDepartmentId
+		WHERE t.delFlag = 'N' AND t.totalObject IS NOT NULL
+		 AND e.DelFlg=0
+		AND e.projectNo=#{serviceObj,jdbcType=VARCHAR}
+	</select>
+
+</mapper>

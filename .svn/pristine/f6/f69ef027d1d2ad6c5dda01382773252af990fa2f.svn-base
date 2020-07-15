@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.AchievementCancelMappingMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.AchievementCancelMapping">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<id column="achievementCancelId" property="achievementCancelId" jdbcType="INTEGER" />
+		<result column="StoreId" property="storeId" jdbcType="INTEGER" />
+		<result column="ContractId" property="contractId" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="BIT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	achievementCancelId,StoreId, ContractId
+	</sql>
+	
+	<!-- 新增记录 -->
+	<insert id="createNewRecord" parameterType="Map">
+	insert into Store_AchievementCancelMapping
+	(achievementCancelId,StoreId, ContractId, delFlag)
+	values (#{achievementCancelId,jdbcType=INTEGER},#{storeId,jdbcType=INTEGER},
+	#{contractId,jdbcType=INTEGER},
+	0)
+	</insert>
+	
+	<!-- 更新旧的撤销关系表delFlag 为 1 -->
+	<update id="updateOldCancelMappingRecord" parameterType="Map">
+	UPDATE  dbo.Store_AchievementCancelMapping
+	SET     delFlag = 1
+	WHERE   achievementCancelId = #{achievementCancelId,jdbcType=INTEGER}
+	</update>
+	
+	<select id="queryList" resultMap="BaseResultMap" parameterType="java.util.Map">	
+        SELECT  
+        <include refid="Base_Column_List" />
+		FROM   dbo.Store_AchievementCancelMapping
+		WHERE   delFlag = 0
+		    <if test="Id != null">
+				AND Id = #{Id,jdbcType=INTEGER},
+			</if>
+			<if test="achievementCancelId != null">
+				AND achievementCancelId = #{achievementCancelId,jdbcType=INTEGER}
+			</if>
+			<if test="storeId != null">
+				AND storeId = #{storeId,jdbcType=INTEGER}
+			</if>
+			<if test="ContractId != null">
+				AND contractId = #{contractId,jdbcType=INTEGER}
+			</if>
+		
+	</select>
+	
+	
+    <select id="getAchievementCancelMappingsByFlowId" resultMap="BaseResultMap" parameterType="java.lang.String">	
+        SELECT mm.achievementCancelId,mm.StoreId, mm.ContractId
+             FROM 
+			 Store_AchievementCancelMapping mm
+			 LEFT JOIN Store_AchievementCancel sc ON mm.achievementCancelId = sc.id AND sc.isDelete=0
+			 WHERE sc.flowId = '${flowId}'
+			 AND mm.delFlag=0 AND approveState ='17302'
+	</select>
+	
+	
+	
+</mapper>

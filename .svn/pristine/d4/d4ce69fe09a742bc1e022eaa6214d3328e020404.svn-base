@@ -1,0 +1,35 @@
+package cn.com.eju.pmls.remittanceTrack.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.pmls.performswitch.dao.PmlsWeekInfoMapper;
+import cn.com.eju.pmls.performswitch.model.PmlsWeekInfo;
+import cn.com.eju.pmls.remittanceTrack.dao.RemittanceTrackMapper;
+
+@Service("remittanceTrackService")
+public class RemittanceTrackService extends BaseService {
+	
+    @Resource
+    private RemittanceTrackMapper remittanceTrackMapper;
+    
+    @Resource
+    private PmlsWeekInfoMapper pmlsWeekInfoMapper;
+    
+    /**
+     * desc:回款跟踪数据初始化-年月-周
+     * 2020年4月7日
+     */
+    public ResultData<List<PmlsWeekInfo>> getWeeks(Map<String, Object> map) throws Exception {
+        ResultData<List<PmlsWeekInfo>> resultData = new ResultData();
+        List<PmlsWeekInfo> list = pmlsWeekInfoMapper.getWeeks(map);
+        resultData.setReturnData(list);
+        return resultData;
+    }
+}

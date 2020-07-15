@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.cashierInfo.CashierInfoMapper" >
+
+	<resultMap id="contractNewDtoBaseMap" type="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<result column="id" property="contractId" />
+		<result column="contractNo" property="contractNo" />
+		<result column="companyId" property="companyId" />
+		<result column="dateLifeEnd" property="dateLifeEnd" />
+		<result column="dateLifeStart" property="dateLifeStart" />
+		<result column="valid" property="valid" />
+
+		<result column="contractType" property="contractType" />
+		<result column="contractStatus" property="contractStatus" />
+		<result column="storeNum" property="storeNum" />
+		<result column="flowId" property="flowId" />
+		<result column="originalContractdistinction" property="originalContractdistinction" />
+
+		<result column="partyBAddress" property="partyBAddress" />
+
+		<result column="agreementNo" property="agreementNo" />
+		<result column="authRepresentative" property="authRepresentative" />
+		<result column="depositFee" property="depositFee" />
+		<result column="totleDepositFee" property="totleDepositFee" />
+		<result column="penaltyFee" property="penaltyFee" />
+		<result column="agentContact" property="agentContact" />
+		<result column="companyBankNo" property="companyBankNo" />
+		<result column="accountName" property="accountName" />
+		<result column="bankAccount" property="bankAccount" />
+		<result column="recipients" property="recipients" />
+		<result column="recipientsAddress" property="recipientsAddress" />
+		<result column="agreementType" property="agreementType" />
+		<result column="oaApproveType" property="oaApproveType" />
+		<result column="contractB2A" property="contractB2A" />
+		<result column="remark" property="remark" />
+		<result column="expandingPersonnel" property="expandingPersonnel" />
+		<result column="approveStatus" property="approveStatus" />
+		<result column="checkStatus" property="checkStatus" />
+	</resultMap>
+
+	<resultMap id="contractNewDtoListMap"  extends="contractNewDtoBaseMap" type="cn.com.eju.deal.model.signContract.ContractNewDto">
+		<result column="companyNo" property="companyNo" />
+		<result column="companyName" property="companyName" />
+		<result column="contactNumber" property="contactNumber" />
+		<result column="companyAddress" property="companyAddress" />
+		<result column="businessLicenseNo" property="businessLicenseNo" />
+		<result column="legalPerson" property="legalPerson" />
+		<result column="validName" property="validName" />
+		<result column="dataCount" property="dataCount" />
+		<result column="cityNo" property="cityNo" />
+		<result column="districtNo" property="districtNo" />
+		<result column="contractVersion" property="contractVersion" />
+		<result column="AgreementNo" property="agreementNo" />
+		<result column="collectionType" property="collectionType" />
+		<result column="collectionMethod" property="collectionMethod" />
+		<result column="payMoney" property="payMoney" />
+		<result column="cashierContractId" property="cashierContractId" />
+		<result column="bankName" property="bankName" />
+		<result column="cardNo" property="cardNo" />
+		<result column="receiveNo" property="receiveNo" />
+		<result column="dateCreate" property="dateCreate" />
+		<result column="userName" property="userName" />
+
+		<collection property="contractStoreList" javaType="ArrayList" ofType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+			<result column="storeId" property="storeId" />
+			<result column="StoreNo" property="storeNo" />
+			<result column="Name" property="storeName" />
+			<result column="Address" property="address" />
+			<result column="AddressDetail" property="addressDetail" />
+			<result column="depositFee" property="depositFee" />
+			<result column="receivedMoney" property="receivedMoney" />
+			<result column="receivingMoney" property="receivingMoney" />
+			<result column="amount" property="amount" />
+			<result column="maintainerName" property="maintainerName" />
+			<result column="maintainer" property="maintainer" />
+			<result column="centerName" property="centerName" />
+		</collection>
+	</resultMap>
+
+	<select id="getCashierInfoListData" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		select
+		DENSE_RANK() OVER (ORDER BY sr.id desc) rowNum,
+		c.id ,
+		c.ContractNo,
+		c.AgreementNo,
+		c.PartyB as CompanyName,
+		sr.id AS cashierContractId,
+		CASE WHEN sr.feeType = '17904' THEN '保证金' ELSE '房友系统服务费' END AS collectionType,
+		CASE WHEN sr.receiveType = '17909' THEN '银行转账'
+		WHEN sr.toolCode = '18604' THEN '支付宝' ELSE '微信'
+		END  AS collectionMethod,
+		sr.totalAmount AS payMoney,
+		CASE WHEN sr.approveStatus = 21601 AND sr.status = 20  THEN '未对账'
+		WHEN sr.approveStatus = 21601 AND sr.status != 20 THEN '待提交OA'
+		WHEN sr.approveStatus = 21602 THEN '审批中'
+		WHEN sr.approveStatus = 21603 THEN '审批通过'
+		ELSE '审批不通过' END approveStatus,
+		Company.companyNo,
+		Store.Name,
+		Store.Address
+		INTO #temp_cashierInfo
+		from Contract c
+		INNER JOIN dbo.Company
+		ON Company.Id = c.CompanyId
+		INNER JOIN dbo.ContractStore
+		ON ContractStore.ContractId = c.Id
+		INNER JOIN dbo.Store
+		ON ContractStore.StoreId = Store.Id
+		INNER JOIN dbo.Store_Receive sr
+		ON c.contractNo = sr.contractNo
+		WHERE sr.delFlag = '0' and sr.status not in (0, 10) AND sr.orderType = '21401'
+		AND Store.IsDelete = 0
+		AND ContractStore.IsDelete = 0
+		AND Company.IsDelete = 0
+		AND ContractStore.flag = 0
+		AND ISNULL(ContractStore.storeState,0) != 2
+		<if test="userCreate!=null and userCreate!=0">
+			and (c.centerId in (SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM'))
+			or c.UserCreate=#{userCreate} or Store.Maintainer = #{userCode} or sr.userIdCreate=#{userCreate}
+			)
+		</if>
+		<if test="cityNo!=null and cityNo!=''">
+			and c.AcCityNo = #{cityNo}
+		</if>
+		<if test="contractNo!=null and contractNo!=''">
+			and (
+				c.contractNo like  '%${contractNo}%'
+				or  c.PartyB like  '%${contractNo}%'
+				or  Store.Name like  '%${contractNo}%'
+				or  Store.StoreNo like  '%${contractNo}%'
+				or  Store.Address like  '%${contractNo}%'
+				or  c.AgreementNo like  '%${contractNo}%'
+			)
+		</if>
+		<if test="clickType == 'received'">
+			and sr.approveStatus = 21603
+		</if>
+		<if test="clickType == 'receiving'">
+			and sr.approveStatus IN (21601, 21602)
+		</if>
+		<if test="clickType == 'reject'">
+			and sr.approveStatus = 21604
+		</if>
+
+		SELECT t.* FROM (
+			SELECT *,(SELECT COUNT(DISTINCT(id)) FROM #temp_cashierInfo) AS dataCount FROM #temp_cashierInfo
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+		ORDER BY t.rowNum
+
+		DROP TABLE #temp_cashierInfo
+	</select>
+
+	<select id="getCashierInfoById" parameterType="cn.com.eju.deal.model.signContract.ContractNewDto" resultMap="contractNewDtoListMap">
+		select
+		c.id ,
+		c.ContractNo,
+		c.AgreementNo,
+		c.PartyB AS CompanyName,
+		c.DepositFee,
+		c.companyId,
+		Company.companyNo,
+		Company.LegalPerson,
+		ISNULL(Company.contactNumber, '') AS contactNumber,
+		((SELECT cityName FROM BAS_City WHERE CityNo = Company.CityNo) + (SELECT districtName FROM BAS_District WHERE DistrictNo = Company.DistrictNo) + Company.Address) AS companyAddress,
+		Store.Id AS StoreId,
+		Store.StoreNo,
+		Store.Name,
+		Store.Address,
+		Store.Maintainer,
+		u.userName AS maintainerName,
+		ISNULL(s2.centername,'') centerName,
+		sr.flowId,
+		CASE WHEN sr.feeType = '17904' THEN '保证金' ELSE '房友系统服务费' END AS collectionType,
+		CASE WHEN sr.receiveType = '17909' THEN '银行转账'
+		WHEN sr.toolCode = '18604' THEN '支付宝' ELSE '微信'
+		END  AS collectionMethod,
+		sr.totalAmount AS payMoney,
+		CASE WHEN sr.status = 20 THEN '未对账' ELSE '已对账' END checkStatus,
+		CASE WHEN sr.approveStatus = 21601 THEN '待提交OA'
+		WHEN sr.approveStatus = 21602 THEN '审批中'
+		WHEN sr.approveStatus = 21603 THEN '审批通过'
+		ELSE '审批不通过' END approveStatus,
+		sr.bankName,
+		sr.cardNo,
+		sr.receiveNo,
+		sr.remark,
+		ISNULL((SELECT userName FROM dbo.USR_User usr WHERE usr.userId = sr.userIdCreate),'') AS userName,
+		CONVERT(VARCHAR, ISNULL(sr.responseTime, sr.dateCreate), 120) AS dateCreate,
+		ISNULL(bond.receiveAmount,0) AS receivedMoney,
+		ISNULL(bond.receiveLockAmt,0) AS receivingMoney,
+		bond.amount
+		from Contract c
+		INNER JOIN dbo.Company
+		ON Company.Id = c.CompanyId
+		INNER JOIN dbo.ContractStore
+		ON ContractStore.ContractId = c.Id
+		INNER JOIN dbo.Store
+		ON ContractStore.StoreId = Store.Id
+		INNER JOIN dbo.USR_User u
+		ON Store.Maintainer=u.userCode AND u.delFlag='N'
+		INNER JOIN dbo.Store_Receive sr
+		ON c.contractNo = sr.contractNo
+		INNER JOIN dbo.Store_Receive_Dtl bond
+		ON sr.id = bond.receiveId AND Store.StoreNo = bond.storeNo
+		LEFT JOIN V_CRM_Center_Group_ref s2
+		ON u.groupId = s2.groupId
+		WHERE sr.delFlag = '0' AND bond.delFlag = '0' AND sr.id = #{cashierContractId}
+	</select>
+
+</mapper>

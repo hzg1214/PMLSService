@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.token.dao.ChannelTokenMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.token.model.ChannelToken">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="TokenType" property="tokenType" jdbcType="INTEGER"/>
+        <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="DateExpiration" property="dateExpiration" jdbcType="TIMESTAMP"/>
+        <result column="Token" property="token" jdbcType="NVARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,tokenType,dateCreate,dateExpiration,token
+        </sql>
+
+    <!-- 查询-根据id -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM dbo.ChannelToken
+        WHERE s.Id= #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="getTokenByTypeId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT TOP 1
+        <include refid="Base_Column_List"></include>
+        FROM dbo.ChannelToken
+        WHERE TokenType = #{typeId,jdbcType=INTEGER}
+        ORDER BY DateCreate DESC
+    </select>
+
+
+    <!-- 新增 -->
+    <insert id="create" parameterType="cn.com.eju.deal.token.model.ChannelToken" useGeneratedKeys="true" keyProperty="id">
+INSERT dbo.ChannelToken
+        ( TokenType ,
+          DateCreate ,
+          Token ,
+          DateExpiration
+        )
+VALUES  ( #{tokenType,jdbcType=INTEGER} , -- TokenType - int
+          GETDATE() , -- DateCreate - datetime
+          #{token,jdbcType=NVARCHAR}, -- Token - nvarchar(300)
+          #{dateExpiration,jdbcType=TIMESTAMP}  -- DateExpiration - datetime
+        )
+    </insert>
+
+</mapper>

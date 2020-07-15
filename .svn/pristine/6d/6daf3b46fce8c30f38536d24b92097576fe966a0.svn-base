@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.RoleMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.Role" >
+    <id column="roleId" property="roleId" jdbcType="INTEGER" />
+    <result column="roleName" property="roleName" jdbcType="NVARCHAR" />
+    <result column="roleCode" property="roleCode" jdbcType="NVARCHAR" />
+    <result column="roleDesc" property="roleDesc" jdbcType="NVARCHAR" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    roleId, roleName,roleCode, roleDesc, dateCreate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Role
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="queryList" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Role 
+      <where>
+			delFlag = 'N'
+
+			<if test="roleName != null and roleName !=''">
+  		  		<![CDATA[
+    				AND roleName LIKE '%${roleName}%'
+    			]]>
+			</if>
+			</where>
+  </select>
+  
+  <select id="queryAuthByRoleId" resultType="cn.com.eju.deal.user.model.Auth" parameterType="Map" >
+      select t2.* from 
+      	USR_RoleAuthMapping t ,
+      	USR_Auth t2 
+      	where t.authId=t2.authId  and t2.delFlag='N'
+				and t.roleId=#{roleId,jdbcType=INTEGER} 
+  </select> 
+  
+  <select id="list" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Role where delFlag='N'
+  </select>
+  
+    <!-- 更新实体 -->
+	<update id="batchEdit">
+		UPDATE USR_Role
+		SET
+	  		roleName = #{role.roleName},
+	  		roleDesc = #{role.roleDesc}
+		<where>
+				roleId = #{role.roleId}
+    	</where>
+	</update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from USR_Role
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.user.model.Role" useGeneratedKeys="true" keyProperty="roleId" >
+    insert into USR_Role (roleName, roleDesc, 
+      dateCreate, userIdCreate, delFlag
+      )
+    values (#{roleName,jdbcType=NVARCHAR}, #{roleDesc,jdbcType=NVARCHAR}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{delFlag,jdbcType=NVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.user.model.Role" >
+    insert into USR_Role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        roleId,
+      </if>
+      <if test="roleName != null" >
+        roleName,
+      </if>
+      <if test="roleCode != null" >
+        roleCode,
+      </if>
+      <if test="roleDesc != null" >
+        roleDesc,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=NVARCHAR},
+      </if>
+      <if test="roleCode != null" >
+        #{roleCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="roleDesc != null" >
+        #{roleDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.user.model.Role" >
+    update USR_Role
+    <set >
+      <if test="roleName != null" >
+        roleName = #{roleName,jdbcType=NVARCHAR},
+      </if>
+      <if test="roleCode != null" >
+        roleCode = #{roleCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="roleDesc != null" >
+        roleDesc = #{roleDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.user.model.Role" >
+    update USR_Role
+    set roleName = #{roleName,jdbcType=NVARCHAR},
+      roleCode = #{roleCode,jdbcType=NVARCHAR},
+      roleDesc = #{roleDesc,jdbcType=NVARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=NVARCHAR}
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 逻辑删除 -->
+	<delete id="delete" parameterType="cn.com.eju.deal.user.model.Role">
+		UPDATE USR_Role
+		SET
+		delFlag='Y'
+		<where>
+			roleId = #{roleId}
+		</where>
+	</delete>
+  
+  
+   <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    SELECT 
+	   		  ur.roleId, 
+	   		 ur.roleName, 
+	   		 ur.roleCode, 
+	   		 ur.roleDesc, 
+	   		 ur.dateCreate,
+	   		 ur.userIdCreate, 
+	   		 ur.delFlag
+	    FROM USR_User uu
+	    inner join USR_UserRoleMapping uurp
+	    on uu.userId = uurp.userId
+	    inner join USR_Role ur
+	     on uurp.roleId = ur.roleId
+	    WHERE uu.userId = #{userId,jdbcType=INTEGER}
+	    and uu.delFlag ='Y'
+  </select>
+  
+</mapper>

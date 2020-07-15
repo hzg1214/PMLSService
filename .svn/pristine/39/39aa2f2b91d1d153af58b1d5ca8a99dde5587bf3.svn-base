@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.store.dao.StorePaymentDtlMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.StorePaymentDtl">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="paymentId" jdbcType="INTEGER" property="paymentId" />
+    <result column="storeNo" jdbcType="VARCHAR" property="storeNo" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="providerCode" jdbcType="VARCHAR" property="providerCode" />
+    <result column="providerName" jdbcType="VARCHAR" property="providerName" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt" />
+    <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, paymentId, storeNo, amount, providerCode, providerName, dateCreate, userIdCreate, 
+    dateUpt, userIdUpt, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from store_payment_dtl
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from store_payment_dtl
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.store.model.StorePaymentDtl">
+    insert into store_payment_dtl (id, paymentId, storeNo, 
+      amount, providerCode, providerName, 
+      dateCreate, userIdCreate, dateUpt, 
+      userIdUpt, delFlag)
+    values (#{id,jdbcType=INTEGER}, #{paymentId,jdbcType=INTEGER}, #{storeNo,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{providerCode,jdbcType=VARCHAR}, #{providerName,jdbcType=VARCHAR}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{dateUpt,jdbcType=TIMESTAMP}, 
+      #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="create" parameterType="cn.com.eju.deal.store.model.StorePaymentDtl">
+    insert into store_payment_dtl ( paymentId, storeNo, storeName,
+      amount, providerCode, providerName, remark,
+      dateCreate, userIdCreate, dateUpt, 
+      userIdUpt, delFlag)
+    values (#{paymentId,jdbcType=INTEGER}, #{storeNo,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{providerCode,jdbcType=VARCHAR}, #{providerName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{dateUpt,jdbcType=TIMESTAMP}, 
+      #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR})
+  </insert>
+  <update id="updateByStoreNo" parameterType="java.util.Map">
+    UPDATE dbo.store_deposit
+		<set>
+            <if test="paymentAmount != null and paymentAmount != ''">
+                paymentAmount = ISNULL(paymentAmount, 0) + #{paymentAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="userIdUpt != null and userIdUpt != ''">
+                userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+                dateUpt = getDate()
+            </if>
+       </set>
+        WHERE storeNo = #{storeNo,jdbcType=VARCHAR} 
+  </update>
+  <update id="updateContractStoreByStoreId" parameterType="java.util.Map">
+    UPDATE dbo.ContractStore
+		<set>
+            <if test="refundAmount != null and refundAmount != ''">
+                refundAmount = ISNULL(refundAmount, 0) + #{refundAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="refundState != null and refundState != ''">
+            	refundState = #{refundState,jdbcType=VARCHAR},
+            </if>
+            <if test="refundDate != null">
+            	refundDate = #{refundDate}
+            </if>
+       </set>
+        WHERE storeId = #{storeId,jdbcType=INTEGER} and ContractId = #{contractId,jdbcType=INTEGER} 
+  </update>
+  <update id="updateContractByStoreId" parameterType="java.util.Map">
+    UPDATE dbo.Contract
+		<set>
+            <if test="totalRefundAmount != null and totalRefundAmount != ''">
+                totalRefundAmount = ISNULL(totalRefundAmount, 0) + #{totalRefundAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="refundState != null and refundState != ''">
+            	refundState = #{refundState,jdbcType=VARCHAR}
+            </if>
+       </set>
+        WHERE  Id = #{contractId,jdbcType=INTEGER} 
+  </update>
+  
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.store.model.StorePaymentDtl">
+    insert into store_payment_dtl
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paymentId != null">
+        paymentId,
+      </if>
+      <if test="storeNo != null">
+        storeNo,
+      </if>
+      <if test="storeName != null">
+        storeName,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="providerCode != null">
+        providerCode,
+      </if>
+      <if test="providerName != null">
+        providerName,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="dateUpt != null">
+        dateUpt,
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="paymentId != null">
+        #{paymentId,jdbcType=INTEGER},
+      </if>
+      <if test="storeNo != null">
+        #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null">
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="providerCode != null">
+        #{providerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="providerName != null">
+        #{providerName,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.store.model.StorePaymentDtl">
+    update store_payment_dtl
+    <set>
+      <if test="paymentId != null">
+        paymentId = #{paymentId,jdbcType=INTEGER},
+      </if>
+      <if test="storeNo != null">
+        storeNo = #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="providerCode != null">
+        providerCode = #{providerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="providerName != null">
+        providerName = #{providerName,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.store.model.StorePaymentDtl">
+    update store_payment_dtl
+    set paymentId = #{paymentId,jdbcType=INTEGER},
+      storeNo = #{storeNo,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      providerCode = #{providerCode,jdbcType=VARCHAR},
+      providerName = #{providerName,jdbcType=VARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getRefundStateByContractId" resultType="cn.com.eju.deal.dto.contract.ContractStoreDto" parameterType="java.lang.Integer">
+		select 
+ 			refundState,storeId,ContractId as contractId
+ 		FROM
+				ContractStore cs 
+		WHERE 
+			cs.IsDelete = 0 and 
+	  	 	cs.ContractId=#{contractId,jdbcType=INTEGER}
+	</select>
+</mapper>

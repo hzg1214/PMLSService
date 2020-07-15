@@ -1,0 +1,107 @@
+package cn.com.eju.pmls.remittanceTrack.service;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.base.support.SystemParam;
+import cn.com.eju.deal.common.util.AmountUtils;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.dto.scene.commission.CommissionResultDto;
+import cn.com.eju.pmls.performswitch.dao.PmlsWeekInfoMapper;
+import cn.com.eju.pmls.performswitch.model.PmlsWeekInfo;
+import cn.com.eju.pmls.remittanceTrack.dao.RemittanceTrackMapper;
+import cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackDto;
+import cn.com.eju.pmls.remittanceTrack.dto.RemittanceTrackImportDto;
+import cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack;
+
+@Service("remittanceTrackService")
+public class RemittanceTrackService extends BaseService {
+	
+    @Resource
+    private RemittanceTrackMapper remittanceTrackMapper;
+    
+    @Resource
+    private PmlsWeekInfoMapper pmlsWeekInfoMapper;
+    
+    /**
+     * desc:回款跟踪数据初始化-年月-周
+     * 2020年4月7日
+     */
+    public ResultData<List<PmlsWeekInfo>> getWeeks(Map<String, Object> map) throws Exception {
+        ResultData<List<PmlsWeekInfo>> resultData = new ResultData();
+        List<PmlsWeekInfo> list = pmlsWeekInfoMapper.getWeeks(map);
+        resultData.setReturnData(list);
+        return resultData;
+    }
+    
+    /**
+     * desc:列表
+     * 2020年4月7日
+     */
+    public ResultData<List<RemittanceTrackDto>> queryRemitanceTrackList(Map<String, Object> queryParam) {
+        ResultData<List<RemittanceTrackDto>> resultData = new ResultData<>();
+        List<RemittanceTrackDto> list = remittanceTrackMapper.queryRemitanceTrackList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+    
+    /**
+     * desc:获取回款跟踪数据表头
+     * 2020年4月8日
+     */
+    public ResultData getTitle(Map<String, Object> queryParam) {
+    	ResultData<RemittanceTrackDto> resultData = new ResultData<>();
+    	RemittanceTrackDto remittanceTrackDto= remittanceTrackMapper.getRemittanceTitle(queryParam);
+    	resultData.setReturnData(remittanceTrackDto);
+    	return resultData;
+    }
+    
+    /**
+     * desc:导入
+     * 2020年4月16日
+     */
+    public ResultData<String> insertImput(RemittanceTrackImportDto dto) throws ParseException {
+        ResultData resultData = new ResultData();
+        List<RemittanceTrackDto> remittanceTrackDtoList = dto.getRemittanceTrackDtoList();
+        int count = 0;
+        Map<String,Object> map = new HashMap<>();
+        for (RemittanceTrackDto remittanceTrackDto : remittanceTrackDtoList) {
+			Integer sortNo = remittanceTrackDto.getSortNo();
+			String partnerName = remittanceTrackDto.getPartnerName();
+			String projectNo = remittanceTrackDto.getProjectNo();
+			String dataMonth = remittanceTrackDto.getDataMonth();
+			map.put("sortNo", sortNo);
+			map.put("partnerName", partnerName);
+			map.put("projectNo", projectNo);
+			
+			RemittanceTrack remittanceTrack = remittanceTrackMapper.queryRemittanceTrackBySortNo(map);
+			//更新
+			if(remittanceTrack!=null) {
+				remittanceTrackDto.setId(remittanceTrack.getId());
+				remittanceTrackMapper.updateImport(remittanceTrackDto);
+			}else {//插入
+				remittanceTrackMapper.insertImport(remittanceTrackDto);
+			}
+		}
+        resultData.setReturnData(count);
+        return resultData;
+    }
+    
+}

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.StoreMaintainerMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.StoreMaintainer">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="storeId" property="storeId" jdbcType="INTEGER" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="inStatus" property="inStatus" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="CHAR" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="userCode" property="userCode" jdbcType="VARCHAR" />
+		<result column="userName" property="userName" jdbcType="NVARCHAR" />
+		<result column="setUserName" property="setUserName" jdbcType="NVARCHAR" />
+		<result column="setUserCode" property="setUserCode" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="NVARCHAR" />
+		<result column="cellphone" property="cellphone" jdbcType="NVARCHAR" />
+		<result column="dateMtcStart" property="dateMtcStart" jdbcType="TIMESTAMP" />
+		
+	</resultMap>
+	<insert id="insert" parameterType="cn.com.eju.deal.store.model.StoreMaintainer">
+		INSERT INTO dbo.StoreMaintainer
+		( storeId ,
+          userCode ,
+          userIdCreate ,
+          delFlag ,
+          dateCreate ,
+          setUserCode ,
+          setUserName ,
+          dateMtcStart
+        ) VALUES (
+        #{storeId,jdbcType=INTEGER},
+        #{userCode,jdbcType=VARCHAR},
+        #{userIdCreate,jdbcType=INTEGER},
+        #{delFlag,jdbcType=CHAR},
+        #{dateCreate,jdbcType=TIMESTAMP},
+        #{setUserCode,jdbcType=VARCHAR},
+        #{setUserName,jdbcType=VARCHAR},
+        #{dateMtcStart,jdbcType=TIMESTAMP})
+        
+	</insert>
+
+	<!-- 查询 -->
+	<select id="getStoreMaintainerHisList" resultMap="BaseResultMap"
+		parameterType="Map">
+		SELECT u.userName ,
+		u.userCode ,
+		u.cellphone ,
+		u.email ,
+		u.inStatus,
+		sm.dateCreate ,
+		sm.setUserCode ,
+		sm.setUserName ,
+		dateMtcStart
+		FROM store s
+		INNER JOIN storeMaintainer sm ON s.Id = sm.storeId
+		LEFT JOIN dbo.USR_User u ON u.userCode = sm.userCode
+		<where>
+			1=1
+			<if test="storeId != null and storeId != ''">
+				and	s.Id = #{storeId,jdbcType=INTEGER}
+			</if>
+			<if test="storeNo != null and storeNo != ''">
+				and s.StoreNo = #{storeNo,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null and userName != ''">
+                <![CDATA[AND u.userName LIKE '%${userName}%']]>
+			</if>
+		</where>
+		order by sm.dateCreate desc
+	</select>
+	
+	<!-- 查询 -->
+	<select id="getStoreMaintainerHisListNew" resultMap="BaseResultMap"
+		parameterType="Map">
+		SELECT u.userName ,
+		u.userCode ,
+		u.cellphone ,
+		u.email ,
+		u.inStatus,
+		sm.dateCreate ,
+		sm.setUserCode ,
+		sm.setUserName ,
+		dateMtcStart
+		FROM store s
+		INNER JOIN PMLS_StoreMaintainer sm ON s.Id = sm.storeId
+		LEFT JOIN dbo.USR_User u ON u.userCode = sm.userCode
+		<where>
+			1=1 and sm.delFlag='N'
+			<if test="storeId != null and storeId != ''">
+				and	s.Id = #{storeId,jdbcType=INTEGER}
+			</if>
+			<if test="storeNo != null and storeNo != ''">
+				and s.StoreNo = #{storeNo,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null and userName != ''">
+                <![CDATA[AND u.userName LIKE '%${userName}%']]>
+			</if>
+		</where>
+		order by sm.dateCreate desc
+	</select>
+		<!-- Add 2017/04/10  续签保存用 cning start -->
+	<select id="getByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer"
+		useCache="false">
+        SELECT  * 
+        FROM    dbo.StoreMaintainer
+        WHERE   StoreId = #{storeId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="hasMtner" resultType="boolean" parameterType="java.lang.Integer"
+		useCache="false">
+        SELECT  count(0) 
+        FROM    dbo.StoreMaintainer
+        WHERE   delFlag='N' AND StoreId = #{storeId,jdbcType=INTEGER}
+	</select>
+	
+	<insert id="insertNew" parameterType="cn.com.eju.deal.store.model.StoreMaintainer">
+		INSERT INTO dbo.PMLS_StoreMaintainer
+		( storeId ,
+          userCode ,
+          userIdCreate ,
+          delFlag ,
+          dateCreate ,
+          setUserCode ,
+          setUserName ,
+          dateMtcStart
+        ) VALUES (
+        #{storeId,jdbcType=INTEGER},
+        #{userCode,jdbcType=VARCHAR},
+        #{userIdCreate,jdbcType=INTEGER},
+        #{delFlag,jdbcType=CHAR},
+        #{dateCreate,jdbcType=TIMESTAMP},
+        #{setUserCode,jdbcType=VARCHAR},
+        #{setUserName,jdbcType=VARCHAR},
+        #{dateMtcStart,jdbcType=TIMESTAMP})
+        
+	</insert>
+	
+	<!-- Add 2017/04/10 cning 续签保存用 start -->
+</mapper>

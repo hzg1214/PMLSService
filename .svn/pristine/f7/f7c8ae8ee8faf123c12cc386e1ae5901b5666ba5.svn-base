@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.cashbill.dao.CashBillReportAdjustTaxMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.cashbill.model.CashBillReportAdjustTax" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="repParentId" property="repParentId" jdbcType="INTEGER" />
+    <result column="reportNo" property="reportNo" jdbcType="VARCHAR" />
+    <result column="adjustBeforeTaxAmount" property="adjustBeforeTaxAmount" jdbcType="DECIMAL" />
+    <result column="adjustTaxAmount" property="adjustTaxAmount" jdbcType="DECIMAL" />
+    <result column="adjustAfterTaxAmount" property="adjustAfterTaxAmount" jdbcType="DECIMAL" />
+    <result column="requestType" property="requestType" jdbcType="INTEGER" />
+    <result column="hasDeal" property="hasDeal" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="delFlag" property="delFlag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, repParentId, reportNo, adjustBeforeTaxAmount, adjustTaxAmount, adjustAfterTaxAmount, 
+    requestType, hasDeal, dateUpdate, dateCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Cash_Bill_Report_AdjustTax
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Cash_Bill_Report_AdjustTax
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.cashbill.model.CashBillReportAdjustTax" >
+    insert into Cash_Bill_Report_AdjustTax (repParentId, reportNo,
+      adjustBeforeTaxAmount, adjustTaxAmount, 
+      adjustAfterTaxAmount, requestType, hasDeal, dateUpdate,
+      dateCreate, delFlag)
+    values ( #{repParentId,jdbcType=INTEGER}, #{reportNo,jdbcType=VARCHAR},
+      #{adjustBeforeTaxAmount,jdbcType=DECIMAL}, #{adjustTaxAmount,jdbcType=DECIMAL}, 
+      #{adjustAfterTaxAmount,jdbcType=DECIMAL}, #{requestType,jdbcType=INTEGER}, #{hasDeal,jdbcType=INTEGER}, #{dateUpdate,jdbcType=TIMESTAMP},
+      #{dateCreate,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillReportAdjustTax" >
+    insert into Cash_Bill_Report_AdjustTax
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+
+      <if test="repParentId != null" >
+        repParentId,
+      </if>
+      <if test="reportNo != null" >
+        reportNo,
+      </if>
+      <if test="adjustBeforeTaxAmount != null" >
+        adjustBeforeTaxAmount,
+      </if>
+      <if test="adjustTaxAmount != null" >
+        adjustTaxAmount,
+      </if>
+      <if test="adjustAfterTaxAmount != null" >
+        adjustAfterTaxAmount,
+      </if>
+      <if test="requestType != null" >
+        requestType,
+      </if>
+      <if test="hasDeal != null" >
+        hasDeal,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="repParentId != null" >
+        #{repParentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null" >
+        #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustBeforeTaxAmount != null" >
+        #{adjustBeforeTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustTaxAmount != null" >
+        #{adjustTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustAfterTaxAmount != null" >
+        #{adjustAfterTaxAmount,jdbcType=DECIMAL},
+      </if>
+
+      <if test="requestType != null" >
+        #{requestType,jdbcType=INTEGER},
+      </if>
+      <if test="hasDeal != null" >
+        #{hasDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillReportAdjustTax" >
+    update Cash_Bill_Report_AdjustTax
+    <set >
+      <if test="repParentId != null" >
+        repParentId = #{repParentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null" >
+        reportNo = #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustBeforeTaxAmount != null" >
+        adjustBeforeTaxAmount = #{adjustBeforeTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustTaxAmount != null" >
+        adjustTaxAmount = #{adjustTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustAfterTaxAmount != null" >
+        adjustAfterTaxAmount = #{adjustAfterTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="requestType != null" >
+        requestType = #{requestType,jdbcType=INTEGER},
+      </if>
+      <if test="hasDeal != null" >
+        hasDeal = #{hasDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.cashbill.model.CashBillReportAdjustTax" >
+    update Cash_Bill_Report_AdjustTax
+    set repParentId = #{repParentId,jdbcType=INTEGER},
+      reportNo = #{reportNo,jdbcType=VARCHAR},
+      adjustBeforeTaxAmount = #{adjustBeforeTaxAmount,jdbcType=DECIMAL},
+      adjustTaxAmount = #{adjustTaxAmount,jdbcType=DECIMAL},
+      adjustAfterTaxAmount = #{adjustAfterTaxAmount,jdbcType=DECIMAL},
+      requestType = #{requestType,jdbcType=INTEGER},
+      hasDeal = #{hasDeal,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.EstatetReleaseMapper">
+
+	<resultMap id="EstateReleaseCityMap" type="cn.com.eju.deal.dto.houseLinkage.estate.EstateReleaseCityDto"></resultMap>
+	<select id="queryCityListByEstateId" parameterType="java.lang.String" resultMap="EstateReleaseCityMap">
+		SELECT
+			lec.id,
+			lec.cityNo,
+			bc.cityName
+		FROM
+			LNK_EstateCityMapping lec
+		LEFT JOIN BAS_City bc ON bc.CityNo = lec.cityNo AND bc.FlagDeleted = 0
+		WHERE lec.delflag = 0 
+			AND lec.estateId=#{estateId}
+	</select>
+	<!-- 批量新增变更城市 -->
+  <insert id="batchInsertEstatetRelease" parameterType="java.util.List" >
+    insert into LNK_EstateCityMapping 
+    	(estateId, cityNo,delflag, dateCreate, userCreate)
+    values 
+    <foreach collection="list" item="obj" index="index" separator=",">
+    ( #{obj.estateId,jdbcType=NVARCHAR}, 
+      #{obj.cityNo,jdbcType=NVARCHAR}, 
+     	0, 
+      #{obj.dateCreate,jdbcType=TIMESTAMP}, 
+      #{obj.userCreate,jdbcType=INTEGER}
+      )
+      </foreach>
+  </insert>
+  <update id="deleteEstatetReleaseByEstateId" parameterType="string">
+			UPDATE LNK_EstateCityMapping
+			set delflag = 1
+			where estateId = #{estateId,jdbcType=NVARCHAR}
+	</update>
+</mapper>

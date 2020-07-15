@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.linkDetail.dao.LinkDetailMapper">
+
+	<resultMap id="LinkDetailDtoMap" type="cn.com.eju.deal.dto.houseLinkage.linkDetail.LinkDetailDto"/>
+	<resultMap id="LinkProjectDetailDtoMap" type="cn.com.eju.deal.dto.houseLinkage.linkProjectDetail.LinkProjectDetailDto"/>
+
+	<select id="queryLinkDetailList" parameterType="Map" resultMap="LinkDetailDtoMap">
+		SELECT
+			row_number() OVER(ORDER BY org.regionCode, org.areaCityCode, rpt.cityGroupId, rpt.reportId desc, rpt.detailId, rpt.transferFlag desc, rpt.suitNum desc) rowNum,
+			dbo.F_ClearNullStr(rpt.partnerNm) partnerNm,--合作方名称
+			dbo.F_ClearNullStr(rpt.bigCustomerFlagStr) bigCustomerFlagStr,--是否大客户
+			dbo.F_ClearNullStr(rpt.bigCustomerName) bigCustomerName,--大客户名称
+			--业绩信息
+			dbo.F_ClearNullStr(rpt.accountProject) accountProject, dbo.F_ClearNullStr(rpt.accountProjectNo) accountProjectNo,
+			dbo.F_ClearNullInt(rpt.cityId) cityId, dbo.F_ClearNullStr(rpt.cityNo) cityNo, dbo.F_ClearNullStr(rpt.cityName) cityName,
+			dbo.F_ClearNullStr(org.yearly) yearly, dbo.F_ClearNullStr(org.regionCode) regionCode, dbo.F_ClearNullStr(org.regionName) regionName,
+			dbo.F_ClearNullStr(org.areaCityCode) areaCityCode, dbo.F_ClearNullStr(org.areaCityName) areaCityName,
+			dbo.F_ClearNullInt(rpt.cityGroupId) cityGroupId, dbo.F_ClearNullStr(rpt.cityGroupName) cityGroupName,
+			dbo.F_ClearNullInt(rpt.areaGroupId) areaGroupId, dbo.F_ClearNullStr(rpt.areaGroupName) areaGroupName,
+			dbo.F_ClearNullInt(rpt.centerGroupId) centerGroupId, dbo.F_ClearNullStr(rpt.centerGroupName) centerGroupName,
+			dbo.F_ClearNullInt(rpt.groupId) groupId, dbo.F_ClearNullStr(rpt.groupName) groupName,
+
+			dbo.F_ClearNullInt(rpt.projectCityId) projectCityId, dbo.F_ClearNullStr(rpt.projectCityName) projectCityName,
+			dbo.F_ClearNullInt(rpt.projectDepartmentId) projectDepartmentId, dbo.F_ClearNullStr(rpt.projectDepartmentName) projectDepartmentName,
+ 			dbo.F_ClearNullStr(org1.cityName) srCityName,
+			--案件信息
+			dbo.F_ClearNullStr(rpt.customerFrom) customerFrom, dbo.F_ClearNullStr(rpt.customerFromName) customerFromName,
+			--经纪公司
+			dbo.F_ClearNullStr(rpt.storeNo) storeNo, dbo.F_ClearNullStr(rpt.storeName) storeName, dbo.F_ClearNullStr(rpt.addressDetail) addressDetail,
+			dbo.F_ClearNullStr(dc1.dicValue) storeSize,
+			dbo.F_ClearNullStr(rpt.contractTypeName) contractTypeName, dbo.F_ClearNullStr(rpt.saleName) saleName, dbo.F_ClearNullStr(rpt.salePhone) salePhone,
+			dbo.F_ClearNullStr(rpt.companyName) companyName,
+			--客户信息
+			dbo.F_ClearNullStr(rpt.customerNm) customerNm, dbo.F_ClearNullStr(rpt.customerTel) customerTel, dbo.F_ClearNullStr(rpt.customerNum) customerNum,
+			--报备信息
+			dbo.F_ClearNullStr(rpt.estateId) estateId, dbo.F_ClearNullStr(rpt.estateNm) estateNm, dbo.F_ClearNullStr(rpt.projectNo) projectNo,
+			dbo.F_ClearNullStr(rpt.prepaidName) prepaidName, dbo.F_ClearNullStr(rpt.reportId) reportId,
+			dbo.F_ClearNullDate(rpt.reportDate) reportDate, dbo.F_ClearNullDate(rpt.seeDate) seeDate, dbo.F_ClearNullDate(rpt.pledgedDate) pledgedDate,
+			dbo.F_ClearNullStr(rpt.buildingNo) buildingNo, dbo.F_ClearNullInt(rpt.suitNum) suitNum,
+			--大定/成销
+			dbo.F_ClearNullMoney(rpt.roughArea) roughArea, dbo.F_ClearNullMoney(rpt.roughPrice) roughPrice, dbo.F_ClearNullMoney(rpt.roughAmount) roughAmount,
+			CASE WHEN rpt.roughAuditStatus = '0' THEN '待审核'
+			WHEN rpt.roughAuditStatus = '1' THEN '审核通过'
+			WHEN rpt.roughAuditStatus = '2' THEN '审核驳回'
+			ELSE '-' END AS roughAuditStatus, dbo.F_ClearNullDate(rpt.roughDate) roughDate, dbo.F_ClearNullDate(rpt.roughAuditTime) roughAuditTime,
+			dbo.F_ClearNullMoney(rpt.dealArea) dealArea, dbo.F_ClearNullMoney(rpt.dealPrice) dealPrice, dbo.F_ClearNullMoney(rpt.dealAmount) dealAmount, dbo.F_ClearNullDate(rpt.dealDate) dealDate,
+			--收入类型
+			dbo.F_ClearNullStr(rpt.incomeStatusStr) incomeStatusStr,
+
+			/********* 应计 begin **********/
+			--累积
+			dbo.F_ClearNullMoney(rpt.totalEPTIncome) totalEPTIncome, dbo.F_ClearNullMoney(rpt.totalEATIncome) totalEATIncome, dbo.F_ClearNullMoney(rpt.totalEPTCommission) totalEPTCommission, dbo.F_ClearNullMoney(rpt.totalEATCommission) totalEATCommission, dbo.F_ClearNullMoney(rpt.totalEPTProfit) totalEPTProfit, dbo.F_ClearNullMoney(rpt.totalEATProfit) totalEATProfit,
+			--之前
+			dbo.F_ClearNullMoney(rpt.beforeEPTIncome) beforeEPTIncome, dbo.F_ClearNullMoney(rpt.beforeEATIncome) beforeEATIncome, dbo.F_ClearNullMoney(rpt.beforeEPTCommission) beforeEPTCommission, dbo.F_ClearNullMoney(rpt.beforeEATCommission) beforeEATCommission, dbo.F_ClearNullMoney(rpt.beforeEPTProfit) beforeEPTProfit, dbo.F_ClearNullMoney(rpt.beforeEATProfit) beforeEATProfit,
+			--当年
+			dbo.F_ClearNullMoney(rpt.thisEPTIncome) thisEPTIncome, dbo.F_ClearNullMoney(rpt.thisEATIncome) thisEATIncome, dbo.F_ClearNullMoney(rpt.thisEPTCommission) thisEPTCommission, dbo.F_ClearNullMoney(rpt.thisEATCommission) thisEATCommission, dbo.F_ClearNullMoney(rpt.thisEPTProfit) thisEPTProfit, dbo.F_ClearNullMoney(rpt.thisEATProfit) thisEATProfit,
+
+			--1月收入
+			dbo.F_ClearNullMoney(rpt.janEPTIncome) janEPTIncome, dbo.F_ClearNullMoney(rpt.janEATIncome) janEATIncome, dbo.F_ClearNullMoney(rpt.janEPTCommission) janEPTCommission, dbo.F_ClearNullMoney(rpt.janEATCommission) janEATCommission, dbo.F_ClearNullMoney(rpt.janEPTProfit) janEPTProfit, dbo.F_ClearNullMoney(rpt.janEATProfit) janEATProfit,
+			--2月收入
+			dbo.F_ClearNullMoney(rpt.febEPTIncome) febEPTIncome, dbo.F_ClearNullMoney(rpt.febEATIncome) febEATIncome, dbo.F_ClearNullMoney(rpt.febEPTCommission) febEPTCommission, dbo.F_ClearNullMoney(rpt.febEATCommission) febEATCommission, dbo.F_ClearNullMoney(rpt.febEPTProfit) febEPTProfit, dbo.F_ClearNullMoney(rpt.febEATProfit) febEATProfit,
+			--3月收入
+			dbo.F_ClearNullMoney(rpt.marEPTIncome) marEPTIncome, dbo.F_ClearNullMoney(rpt.marEATIncome) marEATIncome, dbo.F_ClearNullMoney(rpt.marEPTCommission) marEPTCommission, dbo.F_ClearNullMoney(rpt.marEATCommission) marEATCommission, dbo.F_ClearNullMoney(rpt.marEPTProfit) marEPTProfit, dbo.F_ClearNullMoney(rpt.marEATProfit) marEATProfit,
+			--4月收入
+			dbo.F_ClearNullMoney(rpt.aprEPTIncome) aprEPTIncome, dbo.F_ClearNullMoney(rpt.aprEATIncome) aprEATIncome, dbo.F_ClearNullMoney(rpt.aprEPTCommission) aprEPTCommission, dbo.F_ClearNullMoney(rpt.aprEATCommission) aprEATCommission, dbo.F_ClearNullMoney(rpt.aprEPTProfit) aprEPTProfit, dbo.F_ClearNullMoney(rpt.aprEATProfit) aprEATProfit,
+			--5月收入
+			dbo.F_ClearNullMoney(rpt.mayEPTIncome) mayEPTIncome, dbo.F_ClearNullMoney(rpt.mayEATIncome) mayEATIncome, dbo.F_ClearNullMoney(rpt.mayEPTCommission) mayEPTCommission, dbo.F_ClearNullMoney(rpt.mayEATCommission) mayEATCommission, dbo.F_ClearNullMoney(rpt.mayEPTProfit) mayEPTProfit, dbo.F_ClearNullMoney(rpt.mayEATProfit) mayEATProfit,
+			--6月收入
+			dbo.F_ClearNullMoney(rpt.junEPTIncome) junEPTIncome, dbo.F_ClearNullMoney(rpt.junEATIncome) junEATIncome, dbo.F_ClearNullMoney(rpt.junEPTCommission) junEPTCommission, dbo.F_ClearNullMoney(rpt.junEATCommission) junEATCommission, dbo.F_ClearNullMoney(rpt.junEPTProfit) junEPTProfit, dbo.F_ClearNullMoney(rpt.junEATProfit) junEATProfit,
+			--7月收入
+			dbo.F_ClearNullMoney(rpt.julEPTIncome) julEPTIncome, dbo.F_ClearNullMoney(rpt.julEATIncome) julEATIncome, dbo.F_ClearNullMoney(rpt.julEPTCommission) julEPTCommission, dbo.F_ClearNullMoney(rpt.julEATCommission) julEATCommission, dbo.F_ClearNullMoney(rpt.julEPTProfit) julEPTProfit, dbo.F_ClearNullMoney(rpt.julEATProfit) julEATProfit,
+			--8月收入
+			dbo.F_ClearNullMoney(rpt.augEPTIncome) augEPTIncome, dbo.F_ClearNullMoney(rpt.augEATIncome) augEATIncome, dbo.F_ClearNullMoney(rpt.augEPTCommission) augEPTCommission, dbo.F_ClearNullMoney(rpt.augEATCommission) augEATCommission, dbo.F_ClearNullMoney(rpt.augEPTProfit) augEPTProfit, dbo.F_ClearNullMoney(rpt.augEATProfit) augEATProfit,
+			--9月收入
+			dbo.F_ClearNullMoney(rpt.sepEPTIncome) sepEPTIncome, dbo.F_ClearNullMoney(rpt.sepEATIncome) sepEATIncome, dbo.F_ClearNullMoney(rpt.sepEPTCommission) sepEPTCommission, dbo.F_ClearNullMoney(rpt.sepEATCommission) sepEATCommission, dbo.F_ClearNullMoney(rpt.sepEPTProfit) sepEPTProfit, dbo.F_ClearNullMoney(rpt.sepEATProfit) sepEATProfit,
+			--10月收入
+			dbo.F_ClearNullMoney(rpt.octEPTIncome) octEPTIncome, dbo.F_ClearNullMoney(rpt.octEATIncome) octEATIncome, dbo.F_ClearNullMoney(rpt.octEPTCommission) octEPTCommission, dbo.F_ClearNullMoney(rpt.octEATCommission) octEATCommission, dbo.F_ClearNullMoney(rpt.octEPTProfit) octEPTProfit, dbo.F_ClearNullMoney(rpt.octEATProfit) octEATProfit,
+			--11月收入
+			dbo.F_ClearNullMoney(rpt.novEPTIncome) novEPTIncome, dbo.F_ClearNullMoney(rpt.novEATIncome) novEATIncome, dbo.F_ClearNullMoney(rpt.novEPTCommission) novEPTCommission, dbo.F_ClearNullMoney(rpt.novEATCommission) novEATCommission, dbo.F_ClearNullMoney(rpt.novEPTProfit) novEPTProfit, dbo.F_ClearNullMoney(rpt.novEATProfit) novEATProfit,
+			--12月收入
+			dbo.F_ClearNullMoney(rpt.decEPTIncome) decEPTIncome, dbo.F_ClearNullMoney(rpt.decEATIncome) decEATIncome, dbo.F_ClearNullMoney(rpt.decEPTCommission) decEPTCommission, dbo.F_ClearNullMoney(rpt.decEATCommission) decEATCommission, dbo.F_ClearNullMoney(rpt.decEPTProfit) decEPTProfit, dbo.F_ClearNullMoney(rpt.decEATProfit) decEATProfit,
+
+			/********* 应计 end **********/
+
+			/********* 实际 begin **********/
+			--累积
+			dbo.F_ClearNullMoney(rpt.totalAPTIncome) totalAPTIncome, dbo.F_ClearNullMoney(rpt.totalAATIncome) totalAATIncome, dbo.F_ClearNullMoney(rpt.totalAPTCommission) totalAPTCommission, dbo.F_ClearNullMoney(rpt.totalAATCommission) totalAATCommission, dbo.F_ClearNullMoney(rpt.totalAPTProfit) totalAPTProfit, dbo.F_ClearNullMoney(rpt.totalAATProfit) totalAATProfit,
+			--之前
+			dbo.F_ClearNullMoney(rpt.beforeAPTIncome) beforeAPTIncome, dbo.F_ClearNullMoney(rpt.beforeAATIncome) beforeAATIncome, dbo.F_ClearNullMoney(rpt.beforeAPTCommission) beforeAPTCommission, dbo.F_ClearNullMoney(rpt.beforeAATCommission) beforeAATCommission, dbo.F_ClearNullMoney(rpt.beforeAPTProfit) beforeAPTProfit, dbo.F_ClearNullMoney(rpt.beforeAATProfit) beforeAATProfit,
+			--当年
+			dbo.F_ClearNullMoney(rpt.thisAPTIncome) thisAPTIncome, dbo.F_ClearNullMoney(rpt.thisAATIncome) thisAATIncome, dbo.F_ClearNullMoney(rpt.thisAPTCommission) thisAPTCommission, dbo.F_ClearNullMoney(rpt.thisAATCommission) thisAATCommission, dbo.F_ClearNullMoney(rpt.thisAPTProfit) thisAPTProfit, dbo.F_ClearNullMoney(rpt.thisAATProfit) thisAATProfit,
+
+			--1月收入
+			dbo.F_ClearNullMoney(rpt.janAPTIncome) janAPTIncome, dbo.F_ClearNullMoney(rpt.janAATIncome) janAATIncome, dbo.F_ClearNullMoney(rpt.janAPTCommission) janAPTCommission, dbo.F_ClearNullMoney(rpt.janAATCommission) janAATCommission, dbo.F_ClearNullMoney(rpt.janAPTProfit) janAPTProfit, dbo.F_ClearNullMoney(rpt.janAATProfit) janAATProfit,
+			--2月收入
+			dbo.F_ClearNullMoney(rpt.febAPTIncome) febAPTIncome, dbo.F_ClearNullMoney(rpt.febAATIncome) febAATIncome, dbo.F_ClearNullMoney(rpt.febAPTCommission) febAPTCommission, dbo.F_ClearNullMoney(rpt.febAATCommission) febAATCommission, dbo.F_ClearNullMoney(rpt.febAPTProfit) febAPTProfit, dbo.F_ClearNullMoney(rpt.febAATProfit) febAATProfit,
+			--3月收入
+			dbo.F_ClearNullMoney(rpt.marAPTIncome) marAPTIncome, dbo.F_ClearNullMoney(rpt.marAATIncome) marAATIncome, dbo.F_ClearNullMoney(rpt.marAPTCommission) marAPTCommission, dbo.F_ClearNullMoney(rpt.marAATCommission) marAATCommission, dbo.F_ClearNullMoney(rpt.marAPTProfit) marAPTProfit, dbo.F_ClearNullMoney(rpt.marAATProfit) marAATProfit,
+			--4月收入
+			dbo.F_ClearNullMoney(rpt.aprAPTIncome) aprAPTIncome, dbo.F_ClearNullMoney(rpt.aprAATIncome) aprAATIncome, dbo.F_ClearNullMoney(rpt.aprAPTCommission) aprAPTCommission, dbo.F_ClearNullMoney(rpt.aprAATCommission) aprAATCommission, dbo.F_ClearNullMoney(rpt.aprAPTProfit) aprAPTProfit, dbo.F_ClearNullMoney(rpt.aprAATProfit) aprAATProfit,
+			--5月收入
+			dbo.F_ClearNullMoney(rpt.mayAPTIncome) mayAPTIncome, dbo.F_ClearNullMoney(rpt.mayAATIncome) mayAATIncome, dbo.F_ClearNullMoney(rpt.mayAPTCommission) mayAPTCommission, dbo.F_ClearNullMoney(rpt.mayAATCommission) mayAATCommission, dbo.F_ClearNullMoney(rpt.mayAPTProfit) mayAPTProfit, dbo.F_ClearNullMoney(rpt.mayAATProfit) mayAATProfit,
+			--6月收入
+			dbo.F_ClearNullMoney(rpt.junAPTIncome) junAPTIncome, dbo.F_ClearNullMoney(rpt.junAATIncome) junAATIncome, dbo.F_ClearNullMoney(rpt.junAPTCommission) junAPTCommission, dbo.F_ClearNullMoney(rpt.junAATCommission) junAATCommission, dbo.F_ClearNullMoney(rpt.junAPTProfit) junAPTProfit, dbo.F_ClearNullMoney(rpt.junAATProfit) junAATProfit,
+			--7月收入
+			dbo.F_ClearNullMoney(rpt.julAPTIncome) julAPTIncome, dbo.F_ClearNullMoney(rpt.julAATIncome) julAATIncome, dbo.F_ClearNullMoney(rpt.julAPTCommission) julAPTCommission, dbo.F_ClearNullMoney(rpt.julAATCommission) julAATCommission, dbo.F_ClearNullMoney(rpt.julAPTProfit) julAPTProfit, dbo.F_ClearNullMoney(rpt.julAATProfit) julAATProfit,
+			--8月收入
+			dbo.F_ClearNullMoney(rpt.augAPTIncome) augAPTIncome, dbo.F_ClearNullMoney(rpt.augAATIncome) augAATIncome, dbo.F_ClearNullMoney(rpt.augAPTCommission) augAPTCommission, dbo.F_ClearNullMoney(rpt.augAATCommission) augAATCommission, dbo.F_ClearNullMoney(rpt.augAPTProfit) augAPTProfit, dbo.F_ClearNullMoney(rpt.augAATProfit) augAATProfit,
+			--9月收入
+			dbo.F_ClearNullMoney(rpt.sepAPTIncome) sepAPTIncome, dbo.F_ClearNullMoney(rpt.sepAATIncome) sepAATIncome, dbo.F_ClearNullMoney(rpt.sepAPTCommission) sepAPTCommission, dbo.F_ClearNullMoney(rpt.sepAATCommission) sepAATCommission, dbo.F_ClearNullMoney(rpt.sepAPTProfit) sepAPTProfit, dbo.F_ClearNullMoney(rpt.sepAATProfit) sepAATProfit,
+			--10月收入
+			dbo.F_ClearNullMoney(rpt.octAPTIncome) octAPTIncome, dbo.F_ClearNullMoney(rpt.octAATIncome) octAATIncome, dbo.F_ClearNullMoney(rpt.octAPTCommission) octAPTCommission, dbo.F_ClearNullMoney(rpt.octAATCommission) octAATCommission, dbo.F_ClearNullMoney(rpt.octAPTProfit) octAPTProfit, dbo.F_ClearNullMoney(rpt.octAATProfit) octAATProfit,
+			--11月收入
+			dbo.F_ClearNullMoney(rpt.novAPTIncome) novAPTIncome, dbo.F_ClearNullMoney(rpt.novAATIncome) novAATIncome, dbo.F_ClearNullMoney(rpt.novAPTCommission) novAPTCommission, dbo.F_ClearNullMoney(rpt.novAATCommission) novAATCommission, dbo.F_ClearNullMoney(rpt.novAPTProfit) novAPTProfit, dbo.F_ClearNullMoney(rpt.novAATProfit) novAATProfit,
+			--12月收入
+			dbo.F_ClearNullMoney(rpt.decAPTIncome) decAPTIncome, dbo.F_ClearNullMoney(rpt.decAATIncome) decAATIncome, dbo.F_ClearNullMoney(rpt.decAPTCommission) decAPTCommission, dbo.F_ClearNullMoney(rpt.decAATCommission) decAATCommission, dbo.F_ClearNullMoney(rpt.decAPTProfit) decAPTProfit, dbo.F_ClearNullMoney(rpt.decAATProfit) decAATProfit,
+
+			/********* 实际 end **********/
+
+			/********* 垫佣 begin **********/
+			--应计税前EPT
+		  	dbo.F_ClearNullMoney(janEPTPrepaid) janEPTPrepaid, dbo.F_ClearNullMoney(febEPTPrepaid) febEPTPrepaid, dbo.F_ClearNullMoney(marEPTPrepaid) marEPTPrepaid,
+		  	dbo.F_ClearNullMoney(aprEPTPrepaid) aprEPTPrepaid, dbo.F_ClearNullMoney(mayEPTPrepaid) mayEPTPrepaid, dbo.F_ClearNullMoney(junEPTPrepaid) junEPTPrepaid,
+		  	dbo.F_ClearNullMoney(julEPTPrepaid) julEPTPrepaid, dbo.F_ClearNullMoney(augEPTPrepaid) augEPTPrepaid, dbo.F_ClearNullMoney(sepEPTPrepaid) sepEPTPrepaid,
+		  	dbo.F_ClearNullMoney(octEPTPrepaid) octEPTPrepaid, dbo.F_ClearNullMoney(novEPTPrepaid) novEPTPrepaid, dbo.F_ClearNullMoney(decEPTPrepaid) decEPTPrepaid,
+		  	dbo.F_ClearNullMoney(beforeEPTPrepaid) beforeEPTPrepaid, dbo.F_ClearNullMoney(thisEPTPrepaid) thisEPTPrepaid, dbo.F_ClearNullMoney(totalEPTPrepaid) totalEPTPrepaid,
+			--应计税后EAT
+		  	dbo.F_ClearNullMoney(janEATPrepaid) janEATPrepaid, dbo.F_ClearNullMoney(febEATPrepaid) febEATPrepaid, dbo.F_ClearNullMoney(marEATPrepaid) marEATPrepaid,
+		  	dbo.F_ClearNullMoney(aprEATPrepaid) aprEATPrepaid, dbo.F_ClearNullMoney(mayEATPrepaid) mayEATPrepaid, dbo.F_ClearNullMoney(junEATPrepaid) junEATPrepaid,
+		  	dbo.F_ClearNullMoney(julEATPrepaid) julEATPrepaid, dbo.F_ClearNullMoney(augEATPrepaid) augEATPrepaid, dbo.F_ClearNullMoney(sepEATPrepaid) sepEATPrepaid,
+		  	dbo.F_ClearNullMoney(octEATPrepaid) octEATPrepaid, dbo.F_ClearNullMoney(novEATPrepaid) novEATPrepaid, dbo.F_ClearNullMoney(decEATPrepaid) decEATPrepaid,
+		  	dbo.F_ClearNullMoney(beforeEATPrepaid) beforeEATPrepaid, dbo.F_ClearNullMoney(thisEATPrepaid) thisEATPrepaid, dbo.F_ClearNullMoney(totalEATPrepaid) totalEATPrepaid,
+			--实计税前APT
+		  	dbo.F_ClearNullMoney(janAPTPrepaid) janAPTPrepaid, dbo.F_ClearNullMoney(febAPTPrepaid) febAPTPrepaid, dbo.F_ClearNullMoney(marAPTPrepaid) marAPTPrepaid,
+		  	dbo.F_ClearNullMoney(aprAPTPrepaid) aprAPTPrepaid, dbo.F_ClearNullMoney(mayAPTPrepaid) mayAPTPrepaid, dbo.F_ClearNullMoney(junAPTPrepaid) junAPTPrepaid,
+		  	dbo.F_ClearNullMoney(julAPTPrepaid) julAPTPrepaid, dbo.F_ClearNullMoney(augAPTPrepaid) augAPTPrepaid, dbo.F_ClearNullMoney(sepAPTPrepaid) sepAPTPrepaid,
+		  	dbo.F_ClearNullMoney(octAPTPrepaid) octAPTPrepaid, dbo.F_ClearNullMoney(novAPTPrepaid) novAPTPrepaid, dbo.F_ClearNullMoney(decAPTPrepaid) decAPTPrepaid,
+		  	dbo.F_ClearNullMoney(beforeAPTPrepaid) beforeAPTPrepaid, dbo.F_ClearNullMoney(thisAPTPrepaid) thisAPTPrepaid, dbo.F_ClearNullMoney(totalAPTPrepaid) totalAPTPrepaid,
+			--实计税后AAT
+		  	dbo.F_ClearNullMoney(janAATPrepaid) janAATPrepaid, dbo.F_ClearNullMoney(febAATPrepaid) febAATPrepaid, dbo.F_ClearNullMoney(marAATPrepaid) marAATPrepaid,
+		  	dbo.F_ClearNullMoney(aprAATPrepaid) aprAATPrepaid, dbo.F_ClearNullMoney(mayAATPrepaid) mayAATPrepaid, dbo.F_ClearNullMoney(junAATPrepaid) junAATPrepaid,
+		  	dbo.F_ClearNullMoney(julAATPrepaid) julAATPrepaid, dbo.F_ClearNullMoney(augAATPrepaid) augAATPrepaid, dbo.F_ClearNullMoney(sepAATPrepaid) sepAATPrepaid,
+		  	dbo.F_ClearNullMoney(octAATPrepaid) octAATPrepaid, dbo.F_ClearNullMoney(novAATPrepaid) novAATPrepaid, dbo.F_ClearNullMoney(decAATPrepaid) decAATPrepaid,
+		  	dbo.F_ClearNullMoney(beforeAATPrepaid) beforeAATPrepaid, dbo.F_ClearNullMoney(thisAATPrepaid) thisAATPrepaid, dbo.F_ClearNullMoney(totalAATPrepaid) totalAATPrepaid,
+
+			/********* 垫佣 end **********/
+
+			/********* 内佣 begin **********/
+			dbo.F_ClearNullMoney(rpt.totalNPTCommission) totalNPTCommission, dbo.F_ClearNullMoney(rpt.totalNATCommission) totalNATCommission,
+			/********* 内佣 end **********/
+			/********* 应收收入 begin **********/
+			dbo.F_ClearNullMoney(rpt.totalRBPTIncome) totalRBPTIncome, dbo.F_ClearNullMoney(rpt.totalRBATIncome) totalRBATIncome,
+			dbo.F_ClearNullMoney(rpt.beforeRBPTIncome) beforeRBPTIncome, dbo.F_ClearNullMoney(rpt.beforeRBATIncome) beforeRBATIncome,
+			dbo.F_ClearNullMoney(rpt.thisRBPTIncome) thisRBPTIncome, dbo.F_ClearNullMoney(rpt.thisRBATIncome) thisRBATIncome,
+			
+			dbo.F_ClearNullMoney(rpt.janRBPTIncome) janRBPTIncome, dbo.F_ClearNullMoney(rpt.janRBATIncome) janRBATIncome,
+			dbo.F_ClearNullMoney(rpt.febRBPTIncome) febRBPTIncome, dbo.F_ClearNullMoney(rpt.febRBBATIncome) febRBBATIncome,
+			dbo.F_ClearNullMoney(rpt.marRBPTIncome) marRBPTIncome, dbo.F_ClearNullMoney(rpt.marRBATIncome) marRBATIncome,
+			dbo.F_ClearNullMoney(rpt.aprRBPTIncome) aprRBPTIncome, dbo.F_ClearNullMoney(rpt.aprRBATIncome) aprRBATIncome,
+			dbo.F_ClearNullMoney(rpt.mayRBPTIncome) mayRBPTIncome, dbo.F_ClearNullMoney(rpt.mayRBATIncome) mayRBATIncome,
+			dbo.F_ClearNullMoney(rpt.junRBPTIncome) junRBPTIncome, dbo.F_ClearNullMoney(rpt.junRBATIncome) junRBATIncome,
+			
+			dbo.F_ClearNullMoney(rpt.julRBPTIncome) julRBPTIncome, dbo.F_ClearNullMoney(rpt.julRBATIncome) julRBATIncome,
+			dbo.F_ClearNullMoney(rpt.augRBPTIncome) augRBPTIncome, dbo.F_ClearNullMoney(rpt.augRBATIncome) augRBATIncome,
+			dbo.F_ClearNullMoney(rpt.sepRBPTIncome) sepRBPTIncome, dbo.F_ClearNullMoney(rpt.sepRBATIncome) sepRBATIncome,
+			dbo.F_ClearNullMoney(rpt.octRBPTIncome) octRBPTIncome, dbo.F_ClearNullMoney(rpt.octRBATIncome) octRBATIncome,
+			dbo.F_ClearNullMoney(rpt.novRBPTIncome) novRBPTIncome, dbo.F_ClearNullMoney(rpt.novRBATIncome) novRBATIncome,
+			dbo.F_ClearNullMoney(rpt.decRBPTIncome) decRBPTIncome, dbo.F_ClearNullMoney(rpt.decRBATIncome) decRBATIncome,
+			/********* 应收收入 end **********/
+			--人员信息
+			dbo.F_ClearNullStr(rpt.expenderCode) expenderCode, dbo.F_ClearNullStr(rpt.expenderName) expenderName,
+			dbo.F_ClearNullStr(rpt.groupLeaderCode) groupLeaderCode, dbo.F_ClearNullStr(rpt.groupLeaderName) groupLeaderName,
+			dbo.F_ClearNullStr(rpt.areaLeaderCode) areaLeaderCode, dbo.F_ClearNullStr(rpt.areaLeaderName) areaLeaderName,
+
+			'' remark,
+			dbo.F_ClearNullStr(fyObject1) fyObject1, dbo.F_ClearNullMoney(befYJFY1) befYJFY1,dbo.F_ClearNullMoney(aftYJFY1) aftYJFY1,
+			dbo.F_ClearNullStr(fyObject2) fyObject2, dbo.F_ClearNullMoney(befYJFY2) befYJFY2,dbo.F_ClearNullMoney(aftYJFY2) aftYJFY2,
+			dbo.F_ClearNullStr(fyObject3) fyObject3, dbo.F_ClearNullMoney(befYJFY3) befYJFY3,dbo.F_ClearNullMoney(aftYJFY3) aftYJFY3
+		  FROM RPT_LinkDetail rpt
+		LEFT JOIN dbo.Store s ON s.StoreNo = rpt.storeNo
+		LEFT JOIN dbo.BAS_DictionaryValue dc1 ON dc1.dicCode=s.storeSizeScale
+		LEFT JOIN (
+		SELECT distinct yearly, regionCode, regionName, areaCityCode, areaCityName, cityGroupId, cityGroupName
+		FROM dbo.V_USR_OrgHis
+		<if test="organization != null and organization != ''">
+			WHERE yearly = #{organization, jdbcType=VARCHAR}
+		</if>
+		) org ON rpt.cityGroupId = org.cityGroupId
+		<if test="serachKey != null and serachKey != '' and serachKey!='YJ'">
+			LEFT JOIN   (
+			SELECT DISTINCT areaCityCode,areaCityName,cityId FROM dbo.V_USR_OrgHis
+			<if test="organization != null and organization != ''">
+				WHERE yearly = #{organization, jdbcType=VARCHAR}
+			</if>
+			) org_sr ON rpt.projectCityId =org_sr.cityId
+		</if>
+		LEFT JOIN dbo.BAS_City org1 ON rpt.projectCityId = org1.ID
+
+		 WHERE 1 = 1
+
+		<if test="reportDateStart != null and reportDateStart != ''">
+			AND rpt.ReportDate >= convert(datetime, '${reportDateStart}')
+		</if>
+		<if test="reportDateEnd != null and reportDateEnd != ''">
+			AND rpt.ReportDate &lt; convert(datetime, '${reportDateEnd}') + 1
+		</if>
+		<if test="roughDateStart != null and roughDateStart != ''">
+			AND rpt.roughDate >= convert(datetime, '${roughDateStart}')
+		</if>
+		<if test="roughDateEnd != null and roughDateEnd != ''">
+			AND rpt.roughDate &lt; convert(datetime, '${roughDateEnd}') + 1
+		</if>
+		<if test="dealDateStart != null and dealDateStart != ''">
+			AND rpt.dealDate >= convert(datetime, '${dealDateStart}')
+		</if>
+		<if test="dealDateEnd != null and dealDateEnd != ''">
+			AND rpt.dealDate &lt; convert(datetime, '${dealDateEnd}') + 1
+		</if>
+		<if test="estateId != null and estateId != ''">
+			AND (rpt.estateId LIKE CONCAT('', #{estateId, jdbcType=NVARCHAR}) OR rpt.projectNo LIKE CONCAT('%', #{estateId, jdbcType=NVARCHAR}))
+		</if>
+		<if test="estateNm != null and estateNm != ''">
+			AND rpt.EstateNm LIKE CONCAT('%', #{estateNm, jdbcType=NVARCHAR}, '%')
+		</if>
+		<if test="reportId != null and reportId != ''">
+			AND rpt.reportId LIKE CONCAT('%', #{reportId, jdbcType=NVARCHAR})
+		</if>
+		<if test="storeNo != null and storeNo != ''">
+			AND rpt.storeNo LIKE CONCAT('%', #{storeNo, jdbcType=NVARCHAR})
+		</if>
+		<if test="organization != null and organization != ''">
+			AND rpt.year = #{organization}
+		</if>
+		<if test="customerFromId != null and customerFromId != ''">
+			AND rpt.customerFrom = #{customerFromId}
+		</if>
+		<if test="accountProjectList != null">
+			AND rpt.accountProjectNo IN
+			<foreach collection="accountProjectList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="regionCodeList != null">
+			AND org.regionCode IN
+			<foreach collection="regionCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="serachKey != null and serachKey != '' and serachKey=='YJ'">
+			<if test="areaCityCodeList != null">
+				AND org.areaCityCode IN
+				<foreach collection="areaCityCodeList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="cityIdList != null">
+				AND rpt.cityId IN
+				<foreach collection="cityIdList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="centerIdList != null">
+				AND rpt.centerGroupId IN
+				<foreach collection="centerIdList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</if>
+		<if test="serachKey != null and serachKey != '' and serachKey=='SR'">
+			<if test="areaCityCodeList != null">
+				AND org_sr.areaCityCode IN
+				<foreach collection="areaCityCodeList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="cityIdList != null">
+				AND rpt.projectCityId IN
+				<foreach collection="cityIdList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</if>
+		<if test="serachKey != null and serachKey != '' and serachKey!='SR' and serachKey!='YJ'">
+			<if test="areaCityCodeList != null">
+				AND (org.areaCityCode IN
+				<foreach collection="areaCityCodeList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				OR org_sr.areaCityCode IN
+				<foreach collection="areaCityCodeList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				)
+			</if>
+			<if test="cityIdList != null">
+				AND (rpt.cityId IN
+				<foreach collection="cityIdList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				OR rpt.projectCityId IN
+				<foreach collection="cityIdList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				)
+			</if>
+		</if>
+
+		<if test="userId != null and userId != ''">
+<!-- 			AND ( -->
+<!-- 				( -->
+<!-- 				  rpt.centerGroupId is null AND rpt.cityId in (SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter(#{userId}, 'CRM')) -->
+<!-- 				) OR ( -->
+<!-- 				  rpt.centerGroupId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')) -->
+<!-- 				) OR ( -->
+<!-- 				  rpt.projectDepartmentId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')) -->
+<!-- 				) -->
+<!-- 			) -->
+			AND (
+					(
+					  rpt.centerGroupId is null AND rpt.cityId in (
+					  		SELECT DISTINCT m.cityId FROM dbo.BAS_PMLS_UserCenterCitySetting m
+									JOIN dbo.USR_User u ON u.userCode=m.userCode AND u.delFlag='N'
+									 WHERE m.delFlag=0 AND u.userId=#{userId}
+						)
+					) OR (
+					  rpt.centerGroupId in (
+					  		SELECT DISTINCT m.centerId FROM dbo.BAS_PMLS_UserCenterCitySetting m
+								JOIN dbo.USR_User u ON u.userCode=m.userCode AND u.delFlag='N'
+								WHERE m.delFlag=0 AND u.userId=#{userId}
+					  )
+					) OR (
+					  rpt.projectDepartmentId in (
+					  		SELECT DISTINCT m.centerId FROM dbo.BAS_PMLS_UserCenterCitySetting m
+								JOIN dbo.USR_User u ON u.userCode=m.userCode AND u.delFlag='N'
+								WHERE m.delFlag=0 AND u.userId=#{userId}
+					  )
+					)
+				)
+		</if>
+		ORDER BY rowNum
+
+	</select>
+
+	<select id="queryLinkProjectDetailList" parameterType="Map" resultMap="LinkProjectDetailDtoMap">
+	  EXEC P_CRM_RPT_LinkProjectDetail #{organization}, #{regionCodeStr}, #{areaCityCodeStr}, #{cityIdStr}, #{centerIdStr}, #{startDate}, #{endDate}, #{projectNo}, #{projectStatusStr}, #{estateNm}, #{realityCityNo}, #{districtNo}, #{address}, #{userId},#{clickType}
+	</select>
+
+	<select id="queryLinkProjectDetailListByProject" parameterType="Map" resultMap="LinkProjectDetailDtoMap">
+	  EXEC P_CRM_RPT_LinkProjectDetail_ByProject #{organization}, #{regionCodeStr}, #{areaCityCodeStr}, #{cityIdStr}, '', #{startDateProject}, #{endDateProject}, #{projectNo}, #{projectStatusStr}, #{estateNm}, #{realityCityNo}, #{districtNo}, #{address}, #{userId},#{clickType}
+	</select>
+
+	<select id="queryLinkProjectTraceList" parameterType="Map" resultType="cn.com.eju.deal.dto.houseLinkage.linkProjectTrace.LinkProjectTraceDto">
+		EXEC P_CRM_RPT_LinkProjectTrace_new #{cityNo}, #{projectNo}, #{currentYear}, #{startDate},#{endDate},#{pre3Month},#{userCode},#{clickType},#{statisticsNum}
+	</select>
+
+	<select id="queryLinkProjectPartATraceList" parameterType="Map" resultType="cn.com.eju.pmls.report.linkDetail.dto.LinkProjectPartATraceDto">
+		EXEC P_CRM_RPT_LinkProjectPartATrace #{cityNo}, #{projectNo}, #{currentYear}, #{startDate},#{endDate},#{pre3Month},#{userCode},#{clickType},#{statisticsNum}
+	</select>
+
+	<select id="queryCityList" parameterType="Map" resultType="cn.com.eju.deal.dto.common.CityDto">
+		SELECT
+			lc.cityId,
+			lc.cityNo,
+			c.cityName
+		FROM
+			BAS_LinkProjectTraceCity lc
+			JOIN BAS_City c ON lc.cityId = c.id
+			AND lc.delFlag = 0
+			AND lc.userCode =#{userCode}
+	</select>
+</mapper>

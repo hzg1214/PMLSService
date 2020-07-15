@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.wechat.dao.MsgDataMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.wechat.model.MsgData">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="toUser" property="toUser" jdbcType="VARCHAR" />
+		<result column="toParty" property="toParty" jdbcType="VARCHAR" />
+		<result column="toTag" property="totag" jdbcType="VARCHAR" />
+		<result column="msgType" property="msgtype" jdbcType="VARCHAR" />
+		<result column="agentid" property="agentid" jdbcType="INTEGER" />
+		<result column="safe" property="safe" jdbcType="INTEGER" />
+		<result column="sendFinishFlag" property="sendFinishFlag"
+			jdbcType="VARCHAR" />
+		<result column="delFlag" property="delFlag" jdbcType="BIT" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+		<collection property="msgDataDetailList" ofType="cn.com.eju.deal.wechat.model.MsgDataDetail">
+			<result column="content" property="content" jdbcType="NVARCHAR" />
+			<result column="mediaid" property="mediaid" jdbcType="VARCHAR" />
+			<result column="title" property="title" jdbcType="NVARCHAR" />
+			<result column="discription" property="discription" jdbcType="NVARCHAR" />
+			<result column="url" property="url" jdbcType="VARCHAR" />
+			<result column="picurl" property="picurl" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="unSendMsgList" type="cn.com.eju.deal.wechat.model.MsgData">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="toUser" property="toUser" jdbcType="VARCHAR" />
+		<result column="toParty" property="toParty" jdbcType="VARCHAR" />
+		<result column="toTag" property="totag" jdbcType="VARCHAR" />
+		<result column="msgType" property="msgtype" jdbcType="VARCHAR" />
+		<result column="agentid" property="agentid" jdbcType="INTEGER" />
+		<result column="safe" property="safe" jdbcType="INTEGER" />
+		<result column="sendFinishFlag" property="sendFinishFlag" jdbcType="VARCHAR" />
+		<collection property="msgDataDetailList" ofType="cn.com.eju.deal.wechat.model.MsgDataDetail">
+			<result column="content" property="content" jdbcType="NVARCHAR" />
+			<result column="mediaid" property="mediaid" jdbcType="VARCHAR" />
+			<result column="title" property="title" jdbcType="NVARCHAR" />
+			<result column="discription" property="discription" jdbcType="NVARCHAR" />
+			<result column="url" property="url" jdbcType="VARCHAR" />
+			<result column="picurl" property="picurl" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+	<!-- 查询所有未发送的消息 -->
+	<select id="queryUnsendMsgData" resultMap="unSendMsgList">
+		SELECT
+			T1.id,
+			T1.toUser ,
+			T1.toParty ,
+			T1.toTag ,
+			T1.msgType ,
+			T1.agentid ,
+			T1.safe ,
+			T2.content ,
+			T2.discription ,
+			T2.mediaid ,
+			T2.title ,
+			T2.url ,
+			T2.picurl
+		FROM dbo.WX_MsgData T1 
+			LEFT JOIN dbo.WX_MsgDataDetail T2
+			ON T1.id = T2.dataId 
+			AND T2.delFlag = 0
+		WHERE T1.delFlag = 0
+			AND T1.sendFinishFlag = '0'
+	</select>
+
+	<!-- 发送成功-更新sendFinishFlag 和 dateUpdate -->
+	<update id="updateMsgToSended">
+		UPDATE dbo.WX_MsgData
+		SET
+			dateUpdate = GETDATE() ,
+			sendFinishFlag = 1
+		WHERE id = #{id}
+	</update>
+
+</mapper>

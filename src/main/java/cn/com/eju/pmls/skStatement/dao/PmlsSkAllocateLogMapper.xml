@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateLogMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="skSerialNo" property="skSerialNo" jdbcType="VARCHAR" />
+    <result column="logMsg" property="logMsg" jdbcType="NVARCHAR" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="userIdUpdate" property="userIdUpdate" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, skSerialNo, logMsg, delFlag, dateCreate, userIdCreate, dateUpdate, userIdUpdate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from PMLS_SkAllocate_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from PMLS_SkAllocate_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateLog" useGeneratedKeys="true" keyProperty="id">
+    insert into PMLS_SkAllocate_log (skSerialNo, logMsg,
+      delFlag, dateCreate, userIdCreate)
+    values ( #{skSerialNo,jdbcType=VARCHAR}, #{logMsg,jdbcType=NVARCHAR},
+      0, getdate(), #{userIdCreate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateLog" >
+    insert into PMLS_SkAllocate_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="skSerialNo != null" >
+        skSerialNo,
+      </if>
+      <if test="logMsg != null" >
+        logMsg,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="skSerialNo != null" >
+        #{skSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logMsg != null" >
+        #{logMsg,jdbcType=NVARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateLog" >
+    update PMLS_SkAllocate_log
+    <set >
+      <if test="skSerialNo != null" >
+        skSerialNo = #{skSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logMsg != null" >
+        logMsg = #{logMsg,jdbcType=NVARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateLog" >
+    update PMLS_SkAllocate_log
+    set skSerialNo = #{skSerialNo,jdbcType=VARCHAR},
+      logMsg = #{logMsg,jdbcType=NVARCHAR},
+      delFlag = #{delFlag,jdbcType=BIT},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userIdUpdate = #{userIdUpdate,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getSkAllocateLogList" parameterType="Map" resultType="cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateLogDto">
+  SELECT  l.id
+          ,l.skSerialNo
+          ,l.logMsg
+          ,l.dateCreate
+          ,l.userIdCreate
+          ,u1.userName userNameCreate
+          ,l.dateUpdate
+          ,l.userIdUpdate
+          ,u2.userName userNameUpdate
+  FROM dbo.PMLS_SkAllocate_log (NOLOCK) l
+  LEFT JOIN dbo.USR_User u1 ON u1.userId = l.userIdCreate
+  LEFT JOIN dbo.USR_User u2 ON u2.userId = l.userIdUpdate
+  WHERE l.delFlag = 0
+    AND skSerialNo = #{skSerialNo,jdbcType=VARCHAR}
+  ORDER BY l.id DESC
+  </select>
+</mapper>

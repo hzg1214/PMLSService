@@ -1,0 +1,34 @@
+package cn.com.eju.pmls.jsStatement.dto;
+
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatement;
+
+public class PmlsJsStatementDto extends PmlsJsStatement {
+
+    private String approveStatusNm;
+    private String userCreateName;
+    private String userCreateCode;
+
+    public String getUserCreateCode() {
+		return userCreateCode;
+	}
+
+	public void setUserCreateCode(String userCreateCode) {
+		this.userCreateCode = userCreateCode;
+	}
+
+	public String getApproveStatusNm() {
+        return approveStatusNm;
+    }
+
+    public void setApproveStatusNm(String approveStatusNm) {
+        this.approveStatusNm = approveStatusNm;
+    }
+
+    public String getUserCreateName() {
+        return userCreateName;
+    }
+
+    public void setUserCreateName(String userCreateName) {
+        this.userCreateName = userCreateName;
+    }
+}

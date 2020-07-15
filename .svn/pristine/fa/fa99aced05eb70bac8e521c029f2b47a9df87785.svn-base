@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.commission.dao.CommissionMapper">
+
+	<resultMap id="CommissionImportDtoMap" type="cn.com.eju.pmls.commission.dto.CommissionImportDto"/>
+
+	<select id="queryCityList" parameterType="java.util.Map" resultMap="CommissionImportDtoMap">
+	SELECT DISTINCT t3.cityNo,t3.cityName FROM cloud_hbl_fy_org_ref t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId=t2.id INNER JOIN OMS.dbo.BAS_BonusUse_Setting t3 ON t3.cityNo=t2.CityNo AND RIGHT(t1.year,2)=RIGHT(t3.year,2)
+		WHERE t1.year='${year}' AND orgType='CITY'AND t3.userCode=#{userCode} and t3.delFlag = 'N'
+
+	</select>
+
+	<select id="queryBusinessTypeList" parameterType="java.util.Map" resultMap="CommissionImportDtoMap">
+		SELECT dicCode businessTypeCode,dicValue businessTypeName
+		FROM oms.dbo.BAS_DictionaryValue t1
+		INNER JOIN (
+			SELECT a.userCode,a.cityNo,b.businessType
+			FROM (
+			SELECT userCode,cityNo,[businessType]=<![CDATA[CAST('<v>'+REPLACE([businessType],',','</v><v>')+'</v>' AS xml)]]> FROM OMS.dbo.BAS_BonusUse_Setting
+			WHERE userCode='${userCode}' AND cityNo='${cityNo}'
+			AND delFlag = 'N' and 'FY'+right(year,2)='${year}'
+			) a
+			OUTER APPLY (SELECT [businessType]=T.C.value('.','varchar(50)') FROM a.[businessType].nodes('/v') AS T(C)) b
+		) t2 ON t1.dicCode = t2.businessType
+		WHERE t1.typeId='192' AND t1.delFlag='N'
+	</select>
+
+	<select id="checkAccount" parameterType="cn.com.eju.pmls.commission.dto.CommissionImportDto" resultMap="CommissionImportDtoMap">
+		SELECT cityNo FROM Pmls_Perform_Switch
+		WHERE relateSystem='${relateSystem}' AND switchState = '27502' AND cityNo = '${cityNo}' AND switchYear = '${year}' AND switchMonth = '${month}'
+	</select>
+
+	<select id="getLatestAccountMonth" parameterType="cn.com.eju.pmls.commission.dto.CommissionImportDto" resultMap="CommissionImportDtoMap">
+		SELECT TOP 1 switchYear+'-'+switchMonth AS dateMonth FROM Pmls_Perform_Switch
+		WHERE relateSystem='${relateSystem}' AND switchState = '27502' AND cityNo = '${cityNo}'
+		ORDER BY switchYear DESC,switchMonth DESC
+	</select>
+
+	<select id="checkData" parameterType="cn.com.eju.pmls.commission.dto.CommissionImportDto" resultMap="CommissionImportDtoMap">
+		SELECT * INTO #temp_import FROM(
+		<foreach collection="importDtos" item="item" index="index" separator=" UNION ALL ">
+			SELECT ${index}+1 AS id,'${item.cityNo}' AS cityNo,'${item.dateMonth}' AS monthStr,
+			'${item.accountProjectCode}' AS accountProjectCode,'${item.accountProjectName}' AS accountProjectName,
+			'${item.checkBodyCode}' AS checkBodyCode,'${item.checkBodyName}' AS checkBodyName,
+			'${item.costCode}' AS costCode,'${item.costName}' AS costName,
+			'${item.projectNo}' AS projectNo,'${item.projectName}' AS projectName,
+			'${item.userCode}' AS userCode,'${item.userName}' AS userName,
+			'${item.serviceType}' AS serviceType,'${item.jobBonus}' AS jobBonus,
+			'${item.teamBonus}' AS teamBonus,'${item.date}' AS countDate
+		</foreach>
+		)t
+
+		<!--不匹配的名称或编号-->
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		temp.accountProjectCode,'' accountProjectName,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.accountProjectCode = cs.accountProjectCode
+		WHERE cs.accountProjectCode IS NULL
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		'' accountProjectCode,temp.accountProjectName,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.accountProjectName = cs.accountProject
+		WHERE cs.accountProject IS NULL
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'d' resultType,
+		'' accountProjectCode,temp.accountProjectName,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.accountProjectCode = cs.accountProjectCode AND temp.accountProjectName = cs.accountProject
+		WHERE cs.accountProjectCode IS NULL
+
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		'' accountProjectCode,'' accountProjectCode,temp.checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.checkBodyCode = cs.decheckBodyId
+		WHERE cs.decheckBodyId IS NULL
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,temp.checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.checkBodyName = cs.decheckBodyName
+		WHERE cs.decheckBodyName IS NULL
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'d' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,temp.checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.checkBodyCode = cs.decheckBodyId AND temp.checkBodyName = cs.decheckBodyName
+		WHERE cs.decheckBodyId IS NULL
+
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,temp.costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.costCode = cs.costCode
+		WHERE cs.costCode IS NULL and temp.costCode!=''
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,temp.costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.costName = cs.costName
+		WHERE cs.costName IS NULL and temp.costCode!=''
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'d' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,temp.costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.costCode = cs.costCode AND temp.costName = cs.costName
+		WHERE cs.costCode IS NULL and temp.costCode!=''
+
+		<!--已弃用的考核code 成本code start-->
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'e' resultType,
+		'' accountProjectCode,'' accountProjectCode,temp.checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN [10.0.3.21].yusuan.dbo.cux_kaohe_bind_block_v cs
+		ON temp.checkBodyCode = cs.KH_CODE
+		WHERE cs.KH_CODE IS NULL
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'e' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,temp.checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN [10.0.3.21].yusuan.dbo.cux_kaohe_bind_block_v cs
+		ON temp.checkBodyName = cs.KH_NAME
+		WHERE cs.KH_NAME IS NULL
+
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'e' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,temp.costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN [10.0.3.21].yusuan.dbo.cux_chenben_bind_block_v cs
+		ON temp.costCode = cs.COST_CODE
+		WHERE cs.COST_CODE IS NULL and temp.costCode!=''
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'e' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,temp.costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN [10.0.3.21].yusuan.dbo.cux_chenben_bind_block_v cs
+		ON temp.costName = cs.COST_NAME
+		WHERE cs.COST_NAME IS NULL and temp.costCode!=''
+		<!--已弃用的考核code 成本code end-->
+
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,temp.projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN (
+		SELECT t1.* FROM V_HBL_ProjectInfo t1
+		INNER JOIN  [10.0.3.21].yusuan.dbo.eju_project_v t2 ON t1.projectNo=t2.flex_value
+		) cs
+		ON temp.projectNo = cs.projectNo
+		WHERE cs.projectNo IS NULL  and temp.projectNo !=''
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,temp.projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN (
+		SELECT t1.* FROM V_HBL_ProjectInfo t1
+		INNER JOIN  [10.0.3.21].yusuan.dbo.eju_project_v t2 ON t1.projectNo=t2.flex_value
+		) cs
+		ON temp.projectName = cs.EstateNm
+		WHERE cs.EstateNm IS NULL and temp.projectNo !=''
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'d' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,temp.projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN (
+		SELECT t1.* FROM V_HBL_ProjectInfo t1
+		INNER JOIN  [10.0.3.21].yusuan.dbo.eju_project_v t2 ON t1.projectNo=t2.flex_value
+		) cs
+		ON temp.projectNo = cs.projectNo AND temp.projectName = cs.EstateNm
+		WHERE cs.projectNo IS NULL  and temp.projectNo !=''
+		<if test="importType == 'kf'">
+			UNION ALL
+			SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+			'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,temp.userCode,'' userName
+			FROM #temp_import temp
+			LEFT JOIN [10.0.3.21].yusuan.dbo.eju_emp_number_v_ALL cs
+			ON temp.userCode = cs.EMPLOYEE_NUMBER
+			WHERE cs.EMPLOYEE_NUMBER IS NULL
+			UNION ALL
+			SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'a' resultType,
+			'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,temp.userName
+			FROM #temp_import temp
+			LEFT JOIN [10.0.3.21].yusuan.dbo.eju_emp_number_v_ALL cs
+			ON temp.userName = cs.EMPLOYEE_NAME
+			WHERE cs.EMPLOYEE_NAME IS NULL
+			UNION ALL
+			SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'d' resultType,
+			'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,'' projectName,'' userCode,temp.userName
+			FROM #temp_import temp
+			LEFT JOIN [10.0.3.21].yusuan.dbo.eju_emp_number_v_ALL cs
+			ON temp.userCode = cs.EMPLOYEE_NUMBER AND temp.userName = cs.EMPLOYEE_NAME
+			WHERE cs.EMPLOYEE_NUMBER IS NULL
+		</if>
+
+		<!--项目或成本中心和所选城市不匹配-->
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'b' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,temp.costCode,'' costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		INNER JOIN	BAS_City city
+		ON temp.cityNo = city.cityNo
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.costCode = cs.costCode AND city.id = cs.cityId
+		WHERE cs.costCode IS NULL and temp.costCode!=''
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'b' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,temp.costName,'' projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		INNER JOIN	BAS_City city
+		ON temp.cityNo = city.cityNo
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.costName = cs.costName AND city.id = cs.cityId
+		WHERE cs.costName IS NULL and temp.costCode!=''
+
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'b' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,temp.projectNo,'' projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN V_HBL_ProjectInfo cs
+		ON temp.projectNo = cs.projectNo AND temp.cityNo = cs.cityNo
+		WHERE cs.projectNo IS NULL and temp.projectNo !=''
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'b' resultType,
+		'' accountProjectCode,'' accountProjectCode,'' checkBodyCode,'' checkBodyName,'' costCode,'' costName,'' projectNo,temp.projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		LEFT JOIN V_HBL_ProjectInfo cs
+		ON temp.projectName = cs.EstateNm AND temp.cityNo = cs.cityNo
+		WHERE cs.EstateNm IS NULL and temp.projectNo !=''
+
+		<!--项目对应的城市和核算主体，考核主体是否匹配-->
+		UNION ALL
+		SELECT temp.id,temp.monthStr,temp.countDate,temp.serviceType,temp.jobBonus,temp.teamBonus,'c' resultType,
+		temp.accountProjectCode,temp.accountProjectName,temp.checkBodyCode,temp.checkBodyName,'' costCode,'' costName,temp.projectNo,temp.projectName,'' userCode,'' userName
+		FROM #temp_import temp
+		INNER JOIN	BAS_City city
+		ON temp.cityNo = city.cityNo
+		INNER JOIN	V_HBL_ProjectInfo project
+		ON temp.projectNo = project.projectNo AND temp.projectName = project.EstateNm AND temp.cityNo = project.cityNo
+		LEFT JOIN BAS_CenterSetting cs
+		ON temp.accountProjectCode = cs.accountProjectCode AND temp.accountProjectName = cs.accountProject
+		AND temp.checkBodyCode = cs.decheckBodyId AND temp.checkBodyName = cs.decheckBodyName
+		AND city.id = cs.cityId
+		WHERE cs.cityId IS NULL
+		ORDER BY temp.id,resultType
+
+		DROP TABLE #temp_import
+	</select>
+
+	<select id="queryYjList" parameterType="java.util.Map" resultMap="CommissionImportDtoMap">
+		SELECT accountProjectCode,accountProjectName,checkBodyCode,checkBodyName,costCode,costName,
+		projectNo,projectName,serviceType,jobBonus,teamBonus,countDate
+		FROM bonus_accrued_import t1
+		INNER JOIN OMS.dbo.BAS_BonusUse_Setting t2 ON t1.cityNo=t2.CityNo AND LEFT(t1.monthStr,4)=t2.year AND delFlag='N'
+		WHERE t2.userCode=#{loginUser}
+		and t1.cityNo = '${cityNo}' AND monthStr = '${dateMonth}'
+		<if test="businessTypeCode == '19201'">
+			AND serviceType = '联动'
+		</if>
+		<if test="businessTypeCode == '19202'">
+			AND serviceType != '联动'
+		</if>
+		ORDER BY t1.id
+	</select>
+
+	<select id="queryKfList" parameterType="java.util.Map" resultMap="CommissionImportDtoMap">
+		SELECT accountProjectCode,accountProjectName,checkBodyCode,checkBodyName,costCode,costName,
+		projectNo,projectName,t1.userCode,userName,serviceType,jobBonus,teamBonus,canSendDate
+		FROM bonus_actual_import t1
+		INNER JOIN OMS.dbo.BAS_BonusUse_Setting t2 ON t1.cityNo=t2.CityNo AND LEFT(t1.monthStr,4)=t2.year AND delFlag='N'
+		WHERE t2.userCode=#{loginUser}
+		and t1.cityNo = '${cityNo}' AND monthStr = '${dateMonth}'
+		<if test="businessTypeCode == '19201'">
+			AND serviceType = '联动'
+		</if>
+		<if test="businessTypeCode == '19202'">
+			AND serviceType != '联动'
+		</if>
+		ORDER BY t1.id
+	</select>
+
+	<delete id="deleteYjData" parameterType="cn.com.eju.pmls.commission.dto.CommissionImportDto">
+		DELETE bonus_accrued_import
+		WHERE cityNo='${cityNo}' AND monthStr='${dateMonth}'
+		<if test="businessTypeCode == '19201'">
+			AND serviceType = '联动'
+		</if>
+		<if test="businessTypeCode == '19202'">
+			AND serviceType != '联动'
+		</if>
+	</delete>
+
+	<delete id="deleteKfData" parameterType="cn.com.eju.pmls.commission.dto.CommissionImportDto">
+		DELETE bonus_actual_import
+		WHERE cityNo='${cityNo}' AND monthStr='${dateMonth}'
+		<if test="businessTypeCode == '19201'">
+			AND serviceType = '联动'
+		</if>
+		<if test="businessTypeCode == '19202'">
+			AND serviceType != '联动'
+		</if>
+	</delete>
+
+</mapper>

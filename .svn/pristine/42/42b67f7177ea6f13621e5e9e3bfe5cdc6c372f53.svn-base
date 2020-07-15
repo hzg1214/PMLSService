@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.report.dao.LnkReportYJFAMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.report.model.LnkReportYJFA" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="reportId" property="reportId" jdbcType="NVARCHAR" />
+    <result column="companyNo" property="companyNo" jdbcType="NVARCHAR" />
+    <result column="programmeId" property="programmeId" jdbcType="INTEGER" />
+    <result column="delFlg" property="delFlg" jdbcType="BIT" />
+    <result column="crtDt" property="crtDt" jdbcType="TIMESTAMP" />
+    <result column="crtEmpId" property="crtEmpId" jdbcType="INTEGER" />
+    <result column="uptEmpId" property="uptEmpId" jdbcType="INTEGER" />
+    <result column="uptDt" property="uptDt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, reportId, companyNo, programmeId, delFlg, crtDt, crtEmpId, uptEmpId, uptDt
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from LNK_Report_YJFA
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from LNK_Report_YJFA
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.report.model.LnkReportYJFA" >
+    insert into LNK_Report_YJFA (id, reportId, companyNo, 
+      programmeId, delFlg, crtDt, 
+      crtEmpId, uptEmpId, uptDt
+      )
+    values (#{id,jdbcType=INTEGER}, #{reportId,jdbcType=NVARCHAR}, #{companyNo,jdbcType=NVARCHAR}, 
+      #{programmeId,jdbcType=INTEGER}, #{delFlg,jdbcType=BIT}, #{crtDt,jdbcType=TIMESTAMP}, 
+      #{crtEmpId,jdbcType=INTEGER}, #{uptEmpId,jdbcType=INTEGER}, #{uptDt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.report.model.LnkReportYJFA" >
+    insert into LNK_Report_YJFA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="reportId != null" >
+        reportId,
+      </if>
+      <if test="companyNo != null" >
+        companyNo,
+      </if>
+      <if test="programmeId != null" >
+        programmeId,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="crtDt != null" >
+        crtDt,
+      </if>
+      <if test="crtEmpId != null" >
+        crtEmpId,
+      </if>
+      <if test="uptEmpId != null" >
+        uptEmpId,
+      </if>
+      <if test="uptDt != null" >
+        uptDt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=NVARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="programmeId != null" >
+        #{programmeId,jdbcType=INTEGER},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=BIT},
+      </if>
+      <if test="crtDt != null" >
+        #{crtDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="crtEmpId != null" >
+        #{crtEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="uptEmpId != null" >
+        #{uptEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="uptDt != null" >
+        #{uptDt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.report.model.LnkReportYJFA" >
+    update LNK_Report_YJFA
+    <set >
+      <if test="reportId != null" >
+        reportId = #{reportId,jdbcType=NVARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        companyNo = #{companyNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="programmeId != null" >
+        programmeId = #{programmeId,jdbcType=INTEGER},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=BIT},
+      </if>
+      <if test="crtDt != null" >
+        crtDt = #{crtDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="crtEmpId != null" >
+        crtEmpId = #{crtEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="uptEmpId != null" >
+        uptEmpId = #{uptEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="uptDt != null" >
+        uptDt = #{uptDt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.report.model.LnkReportYJFA" >
+    update LNK_Report_YJFA
+    set reportId = #{reportId,jdbcType=NVARCHAR},
+      companyNo = #{companyNo,jdbcType=NVARCHAR},
+      programmeId = #{programmeId,jdbcType=INTEGER},
+      delFlg = #{delFlg,jdbcType=BIT},
+      crtDt = #{crtDt,jdbcType=TIMESTAMP},
+      crtEmpId = #{crtEmpId,jdbcType=INTEGER},
+      uptEmpId = #{uptEmpId,jdbcType=INTEGER},
+      uptDt = #{uptDt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <update id="logicDeleteByReportId" parameterType="Map" >
+    update LNK_Report_YJFA set delFlg = 1,uptDt = getdate(),uptEmpId = #{uptEmpId}
+    where delFlg = 0 AND reportId = #{reportId}
+  </update>
+
+  <select id="mergeInsert" parameterType="Map" >
+      MERGE INTO dbo.LNK_Report_YJFA s1
+      USING (SELECT #{reportId} AS reportId,#{companyNo} AS companyNo,#{programmeId} AS programmeId) AS s2
+         ON s1.ReportId=s2.reportId AND s1.companyNo=s2.companyNo
+      WHEN MATCHED THEN
+       UPDATE SET s1.DelFlg=0,s1.UptEmpId=#{uptEmpId},s1.UptDt=getdate(),s1.programmeId=#{programmeId}
+      WHEN NOT MATCHED THEN
+      INSERT (reportId, companyNo,programmeId, delFlg, crtDt,crtEmpId, uptEmpId, uptDt)
+      VALUES (#{reportId}, #{companyNo},#{programmeId}, 0, getdate(),#{crtEmpId}, #{uptEmpId}, getdate());
+  </select>
+</mapper>

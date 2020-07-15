@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.image.ImgMapper" >
+
+
+	<insert id="addImg" parameterType="java.util.List">
+		INSERT INTO Pic_Picture_Ref (
+			pictureRefId,
+			smallPictureUrl,
+			middlePictureUrl,
+			bigPictureUrl,
+			createUser,
+			createTime,
+			pictureStatus
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+			#{item.pictureRefId},
+			#{item.smallPictureUrl},
+			#{item.middlePictureUrl},
+			#{item.bigPictureUrl},
+			#{item.createUser},
+			getdate(),
+			0
+		)
+		</foreach>
+	</insert>
+
+	<delete id="deleteImg" parameterType="cn.com.eju.deal.model.sweepStreets.WXPictureDto">
+		update Pic_Picture_Ref set pictureStatus=1 where pictureRefId=#{pictureRefId}
+	</delete>
+</mapper>

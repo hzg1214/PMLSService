@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.report.projectDetail.dao.PmlsProjectDetailMapper">
+
+	<select id="queryList" parameterType="Map" resultType="cn.com.eju.pmls.report.projectDetail.dto.ProjectDetailDto">
+		SELECT row_number() OVER(ORDER BY org.regionCode, org.areaCityCode,e.projectNo,ht.htDateStart) rowNum,
+		dbo.F_ClearNullStr(org.regionName) gsRegion,--项目归属区域
+		dbo.F_ClearNullStr(org.areaCityName) gsCity,--项目归属城市
+		dbo.F_ClearNullStr(c1.CityName) szCity,--项目所在城市
+		dbo.F_ClearNullStr(g.groupName) gsDepartment,--项目归属项目部
+		dbo.F_ClearNullStr(e.projectNo) projectNo,--项目编码
+		dbo.F_ClearNullStr(EstateNm) projectName,--项目名称
+		dbo.F_ClearNullStr(d1.dicValue) projectStatus,--项目状态
+		dbo.F_ClearNullStr(d2.dicValue) businessModel,--业务模式
+		dbo.F_ClearNullStr(drd.developerBrandName) developerBrandName,--开发商品牌
+		dbo.F_ClearNullStr(e.developerName) developerName,--开发商名称
+		dbo.F_ClearNullStr(d3.dicValue) isBigCustomer,--是否大客户
+		dbo.F_ClearNullStr(d4.dicValue) partnerType,--合作方类型
+		dbo.F_ClearNullStr(e.developerBrandName) partnerBrandName,--合作方品牌
+		dbo.F_ClearNullStr(PartnerNm) partnerName,--合作方名称
+		dbo.F_ClearNullStr(d5.dicValue) totalFieldFlag,--共场
+		dbo.F_ClearNullStr(d6.dicValue) directSignFlag,--是否直签
+		dbo.F_ClearNullDate(ht.htDateStart) cooperationDtStart,--合作开始时间
+		dbo.F_ClearNullDate(ht.htDateEnd) cooperationDtEnd,--合作结束时间
+		dbo.F_ClearNullStr(ht.srlhtOaNo) srlHtNo,--收入类合同编号
+		dbo.F_ClearNullStr(MgtKbn) mgtKbn,--物业类型
+		dbo.F_ClearNullStr(c2.CityName) realCity,--楼盘地理城市
+		dbo.F_ClearNullStr(dis.DistrictName) realDistrict,--楼盘区域
+		dbo.F_ClearNullStr(u1.userName) sceneEmpName,--开发负责人
+		dbo.F_ClearNullStr(u1.userCode) sceneEmpCode,--开发负责人工号
+		dbo.F_ClearNullStr(u2.userName) projectLeaderEmpName,--项目负责人
+		dbo.F_ClearNullStr(u2.userCode) projectLeaderEmpCode--项目负责人工号
+		FROM dbo.LNK_Estate e (NOLOCK)
+		LEFT JOIN dbo.LNK_Estate_Srlht ht (NOLOCK) ON ht.delFlag=0 AND ht.projectNo = e.projectNo
+		LEFT JOIN dbo.BAS_City c1(NOLOCK) ON c1.CityNo=e.CityNo
+		LEFT JOIN ( SELECT distinct yearly, regionCode, regionName, areaCityCode, areaCityName, cityGroupId, cityGroupName,cityId
+		FROM dbo.V_USR_OrgHis WHERE yearly = #{organization, jdbcType=VARCHAR}
+		) org ON c1.ID = org.cityId
+		LEFT JOIN dbo.USR_Group g (NOLOCK) ON e.projectDepartmentId=g.groupId AND g.delFlag='N'
+		LEFT JOIN dbo.BAS_DictionaryValue d1 (NOLOCK) ON d1.dicCode = projectStatus
+		LEFT JOIN dbo.BAS_DictionaryValue d2 (NOLOCK) ON d2.dicCode = businessModel
+		LEFT JOIN dbo.PMLS_Developer d (NOLOCK) ON d.id=e.devCompanyId
+		LEFT JOIN dbo.PMLS_DeveloperBrand drd (NOLOCK) ON d.developerBrandId=drd.id
+		LEFT JOIN dbo.BAS_DictionaryValue d3 (NOLOCK) ON d3.dicCode = e.bigCustomerFlag
+		LEFT JOIN dbo.BAS_DictionaryValue d4 (NOLOCK) ON d4.dicCode = e.Partner
+		LEFT JOIN dbo.BAS_DictionaryValue d5 (NOLOCK) ON d5.dicCode = totalFieldFlag
+		LEFT JOIN dbo.BAS_DictionaryValue d6 (NOLOCK) ON d6.dicCode = directSignFlag
+		LEFT JOIN dbo.BAS_City c2 (NOLOCK) ON c2.CityNo = e.realityCityNo
+		LEFT JOIN dbo.BAS_District dis (NOLOCK) ON dis.DistrictNo = e.DistrictId
+		LEFT JOIN dbo.USR_User u1 (NOLOCK) ON u1.userId = SceneEmpId
+		LEFT JOIN dbo.USR_User u2 (NOLOCK) ON u2.userId = projectLeaderEmpId
+		<where>
+			<if test="areaCityCodeList != null">
+				AND org.areaCityCode IN
+				<foreach collection="areaCityCodeList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="cityIdList != null">
+				AND org.cityId IN
+				<foreach collection="cityIdList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="projectDepartmentId != null and projectDepartmentId !=''">
+				<![CDATA[
+  				AND e.projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER}
+  				]]>
+			</if>
+			<if test="projectStatusStr != null and projectStatusStr !=''">
+				<![CDATA[
+  				AND e.projectStatus in (${projectStatusStr})
+  				]]>
+			</if>
+
+			<if test="estateNmKey != null and estateNmKey != ''">
+				AND (e.projectNo like '${estateNmKey}%' OR e.estateNm like '%${estateNmKey}%')
+			</if>
+		</where>
+		ORDER BY org.regionCode, org.areaCityCode, e.projectNo,ht.htDateStart
+	</select>
+</mapper>

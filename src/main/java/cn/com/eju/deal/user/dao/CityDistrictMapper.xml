@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.CityDistrictMapper" >
+  <sql id="Base_Column_CityList" >
+    groupId,cityId,cityName,delFlag
+  </sql>
+  <sql id="Base_Column_DistrictList" >
+    groupId,districtId,districtName,delFlag 
+  </sql>
+  <select id="selectCityByCityId" resultType="cn.com.eju.deal.user.model.CityDistrictMapping" parameterType="java.lang.Integer" >
+    select 
+     cityId,delFlag
+    from USR_GroupCityMapping 
+	where  cityId=#{cityId,jdbcType=INTEGER}
+  </select>
+  <select id="selectDistrictByDistrictId" resultType="cn.com.eju.deal.user.model.CityDistrictMapping" parameterType="java.lang.Integer" >
+    select 
+     districtId,delFlag
+    from USR_GroupDistrictMapping 
+	where  districtId=#{districtId,jdbcType=INTEGER}
+  </select>
+  <select id="queryCityList" resultType="cn.com.eju.deal.user.model.CityDistrictMapping" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_CityList" />
+    from USR_GroupCityMapping t,BAS_City t2 
+	where t.cityId=t2.id 
+	and t.delFlag='N' 
+    and t.groupId=#{groupId,jdbcType=INTEGER}
+    order by t.dateCreate desc
+  </select>
+  
+  <select id="queryDistrictList" resultType="cn.com.eju.deal.user.model.CityDistrictMapping" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_DistrictList" />
+    from USR_GroupDistrictMapping t,BAS_District t2 
+	where t.districtId=t2.id 
+	and t.delFlag='N' 
+	and t.groupId=#{groupId,jdbcType=INTEGER}
+    order by t.dateCreate desc
+  </select>
+  
+  <select id="queryDistrictByCityName" resultType="cn.com.eju.deal.user.model.CityDistrictMapping" parameterType="java.lang.String" >
+    select 
+    id as districtId,districtName
+    from BAS_District 
+	where   state=1
+	and cityName=#{cityName,jdbcType=NVARCHAR}
+  </select>
+  
+  <select id="queryAllCity" resultType="cn.com.eju.deal.user.model.CityDistrictMapping" >
+   select id as cityId,cityName 
+   	from BAS_City  
+   where state=1 and isService=1
+  </select>
+  
+  <update id="deleteCityByPrimaryKey" parameterType="java.lang.Integer" >
+     update USR_GroupCityMapping SET
+      delFlag = 'Y'
+     where cityId = #{cityId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="deleteDistrictByPrimaryKey" parameterType="java.lang.Integer" >
+     update USR_GroupDistrictMapping SET
+      delFlag = 'Y'
+     where districtId = #{districtId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateCityByCityId" parameterType="cn.com.eju.deal.user.model.CityDistrictMapping" >
+     update USR_GroupCityMapping SET
+      delFlag = #{delFlag,jdbcType=NVARCHAR}
+     where cityId = #{cityId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateDistrictByDistrictId" parameterType="cn.com.eju.deal.user.model.CityDistrictMapping" >
+     update USR_GroupDistrictMapping SET
+      delFlag = #{delFlag,jdbcType=NVARCHAR}
+     where districtId = #{districtId,jdbcType=INTEGER}
+  </update>
+  
+  <insert id="insertGroupCity" parameterType="cn.com.eju.deal.user.model.CityDistrictMapping" >
+    insert into USR_GroupCityMapping (groupId,cityId,userIdCreate)
+    values (#{groupId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER},#{userIdCreate,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertGroupDistrict" parameterType="cn.com.eju.deal.user.model.CityDistrictMapping" >
+    insert into USR_GroupDistrictMapping (groupId,districtId,userIdCreate)
+    values (#{groupId,jdbcType=INTEGER}, #{districtId,jdbcType=INTEGER},#{userIdCreate,jdbcType=INTEGER})
+  </insert>
+</mapper>

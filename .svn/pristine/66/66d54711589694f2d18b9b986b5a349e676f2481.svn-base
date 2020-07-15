@@ -1,0 +1,157 @@
+package cn.com.eju.pmls.jsStatement.controller;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsStatementDto;
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatement;
+import cn.com.eju.pmls.jsStatement.service.JsStatementService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("jsStatementController")
+public class JsStatementController {
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Autowired
+    JsStatementService jsStatementService;
+
+    @RequestMapping(value = "/queryList/{param}", method = RequestMethod.GET)
+    public String queryList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/toInvalid", method = RequestMethod.POST)
+    public String toInvalid(@RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try {
+            PmlsJsStatement statement = JsonUtil.parseToObject(json, PmlsJsStatement.class);
+            resultData = jsStatementService.toInvalid(statement);
+        } catch (Exception e) {
+            logger.error("jsStatementController.toInvalid:作废结算书操作发生异常param:" + json, e);
+            resultData.setFail("操作发生异常，请联系管理员！");
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/toTermination", method = RequestMethod.POST)
+    public String toTermination(@RequestBody String json) {
+        ResultData resultData = new ResultData();
+        try {
+            PmlsJsStatement statement = JsonUtil.parseToObject(json, PmlsJsStatement.class);
+            resultData = jsStatementService.toTermination(statement);
+        } catch (Exception e) {
+            logger.error("jsStatementController.toTermination:终止结算书操作发生异常param:" + json, e);
+            resultData.setFail("操作发生异常，请联系管理员！");
+        }
+        return resultData.toString();
+    }
+
+
+
+    @RequestMapping(value = "/queryJsCompanyList/{param}", method = RequestMethod.GET)
+    public String queryJsCompanyList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryJsCompanyList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryJsCompanyList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/queryJsProjectList/{param}", method = RequestMethod.GET)
+    public String queryJsProjectList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryJsProjectList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryJsProjectList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/queryJsHSCodeList/{param}", method = RequestMethod.GET)
+    public String queryJsHSCodeList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryJsHSCodeList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryJsHSCodeList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/queryJsKHCodeList/{param}", method = RequestMethod.GET)
+    public String queryJsKHCodeList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryJsKHCodeList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryJsKHCodeList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/queryJsFrameOaList/{param}", method = RequestMethod.GET)
+    public String queryJsFrameOaList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryJsFrameOaList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryJsFrameOaList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/queryJsNormalReportList/{param}", method = RequestMethod.GET)
+    public String queryJsNormalReportList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryJsNormalReportList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryJsNormalReportList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/queryJsOffsetReportList/{param}", method = RequestMethod.GET)
+    public String queryJsOffsetReportList(@PathVariable String param) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = jsStatementService.queryJsOffsetReportList(queryParam);
+        } catch (Exception e) {
+            logger.error("JsStatementController.queryJsOffsetReportList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+
+}

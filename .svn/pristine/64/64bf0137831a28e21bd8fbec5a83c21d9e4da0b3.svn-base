@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.youFangTongBind.dao.YouFangTongBindMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.youFangTongBind.model.YftEjuBind">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="yftUserId" jdbcType="INTEGER" property="yftUserId" />
+    <result column="yftUserName" jdbcType="NVARCHAR" property="yftUserName" />
+    <result column="yftUserTel" jdbcType="VARCHAR" property="yftUserTel" />
+    <result column="yftStoreNo" jdbcType="NVARCHAR" property="yftStoreNo" />
+    <result column="yftStoreName" jdbcType="NVARCHAR" property="yftStoreName" />
+    <result column="ejuUserCode" jdbcType="VARCHAR" property="ejuUserCode" />
+    <result column="ejuUserName" jdbcType="NVARCHAR" property="ejuUserName" />
+    <result column="ejuUserTel" jdbcType="VARCHAR" property="ejuUserTel" />
+    <result column="startDate" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="endDate" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="unBindDate" jdbcType="TIMESTAMP" property="unBindDate" />
+    <result column="reason" jdbcType="NVARCHAR" property="reason" />
+    <result column="remarks" jdbcType="NVARCHAR" property="remarks" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, yftUserId, yftUserName, yftUserTel, yftStoreNo, yftStoreName, ejuUserCode, ejuUserName, ejuUserTel, startDate, endDate, unBindDate, reason, remarks,createDate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from YFT_EJU_Bind
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from YFT_EJU_Bind
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.youFangTongBind.model.YftEjuBind">
+    insert into YFT_EJU_Bind (id, yftUserId, yftUserName, yftUserTel, yftStoreNo, yftStoreName,
+      ejuUserCode, ejuUserName, ejuUserTel,
+       startDate, endDate, unBindDate, reason, remarks,createDate
+      )
+    values (#{id,jdbcType=INTEGER}, #{yftUserId,jdbcType=INTEGER}, #{yftUserName,jdbcType=NVARCHAR},
+      #{yftUserTel,jdbcType=VARCHAR}, #{yftStoreNo,jdbcType=NVARCHAR}, #{yftStoreName,jdbcType=NVARCHAR},
+      #{ejuUserCode,jdbcType=VARCHAR}, #{ejuUserName,jdbcType=NVARCHAR}, #{ejuUserTel,jdbcType=VARCHAR},
+      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{unBindDate,jdbcType=TIMESTAMP},
+      #{reason,jdbcType=NVARCHAR}, #{remarks,jdbcType=NVARCHAR},#{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.youFangTongBind.model.YftEjuBind">
+    insert into YFT_EJU_Bind
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="yftUserId != null">
+        yftUserId,
+      </if>
+      <if test="yftUserName != null">
+        yftUserName,
+      </if>
+      <if test="yftUserTel != null">
+        yftUserTel,
+      </if>
+      <if test="yftStoreNo != null">
+        yftStoreNo,
+      </if>
+      <if test="yftStoreName != null">
+        yftStoreName,
+      </if>
+      <if test="ejuUserCode != null">
+        ejuUserCode,
+      </if>
+      <if test="ejuUserName != null">
+        ejuUserName,
+      </if>
+      <if test="ejuUserTel != null">
+        ejuUserTel,
+      </if>
+      <if test="startDate != null">
+        startDate,
+      </if>
+      <if test="endDate != null">
+        endDate,
+      </if>
+      <if test="unBindDate != null">
+        unBindDate,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="yftUserId != null">
+        #{yftUserId,jdbcType=INTEGER},
+      </if>
+      <if test="yftUserName != null">
+        #{yftUserName,jdbcType=NVARCHAR},
+      </if>
+      <if test="yftUserTel != null">
+        #{yftUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="yftStoreNo != null">
+        #{yftStoreNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="yftStoreName != null">
+        #{yftStoreName,jdbcType=NVARCHAR},
+      </if>
+      <if test="ejuUserCode != null">
+        #{ejuUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ejuUserName != null">
+        #{ejuUserName,jdbcType=NVARCHAR},
+      </if>
+      <if test="ejuUserTel != null">
+        #{ejuUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unBindDate != null">
+        #{unBindDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.youFangTongBind.model.YftEjuBind">
+    update YFT_EJU_Bind
+    <set>
+      <if test="yftUserId != null">
+        yftUserId = #{yftUserId,jdbcType=INTEGER},
+      </if>
+      <if test="yftUserName != null">
+        yftUserName = #{yftUserName,jdbcType=NVARCHAR},
+      </if>
+      <if test="yftUserTel != null">
+        yftUserTel = #{yftUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="yftStoreNo != null">
+        yftStoreNo = #{yftStoreNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="yftStoreName != null">
+        yftStoreName = #{yftStoreName,jdbcType=NVARCHAR},
+      </if>
+      <if test="ejuUserCode != null">
+        ejuUserCode = #{ejuUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ejuUserName != null">
+        ejuUserName = #{ejuUserName,jdbcType=NVARCHAR},
+      </if>
+      <if test="ejuUserTel != null">
+        ejuUserTel = #{ejuUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        startDate = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        endDate = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unBindDate != null">
+        unBindDate = #{unBindDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.youFangTongBind.model.YftEjuBind">
+    update YFT_EJU_Bind
+    set yftUserId = #{yftUserId,jdbcType=INTEGER},
+      yftUserName = #{yftUserName,jdbcType=NVARCHAR},
+      yftUserTel = #{yftUserTel,jdbcType=VARCHAR},
+      yftStoreNo = #{yftStoreNo,jdbcType=NVARCHAR},
+      yftStoreName = #{yftStoreName,jdbcType=NVARCHAR},
+      ejuUserCode = #{ejuUserCode,jdbcType=VARCHAR},
+      ejuUserName = #{ejuUserName,jdbcType=NVARCHAR},
+      ejuUserTel = #{ejuUserTel,jdbcType=VARCHAR},
+      startDate = #{startDate,jdbcType=TIMESTAMP},
+      endDate = #{endDate,jdbcType=TIMESTAMP},
+      unBindDate = #{unBindDate,jdbcType=TIMESTAMP},
+      reason = #{reason,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryBindInfo" parameterType="cn.com.eju.deal.youFangTongBind.dto.YouFangTongBindDto" resultType="cn.com.eju.deal.youFangTongBind.dto.YouFangTongBindDto">
+      SELECT
+          top 1 *
+      FROM
+          ( SELECT DATEDIFF( DAY, startDate, endDate ) dayNum,* FROM YFT_EJU_Bind WHERE yftUserId = #{yftUserId} AND unBindDate IS NULL ) a
+      WHERE
+          a.dayNum >0
+  </select>
+  <insert id="insertBindInfo" parameterType="cn.com.eju.deal.youFangTongBind.dto.YouFangTongBindDto">
+    insert into YFT_EJU_Bind
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yftUserId != null">
+        yftUserId,
+      </if>
+      <if test="yftUserName != null">
+        yftUserName,
+      </if>
+      <if test="yftUserTel != null">
+        yftUserTel,
+      </if>
+      <if test="yftStoreNo != null">
+        yftStoreNo,
+      </if>
+      <if test="yftStoreName != null">
+        yftStoreName,
+      </if>
+      <if test="ejuUserCode != null">
+        ejuUserCode,
+      </if>
+      <if test="ejuUserName != null">
+        ejuUserName,
+      </if>
+      <if test="ejuUserTel != null">
+        ejuUserTel,
+      </if>
+      <if test="startDate != null">
+        startDate,
+      </if>
+      <if test="endDate != null">
+        endDate,
+      </if>
+      <if test="unBindDate != null">
+        unBindDate,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yftUserId != null">
+        #{yftUserId,jdbcType=INTEGER},
+      </if>
+      <if test="yftUserName != null">
+        #{yftUserName,jdbcType=NVARCHAR},
+      </if>
+      <if test="yftUserTel != null">
+        #{yftUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="yftStoreNo != null">
+        #{yftStoreNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="yftStoreName != null">
+        #{yftStoreName,jdbcType=NVARCHAR},
+      </if>
+      <if test="ejuUserCode != null">
+        #{ejuUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ejuUserName != null">
+        #{ejuUserName,jdbcType=NVARCHAR},
+      </if>
+      <if test="ejuUserTel != null">
+        #{ejuUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unBindDate != null">
+        #{unBindDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="getBindList" parameterType="Map" resultType="cn.com.eju.deal.youFangTongBind.dto.YouFangTongBindDto">
+    SELECT
+    DENSE_RANK ( ) OVER ( ORDER BY a.id ASC ) rowNum,
+    CONVERT ( VARCHAR ( 100 ), startDate, 111 ) startDate,
+    CONVERT ( VARCHAR ( 100 ), endDate, 111 ) endDate,
+    CONVERT ( VARCHAR ( 100 ), unBindDate, 111 ) unBindDate,
+    id,
+    yftUserId,
+    yftUserName,
+    yftUserTel,
+    yftStoreNo,
+    yftStoreName,
+    ejuUserCode,
+    ejuUserName,
+    ejuUserTel,
+    reason,
+    remarks,
+    createDate,
+    CASE
+
+    WHEN a.unBindDate IS NOT NULL THEN
+    3 ELSE
+    CASE
+
+    WHEN DATEDIFF ( day, CONVERT ( VARCHAR ( 100 ), getDate(), 111 ), a.endDate ) > 0 THEN
+    1 ELSE 2
+    END
+    END bindStatus,
+    DATEDIFF ( day, CONVERT ( VARCHAR ( 100 ), getDate(), 111 ), a.endDate ) dayNum
+    INTO #temp_Bind
+    FROM
+    ( SELECT ROW_NUMBER ( ) over ( PARTITION BY yftUserId,ejuUserCode ORDER BY createDate DESC ) AS w,* FROM YFT_EJU_Bind ) AS a
+    WHERE
+    w = 1 and ejuUserCode = #{userCode}
+    ORDER BY dayNum ${sort}
+
+    SELECT t.* FROM (
+    SELECT *,(SELECT COUNT(*) FROM #temp_Bind) AS dataCount,(SELECT COUNT(*) FROM #temp_Bind where bindStatus = 1) AS bindCount FROM #temp_Bind
+    ) t where t.rowNum &gt; (( CAST (#{CurrentPage} AS INT)-1) * #{PageSize}) AND t.rowNum  &lt;= ( CAST (#{CurrentPage} AS INT)*#{PageSize})
+      ORDER BY
+      bindStatus asc,dayNum ${sort}
+
+	DROP TABLE #temp_Bind
+  </select>
+
+  <select id="getBindLogList" parameterType="Map" resultType="cn.com.eju.deal.youFangTongBind.dto.YouFangTongBindDto">
+    SELECT
+    DENSE_RANK ( ) OVER ( ORDER BY createDate desc ) rowNum,
+    CONVERT ( VARCHAR ( 100 ), startDate, 111 ) startDate,
+    CONVERT ( VARCHAR ( 100 ), endDate, 111 ) endDate,
+    CONVERT ( VARCHAR ( 100 ), unBindDate, 111 ) unBindDate,
+    id,
+    yftUserId,
+    yftUserName,
+    yftUserTel,
+    yftStoreNo,
+    yftStoreName,
+    ejuUserCode,
+    ejuUserName,
+    ejuUserTel,
+    reason,
+    remarks,
+    createDate,
+    CASE
+    WHEN unBindDate IS NOT NULL THEN
+    3 ELSE
+    CASE
+    WHEN DATEDIFF ( day, CONVERT ( VARCHAR ( 100 ), getDate(), 111 ), endDate ) > 0 THEN
+    1 ELSE 2
+    END
+    END bindStatus,
+    DATEDIFF ( day, CONVERT ( VARCHAR ( 100 ), getDate(), 111 ), endDate ) dayNum
+    INTO #temp_Bind_Log
+    FROM
+     YFT_EJU_Bind
+    WHERE ejuUserCode = #{ejuUserCode} and yftUserId = #{yftUserId}
+	ORDER BY createDate desc
+
+    SELECT t.* FROM (
+    SELECT *,(SELECT COUNT(*) FROM #temp_Bind_Log) AS dataCount FROM #temp_Bind_Log
+    ) t where t.rowNum &gt; (( CAST(#{CurrentPage} AS INT)-1) * #{PageSize}) AND t.rowNum  &lt;= ( CAST(#{CurrentPage} AS INT)*#{PageSize})
+    ORDER BY t.rowNum
+
+	DROP TABLE #temp_Bind_Log
+  </select>
+
+  <select id="queryYFTBind" parameterType="Map" resultType="cn.com.eju.deal.youFangTongBind.dto.YouFangTongBindDto">
+    SELECT
+        *
+    FROM
+        (
+    SELECT
+        *,
+    CASE
+
+        WHEN unBindDate IS NOT NULL THEN
+        3 ELSE
+    CASE
+
+        WHEN DATEDIFF ( DAY, CONVERT ( VARCHAR ( 100 ), getDate ( ), 111 ), endDate ) > 0 THEN
+        1 ELSE 2
+    END
+        END bindStatus
+    FROM
+        YFT_EJU_Bind
+        ) a
+    WHERE
+        a.ejuUserCode = #{userCode}
+    AND a.bindStatus = 1
+  </select>
+
+  <update id="unBindById" parameterType="java.lang.Integer">
+    UPDATE YFT_EJU_Bind
+    SET unBindDate = getDate ( ),
+    reason = '重新绑定'
+    WHERE
+        id = #{id}
+  </update>
+
+</mapper>

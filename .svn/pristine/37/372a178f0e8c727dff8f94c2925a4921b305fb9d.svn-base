@@ -1,0 +1,19 @@
+package cn.com.eju.pmls.jsStatement.dao;
+
+import cn.com.eju.pmls.jsStatement.model.PmlsStatementCashBillRelate;
+
+public interface PmlsStatementCashBillRelateMapper {
+    int deleteByPrimaryKey(Integer relateId);
+
+    int insert(PmlsStatementCashBillRelate record);
+
+    int insertSelective(PmlsStatementCashBillRelate record);
+
+    PmlsStatementCashBillRelate selectByPrimaryKey(Integer relateId);
+
+    int updateByPrimaryKeySelective(PmlsStatementCashBillRelate record);
+
+    int updateByPrimaryKey(PmlsStatementCashBillRelate record);
+
+    PmlsStatementCashBillRelate getTopByStatementId(Integer pscompId);
+}

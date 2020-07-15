@@ -1,0 +1,180 @@
+package cn.com.eju.pmls.utils;
+
+import cn.com.eju.deal.common.util.ExcelUtil;
+import cn.com.eju.deal.common.util.UploadFileUtil;
+import cn.com.eju.pmls.channelBusiness.model.JsStatementDto;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+public class UpdateExcelUtils {
+    private static Logger logger = LoggerFactory.getLogger(ExcelUtil.class);
+
+    private static Workbook workbook;
+    private static Sheet sheet;
+
+    /**
+     * 读取Excel文件并修改
+     */
+    public static JSONObject createExcel(HttpServletRequest request,String fileName, List<JsStatementDto> list){
+        InputStream is=null;
+        OutputStream os =null;
+        try {
+            //获取模板文件地址
+            String excelPath = request.getSession().getServletContext().getRealPath("/WEB-INF/template/" + "jssDetail.xlsx");
+//            String excelPath="I:/work_PMLS/PMLSWeb/src/main/webapp/template/项目中介服务费结算明细表.xlsx";
+            is = new FileInputStream(excelPath);
+            workbook = new XSSFWorkbook(is);
+            sheet = workbook.getSheetAt(0);
+
+            //单元格样式
+            CellStyle style=workbook.createCellStyle();
+            style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+            style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+            style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+            style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中
+            style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 垂直居中
+            Font font = workbook.createFont();
+            font.setFontName("微软雅黑");
+            font.setFontHeightInPoints((short) 10);//设置字体大小
+            style.setFont(font);
+            style.setWrapText(true);//设置自动换行
+            int index=3;//开始行下标
+            int startRow=4;//开始行数
+
+            if(list!=null && list.size()>0){
+            	Row titleRow=sheet.getRow(1);//获取中介行内容并修改
+                titleRow.getCell(0).setCellValue("经纪公司："+list.get(0).getCompanyName());
+//                Row projectRow=sheet.getRow(3);//获取标题行内容并修改
+//                projectRow.getCell(0).setCellValue("项目名称："+list.get(0).getProjectName());
+
+                for(int i=0;i<list.size();i++){
+                    createRow(index++,list.get(i),style);
+                    if(i<list.size()-1){//最后一行不下移
+                        sheet.shiftRows(startRow++, sheet.getLastRowNum(), 1); //从第5行开始，向下移动一行
+                    }else{
+                        int sumRowIndex=index;
+                        //结束后添加公式
+                        Row sumRow=sheet.getRow(sumRowIndex);
+                        sumRow.getCell(4).setCellFormula("SUM(E4:E"+sumRowIndex+")");
+                        sumRow.getCell(5).setCellFormula("SUM(F4:F"+sumRowIndex+")");
+                        sumRow.getCell(7).setCellFormula("SUM(H4:H"+sumRowIndex+")");
+                        sumRow.getCell(8).setCellFormula("SUM(I4:I"+sumRowIndex+")");
+                        sumRow.getCell(10).setCellFormula("SUM(K4:K"+sumRowIndex+")");
+                    }
+                }
+            }
+            String outputUrl=request.getSession().getServletContext().getRealPath("/WEB-INF/template/"+fileName);
+//            String outputUrl="G:/tmp"+"/项目中介服务费结算明细表.xlsx";
+            logger.info("定时任务测试createJssFile:临时文件路径："+outputUrl);
+            File file=new File(outputUrl);
+            os = new FileOutputStream(file);
+            workbook.write(os);
+            workbook.close();
+            os.close();
+
+            FileInputStream fileInputStream = new FileInputStream(outputUrl);
+
+            //上传附件
+            String URL = "http://pic.ehousechina.com/Service/UpLoadFangYouFile";
+            UploadFileUtil uploadFileUtil = new UploadFileUtil();
+            try {
+                logger.info("文件上传开始=============");
+                String result = uploadFileUtil.uploadFile(URL,fileName,fileInputStream);
+                JSONObject resultJson = JSON.parseObject(result);
+                JSONObject dataJson = resultJson.getJSONObject("TData");
+                logger.info("文件上传结束============="+dataJson);
+                if(file!=null){
+                    fileInputStream.close();
+                    //file.delete();//删除临时文件
+                }
+                System.out.println("附件上传结果："+dataJson);
+
+                return  dataJson;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            // 完毕，关闭所有链接
+            try {
+                if(os!=null){
+                    os.close();
+                }
+                if(is!=null){
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+
+    }
+    private static void createRow(int index, JsStatementDto dto,CellStyle style) throws Exception{
+        try {
+
+            Row row=sheet.createRow(index);
+            //创建单元格并设置单元格内容
+            int cellIndex=0;
+            createCell(cellIndex++,row,dto.getRowNum().toString(),"Integer",style);
+            createCell(cellIndex++,row,dto.getCompanyName(),"String",style);
+            createCell(cellIndex++,row,dto.getProjectName(),"String",style);
+            createCell(cellIndex++,row,dto.getBuildingNo(),"String",style);
+            createCell(cellIndex++,row,dto.getCustomerName(),"String",style);
+            createCell(cellIndex++,row,dto.getCxArea().toString(),"Double",style);
+            createCell(cellIndex++,row,dto.getCxAmount().toString(),"Double",style);
+            createCell(cellIndex++,row,dto.getServiceFeeDes(),"String",style);
+            createCell(cellIndex++,row,dto.getContractYdAmount().toString(),"Double",style);
+            createCell(cellIndex++,row,dto.getJsAmount().toString(),"Double",style);
+            createCell(cellIndex++,row,dto.getKpAmount().toString(),"Double",style);
+            createCell(cellIndex++,row,dto.getKpRate().toString()+"%","String",style);
+            createCell(cellIndex++,row,dto.getKpTaxAmount().toString(),"Double",style);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    //创建单元格
+    private static void createCell(int cellIndex,Row row,String value,String valueType,CellStyle style){
+        Cell cell= row.createCell(cellIndex);
+        //cell.setCellValue(value);
+        switch (valueType) {
+            case "String": {
+                cell.setCellValue(value);
+                break;
+            }
+            case "Double":
+                cell.setCellValue(Double.parseDouble(value));
+                break;
+            case "Integer":
+                cell.setCellValue(Integer.parseInt(value));
+                break;
+            default: {
+                cell.setCellValue(value);
+                break;
+            }
+        }
+        cell.setCellStyle(style);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("生成excel开始");
+//        createExcel();
+        System.out.println("生成excel结束");
+    }
+}

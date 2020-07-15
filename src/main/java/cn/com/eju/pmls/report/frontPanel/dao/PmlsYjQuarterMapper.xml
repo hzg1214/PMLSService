@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.report.frontPanel.dao.PmlsYjQuarterMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.report.frontPanel.model.PmlsYjQuarter" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="projectNo" property="projectNo" jdbcType="VARCHAR" />
+    <result column="projectName" property="projectName" jdbcType="NVARCHAR" />
+    <result column="cityNo" property="cityNo" jdbcType="VARCHAR" />
+    <result column="hblcode" property="hblcode" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="quarterindex" property="quarterindex" jdbcType="VARCHAR" />
+    <result column="yisr_dq" property="yisr_dq" jdbcType="DECIMAL" />
+    <result column="yjsr_lj" property="yjsr_lj" jdbcType="DECIMAL" />
+    <result column="yjsr_ljhk" property="yjsr_ljhk" jdbcType="DECIMAL" />
+    <result column="yjsr_ljwhk" property="yjsr_ljwhk" jdbcType="DECIMAL" />
+    <result column="yssr_dq" property="yssr_dq" jdbcType="DECIMAL" />
+    <result column="yssr_lj" property="yssr_lj" jdbcType="DECIMAL" />
+    <result column="yssr_ljhk" property="yssr_ljhk" jdbcType="DECIMAL" />
+    <result column="yssr_ljwhk" property="yssr_ljwhk" jdbcType="DECIMAL" />
+    <result column="yjfy_dq" property="yjfy_dq" jdbcType="DECIMAL" />
+    <result column="yjfy_lj" property="yjfy_lj" jdbcType="DECIMAL" />
+    <result column="sjfy_lj" property="sjfy_lj" jdbcType="DECIMAL" />
+    <result column="yjfy_ljwf" property="yjfy_ljwf" jdbcType="DECIMAL" />
+    <result column="yjdy_dq" property="yjdy_dq" jdbcType="DECIMAL" />
+    <result column="yjdy_lj" property="yjdy_lj" jdbcType="DECIMAL" />
+    <result column="sjdy_lj" property="sjdy_lj" jdbcType="DECIMAL" />
+    <result column="yjdy_ljwd" property="yjdy_ljwd" jdbcType="DECIMAL" />
+    <result column="dyyjsr_lj" property="dyyjsr_lj" jdbcType="DECIMAL" />
+    <result column="dyyjss_lj" property="dyyjss_lj" jdbcType="DECIMAL" />
+    <result column="dyyjsr_ljwh" property="dyyjsr_ljwh" jdbcType="DECIMAL" />
+    <result column="dyyssr_lj" property="dyyssr_lj" jdbcType="DECIMAL" />
+    <result column="dyyssr_ljwh" property="dyyssr_ljwh" jdbcType="DECIMAL" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="dealAmount_lj" property="dealAmount_lj" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <select id="getPmlsFrontPanelYjInfo" parameterType="map" resultMap="BaseResultMap">
+    SELECT cityNo
+          , CAST(ROUND(SUM(yisr_dq) / 10000,2) AS DECIMAL(18,2)) AS yisr_dq
+          , CAST(ROUND(SUM(yjsr_lj) / 10000,2) AS DECIMAL(18,2)) AS yjsr_lj
+          , CAST(ROUND(SUM(yjsr_ljhk) / 10000,2) AS DECIMAL(18,2)) AS yjsr_ljhk
+          , CAST(ROUND(SUM(yjsr_ljwhk) / 10000,2) AS DECIMAL(18,2)) AS yjsr_ljwhk
+          , CAST(ROUND(SUM(yssr_dq) / 10000,2) AS DECIMAL(18,2)) AS yssr_dq
+          , CAST(ROUND(SUM(yssr_lj) / 10000,2) AS DECIMAL(18,2)) AS yssr_lj
+          , CAST(ROUND(SUM(yssr_ljhk) / 10000,2) AS DECIMAL(18,2)) AS yssr_ljhk
+          , CAST(ROUND(SUM(yssr_ljwhk) / 10000,2) AS DECIMAL(18,2)) AS yssr_ljwhk
+          , CAST(ROUND(SUM(yjfy_dq) / 10000,2) AS DECIMAL(18,2)) AS yjfy_dq
+          , CAST(ROUND(SUM(yjfy_lj) / 10000,2) AS DECIMAL(18,2)) AS yjfy_lj
+          , CAST(ROUND(SUM(sjfy_lj) / 10000,2) AS DECIMAL(18,2)) AS sjfy_lj
+          , CAST(ROUND(SUM(yjfy_ljwf) / 10000,2) AS DECIMAL(18,2)) AS yjfy_ljwf
+          , CAST(ROUND(SUM(yjdy_dq) / 10000,2) AS DECIMAL(18,2)) AS yjdy_dq
+          , CAST(ROUND(SUM(yjdy_lj) / 10000,2) AS DECIMAL(18,2)) AS yjdy_lj
+          , CAST(ROUND(SUM(sjdy_lj) / 10000,2) AS DECIMAL(18,2)) AS sjdy_lj
+          , CAST(ROUND(SUM(yjdy_ljwd) / 10000,2) AS DECIMAL(18,2)) AS yjdy_ljwd
+          , CAST(ROUND(SUM(dyyjsr_lj) / 10000,2) AS DECIMAL(18,2)) AS dyyjsr_lj
+          , CAST(ROUND(SUM(dyyjss_lj) / 10000,2) AS DECIMAL(18,2)) AS dyyjss_lj
+          , CAST(ROUND(SUM(dyyjsr_ljwh) / 10000,2) AS DECIMAL(18,2)) AS dyyjsr_ljwh
+          , CAST(ROUND(SUM(dyyssr_lj) / 10000,2) AS DECIMAL(18,2)) AS dyyssr_lj
+          , CAST(ROUND(SUM(dyyssr_ljwh) / 10000,2) AS DECIMAL(18,2)) AS dyyssr_ljwh
+          , CAST(ROUND(SUM(dealAmount_lj) / 10000,2) AS DECIMAL(18,2)) AS dealAmount_lj
+    FROM cloud_pmls_yj_quarter
+    WHERE cityNo = #{cityNo,jdbcType=VARCHAR}
+      AND year = #{year,jdbcType=VARCHAR}
+      AND quarterindex = #{quarterIndex,jdbcType=VARCHAR}
+    GROUP BY cityNo
+  </select>
+</mapper>

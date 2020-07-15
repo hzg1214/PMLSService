@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.linkAchieveChange.dao.AchieveMentChangeLogMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.linkAchieveChange.model.AchieveMentChangeLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="relateId" jdbcType="INTEGER" property="relateId" />
+    <result column="changeContent" jdbcType="VARCHAR" property="changeContent" />
+    <result column="createUserCode" jdbcType="VARCHAR" property="createUserCode" />
+    <result column="createUserName" jdbcType="VARCHAR" property="createUserName" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, relateId, changeContent, createUserCode, createUserName, createDate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from LOG_LNK_AchieveMentChange
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from LOG_LNK_AchieveMentChange
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.linkAchieveChange.model.AchieveMentChangeLog">
+    insert into LOG_LNK_AchieveMentChange (id, relateId, changeContent,
+      createUserCode, createUserName, createDate, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{relateId,jdbcType=INTEGER}, #{changeContent,jdbcType=VARCHAR},
+      #{createUserCode,jdbcType=VARCHAR}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.linkAchieveChange.model.AchieveMentChangeLog">
+    insert into LOG_LNK_AchieveMentChange
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relateId != null">
+        relateId,
+      </if>
+      <if test="changeContent != null">
+        changeContent,
+      </if>
+      <if test="createUserCode != null">
+        createUserCode,
+      </if>
+      <if test="createUserName != null">
+        createUserName,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="relateId != null">
+        #{relateId,jdbcType=INTEGER},
+      </if>
+      <if test="changeContent != null">
+        #{changeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserCode != null">
+        #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.linkAchieveChange.model.AchieveMentChangeLog">
+    update LOG_LNK_AchieveMentChange
+    <set>
+      <if test="relateId != null">
+        relateId = #{relateId,jdbcType=INTEGER},
+      </if>
+      <if test="changeContent != null">
+        changeContent = #{changeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserCode != null">
+        createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserName != null">
+        createUserName = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.linkAchieveChange.model.AchieveMentChangeLog">
+    update LOG_LNK_AchieveMentChange
+    set relateId = #{relateId,jdbcType=INTEGER},
+      changeContent = #{changeContent,jdbcType=VARCHAR},
+      createUserCode = #{createUserCode,jdbcType=VARCHAR},
+      createUserName = #{createUserName,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getLogList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from LOG_LNK_AchieveMentChange
+    where delFlag=0 and relateId = #{relateId,jdbcType=INTEGER}
+    ORDER BY id DESC
+  </select>
+  <insert id="insertAchieveMentAdjustDetailLog" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportAchieveMentAdjustLog">
+		insert into LNK_ReportAchieveMentAdjustLog(
+			relateId, reportId,
+			changeReason, changeContent, 
+			oldMaintainerCode,oldMaintainerNm, maintainerCode, maintainerNm,
+			oldCenterGroupId,oldCenterGroupName,centerGroupId,centerGroupName,
+			dateCreate,userIdCreate, userName, userCode,delFlag
+		) values (	
+			#{relateId,jdbcType=INTEGER},#{reportId,jdbcType=VARCHAR},
+			#{changeReason,jdbcType=NVARCHAR},#{changeContent,jdbcType=NVARCHAR},
+			#{oldMaintainerCode,jdbcType=VARCHAR},#{oldMaintainerNm,jdbcType=VARCHAR}, 
+			#{maintainerCode,jdbcType=VARCHAR},#{maintainerNm,jdbcType=VARCHAR},
+			#{oldCenterGroupId,jdbcType=VARCHAR},#{oldCenterGroupName,jdbcType=VARCHAR},
+			#{centerGroupId,jdbcType=VARCHAR},#{centerGroupName,jdbcType=VARCHAR},
+			GETDATE(),#{userIdCreate,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR},#{userCode,jdbcType=VARCHAR},0
+		)
+	</insert>
+</mapper>

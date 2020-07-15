@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.common.dao.PmlsUserCenterCitySettingMapper">
+
+    <select id="queryCityList" parameterType="java.util.Map" resultType="cn.com.eju.deal.common.model.City">
+		SELECT t.CityNo,t.CityName FROM  (
+			SELECT t1.cityId, t2.CityNo,t2.CityName
+				from BAS_PMLS_UserCenterCitySetting  t1,bas_city t2
+				where t1.delFlag=0
+				and t1.cityNo=t2.cityNo
+				and userCode=#{userCode}
+			GROUP BY  t1.cityId, t2.CityNo,t2.CityName
+		) t
+		 ORDER BY t.cityId
+	</select>
+
+    <select id="queryCenterList" parameterType="java.util.Map"
+            resultType="cn.com.eju.deal.common.model.PmlsUserCenterCitySetting">
+		SELECT 
+			t1.centerId,t1.cityId,t1.cityNo,t2.cityName
+		from BAS_PMLS_UserCenterCitySetting t1,bas_city t2
+		where delFlag=0
+		and t1.cityNo=t2.cityNo
+		and userCode=#{userCode}
+	</select>
+
+    <!-- HBL归属区域 -->
+    <select id="queryHblRegionList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT DISTINCT T3.qyCode,T3.qyName
+		FROM BAS_PMLS_UserCenterCitySetting T1
+		INNER JOIN cloud_hbl_fy_org_ref T2 ON T2.year= CONCAT('FY',right(#{organization},2)) AND T2.orgType='CITY' AND T1.cityId = T2.cityId
+		INNER JOIN cloud_shy_fy_city_ref_new T3 ON  T3.year= #{organization}  AND T3.orgType='FYYJCS' AND T2.cityGroupId = T3.cityGroupId
+		WHERE T1.delFlag = 0
+		AND T1.userCode = #{userCode}
+	</select>
+
+    <!-- HBL归属板块-->
+    <select id="queryHblAreaCityList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT T3.areaCityCode,T3.areaCityName
+        FROM BAS_PMLS_UserCenterCitySetting T1
+        INNER JOIN cloud_hbl_fy_org_ref T2 ON T2.year= CONCAT('FY',right(#{organization},2)) AND T2.orgType='CITY' AND
+        T1.cityId = T2.cityId
+        INNER JOIN cloud_shy_fy_city_ref_new T3 ON T3.year= #{organization} AND T3.orgType='FYYJCS' AND T2.cityGroupId =
+        T3.cityGroupId
+        WHERE T1.delFlag = 0
+        AND T1.userCode = #{userCode}
+        <!-- 归属区域-->
+        <if test="regionCodeList != null and regionCodeList.size >0">
+            AND T3.qyCode IN
+            <foreach collection="regionCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- HBL归属城市 -->
+    <select id="queryHblCityList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT T2.cityId,T2.cityGroupId,T2.cityGroupName
+        FROM BAS_PMLS_UserCenterCitySetting T1
+        INNER JOIN cloud_hbl_fy_org_ref T2 ON T2.year= CONCAT('FY',right(#{organization},2)) AND T2.orgType='CITY' AND
+        T1.cityId = T2.cityId
+        LEFT JOIN cloud_shy_fy_city_ref_new T3 ON T3.year= #{organization} AND T3.orgType='FYYJCS' AND T2.cityGroupId =
+        T3.cityGroupId
+        WHERE T1.delFlag = 0
+        AND T1.userCode = #{userCode}
+        <!-- 归属区域-->
+        <if test="regionCodeList != null and regionCodeList.size >0">
+            AND T3.qyCode IN
+            <foreach collection="regionCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <!-- 归属板块-->
+        <if test="areaCityCodeList != null and areaCityCodeList.size >0">
+            AND T3.areaCityCode IN
+            <foreach collection="areaCityCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- HBL归属中心 -->
+    <select id="queryHblCenterList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT T2.centerId,T2.centerName
+        FROM BAS_PMLS_UserCenterCitySetting T1
+        INNER JOIN cloud_hbl_fy_org_ref T2 ON T2.orgType='CENTER' AND T2.year= CONCAT('FY',right(#{organization},2)) AND
+        T1.centerId = T2.centerId
+        LEFT JOIN cloud_shy_fy_city_ref_new T3 ON T3.year= #{organization} AND T3.orgType='FYYJCS' AND T2.cityGroupId =
+        T3.cityGroupId
+        WHERE T1.delFlag = 0
+        AND T1.userCode = #{userCode}
+        <!-- 归属区域-->
+        <if test="regionCodeList != null and regionCodeList.size >0">
+            AND T3.qyCode IN
+            <foreach collection="regionCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <!-- 归属板块-->
+        <if test="areaCityCodeList != null and areaCityCodeList.size >0">
+            AND T3.areaCityCode IN
+            <foreach collection="areaCityCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <!--归属城市-->
+        <if test="cityIdList != null and cityIdList.size >0">
+            AND T1.cityId IN
+            <foreach collection="cityIdList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </select>
+
+</mapper>

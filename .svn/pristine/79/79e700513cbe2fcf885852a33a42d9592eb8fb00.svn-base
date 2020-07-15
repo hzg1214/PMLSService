@@ -1,0 +1,66 @@
+package cn.com.eju.pmls.skStatement.controller;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.pmls.skStatement.dto.PmlsSkStatementDto;
+import cn.com.eju.pmls.skStatement.service.SkStatementService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("skStatementController")
+public class SkStatementController {
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Autowired
+    SkStatementService skStatementService;
+
+
+    @RequestMapping(value = "/queryList/{param}", method = RequestMethod.GET)
+    public String queryList(@PathVariable String param) {
+        ResultData<List<PmlsSkStatementDto>> resultData = new ResultData<List<PmlsSkStatementDto>>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = skStatementService.queryList(queryParam);
+        } catch (Exception e) {
+            logger.error("skStatementController.queryList 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+
+    @RequestMapping(value = "/getSkStatementById/{param}", method = RequestMethod.GET)
+    public String getJsStatementById(@PathVariable String param) {
+        ResultData<PmlsSkStatementDto> resultData = new ResultData<PmlsSkStatementDto>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = skStatementService.getSkStatementById(queryParam);
+        } catch (Exception e) {
+            logger.error("skStatementController.getSkStatementById 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+
+    @RequestMapping(value = "/allocateCheck/{param}", method = RequestMethod.GET)
+    public String allocateCheck(@PathVariable String param) {
+        ResultData<PmlsSkStatementDto> resultData = new ResultData<PmlsSkStatementDto>();
+        try {
+            Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+            resultData = skStatementService.allocateCheck(queryParam);
+        } catch (Exception e) {
+            logger.error("skStatementController.allocateCheck 发生异常 param:" + param, e);
+            resultData.setFail();
+        }
+        return resultData.toString();
+    }
+}

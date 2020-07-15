@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.report.dao.SendContractFangyouLogMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.report.model.SendContractFangyouLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="typeId" jdbcType="VARCHAR" property="typeId" />
+    <result column="reqParamJson" jdbcType="NVARCHAR" property="reqParamJson" />
+    <result column="rspParamJson" jdbcType="NVARCHAR" property="rspParamJson" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, typeId, reqParamJson, rspParamJson, dateCreate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Send_Contract_Fangyou_Log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Send_Contract_Fangyou_Log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.report.model.SendContractFangyouLog">
+    insert into Send_Contract_Fangyou_Log (id, typeId, reqParamJson, 
+      rspParamJson, dateCreate, userIdCreate, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{typeId,jdbcType=VARCHAR}, #{reqParamJson,jdbcType=NVARCHAR}, 
+      #{rspParamJson,jdbcType=NVARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.report.model.SendContractFangyouLog">
+    insert into Send_Contract_Fangyou_Log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="typeId != null">
+        typeId,
+      </if>
+      <if test="reqParamJson != null">
+        reqParamJson,
+      </if>
+      <if test="rspParamJson != null">
+        rspParamJson,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="reqParamJson != null">
+        #{reqParamJson,jdbcType=NVARCHAR},
+      </if>
+      <if test="rspParamJson != null">
+        #{rspParamJson,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.report.model.SendContractFangyouLog">
+    update Send_Contract_Fangyou_Log
+    <set>
+      <if test="typeId != null">
+        typeId = #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="reqParamJson != null">
+        reqParamJson = #{reqParamJson,jdbcType=NVARCHAR},
+      </if>
+      <if test="rspParamJson != null">
+        rspParamJson = #{rspParamJson,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.report.model.SendContractFangyouLog">
+    update Send_Contract_Fangyou_Log
+    set typeId = #{typeId,jdbcType=VARCHAR},
+      reqParamJson = #{reqParamJson,jdbcType=NVARCHAR},
+      rspParamJson = #{rspParamJson,jdbcType=NVARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

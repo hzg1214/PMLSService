@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.channelBusiness.dao.ChannelBrandMapper">
+
+  <!--获取渠道品牌列表-->
+  <select id="getChannelBrandList"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.ChannelBrandDto">
+    select t.* from (
+        select distinct
+        t1.Id ,
+        t1.brandCode ,
+        t1.brandName ,
+        t1.orgId ,
+        t1.parentId ,
+        CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate ,
+        t1.userIdCreate ,
+        t1.delFlag ,
+        t1.remark,
+        t2.userName createUserName from PMLS_ChannelBrand t1
+        INNER JOIN dbo.USR_User t2 ON t1.userIdCreate=t2.userId AND t2.delFlag='N'
+        <if test="(brandName!=null and brandName!='') or (brandCode!=null and brandCode!='')">
+          INNER JOIN (
+          SELECT orgId FROM PMLS_ChannelBrand WHERE 1=1 and delFlag=0
+          <if test="brandName!=null and brandName!=''">and brandName like '%'+#{brandName}+'%'
+          </if>
+            <if test="brandCode!=null and brandCode!=''">
+              and brandCode like '%'+#{brandCode}+'%'
+            </if>
+          ) t3 ON (t1.orgId.ToString() LIKE t3.orgId.ToString()+'%' OR t3.orgId.ToString() LIKE t1.orgId.ToString()+'%')
+        </if>
+        where t1.delFlag=0
+    ) t order by t.parentId ASC,t.dateCreate desc
+  </select>
+  <!--获取渠道品牌信息-->
+  <select id="getBrandInfo"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.ChannelBrandDto">
+    select top 1
+      orgId.ToString() as orgId,
+      Id ,
+      brandCode ,
+      brandName ,
+      parentId ,
+      dateCreate ,
+      userIdCreate ,
+      delFlag ,
+      remark
+    from PMLS_ChannelBrand where delFlag=0
+    <if test="id!=null and id!=0">
+      and id=#{id}
+    </if>
+
+  </select>
+  <!--新增渠道品牌-->
+  <insert id="addBrand" parameterType="cn.com.eju.pmls.channelBusiness.model.ChannelBrandDto" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+        INSERT INTO PMLS_ChannelBrand (
+          brandCode,
+          brandName,
+          orgId,
+          parentId,
+          remark,
+          dateCreate,
+          userIdCreate,
+          delFlag
+        ) VALUES(
+          #{brandCode},
+          #{brandName},
+          null,
+          #{parentId},
+          #{remark},
+          getdate(),
+          #{userIdCreate},
+          0
+        )
+    </insert>
+  <!--修改渠道品牌-->
+  <update id="updateBrand"  parameterType="cn.com.eju.pmls.channelBusiness.model.ChannelBrandDto">
+    update PMLS_ChannelBrand
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="brandName!=null and brandName!=''">
+        brandName=#{brandName},
+      </if>
+      <if test="remark!=null and remark!=''">
+        remark=#{remark},
+      </if>
+      <if test="orgId!=null and orgId!=''">
+        orgId=#{orgId},
+      </if>
+    </trim>
+    where id=#{id}
+  </update>
+  <!--删除渠道品牌-->
+  <update id="deleteBrand" parameterType="cn.com.eju.pmls.channelBusiness.model.ChannelBrandDto" >
+    update PMLS_ChannelBrand set delFlag=1 where orgId.ToString() LIKE '%/'+'${id}'+'/%'
+  </update>
+  <!--校验渠道品牌是否已关联商户-->
+  <select id="checkBusiness" parameterType="cn.com.eju.pmls.channelBusiness.model.ChannelBrandDto" resultType="int">
+      SELECT COUNT(1) AS num FROM PMLS_ChannelBrand t1
+      INNER JOIN company t2 ON t1.id=t2.brandId AND t2.IsDelete=0
+      WHERE t1.delFlag=0 AND t1.orgId.ToString() LIKE '%/'+'${id}'+'/%'
+  </select>
+  <!--校验渠道品牌是否存在-->
+  <select id="checkBrandInfo" parameterType="cn.com.eju.pmls.channelBusiness.model.ChannelBrandDto" resultType="int">
+      select count(1) as num from PMLS_ChannelBrand t1 where t1.delFlag=0 and t1.brandName=#{brandName}
+      <if test="id!=null and id!=0">
+        and t1.id!=#{id}
+      </if>
+  </select>
+</mapper>

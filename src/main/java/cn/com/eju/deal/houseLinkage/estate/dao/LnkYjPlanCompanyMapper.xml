@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.LnkYjPlanCompanyMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanCompany" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="planId" property="planId" jdbcType="INTEGER" />
+    <result column="companyNo" property="companyNo" jdbcType="VARCHAR" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, planId, companyNo, createDate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from LNK_Yj_Plan_Company
+    where delFlag=0 and id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from LNK_Yj_Plan_Company
+    where delFlag=0 and id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanCompany" >
+    insert into LNK_Yj_Plan_Company (id, planId, companyNo, 
+      createDate, userIdCreate, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{companyNo,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanCompany" >
+    insert into LNK_Yj_Plan_Company
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="planId != null" >
+        planId,
+      </if>
+      <if test="companyNo != null" >
+        companyNo,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanCompany" >
+    update LNK_Yj_Plan_Company
+    <set >
+      <if test="planId != null" >
+        planId = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        companyNo = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlanCompany" >
+    update LNK_Yj_Plan_Company
+    set planId = #{planId,jdbcType=INTEGER},
+      companyNo = #{companyNo,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="getYjPlanCompanyList" parameterType="Map" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkYjPlanCompanyDto">
+    select
+    	c.CompanyNo companyNo,c.CompanyName companyName,
+    	planCom.id, planCom.planId, planCom.companyNo, planCom.createDate, planCom.userIdCreate, planCom.delFlag
+    from dbo.LNK_Yj_Plan_Company planCom
+    LEFT JOIN dbo.Company c ON c.CompanyNo=planCom.companyNo AND c.IsDelete=0
+    where planCom.delFlag = 0 AND planCom.planId = #{planId,jdbcType=INTEGER} 
+    ORDER BY planCom.createDate
+  </select>
+  
+  <update id="updateByPlanId" parameterType="map" >
+	    update LNK_Yj_Plan_Company set
+	      delFlag = 1
+	    where planId = #{planId,jdbcType=INTEGER}
+  	</update>
+</mapper>

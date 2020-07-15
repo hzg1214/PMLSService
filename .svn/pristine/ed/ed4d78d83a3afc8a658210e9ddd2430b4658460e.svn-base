@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.store.dao.StorePaymentMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.StorePayment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="orderType" jdbcType="INTEGER" property="orderType" />
+    <result column="paymentNo" jdbcType="VARCHAR" property="paymentNo" />
+    <result column="contractNo" jdbcType="VARCHAR" property="contractNo" />
+    <result column="paymentType" jdbcType="INTEGER" property="paymentType" />
+    <result column="totalAmount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="approveStatus" jdbcType="INTEGER" property="approveStatus" />
+    <result column="submitOaStatus" jdbcType="INTEGER" property="submitOaStatus" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="confirmTime" jdbcType="TIMESTAMP" property="confirmTime" />
+    <result column="flowId" jdbcType="VARCHAR" property="flowId" />
+    <result column="cityNo" jdbcType="VARCHAR" property="cityNo" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt" />
+    <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id,orderType, paymentNo,contractNo, paymentType, totalAmount, approveStatus, submitOaStatus, status, confirmTime, 
+    flowId, dateCreate, userIdCreate, dateUpt, userIdUpt, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from store_payment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from store_payment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.store.model.StorePayment">
+    insert into store_payment (id, orderType, paymentNo,contractNo, paymentType, 
+      totalAmount, approveStatus, submitOaStatus, 
+      status, confirmTime, flowId, 
+      dateCreate, userIdCreate, dateUpt, 
+      userIdUpt, delFlag,refundDate)
+    values (#{id,jdbcType=INTEGER},#{orderType,jdbcType=INTEGER}, #{paymentNo,jdbcType=VARCHAR},
+      #{contractNo,jdbcType=VARCHAR}, #{paymentType,jdbcType=INTEGER}, 
+      #{totalAmount,jdbcType=DECIMAL}, #{approveStatus,jdbcType=INTEGER}, #{submitOaStatus,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{confirmTime,jdbcType=TIMESTAMP}, #{flowId,jdbcType=VARCHAR}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{dateUpt,jdbcType=TIMESTAMP}, 
+      #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR},#{refundDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.store.model.StorePayment" useGeneratedKeys="true" keyProperty="id">
+    insert into store_payment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderType != null">
+        orderType,
+      </if>
+      <if test="paymentNo != null">
+        paymentNo,
+      </if>
+      <if test="contractNo != null">
+        contractNo,
+      </if>
+      <if test="paymentType != null">
+        paymentType,
+      </if>
+      <if test="totalAmount != null">
+        totalAmount,
+      </if>
+      <if test="approveStatus != null">
+        approveStatus,
+      </if>
+      <if test="submitOaStatus != null">
+        submitOaStatus,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="confirmTime != null">
+        confirmTime,
+      </if>
+      <if test="flowId != null">
+        flowId,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="dateUpt != null">
+        dateUpt,
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+        <if test="accountProject != null">
+            accountProject,
+        </if>
+        <if test="accountProjectCode != null">
+            accountProjectCode,
+        </if>
+        <if test="cityNo != null">
+            cityNo,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="paymentNo != null">
+        #{paymentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null">
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null">
+        #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="approveStatus != null">
+        #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="submitOaStatus != null">
+        #{submitOaStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="confirmTime != null">
+        #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+        <if test="accountProject != null">
+            #{accountProject,jdbcType=NVARCHAR},
+        </if>
+        <if test="accountProjectCode != null">
+            #{accountProjectCode,jdbcType=NVARCHAR},
+        </if>
+        <if test="cityNo != null">
+            #{cityNo,jdbcType=NVARCHAR},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.store.model.StorePayment">
+    update store_payment
+    <set>
+      <if test="orderType != null">
+        orderType = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="paymentNo != null">
+        paymentNo = #{paymentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null">
+        contractNo = #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null">
+        paymentType = #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null">
+        totalAmount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="approveStatus != null">
+        approveStatus = #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="submitOaStatus != null">
+        submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="confirmTime != null">
+        confirmTime = #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowId != null">
+        flowId = #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.store.model.StorePayment">
+    update store_payment
+    set orderType = #{orderType,jdbcType=INTEGER},
+      paymentNo = #{paymentNo,jdbcType=VARCHAR},
+      contractNo = #{contractNo,jdbcType=VARCHAR},
+      paymentType = #{paymentType,jdbcType=INTEGER},
+      totalAmount = #{totalAmount,jdbcType=DECIMAL},
+      approveStatus = #{approveStatus,jdbcType=INTEGER},
+      submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      confirmTime = #{confirmTime,jdbcType=TIMESTAMP},
+      flowId = #{flowId,jdbcType=VARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <resultMap id="storePaymentDto" type="cn.com.eju.deal.dto.store.StorePaymentDto"></resultMap>
+  <!-- 查询保证金退款列表 -->
+  <select id="getStorePaymentList" resultMap="storePaymentDto" parameterType="Map">
+  	SELECT 
+  		sr.id,
+  		--编号
+  		sr.paymentNo,
+  		--合同编号
+  		sr.contractNo,
+  		--金额
+  		sr.totalAmount,
+  		--申请人
+		sr.userIdCreate,
+		us.userName,
+		--申请时间
+		sr.dateCreate,
+		--Oa申请状态
+		sr.submitOaStatus,
+		dv.dicValue as oaStatusName,
+		--公司名称
+		cy.CompanyName as companyName,
+		sr.paymentType,
+		sr.status
+  	FROM 
+  		dbo.store_payment sr
+  		LEFT JOIN dbo.Contract ct on ct.ContractNo=sr.contractNo
+  		LEFT JOIN dbo.Company cy ON ct.CompanyId = cy.Id AND cy.IsDelete = 0 
+  		LEFT JOIN dbo.USR_User us on us.userId = sr.userIdCreate and us.delFlag = 'N'
+  		LEFT JOIN dbo.BAS_DictionaryValue dv ON sr.approveStatus = dv.dicCode
+		                                                    AND dv.typeId = 216
+		                                                    AND dv.delFlag = 'N'
+  	WHERE
+  		sr.delFlag = '0' and sr.orderType = 21405
+  		<if test="searchValues != null and searchValues != ''">
+			AND (	
+				sr.paymentNo LIKE CONCAT('%', #{searchValues},'%')
+				OR sr.contractNo  LIKE CONCAT('%', #{searchValues},'%')
+				OR ct.agreementNo LIKE CONCAT('%', #{searchValues},'%')
+			)
+		</if>
+		<if test="cityNo != null and cityNo != ''">
+			   and sr.cityNo= #{cityNo}
+		</if>
+		<if test="companyName != null and companyName != '' ">
+	        AND cy.companyName LIKE CONCAT('%', #{companyName},'%')
+	    </if>
+		<if test="userName != null and userName != '' ">
+	        AND us.userName  LIKE CONCAT('%', #{userName},'%')
+	    </if>
+	    <if test="dateStart != null and dateStart != ''">
+	    	AND sr.dateCreate &gt;= #{dateStart}
+	    </if>
+	    <if test="dateEnd != null and dateEnd != ''">
+	    	AND sr.dateCreate &lt;= #{dateEnd}
+	    </if>
+  		ORDER BY sr.dateCreate desc
+	</select>
+	<resultMap id="storeDto" type="cn.com.eju.deal.dto.store.StoreDto"></resultMap>
+	<!-- 查询保证金退款门店信息 -->
+  	<select id="getStoreInfoById" resultMap="storeDto" parameterType="java.lang.Integer">
+  		SELECT 
+  			s.Id as storeId,
+			s.storeNo,
+			--门店名称
+			s.Name as name,
+			--门店地址
+			s.AddressDetail,
+			--应收金额
+			sd.receiveAmount AS totalAmount,
+			srd.amount,
+			sd.paymentAmount
+	  	FROM 
+			 dbo.store_payment_dtl srd
+			LEFT JOIN dbo.Store s on s.storeNo = srd.storeNo
+			LEFT JOIN  dbo.store_deposit sd on sd.storeNo = srd.storeNo and sd.delFlag ='0'
+		WHERE 
+			srd.delFlag = '0' and
+			srd.paymentId = #{id,jdbcType=INTEGER}
+  	</select>
+  	<!-- 查询保证金退款详情 -->
+	<select id="getBriefById" resultMap="storePaymentDto" parameterType="java.lang.Integer">
+		select 
+			sr.id,sr.paymentNo,
+	  		sr.contractNo,
+			--协议书编号
+			ct.agreementNo,
+			contractTypeName = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = ct.ContractType AND delFlag = 'N'),
+			companyName = (SELECT CompanyName FROM dbo.Company  where ct.CompanyId = Id AND IsDelete = 0 ),
+			sr.confirmTime,
+			approveStatusNm = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = sr.approveStatus 
+				AND typeId = 216 AND delFlag = 'N' ),
+			sr.paymentType,
+	  		paymentTypeNm = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = sr.paymentType 
+	 				AND typeId = 217 AND delFlag = 'N' ),
+ 			sr.totalAmount,
+ 			sr.userIdCreate,
+ 			us.userName,
+ 			sr.dateCreate,
+ 			sr.refundDate	
+ 		from 
+				dbo.store_payment sr
+	  		LEFT JOIN dbo.Contract ct on ct.ContractNo=sr.contractNo
+	  		LEFT JOIN dbo.USR_User us on us.userId = sr.userIdCreate and us.delFlag = 'N' 
+	  	where sr.delFlag='0' and sr.id=#{id,jdbcType=INTEGER}
+	</select>
+	<resultMap id="contractSearchResultDto" type="cn.com.eju.deal.dto.contract.ContractDto"></resultMap>
+	<!-- 根据合同id查询合同信息 -->
+	<select id="getContractInfoById" resultMap="contractSearchResultDto" parameterType="java.lang.Integer">
+		select 
+			ct.Id as id,
+			ct.ContractNo as contractNo,
+			ct.AgreementNo as agreementNo,
+			ct.ContractStatus as contractStatus,
+			ct.CompanyId as companyId,
+			cy.CompanyName as companyName,
+			ct.ContractType,
+			contractTypeName = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = ct.ContractType AND delFlag = 'N'),
+			u.userName AS  userNameCreate
+			,contractStatusName = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = ct.ContractStatus 
+					AND typeId = 104 AND delFlag = 'N' ),
+			ct.AcCityNo as acCityNo,
+			contractCityName = (SELECT cityName FROM BAS_City WHERE ct.AcCityNo = CityNo 
+					AND FlagDeleted = 0)
+ 		FROM Contract ct 
+			INNER JOIN Company cy ON ct.CompanyId = cy.Id AND cy.IsDelete = 0 
+			INNER JOIN USR_User u ON ct.UserCreate = u.userId and u.delFlag = 'N'
+		WHERE 
+	  	 	ct.Id=#{id,jdbcType=INTEGER}
+	</select>
+	<!-- 通过合同id查询其关联的门店信息 -->
+	<select id="getStoreInfoByContractId" resultMap="storeDto" parameterType="java.lang.Integer">
+		select 
+ 			s.Id as storeId,
+ 			s.StoreNo as storeNo,
+ 			s.Name as name,
+ 			s.AddressDetail as addressDetail,
+			--sd.totalAmount,
+			sd.paymentAmount,
+			(ISNULL(sd.receiveAmount,0) - ISNULL(sd.paymentAmount,0)-sd.paymentLockAmt) as totalAmount
+ 			FROM
+				Contract ct
+				INNER  JOIN ContractStore cs ON ct.Id = cs.ContractId AND cs.IsDelete = 0
+				INNER JOIN Store s ON s.Id = cs.StoreId AND s.IsDelete = 0
+				LEFT JOIN Store_Deposit sd on sd.storeNo = s.storeNo  and sd.delFlag = '0'
+		WHERE 
+	  	 	ct.Id=#{id,jdbcType=INTEGER}
+	</select>
+	<!-- 通过合同id查询已退完的合同信息-->
+	<select id="getLockingStore" resultMap="storeDto" parameterType="java.lang.Integer">
+		select 
+			s.Id as storeId,ct.Id,
+			s.StoreNo as storeNo,
+			sd.totalAmount,
+			sd.paymentLockAmt,
+			sd.paymentAmount,
+			sd.receiveAmount
+		FROM
+			Contract ct
+			INNER  JOIN ContractStore cs ON ct.Id = cs.ContractId AND cs.IsDelete = 0
+			INNER JOIN Store s ON s.Id = cs.StoreId AND s.IsDelete = 0
+			inner JOIN Store_Deposit sd on sd.storeNo = s.storeNo  and sd.delFlag = '0' and sd.receiveAmount   &lt;= (sd.paymentAmount+sd.paymentLockAmt)
+			--inner join Store_Payment sp on sp.contractNo = ct.contractNo and sp.delFlag = '0'
+		WHERE 
+	  	 	ct.Id= #{id,jdbcType=INTEGER}
+	</select>
+	<!-- 新增保证金退款页面用 -->
+	<select id="getPaymentContractList" resultMap="contractSearchResultDto" parameterType="Map">
+		SELECT DISTINCT
+		ct.Id as id,ct.AcCityNo as acCityNo,
+		ct.ContractNo as contractNo,
+		ct.AgreementNo as agreementNo,
+		ct.DateCreate as dateCreate,
+		ct.UserCreate as userCreate,
+		ct.ContractStatus as contractStatus,
+		ct.CompanyId as companyId,
+		cy.CompanyName as companyName,
+		ct.ContractType,
+		u.userName AS  userNameCreate
+		,contractStatusName = (SELECT dicValue FROM BAS_DictionaryValue WHERE dicCode = ct.ContractStatus 
+				AND typeId = 104 AND delFlag = 'N' ),
+		contractCityName = (SELECT cityName FROM BAS_City WHERE ct.AcCityNo = CityNo 
+					AND FlagDeleted = 0)
+		FROM Contract ct 
+			INNER JOIN Company cy ON ct.CompanyId = cy.Id AND cy.IsDelete = 0 
+			INNER JOIN USR_User u ON ct.UserCreate = u.userId and u.delFlag = 'N'
+		WHERE 
+			1=1
+			AND ct.contractStatus !=10405
+			AND ct.depositFeeState != 17501
+			AND (ct.refundState != 17803 or  ct.refundState IS NULL)
+		    AND (ISNULL(ct.arrivalDepositFee,0) - ISNULL(ct.totalRefundAmount,0)>0)
+			<if test="cityNo != null and cityNo != ''">
+			   and ct.AcCityNo= #{cityNo}
+			</if>
+			<if test="companyName != null and companyName != ''">
+				<![CDATA[
+    				AND cy.CompanyName  LIKE '%${companyName}%'
+    			]]>
+			</if>
+			<if test="contractNo != null and contractNo != ''">
+				<![CDATA[
+    				AND ct.ContractNo  LIKE '%${contractNo}%'
+    			]]>
+			</if>
+			ORDER BY ct.DateCreate DESC 
+	</select>
+	
+	<update id="updateStr" parameterType="java.util.Map">
+		UPDATE dbo.store_payment
+		<set>
+                <if test="delFlag != null and delFlag != ''">
+                    delFlag = #{delFlag,jdbcType=VARCHAR},
+                </if>
+                <if test="submitOaStatus != null and submitOaStatus != ''">
+                    submitOaStatus = #{submitOaStatus,jdbcType=INTEGER},
+                </if>
+                <if test="userIdUpt != null and userIdUpt != ''">
+                    userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+                    dateUpt = getDate()
+                </if>
+           </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 新增保证金退款 -->
+	<insert id="create" parameterType="cn.com.eju.deal.store.model.StorePayment"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into store_payment ( orderType, paymentNo,contractNo, paymentType, 
+	      totalAmount, approveStatus, submitOaStatus, 
+	      status, confirmTime, flowId, 
+	      dateCreate, userIdCreate, dateUpt, 
+	      userIdUpt, delFlag,refundDate,cityNo,accountProject,accountProjectCode)
+	    values (#{orderType,jdbcType=INTEGER}, #{paymentNo,jdbcType=VARCHAR},
+	      #{contractNo,jdbcType=VARCHAR}, #{paymentType,jdbcType=INTEGER}, 
+	      #{totalAmount,jdbcType=DECIMAL}, #{approveStatus,jdbcType=INTEGER}, #{submitOaStatus,jdbcType=INTEGER}, 
+	      #{status,jdbcType=INTEGER}, #{confirmTime,jdbcType=TIMESTAMP}, #{flowId,jdbcType=VARCHAR}, 
+	      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{dateUpt,jdbcType=TIMESTAMP}, 
+	      #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR}, #{refundDate,jdbcType=TIMESTAMP},
+	      #{cityNo,jdbcType=VARCHAR},#{accountProject,jdbcType=VARCHAR},#{accountProjectCode,jdbcType=VARCHAR})
+	</insert>
+	<!-- 根据业绩城市编号查询其核算主体 -->
+	<select id="queryAccountProject" resultType="cn.com.eju.deal.store.model.StorePayment">
+		SELECT 
+			bcs.accountProject as accountProject,bcs.accountProjectCode as accountProjectCode,bcs.id 
+		FROM CRM.dbo.Bas_CitySetting bcs
+		WHERE bcs.delFlag = 'N' and
+			bcs.cityNo = #{cityNo,jdbcType=VARCHAR}
+		ORDER BY bcs.id 
+	</select>
+</mapper>

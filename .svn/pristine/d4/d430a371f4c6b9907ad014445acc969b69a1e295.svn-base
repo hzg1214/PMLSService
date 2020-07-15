@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.UserBankInfoMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.UserBankInfo">
+		<id column="bankId" property="bankId" jdbcType="INTEGER" />
+		<id column="userId" property="userId" jdbcType="INTEGER" />
+		<result column="userName" property="userName" jdbcType="NVARCHAR" />
+		<result column="bankAccount" property="bankAccount" jdbcType="NVARCHAR" />
+		<result column="bankName" property="bankName" jdbcType="NVARCHAR" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+		<result column="isDefault" property="isDefault" jdbcType="NVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		bankId, userId, userName, bankAccount, bankName,dateCreate,
+		userIdCreate,
+		delFlag,isDefault
+	</sql>
+	<select id="queryList" parameterType="cn.com.eju.deal.user.model.UserBankInfo" resultMap="BaseResultMap">
+	   SELECT 
+	   <include refid="Base_Column_List"/>
+	   FROM USR_UserBankInfo
+	   WHERE
+	   userId = #{userId ,jdbcType = INTEGER} AND delFlag = 'N'
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from USR_UserBankInfo
+	    where bankId = #{bankId,jdbcType=INTEGER}
+	  </select>
+	<insert id="insert" parameterType="cn.com.eju.deal.user.model.UserBankInfo" useGeneratedKeys="true" keyProperty="bankId">
+	   insert into USR_UserBankInfo (userId,
+		userName,
+		bankAccount,
+		bankName,
+		userIdCreate
+		)
+		values (#{userId}, #{userName},
+		#{bankAccount},
+		#{bankName},
+		#{userIdCreate})
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+	    update
+		USR_UserBankInfo
+		set delFlag = 'Y'
+		where bankId = #{bankId,jdbcType=INTEGER}
+	
+	</delete>
+	
+ <update id="updateByBankId" parameterType="cn.com.eju.deal.user.model.UserBankInfo" >
+    update USR_UserBankInfo
+    <set >
+      <if test="userName != null" >
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bankAccount = #{bankAccount,jdbcType=NVARCHAR},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="isDefault != null" >
+        isDefault = #{isDefault,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where bankId = #{bankId,jdbcType=INTEGER}
+  </update>
+	<select id="getByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	   SELECT 
+	   <include refid="Base_Column_List"/>
+	   FROM USR_UserBankInfo
+	   WHERE
+	   userId = #{userId ,jdbcType = INTEGER} AND delFlag = 'N'
+	</select>
+</mapper>

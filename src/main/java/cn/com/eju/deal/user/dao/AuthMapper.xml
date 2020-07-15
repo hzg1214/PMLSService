@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.AuthMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.Auth">
+		<id column="authId" property="authId" jdbcType="INTEGER" />
+		<result column="systemId" property="systemId" jdbcType="INTEGER" />
+		<result column="authName" property="authName" jdbcType="NVARCHAR" />
+		<result column="authCode" property="authCode" jdbcType="NVARCHAR" />
+		<result column="authDesc" property="authDesc" jdbcType="NVARCHAR" />
+		<result column="type" property="type" jdbcType="CHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="treeIdStr" property="treeIdStr" jdbcType="VARCHAR" />
+		<result column="parentId" property="parentId" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		authId,systemId, authName, authCode, authDesc, type, url,
+		treeId.ToString() as
+		treeIdStr,parentId,
+		sortNo, dateCreate,
+		userIdCreate,
+		delFlag
+	</sql>
+
+	<select id="selectByPrimaryKey" resultType="cn.com.eju.deal.user.model.Auth"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from USR_Auth
+		where authId = #{authId,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update
+		USR_Auth
+		set delFlag = 'Y'
+		where authId = #{authId,jdbcType=INTEGER}
+	</delete>
+
+	<select id="list" resultType="cn.com.eju.deal.user.model.Auth" parameterType="java.lang.String">
+		select
+		t.authId,t.systemId,t2.systemName, t.authName, t.authCode, t.authDesc, t.type, t.url,
+		t.treeId.ToString() as
+		treeIdStr,t.parentId,
+		t.sortNo, t.dateCreate,
+		t.userIdCreate,
+		t.delFlag
+		from USR_Auth t
+		left join USR_System t2 on  t2.systemId=t.systemId
+		where t.delFlag = 'N'
+		and t2.systemCode = #{systemCode}
+	</select>
+
+	<select id="urlNotNulllist" resultType="cn.com.eju.deal.user.model.Auth" parameterType="java.lang.String">
+		select
+		t.authId,t.systemId,t2.systemName, t.authName, t.authCode, t.authDesc, t.type, t.url,
+		t.treeId.ToString() as
+		treeIdStr,t.parentId,
+		t.sortNo, t.dateCreate,
+		t.userIdCreate,
+		t.delFlag
+		from USR_Auth t
+		left join USR_System t2 on  t2.systemId=t.systemId
+		where t.delFlag = 'N'
+		and t.url is not null
+		and t2.systemCode =#{systemCode}
+	</select>
+	<select id="getListByParentId" resultType="cn.com.eju.deal.user.model.Auth"
+		parameterType="int">
+		select
+		<include refid="Base_Column_List" />
+		from USR_Auth where parentId = #{parentId}
+		and delFlag = 'N'
+	</select>
+
+	<insert id="insert" parameterType="cn.com.eju.deal.user.model.Auth"
+		useGeneratedKeys="true" keyProperty="authId">
+		insert into USR_Auth (authName,
+		authCode,
+		authDesc, type, url,treeId,
+		parentId, sortNo ,systemId,
+		userIdCreate,delFlag)
+		values (#{authName}, #{authCode},
+		#{authDesc},
+		#{type},
+		#{url},
+		#{treeIdStr},
+		#{parentId}, #{sortNo},#{systemId},
+		#{userIdCreate},#{delFlag})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.user.model.Auth" >
+	    update USR_Auth
+	    <set >
+	      <if test="authName != null" >
+	        authName = #{authName,jdbcType=NVARCHAR},
+	      </if>
+	      <if test="authCode != null" >
+	        authCode = #{authCode,jdbcType=NVARCHAR},
+	      </if>
+	      <if test="authDesc != null" >
+	        authDesc = #{authDesc,jdbcType=NVARCHAR},
+	      </if>
+	      <if test="type != null" >
+	        type = #{type},
+	      </if>
+	      <if test="url != null" >
+	        url = #{url},
+	      </if>
+	      <if test="treeIdStr != null" >
+	        treeId = #{treeIdStr},
+	      </if>
+	      <if test="parentId != null" >
+	        parentId = #{parentId},
+	      </if>
+	      <if test="sortNo != null" >
+	        sortNo = #{sortNo},
+	      </if>
+	      <if test="systemId != null" >
+	        systemId = #{systemId},
+	      </if>
+	      <if test="dateCreate != null" >
+	        dateCreate = #{dateCreate},
+	      </if>
+	      <if test="userIdCreate != null" >
+	        userIdCreate = #{userIdCreate},
+	      </if>
+	      <if test="delFlag != null" >
+	        delFlag = #{delFlag},
+	      </if>
+	    </set>
+    where authId =
+		#{authId,jdbcType=INTEGER}
+  </update>
+  
+  
+	<select id="getListByPostId" resultType="cn.com.eju.deal.user.model.Auth"
+		parameterType="Map">
+		SELECT distinct ua.*,
+			ua.treeId.ToString() as
+			treeIdStr
+		From
+		   USR_Post up
+		   inner join USR_PostRoleMapping  upr
+		   on up.postId = upr.postId 
+		   and  upr.delFlag='N'
+		   inner join USR_Role ur
+		   on upr.roleId = ur.roleId
+		   and ur.delFlag ='N'
+		   inner join USR_RoleAuthMapping  ura
+		   on ura.roleId = ur.roleId
+		   and ura.delFlag ='N'
+		   inner join USR_Auth ua
+		   on ura.authId = ua.authId
+		   and ua.delFlag ='N'
+		   inner join USR_system us
+		   on ua.systemId = us.systemId
+		   and us.delFlag= 'N'
+		   where ua.delFlag ='N'
+		   AND up.postId=#{postId}
+		   AND us.systemCode = #{systemCode}
+		  order by ua.parentId, ua.sortNo
+	</select>
+	
+	
+	<select id="getAllowAuthByHeader" resultType="cn.com.eju.deal.user.model.Auth" parameterType="map">
+		SELECT top 1 t.*
+		FROM (
+		SELECT distinct ua.*,
+     		ua.treeId.ToString() treeIdStr
+		From
+		   USR_Post up
+		   inner join USR_PostRoleMapping  upr
+		   on up.postId = upr.postId 
+		   and  upr.delFlag='N'
+		   inner join USR_Role ur
+		   on upr.roleId = ur.roleId
+		   and ur.delFlag ='N'
+		   inner join USR_RoleAuthMapping  ura
+		   on ura.roleId = ur.roleId
+		   and ura.delFlag ='N'
+		   inner join USR_Auth ua
+		   on ura.authId = ua.authId
+		   and ua.delFlag ='N'		   
+		   inner join USR_system us
+		   on ua.systemId = us.systemId
+		   and us.delFlag= 'N'
+		   where ua.delFlag ='N'
+		   AND up.postId=#{postId}
+		   AND us.systemCode=#{systemCode}
+		   AND ua.type = 'P'
+		   AND  ua.treeId.ToString()  LIKE '${treeStr}%'
+		   AND RTRIM(LTRIM(ua.url)) is NOT null
+		   AND RTRIM(LTRIM(ua.url))  &lt; &gt; ''
+		   ) T
+           ORDER BY t.parentId,t.sortNo
+	</select>
+	
+	
+		<select id="getListByPostIdList" resultType="cn.com.eju.deal.user.model.Auth"
+		parameterType="Map">
+		SELECT distinct ua.*
+		From
+		   USR_Post up
+		   inner join USR_PostRoleMapping  upr
+		   on up.postId = upr.postId 
+		   and  upr.delFlag='N'
+		   inner join USR_Role ur
+		   on upr.roleId = ur.roleId
+		   and ur.delFlag ='N'
+		   inner join USR_RoleAuthMapping  ura
+		   on ura.roleId = ur.roleId
+		   and ura.delFlag ='N'
+		   inner join USR_Auth ua
+		   on ura.authId = ua.authId
+		   and ua.delFlag ='N'		     
+		   inner join USR_system us
+		   on ua.systemId = us.systemId
+		   and us.delFlag= 'N'		   
+		   where ua.delFlag ='N'
+		   AND us.systemCode = #{systemCode}
+		   <foreach collection="ListPostId" item="item" index="index" open="AND ("
+			close=")" separator="OR">
+				<![CDATA[
+	    			up.postId=#{item}
+	    		]]>
+			</foreach>
+	</select>
+	
+	<select id="getAuthByUrlAndType" resultType="cn.com.eju.deal.user.model.Auth"
+		parameterType="Map">
+		SELECT *
+		FROM   USR_Auth
+		WHERE  url = #{url} 
+        AND type = #{type}
+        AND delFlag ='N'
+	</select>
+
+	<select id="getStoreAuditAuthByCity" parameterType="Map" resultType="cn.com.eju.deal.user.model.Auth">
+		SELECT top 1
+			auth.authId, auth.authName, auth.authCode, auth.authDesc,
+			auth.type, auth.url, auth.treeId.ToString() treeIdStr,
+			auth.parentId, auth.sortNo, auth.systemId, sys.systemName
+		  FROM dbo.USR_Auth auth
+			LEFT JOIN dbo.USR_System sys ON auth.systemId = sys.systemId
+		 WHERE auth.delFlag = 'N'
+		   AND auth.authId IN (
+		SELECT authId FROM dbo.V_USR_UserAuth
+		 WHERE authName like '门店审核'
+		<if test="cityNo != null and cityNo != ''">
+			AND cityNo = #{cityNo,jdbcType=NVARCHAR}
+		</if>
+		<if test="userId != null and userId != ''">
+			AND userId = #{userId}
+		</if>
+		)
+	</select>
+	
+	
+	<select id="getAuthListByParam" resultType="cn.com.eju.deal.user.model.Auth"
+		parameterType="Map">
+		SELECT distinct ua.*
+		FROM  dbo.USR_UserPostMapping   upm
+		   INNER JOIN  		   USR_Post up
+		   ON  up.postId=upm.postId AND  upm.delFlag='N' AND up.delFlag='N'
+		   inner join USR_PostRoleMapping  upr
+		   on up.postId = upr.postId 
+		   and  upr.delFlag='N'
+		   inner join USR_Role ur
+		   on upr.roleId = ur.roleId
+		   and ur.delFlag ='N'
+		   inner join USR_RoleAuthMapping  ura
+		   on ura.roleId = ur.roleId
+		   and ura.delFlag ='N'
+		   inner join USR_Auth ua
+		   on ura.authId = ua.authId
+		   and ua.delFlag ='N'		     
+		   inner join USR_system us
+		   on ua.systemId = us.systemId
+		   and us.delFlag= 'N'		   
+		   where ua.delFlag ='N'
+		    AND  upm.delFlag='N'
+		   AND us.systemCode = #{systemCode}
+		   AND  upm.userId=#{userId}
+		order by ua.parentId ,ua.sortNo
+	</select>
+	
+
+</mapper>

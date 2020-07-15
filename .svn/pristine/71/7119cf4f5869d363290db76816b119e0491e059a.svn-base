@@ -1,0 +1,96 @@
+package cn.com.eju.pmls.developer.model;
+
+import java.util.Date;
+
+/**
+ * 
+ * desc:开发商品牌entity
+ * @date   :2019年11月7日
+ */
+public class DeveloperBrand {
+    private Integer id;//主键ID
+    private String developerBrandCode;//开发商编号
+    private String developerBrandName;//开发商名称
+    private Integer parentId;//父级ID
+    private String orgId;//架构ID
+    private String dateCreate;//创建时间
+    private Date dateUpdate;//更新时间
+    private String userIdCreate;//创建人
+    private String userIdUpdate;//更新人
+    private Integer delFlag;//删除标识
+    private String remark;//备注
+    private Integer partner;//合作方类型
+	public Date getDateUpdate() {
+		return dateUpdate;
+	}
+	public void setDateUpdate(Date dateUpdate) {
+		this.dateUpdate = dateUpdate;
+	}
+	public String getUserIdUpdate() {
+		return userIdUpdate;
+	}
+	public void setUserIdUpdate(String userIdUpdate) {
+		this.userIdUpdate = userIdUpdate;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getDeveloperBrandCode() {
+		return developerBrandCode;
+	}
+	public void setDeveloperBrandCode(String developerBrandCode) {
+		this.developerBrandCode = developerBrandCode;
+	}
+	public String getDeveloperBrandName() {
+		return developerBrandName;
+	}
+	public void setDeveloperBrandName(String developerBrandName) {
+		this.developerBrandName = developerBrandName;
+	}
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+	public String getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
+	public String getDateCreate() {
+		return dateCreate;
+	}
+	public void setDateCreate(String dateCreate) {
+		this.dateCreate = dateCreate;
+	}
+	public String getUserIdCreate() {
+		return userIdCreate;
+	}
+	public void setUserIdCreate(String userIdCreate) {
+		this.userIdCreate = userIdCreate;
+	}
+	public Integer getDelFlag() {
+		return delFlag;
+	}
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public Integer getPartner() {
+		return partner;
+	}
+	public void setPartner(Integer partner) {
+		this.partner = partner;
+	}
+    
+}

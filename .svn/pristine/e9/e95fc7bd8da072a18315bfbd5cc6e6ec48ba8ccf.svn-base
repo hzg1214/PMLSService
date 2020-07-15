@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.performswitch.dao.CityUseMapper">
+
+	<resultMap id="BaseResultMap" type="cn.com.eju.pmls.performswitch.model.CityUse">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="cityNo" property="cityNo" jdbcType="NVARCHAR" />
+		<result column="cityName" property="cityName" jdbcType="NVARCHAR" />
+		<result column="oaMdfpTemplateCode" property="oaMdfpTemplateCode" jdbcType="NVARCHAR" />
+		<result column="oaEjuCompanyName" property="oaEjuCompanyName" jdbcType="NVARCHAR" />
+		<result column="oaEjuCompanyId" property="oaEjuCompanyId" jdbcType="NVARCHAR" />
+		<result column="oaMdysTemplateCode" property="oaMdysTemplateCode" jdbcType="NVARCHAR" />
+
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="delFlag" property="delFlag" jdbcType="BIT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, cityNo, cityName, userIdCreate, dateCreate, delFlag,oaMdfpTemplateCode,oaEjuCompanyName,oaEjuCompanyId,oaMdysTemplateCode
+	</sql>
+
+	<!-- 查询 list -->
+	<select id="getByCityNo" resultType="cn.com.eju.pmls.performswitch.model.CityUse" parameterType="Map">
+		SELECT
+			*
+		FROM
+		OMS.dbo.CRM_CityUse
+		<where>
+			delFlag = 0
+			<if test="cityNo != null and cityNo != ''">
+  		  		<![CDATA[
+    				AND cityNo = #{cityNo,jdbcType=NVARCHAR}
+    			]]>
+			</if>
+		</where>
+	</select>
+
+</mapper>

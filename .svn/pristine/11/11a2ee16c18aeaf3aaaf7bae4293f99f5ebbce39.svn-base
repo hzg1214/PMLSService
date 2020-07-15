@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.LnkYjWyInfoMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.LnkYjWyInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="wyTypeCode" property="wyTypeCode" jdbcType="NVARCHAR" />
+    <result column="wyTypName" property="wyTypName" jdbcType="NVARCHAR" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, wyTypeCode, wyTypName, createDate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from LNK_Yj_Wy_Info
+    where delFlag=0 and id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from LNK_Yj_Wy_Info
+    where delFlag=0 and id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjWyInfo" >
+    insert into LNK_Yj_Wy_Info (id, wyTypeCode, wyTypName, 
+      createDate, userIdCreate, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{wyTypeCode,jdbcType=NVARCHAR}, #{wyTypName,jdbcType=NVARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjWyInfo" >
+    insert into LNK_Yj_Wy_Info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="wyTypeCode != null" >
+        wyTypeCode,
+      </if>
+      <if test="wyTypName != null" >
+        wyTypName,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="wyTypeCode != null" >
+        #{wyTypeCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="wyTypName != null" >
+        #{wyTypName,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjWyInfo" >
+    update LNK_Yj_Wy_Info
+    <set >
+      <if test="wyTypeCode != null" >
+        wyTypeCode = #{wyTypeCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="wyTypName != null" >
+        wyTypName = #{wyTypName,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjWyInfo" >
+    update LNK_Yj_Wy_Info
+    set wyTypeCode = #{wyTypeCode,jdbcType=NVARCHAR},
+      wyTypName = #{wyTypName,jdbcType=NVARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id ='getWyInfoList' resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from LNK_Yj_Wy_Info
+    where delFlag = 0
+  </select>
+  
+  <select id ='getWyTpyeNameByCode' resultMap="BaseResultMap">
+    select top 1
+    <include refid="Base_Column_List" />
+    from LNK_Yj_Wy_Info
+    where delFlag = 0 and wyTypeCode = #{wyTypeCode,jdbcType=NVARCHAR}
+  </select>
+</mapper>

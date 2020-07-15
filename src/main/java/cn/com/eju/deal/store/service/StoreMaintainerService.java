@@ -1,0 +1,163 @@
+package cn.com.eju.deal.store.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.store.dao.StoreMapper;
+import cn.com.eju.deal.store.model.Store;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.support.ReturnCode;
+import cn.com.eju.deal.store.dao.StoreMaintainerMapper;
+import cn.com.eju.deal.store.model.StoreMaintainer;
+import cn.com.eju.deal.dto.store.StoreMaintainerDto;
+
+/** 
+* @ClassName: StoreMaintainerService 
+* @Description: 门店维护人service
+* @author 张文辉
+* @date 2016年3月24日 下午2:18:04 
+*/
+@Service("storeMaintainerService")
+public class StoreMaintainerService{
+
+    @Resource
+    private StoreMaintainerMapper storeMaintainerMapper;
+
+    @Resource
+    private StoreMapper storeMapper;
+
+    /** 
+    * @Title: create 
+    * @Description: 新增门店维护人关系
+    * @param storeMaintainer
+    * @return
+    */
+    public ResultData<?> create(StoreMaintainer storeMaintainer) throws Exception
+    {
+        ResultData<StoreMaintainer> resultData=new ResultData<>();
+        String isNew = storeMaintainer.getIsNew();
+        Integer count=0;
+        if("1".equals(isNew)) {
+        	 count=this.storeMaintainerMapper.insertNew(storeMaintainer);
+        }else {
+        	count=this.storeMaintainerMapper.insert(storeMaintainer);
+        }
+        if (count>0) {
+            resultData.setSuccess();
+            resultData.setReturnCode(ReturnCode.SUCCESS);
+            resultData.setReturnMsg("新增门店维护人关系成功");
+        }else{
+            resultData.setFail();
+            resultData.setReturnCode(ReturnCode.FAILURE);
+            resultData.setReturnMsg("新增门店维护人关系失败");
+        }
+        return resultData;
+    }
+    
+    /**
+     * 查询门店维护人历史
+     */
+    public ResultData<List<StoreMaintainer>> getStoreMaintainerHisList(Map<?, ?> param)  throws Exception{
+        ResultData<List<StoreMaintainer>> br = new ResultData<List<StoreMaintainer>>();
+        String isNew = (String) param.get("isNew");
+        List<StoreMaintainer> userList = null;
+        if("1".equals(isNew)) {
+        	 userList = this.storeMaintainerMapper.getStoreMaintainerHisListNew(param);
+        }else {
+        	 userList = this.storeMaintainerMapper.getStoreMaintainerHisList(param);
+        }
+        if (userList == null) {
+            br.setReturnMsg("获取数据失败。");
+            br.setReturnCode(ReturnCode.FAILURE);
+        }
+        br.setReturnCode(ReturnCode.SUCCESS);
+        br.setTotalCount((String) param.get(QueryConst.TOTAL_COUNT));
+        br.setReturnData(userList);
+        return br;
+    }
+    
+
+    
+    //Add 2017.04/10 续签保存用 cning --->
+      /**
+       * 查询门店维护人信息
+       *
+       * @param storeId
+       * @return
+       */    
+      public StoreMaintainerDto getByStoreId(int storeId)
+          throws Exception
+      {
+           StoreMaintainerDto storeMaintainerDto=new StoreMaintainerDto();
+      	 
+           // 获取门店维护人信息
+           StoreMaintainer storeMaintainerMdl = storeMaintainerMapper.getByStoreId(storeId);
+           
+           //Model转换Dto
+           BeanUtils.copyProperties(storeMaintainerMdl, storeMaintainerDto);
+           return storeMaintainerDto;
+      }
+    //Add 2017.04/10 续签保存用 cning <---
+      
+      /**
+       * 查询门店是否有维护人
+       */
+      public Boolean hasMtner(Integer storeId) throws Exception{
+    	  return storeMaintainerMapper.hasMtner(storeId);
+      }
+
+    /**
+     * 门店维护人的check
+     */
+    public ResultData<?> chkMaintainer(Map<?, ?> param)  throws Exception{
+        ResultData<?> br = new ResultData<List<StoreMaintainer>>();
+        br.setReturnCode(ReturnCode.SUCCESS);
+
+        String storeIdStr = (String)param.get("storeId");
+        Integer storeId = null;
+        if(StringUtil.isNotEmpty(storeIdStr)){
+            storeId = Integer.valueOf(storeIdStr);
+        }
+        if(storeId != null){
+
+            Store store = storeMapper.getById(storeId);
+            Integer centerId = store.getCenterId();
+
+            if(centerId == null){
+                br.setFail("请联系中心负责人分配门店维护人！");
+                return br;
+            }
+        }else{
+            br.setFail("请选择门店");
+            return br;
+        }
+
+        List<StoreMaintainer> storeMaintainerList = this.storeMaintainerMapper.getStoreMaintainerHisList(param);
+
+        if(storeMaintainerList == null || storeMaintainerList.size() <= 0){
+            br.setFail("请联系中心负责人分配门店维护人");
+            return br;
+        }
+
+        StoreMaintainer storeMaintainer = storeMaintainerList.get(0);
+        Integer inStatus = storeMaintainer.getInStatus();
+        if(inStatus != null) {
+            if (1074 == inStatus || 1075 == inStatus) {
+                br.setFail("维护人已离职，请联系中心负责人重新分配维护人");
+                return br;
+            }
+        }else{
+            br.setFail("获取门店维护人在职状态失败，请联系管理员");
+            return br;
+        }
+
+        return br;
+    }
+}

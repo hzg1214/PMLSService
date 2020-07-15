@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.rptCompany.dao.RptCompanyDetailMapper">
+
+  <!--获取经纪公司明细列表-->
+  <select id="queryCompanyDetailList"  parameterType="Map" resultType="cn.com.eju.pmls.rptCompany.dto.RptCompanyDetailDto">
+    	
+
+		--当年大定金额
+        SELECT  companyNo ,
+                SUM(yearlyAmount) thisTotal
+		INTO #rough_this
+        FROM    dbo.RPT_CompanyDetail
+        WHERE   roughYear = #{roughYear}  --大定数据年份
+        GROUP BY companyNo;
+
+		--海波龙数据
+		SELECT DISTINCT
+			c.id
+            ,c.CityNo 
+            ,c.CityName
+            ,ref.qyCode 
+            ,ref.qyName
+            ,ref.areaCityCode
+	    	,ref.areaCityName
+	   	INTO #rough_hbl
+        FROM    dbo.cloud_shy_fy_city_ref_new ref
+                INNER JOIN dbo.USR_Group g WITH(NOLOCK) ON ref.cityGroupId = g.groupId
+                INNER JOIN dbo.BAS_City c  WITH(NOLOCK) ON c.ID = g.cityId
+        WHERE   year = #{organization}    --架构年份
+                AND orgType = 'FYYJCS'
+                AND cityGroupId NOT IN ( -2, -4, 1733 )
+
+		--旗下门店数
+		SELECT  cs.CompanyId ,
+                COUNT(DISTINCT s.StoreNo) storeNums
+		INTO #store_num
+        FROM    dbo.CompanyStore cs
+                INNER JOIN dbo.Store s WITH(NOLOCK) ON cs.StoreId = s.Id
+                                            AND s.IsDelete = 0
+        WHERE   cs.IsDelete = 0 and  cs.flag = 0
+        GROUP BY cs.CompanyId;
+        
+        
+        --获取最新框架信息
+		SELECT  *
+		INTO    #new_lfc
+		FROM    ( SELECT    ROW_NUMBER() OVER ( PARTITION BY lfc.companyNo ORDER BY lfc.id DESC ) AS w ,
+							lfc.companyNo ,
+							lfc.contractNo,
+							CONVERT(VARCHAR(10), lfc.dateLifeStart, 120) dateLifeStart ,
+							CONVERT(VARCHAR(10), lfc.dateLifeEnd, 120) dateLifeEnd ,
+							CONVERT(VARCHAR(10), lfc.approvePassDate, 120) approvePassDate ,
+							uufc.userCode ,
+							uufc.userName
+				  FROM      LNK_FrameContract lfc
+							LEFT JOIN dbo.USR_User uufc WITH ( NOLOCK ) ON uufc.userId = lfc.userIdCreate
+																  AND uufc.delFlag = 'N'
+				  WHERE     lfc.delFlag = 0
+				) new_lfc
+		WHERE   w = 1;  
+		
+<!--                   SELECT  MAX(dateCreate),companyNo -->
+<!-- 					FROM    LNK_FrameContract -->
+<!-- 					WHERE delFlag=0   -->
+<!-- 				  GROUP BY companyNo -->
+
+        --获取签框架信息-是否签框架
+        SELECT  CASE WHEN lfc.companyNo >'' THEN 'yes'
+                     ELSE 'no'
+                END isFrameContract ,
+                lfc.*
+
+        INTO    #frameData
+        FROM    dbo.Company m4
+                LEFT JOIN #new_lfc lfc ON lfc.companyNo = m4.CompanyNo;
+
+
+		SELECT
+		 ROW_NUMBER() OVER(ORDER BY  t1.DateCreate desc) AS rowNum  
+		,t2.* 
+        ,t1.Id id
+        ,t1.companyNo  comCompanyNo
+        ,t1.CompanyName companyName 
+        ,t1.brandType                   --业务类型
+        ,brandTypeStr = ( CASE WHEN t1.brandType =29401
+                                         THEN '分销'
+							   WHEN t1.brandType =29402
+                                         THEN '其他'
+										 ELSE '-'
+                                    END )
+        ,t3.CityNo acCityNo             --业绩所在城市  CRM
+        ,t3.CityName acCityName 
+        ,t3.areaCityCode areaCityNo          --业绩归属城市  海波龙
+        ,t3.areaCityName areaCityName 
+        ,t3.qyCode regionCode           --业绩归属区域  海波龙
+        ,t3.qyName regionName
+        ,t4.isFrameContract                          --是否签框架
+        ,t4.contractNo                               --框架合同编号
+        ,t4.dateLifeStart frameDateStart             --框架开始日期
+        ,t4.dateLifeEnd   frameDateEnd             --框架结束日期
+        ,t4.approvePassDate frameApprovePassDate     --框架过审日期
+        ,t4.userCode  frameCreateUserCode            --框架创建人
+        ,t4.userName  frameCreateUserName
+		,ISNULL(t5.storeNums,0) storeNums      --旗下门店数             
+		,dbo.F_ClearNullMoney(ISNULL(t6.yearlyAmount,0)+ISNULL(t2.preAmount,0)) totalAmount--总累计
+		,dbo.F_ClearNullMoney(t2.preAmount) preTotal--当年以前
+		,dbo.F_ClearNullMoney(t6.yearlyAmount) thisTotal--当前新增
+FROM    dbo.Company t1           
+        LEFT JOIN dbo.RPT_CompanyDetail t2 WITH(NOLOCK) ON t1.CompanyNo = t2.CompanyNo and  roughYear=#{roughYear}    --大定数据  年份
+        LEFT JOIN #rough_hbl t3 WITH(NOLOCK) ON t3.CityNo = t1.AcCityNo
+        LEFT JOIN #frameData t4 WITH(NOLOCK) ON t4.companyNo = t1.CompanyNo
+        LEFT JOIN #store_num t5 WITH(NOLOCK) ON t5.CompanyId = t1.Id
+		LEFT JOIN #rough_this t6 WITH(NOLOCK) ON t6.companyNo=t1.CompanyNo
+		
+WHERE   t1.IsDelete = 0
+<!-- 		归属城市 -->
+	    <if test="areaCityCodeList != null">
+			AND t3.areaCityCode IN
+			<foreach collection="areaCityCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+<!-- 		所在城市 -->
+		<if test="cityIdList != null">
+			AND t3.id IN
+			<foreach collection="cityIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+<!-- 			业务类型 -->
+	    <if test="brandType != null and brandType!=''">
+            AND t1.brandType=#{brandType}
+        </if>
+        <!--         是否签框架 -->
+        <if test="isFrameContract!=null and isFrameContract!='' ">
+	      	AND t4.isFrameContract=#{isFrameContract}
+	    </if>
+<!-- 	    经纪公司 -->
+        <if test="companyNo!=null and companyNo!=''">
+	      <![CDATA[
+  				AND (t1.companyNo LIKE '%${companyNo}%' or t1.companyName LIKE '%${companyNo}%')
+  				]]>
+	    </if>
+	    ORDER BY  rowNum;
+
+	    
+	    
+DROP TABLE #rough_this;
+DROP TABLE #store_num;
+DROP TABLE #new_lfc;
+DROP TABLE #frameData;
+
+  </select>
+  
+   <!-- 查询 list 表头-->
+    <select id="getCompanyStoreDetailTitle" parameterType="Map" resultType="cn.com.eju.pmls.rptCompany.dto.CompanyStoreDetailTitleDto">
+        
+		SELECT 
+			(CASE WHEN t.weekStartDate1 IS NOT NULL THEN CONCAT('第1周(',t.weekStartDate1,'至',t.weekEndDate1,')') ELSE NULL END) weekDate1
+		, (CASE WHEN t.weekStartDate2 IS NOT NULL THEN CONCAT('第2周(',t.weekStartDate2,'至',t.weekEndDate2,')') ELSE NULL END) weekDate2
+		, (CASE WHEN t.weekStartDate3 IS NOT NULL THEN CONCAT('第3周(',t.weekStartDate3,'至',t.weekEndDate3,')') ELSE NULL END) weekDate3
+		, (CASE WHEN t.weekStartDate4 IS NOT NULL THEN CONCAT('第4周(',t.weekStartDate4,'至',t.weekEndDate4,')') ELSE NULL END) weekDate4
+		, (CASE WHEN t.weekStartDate5 IS NOT NULL THEN CONCAT('第5周(',t.weekStartDate5,'至',t.weekEndDate5,')') ELSE NULL END) weekDate5
+		, (CASE WHEN t.weekStartDate6 IS NOT NULL THEN CONCAT('第6周(',t.weekStartDate6,'至',t.weekEndDate6,')') ELSE NULL END) weekDate6
+		, (CASE WHEN t.weekStartDate7 IS NOT NULL THEN CONCAT('第7周(',t.weekStartDate7,'至',t.weekEndDate7,')') ELSE NULL END) weekDate7
+		, (CASE WHEN t.weekStartDate8 IS NOT NULL THEN CONCAT('第8周(',t.weekStartDate8,'至',t.weekEndDate8,')') ELSE NULL END) weekDate8
+		, (CASE WHEN t.weekStartDate9 IS NOT NULL THEN CONCAT('第9周(',t.weekStartDate9,'至',t.weekEndDate9,')') ELSE NULL END) weekDate9
+		
+		, (CASE WHEN t.weekStartDate10 IS NOT NULL THEN CONCAT('第10周(',t.weekStartDate10,'至',t.weekEndDate10,')') ELSE NULL END) weekDate10
+		, (CASE WHEN t.weekStartDate11 IS NOT NULL THEN CONCAT('第11周(',t.weekStartDate11,'至',t.weekEndDate11,')') ELSE NULL END) weekDate11
+		, (CASE WHEN t.weekStartDate12 IS NOT NULL THEN CONCAT('第12周(',t.weekStartDate12,'至',t.weekEndDate12,')') ELSE NULL END) weekDate12
+		, (CASE WHEN t.weekStartDate13 IS NOT NULL THEN CONCAT('第13周(',t.weekStartDate13,'至',t.weekEndDate13,')') ELSE NULL END) weekDate13
+		, (CASE WHEN t.weekStartDate14 IS NOT NULL THEN CONCAT('第14周(',t.weekStartDate14,'至',t.weekEndDate14,')') ELSE NULL END) weekDate14
+		, (CASE WHEN t.weekStartDate15 IS NOT NULL THEN CONCAT('第15周(',t.weekStartDate15,'至',t.weekEndDate15,')') ELSE NULL END) weekDate15
+		, (CASE WHEN t.weekStartDate16 IS NOT NULL THEN CONCAT('第16周(',t.weekStartDate16,'至',t.weekEndDate16,')') ELSE NULL END) weekDate16
+		, (CASE WHEN t.weekStartDate17 IS NOT NULL THEN CONCAT('第17周(',t.weekStartDate17,'至',t.weekEndDate17,')') ELSE NULL END) weekDate17
+		, (CASE WHEN t.weekStartDate18 IS NOT NULL THEN CONCAT('第18周(',t.weekStartDate18,'至',t.weekEndDate18,')') ELSE NULL END) weekDate18
+		, (CASE WHEN t.weekStartDate19 IS NOT NULL THEN CONCAT('第19周(',t.weekStartDate19,'至',t.weekEndDate19,')') ELSE NULL END) weekDate19
+		
+		, (CASE WHEN t.weekStartDate20 IS NOT NULL THEN CONCAT('第20周(',t.weekStartDate20,'至',t.weekEndDate20,')') ELSE NULL END) weekDate20
+		, (CASE WHEN t.weekStartDate21 IS NOT NULL THEN CONCAT('第21周(',t.weekStartDate21,'至',t.weekEndDate21,')') ELSE NULL END) weekDate21
+		, (CASE WHEN t.weekStartDate22 IS NOT NULL THEN CONCAT('第22周(',t.weekStartDate22,'至',t.weekEndDate22,')') ELSE NULL END) weekDate22
+		, (CASE WHEN t.weekStartDate23 IS NOT NULL THEN CONCAT('第23周(',t.weekStartDate23,'至',t.weekEndDate23,')') ELSE NULL END) weekDate23
+		, (CASE WHEN t.weekStartDate24 IS NOT NULL THEN CONCAT('第24周(',t.weekStartDate24,'至',t.weekEndDate24,')') ELSE NULL END) weekDate24
+		, (CASE WHEN t.weekStartDate25 IS NOT NULL THEN CONCAT('第25周(',t.weekStartDate25,'至',t.weekEndDate25,')') ELSE NULL END) weekDate25
+		, (CASE WHEN t.weekStartDate26 IS NOT NULL THEN CONCAT('第26周(',t.weekStartDate26,'至',t.weekEndDate26,')') ELSE NULL END) weekDate26
+		, (CASE WHEN t.weekStartDate27 IS NOT NULL THEN CONCAT('第27周(',t.weekStartDate27,'至',t.weekEndDate27,')') ELSE NULL END) weekDate27
+		, (CASE WHEN t.weekStartDate28 IS NOT NULL THEN CONCAT('第28周(',t.weekStartDate28,'至',t.weekEndDate28,')') ELSE NULL END) weekDate28
+		, (CASE WHEN t.weekStartDate29 IS NOT NULL THEN CONCAT('第29周(',t.weekStartDate29,'至',t.weekEndDate29,')') ELSE NULL END) weekDate29
+		
+		, (CASE WHEN t.weekStartDate30 IS NOT NULL THEN CONCAT('第30周(',t.weekStartDate30,'至',t.weekEndDate30,')') ELSE NULL END) weekDate30
+		, (CASE WHEN t.weekStartDate31 IS NOT NULL THEN CONCAT('第31周(',t.weekStartDate31,'至',t.weekEndDate31,')') ELSE NULL END) weekDate31
+		, (CASE WHEN t.weekStartDate32 IS NOT NULL THEN CONCAT('第32周(',t.weekStartDate32,'至',t.weekEndDate32,')') ELSE NULL END) weekDate32
+		, (CASE WHEN t.weekStartDate33 IS NOT NULL THEN CONCAT('第33周(',t.weekStartDate33,'至',t.weekEndDate33,')') ELSE NULL END) weekDate33
+		, (CASE WHEN t.weekStartDate34 IS NOT NULL THEN CONCAT('第34周(',t.weekStartDate34,'至',t.weekEndDate34,')') ELSE NULL END) weekDate34
+		, (CASE WHEN t.weekStartDate35 IS NOT NULL THEN CONCAT('第35周(',t.weekStartDate35,'至',t.weekEndDate35,')') ELSE NULL END) weekDate35
+		, (CASE WHEN t.weekStartDate36 IS NOT NULL THEN CONCAT('第36周(',t.weekStartDate36,'至',t.weekEndDate36,')') ELSE NULL END) weekDate36
+		, (CASE WHEN t.weekStartDate37 IS NOT NULL THEN CONCAT('第37周(',t.weekStartDate37,'至',t.weekEndDate37,')') ELSE NULL END) weekDate37
+		, (CASE WHEN t.weekStartDate38 IS NOT NULL THEN CONCAT('第38周(',t.weekStartDate38,'至',t.weekEndDate38,')') ELSE NULL END) weekDate38
+		, (CASE WHEN t.weekStartDate39 IS NOT NULL THEN CONCAT('第39周(',t.weekStartDate39,'至',t.weekEndDate39,')') ELSE NULL END) weekDate39
+		
+		, (CASE WHEN t.weekStartDate40 IS NOT NULL THEN CONCAT('第40周(',t.weekStartDate40,'至',t.weekEndDate40,')') ELSE NULL END) weekDate40
+		, (CASE WHEN t.weekStartDate41 IS NOT NULL THEN CONCAT('第41周(',t.weekStartDate41,'至',t.weekEndDate41,')') ELSE NULL END) weekDate41
+		, (CASE WHEN t.weekStartDate42 IS NOT NULL THEN CONCAT('第42周(',t.weekStartDate42,'至',t.weekEndDate42,')') ELSE NULL END) weekDate42
+		, (CASE WHEN t.weekStartDate43 IS NOT NULL THEN CONCAT('第43周(',t.weekStartDate43,'至',t.weekEndDate43,')') ELSE NULL END) weekDate43
+		, (CASE WHEN t.weekStartDate44 IS NOT NULL THEN CONCAT('第44周(',t.weekStartDate44,'至',t.weekEndDate44,')') ELSE NULL END) weekDate44
+		, (CASE WHEN t.weekStartDate45 IS NOT NULL THEN CONCAT('第45周(',t.weekStartDate45,'至',t.weekEndDate45,')') ELSE NULL END) weekDate45
+		, (CASE WHEN t.weekStartDate46 IS NOT NULL THEN CONCAT('第46周(',t.weekStartDate46,'至',t.weekEndDate46,')') ELSE NULL END) weekDate46
+		, (CASE WHEN t.weekStartDate47 IS NOT NULL THEN CONCAT('第47周(',t.weekStartDate47,'至',t.weekEndDate47,')') ELSE NULL END) weekDate47
+		, (CASE WHEN t.weekStartDate48 IS NOT NULL THEN CONCAT('第48周(',t.weekStartDate48,'至',t.weekEndDate48,')') ELSE NULL END) weekDate48
+		, (CASE WHEN t.weekStartDate49 IS NOT NULL THEN CONCAT('第49周(',t.weekStartDate49,'至',t.weekEndDate49,')') ELSE NULL END) weekDate49
+		
+		, (CASE WHEN t.weekStartDate50 IS NOT NULL THEN CONCAT('第50周(',t.weekStartDate50,'至',t.weekEndDate50,')') ELSE NULL END) weekDate50
+		, (CASE WHEN t.weekStartDate51 IS NOT NULL THEN CONCAT('第51周(',t.weekStartDate51,'至',t.weekEndDate51,')') ELSE NULL END) weekDate51
+		, (CASE WHEN t.weekStartDate52 IS NOT NULL THEN CONCAT('第52周(',t.weekStartDate52,'至',t.weekEndDate52,')') ELSE NULL END) weekDate52
+		, (CASE WHEN t.weekStartDate53 IS NOT NULL THEN CONCAT('第53周(',t.weekStartDate53,'至',t.weekEndDate53,')') ELSE NULL END) weekDate53
+		, (CASE WHEN t.weekStartDate54 IS NOT NULL THEN CONCAT('第54周(',t.weekStartDate54,'至',t.weekEndDate54,')') ELSE NULL END) weekDate54
+				  FROM (SELECT  t1.year ,
+		MAX(CASE WHEN t1.week = 1 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate1   ,
+		MAX(CASE WHEN t1.week = 1 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate1   ,
+		MAX(CASE WHEN t1.week = 2 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate2   ,
+		MAX(CASE WHEN t1.week = 2 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate2   ,
+		MAX(CASE WHEN t1.week = 3 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate3   ,
+		MAX(CASE WHEN t1.week = 3 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate3   ,
+		MAX(CASE WHEN t1.week = 4 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate4   ,
+		MAX(CASE WHEN t1.week = 4 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate4   ,
+		MAX(CASE WHEN t1.week = 5 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate5   ,
+		MAX(CASE WHEN t1.week = 5 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate5   ,
+		MAX(CASE WHEN t1.week = 6 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate6   ,
+		MAX(CASE WHEN t1.week = 6 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate6   ,
+		MAX(CASE WHEN t1.week = 7 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate7   ,
+		MAX(CASE WHEN t1.week = 7 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate7   ,
+		MAX(CASE WHEN t1.week = 8 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate8   ,
+		MAX(CASE WHEN t1.week = 8 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate8   ,
+		MAX(CASE WHEN t1.week = 9 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate9   ,
+		MAX(CASE WHEN t1.week = 9 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate9   ,
+		MAX(CASE WHEN t1.week = 10 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate10 ,
+		MAX(CASE WHEN t1.week = 10 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate10 ,
+		
+		MAX(CASE WHEN t1.week = 11 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate11 ,
+		MAX(CASE WHEN t1.week = 11 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate11 ,
+		MAX(CASE WHEN t1.week = 12 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate12 ,
+		MAX(CASE WHEN t1.week = 12 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate12 ,
+		MAX(CASE WHEN t1.week = 13 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate13 ,
+		MAX(CASE WHEN t1.week = 13 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate13 ,
+		MAX(CASE WHEN t1.week = 14 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate14 ,
+		MAX(CASE WHEN t1.week = 14 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate14 ,
+		MAX(CASE WHEN t1.week = 15 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate15 ,
+		MAX(CASE WHEN t1.week = 15 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate15 ,
+		MAX(CASE WHEN t1.week = 16 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate16 ,
+		MAX(CASE WHEN t1.week = 16 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate16 ,
+		MAX(CASE WHEN t1.week = 17 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate17 ,
+		MAX(CASE WHEN t1.week = 17 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate17 ,
+		MAX(CASE WHEN t1.week = 18 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate18 ,
+		MAX(CASE WHEN t1.week = 18 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate18 ,
+		MAX(CASE WHEN t1.week = 19 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate19 ,
+		MAX(CASE WHEN t1.week = 19 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate19 ,
+		MAX(CASE WHEN t1.week = 20 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate20 ,
+		MAX(CASE WHEN t1.week = 20 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate20 ,
+		
+		MAX(CASE WHEN t1.week = 21 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate21   ,
+		MAX(CASE WHEN t1.week = 21 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate21   ,
+		MAX(CASE WHEN t1.week = 22 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate22   ,
+		MAX(CASE WHEN t1.week = 22 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate22   ,
+		MAX(CASE WHEN t1.week = 23 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate23   ,
+		MAX(CASE WHEN t1.week = 23 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate23   ,
+		MAX(CASE WHEN t1.week = 24 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate24   ,
+		MAX(CASE WHEN t1.week = 24 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate24   ,
+		MAX(CASE WHEN t1.week = 25 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate25   ,
+		MAX(CASE WHEN t1.week = 25 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate25   ,
+		MAX(CASE WHEN t1.week = 26 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate26   ,
+		MAX(CASE WHEN t1.week = 26 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate26   ,
+		MAX(CASE WHEN t1.week = 27 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate27   ,
+		MAX(CASE WHEN t1.week = 27 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate27   ,
+		MAX(CASE WHEN t1.week = 28 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate28   ,
+		MAX(CASE WHEN t1.week = 28 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate28   ,
+		MAX(CASE WHEN t1.week = 29 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate29   ,
+		MAX(CASE WHEN t1.week = 29 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate29   ,
+		
+		MAX(CASE WHEN t1.week = 30 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate30   ,
+		MAX(CASE WHEN t1.week = 30 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate30   ,
+		MAX(CASE WHEN t1.week = 31 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate31   ,
+		MAX(CASE WHEN t1.week = 31 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate31   ,
+		MAX(CASE WHEN t1.week = 32 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate32   ,
+		MAX(CASE WHEN t1.week = 32 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate32   ,
+		MAX(CASE WHEN t1.week = 33 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate33   ,
+		MAX(CASE WHEN t1.week = 33 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate33   ,
+		MAX(CASE WHEN t1.week = 34 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate34   ,
+		MAX(CASE WHEN t1.week = 34 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate34   ,
+		MAX(CASE WHEN t1.week = 35 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate35   ,
+		MAX(CASE WHEN t1.week = 35 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate35   ,
+		MAX(CASE WHEN t1.week = 36 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate36   ,
+		MAX(CASE WHEN t1.week = 36 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate36   ,
+		MAX(CASE WHEN t1.week = 37 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate37   ,
+		MAX(CASE WHEN t1.week = 37 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate37   ,
+		MAX(CASE WHEN t1.week = 38 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate38   ,
+		MAX(CASE WHEN t1.week = 38 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate38   ,
+		MAX(CASE WHEN t1.week = 39 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate39   ,
+		MAX(CASE WHEN t1.week = 39 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate39   ,
+		
+		MAX(CASE WHEN t1.week = 40 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate40   ,
+		MAX(CASE WHEN t1.week = 40 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate40   ,
+		MAX(CASE WHEN t1.week = 41 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate41   ,
+		MAX(CASE WHEN t1.week = 41 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate41   ,
+		MAX(CASE WHEN t1.week = 42 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate42   ,
+		MAX(CASE WHEN t1.week = 42 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate42   ,
+		MAX(CASE WHEN t1.week = 43 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate43   ,
+		MAX(CASE WHEN t1.week = 43 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate43   ,
+		MAX(CASE WHEN t1.week = 44 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate44   ,
+		MAX(CASE WHEN t1.week = 44 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate44   ,
+		MAX(CASE WHEN t1.week = 45 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate45   ,
+		MAX(CASE WHEN t1.week = 45 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate45   ,
+		MAX(CASE WHEN t1.week = 46 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate46   ,
+		MAX(CASE WHEN t1.week = 46 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate46   ,
+		MAX(CASE WHEN t1.week = 47 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate47   ,
+		MAX(CASE WHEN t1.week = 47 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate47   ,
+		MAX(CASE WHEN t1.week = 48 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate48   ,
+		MAX(CASE WHEN t1.week = 48 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate48   ,
+		MAX(CASE WHEN t1.week = 49 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate49   ,
+		MAX(CASE WHEN t1.week = 49 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate49   ,
+		
+		MAX(CASE WHEN t1.week = 50 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate50   ,
+		MAX(CASE WHEN t1.week = 50 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate50   ,
+		MAX(CASE WHEN t1.week = 51 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate51   ,
+		MAX(CASE WHEN t1.week = 51 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate51   ,
+		MAX(CASE WHEN t1.week = 52 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate52   ,
+		MAX(CASE WHEN t1.week = 52 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate52   ,
+		MAX(CASE WHEN t1.week = 53 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate53   ,
+		MAX(CASE WHEN t1.week = 53 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate53   ,
+		MAX(CASE WHEN t1.week = 54 THEN CONVERT(VARCHAR(100), t1.weekstart, 2) ELSE NULL  END) AS weekStartDate54   ,
+		MAX(CASE WHEN t1.week = 54 THEN CONVERT(VARCHAR(100), t1.weekEnd, 2)   ELSE NULL  END) AS   weekEndDate54   
+		FROM    dbo.dim_date_week t1
+		WHERE   t1.year = #{roughYear,jdbcType=INTEGER}
+		GROUP BY t1.year 
+		) t
+    </select>
+    
+    <!--获取经纪公司明细列表-->
+  	<select id="queryCompanyDetailListNew"  parameterType="Map" statementType="CALLABLE" resultType="cn.com.eju.pmls.rptCompany.dto.RptCompanyDetailDto">
+  		EXEC P_PMLS_RPT_CompanyDetail #{organization},#{areaCityCodes}, #{cityIds}, #{brandType},#{isFrameContract},#{companyNo},#{roughYear},#{offset},#{rows},#{total,jdbcType=INTEGER,mode=OUT}
+  	</select>
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.common.dao.OmsInteractiveMapper">
+	<!-- 查询关账记录 list -->
+	<select id="queryAPIListByCityNo"  resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT cityNo,MAX(cast(CONCAT(switchYear,switchMonth) as int)) closeDate 
+		FROM Pmls_Perform_Switch
+		WHERE switchState = 27502
+		  AND relateSystem = 27601
+		GROUP BY cityNo
+	</select>
+	  <!-- 查询门店装修记录 -->
+    <select id="getDecCountByMap" resultType="java.lang.Integer"  parameterType="cn.com.eju.deal.dto.store.DecorationDto">
+		SELECT count(1) CNT
+		FROM     oms.dbo.CRM_Decoration T1		       
+		WHERE   T1.delFlag = 0
+			    AND T1.decorationType is NOT NULL
+				AND	T1.storeNo = #{storeNo,jdbcType=NVARCHAR}
+				AND	T1.contractNo = #{contractNo,jdbcType=NVARCHAR}	
+  	</select>
+	
+	
+	<!-- OMS新增装修 -->
+	<insert id="createDecrt" parameterType="cn.com.eju.deal.common.model.Decoration">
+		INSERT INTO OMS.dbo.CRM_Decoration
+		(
+			decorateNo,storeNo,storeName,storeAddress,contractNo,
+			contractType,companyName,applicant,decorateStatus,cityNo,oafilpagency,
+			delFlag,dateCreate,dateUpdate,agreementNo,dateLifeStart,dateLifeEnd
+		)
+		VALUES
+		(
+			#{decorateNo,jdbcType=VARCHAR},
+			#{storeNo,jdbcType=VARCHAR},
+			#{storeName,jdbcType=NVARCHAR},
+			#{storeAddress,jdbcType=NVARCHAR},
+			#{contractNo,jdbcType=VARCHAR},
+			#{contractType,jdbcType=VARCHAR},
+			#{companyName,jdbcType=NVARCHAR},
+			#{applicant,jdbcType=INTEGER},
+			#{decorateStatus,jdbcType=INTEGER},
+			#{cityNo,jdbcType=VARCHAR},
+			#{oafilpagency,jdbcType=VARCHAR},
+			0,getDate(),getDate(),
+			#{agreementNo,jdbcType=VARCHAR},
+			#{dateLifeStart,jdbcType=INTEGER},
+			#{dateLifeEnd,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<!-- 批量新增合同流水 -->
+  <insert id="batchContractFlow" parameterType="java.util.List" >
+    insert into oms.dbo.CRM_ContractFlow 
+    (
+      companyName, storeNo, 
+      storeName, storeAddressDetail, contractNo, 
+      contractState, userIdCreate, performDate, 
+      dateCreate,contractType, 
+      recordNum, recordReason,cityNo,delFlag
+      )
+    values 
+    <foreach collection="list" item="obj" index="index" separator=",">
+    ( #{obj.companyName,jdbcType=NVARCHAR}, 
+      #{obj.storeNo,jdbcType=NVARCHAR}, 
+      #{obj.storeName,jdbcType=NVARCHAR}, 
+      #{obj.storeAddressDetail,jdbcType=NVARCHAR}, 
+      #{obj.contractNo,jdbcType=NVARCHAR},
+      #{obj.contractState,jdbcType=NVARCHAR}, 
+      #{obj.userIdCreate,jdbcType=INTEGER},
+      #{obj.performDate,jdbcType=TIMESTAMP},getdate(),
+      #{obj.contractType,jdbcType=NVARCHAR},
+      #{obj.recordNum,jdbcType=NVARCHAR},
+      #{obj.recordReason,jdbcType=NVARCHAR},
+      #{obj.cityNo,jdbcType=VARCHAR},
+      0
+      )
+      </foreach>
+  </insert>
+  
+    <!-- 新增装修 -->
+    <insert id="batchCreateDecoration" parameterType="java.util.List">
+        INSERT INTO oms.dbo.CRM_Decoration
+        (
+            decorateNo,storeNo,storeName,storeAddress,contractNo,
+            contractType,companyName,applicant,decorateStatus,cityNo,oafilpagency,
+            delFlag,dateCreate,dateUpdate,agreementNo,dateLifeStart,dateLifeEnd
+        )
+        VALUES
+        <foreach collection="list" item="obj" index="index" separator=",">
+        (
+            #{obj.decorateNo,jdbcType=VARCHAR},
+            #{obj.storeNo,jdbcType=VARCHAR},
+            #{obj.storeName,jdbcType=NVARCHAR},
+            #{obj.storeAddress,jdbcType=NVARCHAR},
+            #{obj.contractNo,jdbcType=VARCHAR},
+            #{obj.contractType,jdbcType=VARCHAR},
+            #{obj.companyName,jdbcType=NVARCHAR},
+            #{obj.applicant,jdbcType=INTEGER},
+            #{obj.decorateStatus,jdbcType=INTEGER},
+            #{obj.cityNo,jdbcType=VARCHAR},
+            #{obj.oafilpagency,jdbcType=VARCHAR},
+            0,getDate(),getDate(),
+            #{obj.agreementNo,jdbcType=VARCHAR},
+            #{obj.dateLifeStart,jdbcType=INTEGER},
+            #{obj.dateLifeEnd,jdbcType=INTEGER}
+        )
+        </foreach>
+    </insert>
+    
+    <insert id="createDeposit" parameterType="cn.com.eju.deal.dto.contract.DepositDto" >
+	    insert into OMS.dbo.CRM_Deposit (contractNo, contractType, 
+	      contractState, companyName, itemAmount, 
+	      receivedAmount, uncollectAmount, receiveState, 
+	      userIdCreate, dateCreate, dateUpdate, 
+	      updateCreate, delFlag,agreementNo,cityNo)
+	    values (#{contractNo,jdbcType=NVARCHAR}, #{contractType,jdbcType=NVARCHAR}, 
+	      #{contractState,jdbcType=NVARCHAR}, #{companyName,jdbcType=NVARCHAR}, #{itemAmount,jdbcType=DECIMAL}, 
+	      #{receivedAmount,jdbcType=DECIMAL}, #{uncollectAmount,jdbcType=DECIMAL}, #{receiveState,jdbcType=INTEGER}, 
+	      #{userIdCreate,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, #{dateUpdate,jdbcType=TIMESTAMP}, 
+	      #{updateCreate,jdbcType=INTEGER}, #{bDelFlag,jdbcType=BIT},#{agreementNo,jdbcType=NVARCHAR},#{cityNo,jdbcType=NVARCHAR})
+    </insert>
+    
+    <insert id="createPerformNodeRecord" parameterType="cn.com.eju.deal.dto.contract.PerformNodeRecordDto">
+	insert into OMS.dbo.CRM_PerformNodeRecord
+		(
+		companyName, storeNo,
+		storeName, storeAddressDetail, contractNo,
+		contractState, contractType, oaApprovalDate,
+		depositArrivalDate, flipPassDate, dateUpdate,
+		dateCreate, delFlag,cityNo
+		)
+	values
+		(
+		#{companyName,jdbcType=NVARCHAR},
+		#{storeNo,jdbcType=NVARCHAR},
+		#{storeName,jdbcType=NVARCHAR},
+		#{storeAddressDetail,jdbcType=NVARCHAR},
+		#{contractNo,jdbcType=NVARCHAR},
+		#{contractState,jdbcType=NVARCHAR},
+		#{contractType,jdbcType=NVARCHAR},
+		#{oaApprovalDate,jdbcType=TIMESTAMP},
+		#{depositArrivalDate,jdbcType=TIMESTAMP},
+		#{flipPassDate,jdbcType=TIMESTAMP},
+		#{dateUpdate,jdbcType=TIMESTAMP},
+		#{dateCreate,jdbcType=TIMESTAMP},
+		#{delFlag,jdbcType=BIT},
+		#{cityNo,jdbcType=VARCHAR}
+		)
+</insert>
+
+	<!-- 修改业绩节点记录 -->
+	<update id="updatePerformNodeRecord" parameterType="cn.com.eju.deal.dto.contract.PerformNodeRecordDto">
+		update OMS.dbo.CRM_PerformNodeRecord
+		<set>
+			<if test="depositArrivalDate != null">
+				depositArrivalDate = #{depositArrivalDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateUpdate != null">
+				dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="flipPassDate != null">
+				flipPassDate = #{flipPassDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where contractNo = #{contractNo,jdbcType=NVARCHAR} and
+		storeNo = #{storeNo,jdbcType=NVARCHAR}
+	</update>
+
+	<!-- 根据合同编码批量更新合同状态 -->
+	<update id="batchUpdateContractState" parameterType="java.util.List">
+		<foreach collection="list" item="obj" index="index" separator=";">
+			UPDATE oms.dbo.CRM_Deposit
+			set
+			<if test="#{obj.contractState !=null}">
+				contractState= #{obj.contractState,jdbcType=NVARCHAR}
+			</if>
+			where contractNo = #{obj.contractNo,jdbcType=NVARCHAR}
+
+		</foreach>
+	</update>
+	
+	<update id="updateOmsDecoration" parameterType="cn.com.eju.deal.dto.store.DecorationDto">
+	   UPDATE oms.dbo.CRM_Decoration SET delFlag = 1 
+	   WHERE contractNo = #{contractNo,jdbcType=NVARCHAR} AND storeNo = #{storeNo,jdbcType=NVARCHAR}
+	</update>
+	
+	<select id="getPayFeeByPaySeq" parameterType="string" resultType="cn.com.eju.deal.model.cashier.CashierDto">
+	   SELECT ISNULL(payFee,0) AS payTotalFee FROM  oms.dbo.CRM_CashierOrder WHERE serialNo = #{paySeq,jdbcType=NVARCHAR}
+	</select>
+	<update id="updateOmsDecorationById" parameterType="map">
+	   UPDATE oms.dbo.CRM_Decoration SET operateFlag = #{operateFlag,jdbcType=INTEGER} 
+	   WHERE delFlag=0 and decorateId = #{decorateId,jdbcType=INTEGER} 
+	</update>
+</mapper>

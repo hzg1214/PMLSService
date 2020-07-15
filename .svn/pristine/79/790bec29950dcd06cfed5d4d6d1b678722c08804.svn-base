@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    <result column="reportId" property="reportId" jdbcType="VARCHAR" />
+    <result column="companyNo" property="companyNo" jdbcType="VARCHAR" />
+    <result column="rptDtlId" property="rptDtlId" jdbcType="INTEGER" />
+    <result column="customerName" property="customerName" jdbcType="NVARCHAR" />
+    <result column="buildingNo" property="buildingNo" jdbcType="NVARCHAR" />
+    <result column="roughtArea" property="roughtArea" jdbcType="DECIMAL" />
+    <result column="roughtAmount" property="roughtAmount" jdbcType="DECIMAL" />
+    <result column="roughtDate" property="roughtDate" jdbcType="TIMESTAMP" />
+    <result column="roughAuditTime" property="roughAuditTime" jdbcType="TIMESTAMP" />
+    <result column="cxArea" property="cxArea" jdbcType="DECIMAL" />
+    <result column="cxAmount" property="cxAmount" jdbcType="DECIMAL" />
+    <result column="dealDate" property="dealDate" jdbcType="TIMESTAMP" />
+    <result column="yjAmount_bef" property="yjAmount_bef" jdbcType="DECIMAL" />
+    <result column="yjAmount_aft" property="yjAmount_aft" jdbcType="DECIMAL" />
+    <result column="sjAmount_bef" property="sjAmount_bef" jdbcType="DECIMAL" />
+    <result column="sjAmount_aft" property="sjAmount_aft" jdbcType="DECIMAL" />
+    <result column="allocatAmount_bef" property="allocatAmount_bef" jdbcType="DECIMAL" />
+    <result column="allocatAmount_aft" property="allocatAmount_aft" jdbcType="DECIMAL" />
+    <result column="delFlag" property="delFlag" jdbcType="BIT" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="userIdUpdate" property="userIdUpdate" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, parentId, reportId, companyNo, rptDtlId, customerName, buildingNo, roughtArea,
+    roughtAmount, roughtDate, roughAuditTime, cxArea, cxAmount, dealDate, yjAmount_bef,
+    yjAmount_aft, sjAmount_bef, sjAmount_aft, allocatAmount_bef, allocatAmount_aft, delFlag,
+    dateCreate, userIdCreate, dateUpdate, userIdUpdate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from PMLS_SkAllocate_dtl
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from PMLS_SkAllocate_dtl
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    insert into PMLS_SkAllocate_dtl (id, parentId, reportId,
+    companyNo, rptDtlId, customerName,
+    buildingNo, roughtArea, roughtAmount,
+    roughtDate, roughAuditTime, cxArea,
+    cxAmount, dealDate, yjAmount_bef,
+    yjAmount_aft, sjAmount_bef, sjAmount_aft,
+    allocatAmount_bef, allocatAmount_aft, delFlag,
+    dateCreate, userIdCreate, dateUpdate,
+    userIdUpdate)
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{reportId,jdbcType=VARCHAR},
+    #{companyNo,jdbcType=VARCHAR}, #{rptDtlId,jdbcType=INTEGER}, #{customerName,jdbcType=NVARCHAR},
+    #{buildingNo,jdbcType=NVARCHAR}, #{roughtArea,jdbcType=DECIMAL}, #{roughtAmount,jdbcType=DECIMAL},
+    #{roughtDate,jdbcType=TIMESTAMP}, #{roughAuditTime,jdbcType=TIMESTAMP}, #{cxArea,jdbcType=DECIMAL},
+    #{cxAmount,jdbcType=DECIMAL}, #{dealDate,jdbcType=TIMESTAMP}, #{yjAmount_bef,jdbcType=DECIMAL},
+    #{yjAmount_aft,jdbcType=DECIMAL}, #{sjAmount_bef,jdbcType=DECIMAL}, #{sjAmount_aft,jdbcType=DECIMAL},
+    #{allocatAmount_bef,jdbcType=DECIMAL}, #{allocatAmount_aft,jdbcType=DECIMAL}, #{delFlag,jdbcType=BIT},
+    #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{dateUpdate,jdbcType=TIMESTAMP},
+    #{userIdUpdate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    insert into PMLS_SkAllocate_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="parentId != null" >
+        parentId,
+      </if>
+      <if test="reportId != null" >
+        reportId,
+      </if>
+      <if test="companyNo != null" >
+        companyNo,
+      </if>
+      <if test="rptDtlId != null" >
+        rptDtlId,
+      </if>
+      <if test="customerName != null" >
+        customerName,
+      </if>
+      <if test="buildingNo != null" >
+        buildingNo,
+      </if>
+      <if test="roughtArea != null" >
+        roughtArea,
+      </if>
+      <if test="roughtAmount != null" >
+        roughtAmount,
+      </if>
+      <if test="roughtDate != null" >
+        roughtDate,
+      </if>
+      <if test="roughAuditTime != null" >
+        roughAuditTime,
+      </if>
+      <if test="cxArea != null" >
+        cxArea,
+      </if>
+      <if test="cxAmount != null" >
+        cxAmount,
+      </if>
+      <if test="dealDate != null" >
+        dealDate,
+      </if>
+      <if test="yjAmount_bef != null" >
+        yjAmount_bef,
+      </if>
+      <if test="yjAmount_aft != null" >
+        yjAmount_aft,
+      </if>
+      <if test="sjAmount_bef != null" >
+        sjAmount_bef,
+      </if>
+      <if test="sjAmount_aft != null" >
+        sjAmount_aft,
+      </if>
+      <if test="allocatAmount_bef != null" >
+        allocatAmount_bef,
+      </if>
+      <if test="allocatAmount_aft != null" >
+        allocatAmount_aft,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate,
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rptDtlId != null" >
+        #{rptDtlId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="buildingNo != null" >
+        #{buildingNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="roughtArea != null" >
+        #{roughtArea,jdbcType=DECIMAL},
+      </if>
+      <if test="roughtAmount != null" >
+        #{roughtAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="roughtDate != null" >
+        #{roughtDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roughAuditTime != null" >
+        #{roughAuditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cxArea != null" >
+        #{cxArea,jdbcType=DECIMAL},
+      </if>
+      <if test="cxAmount != null" >
+        #{cxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealDate != null" >
+        #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yjAmount_bef != null" >
+        #{yjAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="yjAmount_aft != null" >
+        #{yjAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="sjAmount_bef != null" >
+        #{sjAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="sjAmount_aft != null" >
+        #{sjAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="allocatAmount_bef != null" >
+        #{allocatAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="allocatAmount_aft != null" >
+        #{allocatAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    update PMLS_SkAllocate_dtl
+    <set >
+      <if test="parentId != null" >
+        parentId = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        reportId = #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        companyNo = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rptDtlId != null" >
+        rptDtlId = #{rptDtlId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        customerName = #{customerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="buildingNo != null" >
+        buildingNo = #{buildingNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="roughtArea != null" >
+        roughtArea = #{roughtArea,jdbcType=DECIMAL},
+      </if>
+      <if test="roughtAmount != null" >
+        roughtAmount = #{roughtAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="roughtDate != null" >
+        roughtDate = #{roughtDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roughAuditTime != null" >
+        roughAuditTime = #{roughAuditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cxArea != null" >
+        cxArea = #{cxArea,jdbcType=DECIMAL},
+      </if>
+      <if test="cxAmount != null" >
+        cxAmount = #{cxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealDate != null" >
+        dealDate = #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yjAmount_bef != null" >
+        yjAmount_bef = #{yjAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="yjAmount_aft != null" >
+        yjAmount_aft = #{yjAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="sjAmount_bef != null" >
+        sjAmount_bef = #{sjAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="sjAmount_aft != null" >
+        sjAmount_aft = #{sjAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="allocatAmount_bef != null" >
+        allocatAmount_bef = #{allocatAmount_bef,jdbcType=DECIMAL},
+      </if>
+      <if test="allocatAmount_aft != null" >
+        allocatAmount_aft = #{allocatAmount_aft,jdbcType=DECIMAL},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl" >
+    update PMLS_SkAllocate_dtl
+    set parentId = #{parentId,jdbcType=INTEGER},
+      reportId = #{reportId,jdbcType=VARCHAR},
+      companyNo = #{companyNo,jdbcType=VARCHAR},
+      rptDtlId = #{rptDtlId,jdbcType=INTEGER},
+      customerName = #{customerName,jdbcType=NVARCHAR},
+      buildingNo = #{buildingNo,jdbcType=NVARCHAR},
+      roughtArea = #{roughtArea,jdbcType=DECIMAL},
+      roughtAmount = #{roughtAmount,jdbcType=DECIMAL},
+      roughtDate = #{roughtDate,jdbcType=TIMESTAMP},
+      roughAuditTime = #{roughAuditTime,jdbcType=TIMESTAMP},
+      cxArea = #{cxArea,jdbcType=DECIMAL},
+      cxAmount = #{cxAmount,jdbcType=DECIMAL},
+      dealDate = #{dealDate,jdbcType=TIMESTAMP},
+      yjAmount_bef = #{yjAmount_bef,jdbcType=DECIMAL},
+      yjAmount_aft = #{yjAmount_aft,jdbcType=DECIMAL},
+      sjAmount_bef = #{sjAmount_bef,jdbcType=DECIMAL},
+      sjAmount_aft = #{sjAmount_aft,jdbcType=DECIMAL},
+      allocatAmount_bef = #{allocatAmount_bef,jdbcType=DECIMAL},
+      allocatAmount_aft = #{allocatAmount_aft,jdbcType=DECIMAL},
+      delFlag = #{delFlag,jdbcType=BIT},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+      userIdUpdate = #{userIdUpdate,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAllocateListForDeal" parameterType="Map" resultType="cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateDtlDto">
+    EXEC P_PMLS_SkAllocate_Market  #{srId}
+  </select>
+
+  <select id="getAllocateListForBuilding" parameterType="Map" resultType="cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateDtlDto">
+    EXEC P_PMLS_SkAllocate_Customize  #{srId},#{reportNoList}
+  </select>
+
+  <update id="deleteByParentId" parameterType="java.lang.Integer">
+    UPDATE PMLS_SkAllocate_dtl
+       SET delFlag = 1
+          ,dateUpdate = GETDATE()
+     WHERE parentId = #{id,jdbcType=INTEGER}
+       AND delFlag = 0
+  </update>
+
+   <update id="deleteById" parameterType="java.lang.Integer">
+    UPDATE PMLS_SkAllocate_dtl
+       SET delFlag = 1
+          ,dateUpdate = GETDATE()
+     WHERE id = #{id,jdbcType=INTEGER}
+       AND delFlag = 0
+   </update>
+
+  <select id="getByParentId" parameterType="Map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM PMLS_SkAllocate_dtl
+    WHERE delFlag = 0
+     AND parentId = #{parentId,jdbcType=INTEGER}
+    ORDER BY reportId
+  </select>
+
+  <select id="querySkAllocateDtlList" parameterType="Map" resultType="cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateDtlDto">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM PMLS_SkAllocate_dtl
+    WHERE delFlag = 0
+     AND parentId = #{parentId,jdbcType=INTEGER}
+    <if test="keyword != null and keyword != ''">
+      AND (reportId CONCAT('%', #{keyword,jdbcType=VARCHAR} ,'%')
+       OR customerName CONCAT('%', #{keyword,jdbcType=VARCHAR} ,'%')
+       OR buildingNo CONCAT('%', #{keyword,jdbcType=VARCHAR} ,'%')
+      )
+    </if>
+    ORDER BY reportId
+  </select>
+</mapper>

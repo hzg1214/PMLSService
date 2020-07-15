@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ContractChangeMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.ContractChange">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="contractStopNo" property="contractStopNo" jdbcType="NVARCHAR" />
+		<result column="contractId" property="contractId" jdbcType="INTEGER" />
+		<result column="changeType" property="changeType" jdbcType="INTEGER" />
+		<result column="stopType" property="stopType" jdbcType="INTEGER" />
+		<result column="stopReason" property="stopReason" jdbcType="NVARCHAR" />
+		<result column="decorateCNTSituate" property="decorateCNTSituate" jdbcType="INTEGER" />
+		<result column="decorateSituate" property="decorateSituate" jdbcType="INTEGER" />
+		<result column="decorateCompany" property="decorateCompany" jdbcType="NVARCHAR" />
+		<result column="flopMode" property="flopMode" jdbcType="INTEGER" />
+		<result column="decorateAmount" property="decorateAmount" jdbcType="DECIMAL" />
+		<result column="payAmount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="isReleaseFlag" property="isReleaseFlag" jdbcType="INTEGER" />
+		<result column="stopDate" property="stopDate" jdbcType="TIMESTAMP" />
+		<result column="isaTob" property="isaTob" jdbcType="INTEGER" />
+		<result column="stopDescribe" property="stopDescribe" jdbcType="NVARCHAR" />
+		<result column="remarks" property="remarks" jdbcType="NVARCHAR" />
+		<result column="flowEndDate" property="flowEndDate" jdbcType="TIMESTAMP" />
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="BIT" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="updateCreate" property="updateCreate" jdbcType="INTEGER" />
+		<result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+		<result column="receivedAmount" property="receivedAmount" jdbcType="DECIMAL" />
+		<result column="approveState" property="approveState" jdbcType="INTEGER" />
+		<result column="flowId" property="flowId" jdbcType="NVARCHAR" />
+		<result column="changeCompanyName" property="changeCompanyName" jdbcType="INTEGER"/>
+		<result column="changeCompanyAddress" property="changeCompanyAdress" jdbcType="INTEGER"/>
+		<result column="changeStoreAddress" property="changeStoreAdress" jdbcType="INTEGER"/>
+		<result column="changeCompany" property="changeCompany" jdbcType="INTEGER"/>
+		<result column="companyCity" property="companyCity" jdbcType="NVARCHAR"/>
+		<result column="companyDistrict" property="companyDistrict" jdbcType="NVARCHAR"/>
+		<result column="companyAddress" property="companyAdresss" jdbcType="NVARCHAR"/>
+		<result column="storeCity" property="storeCity" jdbcType="NVARCHAR"/>
+		<result column="storeDistrict" property="storeDistrict" jdbcType="NVARCHAR"/>
+		<result column="storeAddress" property="storeAdresss" jdbcType="NVARCHAR"/>
+		<result column="changeCompanyCityName" property="changeCompanyCityName" jdbcType="NVARCHAR"/>	
+		<result column="changeCompanyDistrictName" property="changeCompanyDistrictName" jdbcType="NVARCHAR"/>	
+		<result column="changeStoreCityName" property="changeStoreCityName" jdbcType="NVARCHAR"/>
+		<result column="changeStoreDistrictName" property="changeStoreDistrictName" jdbcType="NVARCHAR" />
+		<result column="newCompanyName" property="newCompanyName" jdbcType="NVARCHAR"/>
+		<result column="newLegalPerson" property="newLegalPerson" jdbcType="NVARCHAR"/>
+		<result column="newCompanyAddressCityNo" property="newCompanyAddressCityNo" jdbcType="NVARCHAR"/>
+		<result column="newCompanyAddressDistrictNo" property="newCompanyAddressDistrictNo" jdbcType="NVARCHAR"/>
+		<result column="newCompanyAddress" property="newCompanyAddress" jdbcType="NVARCHAR"/>
+		<result column="newAgreementNo" property="newAgreementNo" jdbcType="NVARCHAR"/>
+		<result column="newDateLifeStart" property="newDateLifeStart" jdbcType="TIMESTAMP"/>
+		<result column="newDateLifeEnd" property="newDateLifeEnd" jdbcType="TIMESTAMP"/>
+		<result column="newCompanyAddressCityName" property="newCompanyAddressCityName" jdbcType="NVARCHAR"/>
+		<result column="newCompanyAddressDistrictName" property="newCompanyAddressDistrictName" jdbcType="NVARCHAR"/>
+		<result column="submitOAStatus" property="submitOAStatus" jdbcType="INTEGER" />
+		<result column="threePartChangeType" property="threePartChangeType" jdbcType="INTEGER" />
+		<result column="contractType" property="contractType" jdbcType="INTEGER" />
+		<result column="cityNo" property="cityNo" jdbcType="NVARCHAR"/>
+		<result column="districtNo" property="districtNo" jdbcType="NVARCHAR"/>
+		<result column="cancelFlag" property="cancelFlag" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, contractStopNo, contractId, stopType, stopReason, 
+		decorateCNTSituate, decorateSituate, decorateCompany, flopMode, decorateAmount, 
+		payAmount, isReleaseFlag, stopDate, isaTob, stopDescribe, remarks, flowEndDate, 
+		dateCreate, userIdCreate, updateCreate, updateDate, delFlag, changeType, receivedAmount, approveState, flowId,
+		changeCompanyName,changeCompanyAdress,changeStoreAdress,changeCompany,companyCity,companyDistrict,companyAdresss,
+		storeCity,storeDistrict,storeAdresss,newCompanyName,newLegalPerson,newCompanyAddressCityNo,newCompanyAddressDistrictNo,
+		newCompanyAddress,newAgreementNo,newDateLifeStart,newDateLifeEnd,submitOAStatus
+	</sql>
+	
+	<resultMap id="ContractChangeMap" type="cn.com.eju.deal.dto.contract.ContractChangeDto" />
+	
+	<!-- 新增合同变更 -->
+	<insert id="create" parameterType="cn.com.eju.deal.contract.model.ContractChange"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ContractChange 
+		(
+			contractStopNo, contractId, stopType, stopReason, 
+			decorateCNTSituate, decorateSituate, decorateCompany, 
+			flopMode, decorateAmount, payAmount, 
+			isReleaseFlag, stopDate, isaTob, 
+			stopDescribe, remarks, flowEndDate, 
+			dateCreate, userIdCreate, updateCreate, updateDate,
+			delFlag, changeType, receivedAmount, approveState, flowId,
+			changeCompanyName
+			,changeCompanyAddress
+			,changeStoreAddress
+			,changeCompany
+			,companyCity
+			,companyDistrict
+			,companyAddress
+			,storeCity
+			,storeDistrict
+			,storeAddress
+			,newCompanyName
+			,newLegalPerson
+			,newCompanyAddressCityNo
+			,newCompanyAddressDistrictNo
+			,newCompanyAddress
+			,newAgreementNo
+			,newDateLifeStart
+			,newDateLifeEnd
+			,oldCompanyId
+			,newCompanyId
+			,updateCompanyName
+			,newUpdateCompanyName,
+			oldUpdateCompanyName,
+			oldStoreAddressDetail,
+			agreementType,
+            authRepresentative ,
+            agentContact ,
+            totleDepositFee ,
+            penaltyFee ,
+            companyBankNo ,
+            bankAccount ,
+            accountName ,
+            recipients ,
+            cityNo ,
+            districtNo,
+            recipientsAddress,
+            submitOAStatus
+         
+		)
+		values 
+		(
+			#{contractStopNo,jdbcType=NVARCHAR},
+			#{contractId,jdbcType=INTEGER},
+			#{stopType,jdbcType=INTEGER},
+			#{stopReason,jdbcType=NVARCHAR},
+			#{decorateCNTSituate,jdbcType=INTEGER},
+			#{decorateSituate,jdbcType=INTEGER},
+			#{decorateCompany,jdbcType=NVARCHAR},
+			#{flopMode,jdbcType=INTEGER},
+			#{decorateAmount,jdbcType=DECIMAL}, 
+			#{payAmount,jdbcType=DECIMAL},
+			#{isReleaseFlag,jdbcType=INTEGER},
+			#{stopDate,jdbcType=TIMESTAMP},
+			 #{isaTob,jdbcType=INTEGER},
+			#{stopDescribe,jdbcType=NVARCHAR}, 
+			#{remarks,jdbcType=NVARCHAR},
+			#{flowEndDate,jdbcType=TIMESTAMP},
+			#{dateCreate,jdbcType=TIMESTAMP},
+			#{userIdCreate,jdbcType=INTEGER},
+			#{updateCreate,jdbcType=INTEGER},
+			#{updateDate,jdbcType=TIMESTAMP},
+			0,
+			#{changeType,jdbcType=INTEGER},
+			#{receivedAmount,jdbcType=DECIMAL},
+			0,
+			#{flowId,jdbcType=NVARCHAR},
+			#{changeCompanyName,jdbcType=INTEGER},
+			#{changeCompanyAdress,jdbcType=INTEGER},
+			#{changeStoreAdress,jdbcType=INTEGER},
+			#{changeCompany,jdbcType=INTEGER},
+			#{companyCity,jdbcType=NVARCHAR},
+			#{companyDistrict,jdbcType=NVARCHAR},
+			#{companyAdresss,jdbcType=NVARCHAR},
+			#{storeCity,jdbcType=NVARCHAR},
+			#{storeDistrict,jdbcType=NVARCHAR},
+			#{storeAdresss,jdbcType=NVARCHAR},
+			#{newCompanyName,jdbcType=NVARCHAR},
+			#{newLegalPerson,jdbcType=NVARCHAR},
+			#{newCompanyAddressCityNo,jdbcType=NVARCHAR},
+			#{newCompanyAddressDistrictNo,jdbcType=NVARCHAR},
+			#{newCompanyAddress,jdbcType=NVARCHAR},
+			#{newAgreementNo,jdbcType=NVARCHAR},
+			#{newDateLifeStart,jdbcType=TIMESTAMP},
+			#{newDateLifeEnd,jdbcType=TIMESTAMP},
+			#{oldCompanyId,jdbcType=INTEGER},
+			#{newCompanyId,jdbcType=INTEGER},
+			#{updateCompanyName,jdbcType=INTEGER},
+			#{newUpdateCompanyName,jdbcType=NVARCHAR},
+			#{oldUpdateCompanyName,jdbcType=NVARCHAR},
+			#{oldStoreAddressDetail,jdbcType=NVARCHAR},
+			#{agreementType,jdbcType=INTEGER},
+            #{authRepresentative ,jdbcType=NVARCHAR},
+            #{agentContact ,jdbcType=NVARCHAR},
+            #{totleDepositFee ,jdbcType=DECIMAL},
+            #{penaltyFee ,jdbcType=DECIMAL},
+            #{companyBankNo ,jdbcType=NVARCHAR},
+            #{bankAccount ,jdbcType=NVARCHAR},
+            #{accountName ,jdbcType=NVARCHAR},
+            #{recipients ,jdbcType=NVARCHAR},
+            #{cityNo ,jdbcType=NVARCHAR},
+            #{districtNo,jdbcType=NVARCHAR},
+            #{recipientsAddress,jdbcType=NVARCHAR},
+            21201
+		)
+	</insert>
+	
+	<!-- 编辑合同变更信息 -->
+	<update id="update" parameterType="cn.com.eju.deal.contract.model.ContractChange">
+		UPDATE ContractChange
+		<set>
+			<if test="contractStopNo != null">
+				contractStopNo = #{contractStopNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="contractId != null">
+				contractId = #{contractId,jdbcType=INTEGER},
+			</if>
+			<if test="stopType != null">
+				stopType = #{stopType,jdbcType=INTEGER},
+			</if>
+			<if test="stopReason != null">
+				stopReason = #{stopReason,jdbcType=NVARCHAR},
+			</if>
+			<if test="decorateCNTSituate != null">
+				decorateCNTSituate = #{decorateCNTSituate,jdbcType=INTEGER},
+			</if>
+			<if test="decorateSituate != null">
+				decorateSituate = #{decorateSituate,jdbcType=INTEGER},
+			</if>
+			<if test="decorateCompany != null">
+				decorateCompany = #{decorateCompany,jdbcType=NVARCHAR},
+			</if>
+			<if test="flopMode != null">
+				flopMode = #{flopMode,jdbcType=INTEGER},
+			</if>
+			<if test="decorateAmount != null">
+				decorateAmount = #{decorateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="payAmount != null">
+				payAmount = #{payAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isReleaseFlag != null">
+				isReleaseFlag = #{isReleaseFlag,jdbcType=INTEGER},
+			</if>
+			<if test="stopDate != null">
+				stopDate = #{stopDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isaTob != null">
+				isaTob = #{isaTob,jdbcType=INTEGER},
+			</if>
+			<if test="stopDescribe != null">
+				stopDescribe = #{stopDescribe,jdbcType=NVARCHAR},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=NVARCHAR},
+			</if>
+			<if test="flowEndDate != null">
+				flowEndDate = #{flowEndDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dateCreate != null">
+				dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userIdCreate != null">
+				userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+			</if>
+			<if test="updateCreate != null">
+				updateCreate = #{updateCreate,jdbcType=INTEGER},
+			</if>
+			<if test="updateDate != null">
+				updateDate = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				delFlag = #{delFlag,jdbcType=BIT},
+			</if>
+			<if test="changeType != null">
+				changeType = #{changeType,jdbcType=INTEGER},
+			</if>
+			<if test="receivedAmount != null">
+				receivedAmount = #{receivedAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="approveState != null">
+				approveState = #{approveState,jdbcType=INTEGER},
+			</if>
+			<if test="approveDate != null">
+				approveDate = #{approveDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="flowId != null">
+				flowId = #{flowId,jdbcType=NVARCHAR},
+			</if>
+			<if test="changeCompanyName != null">
+			     changeCompanyName = #{changeCompanyName,jdbcType=INTEGER},
+			</if>
+			<if test="changeCompanyAdress != null">
+			     changeCompanyAddress = #{changeCompanyAdress,jdbcType=INTEGER},
+			</if>
+			<if test="changeStoreAdress != null">
+			     changeStoreAddress = #{changeStoreAdress,jdbcType=INTEGER},
+			</if>
+			<if test="changeCompany != null">
+			     changeCompany = #{changeCompany,jdbcType=INTEGER},
+			</if>
+			<if test="companyCity != null">
+			     companyCity = #{companyCity,jdbcType=NVARCHAR},
+			</if>
+			<if test="companyDistrict != null">
+			     companyDistrict = #{companyDistrict,jdbcType=NVARCHAR},
+			</if>
+			<if test="companyAdresss != null">
+			     companyAddress = #{companyAdresss,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeCity != null">
+			      storeCity = #{storeCity,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeDistrict != null">
+			      storeDistrict = #{storeDistrict,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeAdresss != null">
+			      storeAddress = #{storeAdresss,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyName != null">
+			      newCompanyName = #{newCompanyName,jdbcType=NVARCHAR},
+			</if>
+			<if test="newLegalPerson != null">
+			     newLegalPerson = #{newLegalPerson,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyAddressCityNo != null">
+			    newCompanyAddressCityNo = #{newCompanyAddressCityNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyAddressDistrictNo != null">
+			    newCompanyAddressDistrictNo = #{newCompanyAddressDistrictNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="newCompanyAddress != null">
+			    newCompanyAddress = #{newCompanyAddress,jdbcType=NVARCHAR},
+			</if>
+			<if test="newAgreementNo != null">
+			    newAgreementNo = #{newAgreementNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="newDateLifeStart != null">
+			    newDateLifeStart = #{newDateLifeStart,jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="newDateLifeEnd != null">
+			    newDateLifeEnd = #{newDateLifeEnd,jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="oldCompanyId != null and oldCompanyId != ''">
+	           oldCompanyId = #{oldCompanyId,jdbcType=INTEGER},
+	        </if>
+	        <if test="newCompanyId != null and newCompanyId != ''">
+	           newCompanyId = #{newCompanyId,jdbcType=INTEGER},
+	        </if>
+	        <if test="updateCompanyName != null and updateCompanyName != ''">
+	           updateCompanyName = #{updateCompanyName,jdbcType=INTEGER},
+	        </if>
+	        <if test="newUpdateCompanyName != null and newUpdateCompanyName != ''">
+	           newUpdateCompanyName = #{newUpdateCompanyName,jdbcType=NVARCHAR},
+	        </if>
+	        <if test="agreementType != null and agreementType != ''">
+		        agreementType = #{agreementType,jdbcType=INTEGER},
+		    </if>
+		    <if test="authRepresentative != null and authRepresentative != ''">
+			    authRepresentative = #{authRepresentative ,jdbcType=NVARCHAR},
+		    </if>
+			<if test="agentContact != null and agentContact != ''">
+				agentContact = #{agentContact ,jdbcType=NVARCHAR},
+			</if>
+			<if test=" totleDepositFee != null and totleDepositFee != ''">
+				totleDepositFee = #{totleDepositFee ,jdbcType=DECIMAL},
+			</if>
+			<if test="penaltyFee != null and penaltyFee != ''">
+				penaltyFee = #{penaltyFee ,jdbcType=DECIMAL},
+			</if>
+			<if test="companyBankNo != null and companyBankNo != ''">
+				companyBankNo = #{companyBankNo ,jdbcType=NVARCHAR},
+			</if>
+			<if test="bankAccount != null and bankAccount != ''">
+				bankAccount = #{bankAccount ,jdbcType=NVARCHAR},
+			</if>
+			<if test="accountName != null and accountName != ''">
+				accountName = #{accountName ,jdbcType=NVARCHAR},
+			</if>
+			<if test="recipients != null and recipients != ''">
+				recipients = #{recipients ,jdbcType=NVARCHAR},
+			</if>
+			<if test="cityNo != null and cityNo != ''">
+				cityNo = #{cityNo ,jdbcType=NVARCHAR},
+			</if>
+			<if test="districtNo != null and districtNo != ''">
+				districtNo = #{districtNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="recipientsAddress != null and recipientsAddress != ''">
+				recipientsAddress = #{recipientsAddress,jdbcType=NVARCHAR},
+			</if>
+	        <if test="oldUpdateCompanyName != null and oldUpdateCompanyName != ''">
+	           oldUpdateCompanyName = #{oldUpdateCompanyName,jdbcType=NVARCHAR},
+	        </if>
+	        <if test="oldStoreAddressDetail != null and oldStoreAddressDetail != ''">
+	           oldStoreAddressDetail = #{oldStoreAddressDetail,jdbcType=NVARCHAR},
+	        </if>
+			<if test="submitOAStatus!=null">
+				submitOAStatus = #{submitOAStatus,jdbcType=INTEGER}
+			</if>			
+		</set>
+		<where>
+			delFlag = 0
+			<if test="id != null">
+		        <![CDATA[AND id = #{id,jdbcType=INTEGER}]]>
+			</if>
+			<if test="flowId != null">
+		        <![CDATA[AND flowId = #{flowId,jdbcType=NVARCHAR}]]>
+			</if>
+		</where>
+	</update>
+	
+	<!-- 根据合同变更ID查询合同变更信息 -->
+	<select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.Integer">	
+		SELECT TOP 1
+		        ISNULL(( SELECT BusinessLicenseNo
+		                 FROM   dbo.Company
+		                 WHERE  id = ISNULL(ISNULL(t.newCompanyId, t.oldCompanyId), 0)
+		               ), c.registrId) AS registrId ,
+		        t.* ,
+		        ( SELECT    BAS_City.CityName
+		          FROM      BAS_City
+		          WHERE     BAS_City.CityNo = t.companyCity
+		        ) AS changeCompanyCityName ,
+		        ( SELECT    BAS_City.CityName
+		          FROM      BAS_City
+		          WHERE     BAS_City.CityNo = t.storeCity
+		        ) AS changeStoreCityName ,
+		        ( SELECT    BAS_District.DistrictName
+		          FROM      BAS_District
+		          WHERE     BAS_District.DistrictNo = t.companyDistrict
+		        ) AS changeCompanyDistrictName ,
+		        ( SELECT    BAS_District.DistrictName
+		          FROM      BAS_District
+		          WHERE     BAS_District.DistrictNo = t.storeDistrict
+		        ) AS changeStoreDistrictName ,
+		        ( SELECT    BAS_City.CityName
+		          FROM      BAS_City
+		          WHERE     BAS_City.CityNo = t.newCompanyAddressCityNo
+		        ) AS newCompanyAddressCityName ,
+		        ( SELECT    BAS_District.DistrictName
+		          FROM      BAS_District
+		          WHERE     BAS_District.DistrictNo = t.newCompanyAddressDistrictNo
+		        ) AS newCompanyAddressDistrictName,
+		        c.contractNo,
+		        u.userName as userCreateName,
+		        CASE t.approveState
+				  WHEN 0 THEN '待提交审核'
+				  WHEN 1 THEN '审核中'
+				  WHEN 2 THEN '审核通过'
+				  WHEN 3 THEN '审核未通过'
+				  ELSE '查询状态失败'
+				END AS approveStateName
+		FROM    dbo.ContractChange t
+		        JOIN dbo.Contract c ON t.contractId = c.Id
+		        join crm.crm.dbo.USR_User u on t.userIdCreate = u.userId
+		WHERE   t.id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据合同变更 审核状态是 审核中的合同变更信息 -->
+	<select id="queryByApproveState" resultMap="BaseResultMap" parameterType="java.util.Map">	
+		SELECT  *
+        FROM    ContractChange
+        WHERE   delFlag = 0
+                AND approveState = 1
+	</select>
+	
+	<!-- 根据合同ID查询合同变更信息 只查终止-->
+	<select id="getContractChange" resultMap="ContractChangeMap"
+		parameterType="java.lang.Integer">
+		SELECT		c.partyB as oldUpdateCompanyName,
+					T1.* ,
+			        T2.storeNumber ,
+			        T3.userName as userCreateName ,
+			        T3.userCode,
+			        changeTypeName = CASE WHEN ISNULL(T1.changeType, 0) = 17001 THEN '终止'
+			        					  WHEN ISNULL(T1.changeType, 0) = 17002 THEN '乙类转甲类'
+			                              ELSE '未知'
+			                         END
+		FROM    ContractChange T1
+		join contract c on t1.contractId = c.id
+        LEFT JOIN ( SELECT  COUNT(*) AS storeNumber ,
+                            contractStopId
+                    FROM    ContractChangeStore
+                    WHERE   delFlag = 0
+                    GROUP BY contractStopId
+                  ) AS T2 ON T2.contractStopId = T1.id
+        LEFT JOIN  crm.dbo.USR_User T3 ON T3.userId = T1.userIdCreate
+		WHERE   T1.contractId = #{contractId,jdbcType=INTEGER}
+		and T1.changeType = 17001
+		AND T1.delFlag = 0
+	</select>
+	
+	<!-- 批量更新 合同变更记录表 审核状态 -->
+	<update id="updateChgApprovaeState" parameterType="Map">
+		UPDATE ContractChange
+		SET approveState = #{approveState,jdbcType=INTEGER}
+		<where>
+			delFlag = 0
+			<if test="flowIdList != null and flowIdList != ''">
+				<foreach collection="flowIdList" item="item" index="index"
+					open="AND (" close=")" separator="OR">
+						<![CDATA[
+			    			 flowId = #{item, jdbcType=VARCHAR}
+			    		]]>
+				</foreach>
+			</if>
+		</where>
+	</update>
+	
+	<!-- 提交审核后、更新flowId和approveState(1:变更中) -->
+	<update id="updateFlowId" parameterType="cn.com.eju.deal.contract.model.ContractChange">
+		UPDATE ContractChange
+		<set>
+			<if test="accountProject != null">
+				accountProject = #{accountProject,jdbcType=NVARCHAR},
+			</if>
+			<if test="accountProjectNo != null">
+				accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR},
+			</if>
+			<if test="approveState != null">
+				approveState = #{approveState,jdbcType=INTEGER},
+			</if>
+			<if test="flowId != null">
+				flowId = #{flowId,jdbcType=NVARCHAR},
+			</if>
+			<if test="updateCreate != null">
+				updateCreate = #{updateCreate,jdbcType=INTEGER},
+			</if>
+			<if test="updateDate != null">
+				updateDate = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="submitOAStatus!=null">
+				submitOAStatus = #{submitOAStatus,jdbcType=INTEGER}
+			</if>
+		</set>
+		WHERE delFlag = 0 
+		AND id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 查询该合同ID对应的所有approveState是变更中的门店信息 -->
+	<select id="getContractChangeById" resultMap="ContractChangeMap" parameterType="java.lang.Integer">	
+		SELECT  
+				 	T1.id
+			       ,T1.contractId
+				   ,T1.approveState
+			       ,T2.storeId
+		FROM    ContractChange T1
+		INNER JOIN ContractChangeStore T2 ON T2.contractStopId = T1.id
+		                                            AND T2.delFlag = 0
+		                                            AND T2.contractId = ( SELECT    contractId
+																					  FROM      ContractChange
+																					  WHERE     id = #{id,jdbcType=INTEGER}
+																					)
+		WHERE   T1.contractId = ( 
+									SELECT    contractId
+		                            FROM      ContractChange
+		                            WHERE     id = #{id,jdbcType=INTEGER}
+		                        )
+		        AND T1.delFlag = 0
+		        and t1.cancelFlag = 0
+		        AND T1.approveState in (1,2)
+	</select>
+
+	<!-- 根据门店ID查找合同门店变更信息 -->
+	<select id="getContractChangeByStoreId" resultMap="ContractChangeMap" parameterType="java.lang.Integer">	
+		<!--
+		SELECT TOP 1
+				acm.storeId AS storeId
+		FROM    dbo.Store_AchievementCancel ac
+				JOIN dbo.Store_AchievementCancelMapping acm ON ac.id = acm.achievementCancelId
+				JOIN dbo.Contract c ON c.Id = ac.contractId
+									   AND c.ContractStatus = 10403
+		WHERE   ac.isDelete = 0
+				AND acm.delFlag = 0
+				AND ac.approveState &lt;&gt; '17303'
+				AND acm.storeId = #{id,jdbcType=INTEGER}
+		UNION ALL
+		SELECT TOP 1
+				T1.storeId AS storeId
+		FROM    ContractChangeStore T1
+				INNER JOIN ContractChange T2 ON T2.id = T1.contractStopId
+				INNER JOIN dbo.v_crm_StoreContract_last t3 ON t3.StoreId = #{id,jdbcType=INTEGER} AND t2.contractId = t3.ContractId
+		WHERE   T1.storeId = #{id,jdbcType=INTEGER}
+				AND T1.delFlag = 0
+				AND T2.delFlag = 0
+				and t2.cancelFlag = 0
+				AND (T2.changeType IN ( 17001, 17003,17004 ) OR (T2.changeType = 17002 AND T2.changeCompany = 1))
+				AND T3.ContractStatus = 10403
+	-->
+		SELECT acm.storeId AS storeId
+		FROM    dbo.Store_AchievementCancel ac
+				JOIN dbo.Store_AchievementCancelMapping acm ON ac.id = acm.achievementCancelId
+				JOIN dbo.v_crm_StoreContract_last lst ON lst.ContractId = ac.contractId AND lst.StoreId = #{id,jdbcType=INTEGER}
+		WHERE   ac.isDelete = 0
+				AND acm.delFlag = 0
+				AND ac.approveState &lt;&gt; '17303'
+				AND acm.storeId = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据合同ID查询合同变更信息 -->
+	<select id="getcontractB2AChangeNo" resultMap="ContractChangeMap"
+		parameterType="java.lang.String">
+		Select TOP 1 cc.*
+		From
+			Contract c
+			INNER JOIN ContractStore cs
+				ON c.Id = cs.ContractId
+			INNER JOIN ContractChangeStore ccs
+				ON cs.StoreId = ccs.StoreId
+			INNER JOIN ContractChange cc
+				On ccs.contractStopId = cc.Id
+		Where
+			c.ContractNo = #{contractNo,jdbcType=VARCHAR}
+			And cc.changeType = 17002
+			And cc.delFlag = 0
+			and cc.cancelFlag = 0
+			Order by cc.dateCreate desc 		
+	</select>	
+
+	<!-- 根据合同变更ID查询合同变更信息 -->
+	<select id="getContractChangeByFlowId" resultMap="BaseResultMap" parameterType="java.lang.String">	
+		SELECT  * 
+		, (select BAS_City.CityName From BAS_City where BAS_City.CityNo =ContractChange.companyCity) As changeCompanyCityName
+		, (select BAS_City.CityName From BAS_City where BAS_City.CityNo =ContractChange.storeCity) As changeStoreCityName
+		, (select BAS_District.DistrictName From BAS_District where BAS_District.DistrictNo = ContractChange.companyDistrict) As changeCompanyDistrictName
+		, (select BAS_District.DistrictName From BAS_District where BAS_District.DistrictNo = ContractChange.storeDistrict) As changeStoreDistrictName
+		FROM    ContractChange
+		WHERE   flowId = #{flowId,jdbcType=VARCHAR}
+	</select>
+<insert id="copyForOaSplit" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dbo.ContractChange
+        ( contractStopNo ,
+          contractId ,
+          stopType ,
+          stopReason ,
+          decorateCNTSituate ,
+          decorateSituate ,
+          decorateCompany ,
+          flopMode ,
+          decorateAmount ,
+          payAmount ,
+          isReleaseFlag ,
+          stopDate ,
+          isaTob ,
+          stopDescribe ,
+          remarks ,
+          flowEndDate ,
+          dateCreate ,
+          userIdCreate ,
+          updateCreate ,
+          updateDate ,
+          delFlag ,
+          changeType ,
+          receivedAmount ,
+          approveState ,
+          flowId ,
+          changeCompanyName ,
+          changeCompanyAddress ,
+          changeStoreAddress ,
+          changeCompany ,
+          companyCity ,
+          companyDistrict ,
+          companyAddress ,
+          storeCity ,
+          storeDistrict ,
+          storeAddress ,
+          newCompanyName ,
+          newLegalPerson ,
+          newCompanyAddressCityNo ,
+          newCompanyAddressDistrictNo ,
+          newCompanyAddress ,
+          newAgreementNo ,
+          newDateLifeStart ,
+          newDateLifeEnd ,
+          oldCompanyId ,
+          newCompanyId ,
+          updateCompanyName ,
+          newUpdateCompanyName ,
+          authRepresentative ,
+          agentContact ,
+          totleDepositFee ,
+          penaltyFee ,
+          companyBankNo ,
+          bankAccount ,
+          accountName ,
+          recipients ,
+          cityNo ,
+          districtNo ,
+          recipientsAddress ,
+          agreementType ,
+          submitOAStatus ,
+          oldUpdateCompanyName ,
+          oldStoreAddressDetail
+        )
+        SELECT  #{code,jdbcType=VARCHAR} ,
+                contractId ,
+                stopType ,
+                stopReason ,
+                decorateCNTSituate ,
+                decorateSituate ,
+                decorateCompany ,
+                flopMode ,
+                decorateAmount ,
+                payAmount ,
+                isReleaseFlag ,
+                stopDate ,
+                isaTob ,
+                stopDescribe ,
+                CONCAT(remarks,#{appendRemarks,jdbcType=VARCHAR}) AS remarks ,
+                flowEndDate ,
+                dateCreate ,
+                userIdCreate ,
+                updateCreate ,
+                updateDate ,
+                delFlag ,
+                changeType ,
+                receivedAmount ,
+                approveState ,
+                flowId ,
+                changeCompanyName ,
+                changeCompanyAddress ,
+                changeStoreAddress ,
+                changeCompany ,
+                companyCity ,
+                companyDistrict ,
+                companyAddress ,
+                storeCity ,
+                storeDistrict ,
+                storeAddress ,
+                newCompanyName ,
+                newLegalPerson ,
+                newCompanyAddressCityNo ,
+                newCompanyAddressDistrictNo ,
+                newCompanyAddress ,
+                newAgreementNo ,
+                newDateLifeStart ,
+                newDateLifeEnd ,
+                oldCompanyId ,
+                newCompanyId ,
+                updateCompanyName ,
+                newUpdateCompanyName ,
+                authRepresentative ,
+                agentContact ,
+                totleDepositFee ,
+                penaltyFee ,
+                companyBankNo ,
+                bankAccount ,
+                accountName ,
+                recipients ,
+                cityNo ,
+                districtNo ,
+                recipientsAddress ,
+                agreementType ,
+                submitOAStatus ,
+                oldUpdateCompanyName ,
+                oldStoreAddressDetail
+           FROM dbo.ContractChange 
+        WHERE id = #{contractChangeId,jdbcType=INTEGER}
+    </insert>
+    
+    <insert id="copySubForOaSplit" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        INSERT  INTO dbo.ContractChangeStore
+            ( contractStopId ,
+              storeId ,
+              delFlag ,
+              approveState ,
+              contractId ,
+              depositBackMoney ,
+              depositBalance ,
+              receivedAmount ,
+              decorationType ,
+              decorateSituate ,
+              decorateCompany ,
+              decorateAmount
+            )
+        SELECT  #{newContractChangeId,jdbcType=INTEGER} ,
+                storeId ,
+                delFlag ,
+                approveState ,
+                contractId ,
+                depositBackMoney ,
+                depositBalance ,
+                receivedAmount ,
+                decorationType ,
+                decorateSituate ,
+                decorateCompany ,
+                decorateAmount
+        FROM    ContractChangeStore
+        WHERE   storeId = #{storeId,jdbcType=INTEGER}
+                AND contractStopId = #{oldContractChangeId,jdbcType=INTEGER}
+                AND delFlag = 0
+    </insert>
+    <insert id="copyFileForOaSplit" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="FileRecordMainId">
+        INSERT  INTO dbo.FIL_FileRecordMain
+        ( CompanyId ,
+          RefId ,
+          FileId ,
+          FileTypeId ,
+          FileFullName ,
+          FileSourceId ,
+          Remark ,
+          DateCreate ,
+          UserCreate ,
+          IsDelete ,
+          fileNo ,
+          picUrl ,
+          fileSuffix ,
+          fileAbbrUrl ,
+          url50 ,
+          fileUrl ,
+          sellFileNo ,
+          sfImage
+        )
+        SELECT  CompanyId ,
+                #{newRefId,jdbcType=INTEGER} ,
+                FileId ,
+                FileTypeId ,
+                FileFullName ,
+                FileSourceId ,
+                Remark ,
+                DateCreate ,
+                UserCreate ,
+                IsDelete ,
+                fileNo ,
+                picUrl ,
+                fileSuffix ,
+                fileAbbrUrl ,
+                url50 ,
+                fileUrl ,
+                sellFileNo ,
+                sfImage
+        FROM    dbo.FIL_FileRecordMain
+        WHERE   RefId = #{oldRefId,jdbcType=INTEGER}
+                AND IsDelete = 0
+    </insert>
+    
+    <update id="delOmsDecoration" parameterType="Map">
+        UPDATE  oms.dbo.CRM_Decoration
+		SET     delFlag = 1
+		FROM    oms.dbo.CRM_Decoration d
+		        JOIN crm.dbo.Contract c ON c.ContractNo = d.contractNo
+		        JOIN crm.dbo.Store s ON s.StoreNo = d.storeNo
+		WHERE   d.decorationType IS NULL
+		        AND c.Id = #{contractId,jdbcType=INTEGER}
+		        <foreach collection="storeIdList" item="item" index="index"
+	                open="AND (" close=")" separator="OR">
+	            <![CDATA[
+	                 s.id =  #{item,jdbcType=INTEGER}
+	            ]]>
+	            </foreach>
+    </update>
+    
+    <update id="delCrmDecoration" parameterType="Map">
+        UPDATE  crm.dbo.Store_Decoration
+        SET     delFlag = 1
+        FROM    crm.dbo.Store_Decoration d
+                JOIN crm.dbo.Contract c ON c.ContractNo = d.contractNo
+        WHERE   d.decorationType IS NULL
+                AND c.Id = #{contractId,jdbcType=INTEGER}
+                <foreach collection="storeIdList" item="item" index="index"
+                    open="AND (" close=")" separator="OR">
+                <![CDATA[
+                     d.storeId =  #{item,jdbcType=INTEGER}
+                ]]>
+                </foreach>
+    </update>
+    
+    <!-- 根据合同id查询未终止的合同门店数量 -->
+    <select id="queryStoreOfCountByConractId" resultType="int"
+		parameterType="int">
+		SELECT
+			count(*)
+		FROM
+			ContractStore
+		WHERE
+			ContractId  = #{contractId,jdbcType=INTEGER} 
+		AND storeState  &lt;&gt;2		
+		AND IsDelete = 0
+	</select>
+
+	<update id="deleteRecordById" parameterType="java.lang.Integer" >
+		UPDATE dbo.ContractChange set cancelFlag=1
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 根据id查询详情 -->
+	<select id="getContractInfoById" resultType="cn.com.eju.deal.storeRelocation.model.StoreRelocationDto" parameterType="java.lang.Integer">
+		SELECT  us.userName,cc.storeAddress AS storeAdresss,
+                bs.dicValue as changeTypeNm,
+                bs2.dicValue as submitOAStatusNm,
+                cc.*,
+	        	approveStateName = ( CASE WHEN cc.approveState IS NULL THEN '-'
+	                                 WHEN cc.approveState = 0 THEN '-'
+	                                 WHEN cc.approveState = 1 THEN '审核中'
+	                                 WHEN cc.approveState = 2 THEN '审核通过'
+	                                 WHEN cc.approveState = 3 THEN '审核不通过'
+	                                 WHEN cc.approveState = 4 THEN '作废'
+	                                 ELSE '-'
+	                            END )
+        FROM    ContractChange cc
+                LEFT JOIN dbo.BAS_DictionaryValue bs ON bs.typeId = 170
+                                                        AND bs.dicCode = cc.changeType
+                                                        AND bs.delFlag = 'N'
+                LEFT JOIN dbo.BAS_DictionaryValue bs2 ON bs2.typeId = 212
+                                                        AND bs2.dicCode = cc.submitOAStatus
+                                                        AND bs2.delFlag = 'N'
+                LEFT JOIN crm.dbo.USR_User us ON us.userId = cc.userIdCreate
+                                             AND us.delFlag = 'N'
+	  	WHERE cc.delFlag=0  
+	  		and cc.id=#{id,jdbcType=INTEGER}
+	</select>
+	<update id="updateContractStoreByParam" parameterType="map">
+		<if test="approveState != null">
+		UPDATE dbo.ContractChangeStore
+		   	set
+		        approveState = #{approveState}
+        WHERE delFlag = 0 and storeId = #{storeId}
+        	  and contractId = #{contractId} 
+        	  and contractStopId = #{contractStopId}
+        </if>
+	</update>
+	<select id="checkDecorationStatus" resultType="java.lang.Integer" parameterType="int">
+		SELECT  
+            returnStatus = CASE WHEN (oaMdfpStatus IS NULL OR oaMdfpStatus = 16501 OR oaMdfpStatus = 16504) THEN 1
+								WHEN (oaMdfpStatus =16503 AND oaMdysStatus =16603) THEN 1
+								 ELSE 2 END
+    	FROM    Store s
+            LEFT JOIN OMS.dbo.CRM_Decoration de ON de.decorateId = ( SELECT MAX(decorateId) FROM  OMS.dbo.CRM_Decoration
+																	  WHERE storeNo = s.StoreNo AND delFlag = 0 )
+            LEFT JOIN OMS.dbo.CRM_oaStoreFlop sf ON de.decorateId = sf.decorateId
+                                            AND sf.delFlag = 0
+            LEFT JOIN OMS.dbo.CRM_oaStoreAcceptance sa ON de.decorateId = sa.decorateId
+                                            AND sa.delFlag = 0
+	  		
+	  		WHERE  s.Id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getDecorationApplyStatus" resultType="java.lang.Integer" parameterType="int">
+		SELECT  
+            returnStatus = CASE WHEN (oaMdfpStatus = 16501 ) THEN 1 --未申请
+								WHEN oaMdfpStatus = 16503 THEN 2 --审核通过
+								WHEN (oaMdfpStatus =16504 ) THEN 3  --审核不通过
+								 ELSE 4 END
+    	FROM    Store s
+            LEFT JOIN OMS.dbo.CRM_Decoration de ON de.decorateId = ( SELECT MAX(decorateId) FROM  OMS.dbo.CRM_Decoration
+																	  WHERE storeNo = s.StoreNo AND delFlag = 0 )
+            LEFT JOIN OMS.dbo.CRM_oaStoreFlop sf ON de.decorateId = sf.decorateId
+                                            AND sf.delFlag = 0
+            LEFT JOIN OMS.dbo.CRM_oaStoreAcceptance sa ON de.decorateId = sa.decorateId
+                                            AND sa.delFlag = 0
+	  		
+	  		WHERE  s.Id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getStoreRelocationById" resultType="cn.com.eju.deal.storeRelocation.model.StoreRelocationDto" parameterType="java.lang.Integer">
+		SELECT  cc.contractStopNo ,
+                cc.storeCity ,
+                cc.storeDistrict ,
+                cc.changeType ,
+                cc.remarks ,
+                cc.oldUpdateCompanyName ,
+                cc.companyBankNo,
+                cc.oldStoreAddressDetail,
+				cc.contractId,
+				cc.oldCompanyId,
+				c.ContractNo AS contractNo
+				,cc.storeAddress AS storeAdresss2
+        FROM    ContractChange cc
+                INNER JOIN dbo.Contract c ON cc.contractId = c.Id
+        WHERE   cc.id  = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getStoreRelocationStoreById" resultType="cn.com.eju.deal.dto.store.StoreDto" parameterType="java.lang.Integer">
+		SELECT  	s.StoreNo ,
+                    s.Name ,
+                    s.AddressDetail ,
+                    s.Address AS address ,
+                    ccs.storeId ,
+                    ccs.contractId ,
+                    ccs.StoreManager ,
+                    ccs.StoreManagerPhone ,
+                    ccs.ABTypeStore ,
+                    ccs.BTypeStore ,
+                    ccs.contractStopId
+            FROM    dbo.ContractChangeStore ccs
+                    INNER JOIN dbo.Store s ON ccs.storeId = s.Id
+            WHERE   ccs.delFlag = 0 AND ccs.contractStopId   = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="checkStoreAddress" resultType="java.lang.Integer" parameterType="map">
+		SELECT  SUM(returnStatus) AS returnStatus
+		FROM    ( SELECT    COUNT(*) returnStatus
+		          FROM      dbo.ContractChange cc
+		          WHERE     --cc.changeType IN ( 17002, 17004) AND
+		                    cc.approveState != 2
+		                    AND cc.changeStoreAddress = 1
+							and cc.cancelFlag = 0
+		                    AND cc.storeCity = #{storeCity,jdbcType=NVARCHAR}
+		                    AND cc.storeDistrict = #{storeDistrict,jdbcType=NVARCHAR}
+		                    AND cc.storeAddress = #{storeAdresss,jdbcType=NVARCHAR}
+		                    <if test="contractStopId != null and contractStopId !=''">
+		                    	AND cc.id != #{contractStopId,jdbcType=INTEGER}
+		                    </if>
+		          UNION
+		          SELECT    COUNT(*) returnStatus
+		          FROM      dbo.Store
+		          WHERE    1=1 AND IsDelete = 0
+		           		    AND AuditStatus != 30
+		            		AND businessStatus != 20903
+		          			AND CityNo = #{storeCity,jdbcType=NVARCHAR}
+		                    AND DistrictNo = #{storeDistrict,jdbcType=NVARCHAR}
+		                    AND Address = #{storeAdresss,jdbcType=NVARCHAR}
+		                    <if test="storeId != null and storeId != ''">
+					            <![CDATA[
+					               and id <> #{storeId,jdbcType=INTEGER}
+					               ]]>
+					        </if>
+		        ) tem
+	</select>
+	<!-- 根据id查询详情 -->
+	<select id="getContractChangeStoreByIds" resultType="cn.com.eju.deal.contract.model.ContractChangeStore" parameterType="map">
+		SELECT * FROM dbo.ContractChangeStore WHERE delFlag=0  
+			AND contractStopId =#{contractStopId,jdbcType=INTEGER} 
+			AND contractId= #{contractId,jdbcType=INTEGER}  
+			AND storeId = #{storeId,jdbcType=INTEGER}
+	</select>
+</mapper>

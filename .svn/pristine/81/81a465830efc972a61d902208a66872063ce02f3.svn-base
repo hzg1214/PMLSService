@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contacts.dao.ContactsMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.contacts.model.Contacts">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="ContactsNo" property="contactsNo" jdbcType="NVARCHAR"/>
+        <result column="Name" property="name" jdbcType="NVARCHAR"/>
+        <result column="MobilePhone" property="mobilePhone" jdbcType="NVARCHAR"/>
+        <result column="Email" property="email" jdbcType="NVARCHAR"/>
+        <result column="Remark" property="remark" jdbcType="NVARCHAR"/>
+        <result column="Sex" property="sex" jdbcType="INTEGER"/>
+        <result column="CompanyId" property="companyId" jdbcType="INTEGER"/>
+        <result column="IsDefault" property="isDefault" jdbcType="BIT"/>
+        <result column="IsDelete" property="isDelete" jdbcType="BIT"/>
+        <result column="CityNo" property="cityNo" jdbcType="NVARCHAR"/>
+        <result column="DistrictNo" property="districtNo" jdbcType="NVARCHAR"/>
+        <result column="AreaNo" property="areaNo" jdbcType="NVARCHAR"/>
+        <result column="Address" property="address" jdbcType="NVARCHAR"/>
+        <result column="Wechat" property="wechat" jdbcType="NVARCHAR"/>
+        <result column="QQ" property="qQ" jdbcType="NVARCHAR"/>
+        <result column="UserCreate" property="userCreate" jdbcType="INTEGER"/>
+        <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <!-- 拓展字段 -->
+        <result column="CityName" property="cityName" jdbcType="NVARCHAR"/>
+        <result column="DistrictName" property="districtName" jdbcType="NVARCHAR"/>
+        <result column="AreaName" property="areaName" jdbcType="NVARCHAR"/>
+        <result column="CompanyName" property="companyName" jdbcType="NVARCHAR"/>
+        <result column="storeId" property="storeId" jdbcType="INTEGER"/>
+        <result column="userName" property="userName" jdbcType="NVARCHAR"/>
+        <result column="longitude" property="longitude" jdbcType="DECIMAL"/>
+        <result column="latitude" property="latitude" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		Id, ContactsNo, Name, MobilePhone, Email, Remark, Sex,
+		CompanyId,
+		IsDefault, IsDelete,
+		CityNo, DistrictNo, AreaNo, Address,
+		Wechat, QQ, UserCreate, DateCreate,
+		storeId		
+	</sql>
+
+    <!-- 查询-根据id -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT co.*,ba.AreaName,bc.CityName,bd.DistrictName,c.CompanyName
+        FROM Contacts co
+        LEFT JOIN dbo.Company c ON c.Id=co.CompanyId and c.brandId is null
+        LEFT JOIN dbo.BAS_Area ba ON ba.AreaNo = co.AreaNo
+        LEFT JOIN dbo.BAS_City bc ON bc.CityNo = co.CityNo
+        LEFT JOIN dbo.BAS_District bd ON bd.CityNo =co.CityNo
+        <where>
+            co.IsDelete=0 AND co.Id= #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <!-- 查询 list -->
+    <select id="queryList" parameterType="Map" resultMap="BaseResultMap">
+        SELECT 
+     	c.*,u.userName
+        FROM
+        dbo.Contacts c
+        LEFT JOIN crm.dbo.USR_User u ON c.userCreate = u.userId
+        <where>
+            IsDelete=0
+            <if test="contactsNo != null and contactsNo != ''">
+                <![CDATA[AND ContactsNo LIKE '%${contactsNo}']]>
+            </if>
+            <if test="name != null and name != ''">
+                <![CDATA[AND Name LIKE '%${name}%']]>
+            </if>
+            <if test="mobilePhone != null and mobilePhone != ''">
+                <![CDATA[AND MobilePhone LIKE '%${mobilePhone}%']]>
+            </if>
+            <if test="email != null and email != ''">
+                <![CDATA[AND Email LIKE '%${email}%']]>
+            </if>
+            <if test="remark != null and remark != ''">
+                <![CDATA[AND Remark LIKE '%${remark}%']]>
+            </if>
+            <if test="sex != null and sex != ''">
+                <![CDATA[AND Sex = #{sex,jdbcType=INTEGER}]]>
+            </if>
+            <if test="companyId != null and companyId != ''">
+                <![CDATA[AND CompanyId = #{companyId,jdbcType=INTEGER}]]>
+            </if>
+            <if test="isDefault != null and isDefault != ''">
+                <![CDATA[AND IsDefault = #{isDefault,jdbcType=BIT}]]>
+            </if>
+
+            <if test="cityNo != null and cityNo != ''">
+                <![CDATA[AND CityNo = #{cityNo,jdbcType=NVARCHAR}]]>
+            </if>
+            <if test="districtNo != null and districtNo != ''">
+                <![CDATA[AND DistrictNo = #{districtNo,jdbcType=NVARCHAR}]]>
+            </if>
+            <if test="areaNo != null and areaNo != ''">
+                <![CDATA[AND AreaNo = #{areaNo,jdbcType=NVARCHAR}]]>
+            </if>
+            <if test="address != null and address != ''">
+                <![CDATA[AND Address LIKE '%${address}%']]>
+            </if>
+            <if test="wechat != null and wechat != ''">
+                <![CDATA[AND Wechat LIKE '%${wechat}%']]>
+            </if>
+            <if test="qQ != null and qQ != ''">
+                <![CDATA[AND QQ LIKE '%${qQ}%']]>
+            </if>
+            <if test="storeId != null and storeId != ''">
+                <![CDATA[AND storeId = #{storeId,jdbcType=INTEGER}]]>
+            </if>
+            <if test="userCreate != null and userCreate != ''">
+                <![CDATA[AND UserCreate = #{userCreate,jdbcType=INTEGER}]]>
+            </if>
+            <!-- 数据权限控制 (当前用户及其下属用户Id集合)-->
+			<!-- <if test="userIdList != null and userIdList != ''">
+				<foreach collection="userIdList" item="item" index="index"
+					open="AND (" close=")" separator="OR">
+				<![CDATA[
+	    			 c.UserCreate =  #{item,jdbcType=INTEGER}
+	    		]]>
+				</foreach>
+			</if> -->
+        </where>
+        	ORDER BY isDefault desc
+    </select>
+
+    <!-- 新增 -->
+    <insert id="create" parameterType="cn.com.eju.deal.contacts.model.Contacts" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO Contacts
+		(
+		ContactsNo
+		,Name ,MobilePhone ,Email ,Remark ,Sex ,CompanyId
+		,IsDefault ,IsDelete
+		,CityNo ,DistrictNo ,AreaNo ,Address ,Wechat ,QQ, UserCreate, DateCreate,
+		storeId
+		)
+		VALUES
+		(
+		#{contactsNo,jdbcType=NVARCHAR},
+		#{name,jdbcType=NVARCHAR},
+		#{mobilePhone,jdbcType=NVARCHAR},
+		#{email,jdbcType=NVARCHAR},
+		#{remark,jdbcType=NVARCHAR},
+		#{sex,jdbcType=INTEGER},
+		#{companyId,jdbcType=INTEGER},
+		#{isDefault,jdbcType=BIT},
+		0,
+		#{cityNo,jdbcType=NVARCHAR},
+		#{districtNo,jdbcType=NVARCHAR},
+		#{areaNo,jdbcType=NVARCHAR},
+		#{address,jdbcType=NVARCHAR},
+		#{wechat,jdbcType=NVARCHAR},
+		#{qQ,jdbcType=NVARCHAR},
+		#{userCreate,jdbcType=INTEGER},
+		getDate(),
+		#{storeId,jdbcType=INTEGER}
+		)
+	</insert>
+
+    <insert id="batchCreate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            INSERT INTO Contacts
+            ( ContactsNo ,Name ,MobilePhone ,Email ,Remark ,Sex ,CompanyId
+            ,IsDefault ,IsDelete
+            ,CityNo ,DistrictNo ,AreaNo ,Address ,Wechat ,QQ, UserCreate, DateCreate
+            )
+            VALUES
+            (
+            #{item.contactsNo,jdbcType=NVARCHAR},
+            #{item.name,jdbcType=NVARCHAR},
+            #{item.mobilePhone,jdbcType=NVARCHAR},
+            #{item.email,jdbcType=NVARCHAR},
+            #{item.remark,jdbcType=NVARCHAR},
+            #{item.sex,jdbcType=INTEGER},
+            #{item.companyId,jdbcType=INTEGER},
+            #{item.isDefault,jdbcType=BIT},
+            0,
+            #{item.cityNo,jdbcType=NVARCHAR},
+            #{item.districtNo,jdbcType=NVARCHAR},
+            #{item.areaNo,jdbcType=NVARCHAR},
+            #{item.address,jdbcType=NVARCHAR},
+            #{item.wechat,jdbcType=NVARCHAR},
+            #{item.qQ,jdbcType=NVARCHAR},
+            #{item.userCreate,jdbcType=INTEGER},
+            getDate()
+            )
+        </foreach>
+    </insert>
+
+
+    <!-- 修改 -->
+    <update id="update" parameterType="cn.com.eju.deal.contacts.model.Contacts">
+        UPDATE Contacts
+        <set>
+            <if test="contactsNo != null and contactsNo != ''">
+                ContactsNo = #{contactsNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="name != null and name != ''">
+                Name = #{name,jdbcType=NVARCHAR},
+            </if>
+            <if test="mobilePhone != null">
+                MobilePhone = #{mobilePhone,jdbcType=NVARCHAR},
+            </if>
+            <if test="email != null">
+                Email = #{email,jdbcType=NVARCHAR},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=NVARCHAR},
+            </if>
+            <if test="sex != null and sex != ''">
+                Sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="companyId != null and companyId != ''">
+                CompanyId = #{companyId,jdbcType=INTEGER},
+            </if>
+            <if test="isDefault != null and isDefault != ''">
+                IsDefault = #{isDefault,jdbcType=BIT},
+            </if>
+            <if test="isDelete != null and isDelete != ''">
+                IsDelete = #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="cityNo != null and cityNo != ''">
+                CityNo = #{cityNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="districtNo != null and districtNo != ''">
+                DistrictNo = #{districtNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="areaNo != null and areaNo != ''">
+                AreaNo = #{areaNo,jdbcType=NVARCHAR},
+            </if>
+            <if test="address != null and address != ''">
+                Address = #{address,jdbcType=NVARCHAR},
+            </if>
+            <if test="wechat != null and wechat != ''">
+                Wechat = #{wechat,jdbcType=NVARCHAR},
+            </if>
+            <if test="qQ != null and qQ != ''">
+                QQ = #{qQ,jdbcType=NVARCHAR},
+            </if>          
+        </set>
+        <where>
+            Id = #{id, jdbcType=INTEGER}
+        </where>
+    </update>
+
+    <!-- 逻辑删除 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        UPDATE Contacts
+        SET
+        IsDelete = 1
+        <where>
+            Id = #{id,jdbcType=INTEGER}
+        </where>
+    </delete>
+
+
+    <!-- 更新-批量-->
+    <update id="batchUpdate">
+        UPDATE Contacts
+        <set>
+            IsDefault = 0
+        </set>
+        <where>
+            Id in ${queryParam.idList}
+        </where>
+    </update>
+    
+    <!-- 查询当前User和当前User下属创建的联系人信息（提供给CRM微信端）  -->
+ 	<select id='getByUserId' parameterType="Map" resultMap="BaseResultMap">
+		SELECT  T1.Name ,
+			        T1.MobilePhone ,
+			        T1.storeId ,
+			        T2.Name AS storeName,
+			        T2.Longitude AS longitude,
+			        T2.Latitude AS latitude,
+			        T3.userName AS userCreateName
+		FROM    Contacts (NOLOCK) T1
+		        INNER JOIN Store T2 ON T1.storeId = T2.Id
+		        LEFT JOIN USR_User T3 ON T1.UserCreate = T3.userId
+		WHERE   T1.IsDelete = '0' 
+		    AND   T3.delFlag = 'N' 
+		<!-- 数据权限控制 (当前用户及其下属用户Id集合)-->
+		<if test="userIdList != null and userIdList != ''">
+			<foreach collection="userIdList" item="item" index="index"
+				open="AND (" close=")" separator="OR">
+			<![CDATA[
+    			 T1.UserCreate =  #{item,jdbcType=INTEGER}
+    		]]>
+			</foreach>
+		</if>
+		<if test="searchKey != null and searchKey != ''"><!-- 查询条件:联系人姓名、联系电话、门店名 -->
+                <![CDATA[
+                AND (T1.Name LIKE '%${searchKey}%' OR T1.MobilePhone = '${searchKey}' OR T2.Name LIKE '%${searchKey}%' )
+                ]]>
+		</if>
+		<if test="storeId != null and storeId != ''"><!-- 查询条件:门店ID -->
+                <![CDATA[
+                AND storeId = #{storeId,jdbcType=INTEGER}
+                ]]>
+		</if>
+        ORDER BY T1.DateCreate DESC 
+	</select>
+	<select id="getContracts" resultType="java.lang.Integer" parameterType="cn.com.eju.deal.contacts.model.Contacts">
+		 SELECT count(*) as returnStatus FROM Contacts WHERE storeId = #{storeId,jdbcType=INTEGER} 
+		 AND Name=#{name,jdbcType=NVARCHAR} AND  MobilePhone = #{mobilePhone,jdbcType=NVARCHAR}
+	</select>
+</mapper>

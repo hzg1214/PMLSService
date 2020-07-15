@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.cashbill.dao.OaCashBillReturnMapper" >
+<resultMap id="BaseResultMap" type="cn.com.eju.deal.cashbill.model.OaCashBillReturn" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cashBillNo" property="cashBillNo" jdbcType="VARCHAR" />
+    <result column="flowId" property="flowId" jdbcType="VARCHAR" />
+    <result column="oaNo" property="oaNo" jdbcType="VARCHAR" />
+    <result column="approveStatus" property="approveStatus" jdbcType="INTEGER" />
+    <result column="approveDate" property="approveDate" jdbcType="TIMESTAMP" />
+    <result column="recordDate" property="recordDate" jdbcType="TIMESTAMP" />
+    <result column="description" property="description" jdbcType="NVARCHAR" />
+    <result column="hasDeal" property="hasDeal" jdbcType="INTEGER" />
+    <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+</resultMap>
+<sql id="Base_Column_List" >
+id, cashBillNo, flowId,oaNo, approveStatus, approveDate, recordDate, description, hasDeal,
+dateUpdate, dateCreate
+</sql>
+<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+select
+<include refid="Base_Column_List" />
+from OaCashBillReturn
+where id = #{id,jdbcType=INTEGER}
+</select>
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+delete from OaCashBillReturn
+where id = #{id,jdbcType=INTEGER}
+</delete>
+<insert id="insert" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReturn" >
+insert into OaCashBillReturn (id, cashBillNo, flowId, oaNo,
+approveStatus, approveDate, recordDate,
+description, hasDeal, dateUpdate,
+dateCreate)
+values (#{id,jdbcType=INTEGER}, #{cashBillNo,jdbcType=VARCHAR}, #{flowId,jdbcType=VARCHAR}, #{oaNo,jdbcType=VARCHAR},
+#{approveStatus,jdbcType=INTEGER}, #{approveDate,jdbcType=TIMESTAMP}, #{recordDate,jdbcType=TIMESTAMP},
+#{description,jdbcType=NVARCHAR}, #{hasDeal,jdbcType=INTEGER}, #{dateUpdate,jdbcType=TIMESTAMP},
+#{dateCreate,jdbcType=TIMESTAMP})
+</insert>
+<insert id="insertSelective" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReturn" >
+insert into OaCashBillReturn
+<trim prefix="(" suffix=")" suffixOverrides="," >
+    <if test="id != null" >
+        id,
+    </if>
+    <if test="cashBillNo != null" >
+        cashBillNo,
+    </if>
+    <if test="flowId != null" >
+        flowId,
+    </if>
+    <if test="oaNo != null" >
+        oaNo,
+    </if>
+    <if test="approveStatus != null" >
+        approveStatus,
+    </if>
+    <if test="approveDate != null" >
+        approveDate,
+    </if>
+    <if test="recordDate != null" >
+        recordDate,
+    </if>
+    <if test="description != null" >
+        description,
+    </if>
+    <if test="hasDeal != null" >
+        hasDeal,
+    </if>
+    <if test="dateUpdate != null" >
+        dateUpdate,
+    </if>
+    <if test="dateCreate != null" >
+        dateCreate,
+    </if>
+</trim>
+<trim prefix="values (" suffix=")" suffixOverrides="," >
+    <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+    </if>
+    <if test="cashBillNo != null" >
+        #{cashBillNo,jdbcType=VARCHAR},
+    </if>
+    <if test="flowId != null" >
+        #{flowId,jdbcType=VARCHAR},
+    </if>
+    <if test="oaNo != null" >
+        #{oaNo,jdbcType=VARCHAR},
+    </if>
+    <if test="approveStatus != null" >
+        #{approveStatus,jdbcType=INTEGER},
+    </if>
+    <if test="approveDate != null" >
+        #{approveDate,jdbcType=TIMESTAMP},
+    </if>
+    <if test="recordDate != null" >
+        #{recordDate,jdbcType=TIMESTAMP},
+    </if>
+    <if test="description != null" >
+        #{description,jdbcType=NVARCHAR},
+    </if>
+    <if test="hasDeal != null" >
+        #{hasDeal,jdbcType=INTEGER},
+    </if>
+    <if test="dateUpdate != null" >
+        #{dateUpdate,jdbcType=TIMESTAMP},
+    </if>
+    <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+    </if>
+</trim>
+</insert>
+<update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReturn" >
+update OaCashBillReturn
+<set >
+    <if test="cashBillNo != null" >
+        cashBillNo = #{cashBillNo,jdbcType=VARCHAR},
+    </if>
+    <if test="flowId != null" >
+        flowId = #{flowId,jdbcType=VARCHAR},
+    </if>
+    <if test="oaNo != null" >
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+    </if>
+    <if test="approveStatus != null" >
+        approveStatus = #{approveStatus,jdbcType=INTEGER},
+    </if>
+    <if test="approveDate != null" >
+        approveDate = #{approveDate,jdbcType=TIMESTAMP},
+    </if>
+    <if test="recordDate != null" >
+        recordDate = #{recordDate,jdbcType=TIMESTAMP},
+    </if>
+    <if test="description != null" >
+        description = #{description,jdbcType=NVARCHAR},
+    </if>
+    <if test="hasDeal != null" >
+        hasDeal = #{hasDeal,jdbcType=INTEGER},
+    </if>
+    <if test="dateUpdate != null" >
+        dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+    </if>
+    <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+    </if>
+</set>
+where id = #{id,jdbcType=INTEGER}
+</update>
+<update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.cashbill.model.OaCashBillReturn" >
+update OaCashBillReturn
+set cashBillNo = #{cashBillNo,jdbcType=VARCHAR},
+flowId = #{flowId,jdbcType=VARCHAR},
+oaNo = #{oaNo,jdbcType=VARCHAR},
+approveStatus = #{approveStatus,jdbcType=INTEGER},
+approveDate = #{approveDate,jdbcType=TIMESTAMP},
+recordDate = #{recordDate,jdbcType=TIMESTAMP},
+description = #{description,jdbcType=NVARCHAR},
+hasDeal = #{hasDeal,jdbcType=INTEGER},
+dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP},
+dateCreate = #{dateCreate,jdbcType=TIMESTAMP}
+where id = #{id,jdbcType=INTEGER}
+</update>
+
+<select id="getOaCashBillReturn" resultType="cn.com.eju.deal.cashbill.model.OaCashBillReturn">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM OaCashBillReturn
+    WHERE hasDeal = 0
+</select>
+<select id="getOALnkAccountProjectList" resultType="java.util.Map" parameterType="java.lang.String">
+    SELECT hsCode lnkaccountProjectCode,hsname lnkAccountProject, xmCode oaProjectNo , xmName oaProjectName
+      FROM V_Request_Account_Project
+     WHERE xmcode = #{projectNo,jdbcType=VARCHAR}
+</select>
+<select id ="getOAFrmAgreementList" resultType="java.util.Map" parameterType="java.util.Map">
+   SELECT  PO_NUMBER frameOaNo,  CONTRACT_NAME frameOaName, HS_CODE accountProjectCode , HS_NAME accountProject,
+            VENDOR_NAME vendorName, VENDOR_CODE vendorCode, VENDOR_ID vendorId,
+            BGN_DATE cooperateStartTime , END_DATE cooperateEndTime,
+            TOTAL_AMOUNT,FENTAN,KJHT,KIND,
+            CATEGORY_NAME,ALLOCATION_START_DATE,ALLOCATION_END_DATE,
+            CC_CODE,CC_NAME,PJ_CODE,PJ_NAME,KH_CODE,
+            KH_NAME,IF_STOP,IF_OVERDUE
+    FROM V_Request_FrameAgreement
+   WHERE  HS_CODE = #{accountProjectCode,jdbcType=VARCHAR}
+    <if test="frameOaNo!= null and frameOaNo!=''">
+        AND PO_NUMBER like '%${frameOaNo}%'
+    </if>
+    <if test="vendorName!= null and vendorName!=''">
+        AND VENDOR_NAME like '%${vendorName}%'
+    </if>
+    ORDER BY frameOaNo
+
+</select>
+<select id ="getOAReceiveBankList" resultType="java.util.Map" parameterType="java.util.Map">
+SELECT ROW_ID,
+       VENDOR_ID vendorId ,VENDOR_NUMBER vendorCode, VENDOR_NAME vendorName, VENDOR_NAME_ALL vendorNameAll,
+       BANK_NAME bankName, BANK_ACCOUNT bankAccountCardCode ,LEGAL_PERSON bankAccountName,
+       BANK_PROVINCE provinceName, BANK_CITY cityName, CAST(LINE_NUMBER AS INTEGER) serialNo, '' bankNature,
+       PERMIT_CODE, FINANCE_CONTACTS, FINANCE_CONTACT_WAY, IS_LEGAL, CREATED_BY,
+       CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, LAST_UPDATE_LOGIN
+FROM V_Request_Vendor_Bank
+WHERE  VENDOR_ID = #{vendorId,jdbcType=VARCHAR}
+    <if test="bankName != null and bankName!=''">
+        AND BANK_NAME like '%${bankName}%'
+    </if>
+
+ORDER BY ROW_ID
+</select>
+
+<select id="getOACheckBodyList" resultType="java.util.Map" parameterType="java.util.Map">
+      SELECT BLOCK_ID,
+              LEDGER_NAME,
+              KH_CODE checkBodyId ,
+              KH_NAME checkBodyName,
+              HS_NUM accountProjectCode ,
+              HS_NAME accountProjectName
+        FROM V_Request_CheckBody
+       WHERE 1=1
+    <if test="accountProjectCode!= null and accountProjectCode!=''">
+         AND HS_NUM =  #{accountProjectCode,jdbcType=VARCHAR}
+    </if>
+</select>
+
+</mapper>

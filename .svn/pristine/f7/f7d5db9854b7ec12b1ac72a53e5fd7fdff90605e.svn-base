@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjCitymappingMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjCitymapping">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="cityNo" jdbcType="VARCHAR" property="cityNo" />
+    <result column="wjCode" jdbcType="VARCHAR" property="wjCode" />
+    <result column="enbledFlag" jdbcType="VARCHAR" property="enbledFlag" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+    <result column="cityName" jdbcType="VARCHAR" property="cityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cityNo, wjCode, enbledFlag, userCreate, dateCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_CityMapping
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Wj_CityMapping
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjCitymapping">
+    insert into Kefu_Wj_CityMapping (id, cityNo, wjCode, 
+      enbledFlag, userCreate, dateCreate, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{cityNo,jdbcType=VARCHAR}, #{wjCode,jdbcType=VARCHAR}, 
+      #{enbledFlag,jdbcType=VARCHAR}, #{userCreate,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjCitymapping">
+    insert into Kefu_Wj_CityMapping
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cityNo != null">
+        cityNo,
+      </if>
+      <if test="wjCode != null">
+        wjCode,
+      </if>
+      <if test="enbledFlag != null">
+        enbledFlag,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cityNo != null">
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wjCode != null">
+        #{wjCode,jdbcType=VARCHAR},
+      </if>
+      <if test="enbledFlag != null">
+        #{enbledFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="insertOrUpdate" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjCitymapping">
+        MERGE INTO dbo.Kefu_Wj_CityMapping s1
+        USING (SELECT #{wjCode} as wjCode, #{cityNo} as cityNo) AS s2
+        ON s1.delFlag=0 and s2.wjCode = s1.wjCode and s2.cityNo = s1.cityNo
+        WHEN MATCHED THEN
+        UPDATE SET enbledFlag = 1
+        WHEN NOT MATCHED THEN
+        insert (cityNo, wjCode,enbledFlag, userCreate, dateCreate,delFlag)
+        values (#{cityNo}, #{wjCode},#{enbledFlag}, #{userCreate}, #{dateCreate},#{delFlag});
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjCitymapping">
+    update Kefu_Wj_CityMapping
+    <set>
+      <if test="cityNo != null">
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wjCode != null">
+        wjCode = #{wjCode,jdbcType=VARCHAR},
+      </if>
+      <if test="enbledFlag != null">
+        enbledFlag = #{enbledFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjCitymapping">
+    update Kefu_Wj_CityMapping
+    set cityNo = #{cityNo,jdbcType=VARCHAR},
+      wjCode = #{wjCode,jdbcType=VARCHAR},
+      enbledFlag = #{enbledFlag,jdbcType=VARCHAR},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryCityAvailable" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    cm.*,c.CityName
+    from Kefu_Wj_CityMapping cm left join BAS_City c on cm.cityNo = c.CityNo
+		where cm.delFlag = 0 and cm.enbledFlag = 1 and cm.cityNo = #{cityNo,jdbcType=VARCHAR}
+  </select>
+  <select id="queryCityIsAvailable" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    cm.*,c.CityName
+    from Kefu_Wj_CityMapping cm left join BAS_City c on cm.cityNo = c.CityNo
+		where cm.delFlag = 0 and cm.enbledFlag = 1 and cm.cityNo = #{cityNo,jdbcType=VARCHAR}
+        <if test="id != null">
+          and wjCode != ( SELECT wjCode FROM Kefu_Wj_H WHERE id = #{id,jdbcType=INTEGER} )
+        </if>
+  </select>
+  <select id="queryNumByWjCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select
+    count(1)
+    from Kefu_Wj_CityMapping where wjCode = #{wjCode,jdbcType=VARCHAR}
+  </select>
+  <select id="getWjCheckCityList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+        *
+    FROM
+        Kefu_Wj_CityMapping
+    WHERE
+        wjCode = ( SELECT wjCode FROM Kefu_Wj_H WHERE id = #{id,jdbcType=INTEGER} )
+        AND enbledFlag = 1
+        AND delFlag = 0
+  </select>
+</mapper>

@@ -1,0 +1,256 @@
+package cn.com.eju.pmls.skStatement.model;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class PmlsSkAllocateDtl {
+    private Integer id;
+
+    private Integer parentId;
+
+    private String reportId;
+
+    private String companyNo;
+
+    private Integer rptDtlId;
+
+    private String customerName;
+
+    private String buildingNo;
+
+    private BigDecimal roughtArea;
+
+    private BigDecimal roughtAmount;
+
+    private Date roughtDate;
+
+    private Date roughAuditTime;
+
+    private BigDecimal cxArea;
+
+    private BigDecimal cxAmount;
+
+    private Date dealDate;
+
+    private BigDecimal yjAmount_bef;
+
+    private BigDecimal yjAmount_aft;
+
+    private BigDecimal sjAmount_bef;
+
+    private BigDecimal sjAmount_aft;
+
+    private BigDecimal allocatAmount_bef;
+
+    private BigDecimal allocatAmount_aft;
+
+    private Boolean delFlag;
+
+    private Date dateCreate;
+
+    private Integer userIdCreate;
+
+    private Date dateUpdate;
+
+    private Integer userIdUpdate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId == null ? null : reportId.trim();
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
+    }
+
+    public Integer getRptDtlId() {
+        return rptDtlId;
+    }
+
+    public void setRptDtlId(Integer rptDtlId) {
+        this.rptDtlId = rptDtlId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName == null ? null : customerName.trim();
+    }
+
+    public String getBuildingNo() {
+        return buildingNo;
+    }
+
+    public void setBuildingNo(String buildingNo) {
+        this.buildingNo = buildingNo == null ? null : buildingNo.trim();
+    }
+
+    public BigDecimal getRoughtArea() {
+        return roughtArea;
+    }
+
+    public void setRoughtArea(BigDecimal roughtArea) {
+        this.roughtArea = roughtArea;
+    }
+
+    public BigDecimal getRoughtAmount() {
+        return roughtAmount;
+    }
+
+    public void setRoughtAmount(BigDecimal roughtAmount) {
+        this.roughtAmount = roughtAmount;
+    }
+
+    public Date getRoughtDate() {
+        return roughtDate;
+    }
+
+    public void setRoughtDate(Date roughtDate) {
+        this.roughtDate = roughtDate;
+    }
+
+    public Date getRoughAuditTime() {
+        return roughAuditTime;
+    }
+
+    public void setRoughAuditTime(Date roughAuditTime) {
+        this.roughAuditTime = roughAuditTime;
+    }
+
+    public BigDecimal getCxArea() {
+        return cxArea;
+    }
+
+    public void setCxArea(BigDecimal cxArea) {
+        this.cxArea = cxArea;
+    }
+
+    public BigDecimal getCxAmount() {
+        return cxAmount;
+    }
+
+    public void setCxAmount(BigDecimal cxAmount) {
+        this.cxAmount = cxAmount;
+    }
+
+    public Date getDealDate() {
+        return dealDate;
+    }
+
+    public void setDealDate(Date dealDate) {
+        this.dealDate = dealDate;
+    }
+
+    public BigDecimal getYjAmount_bef() {
+        return yjAmount_bef;
+    }
+
+    public void setYjAmount_bef(BigDecimal yjAmount_bef) {
+        this.yjAmount_bef = yjAmount_bef;
+    }
+
+    public BigDecimal getYjAmount_aft() {
+        return yjAmount_aft;
+    }
+
+    public void setYjAmount_aft(BigDecimal yjAmount_aft) {
+        this.yjAmount_aft = yjAmount_aft;
+    }
+
+    public BigDecimal getSjAmount_bef() {
+        return sjAmount_bef;
+    }
+
+    public void setSjAmount_bef(BigDecimal sjAmount_bef) {
+        this.sjAmount_bef = sjAmount_bef;
+    }
+
+    public BigDecimal getSjAmount_aft() {
+        return sjAmount_aft;
+    }
+
+    public void setSjAmount_aft(BigDecimal sjAmount_aft) {
+        this.sjAmount_aft = sjAmount_aft;
+    }
+
+    public BigDecimal getAllocatAmount_bef() {
+        return allocatAmount_bef;
+    }
+
+    public void setAllocatAmount_bef(BigDecimal allocatAmount_bef) {
+        this.allocatAmount_bef = allocatAmount_bef;
+    }
+
+    public BigDecimal getAllocatAmount_aft() {
+        return allocatAmount_aft;
+    }
+
+    public void setAllocatAmount_aft(BigDecimal allocatAmount_aft) {
+        this.allocatAmount_aft = allocatAmount_aft;
+    }
+
+    public Boolean getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+    public Integer getUserIdCreate() {
+        return userIdCreate;
+    }
+
+    public void setUserIdCreate(Integer userIdCreate) {
+        this.userIdCreate = userIdCreate;
+    }
+
+    public Date getDateUpdate() {
+        return dateUpdate;
+    }
+
+    public void setDateUpdate(Date dateUpdate) {
+        this.dateUpdate = dateUpdate;
+    }
+
+    public Integer getUserIdUpdate() {
+        return userIdUpdate;
+    }
+
+    public void setUserIdUpdate(Integer userIdUpdate) {
+        this.userIdUpdate = userIdUpdate;
+    }
+}

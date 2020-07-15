@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.open.dao.OmsPerformMapper">
+    
+    <resultMap id="OmsStoreMap" type="cn.com.eju.deal.open.model.OmsStoreDto" />
+    <resultMap id="OmsContractMap" type="cn.com.eju.deal.open.model.OmsContractDto" />
+    
+    <!-- 根据门店No查询门店相关信息 -->
+    <select id="getStoreByNo" resultMap="OmsStoreMap" parameterType="java.lang.String">
+     SELECT contactName = T2.Name
+		        ,contactPhone = T2.MobilePhone
+		        ,userName = T3.userName
+		        ,userCode = T3.userCode
+		        ,dateCreate = T1.DateCreate
+		        ,storeName = T1.Name
+		        ,storeAddress = T1.Address
+		        ,districtNo = T1.DistrictNo
+		 FROM   Store (NOLOCK) T1
+		        LEFT JOIN (
+						         SELECT TOP 1
+				                            *
+				                    FROM    Contacts
+				                    WHERE   storeId = ( SELECT  Id
+				                                        FROM    Store
+				                                        WHERE   IsDelete = 0
+				                                                AND StoreNo = #{storeNo,jdbcType=NVARCHAR}
+				                                      )
+				                    ORDER BY DateCreate DESC
+                  ) T2 ON T2.storeId = T1.Id
+                          AND T2.IsDelete = 0
+		        LEFT JOIN USR_User T3 ON T3.userId = T1.UserCreate
+		                                 AND T3.delFlag = 'N'
+		 WHERE  T1.IsDelete = 0 
+		        AND T1.StoreNo = #{storeNo,jdbcType=NVARCHAR}
+  </select>
+  
+  <!-- 根据合同No查询合同相关信息 -->
+  <select id="getContractByNo" resultMap="OmsContractMap" parameterType="java.lang.String">
+		SELECT  ContractNo
+				   ,contractType = CASE ContractType
+			                         WHEN '10301' THEN 'A版'
+			                         WHEN '10302' THEN 'B版'
+			                         WHEN '10303' THEN 'C版'
+			                         WHEN '10304' THEN 'A转B版'
+			                         WHEN '10305' THEN 'B转A版'
+			                       END 
+				   ,ContractStatus
+				   ,companyName = PartyB
+				   ,registrId
+				   ,DateLifeStart
+				   ,DateLifeEnd
+				   ,StoreNum
+				   ,DateCreate
+				   ,PerformDate
+				   ,depositFee
+				   ,expandingPersonnelId
+				   ,ExpandingPersonnel
+		FROM  Contract 
+		WHERE ContractNo = #{contractNo,jdbcType=NVARCHAR}
+  </select>
+  
+</mapper>

@@ -1,0 +1,22 @@
+package cn.com.eju.pmls.performswitch.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import cn.com.eju.pmls.performswitch.model.PmlsWeekInfo;
+
+public interface PmlsWeekInfoMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(PmlsWeekInfo record);
+
+    int insertSelective(PmlsWeekInfo record);
+
+    PmlsWeekInfo selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(PmlsWeekInfo record);
+
+    int updateByPrimaryKey(PmlsWeekInfo record);
+    //回款跟踪数据初始化-年月-周
+    List<PmlsWeekInfo> getWeeks(Map<String,Object> record);
+}

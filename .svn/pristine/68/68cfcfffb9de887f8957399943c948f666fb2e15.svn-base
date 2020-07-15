@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.otherReport.dao.LnkQtYjReportMapper" >
+
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.otherReport.model.LnkYjQtReport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="detailId" jdbcType="INTEGER" property="detailId" />
+    <result column="reportId" jdbcType="VARCHAR" property="reportId" />
+    <result column="companyNo" jdbcType="VARCHAR" property="companyNo" />
+    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="yjfybefTaxAmount" jdbcType="DECIMAL" property="yjfybefTaxAmount" />
+    <result column="yjfyaftTaxAmount" jdbcType="DECIMAL" property="yjfyaftTaxAmount" />
+    <result column="delFlg" jdbcType="BIT" property="delFlg" />
+    <result column="crtDt" jdbcType="TIMESTAMP" property="crtDt" />
+    <result column="crtEmpId" jdbcType="INTEGER" property="crtEmpId" />
+    <result column="uptEmpId" jdbcType="INTEGER" property="uptEmpId" />
+    <result column="uptDt" jdbcType="TIMESTAMP" property="uptDt" />
+  </resultMap>
+  
+	<sql id="Base_Column_List">
+		id,
+		detailId,
+		reportId,
+		companyNo,
+		companyName,
+		yjfybefTaxAmount,
+		yjfyaftTaxAmount,
+		delFlg,
+		crtDt,
+		crtEmpId,
+		uptEmpId,
+		uptDt
+	</sql>
+    <insert id="insert" parameterType="cn.com.eju.deal.otherReport.model.LnkYjQtReport">
+        insert into LNK_YJ_QT_REPORT (detailId, reportId, companyNo, companyName,
+        yjfybefTaxAmount, yjfyaftTaxAmount,
+        delFlg, crtDt, crtEmpId)
+        values (#{detailId,jdbcType=INTEGER}, #{reportId,jdbcType=INTEGER}, #{companyNo,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR},
+        #{yjfybefTaxAmount,jdbcType=DECIMAL}, #{yjfyaftTaxAmount,jdbcType=DECIMAL},
+        0, getdate(),#{crtEmpId,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="cn.com.eju.deal.otherReport.model.LnkYjQtReport" useGeneratedKeys="true" keyProperty="id">
+    	insert into LNK_YJ_QT_REPORT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        detailId,
+      </if>
+      <if test="reportId != null">
+        reportId,
+      </if>
+      <if test="companyNo != null">
+        companyNo,
+      </if>
+      <if test="companyName != null">
+        companyName,
+      </if>
+      <if test="yjfybefTaxAmount != null">
+        yjfybefTaxAmount,
+      </if>
+      <if test="yjfyaftTaxAmount != null">
+        yjfyaftTaxAmount,
+      </if>
+      <if test="crtEmpId != null">
+        crtEmpId,
+      </if>
+      <if test="uptEmpId != null">
+        uptEmpId,
+      </if>
+      <if test="crtDt != null">
+        crtDt,
+      </if>
+      <if test="uptDt != null">
+        uptDt,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        #{detailId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null">
+        #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjfybefTaxAmount != null">
+        #{yjfybefTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyaftTaxAmount != null">
+        #{yjfyaftTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="crtEmpId != null">
+         #{crtEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="uptEmpId != null">
+        #{uptEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="crtDt != null">
+        #{crtDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uptDt != null">
+        #{uptDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null">
+        0,
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.otherReport.model.LnkYjQtReport">
+    update LNK_YJ_QT_REPORT
+    <set>
+      <if test="detailId != null">
+       detailId = #{detailId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null">
+       reportId = #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        companyNo = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+       companyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="yjfybefTaxAmount != null">
+        yjfybefTaxAmount = #{yjfybefTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="yjfyaftTaxAmount != null">
+        yjfyaftTaxAmount = #{yjfyaftTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="crtEmpId != null">
+         crtEmpId = #{crtEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="uptEmpId != null">
+        uptEmpId = #{uptEmpId,jdbcType=INTEGER},
+      </if>
+      <if test="crtDt != null">
+        crtDt = #{crtDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uptDt != null">
+        uptDt = #{uptDt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null">
+        delFlg = 1
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!--   返佣对象 -->
+  <select id="getFyObjectByQtReportId" parameterType="Map" resultType="cn.com.eju.deal.otherReport.dto.YjQtReportDto">
+      SELECT t1.reportId ,
+        t1.companyNo ,
+        t1.companyName ,
+        t2.yjbefTaxAmount ,
+		t2.yjaftTaxAmount ,
+        t3.sjbefTaxAmount,
+		t3.sjaftTaxAmount,
+		(CASE WHEN t4.uptDt IS NOT  NULL THEN t4.uptDt
+		ELSE t5.uptDt END ) OperDetailDate
+ FROM   LNK_YJ_QT_REPORT t1
+        LEFT JOIN ( SELECT  reportId ,
+                            companyNo ,
+                            ISNULL(SUM(befTaxAmount), 0) AS yjbefTaxAmount ,
+                            ISNULL(SUM(aftTaxAmount), 0) AS yjaftTaxAmount
+                    FROM    LNK_YJ_QT_YJFY WHERE delFlg=0
+                    GROUP BY reportId ,
+                            companyNo
+                  ) AS t2 ON t1.reportId = t2.reportId
+                             AND t1.companyNo = t2.companyNo
+        LEFT JOIN ( SELECT  reportId ,
+                            companyNo ,
+                            ISNULL(SUM(befTaxAmount), 0) AS sjbefTaxAmount ,
+                            ISNULL(SUM(aftTaxAmount), 0) AS sjaftTaxAmount
+                    FROM    LNK_YJ_QT_SJFY WHERE delFlg=0
+                    GROUP BY reportId ,
+                            companyNo
+                  ) AS t3 ON t1.reportId = t3.reportId
+                             AND t1.companyNo = t3.companyNo
+        LEFT JOIN ( SELECT  reportId ,
+                            companyNo ,
+                            uptEmpId ,
+                            uptDt
+                    FROM    ( SELECT    ROW_NUMBER() OVER ( PARTITION BY reportId,
+                                                            companyNo ORDER BY id DESC ) AS w ,
+                                        *
+                              FROM      LNK_YJ_QT_YJFY WHERE delFlg=0
+                            ) AS a
+                    WHERE   w = 1
+                  ) t4 ON t1.reportId = t4.reportId
+                          AND t1.companyNo = t4.companyNo
+        LEFT JOIN ( SELECT  reportId ,
+                            companyNo ,
+                            uptEmpId ,
+                            uptDt
+                    FROM    ( SELECT    ROW_NUMBER() OVER ( PARTITION BY reportId,
+                                                            companyNo ORDER BY id DESC ) AS w ,
+                                        *
+                              FROM      LNK_YJ_QT_SJFY WHERE delFlg=0
+                            ) AS a
+                    WHERE   w = 1
+                  ) t5 ON t1.reportId = t5.reportId
+                          AND t1.companyNo = t5.companyNo
+			WHERE t1.delFlg=0 and t1.reportId=#{id,jdbcType=INTEGER}
+								
+  </select>
+</mapper>

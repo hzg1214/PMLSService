@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ContractProductMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.ContractProduct" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="ContractId" property="contractId" jdbcType="INTEGER" />
+    <result column="ProductId" property="productId" jdbcType="INTEGER" />
+    <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="IsDelete" property="isDelete" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, ContractId, ProductId, DateCreate, IsDelete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ContractProduct
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ContractProduct
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="create" parameterType="cn.com.eju.deal.contract.model.ContractProduct"  useGeneratedKeys="true" keyProperty="id">
+    insert into ContractProduct (ContractId, ProductId, 
+      DateCreate, IsDelete)
+    values (#{contractId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.contract.model.ContractProduct" >
+    update ContractProduct
+    set ContractId = #{contractId,jdbcType=INTEGER},
+      ProductId = #{productId,jdbcType=INTEGER},
+      DateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      IsDelete = #{isDelete,jdbcType=BIT}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="delProductByContractId" parameterType="java.lang.Integer" >
+    update ContractProduct
+    set IsDelete = 1
+    where ContractId = #{contractId,jdbcType=INTEGER}
+  </update>
+  
+  <delete id="deleteByContractId" parameterType="java.lang.Integer" >
+    delete from ContractProduct
+    where ContractId = #{contractId,jdbcType=INTEGER}
+  </delete>
+</mapper>

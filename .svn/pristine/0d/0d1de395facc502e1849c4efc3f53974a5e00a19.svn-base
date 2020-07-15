@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.StoreMaintenanceMapper">
+
+	<resultMap id="storeMaintenanceDto" type="cn.com.eju.deal.store.model.StoreMaintenanceDto"></resultMap>
+
+    <select id="getStoreMaintenanceList" resultMap="storeMaintenanceDto" parameterType="Map">
+		SELECT t.* FROM (
+			select 
+			      s3.inStatus,
+			      s1.ContractType,
+			      s1.Id as id,
+			      s1.centerId as storeCenterId,
+			      s1.StoreNo as storeNo,
+			      s1.Name as name,
+			      s1.AddressDetail as addressDetail,    
+				  (CASE WHEN s1.contractType is null THEN '未签' 
+					  WHEN s1.contractType ='0' THEN '未签' else d.dicValue end
+				  ) contractTypeName,
+				  vr3.ContractStatus,
+				  (CASE WHEN s1.contractType is null THEN '-' 
+					  WHEN s1.contractType ='0' THEN '-' else vr3.ContractStatusName end
+				  )AS ContractStatusName,       
+			      s1.Maintainer as maintainer,
+			      ISNULL(s1.maintainerName, '-') as maintainerName,
+			      ISNULL(s2.groupName, '-') AS groupName,
+			      ISNULL(s4.centername, '-') AS centername,
+			      (CASE when s3.inStatus='1075'AND CHARINDEX(rtrim(s2.groupName),isnull(s4.centername,'-'))=0 THEN  1
+			          when  s3.inStatus IS NULL  THEN 4
+			          when  s3.inStatus='1075'AND CHARINDEX(rtrim(s2.groupName),isnull(s4.centername,'-'))>0  THEN 2
+			        when  s3.inStatus  &lt; '1075'AND CHARINDEX(rtrim(s2.groupName),isnull(s4.centername,'-'))=0  THEN 3
+			        ELSE  5 END ) AS sortindex
+			          ,
+			      (CASE when s3.inStatus='1075'AND CHARINDEX(rtrim(s2.groupName),isnull(s4.centername,'-'))=0 THEN  '维护人离职、门店所属中心与维护人中心不一致'
+			           when  s3.inStatus IS NULL  THEN  '门店无维护人'
+			          when  s3.inStatus='1075'AND CHARINDEX(rtrim(s2.groupName),isnull(s4.centername,'-'))>0  THEN  '维护人离职'
+			        when  s3.inStatus &lt; '1075'AND CHARINDEX(rtrim(s2.groupName),isnull(s4.centername,'-'))=0  THEN  '门店所属中心与维护人中心不一致'
+			        ELSE  '' END ) AS titleLabel
+			   from
+			    Store s1
+			    LEFT JOIN BAS_DictionaryValue d ON d.dicCode = s1.ContractType and d.delFlag ='N'
+			    LEFT JOIN dbo.USR_Group s2 ON s1.centerId = s2.groupId
+			      AND s2.delFlag = 'N'
+			    LEFT JOIN (
+			      SELECT DISTINCT userCode,inStatus
+			      FROM dbo.USR_User
+			      WHERE delFlag = 'N'
+			      ) s3 ON s1.Maintainer = s3.userCode
+			    LEFT JOIN WX_Maintainer_Center s4 ON s1.Maintainer = s4.userCode
+			    LEFT join v_crm_StoreContract_last vr3 ON s1.id = vr3.StoreId
+			    WHERE s1.IsDelete =0 
+			    AND s1.AuditStatus=20
+			    <if test="cityNo != null and cityNo != ''">
+		            AND s1.AcCityNo = #{cityNo,jdbcType=NVARCHAR}
+		        </if>
+				<if test="storeCityNo != null and storeCityNo != ''">
+	           		 AND s1.CityNo = #{storeCityNo,jdbcType=NVARCHAR}
+	        	</if>
+	        	<if test="districtNo != null and districtNo != ''">
+	            	AND s1.DistrictNo = #{districtNo,jdbcType=NVARCHAR}
+	        	</if>
+	        	<if test="searchValues != null and searchValues != ''">
+					AND (	
+						s1.StoreNo LIKE CONCAT('%', #{searchValues})
+						OR s1.Name LIKE CONCAT('%', #{searchValues},'%')
+						OR s1.AddressDetail LIKE CONCAT('%', #{searchValues},'%')
+						OR s1.maintainerName LIKE CONCAT('%', #{searchValues},'%')
+					)
+				</if>
+				<if test="groupId != null and groupId != ''">
+	           		AND s1.centerId = #{groupId,jdbcType=INTEGER}
+	       		</if>
+	       		<if test="contractStatus != null and contractStatus !=''">
+	            	AND vr3.contractStatus = #{contractStatus,jdbcType=INTEGER}
+	        	</if>
+	        	<if test="contractType != null and contractType != '' and contractType == 1">
+	            	AND (s1.contractType is null or s1.contractType ='')
+	        	</if>
+	        	
+		        <if test="contractType != null and contractType != '' and contractType != 1">
+		            AND s1.contractType = #{contractType,jdbcType=INTEGER}
+		        </if>
+			  ) t ORDER BY t.sortindex,t.id
+	</select>
+</mapper>

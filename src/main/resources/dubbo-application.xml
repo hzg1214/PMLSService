@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+	<!-- 引入配置文件 -->
+	<!--<context:property-placeholder location="classpath:dubbo.properties" ignore-unresolvable="true"/>-->
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<!--<dubbo:application name="${dubbo.application.name}" />-->
+
+	<!-- 使用multicast广播注册中心暴露服务地址 -->
+	<!--<dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+
+	<!-- 使用zookeeper注册中心暴露服务地址, 即zookeeper的所在服务器ip地址和端口号 -->
+	<!--<dubbo:registry protocol="${dubbo.registry.protocol}" address="${dubbo.registry.address}" />-->
+
+	<!-- 用dubbo协议在${dubbo.protocol.port}端口暴露服务 -->
+	<!--<dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" host="${dubbo.protocol.host}"/>-->
+
+<!-- 发布begin -->
+	<!-- 暴露远程服务配置  声明需要暴露的服务接口 -->
+	<!-- <dubbo:service interface="cn.com.eju.deal.dubbo.pmls.api.ICompanyService"
+		ref="dcompanyService" /> -->
+
+	<!-- 和本地服务一样实现远程服务  具体的实现bean 和本地bean一样实现服务 -->
+	<!-- <bean id="dcompanyService" class="cn.com.eju.deal.dubbo.impl.CompanyServiceImpl" /> -->
+	
+	<!-- 提供给OMS系统的API -->
+	<!--<dubbo:service interface="cn.com.eju.deal.dubbo.pmls.api.IOmsService"
+		ref="dOMSService"  token="true" />
+	<bean id="dOMSService" class="cn.com.eju.deal.dubbo.impl.IOmsServiceImpl" />-->
+	
+	<!-- CRM dictionary服务 -->
+	<!--<dubbo:service interface="cn.com.eju.deal.dubbo.pmls.api.IDictionaryService"
+		ref="dDictionaryService"  token="true" />
+	<bean id="dDictionaryService" class="cn.com.eju.deal.dubbo.impl.IDictionaryServiceImpl" />-->
+	
+	<!-- 提供给Exchange系统的API -->
+<!--	<dubbo:service interface="cn.com.eju.deal.dubbo.pmls.api.IExchangeService"
+		ref="dExchangeService"  token="true" />
+	<bean id="dExchangeService" class="cn.com.eju.deal.dubbo.impl.IExchangeServiceImpl" /> -->
+	
+	<!-- 提供给Fangyou系统的API -->
+<!--	<dubbo:service interface="cn.com.eju.deal.dubbo.pmls.api.IFangyouService"
+		ref="dFangyouService"  token="true" />
+	<bean id="dFangyouService" class="cn.com.eju.deal.dubbo.impl.IFangyouServiceImpl" />-->
+	
+	<!-- 提供给OP系统的API -->
+	<!--<dubbo:service interface="cn.com.eju.deal.dubbo.pmls.api.IOPService"
+		ref="dOPService"  token="true" />
+	<bean id="dOPService" class="cn.com.eju.deal.dubbo.impl.IOPServiceImpl" />-->
+	
+	<!-- 定时任务接口 -->
+<!--	<dubbo:service interface="cn.com.eju.deal.dubbo.pmls.api.ITimerService"
+		ref="dTimerService"  token="true" />
+	<bean id="dTimerService" class="cn.com.eju.deal.dubbo.impl.ITimerServiceImpl" />-->
+	
+<!-- 发布end -->
+
+<!-- 订阅begin -->
+	<!--生成远程服务代理，可以像使用本地bean一样使用demoService -->
+	<!--
+    <dubbo:reference id="contractFlowService"  
+        interface="cn.com.eju.deal.dubbo.oms.api.IContractFlowService" check="false" />
+        
+    <dubbo:reference id="decorationService"  
+        interface="cn.com.eju.deal.dubbo.oms.api.IDecorationService" check="false" />
+        
+  	<dubbo:reference id="depositService"  
+        interface="cn.com.eju.deal.dubbo.oms.api.IDepositService" check="false" />
+        
+    <dubbo:reference id="performNodeRecordService"  
+        interface="cn.com.eju.deal.dubbo.oms.api.IPerformNodeRecordService" check="false" />
+    
+    <dubbo:reference id="opCompanyService"  
+        interface="cn.com.eju.deal.dubbo.op.api.IOPCompanyService" check="false" />
+        
+    <dubbo:reference id="businessService"  
+        interface="cn.com.eju.deal.dubbo.ums.api.IBusinessService" check="false" />
+        -->
+<!-- 订阅end -->
+</beans>

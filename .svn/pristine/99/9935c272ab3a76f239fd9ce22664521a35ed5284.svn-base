@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.totalPackage.dao.TotalPackageDataMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageData">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="settlementNo" jdbcType="VARCHAR" property="settlementNo" />
+    <result column="orderNumber" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="projectNo" jdbcType="VARCHAR" property="projectNo" />
+    <result column="buildingNo" jdbcType="NVARCHAR" property="buildingNo" />
+    <result column="receivableDate" jdbcType="TIMESTAMP" property="receivableDate" />
+    <result column="salesMoney" jdbcType="DECIMAL" property="salesMoney" />
+    <result column="salesDate" jdbcType="TIMESTAMP" property="salesDate" />
+    <result column="preTaxTotalServiceFee" jdbcType="DECIMAL" property="preTaxTotalServiceFee" />
+    <result column="afterTaxTotalServiceFee" jdbcType="DECIMAL" property="afterTaxTotalServiceFee" />
+    <result column="preTaxIncome" jdbcType="DECIMAL" property="preTaxIncome" />
+    <result column="afterTaxIncome" jdbcType="DECIMAL" property="afterTaxIncome" />
+    <result column="oaPastTrialDate" jdbcType="TIMESTAMP" property="oaPastTrialDate" />
+    <result column="hasPadDeal" jdbcType="INTEGER" property="hasPadDeal" />
+    <result column="dealPadDate" jdbcType="TIMESTAMP" property="dealPadDate" />
+    <result column="hasRakeback" jdbcType="INTEGER" property="hasRakeback" />
+    <result column="rakebackDate" jdbcType="TIMESTAMP" property="rakebackDate" />
+    <result column="hasRevenues" jdbcType="INTEGER" property="hasRevenues" />
+    <result column="revenuesDate" jdbcType="TIMESTAMP" property="revenuesDate" />
+    <result column="dealDesc" jdbcType="NVARCHAR" property="dealDesc" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+    <result column="salesNum" jdbcType="INTEGER" property="salesNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, settlementNo, orderNumber, projectNo, buildingNo, receivableDate, salesMoney, salesDate, preTaxTotalServiceFee,
+    afterTaxTotalServiceFee,preTaxIncome,afterTaxIncome,oaPastTrialDate,hasPadDeal,dealPadDate,
+    hasRakeback,rakebackDate,hasRevenues,revenuesDate,dealDesc,createDate,delFlag,salesNum
+  </sql>
+  <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageData" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO LNK_TotalPackageData
+        ( settlementNo ,
+          orderNumber,
+          projectNo ,
+          buildingNo ,
+          receivableDate ,
+          salesMoney ,
+          salesDate ,
+          preTaxTotalServiceFee ,
+          afterTaxTotalServiceFee ,
+          preTaxIncome ,
+          afterTaxIncome ,
+          oaPastTrialDate ,
+          hasPadDeal ,
+          dealPadDate ,
+          hasRakeback ,
+          rakebackDate ,
+          hasRevenues ,
+          revenuesDate ,
+          dealDesc ,
+          createDate ,
+          delFlag,salesNum
+        )
+VALUES  (#{settlementNo,jdbcType=VARCHAR} ,
+          #{orderNumber,jdbcType=VARCHAR} ,
+          #{projectNo,jdbcType=VARCHAR} ,
+          #{buildingNo,jdbcType=NVARCHAR} ,
+          #{receivableDate,jdbcType=TIMESTAMP} ,
+          #{salesMoney,jdbcType=DECIMAL} ,
+          #{salesDate,jdbcType=TIMESTAMP} ,
+          #{preTaxTotalServiceFee,jdbcType=DECIMAL} ,
+          #{afterTaxTotalServiceFee,jdbcType=DECIMAL} ,
+          #{preTaxIncome,jdbcType=DECIMAL} ,
+          #{afterTaxIncome,jdbcType=DECIMAL} ,
+          #{oaPastTrialDate,jdbcType=TIMESTAMP} ,
+          0 ,
+          #{dealPadDate,jdbcType=TIMESTAMP} ,
+          0 ,
+          #{rakebackDate,jdbcType=TIMESTAMP} ,
+          0 ,
+          #{revenuesDate,jdbcType=TIMESTAMP} ,
+          #{dealDesc,jdbcType=NVARCHAR} ,
+          getdate() ,
+          'N',#{salesNum,jdbcType=INTEGER}
+        )
+  </insert>
+  <update id="update" parameterType="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageData">
+    update LNK_TotalPackageData
+    <set>
+      <if test="settlementNo != null">
+        settlementNo = #{settlementNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        orderNumber = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null">
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null">
+        buildingNo = #{buildingNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="receivableDate != null">
+        receivableDate = #{receivableDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salesMoney != null">
+        salesMoney = #{salesMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="salesDate != null">
+        salesDate = #{salesDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preTaxTotalServiceFee != null">
+        preTaxTotalServiceFee = #{preTaxTotalServiceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="afterTaxTotalServiceFee != null">
+        afterTaxTotalServiceFee = #{afterTaxTotalServiceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="preTaxIncome != null">
+        preTaxIncome = #{preTaxIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="afterTaxIncome != null">
+        afterTaxIncome = #{afterTaxIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="oaPastTrialDate != null">
+        oaPastTrialDate = #{oaPastTrialDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasPadDeal != null">
+        hasPadDeal = #{hasPadDeal,jdbcType=INTEGER},
+      </if>
+      <if test="dealPadDate != null">
+        dealPadDate = #{dealPadDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasRakeback != null">
+        hasRakeback = #{hasRakeback,jdbcType=INTEGER},
+      </if>
+      <if test="rakebackDate != null">
+        rakebackDate = #{rakebackDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hasRevenues != null">
+        hasRevenues = #{hasRevenues,jdbcType=INTEGER},
+      </if>
+      <if test="revenuesDate != null">
+        revenuesDate = #{revenuesDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealDesc != null">
+        dealDesc = #{dealDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="salesNum != null">
+        salesNum = #{salesNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="ImportMap" type="cn.com.eju.deal.dto.scene.commission.ImportDto"></resultMap>
+  <select id="getLnkImportByMap" resultMap="ImportMap" parameterType="Map">
+    SELECT * FROM LNK_Import
+    WHERE reportId = #{reportId, jdbcType=VARCHAR}
+    AND templateType = #{templateType, jdbcType=VARCHAR}
+    AND amountType = #{amountType, jdbcType=VARCHAR}
+    AND detailId = #{detailId,jdbcType=INTEGER}
+    AND num = 1
+    <if test="year != null">
+      AND year = #{year, jdbcType=INTEGER}
+    </if>
+    AND DelFlg = 0
+    Order BY year DESC
+  </select>
+
+  <!-- 导入数据批量插入 -->
+  <insert id="createLnkImport"   parameterType="cn.com.eju.deal.dto.scene.commission.ImportDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO LNK_Import (
+    templateType
+    ,amountType
+    ,year
+    ,projectNo
+    ,estateId
+    ,estateNm
+    ,reportId
+    ,detailId
+    ,buildingNo
+    ,num
+    ,dealAmount
+    ,dealDate
+    ,subTotalPreTax
+    ,beforeAmountPreTax
+    ,janPreTax
+    ,febPreTax
+    ,marPreTax
+    ,aprPreTax
+    ,mayPreTax
+    ,junPreTax
+    ,julPreTax
+    ,augPreTax
+    ,sepPreTax
+    ,octPreTax
+    ,novPreTax
+    ,decPreTax
+    ,subTotalAfterTax
+    ,beforeAmountAfterTax
+    ,janAfterTax
+    ,febAfterTax
+    ,marAfterTax
+    ,aprAfterTax
+    ,mayAfterTax
+    ,junAfterTax
+    ,julAfterTax
+    ,augAfterTax
+    ,sepAfterTax
+    ,octAfterTax
+    ,novAfterTax
+    ,decAfterTax
+    ,CrtEmpId
+    ,DelFlg
+    ,CrtDt,UptEmpId,UptDt
+    )
+    VALUES
+    (
+    #{templateType, jdbcType=NVARCHAR}
+    ,#{amountType, jdbcType=NVARCHAR}
+    ,#{year, jdbcType=INTEGER}
+    ,#{projectNo, jdbcType=VARCHAR}
+    ,#{estateId, jdbcType=VARCHAR}
+    ,#{estateNm, jdbcType=NVARCHAR}
+    ,#{reportId, jdbcType=VARCHAR}
+    ,#{detailId, jdbcType=INTEGER}
+    ,#{buildingNo, jdbcType=NVARCHAR}
+    ,#{num, jdbcType=INTEGER}
+    ,#{dealAmount, jdbcType=DECIMAL}
+    ,#{dealDate, jdbcType=TIMESTAMP}
+    <if test="subTotalPreTax != null and subTotalPreTax != ''">
+      ,#{subTotalPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="subTotalPreTax == null or subTotalPreTax == ''">
+      ,NULL
+    </if>
+    <if test="beforeAmountPreTax != null and beforeAmountPreTax != ''">
+      ,#{beforeAmountPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="beforeAmountPreTax == null or beforeAmountPreTax == ''">
+      ,NULL
+    </if>
+    <if test="janPreTax != null and janPreTax != ''">
+      ,#{janPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="janPreTax == null or janPreTax == ''">
+      ,NULL
+    </if>
+    <if test="febPreTax != null and febPreTax != ''">
+      ,#{febPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="febPreTax == null or febPreTax == ''">
+      ,NULL
+    </if>
+    <if test="marPreTax != null and marPreTax != ''">
+      ,#{marPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="marPreTax == null or marPreTax == ''">
+      ,NULL
+    </if>
+    <if test="aprPreTax != null and aprPreTax != ''">
+      ,#{aprPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="aprPreTax == null or aprPreTax == ''">
+      ,NULL
+    </if>
+    <if test="mayPreTax != null and mayPreTax != ''">
+      ,#{mayPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="mayPreTax == null or mayPreTax == ''">
+      ,NULL
+    </if>
+    <if test="junPreTax != null and junPreTax != ''">
+      ,#{junPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="junPreTax == null or junPreTax == ''">
+      ,NULL
+    </if>
+    <if test="julPreTax != null and julPreTax != ''">
+      ,#{julPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="julPreTax == null or julPreTax == ''">
+      ,NULL
+    </if>
+    <if test="augPreTax != null and augPreTax != ''">
+      ,#{augPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="augPreTax == null or augPreTax == ''">
+      ,NULL
+    </if>
+    <if test="sepPreTax != null and sepPreTax != ''">
+      ,#{sepPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="sepPreTax == null or sepPreTax == ''">
+      ,NULL
+    </if>
+    <if test="octPreTax != null and octPreTax != ''">
+      ,#{octPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="octPreTax == null or octPreTax == ''">
+      ,NULL
+    </if>
+    <if test="novPreTax != null and novPreTax != ''">
+      ,#{novPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="novPreTax == null or novPreTax == ''">
+      ,NULL
+    </if>
+    <if test="decPreTax != null and decPreTax != ''">
+      ,#{decPreTax, jdbcType=DECIMAL}
+    </if>
+    <if test="decPreTax == null or decPreTax == ''">
+      ,NULL
+    </if>
+    <if test="subTotalAfterTax != null and subTotalAfterTax != ''">
+      ,#{subTotalAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="subTotalAfterTax == null or subTotalAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="beforeAmountAfterTax != null and beforeAmountAfterTax != ''">
+      ,#{beforeAmountAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="beforeAmountAfterTax == null or beforeAmountAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="janAfterTax != null and janAfterTax != ''">
+      ,#{janAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="janAfterTax == null or janAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="febAfterTax != null and febAfterTax != ''">
+      ,#{febAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="febAfterTax == null or febAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="marAfterTax != null and marAfterTax != ''">
+      ,#{marAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="marAfterTax == null or marAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="aprAfterTax != null and aprAfterTax != ''">
+      ,#{aprAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="aprAfterTax == null or aprAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="mayAfterTax != null and mayAfterTax != ''">
+      ,#{mayAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="mayAfterTax == null or mayAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="junAfterTax != null and junAfterTax != ''">
+      ,#{junAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="junAfterTax == null or junAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="julAfterTax != null and julAfterTax != ''">
+      ,#{julAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="julAfterTax == null or julAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="augAfterTax != null and augAfterTax != ''">
+      ,#{augAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="augAfterTax == null or augAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="sepAfterTax != null and sepAfterTax != ''">
+      ,#{sepAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="sepAfterTax == null or sepAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="octAfterTax != null and octAfterTax != ''">
+      ,#{octAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="octAfterTax == null or octAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="novAfterTax != null and novAfterTax != ''">
+      ,#{novAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="novAfterTax == null or novAfterTax == ''">
+      ,NULL
+    </if>
+    <if test="decAfterTax != null and decAfterTax != ''">
+      ,#{decAfterTax, jdbcType=DECIMAL}
+    </if>
+    <if test="decAfterTax == null or decAfterTax == ''">
+      ,NULL
+    </if>
+    ,#{crtEmpId, jdbcType=INTEGER}
+    ,0
+    ,getdate()
+    ,#{uptEmpId, jdbcType=INTEGER}
+    ,getdate()
+    )
+  </insert>
+
+  <!-- 导入数据更新 -->
+  <update id="updateLnkImport"  parameterType="cn.com.eju.deal.dto.scene.commission.ImportDto">
+    UPDATE LNK_Import
+    <set>
+      estateId = #{estateId, jdbcType=VARCHAR}
+      ,estateNm = #{estateNm, jdbcType=VARCHAR}
+      ,buildingNo = #{buildingNo, jdbcType=VARCHAR}
+      ,dealAmount = #{dealAmount, jdbcType=DECIMAL}
+      ,dealDate = #{dealDate, jdbcType=TIMESTAMP}
+      <if test="subTotalPreTax != null and subTotalPreTax != ''">
+        ,subTotalPreTax = #{subTotalPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="subTotalPreTax == null or subTotalPreTax == ''">
+        ,subTotalPreTax = NULL
+      </if>
+      <if test="beforeAmountPreTax != null and beforeAmountPreTax != ''">
+        ,beforeAmountPreTax = #{beforeAmountPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="beforeAmountPreTax == null or beforeAmountPreTax == ''">
+        ,beforeAmountPreTax = NULL
+      </if>
+      <if test="janPreTax != null and janPreTax != ''">
+        ,janPreTax = #{janPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="janPreTax == null or janPreTax == ''">
+        ,janPreTax = NULL
+      </if>
+      <if test="febPreTax != null and febPreTax != ''">
+        ,febPreTax = #{febPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="febPreTax == null or febPreTax == ''">
+        ,febPreTax = NULL
+      </if>
+      <if test="marPreTax != null and marPreTax != ''">
+        ,marPreTax = #{marPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="marPreTax == null or marPreTax == ''">
+        ,marPreTax = NULL
+      </if>
+      <if test="aprPreTax != null and aprPreTax != ''">
+        ,aprPreTax = #{aprPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="aprPreTax == null or aprPreTax == ''">
+        ,aprPreTax = NULL
+      </if>
+      <if test="mayPreTax != null and mayPreTax != ''">
+        ,mayPreTax = #{mayPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="mayPreTax == null or mayPreTax == ''">
+        ,mayPreTax = NULL
+      </if>
+      <if test="junPreTax != null and junPreTax != ''">
+        ,junPreTax = #{junPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="junPreTax == null or junPreTax == ''">
+        ,junPreTax = NULL
+      </if>
+      <if test="julPreTax != null and julPreTax != ''">
+        ,julPreTax = #{julPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="julPreTax == null or julPreTax == ''">
+        ,julPreTax = NULL
+      </if>
+      <if test="augPreTax != null and augPreTax != ''">
+        ,augPreTax = #{augPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="augPreTax == null or augPreTax == ''">
+        ,augPreTax = NULL
+      </if>
+      <if test="sepPreTax != null and sepPreTax != ''">
+        ,sepPreTax = #{sepPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="sepPreTax == null or sepPreTax == ''">
+        ,sepPreTax = NULL
+      </if>
+      <if test="octPreTax != null and octPreTax != ''">
+        ,octPreTax = #{octPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="octPreTax == null or octPreTax == ''">
+        ,octPreTax = NULL
+      </if>
+      <if test="novPreTax != null and novPreTax != ''">
+        ,novPreTax = #{novPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="novPreTax == null or novPreTax == ''">
+        ,novPreTax = NULL
+      </if>
+      <if test="decPreTax != null and decPreTax != ''">
+        ,decPreTax = #{decPreTax, jdbcType=DECIMAL}
+      </if>
+      <if test="decPreTax == null or decPreTax == ''">
+        ,decPreTax = NULL
+      </if>
+      <if test="subTotalAfterTax != null and subTotalAfterTax != ''">
+        ,subTotalAfterTax = #{subTotalAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="subTotalAfterTax == null or subTotalAfterTax == ''">
+        ,subTotalAfterTax = NULL
+      </if>
+      <if test="beforeAmountAfterTax != null and beforeAmountAfterTax != ''">
+        ,beforeAmountAfterTax = #{beforeAmountAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="beforeAmountAfterTax == null or beforeAmountAfterTax == ''">
+        ,beforeAmountAfterTax = NULL
+      </if>
+      <if test="janAfterTax != null and janAfterTax != ''">
+        ,janAfterTax = #{janAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="janAfterTax == null or janAfterTax == ''">
+        ,janAfterTax = NULL
+      </if>
+      <if test="febAfterTax != null and febAfterTax != ''">
+        ,febAfterTax = #{febAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="febAfterTax == null or febAfterTax == ''">
+        ,febAfterTax = NULL
+      </if>
+      <if test="marAfterTax != null and marAfterTax != ''">
+        ,marAfterTax = #{marAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="marAfterTax == null or marAfterTax == ''">
+        ,marAfterTax = NULL
+      </if>
+      <if test="aprAfterTax != null and aprAfterTax != ''">
+        ,aprAfterTax = #{aprAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="aprAfterTax == null or aprAfterTax == ''">
+        ,aprAfterTax = NULL
+      </if>
+      <if test="mayAfterTax != null and mayAfterTax != ''">
+        ,mayAfterTax = #{mayAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="mayAfterTax == null or mayAfterTax == ''">
+        ,mayAfterTax = NULL
+      </if>
+      <if test="junAfterTax != null and junAfterTax != ''">
+        ,junAfterTax = #{junAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="junAfterTax == null or junAfterTax == ''">
+        ,junAfterTax = NULL
+      </if>
+      <if test="julAfterTax != null and julAfterTax != ''">
+        ,julAfterTax = #{julAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="julAfterTax == null or julAfterTax == ''">
+        ,julAfterTax = NULL
+      </if>
+      <if test="augAfterTax != null and augAfterTax != ''">
+        ,augAfterTax = #{augAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="augAfterTax == null or augAfterTax == ''">
+        ,augAfterTax = NULL
+      </if>
+      <if test="sepAfterTax != null and sepAfterTax != ''">
+        ,sepAfterTax = #{sepAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="sepAfterTax == null or sepAfterTax == ''">
+        ,sepAfterTax = NULL
+      </if>
+      <if test="octAfterTax != null and octAfterTax != ''">
+        ,octAfterTax = #{octAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="octAfterTax == null or octAfterTax == ''">
+        ,octAfterTax = NULL
+      </if>
+      <if test="novAfterTax != null and novAfterTax != ''">
+        ,novAfterTax = #{novAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="novAfterTax == null or novAfterTax == ''">
+        ,novAfterTax = NULL
+      </if>
+      <if test="decAfterTax != null and decAfterTax != ''">
+        ,decAfterTax = #{decAfterTax, jdbcType=DECIMAL}
+      </if>
+      <if test="decAfterTax == null or decAfterTax == ''">
+        ,decAfterTax = NULL
+      </if>
+      ,UptEmpId = #{uptEmpId, jdbcType=INTEGER}
+      ,UptDt = getdate()
+    </set>
+    WHERE reportId = #{reportId, jdbcType=VARCHAR}
+    AND detailId = #{detailId, jdbcType=INTEGER}
+    AND num = #{num, jdbcType=VARCHAR}
+    AND amountType = #{amountType, jdbcType=VARCHAR}
+    AND templateType = #{templateType, jdbcType=VARCHAR}
+    AND year = #{year, jdbcType=INTEGER}
+  </update>
+  <select id="getRevenuesForHandle" resultMap="BaseResultMap">
+      SELECT * FROM LNK_TotalPackageData WHERE hasRevenues=0 AND delFlag='N' 
+      AND <![CDATA[CONVERT(VARCHAR(10),receivableDate,120) <=CONVERT(VARCHAR(10),GETDATE(),120)  ]]>
+  </select>
+
+  <!--应计收入-->
+  <select id="handleYJSR" parameterType="Map" >
+    MERGE INTO dbo.Lnk_Yj_Yjsr s1
+    USING (SELECT #{reportId} AS reportId,#{detailId} AS detailId,#{num} AS num,#{recordDate} AS recordDate) AS s2
+    ON s1.ReportId=s2.reportId AND s1.detailId=s2.detailId AND s1.num=s2.num AND s1.recordDate=s2.recordDate
+    WHEN MATCHED THEN
+    UPDATE SET s1.BefTaxAmount=s1.befTaxAmount + #{befTaxAmount},s1.AftTaxAmount=s1.aftTaxAmount + #{aftTaxAmount},s1.UptEmpId=2221,s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag=2
+    WHEN NOT MATCHED THEN
+    INSERT (ReportId,BefTaxAmount,AftTaxAmount,RecordDate,companyNo,detailId,num,CrtEmpId,CrtDt,UptEmpId,UptDt,DelFlg,syncFlag)
+    VALUES(#{reportId},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{companyNo},#{detailId},#{num},2221,getdate(),2221,getdate(),0,2);
+  </select>
+
+  <!--应收收入-->
+  <select id="handleYSSR" parameterType="Map" >
+    MERGE INTO dbo.Lnk_Yj_Yssr s1
+    USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate,#{num} as num,#{detailId} as detailId) AS s2
+    ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate AND s1.num = s2.num AND s1.detailId = s2.detailId
+    WHEN MATCHED THEN
+    UPDATE SET s1.befTaxAmount = s1.befTaxAmount + #{befTaxAmount},s1.aftTaxAmount=s1.aftTaxAmount + #{aftTaxAmount},s1.UptEmpId=2221,s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag=2
+    WHEN NOT MATCHED THEN
+    INSERT (reportId,companyNo,num,befTaxAmount,aftTaxAmount,recordDate,detailId,crtEmpId,crtDt,uptEmpId,uptDt,delFlg,syncFlag)
+    VALUES(#{reportId},#{companyNo},#{num},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{detailId},2221,getdate(),2221,getdate(),0,2);
+  </select>
+
+  <!--应计返佣-->
+  <select id="handleYJFY" parameterType="Map" >
+    MERGE INTO dbo.Lnk_Yj_Yjfy s1
+    USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate,#{num} as num,#{detailId} as detailId) AS s2
+    ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate AND s1.num = s2.num AND s1.detailId = s2.detailId
+    WHEN MATCHED THEN
+    UPDATE SET s1.befTaxAmount = s1.befTaxAmount + #{befTaxAmount},s1.aftTaxAmount=s1.aftTaxAmount + #{aftTaxAmount},s1.UptEmpId=2221,s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag=2
+    WHEN NOT MATCHED THEN
+    INSERT (reportId,companyNo,num,befTaxAmount,aftTaxAmount,recordDate,detailId,crtEmpId,crtDt,uptEmpId,uptDt,delFlg,syncFlag)
+    VALUES(#{reportId},#{companyNo},#{num},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{detailId},2221,getdate(),2221,getdate(),0,2);
+  </select>
+
+  <!--实际返佣-->
+  <select id="handleSJFY" parameterType="Map" >
+    MERGE INTO dbo.Lnk_Yj_Sjfy s1
+    USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate,#{num} as num,#{detailId} as detailId) AS s2
+    ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate AND s1.num = s2.num AND s1.detailId = s2.detailId
+    WHEN MATCHED THEN
+    UPDATE SET s1.befTaxAmount = s1.befTaxAmount + #{befTaxAmount},s1.aftTaxAmount=s1.aftTaxAmount + #{aftTaxAmount},s1.UptEmpId=2221,s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag=2
+    WHEN NOT MATCHED THEN
+    INSERT (reportId,companyNo,num,befTaxAmount,aftTaxAmount,recordDate,detailId,crtEmpId,crtDt,uptEmpId,uptDt,delFlg,syncFlag)
+    VALUES(#{reportId},#{companyNo},#{num},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{detailId},2221,getdate(),2221,getdate(),0,2);
+  </select>
+
+  <!--应计垫佣-->
+  <select id="handleYJDY" parameterType="Map" >
+    MERGE INTO dbo.Lnk_Yj_Yjdy s1
+    USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate,#{num} as num,#{detailId} as detailId) AS s2
+    ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate AND s1.num = s2.num AND s1.detailId = s2.detailId
+    WHEN MATCHED THEN
+    UPDATE SET s1.befTaxAmount = s1.befTaxAmount + #{befTaxAmount},s1.aftTaxAmount=s1.aftTaxAmount + #{aftTaxAmount},s1.UptEmpId=2221,s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag=2
+    WHEN NOT MATCHED THEN
+    INSERT (reportId,companyNo,num,befTaxAmount,aftTaxAmount,recordDate,detailId,crtEmpId,crtDt,uptEmpId,uptDt,delFlg,syncFlag)
+    VALUES(#{reportId},#{companyNo},#{num},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{detailId},2221,getdate(),2221,getdate(),0,2);
+  </select>
+
+  <!--实际垫佣-->
+  <select id="handleSJDY" parameterType="Map" >
+    MERGE INTO dbo.Lnk_Yj_Sjdy s1
+    USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate,#{num} as num,#{detailId} as detailId) AS s2
+    ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate AND s1.num = s2.num AND s1.detailId = s2.detailId
+    WHEN MATCHED THEN
+    UPDATE SET s1.befTaxAmount = s1.befTaxAmount + #{befTaxAmount},s1.aftTaxAmount=s1.aftTaxAmount + #{aftTaxAmount},s1.UptEmpId=2221,s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag=2
+    WHEN NOT MATCHED THEN
+    INSERT (reportId,companyNo,num,befTaxAmount,aftTaxAmount,recordDate,detailId,crtEmpId,crtDt,uptEmpId,uptDt,delFlg,syncFlag)
+    VALUES(#{reportId},#{companyNo},#{num},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{detailId},2221,getdate(),2221,getdate(),0,2);
+  </select>
+
+  <!--应计垫佣-->
+  <select id="handleYJSS" parameterType="Map" >
+    MERGE INTO dbo.Lnk_Yj_Yjss s1
+    USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate,#{num} as num,#{detailId} as detailId) AS s2
+    ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate AND s1.num = s2.num AND s1.detailId = s2.detailId
+    WHEN MATCHED THEN
+    UPDATE SET s1.befTaxAmount = s1.befTaxAmount + #{befTaxAmount},s1.aftTaxAmount=s1.aftTaxAmount + #{aftTaxAmount},s1.UptEmpId=2221,s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag=2
+    WHEN NOT MATCHED THEN
+    INSERT (reportId,companyNo,num,befTaxAmount,aftTaxAmount,recordDate,detailId,crtEmpId,crtDt,uptEmpId,uptDt,delFlg,syncFlag)
+    VALUES(#{reportId},#{companyNo},#{num},#{befTaxAmount},#{aftTaxAmount},#{recordDate},#{detailId},2221,getdate(),2221,getdate(),0,2);
+  </select>
+
+  <select id="getYJSSForHandle" resultType="Map">
+  SELECT top 50 * FROM LNK_TotalPackage_YJSS WHERE hasDeal=0 AND delFlag=0 order by id desc
+  </select>
+
+  <update id="updateYJSS" parameterType="Integer">
+    UPDATE LNK_TotalPackage_YJSS set hasDeal=1,dealDate=getdate() WHERE  id=#{id,jdbcType=INTEGER}
+  </update>
+</mapper>

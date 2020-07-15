@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjSatisfactionFlMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionFl">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="satisfactionId" jdbcType="INTEGER" property="satisfactionId" />
+    <result column="wjflCode" jdbcType="VARCHAR" property="wjflCode" />
+    <result column="wjflScore" jdbcType="NUMERIC" property="wjflScore" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, satisfactionId, wjflCode, wjflScore, userCreate, dateCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_Satisfaction_FL
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Wj_Satisfaction_FL
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionFl">
+    insert into Kefu_Wj_Satisfaction_FL (satisfactionId, wjflCode,
+      wjflScore, userCreate, dateCreate, 
+      delFlag)
+    values (#{satisfactionId,jdbcType=INTEGER}, #{wjflCode,jdbcType=VARCHAR},
+      #{wjflScore,jdbcType=NUMERIC}, #{userCreate,jdbcType=INTEGER}, getdate(),
+      0)
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionFl">
+    insert into Kefu_Wj_Satisfaction_FL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="satisfactionId != null">
+        satisfactionId,
+      </if>
+      <if test="wjflCode != null">
+        wjflCode,
+      </if>
+      <if test="wjflScore != null">
+        wjflScore,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="satisfactionId != null">
+        #{satisfactionId,jdbcType=INTEGER},
+      </if>
+      <if test="wjflCode != null">
+        #{wjflCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wjflScore != null">
+        #{wjflScore,jdbcType=NUMERIC},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionFl">
+    update Kefu_Wj_Satisfaction_FL
+    <set>
+      <if test="satisfactionId != null">
+        satisfactionId = #{satisfactionId,jdbcType=INTEGER},
+      </if>
+      <if test="wjflCode != null">
+        wjflCode = #{wjflCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wjflScore != null">
+        wjflScore = #{wjflScore,jdbcType=NUMERIC},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionFl">
+    update Kefu_Wj_Satisfaction_FL
+    set satisfactionId = #{satisfactionId,jdbcType=INTEGER},
+      wjflCode = #{wjflCode,jdbcType=VARCHAR},
+      wjflScore = #{wjflScore,jdbcType=NUMERIC},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getFLScore" resultType="Map" parameterType="Integer">
+    SELECT d.dicValue wjfl, ISNULL(wjflScore,0) wjflScore FROM dbo.Kefu_Wj_Satisfaction_FL fl
+    LEFT JOIN dbo.BAS_DictionaryValue d ON d.dicCode=fl.wjflCode
+    WHERE fl.delFlag=0 AND d.dicCode!=25108 AND satisfactionId=#{id,jdbcType=INTEGER}
+  </select>
+  <update id="updateByFlCodeAndSid" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionFl">
+    update Kefu_Wj_Satisfaction_FL
+    <set>
+      <if test="wjflScore != null">
+        wjflScore = #{wjflScore,jdbcType=NUMERIC},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where satisfactionId = #{satisfactionId,jdbcType=INTEGER} and wjflCode = #{wjflCode,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="queryWjAnalyseFlScores"  parameterType="Map" resultType="cn.com.eju.deal.keFuWj.dto.WjAnalyseFlScoreDto">
+      SELECT
+          ISNULL(wjflScore,0) wjflScore
+      FROM
+          Kefu_Wj_Satisfaction_FL
+      WHERE
+          delFlag = 0
+          AND satisfactionId = #{satisfactionId}
+      ORDER BY
+          wjflCode ASC
+  </select>
+</mapper>

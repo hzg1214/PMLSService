@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.PhotoMapper">
+	<resultMap id="BaseResultMap"
+		type="cn.com.eju.deal.houseLinkage.estate.model.Photo">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="EstateId" property="estateId" jdbcType="VARCHAR" />
+		<result column="PhotoId" property="photoId" jdbcType="VARCHAR" />
+		<result column="PhotoNm" property="photoNm" jdbcType="NVARCHAR" />
+		<result column="PhotoPath" property="photoPath" jdbcType="NVARCHAR" />
+		<result column="TypeId" property="typeId" jdbcType="VARCHAR" />
+		<result column="CoverFlg" property="coverFlg" jdbcType="VARCHAR" />
+		<result column="OrderNo" property="orderNo" jdbcType="NVARCHAR" />
+		<result column="Content" property="content" jdbcType="NVARCHAR" />
+		<result column="PhotoKbn" property="photoKbn" jdbcType="INTEGER" />
+		<result column="CrtEmpId" property="crtEmpId" jdbcType="INTEGER" />
+		<result column="UptEmpId" property="uptEmpId" jdbcType="INTEGER" />
+		<result column="DelFlg" property="delFlg" jdbcType="BIT" />
+		<result column="CrtDt" property="crtDt" jdbcType="TIMESTAMP" />
+		<result column="UptDt" property="uptDt" jdbcType="TIMESTAMP" />
+		<result column="fileNo" property="fileNo" jdbcType="VARCHAR" />
+
+		<result column="fileSuffix" property="fileSuffix" jdbcType="VARCHAR" />
+		<result column="fileAbbrUrl" property="fileAbbrUrl" jdbcType="VARCHAR" />
+		<result column="url50" property="url50" jdbcType="VARCHAR" />
+		<result column="fileUrl" property="fileUrl" jdbcType="VARCHAR" />
+		<result column="sellFileNo" property="sellFileNo" jdbcType="VARCHAR" />
+		<result column="sfImage" property="sfImage" jdbcType="BIT" />
+		<result column="fileFullName" property="fileFullName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id,EstateId,PhotoId,PhotoNm,PhotoPath,TypeId,CoverFlg,OrderNo,Content,PhotoKbn,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,fileNo,
+		fileSuffix,fileAbbrUrl,url50,fileUrl,sellFileNo,sfImage,fileFullName
+	</sql>
+
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer"
+		useCache="false">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM LNK_Photo
+		<where>
+			Id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
+
+	<insert id="create" parameterType="cn.com.eju.deal.houseLinkage.estate.model.Photo"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into LNK_Photo
+		(EstateId,PhotoId,PhotoNm,PhotoPath,TypeId,CoverFlg,OrderNo,Content
+		,PhotoKbn,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,fileNo,fileSuffix,fileAbbrUrl,url50,
+		fileUrl,sellFileNo,sfImage,fileFullName
+		)
+		values (#{estateId, jdbcType=VARCHAR},#{photoId,
+		jdbcType=VARCHAR},#{photoNm, jdbcType=NVARCHAR},#{photoPath,
+		jdbcType=NVARCHAR},#{typeId, jdbcType=VARCHAR},#{coverFlg,
+		jdbcType=VARCHAR},
+		#{orderNo, jdbcType=NVARCHAR},#{content, jdbcType=NVARCHAR},#{photoKbn,
+		jdbcType=INTEGER},#{crtEmpId, jdbcType=INTEGER},#{uptEmpId,
+		jdbcType=INTEGER},#{delFlg, jdbcType=BIT},
+		#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP},#{fileNo, jdbcType=VARCHAR},
+		#{fileSuffix, jdbcType=VARCHAR},
+		#{fileAbbrUrl, jdbcType=VARCHAR},
+		#{url50, jdbcType=VARCHAR},
+		#{fileUrl, jdbcType=VARCHAR},
+		#{sellFileNo, jdbcType=VARCHAR},
+		#{sfImage, jdbcType=BIT},
+		#{fileFullName, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 查询 list -->
+	<select id='queryList' parameterType="Map" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM LNK_Photo
+		<where>
+			DelFlg=0
+			<if test="estateId != null and estateId != ''">
+                <![CDATA[AND EstateId=#{estateId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="typeId != null and typeId != ''">
+                <![CDATA[AND TypeId = #{typeId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="photoKbn != null and photoKbn != ''">
+                <![CDATA[AND PhotoKbn = #{photoKbn, jdbcType=INTEGER}]]>
+			</if>
+			<if test="photoKbnList != null">
+				<foreach collection="photoKbnList" item="list" index="index"
+					open="AND (" close=")" separator="OR">
+                    <![CDATA[
+	    			 PhotoKbn = #{list, jdbcType=INTEGER}
+	    		]]>
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<update id="update" parameterType="cn.com.eju.deal.houseLinkage.estate.model.Photo">
+		update LNK_Photo
+		<set>
+			<if test="estateId != null">
+				EstateId = #{estateId, jdbcType=VARCHAR},
+			</if>
+			<if test="photoId != null">
+				PhotoId = #{photoId, jdbcType=VARCHAR},
+			</if>
+			<if test="photoNm != null">
+				PhotoNm = #{photoNm, jdbcType=NVARCHAR},
+			</if>
+			<if test="photoPath != null">
+				PhotoPath = #{photoPath, jdbcType=NVARCHAR},
+			</if>
+			<if test="typeId != null">
+				TypeId = #{typeId, jdbcType=VARCHAR},
+			</if>
+			<if test="coverFlg != null">
+				CoverFlg = #{coverFlg, jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				OrderNo = #{orderNo, jdbcType=NVARCHAR},
+			</if>
+			<if test="content != null">
+				Content = #{content, jdbcType=NVARCHAR},
+			</if>
+			<if test="photoKbn != null">
+				PhotoKbn = #{photoKbn, jdbcType=INTEGER},
+			</if>
+			<if test="crtEmpId != null">
+				crtEmpId = #{crtEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="uptEmpId != null">
+				uptEmpId = #{uptEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="delFlg != null">
+				delFlg = #{delFlg, jdbcType=BIT},
+			</if>
+			<if test="crtDt != null">
+				crtDt = #{crtDt, jdbcType=TIMESTAMP},
+			</if>
+			<if test="uptDt != null">
+				uptDt = #{uptDt, jdbcType=TIMESTAMP},
+			</if>
+			<if test="fileNo != null">
+				fileNo = #{fileNo, jdbcType=VARCHAR},
+			</if>
+			<if test="fileSuffix != null">
+				fileSuffix = #{fileSuffix, jdbcType=VARCHAR},
+			</if>
+			<if test="fileAbbrUrl != null">
+				fileAbbrUrl = #{fileAbbrUrl, jdbcType=VARCHAR},
+			</if>
+			<if test="url50 != null">
+				url50 = #{url50, jdbcType=VARCHAR},
+			</if>
+			<if test="fileUrl != null">
+				fileUrl = #{fileUrl, jdbcType=VARCHAR},
+			</if>
+			<if test="sellFileNo != null">
+				sellFileNo = #{sellFileNo, jdbcType=VARCHAR},
+			</if>
+			<if test="sfImage != null">
+				sfImage = #{sfImage, jdbcType=BIT},
+			</if>
+			<if test="fileFullName != null">
+				fileFullName = #{fileFullName, jdbcType=VARCHAR},
+			</if>
+		</set>
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		UPDATE dbo.LNK_Photo SET
+		DelFlg=1,UptDt=GETDATE() WHERE Id=#{id,jdbcType=INTEGER}
+	</delete>
+
+
+</mapper>

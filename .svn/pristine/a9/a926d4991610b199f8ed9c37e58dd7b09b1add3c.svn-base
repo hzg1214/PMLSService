@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.UserOrderMapper" >
+  <resultMap id="CountResultMap" type="cn.com.eju.deal.user.model.UserOrderCount" >
+    <result column="newNum" property="newNum" jdbcType="INTEGER" />
+    <result column="onTheWayNum" property="onTheWayNum" jdbcType="INTEGER" />
+    <result column="finishNum" property="finishNum" jdbcType="INTEGER" />
+    <result column="allNum" property="allNum" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="DistResultMap" type="cn.com.eju.deal.user.model.UserOrderDist" >
+  	<id column="userId" property="userId" jdbcType="INTEGER" />
+    <result column="userCode" property="userCode" jdbcType="VARCHAR" />
+    <result column="userName" property="userName" jdbcType="NVARCHAR" />
+    <result column="cellphone" property="cellphone" jdbcType="VARCHAR" />
+    <result column="thisMonthNum" property="thisMonthNum" jdbcType="INTEGER" />
+    <result column="onTheWayNum" property="onTheWayNum" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getBySignedUserId" resultMap="CountResultMap" >
+  	SELECT 
+  		(SELECT COUNT(1) FROM CNT_ContractPrep (NOLOCK) WHERE dateSignedDistribution <![CDATA[>= #{startDate,jdbcType=TIMESTAMP}]]> AND dateSignedDistribution <![CDATA[< #{endDate,jdbcType=TIMESTAMP}]]> 
+  		AND delFlag = 'N' AND dealAddr = #{exchangeCenterId,jdbcType=INTEGER}
+  		<if test="userId != null and userId != 0">
+			AND userIdSigned = <![CDATA[#{userId,jdbcType=INTEGER}]]>
+		</if>
+		) newNum, 
+  		ISNULL(SUM (CASE WHEN dateHandleEnd <![CDATA[>= #{startDate,jdbcType=TIMESTAMP}]]> AND dateHandleEnd <![CDATA[< #{endDate,jdbcType=TIMESTAMP}]]> AND orderStatus = 3 THEN 1 ELSE 0 END),0) finishNum, 
+  		ISNULL(SUM(CASE WHEN orderStatus >=1 AND orderStatus <![CDATA[<=2]]> THEN 1 ELSE 0 END),0) onTheWayNum, COUNT(1) allNum 
+  	FROM MA_Order (NOLOCK)
+	WHERE delFlag = 'N' AND dealAddr = #{exchangeCenterId,jdbcType=INTEGER} AND orderStatus <![CDATA[<> 4]]> 
+	<if test="userId != null and userId != 0">
+		AND userIdSigned = #{userId,jdbcType=INTEGER}
+	</if>
+  </select>
+  <select id="getByLoanUserId" resultMap="CountResultMap" >
+  	SELECT 
+  		ISNULL(SUM (CASE WHEN dateLoanPermitDist <![CDATA[>= #{startDate,jdbcType=TIMESTAMP}]]> AND dateLoanPermitDist <![CDATA[< #{endDate,jdbcType=TIMESTAMP}]]> THEN 1 ELSE 0 END),0) newNum, 
+  		ISNULL(SUM (CASE WHEN dateHandleEnd <![CDATA[>= #{startDate,jdbcType=TIMESTAMP}]]> AND dateHandleEnd <![CDATA[< #{endDate,jdbcType=TIMESTAMP}]]> AND orderStatus = 3 THEN 1 ELSE 0 END),0) finishNum, 
+  		ISNULL(SUM(CASE WHEN orderStatus >=1 AND orderStatus <![CDATA[<=2]]> THEN 1 ELSE 0 END),0) onTheWayNum, COUNT(1) allNum 
+  	FROM MA_Order (NOLOCK)
+	WHERE delFlag = 'N' AND dealAddr = #{exchangeCenterId,jdbcType=INTEGER} AND orderStatus <![CDATA[<> 4]]>
+	<if test="userId != null and userId != 0">
+		AND userIdLoan = <![CDATA[#{userId,jdbcType=INTEGER}]]>
+	</if>
+  </select>
+  <select id="getByPermitUserId" resultMap="CountResultMap" >
+  	SELECT 
+  		ISNULL(SUM (CASE WHEN dateLoanPermitDist <![CDATA[>= #{startDate,jdbcType=TIMESTAMP}]]> AND dateLoanPermitDist <![CDATA[< #{endDate,jdbcType=TIMESTAMP}]]> THEN 1 ELSE 0 END),0) newNum, 
+  		ISNULL(SUM (CASE WHEN dateHandleEnd <![CDATA[>= #{startDate,jdbcType=TIMESTAMP}]]> AND dateHandleEnd <![CDATA[< #{endDate,jdbcType=TIMESTAMP}]]> AND orderStatus = 3 THEN 1 ELSE 0 END),0) finishNum, 
+  		ISNULL(SUM(CASE WHEN orderStatus >=1 AND orderStatus <![CDATA[<=2]]> THEN 1 ELSE 0 END),0) onTheWayNum, COUNT(1) allNum 
+  	FROM MA_Order (NOLOCK) 
+	WHERE delFlag = 'N' AND dealAddr = #{exchangeCenterId,jdbcType=INTEGER} AND orderStatus <![CDATA[<> 4]]>
+	<if test="userId != null and userId != 0">
+		AND userIdPermit = <![CDATA[#{userId,jdbcType=INTEGER}]]>
+	</if>
+  </select>
+  <select id="getSignedByExchangeCenterId" resultMap="DistResultMap" parameterType="java.lang.Integer" >
+  	DECLARE @startDate VARCHAR(10) = CONVERT(VARCHAR(10),DATEADD(d,1-DATEPART(d,GETDATE()),GETDATE()),23)
+	DECLARE @endDate VARCHAR(10) = CONVERT(VARCHAR(10),DATEADD(d,1-DATEPART(d,DATEADD(m,1,GETDATE())),DATEADD(m,1,GETDATE())),23)
+	DECLARE @orgId HIERARCHYID
+	SELECT TOP 1 @orgId=orgId FROM dbo.USR_Group WHERE typeId = 2 AND exchangeCenterId = #{exchangeCenterId,jdbcType=INTEGER}
+	SELECT uu.userId,uu.userCode,uu.userName,uu.cellphone,
+		SUM(CASE WHEN mo.dateSignedDistribution >= @startDate AND mo.dateSignedDistribution <![CDATA[<]]> @endDate THEN 1 ELSE 0 END) thisMonthNum,
+		SUM(CASE WHEN mo.orderId IS NULL THEN 1 ELSE 0 END) onTheWayNum FROM USR_User (NOLOCK) uu
+		INNER JOIN USR_UserPostMapping (NOLOCK) uupm ON uupm.userId = uu.userId AND uupm.delFlag = 'N'
+		INNER JOIN USR_Post (NOLOCK) up ON up.postId = uupm.postId AND up.delFlag = 'N'
+		INNER JOIN USR_PostType (NOLOCK) upt ON upt.typeId = up.typeId AND upt.delFlag = 'N'
+		INNER JOIN USR_Group (NOLOCK) ug ON ug.groupId = up.groupId AND ug.delFlag = 'N'
+		LEFT JOIN CNT_ContractPrep (NOLOCK) cc ON cc.userIdSigned = uu.userId AND cc.delFlag = 'N'
+		LEFT JOIN MA_Order (NOLOCK) mo ON mo.contractId = cc.contractId AND mo.delFlag = 'N'
+	WHERE uu.delFlag = 'N' AND orgId.IsDescendantOf(@orgId) = 1 AND uu.inStatus IN (1072,1073,1074) AND upt.typeCode = 'PT_ZSJYY'
+	GROUP BY uu.userId,uu.userCode,uu.userName,uu.cellphone
+  </select>
+  <select id="getLoanByExchangeCenterId" resultMap="DistResultMap" parameterType="java.lang.Integer" >
+  	DECLARE @startDate VARCHAR(10) = CONVERT(VARCHAR(10),DATEADD(d,1-DATEPART(d,GETDATE()),GETDATE()),23)
+	DECLARE @endDate VARCHAR(10) = CONVERT(VARCHAR(10),DATEADD(d,1-DATEPART(d,DATEADD(m,1,GETDATE())),DATEADD(m,1,GETDATE())),23)
+	DECLARE @orgId HIERARCHYID
+	SELECT TOP 1 @orgId=orgId FROM dbo.USR_Group WHERE typeId = 2 AND exchangeCenterId = #{exchangeCenterId,jdbcType=INTEGER}
+	SELECT uu.userId,uu.userCode,uu.userName,uu.cellphone,
+		SUM(CASE WHEN mo.dateLoanPermitDist >= @startDate AND mo.dateLoanPermitDist <![CDATA[<]]> @endDate THEN 1 ELSE 0 END) thisMonthNum,
+		SUM(CASE WHEN mo.orderStatus >=1 AND mo.orderStatus <![CDATA[<=2]]> THEN 1 ELSE 0 END) onTheWayNum FROM USR_User (NOLOCK) uu
+		INNER JOIN USR_UserPostMapping (NOLOCK) uupm ON uupm.userId = uu.userId AND uupm.delFlag = 'N'
+		INNER JOIN USR_Post (NOLOCK) up ON up.postId = uupm.postId AND up.delFlag = 'N'
+		INNER JOIN USR_PostType (NOLOCK) upt ON upt.typeId = up.typeId AND upt.delFlag = 'N'
+		INNER JOIN USR_Group (NOLOCK) ug ON ug.groupId = up.groupId AND ug.delFlag = 'N'
+		LEFT JOIN MA_Order (NOLOCK) mo ON mo.userIdLoan = uu.userId AND mo.delFlag = 'N'
+	WHERE uu.delFlag = 'N' AND orgId.IsDescendantOf(@orgId) = 1 AND uu.inStatus IN (1072,1073,1074) AND upt.typeCode = 'PT_DKZY'
+	GROUP BY uu.userId,uu.userCode,uu.userName,uu.cellphone
+  </select>
+  <select id="getPermitByExchangeCenterId" resultMap="DistResultMap" parameterType="java.lang.Integer" >
+  	DECLARE @startDate VARCHAR(10) = CONVERT(VARCHAR(10),DATEADD(d,1-DATEPART(d,GETDATE()),GETDATE()),23)
+	DECLARE @endDate VARCHAR(10) = CONVERT(VARCHAR(10),DATEADD(d,1-DATEPART(d,DATEADD(m,1,GETDATE())),DATEADD(m,1,GETDATE())),23)
+	DECLARE @orgId HIERARCHYID
+	SELECT TOP 1 @orgId=orgId FROM dbo.USR_Group WHERE typeId = 2 AND exchangeCenterId = #{exchangeCenterId,jdbcType=INTEGER}
+	SELECT uu.userId,uu.userCode,uu.userName,uu.cellphone,
+		SUM(CASE WHEN mo.dateLoanPermitDist >= @startDate AND mo.dateLoanPermitDist <![CDATA[<]]> @endDate THEN 1 ELSE 0 END) thisMonthNum,
+		SUM(CASE WHEN mo.orderStatus >=1 AND mo.orderStatus <![CDATA[<=2]]> THEN 1 ELSE 0 END) onTheWayNum FROM USR_User (NOLOCK) uu
+		INNER JOIN USR_UserPostMapping (NOLOCK) uupm ON uupm.userId = uu.userId AND uupm.delFlag = 'N'
+		INNER JOIN USR_Post (NOLOCK) up ON up.postId = uupm.postId AND up.delFlag = 'N'
+		INNER JOIN USR_PostType (NOLOCK) upt ON upt.typeId = up.typeId AND upt.delFlag = 'N'
+		INNER JOIN USR_Group (NOLOCK) ug ON ug.groupId = up.groupId AND ug.delFlag = 'N'
+		LEFT JOIN MA_Order (NOLOCK) mo ON mo.userIdPermit = uu.userId AND mo.delFlag = 'N'
+	WHERE uu.delFlag = 'N' AND orgId.IsDescendantOf(@orgId) = 1 AND uu.inStatus IN (1072,1073,1074) AND upt.typeCode = 'PT_BZZY'
+	GROUP BY uu.userId,uu.userCode,uu.userName,uu.cellphone
+  </select>
+  <select id="getByPostCodeAndExCenterId" resultMap="DistResultMap" parameterType="Map" >
+  	DECLARE @orgId HIERARCHYID
+	SELECT TOP 1 @orgId=orgId FROM dbo.USR_Group WHERE typeId = 2 AND exchangeCenterId = #{exchangeCenterId,jdbcType=INTEGER}
+	SELECT uu.userId,uu.userCode,uu.userName,uu.cellphone 
+	FROM USR_User (NOLOCK) uu
+		INNER JOIN USR_UserPostMapping (NOLOCK) uupm ON uupm.userId = uu.userId AND uupm.delFlag = 'N'
+		INNER JOIN USR_Post (NOLOCK) up ON up.postId = uupm.postId AND up.delFlag = 'N'
+		INNER JOIN USR_PostType (NOLOCK) upt ON upt.typeId = up.typeId AND upt.delFlag = 'N'
+		INNER JOIN USR_Group (NOLOCK) ug ON ug.groupId = up.groupId AND ug.delFlag = 'N'
+	WHERE uu.delFlag = 'N' AND orgId.IsDescendantOf(@orgId) = 1 AND uu.inStatus IN (1072,1073,1074) 
+		AND upt.typeCode = #{PostTypeCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

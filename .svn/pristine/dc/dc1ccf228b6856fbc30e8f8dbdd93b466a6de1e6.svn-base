@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.picture.dao.PictureMapper">
+
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.dto.picture.PictureDto"></resultMap>
+
+	<select id="getPictureUrl" parameterType="java.lang.String" resultMap="pictureDtoMap">
+		SELECT smallPictureUrl,middlePictureUrl,bigPictureUrl FROM Pic_Picture_Ref
+		WHERE pictureStatus = 0 AND pictureRefId = #{pictureRefId}
+	</select>
+
+</mapper>

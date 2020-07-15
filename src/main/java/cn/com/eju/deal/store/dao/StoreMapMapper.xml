@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.StoreMapMapper">
+
+	<resultMap id="storeDtoMap" type="cn.com.eju.deal.dto.store.StoreDto"/>
+	<resultMap id="centerPositionDtoMap" type="cn.com.eju.deal.dto.store.CenterPositionDto"/>
+
+	<select id="getMapInfo" parameterType="java.util.Map" resultMap="storeDtoMap">
+		SELECT t.*
+		FROM (
+			SELECT
+			t2.contractType mapMarkerStyle
+			,id storeId
+			,storeNo
+			,NAME
+			,addressDetail
+			,t1.longitude
+			,t1.latitude
+			,ISNULL(auditStatus, 0) AS auditStatus
+			,6378137.0*ACOS(SIN(${latitude}/180*PI())*SIN(Latitude/180*PI()) + COS(${latitude}/180*PI())*COS(Latitude/180*PI())*COS((${longitude}-Longitude)/180*PI())) distance
+			FROM Store t1
+			INNER JOIN ( SELECT  storeId , shoupaiType,
+				CASE WHEN contractType = 10302
+				THEN 'B'
+				WHEN contractType = 10307
+				THEN 'sp'
+				END contractType
+				FROM    V_CRM_ContractStore_NOW
+				WHERE   contractStatus = '10403' AND contractType IN (10302, 10307)
+			) t2 ON t1.id = t2.StoreId
+			WHERE isDelete = 0
+			AND auditStatus = 20
+		<if test="cityNo!=null and cityNo!=''">
+			and acCityNo='${cityNo}'
+		</if>
+		<if test="centerId!=null and centerId!=''">
+			and centerId IN (${centerId})
+		</if>
+		<if test="contractType!=null and contractType!=''">
+			and t2.contractType IN ('${contractType}')
+		</if>
+		<if test="shoupaiType!=null and shoupaiType!=''">
+			and t2.shoupaiType IN ('${shoupaiType}')
+		</if>
+		) t
+		WHERE 1 = 1
+		<if test="distance!=null and distance!=''">
+			and t.distance &lt;=${distance}
+		</if>
+		ORDER BY t.distance
+	</select>
+
+	<select id="getStoreCount" parameterType="java.util.Map" resultMap="centerPositionDtoMap">
+		<if test="showLevel=='CENTER'">
+			SELECT
+			t3.centerId,t3.centerName,t3.longitude,t3.[latitude],COUNT(*) AS storeNum
+			FROM Store t1
+			INNER JOIN BAS_CenterPosition t3 ON t1.centerId=t3.centerId and t3.status=0
+			LEFT JOIN ( SELECT  storeId ,
+			CASE WHEN contractType = 10301
+			THEN 'A'
+			WHEN contractType = 10302
+			THEN 'B'
+			WHEN contractType = 10304
+			THEN 'B'
+			ELSE 'WQ'
+			END contractType
+			FROM    V_CRM_ContractStore_NOW
+			WHERE   contractStatus IN ( '10401', '10402', '10403', '10404' )
+			) t2 ON t1.id = t2.StoreId
+			WHERE isDelete = 0
+			AND auditStatus = 20
+			<if test="cityNo!=null and cityNo!=''">
+				and t1.acCityNo='${cityNo}'
+			</if>
+			<if test="centerId!=null and centerId!=''">
+				and t1.centerId IN (${centerId})
+			</if>
+			<if test="contractType!=null and contractType!=''">
+				and ISNULL(t2.contractType, 'WQ') IN ('${contractType}')
+			</if>
+			<if test="brand == 1">
+				and ISNULL(t1.ChainBrand, '') != ''
+			</if>
+			<if test="brand == 0">
+				and ISNULL(t1.ChainBrand, '') = ''
+			</if>
+			GROUP BY t3.centerId,t3.centerName,t3.longitude,t3.[latitude]
+		</if>
+		<if test="showLevel=='CITY'">
+			SELECT t3.CityNo,t3.CityName,COUNT(*) AS storeNum
+			FROM Store t1
+			INNER JOIN dbo.BAS_City t3 ON t1.acCityNo=t3.CityNo
+			LEFT JOIN ( SELECT  storeId ,
+				CASE WHEN contractType = 10301
+				THEN 'A'
+				WHEN contractType = 10302
+				THEN 'B'
+				WHEN contractType = 10304
+				THEN 'B'
+				ELSE 'WQ'
+				END contractType
+				FROM    V_CRM_ContractStore_NOW
+				WHERE   contractStatus IN ( '10401', '10402', '10403', '10404' )
+			) t2 ON t1.id = t2.StoreId
+			inner join (select distinct cityNo from V_CRM_USER_CITY where userId='${userId}') t4
+			on t1.acCityNo=t4.cityNo
+			WHERE isDelete = 0
+			AND auditStatus = 20
+			GROUP BY  t3.CityNo,t3.CityName
+		</if>
+	</select>
+
+	<select id="getCenterPosition"  parameterType="java.util.Map" resultMap="centerPositionDtoMap">
+		select top 1 centerId,centerName,longitude,[latitude] from BAS_CenterPosition where centerId in(${centerId}) and STATUS=0
+	</select>
+</mapper>
+

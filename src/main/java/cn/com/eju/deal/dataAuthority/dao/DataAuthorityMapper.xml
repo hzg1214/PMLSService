@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.dataAuthority.dao.DataAuthorityMapper" >
+    <select id="getDataAuthorityList" resultType="cn.com.eju.deal.dataAuthority.model.DataAuthority" parameterType="java.util.Map">
+      SELECT id ,
+       userCode ,
+       userName ,
+       cityGroupId ,
+       cityGroupName ,
+       authorityLevel ,
+       status ,
+       createDate
+       FROM
+       dbo.cloud_user_data_authority
+       where 1=1
+        <if test="userCode!=null and userCode!=''">
+            and userCode=#{userCode}
+        </if>
+        <if test="cityGroupName!=null and cityGroupName!=''">
+            and cityGroupName=#{cityGroupName}
+        </if>
+        order by userCode,createDate
+    </select>
+
+    <select id="getQyInfo" resultType="cn.com.eju.deal.dataAuthority.model.CityRelation" parameterType="java.util.Map">
+      			  SELECT * FROM dbo.v_cloud_shy_fy_city_ref_new_tree ;
+    </select>
+
+    <insert id="insertDataAuth" parameterType="java.util.Map">
+        insert into cloud_user_data_authority (
+            userCode ,
+            userName ,
+            cityGroupId ,
+            cityGroupName ,
+            authorityLevel ,
+            status ,
+            createDate
+        ) VALUES
+        <foreach collection="cityList" item="item" separator=",">
+            (
+                #{userCode},
+                #{userName},
+                #{item.id},
+                #{item.name},
+                #{authorityLevel},
+                0,
+                getdate()
+            )
+        </foreach>
+
+
+    </insert>
+
+    <update id="deleteDataAuth" parameterType="java.util.Map">
+        update  cloud_user_data_authority
+        SET status=1
+        where id IN
+        <foreach collection="idList"  index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+
+
+    </update>
+
+
+</mapper>

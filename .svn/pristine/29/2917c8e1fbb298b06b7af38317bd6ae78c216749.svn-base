@@ -1,0 +1,120 @@
+package cn.com.eju.deal.dto.follow;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import cn.com.eju.deal.dto.common.FileRecordMainDto;
+import cn.com.eju.deal.dto.store.StoreDto;
+import cn.com.eju.deal.follow.model.Follow;
+
+/** 
+* @ClassName: FollowDto 
+* @Description: 跟进接口类
+* @author 陆海丹
+* @date 2016年3月24日 下午1:44:32 
+*  
+*/
+public class FollowDto extends Follow implements Serializable
+{
+    
+    /**
+    * @Fields serialVersionUID : 自动生成的 我也不晓得这是干嘛的。。。
+    */
+    private static final long serialVersionUID = 5416069795828184037L;
+    
+    
+    private String storeName;//门店名称
+    
+    private StoreDto storeDto;//门店信息
+    
+    private Date dateFollowFrom;//跟进起始日期
+    
+    private Date dateFollowTo;//跟进结束日期
+    
+    private String searchKey;//查询关键字
+    
+    public List<FileRecordMainDto> getFileDtos() {
+		return fileDtos;
+	}
+
+	public void setFileDtos(List<FileRecordMainDto> fileDtos) {
+		this.fileDtos = fileDtos;
+	}
+
+	private List<FileRecordMainDto> fileDtos = new ArrayList<>();
+
+    /**
+     * @return the storeName
+     */
+    public String getStoreName()
+    {
+        return storeName;
+    }
+    /**
+     * @param storeName the storeName to set
+     */
+    public void setStoreName(String storeName)
+    {
+        this.storeName = storeName;
+    }
+    /**
+     * @return the storeDto
+     */
+    public StoreDto getStoreDto()
+    {
+        return storeDto;
+    }
+    /**
+     * @param storeDto the storeDto to set
+     */
+    public void setStoreDto(StoreDto storeDto)
+    {
+        this.storeDto = storeDto;
+    }
+    /**
+     * @return the dateFollowFrom
+     */
+    public Date getDateFollowFrom()
+    {
+        return dateFollowFrom;
+    }
+    /**
+     * @param dateFollowFrom the dateFollowFrom to set
+     */
+    public void setDateFollowFrom(Date dateFollowFrom)
+    {
+        this.dateFollowFrom = dateFollowFrom;
+    }
+    /**
+     * @return the dateFollowTo
+     */
+    public Date getDateFollowTo()
+    {
+        return dateFollowTo;
+    }
+    /**
+     * @param dateFollowTo the dateFollowTo to set
+     */
+    public void setDateFollowTo(Date dateFollowTo)
+    {
+        this.dateFollowTo = dateFollowTo;
+    }
+    /**
+     * @return the searchKey
+     */
+    public String getSearchKey()
+    {
+        return searchKey;
+    }
+    /**
+     * @param searchKey the searchKey to set
+     */
+    public void setSearchKey(String searchKey)
+    {
+        this.searchKey = searchKey;
+    }
+    
+    
+}

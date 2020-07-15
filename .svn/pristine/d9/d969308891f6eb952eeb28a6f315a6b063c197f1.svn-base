@@ -1,0 +1,82 @@
+package cn.com.eju.pmls.storeMaintenance.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.support.ReturnCode;
+import cn.com.eju.deal.dto.store.StoreMaintainerDto;
+import cn.com.eju.deal.store.dao.StoreMaintainerMapper;
+import cn.com.eju.deal.store.model.StoreMaintainer;
+import cn.com.eju.pmls.storeMaintenance.dao.PmlsStoreMaintenanceMapper;
+
+@Service("pmlsStoreMaintenanceService")
+public class PmlsStoreMaintenanceService extends BaseService {
+	
+    @Resource
+    private PmlsStoreMaintenanceMapper pmlsStoreMaintenanceMapper;
+    
+    @Resource
+    private StoreMaintainerMapper storeMaintainerMapper;
+    
+    public ResultData queryList(Map<String, Object> queryParam) throws Exception{
+    	//构建返回
+        ResultData<List<Map<String,Object>>> resultData = new ResultData<>();
+        List<Map<String,Object>> lstStoreDtos = pmlsStoreMaintenanceMapper.queryList(queryParam);
+        if (null != lstStoreDtos && !lstStoreDtos.isEmpty())
+        {
+            resultData.setTotalCount((String)queryParam.get(QueryConst.TOTAL_COUNT));
+            resultData.setReturnData(lstStoreDtos);
+        }
+        return resultData;
+    }
+    
+    /**
+     * 
+     * desc:批量变更维护人
+     * 2020年7月8日
+     */
+    public ResultData<?> batchChangeMaintenance(Map<String, Object> queryParam) throws Exception{
+        ResultData<StoreMaintainer> resultData=new ResultData<>();
+        
+        // 新增维护人
+        StoreMaintainerDto insertMaintainer = new StoreMaintainerDto();
+        String idsAndPmlsCenterIds = queryParam.get("idsAndPmlsCenterIds").toString();
+        insertMaintainer.setStoreId(Integer.valueOf(queryParam.get("storeId").toString()));
+        insertMaintainer.setUserCode(queryParam.get("pmlsMaintainCode").toString().trim());
+        insertMaintainer.setDateCreate(new Date());
+        insertMaintainer.setDelFlag("N");
+        insertMaintainer.setUserIdCreate(Integer.valueOf(queryParam.get("userId").toString()));
+        insertMaintainer.setSetUserCode(queryParam.get("userCode").toString().trim());
+        insertMaintainer.setSetUserName(queryParam.get("userName").toString().trim());
+        // 开始维护时间
+        insertMaintainer.setDateMtcStart(new Date());
+        StoreMaintainer storeMaintainer = new StoreMaintainer();
+        if(!StringUtils.isEmpty(idsAndPmlsCenterIds)) {
+        	
+        }
+        BeanUtils.copyProperties(insertMaintainer, storeMaintainer);
+        Integer count=storeMaintainerMapper.insertNew(storeMaintainer);
+        
+        if (count>0) {
+            resultData.setSuccess();
+            resultData.setReturnCode(ReturnCode.SUCCESS);
+            resultData.setReturnMsg("新增门店维护人关系成功");
+        }else{
+            resultData.setFail();
+            resultData.setReturnCode(ReturnCode.FAILURE);
+            resultData.setReturnMsg("新增门店维护人关系失败");
+        }
+        return resultData;
+    }
+    
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ProductTreeMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.ProductTree" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="ParentId" property="parentId" jdbcType="INTEGER" />
+    <result column="ChildId" property="childId" jdbcType="INTEGER" />
+    <result column="IsDelete" property="isDelete" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, ParentId, ChildId, IsDelete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ProductTree
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ProductTree
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="create" parameterType="cn.com.eju.deal.contract.model.ProductTree" useGeneratedKeys="true" keyProperty="id">
+    insert into ProductTree (ParentId, ChildId, 
+      IsDelete)
+    values (#{parentId,jdbcType=INTEGER}, #{childId,jdbcType=INTEGER}, 
+      #{isDelete,jdbcType=BIT})
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.contract.model.ProductTree" >
+    update ProductTree
+    <set >
+      <if test="parentId != null" >
+        ParentId = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="childId != null" >
+        ChildId = #{childId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        IsDelete = #{isDelete,jdbcType=BIT},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

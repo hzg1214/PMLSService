@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.LnkYjPlanMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlan">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="projectNo" property="projectNo" jdbcType="VARCHAR"/>
+        <result column="planName" property="planName" jdbcType="VARCHAR"/>
+        <result column="planType" property="planType" jdbcType="VARCHAR"/>
+        <result column="fyPlanType" property="fyPlanType" jdbcType="VARCHAR"/>
+        <result column="periodType" property="periodType" jdbcType="VARCHAR"/>
+        <result column="periodBeginDate" property="periodBeginDate" jdbcType="TIMESTAMP"/>
+        <result column="periodEndDate" property="periodEndDate" jdbcType="TIMESTAMP"/>
+        <result column="equationType" property="equationType" jdbcType="VARCHAR"/>
+        <result column="isEnable" property="isEnable" jdbcType="BIT"/>
+        <result column="isEdit" property="isEdit" jdbcType="NVARCHAR" />
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER"/>
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="userIdUpdate" property="userIdUpdate" jdbcType="INTEGER"/>
+        <result column="delFlag" property="delFlag" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, projectNo, planName, planType, fyPlanType, periodType, periodBeginDate, periodEndDate, 
+    equationType, isEnable,isEdit, createDate, userIdCreate, updateDate, userIdUpdate, delFlag
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from LNK_Yj_Plan
+        where delFlag=0 and id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from LNK_Yj_Plan
+    where delFlag=0 and id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlan" >
+    insert into LNK_Yj_Plan (id, projectNo, planName,
+      planType, fyPlanType, periodType,
+      periodBeginDate, periodEndDate, equationType,
+      isEnable, isEdit, createDate,
+      userIdCreate, updateDate, userIdUpdate,
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{projectNo,jdbcType=VARCHAR}, #{planName,jdbcType=VARCHAR},
+      #{planType,jdbcType=VARCHAR}, #{fyPlanType,jdbcType=VARCHAR}, #{periodType,jdbcType=VARCHAR},
+      #{periodBeginDate,jdbcType=TIMESTAMP}, #{periodEndDate,jdbcType=TIMESTAMP}, #{equationType,jdbcType=VARCHAR},
+      #{isEnable,jdbcType=BIT}, #{isEdit,jdbcType=NVARCHAR}, #{createDate,jdbcType=TIMESTAMP},
+      #{userIdCreate,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{userIdUpdate,jdbcType=INTEGER},
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlan" useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_Yj_Plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectNo != null" >
+        projectNo,
+      </if>
+      <if test="planName != null" >
+        planName,
+      </if>
+      <if test="planType != null" >
+        planType,
+      </if>
+      <if test="fyPlanType != null" >
+        fyPlanType,
+      </if>
+      <if test="periodType != null" >
+        periodType,
+      </if>
+      <if test="periodBeginDate != null" >
+        periodBeginDate,
+      </if>
+      <if test="periodEndDate != null" >
+        periodEndDate,
+      </if>
+      <if test="equationType != null" >
+        equationType,
+      </if>
+      <if test="isEnable != null" >
+        isEnable,
+      </if>
+      <if test="isEdit != null" >
+        isEdit,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="updateDate != null" >
+        updateDate,
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectNo != null" >
+        #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null" >
+        #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planType != null" >
+        #{planType,jdbcType=VARCHAR},
+      </if>
+      <if test="fyPlanType != null" >
+        #{fyPlanType,jdbcType=VARCHAR},
+      </if>
+      <if test="periodType != null" >
+        #{periodType,jdbcType=VARCHAR},
+      </if>
+      <if test="periodBeginDate != null" >
+        #{periodBeginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="periodEndDate != null" >
+        #{periodEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="equationType != null" >
+        #{equationType,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null" >
+        #{isEnable,jdbcType=BIT},
+      </if>
+      <if test="isEdit != null" >
+        #{isEdit,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlan" >
+    update LNK_Yj_Plan
+    <set >
+      <if test="projectNo != null" >
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null" >
+        planName = #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planType != null" >
+        planType = #{planType,jdbcType=VARCHAR},
+      </if>
+      <if test="fyPlanType != null" >
+        fyPlanType = #{fyPlanType,jdbcType=VARCHAR},
+      </if>
+      <if test="periodType != null" >
+        periodType = #{periodType,jdbcType=VARCHAR},
+      </if>
+      <if test="periodBeginDate != null" >
+        periodBeginDate = #{periodBeginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="periodEndDate != null" >
+        periodEndDate = #{periodEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="equationType != null" >
+        equationType = #{equationType,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null" >
+        isEnable = #{isEnable,jdbcType=BIT},
+      </if>
+      <if test="isEdit != null" >
+        isEdit = #{isEdit,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpdate != null" >
+        userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.houseLinkage.estate.model.LnkYjPlan" >
+    update LNK_Yj_Plan
+    set projectNo = #{projectNo,jdbcType=VARCHAR},
+      planName = #{planName,jdbcType=VARCHAR},
+      planType = #{planType,jdbcType=VARCHAR},
+      fyPlanType = #{fyPlanType,jdbcType=VARCHAR},
+      periodType = #{periodType,jdbcType=VARCHAR},
+      periodBeginDate = #{periodBeginDate,jdbcType=TIMESTAMP},
+      periodEndDate = #{periodEndDate,jdbcType=TIMESTAMP},
+      equationType = #{equationType,jdbcType=VARCHAR},
+      isEnable = #{isEnable,jdbcType=BIT},
+      isEdit = #{isEdit,jdbcType=NVARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      userIdUpdate = #{userIdUpdate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!-- 佣金方案列表 -->
+    <select id="getYjPlanByProjectNo" parameterType="java.util.Map" resultMap="YjPlanResultMap">
+        SELECT uu.userCode,uu.userName,bd1.dicValue fyPlanTypeName,
+        bd2.dicValue planTypeName,bd3.dicValue periodTypeName,
+        bd4.dicValue equationTypeName, pan.*
+        FROM dbo.LNK_Yj_Plan pan
+        LEFT JOIN dbo.USR_User uu ON uu.userId=pan.userIdCreate AND uu.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd1 ON bd1.dicCode=pan.fyPlanType AND bd1.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd2 ON bd2.dicCode=pan.planType AND bd2.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd3 ON bd3.dicCode=pan.periodType AND bd3.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd4 ON bd4.dicCode=pan.equationType AND bd4.delFlag='N'
+        WHERE pan.delFlag=0
+        <if test="projectNo != null and projectNo != ''">
+            AND pan.projectNo = #{projectNo,jdbcType=VARCHAR}
+        </if>
+        <if test="planType != null and planType != ''">
+            AND pan.planType = #{planType,jdbcType=INTEGER}
+        </if>
+        <if test="planId != null and planId != ''">
+            AND pan.id = #{planId,jdbcType=INTEGER}
+        </if>
+        order by pan.createDate DESC
+    </select>
+
+    <resultMap id="YjPlanResultMap" extends="BaseResultMap" type="cn.com.eju.deal.dto.houseLinkage.estate.LnkYjPlanDto">
+        <collection column="{planId=id}" property="yjPlanWyList"
+                    select="cn.com.eju.deal.houseLinkage.estate.dao.LnkYjWyMapper.getYjPlanWyListByPlanId"/>
+        <collection column="{planId=id}" property="yjPlanDetailList"
+                    select="cn.com.eju.deal.houseLinkage.estate.dao.LnkYjPlanDetailMapper.getYjPlanDetailListByPlanId"/>
+        <collection column="{planId=id}" property="yjPlanCompanyList"
+                    select="cn.com.eju.deal.houseLinkage.estate.dao.LnkYjPlanCompanyMapper.getYjPlanCompanyList"/>
+    </resultMap>
+
+    <select id="getProgrammeList" parameterType="java.util.Map" resultMap="YjPlanResultMap">
+        SELECT bd1.dicValue fyPlanTypeName,
+        bd2.dicValue planTypeName,
+        bd3.dicValue periodTypeName,
+        bd4.dicValue equationTypeName,
+        p.*
+        FROM LNK_Yj_Plan p
+        LEFT JOIN dbo.BAS_DictionaryValue bd1 ON bd1.dicCode=p.fyPlanType AND bd1.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd2 ON bd2.dicCode=p.planType AND bd2.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd3 ON bd3.dicCode=p.periodType AND bd3.delFlag='N'
+        LEFT JOIN dbo.BAS_DictionaryValue bd4 ON bd4.dicCode=p.equationType AND bd4.delFlag='N'
+        WHERE p.isEnable = 1
+        AND p.projectNo = #{projectNo,jdbcType=VARCHAR}
+        AND p.planType = #{planType,jdbcType=VARCHAR}
+        AND p.delFlag = 0
+        <![CDATA[
+            AND ((p.periodType ='28901' AND p.periodBeginDate <= #{reportDate} AND #{reportDate} <= p.periodEndDate)
+              OR (p.periodType ='28902' AND p.periodBeginDate <= #{seeDate} AND #{seeDate} <= p.periodEndDate)
+              OR (p.periodType ='28903' AND p.periodBeginDate <= #{roughDate} AND #{roughDate} <= p.periodEndDate)
+              OR (p.periodType ='28904' AND p.periodBeginDate <= #{dealDate} AND #{dealDate} <= p.periodEndDate)
+            )
+        ]]>
+        AND EXISTS(SELECT wy.id FROM dbo.LNK_Yj_Wy wy WHERE wy.planId = p.id AND wy.wyTypeCode =
+        #{wyTypeCode,jdbcType=VARCHAR} AND wy.delFlag ='0')
+        <if test="fyPlanType != null and fyPlanType != ''">
+            AND p.fyPlanType = #{fyPlanType,jdbcType=VARCHAR}
+            <if test="companyNo != null and companyNo != ''">
+                AND EXISTS(SELECT c.id FROM dbo.LNK_Yj_Plan_Company c WHERE c.planId = p.id AND c.companyNo =
+                #{companyNo,jdbcType=VARCHAR} AND c.delFlag ='0')
+            </if>
+        </if>
+        ORDER BY p.createDate DESC
+    </select>
+    
+<!--     根据id查询 -->
+  <select id="queryById" parameterType="map" resultType="cn.com.eju.deal.dto.houseLinkage.estate.LnkYjPlanDto">
+    SELECT uu.userCode,uu.userName,bd1.dicValue fyPlanTypeName,
+		   bd2.dicValue planTypeName,bd3.dicValue periodTypeName,
+		   bd4.dicValue equationTypeName,
+		   (select id from dbo.LNK_Estate where DelFlg = 0 and projectNo = #{projectNo}) estateId
+		    ,pan.*
+		FROM dbo.LNK_Yj_Plan pan 
+  			LEFT JOIN dbo.USR_User uu ON uu.userId=pan.userIdCreate AND uu.delFlag='N'
+			LEFT JOIN dbo.BAS_DictionaryValue bd1 ON bd1.dicCode=pan.fyPlanType AND bd1.delFlag='N'
+			LEFT JOIN dbo.BAS_DictionaryValue bd2 ON bd2.dicCode=pan.planType AND bd2.delFlag='N'
+			LEFT JOIN dbo.BAS_DictionaryValue bd3 ON bd3.dicCode=pan.periodType AND bd3.delFlag='N'
+			LEFT JOIN dbo.BAS_DictionaryValue bd4 ON bd4.dicCode=pan.equationType AND bd4.delFlag='N'
+  		WHERE pan.delFlag=0 and pan.id = #{id}
+  </select>
+
+
+    <select id="getCntYJFYPlan"  parameterType="map" resultType="cn.com.eju.deal.houseLinkage.estate.model.PmlsCompanyYjPlan">
+     SELECT  r.companyNo ,
+                num = ISNULL(ps.num, 0) + ISNULL(pn.num, 0)
+        FROM    LNK_YJ_REPORT r
+                LEFT JOIN ( SELECT  COUNT(0) num
+                            FROM    dbo.LNK_Yj_Plan p
+                            WHERE   p.isEnable = 1
+                                    AND p.projectNo = #{projectNo,jdbcType=VARCHAR}
+                                    AND p.planType = '28702'
+                                    AND p.fyPlanType = '28801'
+                                    AND p.delFlag = 0
+                          ) ps ON 1 = 1
+                LEFT JOIN ( SELECT  c.companyNo ,
+                                    COUNT(0) num
+                            FROM    LNK_YJ_plan p
+                                    INNER JOIN LNK_Yj_Plan_Company c ON p.id = c.planId
+                                                                      AND c.delFlag = 0
+                            WHERE   p.isEnable = 1
+                                    AND p.projectNo = #{projectNo,jdbcType=VARCHAR}
+                                    AND p.planType = '28702'
+                                    AND p.fyPlanType = '28802'
+                                    AND p.delFlag = 0
+                            GROUP BY c.companyNo
+                          ) pn ON pn.companyNo = r.companyNo
+        WHERE   r.reportId = #{reportId,jdbcType=VARCHAR}
+                AND r.delFlg = 0
+    </select>
+
+    <select id="getCntYJSRPlan"  parameterType="map" resultType="cn.com.eju.deal.houseLinkage.estate.model.PmlsCompanyYjPlan">
+        SELECT  '0' AS companyNo ,
+                COUNT(0) num
+        FROM    dbo.LNK_Yj_Plan p
+        WHERE   p.isEnable = 1
+                AND projectNo = #{projectNo,jdbcType=VARCHAR}
+                AND planType = '28701'
+                AND delFlag = 0
+
+    </select>
+    
+    <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from LNK_Yj_Plan pan where pan.delFlag=0
+        <if test="planType != null and planType != ''">
+            AND pan.planType = #{planType,jdbcType=VARCHAR}
+        </if>
+        <if test="planName != null and planName != ''">
+            AND pan.planName = #{planName,jdbcType=VARCHAR}
+        </if>
+        <if test="projectNo != null and projectNo != ''">
+            AND pan.projectNo = #{projectNo,jdbcType=VARCHAR}
+        </if>
+        <!--编辑的时候isEdit为1才可以编辑   查询-->
+        <if test="editId != null">
+            AND pan.id = #{editId,jdbcType=INTEGER}
+        </if>
+		<!--编辑 根据方案类型+方案名称判断是否重复(根据id排除自己) -->
+        <if test="editFaId != null">
+            AND pan.id != #{editFaId,jdbcType=INTEGER}
+        </if>
+    </select>
+</mapper>

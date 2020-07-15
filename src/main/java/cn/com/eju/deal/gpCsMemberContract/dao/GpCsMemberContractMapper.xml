@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.gpCsMemberContract.dao.GpCsMemberContractMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContract">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="gpCsMemberContractNo" jdbcType="VARCHAR" property="gpCsMemberContractNo" />
+    <result column="companyId" jdbcType="INTEGER" property="companyId" />
+    <result column="companyNo" jdbcType="VARCHAR" property="companyNo" />
+    <result column="partyB" jdbcType="NVARCHAR" property="partyB" />
+    <result column="legalPerson" jdbcType="VARCHAR" property="legalPerson" />
+    <result column="partyBCityNo" jdbcType="VARCHAR" property="partyBCityNo" />
+    <result column="partyBCityName" jdbcType="VARCHAR" property="partyBCityName" />
+    <result column="partyBDistrictNo" jdbcType="VARCHAR" property="partyBDistrictNo" />
+    <result column="partyBDistrictName" jdbcType="VARCHAR" property="partyBDistrictName" />
+    <result column="partyBAddress" jdbcType="NVARCHAR" property="partyBAddress" />
+    <result column="registerId" jdbcType="VARCHAR" property="registerId" />
+    <result column="ourFullId" jdbcType="INTEGER" property="ourFullId" />
+    <result column="ourFullName" jdbcType="NVARCHAR" property="ourFullName" />
+    <result column="agreementNo" jdbcType="VARCHAR" property="agreementNo" />
+    <result column="csMemberAmount" jdbcType="DECIMAL" property="csMemberAmount" />
+    <result column="partyBNm" jdbcType="NVARCHAR" property="partyBNm" />
+    <result column="partyBTel" jdbcType="VARCHAR" property="partyBTel" />
+    <result column="accountNm" jdbcType="NVARCHAR" property="accountNm" />
+    <result column="accountProvinceNo" jdbcType="VARCHAR" property="accountProvinceNo" />
+    <result column="accountProvinceNm" jdbcType="NVARCHAR" property="accountProvinceNm" />
+    <result column="accountCityNo" jdbcType="VARCHAR" property="accountCityNo" />
+    <result column="accountCityNm" jdbcType="NVARCHAR" property="accountCityNm" />
+    <result column="bankAccountNm" jdbcType="NVARCHAR" property="bankAccountNm" />
+    <result column="bankAccount" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="remark" jdbcType="NVARCHAR" property="remark" />
+    <result column="cityNo" jdbcType="VARCHAR" property="cityNo" />
+    <result column="oaNo" jdbcType="VARCHAR" property="oaNo" />
+    <result column="submitOAUserId" jdbcType="INTEGER" property="submitOAUserId" />
+    <result column="submitTime" jdbcType="TIMESTAMP" property="submitTime" />
+    <result column="submitOAStatus" jdbcType="INTEGER" property="submitOAStatus" />
+    <result column="flowId" jdbcType="VARCHAR" property="flowId" />
+    <result column="approveState" jdbcType="INTEGER" property="approveState" />
+    <result column="approvePassDate" jdbcType="TIMESTAMP" property="approvePassDate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt" />
+    <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, gpCsMemberContractNo, companyId, companyNo, partyB, legalPerson, partyBCityNo, 
+    partyBCityName, partyBDistrictNo, partyBDistrictName, partyBAddress, registerId, 
+    ourFullId, ourFullName, agreementNo, csMemberAmount, partyBNm, partyBTel, accountNm, 
+    accountProvinceNo, accountProvinceNm, accountCityNo, accountCityNm, bankAccountNm, 
+    bankAccount, remark, cityNo, oaNo, submitOAUserId, submitTime, submitOAStatus, flowId, 
+    approveState, approvePassDate, dateCreate, userIdCreate, dateUpt, userIdUpt, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from GP_CsMemberContract
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from GP_CsMemberContract
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContract">
+    insert into GP_CsMemberContract (id, gpCsMemberContractNo, companyId, 
+      companyNo, partyB, legalPerson, 
+      partyBCityNo, partyBCityName, partyBDistrictNo, 
+      partyBDistrictName, partyBAddress, registerId, 
+      ourFullId, ourFullName, agreementNo, 
+      csMemberAmount, partyBNm, partyBTel, 
+      accountNm, accountProvinceNo, accountProvinceNm, 
+      accountCityNo, accountCityNm, bankAccountNm, 
+      bankAccount, remark, cityNo, 
+      oaNo, submitOAUserId, submitTime, 
+      submitOAStatus, flowId, approveState, 
+      approvePassDate, dateCreate, userIdCreate, 
+      dateUpt, userIdUpt, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{gpCsMemberContractNo,jdbcType=VARCHAR}, #{companyId,jdbcType=INTEGER}, 
+      #{companyNo,jdbcType=VARCHAR}, #{partyB,jdbcType=NVARCHAR}, #{legalPerson,jdbcType=VARCHAR}, 
+      #{partyBCityNo,jdbcType=VARCHAR}, #{partyBCityName,jdbcType=VARCHAR}, #{partyBDistrictNo,jdbcType=VARCHAR}, 
+      #{partyBDistrictName,jdbcType=VARCHAR}, #{partyBAddress,jdbcType=NVARCHAR}, #{registerId,jdbcType=VARCHAR}, 
+      #{ourFullId,jdbcType=INTEGER}, #{ourFullName,jdbcType=NVARCHAR}, #{agreementNo,jdbcType=VARCHAR}, 
+      #{csMemberAmount,jdbcType=DECIMAL}, #{partyBNm,jdbcType=NVARCHAR}, #{partyBTel,jdbcType=VARCHAR}, 
+      #{accountNm,jdbcType=NVARCHAR}, #{accountProvinceNo,jdbcType=VARCHAR}, #{accountProvinceNm,jdbcType=NVARCHAR}, 
+      #{accountCityNo,jdbcType=VARCHAR}, #{accountCityNm,jdbcType=NVARCHAR}, #{bankAccountNm,jdbcType=NVARCHAR}, 
+      #{bankAccount,jdbcType=VARCHAR}, #{remark,jdbcType=NVARCHAR}, #{cityNo,jdbcType=VARCHAR}, 
+      #{oaNo,jdbcType=VARCHAR}, #{submitOAUserId,jdbcType=INTEGER}, #{submitTime,jdbcType=TIMESTAMP}, 
+      #{submitOAStatus,jdbcType=INTEGER}, #{flowId,jdbcType=VARCHAR}, #{approveState,jdbcType=INTEGER}, 
+      #{approvePassDate,jdbcType=TIMESTAMP}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{dateUpt,jdbcType=TIMESTAMP}, #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContract" useGeneratedKeys="true" keyProperty="id">
+    insert into GP_CsMemberContract
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gpCsMemberContractNo != null">
+        gpCsMemberContractNo,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+      <if test="companyNo != null">
+        companyNo,
+      </if>
+      <if test="partyB != null">
+        partyB,
+      </if>
+      <if test="legalPerson != null">
+        legalPerson,
+      </if>
+      <if test="partyBCityNo != null">
+        partyBCityNo,
+      </if>
+      <if test="partyBCityName != null">
+        partyBCityName,
+      </if>
+      <if test="partyBDistrictNo != null">
+        partyBDistrictNo,
+      </if>
+      <if test="partyBDistrictName != null">
+        partyBDistrictName,
+      </if>
+      <if test="partyBAddress != null">
+        partyBAddress,
+      </if>
+      <if test="registerId != null">
+        registerId,
+      </if>
+      <if test="ourFullId != null">
+        ourFullId,
+      </if>
+      <if test="ourFullName != null">
+        ourFullName,
+      </if>
+      <if test="agreementNo != null">
+        agreementNo,
+      </if>
+      <if test="csMemberAmount != null">
+        csMemberAmount,
+      </if>
+      <if test="partyBNm != null">
+        partyBNm,
+      </if>
+      <if test="partyBTel != null">
+        partyBTel,
+      </if>
+      <if test="accountNm != null">
+        accountNm,
+      </if>
+      <if test="accountProvinceNo != null">
+        accountProvinceNo,
+      </if>
+      <if test="accountProvinceNm != null">
+        accountProvinceNm,
+      </if>
+      <if test="accountCityNo != null">
+        accountCityNo,
+      </if>
+      <if test="accountCityNm != null">
+        accountCityNm,
+      </if>
+      <if test="bankAccountNm != null">
+        bankAccountNm,
+      </if>
+      <if test="bankAccount != null">
+        bankAccount,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="cityNo != null">
+        cityNo,
+      </if>
+      <if test="oaNo != null">
+        oaNo,
+      </if>
+      <if test="submitOAUserId != null">
+        submitOAUserId,
+      </if>
+      <if test="submitTime != null">
+        submitTime,
+      </if>
+      <if test="submitOAStatus != null">
+        submitOAStatus,
+      </if>
+      <if test="flowId != null">
+        flowId,
+      </if>
+      <if test="approveState != null">
+        approveState,
+      </if>
+      <if test="approvePassDate != null">
+        approvePassDate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="dateUpt != null">
+        dateUpt,
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+       <if test="centerId != null">
+        centerId,
+      </if>
+       <if test="centerName != null">
+        centerName,
+      </if>
+      <if test="exPersonId != null">
+        exPersonId,
+      </if>
+      <if test="exPerson != null">
+        exPerson,
+      </if>
+      <if test="accountProject != null">
+        accountProject,
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gpCsMemberContractNo != null">
+        #{gpCsMemberContractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partyB != null">
+        #{partyB,jdbcType=NVARCHAR},
+      </if>
+      <if test="legalPerson != null">
+        #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBCityNo != null">
+        #{partyBCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBCityName != null">
+        #{partyBCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBDistrictNo != null">
+        #{partyBDistrictNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBDistrictName != null">
+        #{partyBDistrictName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBAddress != null">
+        #{partyBAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="registerId != null">
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="ourFullId != null">
+        #{ourFullId,jdbcType=INTEGER},
+      </if>
+      <if test="ourFullName != null">
+        #{ourFullName,jdbcType=NVARCHAR},
+      </if>
+      <if test="agreementNo != null">
+        #{agreementNo,jdbcType=VARCHAR},
+      </if>
+      <if test="csMemberAmount != null">
+        #{csMemberAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="partyBNm != null">
+        #{partyBNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="partyBTel != null">
+        #{partyBTel,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNm != null">
+        #{accountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProvinceNo != null">
+        #{accountProvinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvinceNm != null">
+        #{accountProvinceNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountCityNo != null">
+        #{accountCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCityNm != null">
+        #{accountCityNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccountNm != null">
+        #{bankAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=NVARCHAR},
+      </if>
+      <if test="cityNo != null">
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null">
+        #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="submitOAUserId != null">
+        #{submitOAUserId,jdbcType=INTEGER},
+      </if>
+      <if test="submitTime != null">
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitOAStatus != null">
+        #{submitOAStatus,jdbcType=INTEGER},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="approveState != null">
+        #{approveState,jdbcType=INTEGER},
+      </if>
+      <if test="approvePassDate != null">
+        #{approvePassDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="centerId != null">
+        #{centerId,jdbcType=INTEGER},
+      </if>
+      <if test="centerName != null">
+        #{centerName,jdbcType=VARCHAR},
+      </if>
+      <if test="exPersonId != null">
+        #{exPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="exPerson != null">
+        #{exPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProject != null">
+        #{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        #{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContract">
+    update GP_CsMemberContract
+    <set>
+      <if test="gpCsMemberContractNo != null">
+        gpCsMemberContractNo = #{gpCsMemberContractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        companyId = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null">
+        companyNo = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partyB != null">
+        partyB = #{partyB,jdbcType=NVARCHAR},
+      </if>
+      <if test="legalPerson != null">
+        legalPerson = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBCityNo != null">
+        partyBCityNo = #{partyBCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBCityName != null">
+        partyBCityName = #{partyBCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBDistrictNo != null">
+        partyBDistrictNo = #{partyBDistrictNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBDistrictName != null">
+        partyBDistrictName = #{partyBDistrictName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBAddress != null">
+        partyBAddress = #{partyBAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="registerId != null">
+        registerId = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="ourFullId != null">
+        ourFullId = #{ourFullId,jdbcType=INTEGER},
+      </if>
+      <if test="ourFullName != null">
+        ourFullName = #{ourFullName,jdbcType=NVARCHAR},
+      </if>
+      <if test="agreementNo != null">
+        agreementNo = #{agreementNo,jdbcType=VARCHAR},
+      </if>
+      <if test="csMemberAmount != null">
+        csMemberAmount = #{csMemberAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="partyBNm != null">
+        partyBNm = #{partyBNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="partyBTel != null">
+        partyBTel = #{partyBTel,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNm != null">
+        accountNm = #{accountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProvinceNo != null">
+        accountProvinceNo = #{accountProvinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvinceNm != null">
+        accountProvinceNm = #{accountProvinceNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountCityNo != null">
+        accountCityNo = #{accountCityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCityNm != null">
+        accountCityNm = #{accountCityNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccountNm != null">
+        bankAccountNm = #{bankAccountNm,jdbcType=NVARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=NVARCHAR},
+      </if>
+      <if test="cityNo != null">
+        cityNo = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oaNo != null">
+        oaNo = #{oaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="submitOAUserId != null">
+        submitOAUserId = #{submitOAUserId,jdbcType=INTEGER},
+      </if>
+      <if test="submitTime != null">
+        submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitOAStatus != null">
+        submitOAStatus = #{submitOAStatus,jdbcType=INTEGER},
+      </if>
+      <if test="flowId != null">
+        flowId = #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="approveState != null">
+        approveState = #{approveState,jdbcType=INTEGER},
+      </if>
+      <if test="approvePassDate != null">
+        approvePassDate = #{approvePassDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="centerId != null">
+        centerId=#{centerId,jdbcType=INTEGER},
+      </if>
+      <if test="centerName != null">
+        centerName=#{centerName,jdbcType=VARCHAR},
+      </if>
+      <if test="exPersonId != null">
+        exPersonId=#{exPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="exPerson != null">
+        exPerson=#{exPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProject != null">
+        accountProject=#{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo=#{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContract">
+    update GP_CsMemberContract
+    set gpCsMemberContractNo = #{gpCsMemberContractNo,jdbcType=VARCHAR},
+      companyId = #{companyId,jdbcType=INTEGER},
+      companyNo = #{companyNo,jdbcType=VARCHAR},
+      partyB = #{partyB,jdbcType=NVARCHAR},
+      legalPerson = #{legalPerson,jdbcType=VARCHAR},
+      partyBCityNo = #{partyBCityNo,jdbcType=VARCHAR},
+      partyBCityName = #{partyBCityName,jdbcType=VARCHAR},
+      partyBDistrictNo = #{partyBDistrictNo,jdbcType=VARCHAR},
+      partyBDistrictName = #{partyBDistrictName,jdbcType=VARCHAR},
+      partyBAddress = #{partyBAddress,jdbcType=NVARCHAR},
+      registerId = #{registerId,jdbcType=VARCHAR},
+      ourFullId = #{ourFullId,jdbcType=INTEGER},
+      ourFullName = #{ourFullName,jdbcType=NVARCHAR},
+      agreementNo = #{agreementNo,jdbcType=VARCHAR},
+      csMemberAmount = #{csMemberAmount,jdbcType=DECIMAL},
+      partyBNm = #{partyBNm,jdbcType=NVARCHAR},
+      partyBTel = #{partyBTel,jdbcType=VARCHAR},
+      accountNm = #{accountNm,jdbcType=NVARCHAR},
+      accountProvinceNo = #{accountProvinceNo,jdbcType=VARCHAR},
+      accountProvinceNm = #{accountProvinceNm,jdbcType=NVARCHAR},
+      accountCityNo = #{accountCityNo,jdbcType=VARCHAR},
+      accountCityNm = #{accountCityNm,jdbcType=NVARCHAR},
+      bankAccountNm = #{bankAccountNm,jdbcType=NVARCHAR},
+      bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=NVARCHAR},
+      cityNo = #{cityNo,jdbcType=VARCHAR},
+      oaNo = #{oaNo,jdbcType=VARCHAR},
+      submitOAUserId = #{submitOAUserId,jdbcType=INTEGER},
+      submitTime = #{submitTime,jdbcType=TIMESTAMP},
+      submitOAStatus = #{submitOAStatus,jdbcType=INTEGER},
+      flowId = #{flowId,jdbcType=VARCHAR},
+      approveState = #{approveState,jdbcType=INTEGER},
+      approvePassDate = #{approvePassDate,jdbcType=TIMESTAMP},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getGpCsMemberContractList" parameterType="map" resultType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContractDto">
+		 SELECT  
+		 	gct.id,
+		 	gct.gpCsMemberContractNo,
+		 	gct.oaNo,
+	        gct.agreementNo ,
+	        gct.partyB,
+	        gct.companyNo,
+	        gct.companyId ,
+	        gct.dateCreate ,
+	        gct.approveState ,
+	        us.userName ,
+	        gct.userIdCreate ,
+	        gct.submitOAStatus,
+	        approveStatusNm = ( CASE WHEN gct.approveState IS NULL THEN '-'
+	                                 WHEN gct.approveState = 0 THEN '待提交'
+	                                 WHEN gct.approveState = 1 THEN '审核中'
+	                                 WHEN gct.approveState = 2 THEN '审核通过'
+	                                 WHEN gct.approveState = 3 THEN '审核不通过'
+	                                 WHEN gct.approveState = 4 THEN '作废'
+	                                 ELSE '-'
+	                            END )
+		FROM    GP_CsMemberContract gct
+		        LEFT JOIN crm.dbo.USR_User us ON us.userId = gct.userIdCreate
+		                                     AND us.delFlag = 'N'
+		WHERE   gct.delFlag = 0 AND gct.dateCreate is not null
+			<if test="cityNo != null and cityNo != ''">
+				   and gct.cityNo= #{cityNo}
+			</if> 
+			<!-- 会员合同申请编号、协议书编号 -->
+            <if test="searchKey != null and searchKey != ''">
+	    		AND (gct.gpCsMemberContractNo LIKE  CONCAT('%', #{searchKey},'%')
+	    		 OR gct.agreementNo LIKE  CONCAT('%', #{searchKey},'%') 
+	    		 )
+            </if>
+            <if test="dateCreateStart != null and dateCreateStart != ''">
+	    		AND Convert(varchar(10),gct.dateCreate,120) &gt;= #{dateCreateStart,jdbcType=NVARCHAR}
+            </if>
+            <if test="dateCreateEnd != null and dateCreateEnd != ''">
+    				AND Convert(varchar(10),gct.dateCreate,120) &lt;= #{dateCreateEnd,jdbcType=NVARCHAR}
+            </if>
+            <!-- 公司名称 -->
+            <if test="companyName != null and companyName != '' ">
+		        AND (gct.partyB LIKE CONCAT('%', #{companyName},'%') or gct.companyNo LIKE CONCAT('%', #{companyName},'%'))
+		    </if>
+		    <!-- 审核态筛选 -->
+            <if test="contractStatus != null and contractStatus != ''">
+                AND gct.approveState = #{contractStatus,jdbcType=INTEGER}
+            </if>
+            <if test="userName != null and userName != '' ">
+                AND us.userName  LIKE CONCAT('%', #{userName},'%')
+            </if>
+	 	ORDER BY gct.dateCreate desc
+  </select>
+  <select id="getGpCsMemberContractById" resultType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContractDto" parameterType="java.lang.Integer">
+		SELECT  us.userName,
+                bs.dicValue as submitOAStatusNm,
+                gtc.*,
+	        	approveStatusNm = ( CASE WHEN gtc.approveState IS NULL THEN '-'
+	                                 WHEN gtc.approveState = 0 THEN '草签'
+	                                 WHEN gtc.approveState = 1 THEN '审核中'
+	                                 WHEN gtc.approveState = 2 THEN '审核通过'
+	                                 WHEN gtc.approveState = 3 THEN '审核不通过'
+	                                 WHEN gtc.approveState = 4 THEN '作废'
+	                                 ELSE '-'
+	                            END )
+        FROM    GP_CsMemberContract gtc
+                LEFT JOIN dbo.BAS_DictionaryValue bs ON bs.typeId = 212
+                                                        AND bs.dicCode = gtc.submitOAStatus
+                                                        AND bs.delFlag = 'N'
+                LEFT JOIN crm.dbo.USR_User us ON us.userId = gtc.userIdCreate
+                                             AND us.delFlag = 'N'
+	  	WHERE gtc.delFlag=0  
+	  		and gtc.id= #{id,jdbcType=INTEGER}
+	</select>
+  <select id="getGpInfoByCompanyId" resultType="cn.com.eju.deal.gpContract.model.GpContractDto" parameterType="map">
+		SELECT TOP 1
+		       gc.*
+		FROM    dbo.GP_Contract gc
+		        INNER JOIN Fangyou_Movement_Deposit fd ON fd.gpContractNo = gc.gpContractNo
+		                                                  AND fd.delFlag = 0
+		WHERE   gc.contractStatus = 10403
+		        AND gc.delFlag = 0
+		        AND gc.companyId = #{companyId,jdbcType=INTEGER}
+		ORDER BY gc.dateCreate asc
+  </select>
+  <select id="getCsMemberCtByCompanyId" resultType="java.lang.Integer" parameterType="map">
+		SELECT  COUNT(*) AS csMemberCtFlag
+        FROM    dbo.GP_CsMemberContract
+        WHERE  delFlag=0  AND approveState IN(0,1,2,3) and  companyId =  #{companyId,jdbcType=INTEGER}
+  </select>
+  <select id="getCsMemberContractByFlowId" resultType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContract" parameterType="string">
+		    SELECT  gch.*
+            FROM    dbo.GP_CsMemberContract gch
+            WHERE   gch.delFlag = 0 
+				AND gch.flowId = #{flowId}
+				and gch.approveState=1
+	</select>
+	<update id="updateGpCsMemberStatusByFlowId" parameterType="cn.com.eju.deal.gpCsMemberContract.model.GpCsMemberContract">
+        update GP_CsMemberContract
+        <set>
+            <if test="approveState != null">
+                approveState = #{approveState,jdbcType=INTEGER},
+            </if>
+            <if test="approvePassDate != null">
+                approvePassDate = #{approvePassDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dateUpt != null">
+                dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where flowId = #{flowId,jdbcType=VARCHAR}
+    </update>
+    <!-- 根据id作废公盘合同终止信息 -->
+	<update id="updateStatus" parameterType="map">
+		UPDATE  GP_CsMemberContract
+		SET     approveState = #{approveState}
+		        ,userIdUpt = #{userIdUpt},
+		       	dateUpt = GETDATE()
+		WHERE   id  = #{id}
+	</update>
+	<!-- 根据协议书编号查询初始会员合同 -->
+	<select id="getListByAgreementNo" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM GP_CsMemberContract
+        WHERE delFlag = 0 AND approveState in (0,1,2,3) 
+        AND agreementNo= #{agreementNo,jdbcType=VARCHAR}
+        <if test="id != null and id != '' ">
+                AND id  != #{id}
+            </if>
+    </select>
+    <!-- 根据relateId删除业绩归属信息 -->
+	<update id="deleteAchivAchievementByrelateId" parameterType="java.lang.Integer">
+		UPDATE Achiv_Achievement
+		SET delFlag = 1
+		WHERE delFlag = 0 AND achieveType= 17915
+		AND relateId = #{relateId,jdbcType=INTEGER}
+	</update>
+
+  <insert id="insertGpCsMemberContractReturn" parameterType="java.lang.Integer">
+      INSERT  INTO dbo.OaGpCsMemberContractReturn
+        ( gpCsMemberContractNo ,
+        FlowId ,
+        oaNo,
+        approveDate ,
+        hasDeal ,
+        dateUpdate ,
+        dateCreate ,
+        approveStatus
+        )
+      SELECT  gpCsMemberContractNo ,
+              flowId ,
+              oaNo,
+              GETDATE() ,
+              0 ,
+              GETDATE() ,
+              GETDATE() ,
+              3
+          FROM    dbo.GP_CsMemberContract
+      WHERE   id = #{id,jdbcType=INTEGER}
+  </insert>
+</mapper>

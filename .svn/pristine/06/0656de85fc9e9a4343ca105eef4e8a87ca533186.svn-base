@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.Report.dao.StorePreserveMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.Report.model.ExpandDetail" >
+        <result column="rowNum" property="rowNum" jdbcType="INTEGER" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="StoreId" property="StoreId" jdbcType="INTEGER" />
+        <result column="CityId" property="CityId" jdbcType="INTEGER" />
+        <result column="CityName" property="CityName" jdbcType="VARCHAR" />
+        <result column="checkBody" property="checkBody" jdbcType="VARCHAR" />
+        <result column="isOffice" property="isOffice" jdbcType="VARCHAR" />
+        <result column="otherTransfer" property="otherTransfer" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="sybName" property="sybName" jdbcType="VARCHAR" />
+
+        <result column="PerformanceCityNo" property="PerformanceCityNo" jdbcType="VARCHAR" />
+        <result column="PerformanceCity" property="PerformanceCity" jdbcType="VARCHAR" />
+        <result column="PerformanceDepartmentNo" property="PerformanceDepartmentNo" jdbcType="VARCHAR" />
+        <result column="PerformanceDepartment" property="PerformanceDepartment" jdbcType="VARCHAR" />
+        <result column="PerformanceCenterNo" property="PerformanceCenterNo" jdbcType="VARCHAR" />
+        <result column="PerformanceCenter" property="PerformanceCenter" jdbcType="VARCHAR" />
+        <result column="PerformanceGroupNo" property="PerformanceGroupNo" jdbcType="VARCHAR" />
+        <result column="PerformanceGroup" property="PerformanceGroup" jdbcType="VARCHAR" />
+        <result column="PerformancePeople" property="PerformancePeople" jdbcType="VARCHAR" />
+
+        <result column="CompanyNo" property="CompanyNo" jdbcType="VARCHAR" />
+        <result column="CompanyName" property="CompanyName" jdbcType="VARCHAR" />
+        <result column="Address" property="Address" jdbcType="VARCHAR" />
+        <result column="LegalPerson" property="LegalPerson" jdbcType="VARCHAR" />
+        <result column="BusinessLicenseCompanyAddress" property="BusinessLicenseCompanyAddress" jdbcType="VARCHAR" />
+        <result column="BusinessLicenseNo" property="BusinessLicenseNo" jdbcType="VARCHAR" />
+        <result column="businessLicenseType" property="businessLicenseType" jdbcType="VARCHAR" />
+
+        <result column="StoreNo" property="StoreNo" jdbcType="VARCHAR" />
+        <result column="StoreName" property="StoreName" jdbcType="VARCHAR" />
+        <result column="storeCityName" property="storeCityName" jdbcType="VARCHAR" />
+        <result column="DistrictNo" property="DistrictNo" jdbcType="VARCHAR" />
+        <result column="DistrictName" property="DistrictName" jdbcType="VARCHAR" />
+        <result column="StoreGroupName" property="StoreGroupName" jdbcType="VARCHAR" />
+        <result column="StoreSignSize" property="StoreSignSize" jdbcType="VARCHAR" />
+        <result column="AddressDetail" property="AddressDetail" jdbcType="VARCHAR" />
+        <result column="storeSizeScaleName" property="storeSizeScaleName" jdbcType="VARCHAR" />
+        <result column="ABTypeStore" property="ABTypeStore" jdbcType="VARCHAR" />
+        <result column="Contacts" property="Contacts" jdbcType="VARCHAR" />
+        <result column="MobilePhone" property="MobilePhone" jdbcType="VARCHAR" />
+        <result column="nowUserSystem" property="nowUserSystem" jdbcType="VARCHAR" />
+        <result column="storeDueTime" property="storeDueTime" jdbcType="VARCHAR" />
+        <result column="storeLeaseDueTime" property="storeLeaseDueTime" jdbcType="VARCHAR" />
+        <result column="ChainSituation" property="ChainSituation" jdbcType="VARCHAR" />
+        <result column="ChainBrand" property="ChainBrand" jdbcType="VARCHAR" />
+        <result column="AgentNum" property="AgentNum" jdbcType="VARCHAR" />
+        <result column="MainBusiness" property="MainBusiness" jdbcType="VARCHAR" />
+        <result column="ExchangeMethod" property="ExchangeMethod" jdbcType="VARCHAR" />
+        <result column="storeInfoIntegrity" property="storeInfoIntegrity" jdbcType="VARCHAR" />
+        <result column="storeSignStatus" property="storeSignStatus" jdbcType="VARCHAR" />
+        <result column="businessStatus" property="businessStatus" jdbcType="VARCHAR" />
+        <result column="businessPlaceType" property="businessPlaceType" jdbcType="VARCHAR" />
+        <result column="businessPlaceTypeName" property="businessPlaceTypeName" jdbcType="VARCHAR" />
+
+        <result column="ContractNo" property="ContractNo" jdbcType="VARCHAR" />
+        <result column="contractId" property="contractId" jdbcType="VARCHAR" />
+        <result column="contractStatus" property="contractStatus" jdbcType="VARCHAR" />
+        <result column="CooperateMode" property="CooperateMode" jdbcType="VARCHAR" />
+
+        <result column="CompanyBankNo" property="CompanyBankNo" jdbcType="VARCHAR" />
+        <result column="AccountName" property="AccountName" jdbcType="VARCHAR" />
+        <result column="BankAccount" property="BankAccount" jdbcType="VARCHAR" />
+        <result column="PartyB" property="PartyB" jdbcType="VARCHAR" />
+        <result column="PartyBAddress" property="PartyBAddress" jdbcType="VARCHAR" />
+        <result column="AgreementNo" property="AgreementNo" jdbcType="VARCHAR" />
+        <result column="DateLifeStart" property="DateLifeStart" jdbcType="VARCHAR" />
+        <result column="DateLifeEnd" property="DateLifeEnd" jdbcType="VARCHAR" />
+        <result column="StoreCnt" property="StoreCnt" jdbcType="VARCHAR" />
+        <result column="newStoreCnt" property="newStoreCnt" jdbcType="VARCHAR" />
+        <result column="PenaltyFee" property="PenaltyFee" jdbcType="VARCHAR" />
+        <result column="DateCreate" property="DateCreate" jdbcType="VARCHAR" />
+        <result column="ContractdistinctionName" property="ContractdistinctionName" jdbcType="VARCHAR" />
+        <result column="PerformDate" property="PerformDate" jdbcType="VARCHAR" />
+        <result column="CancelDate" property="CancelDate" jdbcType="VARCHAR" />
+        <result column="DateUpdate" property="DateUpdate" jdbcType="VARCHAR" />
+        <result column="ContractCheckStatusName" property="ContractCheckStatusName" jdbcType="VARCHAR" />
+        <result column="Valid" property="Valid" jdbcType="VARCHAR" />
+
+        <result column="DepositFee" property="DepositFee" jdbcType="VARCHAR" />
+        <result column="ArrivalDepositFee" property="ArrivalDepositFee" jdbcType="VARCHAR" />
+        <result column="UncollectedAccount" property="UncollectedAccount" jdbcType="VARCHAR" />
+        <result column="DateArrivalAct" property="DateArrivalAct" jdbcType="VARCHAR" />
+        <result column="RefundAmount" property="RefundAmount" jdbcType="VARCHAR" />
+        <result column="RefundDate" property="RefundDate" jdbcType="VARCHAR" />
+
+        <result column="ReceivableMoney" property="ReceivableMoney" jdbcType="VARCHAR" />
+        <result column="AccountMoney" property="AccountMoney" jdbcType="VARCHAR" />
+        <result column="AccountDate" property="AccountDate" jdbcType="VARCHAR" />
+        <result column="OverDate" property="OverDate" jdbcType="VARCHAR" />
+        <result column="PlatformStatus" property="PlatformStatus" jdbcType="VARCHAR" />
+
+        <result column="decorateCompany10" property="decorateCompany10" jdbcType="VARCHAR" />
+        <result column="oaMdysSumJsj10" property="oaMdysSumJsj10" jdbcType="VARCHAR" />
+        <result column="flipCompleDate10" property="flipCompleDate10" jdbcType="VARCHAR" />
+
+        <result column="payedMoney10" property="payedMoney10" jdbcType="VARCHAR" />
+        <result column="firstMoney10" property="firstMoney10" jdbcType="VARCHAR" />
+        <result column="firstTime10" property="firstTime10" jdbcType="VARCHAR" />
+        <result column="secondMoney10" property="secondMoney10" jdbcType="VARCHAR" />
+        <result column="secondTime10" property="secondTime10" jdbcType="VARCHAR" />
+        <result column="thirdMoney10" property="thirdMoney10" jdbcType="VARCHAR" />
+        <result column="thirdTime10" property="thirdTime10" jdbcType="VARCHAR" />
+
+        <result column="decorateCompany20" property="decorateCompany20" jdbcType="VARCHAR" />
+        <result column="mdfpApplicaDate20" property="mdfpApplicaDate20" jdbcType="VARCHAR" />
+        <result column="oaMdfpPassDate20" property="oaMdfpPassDate20" jdbcType="VARCHAR" />
+        <result column="flipApplicaCode20" property="flipApplicaCode20" jdbcType="VARCHAR" />
+        <result column="quotatnsubtotal20" property="quotatnsubtotal20" jdbcType="VARCHAR" />
+        <result column="standardQuotatn20" property="standardQuotatn20" jdbcType="VARCHAR" />
+        <result column="addQuotation20" property="addQuotation20" jdbcType="VARCHAR" />
+        <result column="flipCompleDate20" property="flipCompleDate20" jdbcType="VARCHAR" />
+        <result column="flipPassDate20" property="flipPassDate20" jdbcType="VARCHAR" />
+        <result column="flipAcceptaceNo20" property="flipAcceptaceNo20" jdbcType="VARCHAR" />
+        <result column="decorateStatus20" property="decorateStatus20" jdbcType="VARCHAR" />
+        <result column="decorateStatusName20" property="decorateStatusName20" jdbcType="VARCHAR" />
+        <result column="oaMdysSumJsj20" property="oaMdysSumJsj20" jdbcType="VARCHAR" />
+        <result column="oaMdysStandardJsj20" property="oaMdysStandardJsj20" jdbcType="VARCHAR" />
+        <result column="oaMdysAddJsj20" property="oaMdysAddJsj20" jdbcType="VARCHAR" />
+
+        <result column="payedMoney20" property="payedMoney20" jdbcType="VARCHAR" />
+        <result column="firstMoney20" property="firstMoney20" jdbcType="VARCHAR" />
+        <result column="firstTime20" property="firstTime20" jdbcType="VARCHAR" />
+        <result column="secondMoney20" property="secondMoney20" jdbcType="VARCHAR" />
+        <result column="secondTime20" property="secondTime20" jdbcType="VARCHAR" />
+        <result column="thirdMoney20" property="thirdMoney20" jdbcType="VARCHAR" />
+        <result column="thirdTime20" property="thirdTime20" jdbcType="VARCHAR" />
+
+        <result column="decorateCompany30" property="decorateCompany30" jdbcType="VARCHAR" />
+        <result column="mdfpApplicaDate30" property="mdfpApplicaDate30" jdbcType="VARCHAR" />
+        <result column="oaMdfpPassDate30" property="oaMdfpPassDate30" jdbcType="VARCHAR" />
+        <result column="flipApplicaCode30" property="flipApplicaCode30" jdbcType="VARCHAR" />
+        <result column="quotatnsubtotal30" property="quotatnsubtotal30" jdbcType="VARCHAR" />
+        <result column="standardQuotatn30" property="standardQuotatn30" jdbcType="VARCHAR" />
+        <result column="addQuotation30" property="addQuotation30" jdbcType="VARCHAR" />
+        <result column="flipCompleDate30" property="flipCompleDate30" jdbcType="VARCHAR" />
+        <result column="flipPassDate30" property="flipPassDate30" jdbcType="VARCHAR" />
+        <result column="flipAcceptaceNo30" property="flipAcceptaceNo30" jdbcType="VARCHAR" />
+        <result column="decorateStatus30" property="decorateStatus30" jdbcType="VARCHAR" />
+        <result column="decorateStatusName30" property="decorateStatusName30" jdbcType="VARCHAR" />
+        <result column="oaMdysSumJsj30" property="oaMdysSumJsj30" jdbcType="VARCHAR" />
+        <result column="oaMdysStandardJsj30" property="oaMdysStandardJsj30" jdbcType="VARCHAR" />
+        <result column="oaMdysAddJsj30" property="oaMdysAddJsj30" jdbcType="VARCHAR" />
+
+        <result column="payedMoney30" property="payedMoney30" jdbcType="VARCHAR" />
+        <result column="firstMoney30" property="firstMoney30" jdbcType="VARCHAR" />
+        <result column="firstTime30" property="firstTime30" jdbcType="VARCHAR" />
+        <result column="secondMoney30" property="secondMoney30" jdbcType="VARCHAR" />
+        <result column="secondTime30" property="secondTime30" jdbcType="VARCHAR" />
+        <result column="thirdMoney30" property="thirdMoney30" jdbcType="VARCHAR" />
+        <result column="thirdTime30" property="thirdTime30" jdbcType="VARCHAR" />
+
+        <result column="flipMode" property="flipMode" jdbcType="VARCHAR" />
+        <result column="flipModeName" property="flipModeName" jdbcType="VARCHAR" />
+        <result column="flipPassDate" property="flipPassDate" jdbcType="VARCHAR" />
+
+        <result column="decorateCount" property="decorateCount" jdbcType="VARCHAR" />
+        <result column="decorateSum" property="decorateSum" jdbcType="VARCHAR" />
+
+        <result column="userName" property="userName" jdbcType="VARCHAR" />
+        <result column="userCode" property="userCode" jdbcType="VARCHAR" />
+        <result column="StoreDateCreate" property="StoreDateCreate" jdbcType="VARCHAR" />
+
+        <result column="ExpandCommissioner" property="ExpandCommissioner" jdbcType="VARCHAR" />
+        <result column="ExpandCommissionerNum" property="ExpandCommissionerNum" jdbcType="VARCHAR" />
+        <result column="ExpandManager" property="ExpandManager" jdbcType="VARCHAR" />
+        <result column="ExpandManagerNum" property="ExpandManagerNum" jdbcType="VARCHAR" />
+        <result column="HeadCenter" property="HeadCenter" jdbcType="VARCHAR" />
+        <result column="HeadCenterNum" property="HeadCenterNum" jdbcType="VARCHAR" />
+
+        <result column="BusinessUnit" property="BusinessUnit" jdbcType="VARCHAR" />
+        <result column="groupName" property="groupName" jdbcType="VARCHAR" />
+        <result column="center" property="center" jdbcType="VARCHAR" />
+        <result column="maintainerName" property="maintainerName" jdbcType="VARCHAR" />
+        <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+        <result column="dateMtcStart" property="dateMtcStart" jdbcType="VARCHAR" />
+        <result column="b2AContractNo" property="b2AContractNo" jdbcType="VARCHAR" />
+        <result column="b2AAgreementNo" property="b2AAgreementNo" jdbcType="VARCHAR" />
+        <result column="b2ACompanyNo" property="b2ACompanyNo" jdbcType="VARCHAR" />
+        <result column="b2ACompanyName" property="b2ACompanyName" jdbcType="VARCHAR" />
+        <result column="b2ADateLifeStart" property="b2ADateLifeStart" jdbcType="VARCHAR" />
+        <result column="b2ADateLifeEnd" property="b2ADateLifeEnd" jdbcType="VARCHAR" />
+        <result column="b2APerformDate" property="b2APerformDate" jdbcType="VARCHAR" />
+        <result column="b2APerformancePeople" property="b2APerformancePeople" jdbcType="VARCHAR" />
+        <result column="reNewContractNo" property="reNewContractNo" jdbcType="VARCHAR" />
+        <result column="reNewAgreementNo" property="reNewAgreementNo" jdbcType="VARCHAR" />
+        <result column="reNewDateLifeStart" property="reNewDateLifeStart" jdbcType="VARCHAR" />
+        <result column="reNewDateLifeEnd" property="reNewDateLifeEnd" jdbcType="VARCHAR" />
+        <result column="reNewPerformDate" property="reNewPerformDate" jdbcType="VARCHAR" />
+        <result column="reNewPerformancePeople" property="reNewPerformancePeople" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap type="cn.com.eju.deal.Report.model.UserCenterAuthDto" id="UserCenterAuthMap"></resultMap>
+
+    <resultMap id="StorePreserveSummaryMap" type="cn.com.eju.deal.Report.model.StorePreserveSummary" >
+        <result column="account_code" property="accountCode" jdbcType="VARCHAR"/>
+        <result column="account_name" property="accountName" jdbcType="VARCHAR"/>
+        <result column="org_code" property="code" jdbcType="VARCHAR"/>
+        <result column="org_name" property="name" jdbcType="VARCHAR"/>
+        <result column="org_type" property="orgType" jdbcType="VARCHAR"/>
+        <result column="org_sort" property="orgSort" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 根据登录人的岗位情况，拿到对应城市 -->
+    <select id="getUserCenterAuthCityName" parameterType="Map" resultMap="UserCenterAuthMap">
+        select distinct cityId,cityName from dbo.F_USR_UserCenterAuth(#{userId, jdbcType=INTEGER}, 'CRM')
+        where 2=2
+        <if test="organization!=null and organization!=''">
+            AND yearly = #{organization}
+        </if>
+    </select>
+
+    <!-- 根据登录人ID城市ID，拿到对应区/事业部 -->
+    <select id="getAreaGroupName" parameterType="Map" resultMap="UserCenterAuthMap">
+        select distinct areaGroupId,areaGroupName,timeTag from dbo.F_USR_UserCenterAuth(#{userId,jdbcType=INTEGER}, 'CRM')
+        where
+        <if test="list != null">
+            cityId in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="organization!=null and organization!=''">
+            AND yearly = #{organization}
+        </if>
+    </select>
+
+    <!-- 根据登录人ID,城市ID，对应区/事业部ID 拿到对应部门/中心-->
+    <select id="getCenterGroupName" parameterType="Map" resultMap="UserCenterAuthMap">
+        select distinct centerGroupId, centerGroupName, timeTag from dbo.F_USR_UserCenterAuth(#{userId,jdbcType=INTEGER}, 'CRM')
+        where
+        <if test="list != null">
+            areaGroupId in
+            <foreach collection="list" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="organization!=null and organization!=''">
+            AND yearly = #{organization}
+        </if>
+    </select>
+
+    <!-- 根据登录人ID,城市ID，对应区/事业部ID 对应部门/中心ID查询组-->
+    <select id="getGroupName" parameterType="Map" resultMap="UserCenterAuthMap">
+        SELECT  distinct groupId,groupName,timeTag  FROM  dbo.F_USR_UserGroupAuth(#{userId,jdbcType=INTEGER}, 'CRM')
+        where
+        <if test="list != null">
+            centerGroupId in
+            <foreach collection="list" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="organization!=null and organization!=''">
+            AND yearly = #{organization}
+        </if>
+    </select>
+
+
+    <select id="searchStorePreserve" parameterType="java.util.Map" resultMap="BaseResultMap">
+        EXEC CRM.dbo.P_CRM_RPT_storePreserve #{stageStr}, '', '', #{contractTypeStr}, #{contractNo}, #{storeNo}, #{storeCityName}, #{storeAddress}, #{company}, #{organization},
+        #{regionCodeStr}, #{areaCityCodeStr}, #{cityIdStr}, '', #{centerIdStr}, '', #{maintainer}, #{userId},#{businessPlaceTypeStr},#{storeSignStatusStr},#{storeSizeScaleStr},#{preserveTime}
+    </select>
+
+
+    <!--<select id="searchStorePreserveSummary" parameterType="java.util.Map" resultMap="StorePreserveSummaryMap">-->
+         <!--SELECT  y1.code,y1.name,y1.account_code,y1.account_name,y2.Q1,y2.Q2,y2.Q3,y2.Q4-->
+          <!--FROM      ( SELECT    *-->
+                      <!--FROM      crm.dbo.v_storesurvive_account x1,-->
+                                <!--( SELECT DISTINCT-->
+                              <!--<choose>-->
+                                  <!--<when test="personal !=null and personal != ''">-->
+                                      <!--userCode as code,userName as name-->
+                                  <!--</when >-->
+                                  <!--<when test="centerIdStr != null and centerIdStr != '' ">-->
+                                      <!--centerGroupId as code,centerGroupName as name-->
+                                  <!--</when >-->
+                                  <!--<when test="cityIdStr != null and cityIdStr != '' ">-->
+                                      <!--sybCode as code,sybName as name-->
+                                  <!--</when >-->
+                                  <!--<when test="areaCityCodeStr != null and areaCityCodeStr != '' ">-->
+                                      <!--areaCityCode as code,areaCityName as name-->
+                                  <!--</when >-->
+                                  <!--<otherwise>-->
+                                      <!--regionCode as code,regionName as name-->
+                                  <!--</otherwise>-->
+                              <!--</choose>-->
+                                  <!--FROM  crm.dbo.rpt_storesurvive-->
+                                  <!--WHERE regionCode in ('${regionCodeStr}')-->
+                                  <!--<if test="areaCityCodeStr !=null and areaCityCodeStr !='' ">-->
+                                      <!--and areaCityCode in ( '${areaCityCodeStr}')-->
+                                  <!--</if>-->
+                                  <!--<if test="cityIdStr !=null and cityIdStr !='' ">-->
+                                      <!--and cityId in ( '${cityIdStr}')-->
+                                  <!--</if>-->
+                                  <!--<if test="centerIdStr !=null and centerIdStr !='' ">-->
+                                      <!--and centerGroupId in ( '${centerIdStr}')-->
+                                  <!--</if>-->
+                                  <!--<if test="personal !=null and personal !='' ">-->
+                                      <!--and userCode in ( #{personal})-->
+                                  <!--</if>-->
+                                  <!--<if test="shopState != null and shopState != ''">-->
+                                      <!--AND isgsfp in ('${shopState}')-->
+                                  <!--</if>-->
+                                   <!--and year = '${year}'-->
+                                <!--) x2-->
+                    <!--) y1-->
+                    <!--LEFT JOIN-->
+        <!--(-->
+        <!--SELECT t1.code ,-->
+        <!--t1.name ,-->
+        <!--'chv' account_code ,-->
+        <!--CASE WHEN ISNULL(t1.Q1,0)&lt;=0 OR ISNULL(t2.Q1,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q1,0)/ISNULL(t2.Q1,0) END Q1,-->
+        <!--CASE WHEN ISNULL(t1.Q2,0)&lt;=0 OR ISNULL(t2.Q2,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q2,0)/ISNULL(t2.Q2,0) END Q2,-->
+        <!--CASE WHEN ISNULL(t1.Q3,0)&lt;=0 OR ISNULL(t2.Q3,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q3,0)/ISNULL(t2.Q3,0) END Q3,-->
+        <!--CASE WHEN ISNULL(t1.Q4,0)&lt;=0 OR ISNULL(t2.Q4,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q4,0)/ISNULL(t2.Q4,0) END Q4-->
+
+        <!--FROM (-->
+        <!--SELECT <choose>-->
+        <!--<when test="personal !=null and personal != ''">-->
+            <!--userCode as code,userName as name-->
+        <!--</when >-->
+        <!--<when test="centerIdStr != null and centerIdStr != '' ">-->
+            <!--centerGroupId as code,centerGroupName as name-->
+        <!--</when >-->
+        <!--<when test="cityIdStr != null and cityIdStr != '' ">-->
+            <!--sybCode as code,sybName as name-->
+        <!--</when >-->
+        <!--<when test="areaCityCodeStr != null and areaCityCodeStr != '' ">-->
+            <!--areaCityCode as code,areaCityName as name-->
+        <!--</when >-->
+        <!--<otherwise>-->
+            <!--regionCode as code,regionName as name-->
+        <!--</otherwise>-->
+    <!--</choose>-->
+        <!--,account_code,-->
+        <!--SUM(Q1) Q1,-->
+        <!--SUM(Q2) Q2,-->
+        <!--SUM(Q3) Q3,-->
+        <!--SUM(Q4) Q4-->
+        <!--FROM CRM.dbo.rpt_storesurvive-->
+        <!--WHERE  account_code='qmchmd' and-->
+        <!--regionCode in ( '${regionCodeStr}')-->
+        <!--<if test="areaCityCodeStr !=null and areaCityCodeStr !='' ">-->
+            <!--and areaCityCode in ( '${areaCityCodeStr}')-->
+        <!--</if>-->
+        <!--<if test="cityIdStr !=null and cityIdStr !='' ">-->
+            <!--and cityId in ( '${cityIdStr}')-->
+        <!--</if>-->
+        <!--<if test="centerIdStr !=null and centerIdStr !='' ">-->
+            <!--and centerGroupId in ( '${centerIdStr}')-->
+        <!--</if>-->
+        <!--<if test="personal !=null and personal !='' ">-->
+            <!--and userCode in ( #{personal})-->
+        <!--</if>-->
+        <!--<if test="shopState != null and shopState != ''">-->
+            <!--AND isgsfp in ('${shopState}')-->
+        <!--</if>-->
+        <!--and year = '${year}'-->
+
+        <!--GROUP BY <choose>-->
+        <!--<when test="personal !=null and personal != ''">-->
+            <!--userCode,userName-->
+        <!--</when >-->
+        <!--<when test="centerIdStr != null and centerIdStr != '' ">-->
+            <!--centerGroupId,centerGroupName-->
+        <!--</when >-->
+        <!--<when test="cityIdStr != null and  cityIdStr!= '' ">-->
+            <!--sybCode,sybName-->
+        <!--</when >-->
+        <!--<when test="areaCityCodeStr != null and areaCityCodeStr != '' ">-->
+            <!--areaCityCode,areaCityName-->
+        <!--</when >-->
+        <!--<otherwise>-->
+            <!--regionCode,regionName-->
+        <!--</otherwise>-->
+    <!--</choose>-->
+        <!--,account_code-->
+        <!--) t1 LEFT JOIN (-->
+        <!--SELECT <choose>-->
+        <!--<when test="personal !=null and personal != ''">-->
+            <!--userCode as code,userName as name-->
+        <!--</when >-->
+        <!--<when test="centerIdStr != null and centerIdStr != '' ">-->
+            <!--centerGroupId as code,centerGroupName as name-->
+        <!--</when >-->
+        <!--<when test="cityIdStr != null and cityIdStr != '' ">-->
+            <!--sybCode as code,sybName as name-->
+        <!--</when >-->
+        <!--<when test="areaCityCodeStr != null and areaCityCodeStr != '' ">-->
+            <!--areaCityCode as code,areaCityName as name-->
+        <!--</when >-->
+        <!--<otherwise>-->
+            <!--regionCode as code,regionName as name-->
+        <!--</otherwise>-->
+    <!--</choose>-->
+        <!--,account_code,-->
+        <!--SUM(Q1) Q1,-->
+        <!--SUM(Q2) Q2,-->
+        <!--SUM(Q3) Q3,-->
+        <!--SUM(Q4) Q4-->
+        <!--FROM CRM.dbo.rpt_storesurvive-->
+        <!--WHERE  account_code='qmwhmd' and-->
+        <!--regionCode in ( '${regionCodeStr}')-->
+        <!--<if test="areaCityCodeStr !=null and areaCityCodeStr !='' ">-->
+            <!--and areaCityCode in ( '${areaCityCodeStr}')-->
+        <!--</if>-->
+        <!--<if test="cityIdStr !=null and cityIdStr !='' ">-->
+            <!--and cityId in ( '${cityIdStr}')-->
+        <!--</if>-->
+        <!--<if test="centerIdStr !=null and centerIdStr !='' ">-->
+            <!--and centerGroupId in ( '${centerIdStr}')-->
+        <!--</if>-->
+        <!--<if test="personal !=null and personal !='' ">-->
+            <!--and userCode in ( #{personal})-->
+        <!--</if>-->
+        <!--<if test="shopState != null and shopState != ''">-->
+            <!--AND isgsfp in ('${shopState}')-->
+        <!--</if>-->
+        <!--and year = '${year}'-->
+        <!--GROUP BY <choose>-->
+        <!--<when test="personal !=null and personal != ''">-->
+            <!--userCode,userName-->
+        <!--</when >-->
+        <!--<when test="centerIdStr != null and centerIdStr != '' ">-->
+            <!--centerGroupId,centerGroupName-->
+        <!--</when >-->
+        <!--<when test="cityIdStr != null and  cityIdStr!= '' ">-->
+            <!--sybCode,sybName-->
+        <!--</when >-->
+        <!--<when test="areaCityCodeStr != null and areaCityCodeStr != '' ">-->
+            <!--areaCityCode,areaCityName-->
+        <!--</when >-->
+        <!--<otherwise>-->
+            <!--regionCode,regionName-->
+        <!--</otherwise>-->
+    <!--</choose>-->
+        <!--,account_code-->
+        <!--) t2 ON t1.code=t2.code-->
+
+        <!--union  all-->
+        <!--SELECT-->
+                            <!--<choose>-->
+                                <!--<when test="personal !=null and personal != ''">-->
+                                    <!--userCode as code,userName as name-->
+                                <!--</when >-->
+                                <!--<when test="centerIdStr != null and centerIdStr != '' ">-->
+                                    <!--centerGroupId as code,centerGroupName as name-->
+                                <!--</when >-->
+                                <!--<when test="cityIdStr != null and cityIdStr != '' ">-->
+                                    <!--sybCode as code,sybName as name-->
+                                <!--</when >-->
+                                <!--<when test="areaCityCodeStr != null and areaCityCodeStr != '' ">-->
+                                    <!--areaCityCode as code,areaCityName as name-->
+                                <!--</when >-->
+                                <!--<otherwise>-->
+                                    <!--regionCode as code,regionName as name-->
+                                <!--</otherwise>-->
+                            <!--</choose>-->
+
+                            <!--,account_code, SUM(Q1)Q1,SUM(Q2)Q2 ,SUM(Q3)Q3,SUM(Q4)Q4-->
+                     <!--FROM    crm.dbo.rpt_storesurvive-->
+                     <!--WHERE    regionCode in ( '${regionCodeStr}')-->
+                        <!--<if test="areaCityCodeStr !=null and areaCityCodeStr !='' ">-->
+                            <!--and areaCityCode in ( '${areaCityCodeStr}')-->
+                        <!--</if>-->
+                        <!--<if test="cityIdStr !=null and cityIdStr !='' ">-->
+                            <!--and cityId in ( '${cityIdStr}')-->
+                        <!--</if>-->
+                        <!--<if test="centerIdStr !=null and centerIdStr !='' ">-->
+                            <!--and centerGroupId in ( '${centerIdStr}')-->
+                        <!--</if>-->
+                        <!--<if test="personal !=null and personal !='' ">-->
+                            <!--and userCode in ( #{personal})-->
+                        <!--</if>-->
+                        <!--<if test="shopState != null and shopState != ''">-->
+                            <!--AND isgsfp in ('${shopState}')-->
+                        <!--</if>-->
+                    <!--and year = '${year}'-->
+                     <!--GROUP BY-->
+                    <!--<choose>-->
+                        <!--<when test="personal !=null and personal != ''">-->
+                            <!--userCode,userName-->
+                        <!--</when >-->
+                        <!--<when test="centerIdStr != null and centerIdStr != '' ">-->
+                            <!--centerGroupId,centerGroupName-->
+                        <!--</when >-->
+                        <!--<when test="cityIdStr != null and  cityIdStr!= '' ">-->
+                            <!--sybCode,sybName-->
+                        <!--</when >-->
+                        <!--<when test="areaCityCodeStr != null and areaCityCodeStr != '' ">-->
+                            <!--areaCityCode,areaCityName-->
+                        <!--</when >-->
+                        <!--<otherwise>-->
+                            <!--regionCode,regionName-->
+                        <!--</otherwise>-->
+                     <!--</choose>,account_code-->
+                    <!--) y2 ON y1.account_code = y2.account_code AND y1.code = y2.code-->
+          <!--ORDER BY y1.code,y1.ORD-->
+    <!--</select>-->
+
+    <select id="exportStorePreserveSummary" parameterType="java.util.Map" resultMap="StorePreserveSummaryMap">
+        SELECT * INTO #rpt_all FROM rpt_storesurvive WHERE year = '${year}'
+        <if test="regionCodes !=null and regionCodes !='' ">
+            and regionCode in ( '${regionCodes}')
+        </if>
+        <if test="areaCityCodes !=null and areaCityCodes !='' ">
+            and areaCityCode in ( '${areaCityCodes}')
+        </if>
+        <if test="cityIds !=null and cityIds !='' ">
+            and cityId in ( '${cityIds}')
+        </if>
+        <if test="centerIds !=null and centerIds !='' ">
+            and centerGroupId in ( '${centerIds}')
+        </if>
+        <if test="shopState != null and shopState != ''">
+            AND isgsfp in ('${shopState}')
+        </if>
+        <if test="personal !=null and personal !=''">
+            and userCode in('${personal}')
+        </if>
+
+        SELECT * INTO #rpt_det
+        FROM (/*全国*/
+
+            <if test="areaCityCodes == null or areaCityCodes =='' and (personal == null or personal =='')">
+--                 SELECT account_code,'全国' org_name ,'qg' org_code,SUM(Q1)Q1,SUM(Q2)Q2,SUM(Q3)Q3,SUM(Q4)Q4 ,'全国' org_type,'000000'  org_sort   FROM #rpt_all GROUP  BY account_code
+--                 UNION ALL
+                /*区域*/
+                SELECT account_code,regionName org_name ,regionCode org_code,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q1  END) Q1,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q2  END) Q2,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q3  END) Q3,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q4  END) Q4,
+                    '区域' org_type,'000000' + regionCode  org_sort   FROM #rpt_all WHERE lev = '1' GROUP  BY account_code,regionCode,regionName
+                UNION ALL
+            </if>
+            <if test=" cityIds == null or cityIds =='' and (personal == null or personal =='')">
+                /*城市*/
+                SELECT account_code,areaCityName org_name ,areaCityCode org_code,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q1  END) Q1,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q2  END) Q2,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q3  END) Q3,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q4  END) Q4,
+                    '城市' org_type,'000000' + regionCode + areaCityCode org_sort   FROM #rpt_all WHERE lev = '1' GROUP  BY account_code,regionCode,regionName,areaCityCode,areaCityName
+                UNION ALL
+            </if>
+            <if test=" centerIds == null or centerIds =='' and (personal == null or personal =='')">
+                /*事业部*/
+                SELECT account_code,sybName org_name ,sybCode org_code,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q1  END) Q1,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q2  END) Q2,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q3  END) Q3,
+                    SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q4  END) Q4,
+                    '事业部' org_type,'000000' + regionCode + areaCityCode +sybCode org_sort   FROM #rpt_all WHERE lev = '1'  GROUP  BY account_code,regionCode,regionName,areaCityCode,areaCityName,sybCode,sybName
+                UNION ALL
+            </if>
+            /*中心*/
+            <if test="personal == null or personal ==''">
+                SELECT account_code,centerGroupName org_name ,centerGroupId org_code,
+                SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q1  END) Q1,
+                SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q2  END) Q2,
+                SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q3  END) Q3,
+                SUM(CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q4  END) Q4,
+                '中心' org_type,'000000' + regionCode + areaCityCode +sybCode+ centerGroupId org_sort   FROM #rpt_all WHERE lev = '1' GROUP  BY account_code,regionCode,regionName,areaCityCode,areaCityName,sybCode,sybName,centerGroupId,centerGroupName
+            </if>
+
+            <if test=" (isPerson == 2) and (personal ==null or personal =='')">
+
+                union all
+                /*人*/
+                SELECT account_code, userName +'('+userCode+')'  + centerGroupName org_name ,userCode org_code,SUM(Q1)Q1,SUM(Q2)Q2,SUM(Q3)Q3,SUM(Q4)Q4 ,'人' org_type,'000000' + regionCode + areaCityCode +sybCode+ centerGroupId + userCode org_sort   FROM #rpt_all  WHERE lev = '0' GROUP  BY account_code,regionCode,regionName,areaCityCode,areaCityName,sybCode,sybName,centerGroupId,centerGroupName,userCode,userName
+
+            </if>
+
+            <if test="personal !=null and personal !=''">
+
+                /*人*/
+                SELECT account_code, userName +'('+userCode+')' + centerGroupName  org_name ,userCode org_code,SUM(Q1)Q1,SUM(Q2)Q2,SUM(Q3)Q3,SUM(Q4)Q4 ,'人' org_type,'000000' + regionCode + areaCityCode +sybCode+ centerGroupId + userCode org_sort   FROM #rpt_all  WHERE lev = '0'  GROUP  BY account_code,regionCode,regionName,areaCityCode,areaCityName,sybCode,sybName,centerGroupId,centerGroupName,userCode,userName
+
+            </if>
+        ) z
+
+
+          SELECT  y1.org_code,y1.org_name,y1.account_code,y1.account_name,y1.org_sort,y2.Q1,y2.Q2,y2.Q3,y2.Q4,y1.org_type,ORD
+          FROM      ( SELECT    *
+                      FROM      dbo.v_storesurvive_account x1,
+                                ( SELECT DISTINCT org_code ,org_name,org_type,org_sort FROM #rpt_det
+                                ) x2
+                    ) y1
+                    LEFT JOIN #rpt_det y2 ON y1.account_code = y2.account_code AND y1.org_code = y2.org_code and y1.org_sort = y2.org_sort
+
+         ORDER BY y1.org_sort,y1.ORD
+
+         DROP TABLE #rpt_all
+         DROP TABLE #rpt_det
+
+
+    </select>
+    <select id="searchStorePreserveSummaryByPersonal" parameterType="java.util.Map" resultMap="StorePreserveSummaryMap">
+        SELECT  * INTO #rpt_basic
+        FROM CRM.dbo.rpt_storesurvive
+        WHERE   lev = '0'
+            <if test="regionCodeStr !=null and regionCodeStr !='' ">
+                and regionCode in ( '${regionCodeStr}')
+            </if>
+            <if test="areaCityCodeStr !=null and areaCityCodeStr !='' ">
+                and areaCityCode in ( '${areaCityCodeStr}')
+            </if>
+            <if test="cityIdStr !=null and cityIdStr !='' ">
+                and cityId in ( '${cityIdStr}')
+            </if>
+            <if test="centerIdStr !=null and centerIdStr !='' ">
+                and centerGroupId in ( '${centerIdStr}')
+            </if>
+            <if test="personal !=null and personal !='' ">
+                and userCode in ( '${personal}')
+            </if>
+            AND isgsfp = #{shopState} and year = '${year}'
+        SELECT userCode,userName,centerGroupName ,centerGroupId, account_code,SUM(Q1)Q1,SUM(Q2)Q2 ,SUM(Q3)Q3,SUM(Q4)Q4
+        INTO #all_hz
+        FROM #rpt_basic
+        GROUP BY userCode,userName,centerGroupName,account_code,centerGroupId
+
+
+
+        SELECT   y1.userCode +y1.centerGroupId  code,y1.userName + '(' +y1.centerGroupName + ')' name ,y1.account_code,y1.account_name,
+        y2.Q1,y2.Q2,y2.Q3,y2.Q4
+        FROM
+        (   SELECT *
+        FROM CRM.dbo.v_storesurvive_account x1,
+        (SELECT DISTINCT userCode ,userName ,centerGroupId,centerGroupName FROM #rpt_basic) x2
+        ) y1
+        LEFT JOIN
+        (	SELECT userCode,userName,centerGroupName ,centerGroupId, account_code,Q1,Q2,Q3,Q4   FROM #all_hz
+        UNION ALL
+        SELECT  t1.userCode,t1.userName,t1.centerGroupName ,t1.centerGroupId, 'chv' account_code,
+        CASE WHEN ISNULL(t1.Q1,0)&lt;=0 OR ISNULL(t2.Q1,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q1,0)/ISNULL(t2.Q1,0) END Q1,
+        CASE WHEN ISNULL(t1.Q2,0)&lt;=0 OR ISNULL(t2.Q2,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q2,0)/ISNULL(t2.Q2,0) END Q2,
+        CASE WHEN ISNULL(t1.Q3,0)&lt;=0 OR ISNULL(t2.Q3,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q3,0)/ISNULL(t2.Q3,0) END Q3,
+        CASE WHEN ISNULL(t1.Q4,0)&lt;=0 OR ISNULL(t2.Q4,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q4,0)/ISNULL(t2.Q4,0) END Q4
+        FROM
+        (SELECT * FROM #all_hz WHERE account_code = 'qmchmd') t1
+        LEFT JOIN
+        (SELECT * FROM #all_hz WHERE account_code = 'qmwhmd') t2 ON t1.userCode = t2.userCode AND t1.centerGroupId = t2.centerGroupId
+        ) y2 ON y1.userCode = y2.userCode AND y1.account_code = y2.account_code AND y1.centerGroupId = y2.centerGroupId
+        ORDER BY y1.userCode,y1.centerGroupId,
+        y1.ORD;
+
+        drop table #all_hz;
+        drop table #rpt_basic;
+    </select>
+
+    <select id="searchStorePreserveSummary" parameterType="java.util.Map" resultMap="StorePreserveSummaryMap">
+        SELECT
+            <choose>
+                <when test="centerIdStr != null and centerIdStr != '' ">
+                    centerGroupId as code,centerGroupName as name
+                </when >
+                <when test="cityIdStr != null and cityIdStr != '' ">
+                    cityId as code,sybName as name
+                </when >
+                <when test="areaCityCodeStr != null and areaCityCodeStr != '' ">
+                    areaCityCode as code,areaCityName as name
+                </when >
+                <otherwise>
+                    regionCode as code,regionName as name
+                </otherwise>
+            </choose>
+            ,account_code ,SUM(Q1)Q1,SUM(Q2)Q2 ,SUM(Q3)Q3,SUM(Q4)Q4
+        INTO #rpt_basic
+        FROM CRM.dbo.rpt_storesurvive
+        where 1=1
+            <if test="regionCodeStr !=null and regionCodeStr !='' ">
+                and regionCode in ( '${regionCodeStr}')
+            </if>
+            <if test="areaCityCodeStr !=null and areaCityCodeStr !='' ">
+                and areaCityCode in ( '${areaCityCodeStr}')
+            </if>
+            <if test="cityIdStr !=null and cityIdStr !='' ">
+                and cityId in ( '${cityIdStr}')
+            </if>
+            <if test="centerIdStr !=null and centerIdStr !='' ">
+                and centerGroupId in ( '${centerIdStr}')
+            </if>
+            AND isgsfp = #{shopState} and year = '${year}' and lev = '1'
+        GROUP BY
+            <choose>
+                <when test="centerIdStr != null and centerIdStr != '' ">
+                    centerGroupId ,centerGroupName
+                </when >
+                <when test="cityIdStr != null and cityIdStr != '' ">
+                    cityId ,sybName
+                </when >
+                <when test="areaCityCodeStr != null and areaCityCodeStr != '' ">
+                    areaCityCode,areaCityName
+                </when >
+                <otherwise>
+                    regionCode,regionName
+                </otherwise>
+            </choose>
+            ,account_code
+
+        SELECT  y1.code,y1.name,y1.account_code,y1.account_name,
+        y2.Q1,y2.Q2,y2.Q3,y2.Q4
+        FROM
+        (   SELECT *
+        FROM CRM.dbo.v_storesurvive_account x1,
+        (SELECT DISTINCT code ,name FROM #rpt_basic) x2
+        ) y1
+        LEFT JOIN
+        (	SELECT	code,name,account_code,
+        CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q1  END Q1,
+        CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q2  END Q2,
+        CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q3  END Q3,
+        CASE WHEN account_code IN ('tlmd','whrbg','tcmd') THEN NULL ELSE Q4  END Q4
+        FROM #rpt_basic
+        UNION ALL
+        SELECT  t1.code,t1.name, 'chv' account_code,
+        CASE WHEN ISNULL(t1.Q1,0)&lt;=0 OR ISNULL(t2.Q1,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q1,0)/ISNULL(t2.Q1,0) END Q1,
+        CASE WHEN ISNULL(t1.Q2,0)&lt;=0 OR ISNULL(t2.Q2,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q2,0)/ISNULL(t2.Q2,0) END Q2,
+        CASE WHEN ISNULL(t1.Q3,0)&lt;=0 OR ISNULL(t2.Q3,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q3,0)/ISNULL(t2.Q3,0) END Q3,
+        CASE WHEN ISNULL(t1.Q4,0)&lt;=0 OR ISNULL(t2.Q4,0)&lt;=0 THEN 0 ELSE ISNULL(t1.Q4,0)/ISNULL(t2.Q4,0) END Q4
+        FROM	  (SELECT * FROM #rpt_basic WHERE account_code = 'qmchmd') t1
+        LEFT JOIN
+        (SELECT * FROM #rpt_basic WHERE account_code = 'qmwhmd') t2 ON  t1.code = t2.code
+
+        ) y2 ON y1.code = y2.code AND y1.account_code = y2.account_code
+        ORDER BY y1.code,y1.ORD;
+
+        drop table #rpt_basic;
+    </select>
+</mapper>

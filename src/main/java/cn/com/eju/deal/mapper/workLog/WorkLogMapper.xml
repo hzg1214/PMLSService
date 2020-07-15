@@ -1,0 +1,1004 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.workLog.WorkLogMapper" >
+
+	<resultMap id="workLogDtoMap" type="cn.com.eju.deal.model.workLog.WorkLogDto"></resultMap>
+	<resultMap id="userInfoDtoMap" type="cn.com.eju.deal.model.workLog.UserInfoNewDto"></resultMap>
+
+
+	<select id="queryCenterStoreList" parameterType="cn.com.eju.deal.model.workLog.WorkLogDto" resultMap="workLogDtoMap">
+	
+		SELECT s2.Maintainer AS userCode,s1.storeId,s1.centerId,
+			CASE WHEN s1.centerid=s3.centerId THEN 1 ELSE 0 END wh_storeNum
+			INTO  #wh_t1
+			FROM (
+				SELECT t.centerId,t.storeId FROM (
+				SELECT DISTINCT centerId,storeId,createDate,ROW_NUMBER() over(PARTITION by storeId order by createDate desc) as w
+				FROM dbo.StoreCenterHis where CONVERT(VARCHAR,createDate,23) &lt;='${endDate}'
+				) t WHERE t.w=1 AND t.centerId='${centerId}'
+			) s1 INNER JOIN dbo.Store s2 ON s1.storeId=s2.id
+			inner join(
+				SELECT t.centerId,t.storeId FROM (
+				SELECT DISTINCT centerId,storeId,createDate,ROW_NUMBER() over(PARTITION by storeId order by createDate desc) as w
+				FROM dbo.StoreCenterHis where CONVERT(VARCHAR,createDate,23) &lt;='${endDate}'
+				) t WHERE t.w=1
+			) s3 on s1.storeId=s3.storeId
+			WHERE s2.IsDelete=0 AND s2.AuditStatus=20
+		
+		SELECT storeId,SUM(fpysNum) wh_fpysNum  into #wh_t4 FROM (
+		SELECT
+		t2.storeId,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		) t GROUP BY storeId
+		
+		<!--维护数据-->
+		SELECT
+		t1.centerId,
+		t1.storeId,
+		t2.name storeName,
+		t2.StoreNo,
+		t1.wh_storeNum,
+		t3.wh_qyBNum,
+		t4.wh_fpysNum
+		INTO #wh_table
+		FROM #wh_t1 t1 LEFT JOIN dbo.Store t2 ON t1.storeid=t2.id and t2.isDelete=0 and t2.auditStatus=20
+		LEFT JOIN (
+		SELECT  DISTINCT storeId,case when contractType IN(10302,10304) AND contractStatus=10403 THEN 1 else 0 end wh_qyBNum FROM V_CRM_ContractStore_NOW
+		) t3 ON t1.storeid=t3.storeId
+		LEFT JOIN #wh_t4 t4 ON t1.storeId=t4.storeId;
+
+		
+		SELECT storeId,SUM(new_init_num_B) AS tz_cqBNum  into #tz_t5 FROM V_CRM_Expand_Achievement
+		WHERE CONVERT(VARCHAR,dateCreate,23)>='${beginDate}' and CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}'
+		AND centerGroupId='${centerId}'
+		GROUP BY storeId
+
+		SELECT storeId,SUM(jiaNum) tz_jiaNum,SUM(new_sign_num_B) AS tz_qyBNum,SUM(renew_sign_num) tz_xqNum 
+		into #tz_t6
+		FROM V_CRM_Expand_Achievement
+		WHERE CONVERT(VARCHAR,performDate,23)>='${beginDate}' and CONVERT(VARCHAR,performDate,23) &lt;='${endDate}'
+		AND centerGroupId='${centerId}'
+		GROUP BY storeId
+
+		
+		SELECT storeId,SUM(fpwcNum) tz_fpwcNum  into #tz_t7 FROM (
+		SELECT
+		t2.storeId,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		where acv.centerGroupId='${centerId}'
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		WHERE  CONVERT(VARCHAR,t1.flipCompleDate,23)>='${beginDate}' and CONVERT(VARCHAR,t1.flipCompleDate,23) &lt;='${endDate}'
+		) t GROUP BY storeId
+		
+		SELECT storeId,SUM(fpysNum) tz_fpysNum  into #tz_t8  FROM (
+		SELECT
+		t2.storeId,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		where acv.centerGroupId='${centerId}'
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		WHERE CONVERT(VARCHAR,t3.flipPassDate,23)>='${beginDate}' and CONVERT(VARCHAR,t3.flipPassDate,23) &lt;='${endDate}'
+		) t GROUP BY storeId
+		
+		<!--拓展数据-->
+		SELECT
+		t5.storeId,
+		t5.tz_cqBNum,
+		t6.tz_jiaNum,
+		t6.tz_qyBNum,
+		t6.tz_xqNum,
+		t7.tz_fpwcNum,
+		t8.tz_fpysNum
+		INTO #tz_table
+		FROM       #tz_t5 t5
+		LEFT JOIN  #tz_t6 t6 ON t5.storeid=t6.storeId
+		LEFT JOIN  #tz_t7 t7 ON t5.storeId=t7.StoreId
+		LEFT JOIN  #tz_t8 t8 ON t5.storeId=t8.StoreId;
+
+
+		SELECT storeNo,SUM(bbNum) bbNum INTO #jy_t1 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId='${centerId}' AND  dateCreate IS NOT NULL
+		AND CONVERT(VARCHAR,dateCreate,23)>='${beginDate}' and CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}'
+		GROUP BY storeNo
+		
+		
+		SELECT storeNo,SUM(wqNum) wqNum INTO #jy_t2 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId='${centerId}' AND signVerifyDate IS NOT NULL
+		AND CONVERT(VARCHAR,signVerifyDate,23)>='${beginDate}' and CONVERT(VARCHAR,signVerifyDate,23) &lt;='${endDate}'
+		GROUP BY storeNo
+	
+		SELECT storeNo,SUM(bdcNum) bdcNum INTO #jy_t3 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId='${centerId}' AND estateAcptDate IS NOT NULL
+		AND CONVERT(VARCHAR,estateAcptDate,23)>='${beginDate}' and CONVERT(VARCHAR,estateAcptDate,23) &lt;='${endDate}'
+		GROUP BY storeNo
+		
+		SELECT storeNo,SUM(bjNum) bjNum INTO #jy_t4 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId='${centerId}' AND dateHandleEnd IS NOT NULL
+		AND CONVERT(VARCHAR,dateHandleEnd,23)>='${beginDate}' and CONVERT(VARCHAR,dateHandleEnd,23) &lt;='${endDate}'
+		GROUP BY storeNo
+		
+	
+		<!--交易数据-->
+		SELECT
+		t5.id AS storeId,
+		t1.bbNum AS jy_bdNum,
+		t2.wqNum AS jy_wqNum,
+		t3.bdcNum AS jy_bdcNum,
+		t4.bjNum AS jy_bjNum
+		INTO #jy_table
+		FROM #jy_t1  t1 
+		LEFT JOIN #jy_t2 t2 ON t1.storeNo=t2.storeNo
+		LEFT JOIN #jy_t3  t3 ON t1.storeNo=t3.storeNo
+		LEFT JOIN #jy_t4 t4 ON t1.storeNo=t4.storeNo
+		LEFT JOIN dbo.Store t5 ON t1.storeNo=t5.storeNo;
+
+		SELECT DISTINCT storeId  into #ld_t1 FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND
+		( reportDate IS NOT NULL AND CONVERT(VARCHAR,reportDate,23)>='${beginDate}' AND CONVERT(VARCHAR,reportDate,23) &lt;='${endDate}'
+		OR seeDate IS NOT NULL AND CONVERT(VARCHAR,seeDate,23)>='${beginDate}' AND CONVERT(VARCHAR,seeDate,23) &lt;='${endDate}'
+		OR roughDate IS NOT NULL AND CONVERT(VARCHAR,roughDate,23)>='${beginDate}' AND CONVERT(VARCHAR,roughDate,23) &lt;='${endDate}'
+		OR  dealDate IS NOT NULL AND CONVERT(VARCHAR,dealDate,23)>='${beginDate}' AND CONVERT(VARCHAR,dealDate,23) &lt;='${endDate}'
+		)
+		
+		
+		SELECT storeId,sum(tsnum) bbNum  into #ld_t2 FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND  reportDate IS NOT NULL AND CONVERT(VARCHAR,reportDate,23)>='${beginDate}' AND CONVERT(VARCHAR,reportDate,23) &lt;='${endDate}' GROUP BY storeId
+	
+		SELECT storeId,sum(tsnum) dkNum into #ld_t3  FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND  seeDate IS NOT NULL AND CONVERT(VARCHAR,seeDate,23)>='${beginDate}' AND CONVERT(VARCHAR,seeDate,23) &lt;='${endDate}' GROUP BY storeId
+	
+		SELECT storeId,sum(tsnum) ddNum,SUM(ISNULL(roughAmount,0)) ddAmount into #ld_t4  FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND  roughDate IS NOT NULL AND CONVERT(VARCHAR,roughDate,23)>='${beginDate}' AND CONVERT(VARCHAR,roughDate,23) &lt;='${endDate}' GROUP BY storeId
+		
+		SELECT storeId,sum(tsnum) cxNum,SUM(ISNULL(dealAmount,0)) cxAmount into #ld_t5  FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND  dealDate IS NOT NULL AND CONVERT(VARCHAR,dealDate,23)>='${beginDate}' AND CONVERT(VARCHAR,dealDate,23) &lt;='${endDate}' GROUP BY storeId
+		
+		
+		<!--联动数据-->
+		SELECT
+		t1.storeId,
+		t2.bbNum as ld_bbNum,
+		t3.dkNum as ld_dkNum,
+		t4.ddNum as ld_ddNum,
+		t4.ddAmount as ld_ddAmount,
+		t5.cxNum as ld_cxNum,
+		t5.cxAmount as ld_cxAmount
+		into #ld_table
+		FROM #ld_t1  t1 
+		LEFT JOIN #ld_t2 t2 ON t1.storeId=t2.storeId
+		LEFT JOIN #ld_t3 t3 ON t1.storeId=t3.storeId
+		LEFT JOIN #ld_t4 t4 ON t1.storeId=t4.storeId
+		LEFT JOIN #ld_t5 t5 ON t1.storeId=t5.storeId
+
+		<!--门店业绩明细-->
+
+		SELECT t.* INTO #main_table FROM (
+			SELECT storeId FROM #wh_table
+			UNION
+			SELECT storeId FROM #tz_table
+			UNION
+			SELECT storeId FROM #jy_table
+			UNION
+			SELECT storeId FROM #ld_table
+		) t;
+
+		SELECT
+		s1.storeId,
+		ISNULL(s2.centerId,'${centerId}') AS centerId,
+		CASE WHEN s2.storeId IS NULL THEN 0 ELSE s2.wh_storeNum END  wh_storeNum,
+		CASE WHEN s2.storeId IS NULL THEN 0 ELSE s2.wh_qyBNum END  wh_qyBNum,
+		CASE WHEN s2.storeId IS NULL THEN 0 ELSE s2.wh_fpysNum END  wh_fpysNum,
+		s3.tz_cqBNum,
+		s3.tz_jiaNum,
+		s3.tz_qyBNum,
+		s3.tz_xqNum,
+		s3.tz_fpwcNum,
+		s3.tz_fpysNum,
+		s4.jy_bdNum,
+		s4.jy_wqNum,
+		s4.jy_bdcNum,
+		s4.jy_bjNum,
+		s5.ld_bbNum,
+		s5.ld_dkNum,
+		s5.ld_ddNum,
+		s5.ld_ddAmount,
+		s5.ld_cxNum,
+		s5.ld_cxAmount
+		into #yjdetail_table
+		FROM #main_table s1
+		LEFT JOIN #wh_table s2 ON s1.storeId=s2.storeId
+		LEFT JOIN #tz_table s3 ON s1.storeId=s3.storeId
+		LEFT JOIN #jy_table s4 ON s1.storeId=s4.storeId
+		LEFT JOIN #ld_table s5 ON s1.storeId=s5.storeId;
+		<!--最终结果-->
+		SELECT t.* FROM (
+		SELECT s1.centerId AS id,
+		s2.groupName AS name,
+		'' as maintainer,
+		'' as maintainerName,
+		0 isQuit,
+		SUM(ISNULL(s1.wh_storeNum,0)) AS wh_storeNum,
+		SUM(ISNULL(s1.wh_qyBNum,0)) AS wh_qyBNum,
+		SUM(ISNULL(s1.wh_fpysNum,0)) AS wh_fpysNum,
+		SUM(ISNULL(s1.tz_cqBNum,0)) AS tz_cqBNum,
+		SUM(ISNULL(s1.tz_jiaNum,0)) AS tz_jiaNum,
+		SUM(ISNULL(s1.tz_qyBNum,0)) AS tz_qyBNum,
+		SUM(ISNULL(s1.tz_xqNum,0)) AS tz_xqNum,
+		SUM(ISNULL(s1.tz_fpwcNum,0)) AS tz_fpwcNum,
+		SUM(ISNULL(s1.tz_fpysNum,0)) AS tz_fpysNum,
+		SUM(ISNULL(s1.jy_bdNum,0)) AS jy_bdNum,
+		SUM(ISNULL(s1.jy_wqNum,0)) AS jy_wqNum,
+		SUM(ISNULL(s1.jy_bdcNum,0)) AS jy_bdcNum,
+		SUM(ISNULL(s1.jy_bjNum,0)) AS jy_bjNum,
+		SUM(ISNULL(s1.ld_bbNum,0)) AS ld_bbNum,
+		SUM(ISNULL(s1.ld_dkNum,0)) AS ld_dkNum,
+		SUM(ISNULL(s1.ld_ddNum,0)) AS ld_ddNum,
+		SUM(ISNULL(s1.ld_ddAmount,0)) AS ld_ddAmount,
+		SUM(ISNULL(s1.ld_cxNum,0)) AS ld_cxNum,
+		SUM(ISNULL(s1.ld_cxAmount,0)) AS ld_cxAmount,
+		0 AS sort
+		FROM #yjdetail_table s1
+		INNER JOIN dbo.USR_Group s2 ON s1.centerId=s2.groupId and s2.delFlag='N'
+		GROUP BY s1.centerId,s2.groupName
+		UNION ALL
+		SELECT
+		s1.storeId AS id,
+		s2.name+'('+s2.storeNo+')' AS name,
+		s2.maintainer,
+		s2.maintainerName,
+		CASE WHEN s3.userCode is null THEN 1 ELSE 0 END isQuit,
+		ISNULL(s1.wh_storeNum,0) AS wh_storeNum,
+		ISNULL(s1.wh_qyBNum,0) AS wh_qyBNum,
+		ISNULL(s1.wh_fpysNum,0) AS wh_fpysNum,
+		ISNULL(s1.tz_cqBNum,0) AS tz_cqBNum,
+		ISNULL(s1.tz_jiaNum,0) AS tz_jiaNum,
+		ISNULL(s1.tz_qyBNum,0) AS tz_qyBNum,
+		ISNULL(s1.tz_xqNum,0) AS tz_xqNum,
+		ISNULL(s1.tz_fpwcNum,0) AS tz_fpwcNum,
+		ISNULL(s1.tz_fpysNum,0) AS tz_fpysNum,
+		ISNULL(s1.jy_bdNum,0) AS jy_bdNum,
+		ISNULL(s1.jy_wqNum,0) AS jy_wqNum,
+		ISNULL(s1.jy_bdcNum,0) AS jy_bdcNum,
+		ISNULL(s1.jy_bjNum,0) AS jy_bjNum,
+		ISNULL(s1.ld_bbNum,0) AS ld_bbNum,
+		ISNULL(s1.ld_dkNum,0) AS ld_dkNum,
+		ISNULL(s1.ld_ddNum,0) AS ld_ddNum,
+		ISNULL(s1.ld_ddAmount,0) AS ld_ddAmount,
+		ISNULL(s1.ld_cxNum,0) AS ld_cxNum,
+		ISNULL(s1.ld_cxAmount,0) AS ld_cxAmount,
+		1 AS sort
+		FROM #yjdetail_table s1
+		INNER JOIN dbo.Store s2 ON s1.storeId=s2.id and s2.isDelete=0 and s2.auditStatus=20
+		LEFT JOIN (SELECT DISTINCT  userCode FROM crm.dbo.USR_User
+		WHERE delFlag='N' AND  inStatus !='1075') s3 ON s2.maintainer=s3.userCode
+		and (
+		ABS(ISNULL(s1.wh_storeNum,0))+
+		ABS(ISNULL(s1.wh_qyBNum,0))+
+		ABS(ISNULL(s1.wh_fpysNum,0))+
+		ABS(ISNULL(s1.tz_cqBNum,0))+
+		ABS(ISNULL(s1.tz_jiaNum,0))+
+		ABS(ISNULL(s1.tz_qyBNum,0))+
+		ABS(ISNULL(s1.tz_xqNum,0))+
+		ABS(ISNULL(s1.tz_fpwcNum,0))+
+		ABS(ISNULL(s1.tz_fpysNum,0))+
+		ABS(ISNULL(s1.jy_bdNum,0))+
+		ABS(ISNULL(s1.jy_wqNum,0))+
+		ABS(ISNULL(s1.jy_bdcNum,0))+
+		ABS(ISNULL(s1.jy_bjNum,0))+
+		ABS(ISNULL(s1.ld_bbNum,0))+
+		ABS(ISNULL(s1.ld_dkNum,0))+
+		ABS(ISNULL(s1.ld_ddNum,0))+
+		ABS(ISNULL(s1.ld_ddAmount,0))+
+		ABS(ISNULL(s1.ld_cxNum,0))+
+		ABS(ISNULL(s1.ld_cxAmount,0))
+		)>0
+		) t ORDER BY t.sort,t.wh_fpysNum DESC;
+
+
+		DROP TABLE #wh_table;
+		DROP TABLE #tz_table;
+		DROP TABLE #jy_table;
+		DROP TABLE #ld_table;
+		DROP TABLE #main_table;
+		DROP TABLE #yjdetail_table;
+		DROP TABLE  #ld_t5
+		DROP TABLE  #ld_t4
+		DROP TABLE  #ld_t3
+		DROP TABLE  #ld_t2
+		DROP TABLE  #ld_t1
+		DROP TABLE  #jy_t4
+		DROP TABLE  #jy_t3
+		DROP TABLE  #jy_t2
+		DROP TABLE  #jy_t1
+		DROP TABLE  #tz_t5
+		DROP TABLE  #tz_t6
+		DROP TABLE  #tz_t7
+		DROP TABLE  #tz_t8
+		DROP TABLE  #wh_t4 
+		DROP TABLE  #wh_t1
+
+	</select>
+	
+	<select id="queryCenterMaintainerList" parameterType="cn.com.eju.deal.model.workLog.WorkLogDto" resultMap="workLogDtoMap">
+		<!--维护数据-->
+			SELECT s2.Maintainer AS userCode,s1.storeId,s1.centerId,
+			CASE WHEN s1.centerid=s3.centerId THEN 1 ELSE 0 END wh_storeNum
+			into #wh_t1
+			FROM (
+				SELECT t.centerId,t.storeId FROM (
+				SELECT DISTINCT centerId,storeId,createDate,ROW_NUMBER() over(PARTITION by storeId order by createDate desc) as w
+				FROM dbo.StoreCenterHis where CONVERT(VARCHAR,createDate,23) &lt;='${endDate}'
+				) t WHERE t.w=1 AND t.centerId='${centerId}'
+			) s1 INNER JOIN dbo.Store s2 ON s1.storeId=s2.id
+				inner join(
+				SELECT t.centerId,t.storeId FROM (
+				SELECT DISTINCT centerId,storeId,createDate,ROW_NUMBER() over(PARTITION by storeId order by createDate desc) as w
+				FROM dbo.StoreCenterHis where CONVERT(VARCHAR,createDate,23) &lt;='${endDate}'
+				) t WHERE t.w=1
+			) s3 on s1.storeId=s3.storeId
+			WHERE s2.IsDelete=0 AND s2.AuditStatus=20
+
+
+			SELECT storeId,SUM(fpysNum) wh_fpysNum 
+			into #wh_t4 FROM (
+				SELECT
+				t2.storeId,
+				CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+				CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+				FROM OMS.dbo.CRM_Decoration t1
+				INNER JOIN (
+				SELECT DISTINCT
+				cs.StoreId,s.StoreNo
+				FROM dbo.Contract cnt
+				INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+				INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+				INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+				) t2 ON t1.storeNo = t2.storeNo
+				INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+				) t GROUP BY storeId
+
+		SELECT
+		t.centerId,
+		t.userCode,
+		SUM(t.wh_storeNum) wh_storeNum,
+		SUM(t.wh_qyBNum) wh_qyBNum,
+		SUM(t.wh_fpysNum) wh_fpysNum
+
+		INTO #wh_table
+		FROM (
+		SELECT
+		t1.centerId,
+		t1.userCode,
+		t1.wh_storeNum,
+		t3.wh_qyBNum,
+		t4.wh_fpysNum
+
+		FROM #wh_t1 t1
+		LEFT JOIN (
+		SELECT  DISTINCT storeId,case when contractType IN(10302,10304) AND contractStatus=10403 THEN 1 else 0 end wh_qyBNum FROM V_CRM_ContractStore_NOW
+		) t3 ON t1.storeId=t3.storeId
+		LEFT JOIN #wh_t4 t4 ON t1.storeId=t4.storeId
+		) t where ISNULL(t.userCode ,'')!='' GROUP BY t.centerId,t.userCode;
+		
+		
+		SELECT expenderCode,SUM(new_init_num_B) AS tz_cqBNum  into #tz_t5 FROM V_CRM_Expand_Achievement
+		WHERE CONVERT(VARCHAR,dateCreate,23)>='${beginDate}'  AND CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}'
+		AND centerGroupId=${centerId}
+		GROUP BY expenderCode
+
+		SELECT expenderCode,SUM(jiaNum) tz_jiaNum,SUM(new_sign_num_B) AS tz_qyBNum,SUM(renew_sign_num) tz_xqNum into #tz_t6
+		FROM V_CRM_Expand_Achievement
+		WHERE CONVERT(VARCHAR,performDate,23)>='${beginDate}'  AND CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}'
+		AND centerGroupId=${centerId}
+		GROUP BY expenderCode
+	
+		SELECT expenderCode,SUM(fpwcNum) tz_fpwcNum  into #tz_t7 FROM (
+		SELECT
+		t2.expenderCode,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		acv.expenderCode,
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		where acv.centerGroupId='${centerId}'
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		WHERE CONVERT(VARCHAR,t1.flipCompleDate,23) >='${beginDate}' AND CONVERT(VARCHAR,t1.flipCompleDate,23) &lt;='${endDate}'
+		) t GROUP BY expenderCode
+		
+		
+		SELECT expenderCode,SUM(fpysNum) tz_fpysNum into #tz_t8  FROM (
+		SELECT
+		t2.expenderCode,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		acv.expenderCode,
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		where acv.centerGroupId='${centerId}'
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		WHERE CONVERT(VARCHAR,t3.flipPassDate,23) >='${beginDate}' AND CONVERT(VARCHAR,t3.flipPassDate,23) &lt;='${endDate}'
+		) t GROUP BY expenderCode
+		
+		<!--拓展数据-->
+		SELECT
+		t5.expenderCode,
+		t5.tz_cqBNum,
+		t6.tz_jiaNum,
+		t6.tz_qyBNum,
+		t6.tz_xqNum,
+		t7.tz_fpwcNum,
+		t8.tz_fpysNum
+		INTO #tz_table
+		FROM #tz_t5 t5
+		LEFT  JOIN #tz_t6 t6 ON t5.expenderCode=t6.expenderCode
+		LEFT JOIN  #tz_t7 t7 ON t5.expenderCode=t7.expenderCode
+		LEFT JOIN  #tz_t8 t8 ON t5.expenderCode=t8.expenderCode;
+		
+		SELECT expenderCode,SUM(bbNum) bbNum INTO #jy_t1 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId=${centerId} AND  dateCreate IS NOT NULL AND  CONVERT(VARCHAR,dateCreate,23)>='${beginDate}'  AND  CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}' GROUP BY expenderCode
+		
+		SELECT expenderCode,SUM(wqNum) wqNum INTO #jy_t2 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId=${centerId} AND signVerifyDate IS NOT NULL AND CONVERT(VARCHAR,signVerifyDate,23)>='${beginDate}' AND  CONVERT(VARCHAR,signVerifyDate,23) &lt;='${endDate}'  GROUP BY expenderCode
+		
+		SELECT expenderCode,SUM(bdcNum) bdcNum INTO #jy_t3 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId=${centerId} AND estateAcptDate IS NOT NULL AND CONVERT(VARCHAR,estateAcptDate,23)>='${beginDate}' AND  CONVERT(VARCHAR,estateAcptDate,23) &lt;='${endDate}'  GROUP BY expenderCode
+		
+		SELECT expenderCode,SUM(bjNum) bjNum INTO #jy_t4 FROM V_CRM_Exchange_Achievement
+		WHERE centerGroupId=${centerId} AND dateHandleEnd IS NOT NULL AND CONVERT(VARCHAR,dateHandleEnd,23)>='${beginDate}' AND  CONVERT(VARCHAR,dateHandleEnd,23) &lt;='${endDate}'  GROUP BY expenderCode
+	
+		<!--交易数据-->
+		SELECT
+		t1.expenderCode,
+		t1.bbNum AS jy_bdNum,
+		t2.wqNum AS jy_wqNum,
+		t3.bdcNum AS jy_bdcNum,
+		t4.bjNum AS jy_bjNum
+		INTO #jy_table
+		FROM  #jy_t1 t1 LEFT JOIN #jy_t2 t2 ON t1.expenderCode=t2.expenderCode
+		LEFT JOIN #jy_t3 t3 ON t1.expenderCode=t3.expenderCode
+		LEFT JOIN #jy_t4 t4 ON t1.expenderCode=t4.expenderCode;
+
+		SELECT DISTINCT expenderCode into #ld_t1
+		FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND
+		( reportDate IS NOT NULL AND CONVERT(VARCHAR,reportDate,23)>='${beginDate}' AND CONVERT(VARCHAR,reportDate,23) &lt;='${endDate}'
+		OR seeDate IS NOT NULL AND CONVERT(VARCHAR,seeDate,23)>='${beginDate}' AND CONVERT(VARCHAR,seeDate,23) &lt;='${endDate}'
+		OR roughDate IS NOT NULL AND CONVERT(VARCHAR,roughDate,23)>='${beginDate}' AND CONVERT(VARCHAR,roughDate,23) &lt;='${endDate}'
+		OR  dealDate IS NOT NULL AND CONVERT(VARCHAR,dealDate,23)>='${beginDate}' AND CONVERT(VARCHAR,dealDate,23) &lt;='${endDate}'
+		)
+		
+		
+		SELECT expenderCode,sum(tsnum) bbNum into #ld_t2 FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND  reportDate IS NOT NULL AND CONVERT(VARCHAR,reportDate,23)>='${beginDate}' AND CONVERT(VARCHAR,reportDate,23) &lt;='${endDate}' GROUP BY expenderCode
+		
+		
+		SELECT expenderCode,sum(tsnum) dkNum  into #ld_t3 FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND  seeDate IS NOT NULL AND CONVERT(VARCHAR,seeDate,23)>='${beginDate}' AND CONVERT(VARCHAR,seeDate,23) &lt;='${endDate}' GROUP BY expenderCode
+		
+		
+		SELECT expenderCode,sum(tsnum) ddNum,SUM(ISNULL(roughAmount,0)) ddAmount into #ld_t4  FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId=${centerId}  AND  roughDate IS NOT NULL AND CONVERT(VARCHAR,roughDate,23)>='${beginDate}' AND CONVERT(VARCHAR,roughDate,23) &lt;='${endDate}' GROUP BY expenderCode
+		
+		SELECT expenderCode,sum(tsnum) cxNum,SUM(ISNULL(dealAmount,0)) cxAmount  into #ld_t5 FROM V_CRM_LinkDetail_Achievement
+		WHERE centerGroupId='${centerId}'  AND  dealDate IS NOT NULL AND CONVERT(VARCHAR,dealDate,23)>='${beginDate}' AND CONVERT(VARCHAR,dealDate,23) &lt;='${endDate}' GROUP BY expenderCode
+	
+		
+		<!--联动数据-->
+		SELECT
+		t1.expenderCode,
+		t2.bbNum as ld_bbNum,
+		t3.dkNum as ld_dkNum,
+		t4.ddNum as ld_ddNum,
+		t4.ddAmount as ld_ddAmount,
+		t5.cxNum as ld_cxNum,
+		t5.cxAmount as ld_cxAmount
+		into #ld_table
+		FROM #ld_t1 t1 LEFT JOIN #ld_t2 t2 ON t1.expenderCode=t2.expenderCode
+		LEFT JOIN #ld_t3 t3 ON t1.expenderCode=t3.expenderCode
+		LEFT JOIN #ld_t4 t4 ON t1.expenderCode=t4.expenderCode
+		LEFT JOIN #ld_t5 t5 ON t1.expenderCode=t5.expenderCode
+
+		<!--维护人业绩明细-->
+		SELECT t.* INTO #main_table FROM (
+			SELECT userCode FROM #wh_table
+			UNION
+			SELECT expenderCode FROM #tz_table
+			UNION
+			SELECT expenderCode FROM #jy_table
+			UNION
+			SELECT expenderCode FROM #ld_table
+		) t;
+
+		SELECT
+		s1.userCode as expenderCode,
+		ISNULL(s2.centerid,'${centerId}') AS centerId,
+		CASE WHEN s2.userCode IS NULL THEN 0 ELSE s2.wh_storeNum END  wh_storeNum,
+		CASE WHEN s2.userCode IS NULL THEN 0 ELSE s2.wh_qyBNum END  wh_qyBNum,
+		CASE WHEN s2.userCode IS NULL THEN 0 ELSE s2.wh_fpysNum END  wh_fpysNum,
+		s3.tz_cqBNum,
+		s3.tz_jiaNum,
+		s3.tz_qyBNum,
+		s3.tz_xqNum,
+		s3.tz_fpwcNum,
+		s3.tz_fpysNum,
+		s4.jy_bdNum,
+		s4.jy_wqNum,
+		s4.jy_bdcNum,
+		s4.jy_bjNum,
+		s5.ld_bbNum,
+		s5.ld_dkNum,
+		s5.ld_ddNum,
+		s5.ld_ddAmount,
+		s5.ld_cxNum,
+		s5.ld_cxAmount
+		into #yjdetail_table
+		FROM #main_table s1
+		LEFT JOIN #wh_table s2 ON s1.userCode=s2.userCode
+		LEFT JOIN #tz_table s3 ON s1.userCode=s3.expenderCode
+		LEFT JOIN #jy_table s4 ON s1.userCode=s4.expenderCode
+		LEFT JOIN #ld_table s5 ON s1.userCode=s5.expenderCode;
+
+		<!--最终结果-->
+		SELECT t.* FROM (
+		SELECT s1.centerId AS id,
+		s2.groupName AS name,
+		SUM(ISNULL(s1.wh_storeNum,0)) AS wh_storeNum,
+		SUM(ISNULL(s1.wh_qyBNum,0)) AS wh_qyBNum,
+		SUM(ISNULL(s1.wh_fpysNum,0)) AS wh_fpysNum,
+		SUM(ISNULL(s1.tz_cqBNum,0)) AS tz_cqBNum,
+		SUM(ISNULL(s1.tz_jiaNum,0)) AS tz_jiaNum,
+		SUM(ISNULL(s1.tz_qyBNum,0)) AS tz_qyBNum,
+		SUM(ISNULL(s1.tz_xqNum,0)) AS tz_xqNum,
+		SUM(ISNULL(s1.tz_fpwcNum,0)) AS tz_fpwcNum,
+		SUM(ISNULL(s1.tz_fpysNum,0)) AS tz_fpysNum,
+		SUM(ISNULL(s1.jy_bdNum,0)) AS jy_bdNum,
+		SUM(ISNULL(s1.jy_wqNum,0)) AS jy_wqNum,
+		SUM(ISNULL(s1.jy_bdcNum,0)) AS jy_bdcNum,
+		SUM(ISNULL(s1.jy_bjNum,0)) AS jy_bjNum,
+		SUM(ISNULL(s1.ld_bbNum,0)) AS ld_bbNum,
+		SUM(ISNULL(s1.ld_dkNum,0)) AS ld_dkNum,
+		SUM(ISNULL(s1.ld_ddNum,0)) AS ld_ddNum,
+		SUM(ISNULL(s1.ld_ddAmount,0)) AS ld_ddAmount,
+		SUM(ISNULL(s1.ld_cxNum,0)) AS ld_cxNum,
+		SUM(ISNULL(s1.ld_cxAmount,0)) AS ld_cxAmount,
+		0 AS sort
+		FROM #yjdetail_table s1
+		INNER JOIN dbo.USR_Group s2 ON s1.centerId=s2.groupId and s2.delFlag='N'
+		GROUP BY s1.centerId,s2.groupName
+		UNION ALL
+		SELECT
+		s2.userId AS id,
+		s2.userName+'('+s2.userCode+')' AS name,
+		ISNULL(s1.wh_storeNum,0) AS wh_storeNum,
+		ISNULL(s1.wh_qyBNum,0) AS wh_qyBNum,
+		ISNULL(s1.wh_fpysNum,0) AS wh_fpysNum,
+		ISNULL(s1.tz_cqBNum,0) AS tz_cqBNum,
+		ISNULL(s1.tz_jiaNum,0) AS tz_jiaNum,
+		ISNULL(s1.tz_qyBNum,0) AS tz_qyBNum,
+		ISNULL(s1.tz_xqNum,0) AS tz_xqNum,
+		ISNULL(s1.tz_fpwcNum,0) AS tz_fpwcNum,
+		ISNULL(s1.tz_fpysNum,0) AS tz_fpysNum,
+		ISNULL(s1.jy_bdNum,0) AS jy_bdNum,
+		ISNULL(s1.jy_wqNum,0) AS jy_wqNum,
+		ISNULL(s1.jy_bdcNum,0) AS jy_bdcNum,
+		ISNULL(s1.jy_bjNum,0) AS jy_bjNum,
+		ISNULL(s1.ld_bbNum,0) AS ld_bbNum,
+		ISNULL(s1.ld_dkNum,0) AS ld_dkNum,
+		ISNULL(s1.ld_ddNum,0) AS ld_ddNum,
+		ISNULL(s1.ld_ddAmount,0) AS ld_ddAmount,
+		ISNULL(s1.ld_cxNum,0) AS ld_cxNum,
+		ISNULL(s1.ld_cxAmount,0) AS ld_cxAmount,
+		1 AS sort
+		FROM #yjdetail_table s1
+		INNER JOIN crm.dbo.USR_User s2 ON s1.expenderCode=s2.userCode and s2.delFlag='N'
+		where (
+		ABS(ISNULL(s1.wh_storeNum,0))+
+		ABS(ISNULL(s1.wh_qyBNum,0))+
+		ABS(ISNULL(s1.wh_fpysNum,0))+
+		ABS(ISNULL(s1.tz_cqBNum,0))+
+		ABS(ISNULL(s1.tz_jiaNum,0))+
+		ABS(ISNULL(s1.tz_qyBNum,0))+
+		ABS(ISNULL(s1.tz_xqNum,0))+
+		ABS(ISNULL(s1.tz_fpwcNum,0))+
+		ABS(ISNULL(s1.tz_fpysNum,0))+
+		ABS(ISNULL(s1.jy_bdNum,0))+
+		ABS(ISNULL(s1.jy_wqNum,0))+
+		ABS(ISNULL(s1.jy_bdcNum,0))+
+		ABS(ISNULL(s1.jy_bjNum,0))+
+		ABS(ISNULL(s1.ld_bbNum,0))+
+		ABS(ISNULL(s1.ld_dkNum,0))+
+		ABS(ISNULL(s1.ld_ddNum,0))+
+		ABS(ISNULL(s1.ld_ddAmount,0))+
+		ABS(ISNULL(s1.ld_cxNum,0))+
+		ABS(ISNULL(s1.ld_cxAmount,0))
+		)>0
+		) t ORDER BY t.sort,t.wh_fpysNum DESC;
+
+		DROP TABLE #wh_table;
+		DROP TABLE #tz_table;
+		DROP TABLE #jy_table;
+		DROP TABLE #ld_table;
+		DROP TABLE #main_table;
+		DROP TABLE #yjdetail_table;
+		
+		DROP TABLE  #ld_t5
+		DROP TABLE  #ld_t4
+		DROP TABLE  #ld_t3
+		DROP TABLE  #ld_t2
+		DROP TABLE  #ld_t1
+		DROP TABLE  #jy_t4
+		DROP TABLE  #jy_t3
+		DROP TABLE  #jy_t2
+		DROP TABLE  #jy_t1
+		DROP TABLE  #tz_t5
+		DROP TABLE  #tz_t6
+		DROP TABLE  #tz_t7
+		DROP TABLE  #tz_t8
+		DROP TABLE  #wh_t4 
+		DROP TABLE  #wh_t1
+	</select>
+	
+	<select id="queryMaintainerStoreList"  parameterType="cn.com.eju.deal.model.workLog.WorkLogDto" resultMap="workLogDtoMap">
+		SELECT s1.userCode,s1.storeId,s2.centerId,
+			CASE WHEN s1.userCode=s3.userCode THEN 1 ELSE 0 END wh_storeNum
+			into #tmp_userStoreList
+			FROM (
+			SELECT t.userCode,t.storeId FROM (
+			SELECT DISTINCT userCode,storeId,dateCreate,ROW_NUMBER() over(PARTITION by storeId order by dateCreate desc) as w
+			FROM dbo.StoreMaintainer where CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}' AND userCode='${userCode}'
+			) t WHERE t.w=1
+			) s1 INNER JOIN dbo.Store s2 ON s1.storeId=s2.id
+			inner join (
+			SELECT t.userCode,t.storeId FROM (
+			SELECT DISTINCT userCode,storeId,dateCreate,ROW_NUMBER() over(PARTITION by storeId order by dateCreate desc) as w
+			FROM dbo.StoreMaintainer where CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}'
+			) t WHERE t.w=1
+			) s3 on s1.storeId=s3.storeId
+			WHERE s2.IsDelete=0 AND s2.AuditStatus=20
+
+
+		<!--维护数据-->
+		SELECT
+		t1.userCode,
+		t1.storeId,
+		t1.wh_storeNum,
+		t3.wh_qyBNum,
+		t4.wh_fpysNum
+		INTO #wh_table
+		FROM #tmp_userStoreList t1
+		LEFT JOIN (
+		SELECT  DISTINCT storeId,case when contractType IN(10302,10304) AND contractStatus=10403 THEN 1 else 0 end wh_qyBNum FROM V_CRM_ContractStore_NOW
+		) t3 ON t1.storeId=t3.storeId
+		LEFT JOIN (
+		SELECT storeId,SUM(fpysNum) wh_fpysNum FROM (
+		SELECT
+		t2.storeId,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		) t GROUP BY storeId
+		) t4 ON t1.storeId=t4.storeId;
+
+
+		<!--拓展数据-->
+		SELECT
+		t5.storeId,
+		t5.tz_cqBNum,
+		t6.tz_jiaNum,
+		t6.tz_qyBNum,
+		t6.tz_xqNum,
+		t7.tz_fpwcNum,
+		t8.tz_fpysNum
+		INTO #tz_table
+		FROM
+		(
+		SELECT storeId,SUM(new_init_num_B) AS tz_cqBNum FROM V_CRM_Expand_Achievement
+		WHERE CONVERT(VARCHAR,dateCreate,23)>='${beginDate}'  AND CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}'
+		AND expenderCode='${userCode}'
+		GROUP BY storeId
+		) t5
+		LEFT  JOIN (
+		SELECT storeId,SUM(jiaNum) tz_jiaNum,SUM(new_sign_num_B) AS tz_qyBNum,SUM(renew_sign_num) tz_xqNum FROM V_CRM_Expand_Achievement
+		WHERE CONVERT(VARCHAR,performDate,23)>='${beginDate}'  AND CONVERT(VARCHAR,performDate,23) &lt;='${endDate}'
+		AND expenderCode='${userCode}'
+		GROUP BY storeId
+		) t6 ON t5.storeId=t6.storeId
+		LEFT JOIN (
+		SELECT storeId,SUM(fpwcNum) tz_fpwcNum FROM (
+		SELECT
+		t2.storeId,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		where acv.expenderCode='${userCode}'
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		WHERE CONVERT(VARCHAR,t1.flipCompleDate,23) >='${beginDate}' AND CONVERT(VARCHAR,t1.flipCompleDate,23) &lt;='${endDate}'
+
+		) t GROUP BY storeId
+		) t7 ON t5.storeId=t7.storeId
+		LEFT JOIN (
+		SELECT storeId,SUM(fpysNum) tz_fpysNum FROM (
+		SELECT
+		t2.storeId,
+		CASE WHEN t1.flipCompleDate IS NOT NULL THEN 1 ELSE 0 END fpwcNum,
+		CASE WHEN t3.flipPassDate IS NOT NULL THEN 1 ELSE 0 END fpysNum
+		FROM OMS.dbo.CRM_Decoration t1
+		INNER JOIN (
+		SELECT DISTINCT
+		cs.StoreId,s.StoreNo
+		FROM dbo.Contract cnt
+		INNER JOIN dbo.ContractStore cs ON cs.ContractId = cnt.Id AND cs.IsDelete = 0
+		INNER JOIN dbo.Achiv_Achievement acv ON acv.relateId = cnt.Id AND acv.achieveType = 17901 AND acv.delFlag = 0
+		INNER JOIN dbo.Store s ON cs.StoreId=s.Id
+		where acv.expenderCode='${userCode}'
+		) t2 ON t1.storeNo = t2.storeNo
+		INNER JOIN OMS.dbo.CRM_oaStoreAcceptance t3 ON t1.decorateId = t3.decorateId AND t3.delFlag = 0
+		WHERE CONVERT(VARCHAR,t3.flipPassDate,23) >='${beginDate}' AND CONVERT(VARCHAR,t3.flipPassDate,23) &lt;='${endDate}'
+		) t GROUP BY storeId
+		) t8 ON t5.storeId=t8.storeId;
+
+		<!--交易数据-->
+		SELECT
+		t5.id AS storeId,
+		t1.bbNum AS jy_bdNum,
+		t2.wqNum AS jy_wqNum,
+		t3.bdcNum AS jy_bdcNum,
+		t4.bjNum AS jy_bjNum
+		INTO #jy_table
+		FROM (
+		SELECT storeNo,SUM(bbNum) bbNum FROM V_CRM_Exchange_Achievement
+		WHERE expenderCode='${userCode}'  AND  dateCreate IS NOT NULL AND  CONVERT(VARCHAR,dateCreate,23)>='${beginDate}'  AND  CONVERT(VARCHAR,dateCreate,23) &lt;='${endDate}' GROUP BY storeNo
+		) t1 LEFT JOIN (
+		SELECT storeNo,SUM(wqNum) wqNum FROM V_CRM_Exchange_Achievement
+		WHERE expenderCode='${userCode}' AND signVerifyDate IS NOT NULL AND CONVERT(VARCHAR,signVerifyDate,23)>='${beginDate}' AND  CONVERT(VARCHAR,signVerifyDate,23) &lt;='${endDate}'  GROUP BY storeNo
+		) t2 ON t1.storeNo=t2.storeNo
+		LEFT JOIN (
+		SELECT storeNo,SUM(bdcNum) bdcNum FROM V_CRM_Exchange_Achievement
+		WHERE expenderCode='${userCode}' AND estateAcptDate IS NOT NULL AND CONVERT(VARCHAR,estateAcptDate,23)>='${beginDate}' AND  CONVERT(VARCHAR,estateAcptDate,23) &lt;='${endDate}'  GROUP BY storeNo
+		) t3 ON t1.storeNo=t3.storeNo
+		LEFT JOIN (
+		SELECT storeNo,SUM(bjNum) bjNum FROM V_CRM_Exchange_Achievement
+		WHERE expenderCode='${userCode}' AND dateHandleEnd IS NOT NULL AND CONVERT(VARCHAR,dateHandleEnd,23)>='${beginDate}' AND  CONVERT(VARCHAR,dateHandleEnd,23) &lt;='${endDate}'  GROUP BY storeNo
+		) t4 ON t1.storeNo=t4.storeNo
+		LEFT JOIN dbo.Store t5 ON t1.storeNo=t5.storeNo;
+
+		<!--联动数据-->
+		SELECT DISTINCT storeId INTO #ld_storeId FROM V_CRM_LinkDetail_Achievement
+		WHERE expenderCode='${userCode}'  AND
+		( reportDate IS NOT NULL AND CONVERT(VARCHAR,reportDate,23)>='${beginDate}' AND CONVERT(VARCHAR,reportDate,23) &lt;='${endDate}'
+		OR seeDate IS NOT NULL AND CONVERT(VARCHAR,seeDate,23)>='${beginDate}' AND CONVERT(VARCHAR,seeDate,23) &lt;='${endDate}'
+		OR roughDate IS NOT NULL AND CONVERT(VARCHAR,roughDate,23)>='${beginDate}' AND CONVERT(VARCHAR,roughDate,23) &lt;='${endDate}'
+		OR  dealDate IS NOT NULL AND CONVERT(VARCHAR,dealDate,23)>='${beginDate}' AND CONVERT(VARCHAR,dealDate,23) &lt;='${endDate}'
+		)		
+		
+		
+		SELECT storeId,sum(tsnum) bbNum INTO #ld_storeId_t2 FROM V_CRM_LinkDetail_Achievement
+		WHERE expenderCode='${userCode}'  AND  reportDate IS NOT NULL AND CONVERT(VARCHAR,reportDate,23)>='${beginDate}' AND CONVERT(VARCHAR,reportDate,23) &lt;='${endDate}' GROUP BY storeId
+		
+		
+		SELECT storeId,sum(tsnum) dkNum INTO #ld_storeId_t3 FROM V_CRM_LinkDetail_Achievement
+		WHERE expenderCode='${userCode}'  AND  seeDate IS NOT NULL AND CONVERT(VARCHAR,seeDate,23)>='${beginDate}' AND CONVERT(VARCHAR,seeDate,23) &lt;='${endDate}' GROUP BY storeId
+		
+		SELECT storeId,sum(tsnum) ddNum,SUM(ISNULL(roughAmount,0)) ddAmount INTO #ld_storeId_t4  FROM V_CRM_LinkDetail_Achievement
+		WHERE expenderCode='${userCode}'  AND  roughDate IS NOT NULL AND CONVERT(VARCHAR,roughDate,23)>='${beginDate}' AND CONVERT(VARCHAR,roughDate,23) &lt;='${endDate}' GROUP BY storeId
+		
+		SELECT storeId,sum(tsnum) cxNum,SUM(ISNULL(dealAmount,0)) cxAmount  INTO #ld_storeId_t5  FROM V_CRM_LinkDetail_Achievement
+		WHERE expenderCode='${userCode}'  AND  dealDate IS NOT NULL AND CONVERT(VARCHAR,dealDate,23)>='${beginDate}' AND CONVERT(VARCHAR,dealDate,23) &lt;='${endDate}' GROUP BY storeId
+	
+		
+		SELECT
+		t1.storeId,
+		t2.bbNum as ld_bbNum,
+		t3.dkNum as ld_dkNum,
+		t4.ddNum as ld_ddNum,
+		t4.ddAmount as ld_ddAmount,
+		t5.cxNum as ld_cxNum,
+		t5.cxAmount as ld_cxAmount
+		into #ld_table
+		FROM #ld_storeId t1 LEFT JOIN #ld_storeId_t2 t2 ON t1.storeId=t2.storeId
+		LEFT JOIN #ld_storeId_t3 t3 ON t1.storeId=t3.storeId
+		LEFT JOIN #ld_storeId_t4 t4 ON t1.storeId=t4.storeId
+		LEFT JOIN #ld_storeId_t5 t5 ON t1.storeId=t5.storeId
+
+		<!--门店业绩明细-->
+		SELECT t.* INTO #main_table FROM (
+			SELECT storeId FROM #wh_table
+			UNION
+			SELECT storeId FROM #tz_table
+			UNION
+			SELECT storeId FROM #jy_table
+			UNION
+			SELECT storeId FROM #ld_table
+		) t;
+
+		SELECT
+		s1.storeId,
+		ISNULL(s2.userCode,'${userCode}') AS userCode,
+		CASE WHEN s2.storeId IS NULL THEN 0 ELSE s2.wh_storeNum END  wh_storeNum,
+		CASE WHEN s2.storeId IS NULL THEN 0 ELSE s2.wh_qyBNum END  wh_qyBNum,
+		CASE WHEN s2.storeId IS NULL THEN 0 ELSE s2.wh_fpysNum END  wh_fpysNum,
+		s3.tz_cqBNum,
+		s3.tz_jiaNum,
+		s3.tz_qyBNum,
+		s3.tz_xqNum,
+		s3.tz_fpwcNum,
+		s3.tz_fpysNum,
+		s4.jy_bdNum,
+		s4.jy_wqNum,
+		s4.jy_bdcNum,
+		s4.jy_bjNum,
+		s5.ld_bbNum,
+		s5.ld_dkNum,
+		s5.ld_ddNum,
+		s5.ld_ddAmount,
+		s5.ld_cxNum,
+		s5.ld_cxAmount
+		into #yjdetail_table
+		FROM #main_table s1
+		LEFT JOIN #wh_table s2 ON s1.storeId=s2.storeId
+		LEFT JOIN #tz_table s3 ON s1.storeId=s3.storeId
+		LEFT JOIN #jy_table s4 ON s1.storeId=s4.storeId
+		LEFT JOIN #ld_table s5 ON s1.storeId=s5.storeId;
+
+
+		<!--最终结果-->
+		SELECT t.* FROM (
+		SELECT s1.userCode AS id,
+		s2.userName AS name,
+		SUM(ISNULL(s1.wh_storeNum,0)) AS wh_storeNum,
+		SUM(ISNULL(s1.wh_qyBNum,0)) AS wh_qyBNum,
+		SUM(ISNULL(s1.wh_fpysNum,0)) AS wh_fpysNum,
+		SUM(ISNULL(s1.tz_cqBNum,0)) AS tz_cqBNum,
+		SUM(ISNULL(s1.tz_jiaNum,0)) AS tz_jiaNum,
+		SUM(ISNULL(s1.tz_qyBNum,0)) AS tz_qyBNum,
+		SUM(ISNULL(s1.tz_xqNum,0)) AS tz_xqNum,
+		SUM(ISNULL(s1.tz_fpwcNum,0)) AS tz_fpwcNum,
+		SUM(ISNULL(s1.tz_fpysNum,0)) AS tz_fpysNum,
+		SUM(ISNULL(s1.jy_bdNum,0)) AS jy_bdNum,
+		SUM(ISNULL(s1.jy_wqNum,0)) AS jy_wqNum,
+		SUM(ISNULL(s1.jy_bdcNum,0)) AS jy_bdcNum,
+		SUM(ISNULL(s1.jy_bjNum,0)) AS jy_bjNum,
+		SUM(ISNULL(s1.ld_bbNum,0)) AS ld_bbNum,
+		SUM(ISNULL(s1.ld_dkNum,0)) AS ld_dkNum,
+		SUM(ISNULL(s1.ld_ddNum,0)) AS ld_ddNum,
+		SUM(ISNULL(s1.ld_ddAmount,0)) AS ld_ddAmount,
+		SUM(ISNULL(s1.ld_cxNum,0)) AS ld_cxNum,
+		SUM(ISNULL(s1.ld_cxAmount,0)) AS ld_cxAmount,
+		0 AS sort
+		FROM #yjdetail_table s1
+		INNER JOIN crm.dbo.USR_User s2 ON s1.userCode=s2.userCode and s2.delFlag='N'
+		GROUP BY s1.userCode,s2.userName
+		UNION ALL
+		SELECT
+		s1.storeId AS id,
+		s2.name+'('+s2.storeNo+')' AS name,
+		ISNULL(s1.wh_storeNum,0) AS wh_storeNum,
+		ISNULL(s1.wh_qyBNum,0) AS wh_qyBNum,
+		ISNULL(s1.wh_fpysNum,0) AS wh_fpysNum,
+		ISNULL(s1.tz_cqBNum,0) AS tz_cqBNum,
+		ISNULL(s1.tz_jiaNum,0) AS tz_jiaNum,
+		ISNULL(s1.tz_qyBNum,0) AS tz_qyBNum,
+		ISNULL(s1.tz_xqNum,0) AS tz_xqNum,
+		ISNULL(s1.tz_fpwcNum,0) AS tz_fpwcNum,
+		ISNULL(s1.tz_fpysNum,0) AS tz_fpysNum,
+		ISNULL(s1.jy_bdNum,0) AS jy_bdNum,
+		ISNULL(s1.jy_wqNum,0) AS jy_wqNum,
+		ISNULL(s1.jy_bdcNum,0) AS jy_bdcNum,
+		ISNULL(s1.jy_bjNum,0) AS jy_bjNum,
+		ISNULL(s1.ld_bbNum,0) AS ld_bbNum,
+		ISNULL(s1.ld_dkNum,0) AS ld_dkNum,
+		ISNULL(s1.ld_ddNum,0) AS ld_ddNum,
+		ISNULL(s1.ld_ddAmount,0) AS ld_ddAmount,
+		ISNULL(s1.ld_cxNum,0) AS ld_cxNum,
+		ISNULL(s1.ld_cxAmount,0) AS ld_cxAmount,
+		1 AS sort
+		FROM #yjdetail_table s1
+		INNER JOIN dbo.Store s2 ON s1.storeId=s2.id and s2.isDelete=0 and s2.auditStatus=20
+		where (
+			ABS(ISNULL(s1.wh_storeNum,0))+
+			ABS(ISNULL(s1.wh_qyBNum,0))+
+			ABS(ISNULL(s1.wh_fpysNum,0))+
+			ABS(ISNULL(s1.tz_cqBNum,0))+
+			ABS(ISNULL(s1.tz_jiaNum,0))+
+			ABS(ISNULL(s1.tz_qyBNum,0))+
+			ABS(ISNULL(s1.tz_xqNum,0))+
+			ABS(ISNULL(s1.tz_fpwcNum,0))+
+			ABS(ISNULL(s1.tz_fpysNum,0))+
+			ABS(ISNULL(s1.jy_bdNum,0))+
+			ABS(ISNULL(s1.jy_wqNum,0))+
+			ABS(ISNULL(s1.jy_bdcNum,0))+
+			ABS(ISNULL(s1.jy_bjNum,0))+
+			ABS(ISNULL(s1.ld_bbNum,0))+
+			ABS(ISNULL(s1.ld_dkNum,0))+
+			ABS(ISNULL(s1.ld_ddNum,0))+
+			ABS(ISNULL(s1.ld_ddAmount,0))+
+			ABS(ISNULL(s1.ld_cxNum,0))+
+			ABS(ISNULL(s1.ld_cxAmount,0))
+			)>0
+		) t ORDER BY t.sort,t.wh_fpysNum DESC;
+
+		DROP TABLE #wh_table;
+		DROP TABLE #tz_table;
+		DROP TABLE #jy_table;
+		DROP TABLE #ld_table;
+		DROP TABLE #main_table;
+		DROP TABLE #yjdetail_table;
+		
+		DROP TABLE #tmp_userStoreList;
+		DROP TABLE #ld_storeId;
+		DROP TABLE #ld_storeId_t2;
+		DROP TABLE #ld_storeId_t3;
+		DROP TABLE #ld_storeId_t4;
+		DROP TABLE #ld_storeId_t5;
+	</select>
+
+	<select id="getUserInfo" parameterType="cn.com.eju.deal.model.workLog.WorkLogDto" resultMap="userInfoDtoMap">
+		SELECT t1.userId,t1.userCode,t1.userName,t1.groupId,t2.groupName,t1.postId,t3.postName,t3.typeId,t4.typeCode FROM crm.dbo.USR_User  t1
+		LEFT JOIN dbo.USR_Group t2 ON t1.groupId=t2.groupId
+		LEFT JOIN dbo.USR_Post t3 ON t1.postId=t3.postId AND t1.groupId=t3.groupId
+		LEFT JOIN dbo.USR_PostType t4 ON t3.typeId=t4.typeId
+		WHERE t1.userCode=#{userCode}
+		and t1.delFlag='N'
+	</select>
+</mapper>

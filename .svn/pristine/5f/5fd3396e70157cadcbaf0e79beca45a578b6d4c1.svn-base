@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.company.dao.CompanyLogMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.company.model.CompanyLog">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="CompanyId" property="companyId" jdbcType="INTEGER"/>
+        <result column="UpdateItem" property="updateItem" jdbcType="NVARCHAR"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateUserId" property="updateUserId" jdbcType="INTEGER"/>
+        <result column="OldCompanyName" property="oldCompanyName" jdbcType="NVARCHAR"/>
+        <result column="OldAddress" property="oldAddress" jdbcType="NVARCHAR"/>
+        <result column="OldLegalPerson" property="oldLegalPerson" jdbcType="NVARCHAR"/>
+        <result column="OldBusinessLicenseNo" property="oldBusinessLicenseNo" jdbcType="NVARCHAR"/>
+        <result column="NewCompanyName" property="newCompanyName" jdbcType="NVARCHAR"/>
+        <result column="NewAddress" property="newAddress" jdbcType="NVARCHAR"/>
+        <result column="NewLegalPerson" property="newLegalPerson" jdbcType="NVARCHAR"/>
+        <result column="NewBusinessLicenseNo" property="newBusinessLicenseNo" jdbcType="NVARCHAR"/>
+        <result column="chbCompanyName" property="chbCompanyName" jdbcType="BIT"/>
+        <result column="chbAddress" property="chbAddress" jdbcType="BIT"/>
+        <result column="chbLegalPerson" property="chbLegalPerson" jdbcType="BIT"/>
+        <result column="chbBusinessLicenseNo" property="chbBusinessLicenseNo" jdbcType="BIT"/>      
+        <!--扩展字段-->
+        <result column="UpdateUserName" property="updateUserName" jdbcType="NVARCHAR"/>
+        <result column="OldAddressDetail" property="oldAddressDetail" jdbcType="NVARCHAR"/>
+        <result column="NewAddressDetail" property="newAddressDetail" jdbcType="NVARCHAR"/>      
+    </resultMap>
+
+    <!-- 查询-根据公司id -->
+    <select id="queryListByCompanyId" resultMap="BaseResultMap" parameterType="Map">
+        SELECT 
+        c.*,
+        updateUserName = u.userName+'('+ u.userCode +')'
+        FROM dbo.CompanyLog c
+        LEFT JOIN USR_User u 
+        	ON c.UpdateUserId = u.userId
+        WHERE c.CompanyId = #{companyId,jdbcType=INTEGER}
+        ORDER BY c.Id DESC
+    </select>
+
+    <!-- 查询最新的-根据公司id -->
+    <select id="selectNewByCompanyId" resultMap="BaseResultMap" parameterType="Map">
+        SELECT TOP 1 * FROM dbo.CompanyLog
+        WHERE CompanyId = #{companyId,jdbcType=INTEGER}
+        ORDER BY Id DESC
+    </select>
+
+    <!-- 查询-根据id -->
+    <select id="getLogDetail" resultMap="BaseResultMap" parameterType="integer">
+        SELECT 
+        c.*,
+        OldAddressDetail=(
+			(SELECT concat(CityName,DistrictName,c.OldAddress) FROM BAS_District WHERE CityNo=c.OldCityNo AND DistrictNo=c.OldAreaNo)
+		), 
+		NewAddressDetail=(
+			(SELECT concat(CityName,DistrictName,c.NewAddress) FROM BAS_District WHERE CityNo=c.NewCityNo AND DistrictNo=c.NewAreaNo)
+		),       
+        u.userName AS updateUserName
+        FROM dbo.CompanyLog c
+        LEFT JOIN USR_User u 
+        	ON c.UpdateUserId = u.userId
+                
+        WHERE c.Id = #{logId,jdbcType=INTEGER}
+    </select>
+
+	<insert id="createCompanyLog" parameterType="Map" useGeneratedKeys="true" keyProperty="Id"> 
+		INSERT INTO CompanyLog(
+			CompanyId,
+			UpdateItem,
+			UpdateTime,
+			UpdateUserId,
+			OldCompanyName,
+			OldAddress,
+			OldLegalPerson,
+			OldBusinessLicenseNo,
+			NewCompanyName,
+			NewAddress,
+			NewLegalPerson,
+			NewBusinessLicenseNo,
+			chbCompanyName,
+			chbAddress,
+			chbLegalPerson,
+			chbBusinessLicenseNo,
+			OldCityNo,
+			OldAreaNo,
+			NewCityNo,
+			NewAreaNo,
+			chbContactNumber,
+			oldContactNumber,
+			newContactNumber
+		) VALUES (
+			#{companyId,jdbcType=INTEGER},
+			#{updateItem,jdbcType=NVARCHAR},
+			getdate(),
+			#{updateUserId,jdbcType=INTEGER},
+			#{oldCompanyName,jdbcType=NVARCHAR},
+			#{oldAddress,jdbcType=NVARCHAR},
+			#{oldLegalPerson,jdbcType=NVARCHAR},
+			#{oldBusinessLicenseNo,jdbcType=NVARCHAR},
+			#{newCompanyName,jdbcType=NVARCHAR},
+			#{newAddress,jdbcType=NVARCHAR},
+			#{newLegalPerson,jdbcType=NVARCHAR},
+			#{newBusinessLicenseNo,jdbcType=NVARCHAR},
+			#{chbCompanyName,jdbcType=BIT},
+			#{chbAddress,jdbcType=BIT},
+			#{chbLegalPerson,jdbcType=BIT},
+			#{chbBusinessLicenseNo,jdbcType=BIT},
+			#{oldCityNo,jdbcType=NVARCHAR},
+			#{oldAreaNo,jdbcType=NVARCHAR},
+			#{newCityNo,jdbcType=NVARCHAR},
+			#{newAreaNo,jdbcType=NVARCHAR},
+			#{chbContactNumber,jdbcType=BIT},
+			#{oldContactNumber,jdbcType=NVARCHAR},
+			#{newContactNumber,jdbcType=NVARCHAR}
+		)
+	</insert>
+       
+</mapper>

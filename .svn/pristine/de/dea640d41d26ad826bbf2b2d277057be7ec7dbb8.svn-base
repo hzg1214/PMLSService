@@ -1,0 +1,4 @@
+package cn.com.eju.pmls.jsStatement.dto;
+
+public class PmlsJsReportDto {
+}

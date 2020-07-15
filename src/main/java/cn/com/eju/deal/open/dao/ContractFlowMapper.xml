@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.open.dao.ContractFlowMapper">
+
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.open.model.ContractFlowDto" />
+	
+	<!-- 根据门店ID、合同ID查询审核通过"-1"的记录 (供OMS-业绩查看用) -->
+	<select id="getContractFlowByStoreId" resultMap="BaseResultMap" parameterType="Map">
+		SELECT TOP 1
+        storeNo = T2.StoreNo ,
+        CityNo = T2.CityNo ,
+        storeName = T2.Name ,
+        storeAddressDetail = T2.AddressDetail ,
+        contractNo = T3.ContractNo ,
+        contractState = CASE T3.ContractStatus 
+         							WHEN '10401' THEN '草签'
+			                         WHEN '10402' THEN '审核中'
+			                         WHEN '10403' THEN '审核通过'
+			                         WHEN '10404' THEN '审核未通过'
+			                         WHEN '10405' THEN '作废'
+			                         WHEN '10406' THEN '终止'
+			                       END ,
+        contractType = CASE T3.ContractType
+         							 WHEN '10301' THEN 'A版'
+			                         WHEN '10302' THEN 'B版'
+			                         WHEN '10303' THEN 'C版'
+			                         WHEN '10304' THEN 'A转B版'
+			                         WHEN '10305' THEN 'B转A版'
+			                       END ,
+        companyName = T3.PartyB ,
+        performDate = getDate() ,
+        recordNum = '-1' ,
+        recordReason = CASE T3.ContractStatus
+			                         WHEN '10403' THEN 'A转B版'
+			                         WHEN '10406' THEN '合同终止'
+			                       END
+		FROM    ContractStore T1
+		        LEFT JOIN Store T2 ON T2.Id = T1.StoreId
+		        LEFT JOIN Contract T3 ON T3.Id = T1.ContractId
+		WHERE   T1.StoreId = #{storeId,jdbcType=INTEGER}
+		        AND T1.IsDelete = 0
+		        <![CDATA[
+		       			AND T1.ContractId <> #{contractId,jdbcType=INTEGER}
+		      	 ]]>
+		ORDER BY T1.Id DESC
+	</select>
+
+</mapper>

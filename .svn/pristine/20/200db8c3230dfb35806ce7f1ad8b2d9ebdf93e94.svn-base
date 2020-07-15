@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.gpContract.dao.GpBankInfoChangeLogFileMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLogFile">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="gpBankInfoChangeLogId" jdbcType="INTEGER" property="gpBankInfoChangeLogId" />
+    <result column="fileRecordMainId" jdbcType="INTEGER" property="fileRecordMainId" />
+    <result column="gpContractId" jdbcType="INTEGER" property="gpContractId" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt" />
+    <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, gpBankInfoChangeLogId, fileRecordMainId, gpContractId, dateCreate, userIdCreate, 
+    dateUpt, userIdUpt, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from GP_BankInfoChangeLogFile
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from GP_BankInfoChangeLogFile
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLogFile">
+    insert into GP_BankInfoChangeLogFile (id, gpBankInfoChangeLogId, fileRecordMainId, 
+      gpContractId, dateCreate, userIdCreate, 
+      dateUpt, userIdUpt, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{gpBankInfoChangeLogId,jdbcType=INTEGER}, #{fileRecordMainId,jdbcType=INTEGER}, 
+      #{gpContractId,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{dateUpt,jdbcType=TIMESTAMP}, #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLogFile">
+    insert into GP_BankInfoChangeLogFile
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gpBankInfoChangeLogId != null">
+        gpBankInfoChangeLogId,
+      </if>
+      <if test="fileRecordMainId != null">
+        fileRecordMainId,
+      </if>
+      <if test="gpContractId != null">
+        gpContractId,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="dateUpt != null">
+        dateUpt,
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gpBankInfoChangeLogId != null">
+        #{gpBankInfoChangeLogId,jdbcType=INTEGER},
+      </if>
+      <if test="fileRecordMainId != null">
+        #{fileRecordMainId,jdbcType=INTEGER},
+      </if>
+      <if test="gpContractId != null">
+        #{gpContractId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLogFile">
+    update GP_BankInfoChangeLogFile
+    <set>
+      <if test="gpBankInfoChangeLogId != null">
+        gpBankInfoChangeLogId = #{gpBankInfoChangeLogId,jdbcType=INTEGER},
+      </if>
+      <if test="fileRecordMainId != null">
+        fileRecordMainId = #{fileRecordMainId,jdbcType=INTEGER},
+      </if>
+      <if test="gpContractId != null">
+        gpContractId = #{gpContractId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.gpContract.model.GpBankInfoChangeLogFile">
+    update GP_BankInfoChangeLogFile
+    set gpBankInfoChangeLogId = #{gpBankInfoChangeLogId,jdbcType=INTEGER},
+      fileRecordMainId = #{fileRecordMainId,jdbcType=INTEGER},
+      gpContractId = #{gpContractId,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

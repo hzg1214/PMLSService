@@ -1,0 +1,4 @@
+package cn.com.eju.pmls.skStatement.dto;
+
+public class PmlsSkStatementDto {
+}

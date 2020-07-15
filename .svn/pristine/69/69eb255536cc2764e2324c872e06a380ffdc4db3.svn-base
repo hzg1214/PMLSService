@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.cashbill.dao.CashBillProjectMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.cashbill.model.CashBillProject">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="estateId" jdbcType="VARCHAR" property="estateId" />
+    <result column="projectNo" jdbcType="VARCHAR" property="projectNo" />
+    <result column="estateNm" jdbcType="VARCHAR" property="estateNm" />
+    <result column="recordTime" jdbcType="TIMESTAMP" property="recordTime" />
+    <result column="predictPayTime" jdbcType="TIMESTAMP" property="predictPayTime" />
+    <result column="payType" jdbcType="INTEGER" property="payType" />
+    <result column="amountNoTax" jdbcType="DECIMAL" property="amountNoTax" />
+    <result column="amountTax" jdbcType="DECIMAL" property="amountTax" />
+    <result column="amountTotal" jdbcType="DECIMAL" property="amountTotal" />
+    <result column="submitStatus" jdbcType="INTEGER" property="submitStatus" />
+    <result column="userCode" jdbcType="VARCHAR" property="userCode" />
+    <result column="cityNo" jdbcType="VARCHAR" property="cityNo" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+
+    <result column="isSpecialProject" jdbcType="INTEGER" property="isSpecialProject" />
+    <collection property="fileList" column="id"
+                ofType="cn.com.eju.deal.dto.common.FileRecordMainDto" select="selectPicture"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, estateId, projectNo, estateNm, recordTime, predictPayTime, payType, amountNoTax, 
+    amountTax, amountTotal, submitStatus, userCode, dateCreate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Cash_Bill_Project
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Cash_Bill_Project
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.cashbill.model.CashBillProject">
+    insert into Cash_Bill_Project (id, estateId, projectNo, 
+      estateNm, recordTime, predictPayTime, 
+      payType, amountNoTax, amountTax, 
+      amountTotal, submitStatus, userCode, 
+      dateCreate, userIdCreate, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{estateId,jdbcType=VARCHAR}, #{projectNo,jdbcType=VARCHAR}, 
+      #{estateNm,jdbcType=VARCHAR}, #{recordTime,jdbcType=TIMESTAMP}, #{predictPayTime,jdbcType=TIMESTAMP}, 
+      #{payType,jdbcType=INTEGER}, #{amountNoTax,jdbcType=DECIMAL}, #{amountTax,jdbcType=DECIMAL}, 
+      #{amountTotal,jdbcType=DECIMAL}, #{submitStatus,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, 
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillProject" useGeneratedKeys="true" keyProperty="id">
+    insert into Cash_Bill_Project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="estateId != null">
+        estateId,
+      </if>
+      <if test="projectNo != null">
+        projectNo,
+      </if>
+      <if test="estateNm != null">
+        estateNm,
+      </if>
+      <if test="recordTime != null">
+        recordTime,
+      </if>
+      <if test="predictPayTime != null">
+        predictPayTime,
+      </if>
+      <if test="payType != null">
+        payType,
+      </if>
+      <if test="amountNoTax != null">
+        amountNoTax,
+      </if>
+      <if test="amountTax != null">
+        amountTax,
+      </if>
+      <if test="amountTotal != null">
+        amountTotal,
+      </if>
+      <if test="submitStatus != null">
+        submitStatus,
+      </if>
+      <if test="userCode != null">
+        userCode,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="estateId != null">
+        #{estateId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null">
+        #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateNm != null">
+        #{estateNm,jdbcType=VARCHAR},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="predictPayTime != null">
+        #{predictPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="amountNoTax != null">
+        #{amountNoTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTax != null">
+        #{amountTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTotal != null">
+        #{amountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="submitStatus != null">
+        #{submitStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillProject">
+    update Cash_Bill_Project
+    <set>
+      <if test="estateId != null">
+        estateId = #{estateId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNo != null">
+        projectNo = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateNm != null">
+        estateNm = #{estateNm,jdbcType=VARCHAR},
+      </if>
+      <if test="recordTime != null">
+        recordTime = #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="predictPayTime != null">
+        predictPayTime = #{predictPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payType != null">
+        payType = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="amountNoTax != null">
+        amountNoTax = #{amountNoTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTax != null">
+        amountTax = #{amountTax,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTotal != null">
+        amountTotal = #{amountTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="submitStatus != null">
+        submitStatus = #{submitStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        userCode = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.cashbill.model.CashBillProject">
+    update Cash_Bill_Project
+    set estateId = #{estateId,jdbcType=VARCHAR},
+      projectNo = #{projectNo,jdbcType=VARCHAR},
+      estateNm = #{estateNm,jdbcType=VARCHAR},
+      recordTime = #{recordTime,jdbcType=TIMESTAMP},
+      predictPayTime = #{predictPayTime,jdbcType=TIMESTAMP},
+      payType = #{payType,jdbcType=INTEGER},
+      amountNoTax = #{amountNoTax,jdbcType=DECIMAL},
+      amountTax = #{amountTax,jdbcType=DECIMAL},
+      amountTotal = #{amountTotal,jdbcType=DECIMAL},
+      submitStatus = #{submitStatus,jdbcType=INTEGER},
+      userCode = #{userCode,jdbcType=VARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectCashBill" parameterType="java.util.Map" resultType="cn.com.eju.deal.cashbill.model.CashBillProject">
+    SELECT  p.*
+      FROM    dbo.Cash_Bill_Project p
+              JOIN dbo.Cash_Bill_Company c ON p.id = c.proParentId
+              JOIN dbo.Cash_Bill_Report r ON c.id = r.comParentId
+      WHERE   p.delFlag = 0
+              AND c.delFlag = 0
+              AND r.delFlag = 0
+              AND p.submitStatus = 0
+              AND p.estateId = #{estateId,jdbcType=VARCHAR}
+		      AND p.userCode = #{userCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectBaseInfoForCash" parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT  e.estateId ,
+            e.projectNo ,
+            e.estateNm ,
+            c.id AS companyId ,
+            c.companyNo ,
+            c.companyName ,
+            r.Id AS reportId ,
+            r.ReportId AS reportNo
+    FROM    dbo.LNK_Estate e
+            INNER JOIN dbo.LNK_Report r ON e.EstateId = r.EstateId
+            INNER JOIN dbo.LNK_YJ_REPORT yr ON r.ReportId = yr.reportId
+                                               AND yr.delFlg = 0
+            INNER JOIN dbo.Company c ON c.CompanyNo = yr.companyNo
+                                        AND c.IsDelete = 0
+    WHERE   r.ReportId = #{reportId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="checkProjectUnique" parameterType="cn.com.eju.deal.cashbill.model.CashBillProject" resultType="cn.com.eju.deal.cashbill.model.CashBillProject">
+    SELECT  *
+    FROM    Cash_Bill_Project
+    WHERE   estateId = #{estateId,jdbcType=VARCHAR}
+            AND userCode = #{userCode,jdbcType=VARCHAR}
+            AND submitStatus = 0
+            AND delFlag = 0
+  </select>
+
+  <select id="findByDynamic" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT  top 1 p.*,e.cityNo,e.isSpecialProject
+    FROM    dbo.Cash_Bill_Project p JOIN LNK_Estate e on p.estateId = e.EstateId
+    WHERE   p.estateId = #{estateId,jdbcType=VARCHAR}
+            AND p.submitStatus = #{submitStatus,jdbcType=INTEGER}
+            AND p.userCode = #{userCode,jdbcType=VARCHAR}
+            AND p.delFlag = 0
+  </select>
+  
+   <select id="findByproParentId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT  p.*,e.cityNo
+    FROM    dbo.Cash_Bill_Project p JOIN LNK_Estate e on p.estateId = e.EstateId
+    WHERE   p.estateId = #{estateId,jdbcType=VARCHAR}
+            AND p.id = #{proParentId,jdbcType=INTEGER}
+            AND p.delFlag = 0
+  </select>
+
+  <resultMap id="pictureDtoMap" type="cn.com.eju.deal.dto.common.FileRecordMainDto"></resultMap>
+  <select id="selectPicture" parameterType="java.util.Map" resultMap="pictureDtoMap">
+    select
+    FileRecordMainId ,
+    CompanyId ,
+    RefId ,
+    FileId ,
+    FileTypeId ,
+    FileFullName ,
+    FileSourceId ,
+    Remark ,
+    DateCreate ,
+    UserCreate ,
+    IsDelete ,
+    fileNo ,
+    picUrl ,
+    fileSuffix ,
+    fileAbbrUrl ,
+    url50 ,
+    fileUrl ,
+    sellFileNo ,
+    sfImage
+    from crm.dbo.FIL_FileRecordMain
+    where RefId = #{id,jdbcType=INTEGER}
+    AND FileTypeId = 1032
+    AND FileSourceId = '9'
+    AND IsDelete = '0'
+    ORDER BY  FileRecordMainId ASC
+  </select>
+
+  <select id="getAccountProjectByEstateId" resultType="java.util.Map" parameterType="java.lang.String">
+    SELECT  c.accountProject ,
+            accountProjectCode,
+            cashBillBatchTpl,
+            cashBillBatchTplName
+    FROM    dbo.LNK_Estate e
+            JOIN dbo.Bas_CitySetting c ON e.CityNo = c.cityNo
+                                          AND c.delFlag = 'N'
+                                          AND e.EstateId = #{estateId,jdbcType=VARCHAR}
+  </select>
+  <select id="getAccountProjectByCityNo" resultType="java.util.Map" parameterType="java.lang.String">
+   		SELECT accountProjectCode lnkaccountProjectCode,accountProject lnkAccountProject 
+			FROM Bas_CitySetting WHERE delFlag = 'N' and cityNo = #{cityNo,jdbcType=VARCHAR}
+		UNION
+			SELECT lnkaccountProjectCode ,lnkAccountProject  
+		FROM Bas_CitySetting WHERE delFlag = 'N' and cityNo =#{cityNo,jdbcType=VARCHAR}
+  </select>
+</mapper>

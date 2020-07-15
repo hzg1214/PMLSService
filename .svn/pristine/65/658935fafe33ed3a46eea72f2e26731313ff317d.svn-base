@@ -1,0 +1,82 @@
+package cn.com.eju.pmls.skStatement.dto;
+
+import cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl;
+
+import java.math.BigDecimal;
+
+/**
+ * Created by haidan on 2020/7/3.
+ */
+public class PmlsSkAllocateDtlDto extends PmlsSkAllocateDtl {
+    private Integer rowNo;
+    private String userNameCreate;
+    private String userNameUpdate;
+
+    /**
+     * 未回款金额（成销收入-成销实收金额）
+     */
+    private BigDecimal unBackAmount_bef;
+    private BigDecimal unBackAmount_aft;
+
+    /**
+     * 剩余拆分金额（未回款金额-本次拆分金额）
+     */
+    private BigDecimal unAllocatedAmount_bef;
+    private BigDecimal unAllocatedAmount_aft;
+
+    public String getUserNameCreate() {
+        return userNameCreate;
+    }
+
+    public void setUserNameCreate(String userNameCreate) {
+        this.userNameCreate = userNameCreate;
+    }
+
+    public String getUserNameUpdate() {
+        return userNameUpdate;
+    }
+
+    public void setUserNameUpdate(String userNameUpdate) {
+        this.userNameUpdate = userNameUpdate;
+    }
+
+    public Integer getRowNo() {
+        return rowNo;
+    }
+
+    public void setRowNo(Integer rowNo) {
+        this.rowNo = rowNo;
+    }
+
+    public BigDecimal getUnBackAmount_bef() {
+        return unBackAmount_bef;
+    }
+
+    public void setUnBackAmount_bef(BigDecimal unBackAmount_bef) {
+        this.unBackAmount_bef = unBackAmount_bef;
+    }
+
+    public BigDecimal getUnBackAmount_aft() {
+        return unBackAmount_aft;
+    }
+
+    public void setUnBackAmount_aft(BigDecimal unBackAmount_aft) {
+        this.unBackAmount_aft = unBackAmount_aft;
+    }
+
+    public BigDecimal getUnAllocatedAmount_bef() {
+        return unAllocatedAmount_bef;
+    }
+
+    public void setUnAllocatedAmount_bef(BigDecimal unAllocatedAmount_bef) {
+        this.unAllocatedAmount_bef = unAllocatedAmount_bef;
+    }
+
+    public BigDecimal getUnAllocatedAmount_aft() {
+        return unAllocatedAmount_aft;
+    }
+
+    public void setUnAllocatedAmount_aft(BigDecimal unAllocatedAmount_aft) {
+        this.unAllocatedAmount_aft = unAllocatedAmount_aft;
+    }
+}

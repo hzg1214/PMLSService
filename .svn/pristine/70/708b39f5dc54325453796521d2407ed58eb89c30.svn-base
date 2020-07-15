@@ -1,0 +1,17 @@
+package cn.com.eju.pmls.skStatement.dao;
+
+import cn.com.eju.pmls.skStatement.model.PmlsSkStatmentDtl;
+
+public interface PmlsSkStatmentDtlMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(PmlsSkStatmentDtl record);
+
+    int insertSelective(PmlsSkStatmentDtl record);
+
+    PmlsSkStatmentDtl selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(PmlsSkStatmentDtl record);
+
+    int updateByPrimaryKey(PmlsSkStatmentDtl record);
+}

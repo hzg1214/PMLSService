@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.linkZjcbDetail.dao.LinkZjcbDetailMapper">
+
+	<resultMap id="LinkZjcbDetailDtoMap" type="cn.com.eju.deal.dto.houseLinkage.linkZjcbDetail.LinkZjcbDetailDto"/>
+
+	<select id="queryLinkZjcbDetailList" parameterType="Map" resultMap="LinkZjcbDetailDtoMap">
+		--当年资金成本
+		SELECT year,reportId,SUM(cbAmount) thisTotal
+		INTO #zjcb_this
+		FROM LNK_Report_Zjcb
+		WHERE year = #{organization, jdbcType=VARCHAR}
+		GROUP BY year,reportId
+
+		--当年以前资金成本
+		SELECT reportId,SUM(cbAmount) preTotal
+		INTO #zjcb_pre
+		FROM dbo.LNK_Report_Zjcb
+		WHERE <![CDATA[year < #{organization, jdbcType=VARCHAR}]]>
+		GROUP BY reportId
+
+		--基础数据行转列
+		SELECT * INTO #zjcb_pvt FROM(
+		SELECT year,reportId,CASE MONTH(cbDateStr) WHEN 1 THEN 'jan'
+		WHEN 2 THEN 'feb'
+		WHEN 3 THEN 'mar'
+		WHEN 4 THEN 'apr'
+		WHEN 5 THEN 'may'
+		WHEN 6 THEN 'jun'
+		WHEN 7 THEN 'jul'
+		WHEN 8 THEN 'aug'
+		WHEN 9 THEN 'sep'
+		WHEN 10 THEN 'oct'
+		WHEN 11 THEN 'nov'
+		WHEN 12 THEN 'dec' END mon,
+		cbAmount FROM dbo.LNK_Report_Zjcb
+		<where>
+			<if test="dateStart != null and dateStart != ''">
+				AND convert(datetime, cbDateStr) >= convert(datetime, '${dateStart}')
+			</if>
+			<if test="dateEnd != null and dateEnd != ''">
+				AND convert(datetime, cbDateStr) &lt; convert(datetime, '${dateEnd}') + 1
+			</if>
+		</where>
+		)t PIVOT (SUM(cbAmount) FOR mon IN ([jan],[feb],[mar],[apr],[may],[jun],[jul],[aug],[sep],[oct],[nov],[dec])) AS pvt
+		ORDER BY pvt.year
+
+		SELECT
+		dbo.F_ClearNullStr(zjcb.year) yearly
+		,org.regionCode,dbo.F_ClearNullStr(org.regionName) regionName--业绩归属区域
+		,org.areaCityCode,dbo.F_ClearNullStr(org.areaCityName) areaCityName--业绩归属城市
+		,acv.cityGroupId,dbo.F_ClearNullStr(acv.cityGroupName) cityGroupName--业绩所在城市
+		,est_city.id projectCityId, dbo.F_ClearNullStr(est_city.cityName) projectCityName--项目归属城市
+		,dbo.F_ClearNullStr(org1.areaCityName) srCityName--收入归属城市
+		,dbo.F_ClearNullStr(projectNo) projectNo--项目编号
+		,dbo.F_ClearNullStr(est.EstateNm) estateNm--楼盘名
+		,dbo.F_ClearNullStr(zjcb.reportId) reportId--报备编号
+		,dbo.F_ClearNullStr(rd.buildingNo) buildingNo--楼室号
+		,dbo.F_ClearNullMoney(ISNULL(th.thisTotal,0)+ISNULL(pre.preTotal,0)) totalAmount--总累计资金成本
+		,dbo.F_ClearNullMoney(pre.preTotal) preTotal--当年以前资金成本
+		,dbo.F_ClearNullMoney(th.thisTotal) thisTotal--当前资金成本
+		,dbo.F_ClearNullMoney(zjcb.jan) jan
+		,dbo.F_ClearNullMoney(zjcb.feb) feb
+		,dbo.F_ClearNullMoney(zjcb.mar) mar
+		,dbo.F_ClearNullMoney(zjcb.apr) apr
+		,dbo.F_ClearNullMoney(zjcb.may) may
+		,dbo.F_ClearNullMoney(zjcb.jun) jun
+		,dbo.F_ClearNullMoney(zjcb.jul) jul
+		,dbo.F_ClearNullMoney(zjcb.aug) aug
+		,dbo.F_ClearNullMoney(zjcb.sep) sep
+		,dbo.F_ClearNullMoney(zjcb.oct) oct
+		,dbo.F_ClearNullMoney(zjcb.nov) nov
+		,dbo.F_ClearNullMoney(zjcb.DEC) dec
+		,city.id  rcityid,acv.centerGroupId,est.projectDepartmentId
+		into #zjcb_nosort
+		FROM #zjcb_pvt zjcb
+		LEFT JOIN #zjcb_this th WITH(NOLOCK) ON th.reportId = zjcb.reportId AND th.year = zjcb.year
+		LEFT JOIN #zjcb_pre pre WITH(NOLOCK) ON pre.reportId = zjcb.reportId
+		LEFT JOIN dbo.LNK_Report r WITH(NOLOCK) ON r.DelFlg=0 AND r.ReportId = zjcb.reportId
+		LEFT JOIN dbo.LNK_ReportDetail rd WITH(NOLOCK) ON rd.DelFlg=0 AND isValid=0 AND Progress=13505 
+<!-- 		AND LEFT(CountId,15)=zjcb.reportId -->
+		AND reportNo=zjcb.reportId
+		LEFT JOIN dbo.V_CRM_Achievement acv ON r.Id = acv.contractId AND acv.achieveType = '17902'
+		LEFT JOIN dbo.LNK_Estate est WITH(NOLOCK) ON r.EstateId = est.EstateId AND est.DelFlg = 0
+		LEFT JOIN dbo.BAS_City est_city WITH(NOLOCK) ON est.CityNo = est_city.CityNo AND est_city.FlagDeleted = 0
+		LEFT JOIN dbo.BAS_City city WITH(NOLOCK) ON city.CityNo = r.CityNo AND city.isService = 1 AND city.FlagDeleted = 0
+		LEFT JOIN (
+		SELECT distinct yearly, regionCode, regionName, areaCityCode, areaCityName, cityGroupId, cityGroupName FROM dbo.V_USR_OrgHis
+			<if test="organization != null and organization != ''">
+				WHERE yearly = #{organization, jdbcType=VARCHAR}
+			</if>
+		) org ON acv.cityGroupId = org.cityGroupId
+		LEFT JOIN (
+		SELECT distinct yearly, regionCode, regionName, areaCityCode, areaCityName, cityGroupId, cityGroupName FROM dbo.V_USR_OrgHis
+			<if test="organization != null and organization != ''">
+				WHERE yearly = #{organization, jdbcType=VARCHAR}
+			</if>
+		) org1 ON est_city.id = org1.cityGroupId
+		 WHERE 1 = 1
+		<if test="organization != null and organization != ''">
+			AND zjcb.year = #{organization}
+		</if>
+
+
+		select ROW_NUMBER() OVER ( ORDER BY regionCode, areaCityCode, cityGroupId, reportId DESC ) rowNum ,t.* from #zjcb_nosort t where 1=1
+
+		<if test="regionCodeList != null">
+			AND regionCode IN
+			<foreach collection="regionCodeList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="areaCityCodeList != null">
+			AND areaCityCode IN
+			<foreach collection="areaCityCodeList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="cityIdList != null">
+			AND rcityid IN
+			<foreach collection="cityIdList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="reportId != null and reportId != ''">
+			AND reportId LIKE CONCAT('%', #{reportId, jdbcType=NVARCHAR})
+		</if>
+		<if test="projectNo != null and projectNo != ''">
+			AND projectNo LIKE CONCAT('%', #{projectNo, jdbcType=NVARCHAR})
+		</if>
+		<if test="userId != null and userId != ''">
+			AND (
+				(
+					centerGroupId is null AND rcityid in (SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter(#{userId}, 'CRM'))
+				) OR (
+					centerGroupId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+				) OR (
+					projectDepartmentId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+				)
+			)
+		</if>
+		ORDER BY rowNum
+
+		DROP TABLE #zjcb_this
+		DROP TABLE #zjcb_pre
+		DROP TABLE #zjcb_pvt
+		DROP table #zjcb_nosort
+	</select>
+	
+	<select id="selLinkZjcbDetailList" parameterType="Map" resultMap="LinkZjcbDetailDtoMap">
+	
+		SELECT  pre.reportId 
+		       ,SUM(pre.cbTotal) dyTotal
+		   INTO #prezjcb
+		   FROM LNK_Report_Zjcb_Total pre
+		  WHERE pre.delFlag =0 
+		    AND <![CDATA[pre.year < #{organization,jdbcType=VARCHAR}]]>
+		  GROUP BY pre.reportId
+	
+		SELECT DISTINCT
+                yearly ,
+                regionCode ,
+                regionName ,
+                cityId,
+                areaCityCode ,
+                areaCityName ,
+                cityGroupId ,
+                cityGroupName
+                INTO #orgHis
+        FROM    dbo.V_USR_OrgHis WITH(NOLOCK)
+		<if test="organization != null and organization != ''">
+	        WHERE   yearly=#{organization, jdbcType=VARCHAR}
+		</if>
+				
+		SELECT  
+			ROW_NUMBER() OVER ( ORDER BY regionCode, areaCityCode, org.cityGroupId, zjcb.reportId DESC ) rowNum ,
+			city.id  rcityid,
+			zjcb.year yearly ,
+	        org.regionCode ,
+	        org.regionName regionName ,
+	        org.areaCityCode ,
+	        org.areaCityName areaCityName ,
+	        est_city.ID projectCityId ,
+	        est_city.CityName projectCityName ,
+	        city.id cityGroupId ,
+	        city.cityName cityGroupName ,
+	        gp.groupId projectGroupId ,
+	        gp.groupName projectGroupName ,
+	        acv.centerGroupId centerGroupId,
+			acv.centerGroupName centerGroupName,
+	        est.projectNo projectNo ,
+	        est.EstateNm estateNm ,
+	        zjcb.ReportId reportId ,
+	        dbo.F_ClearNullStr(rd.buildingNo) buildingNo ,
+	        CAST((ISNULL(zjcb.cbTotal,0) + ISNULL(prezjcb.dyTotal,0)) AS   decimal(18,   2)) totalAmount ,
+	        CAST(ISNULL(prezjcb.dyTotal,0) AS   decimal(18,   2)) preTotal,
+	        CAST(ISNULL(zjcb.cbTotal,0) AS   decimal(18,   2)) thisTotal,
+	        CAST(zjcb.dyAmountjan AS   decimal(18,   2))dyjan ,
+			CAST(zjcb.dyAmountfeb AS   decimal(18,   2))dyfeb ,
+			CAST(zjcb.dyAmountmar AS   decimal(18,   2))dymar ,
+			CAST(zjcb.dyAmountapr AS   decimal(18,   2))dyapr ,
+			CAST(zjcb.dyAmountmay AS   decimal(18,   2))dymay ,
+			CAST(zjcb.dyAmountjun AS   decimal(18,   2))dyjun ,
+			CAST(zjcb.dyAmountjul AS   decimal(18,   2))dyjul ,
+			CAST(zjcb.dyAmountaug AS   decimal(18,   2))dyaug ,
+			CAST(zjcb.dyAmountsep AS   decimal(18,   2))dysep ,
+			CAST(zjcb.dyAmountoct AS   decimal(18,   2))dyoct ,
+			CAST(zjcb.dyAmountnov AS   decimal(18,   2))dynov ,
+			CAST(zjcb.dyAmountdec AS   decimal(18,   2))dydec ,
+			CAST(zjcb.dyhkAmountjan AS   decimal(18,   2))dyhkjan ,
+			CAST(zjcb.dyhkAmountfeb AS   decimal(18,   2))dyhkfeb ,
+			CAST(zjcb.dyhkAmountmar AS   decimal(18,   2))dyhkmar ,
+			CAST(zjcb.dyhkAmountapr AS   decimal(18,   2))dyhkapr ,
+			CAST(zjcb.dyhkAmountmay AS   decimal(18,   2))dyhkmay ,
+			CAST(zjcb.dyhkAmountjun AS   decimal(18,   2))dyhkjun ,
+			CAST(zjcb.dyhkAmountjul AS   decimal(18,   2))dyhkjul ,
+			CAST(zjcb.dyhkAmountaug AS   decimal(18,   2))dyhkaug ,
+			CAST(zjcb.dyhkAmountsep AS   decimal(18,   2))dyhksep ,
+			CAST(zjcb.dyhkAmountoct AS   decimal(18,   2))dyhkoct ,
+			CAST(zjcb.dyhkAmountnov AS   decimal(18,   2))dyhknov ,
+			CAST(zjcb.dyhkAmountdec AS   decimal(18,   2))dyhkdec ,
+	        CAST(zjcb.cb01 AS   decimal(18,   2)) zjcbjan ,
+			CAST(zjcb.cb02 AS   decimal(18,   2)) zjcbfeb ,
+			CAST(zjcb.cb03 AS   decimal(18,   2)) zjcbmar ,
+			CAST(zjcb.cb04 AS   decimal(18,   2)) zjcbapr ,
+			CAST(zjcb.cb05 AS   decimal(18,   2)) zjcbmay ,
+			CAST(zjcb.cb06 AS   decimal(18,   2)) zjcbjun ,
+			CAST(zjcb.cb07 AS   decimal(18,   2)) zjcbjul ,
+			CAST(zjcb.cb08 AS   decimal(18,   2)) zjcbaug ,
+			CAST(zjcb.cb09 AS   decimal(18,   2)) zjcbsep ,
+			CAST(zjcb.cb10 AS   decimal(18,   2)) zjcboct ,
+			CAST(zjcb.cb11 AS   decimal(18,   2)) zjcbnov ,
+			CAST(zjcb.cb12 AS   decimal(18,   2)) zjcbdec
+		FROM    dbo.LNK_Report_Zjcb_Total zjcb WITH(NOLOCK)
+        	LEFT JOIN #prezjcb prezjcb ON prezjcb.ReportId = zjcb.ReportId
+        	LEFT JOIN dbo.LNK_Report r WITH(NOLOCK) ON r.DelFlg = 0
+                                      AND r.ReportId = zjcb.ReportId
+        	LEFT JOIN dbo.LNK_ReportDetail rd WITH(NOLOCK) ON rd.DelFlg = 0
+                                             AND isValid = 0
+                                             AND Progress = 13505
+                                             AND rd.ReportNo = zjcb.ReportId
+        	LEFT JOIN dbo.V_CRM_Achievement acv ON r.Id = acv.contractId
+                                               AND acv.achieveType = '17902'
+        	LEFT JOIN #orgHis org ON acv.cityGroupId = org.cityGroupId
+        	LEFT JOIN dbo.LNK_Estate est WITH(NOLOCK) ON r.EstateId = est.EstateId
+                                        AND est.DelFlg = 0
+        	LEFT JOIN dbo.BAS_City est_city WITH(NOLOCK) ON est.CityNo = est_city.CityNo
+                                           AND est_city.FlagDeleted = 0
+            LEFT JOIN dbo.BAS_City city WITH(NOLOCK) ON city.CityNo = r.CityNo AND city.isService = 1 AND city.FlagDeleted = 0
+        	LEFT JOIN dbo.USR_Group gp WITH(NOLOCK) ON gp.groupId = est.projectDepartmentId
+                                      AND gp.delFlag = 'N'
+            where zjcb.delFlag=0
+            <if test="organization != null and organization != ''">
+				AND zjcb.year = #{organization}
+			</if>
+            <if test="regionCodeList != null">
+				AND org.regionCode IN
+				<foreach collection="regionCodeList" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="areaCityCodeList != null">
+				AND org.areaCityCode IN
+				<foreach collection="areaCityCodeList" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="cityIdList != null">
+				AND city.id IN
+				<foreach collection="cityIdList" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="centerIdList != null">
+				AND acv.centerGroupId IN
+				<foreach collection="centerIdList" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="estateNm != null and estateNm != ''">
+<!-- 				AND est.EstateNm LIKE CONCAT('%', #{estateNm, jdbcType=NVARCHAR}, '%') -->
+				AND (
+				        est.EstateNm  LIKE CONCAT(#{estateNm, jdbcType=NVARCHAR}, '%')
+				     OR est.projectNo LIKE CONCAT(#{estateNm, jdbcType=NVARCHAR}, '%')
+				    )
+			</if>
+			<if test="reportId != null and reportId != ''">
+				AND zjcb.reportId LIKE CONCAT('%', #{reportId, jdbcType=NVARCHAR})
+			</if>
+<!-- 			<if test="projectNo != null and projectNo != ''"> -->
+<!-- 				AND est.projectNo LIKE CONCAT('%', #{projectNo, jdbcType=NVARCHAR}) -->
+<!-- 			</if> -->
+<!-- 			<if test="userId != null and userId != ''"> -->
+<!-- 				AND ( -->
+				
+<!-- 					( -->
+<!-- 						centerGroupId is null  -->
+<!-- 						AND city.id in  -->
+<!-- 						<foreach collection="cityIdAuthList" item="item" index="index" open="(" separator="," close=")"> -->
+<!-- 							#{item} -->
+<!-- 						</foreach> -->
+					
+<!-- 					)  -->
+					
+<!-- 					OR ( -->
+<!-- 						centerGroupId in  -->
+<!-- 						<foreach collection="centerGroupIdAuthList" item="item" index="index" open="(" separator="," close=")"> -->
+<!-- 							#{item} -->
+<!-- 						</foreach>					 -->
+<!-- 					)  -->
+					
+<!-- 					OR ( -->
+<!-- 						projectDepartmentId in  -->
+<!-- 						<foreach collection="centerGroupIdAuthList" item="item" index="index" open="(" separator="," close=")"> -->
+<!-- 							#{item} -->
+<!-- 						</foreach>					 -->
+<!-- 					) -->
+<!-- 				) -->
+<!-- 			</if> -->
+				<if test="userId != null and userId != ''">
+			AND (
+				(
+					centerGroupId is null AND city.id in (SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter(#{userId}, 'CRM'))
+				) OR (
+					centerGroupId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+				) OR (
+					projectDepartmentId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth(#{userId}, 'CRM'))
+				)
+			)
+		</if>
+			ORDER BY rowNum
+<!-- 			offset ${offsetRowLine} rows fetch next 10 rows only -->
+			
+			
+			DROP TABLE #prezjcb
+			DROP TABLE #orgHis
+	</select>
+
+	<select id="execLinkZjcbDetailTable" parameterType="Map" resultMap="LinkZjcbDetailDtoMap">
+		exec P_CRM_RPT_LinkZjcb_Query #{organization},#{regionCodeList},#{areaCityCodeList},#{cityIdList},#{centerIdList},#{estateNm},#{reportId},#{dateStage},#{userId}
+	</select>
+
+	<select id="getCrmUserAuthCity" parameterType="Map" resultType="String">
+		SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter(#{userId}, 'CRM')
+	</select>
+	
+	<select id="getCrmUserAuthCenterGroup" parameterType="Map" resultType="String">
+		SELECT centerGroupId FROM  dbo.F_USR_UserCenterAuth(#{userId}, 'CRM')
+	</select>
+</mapper>

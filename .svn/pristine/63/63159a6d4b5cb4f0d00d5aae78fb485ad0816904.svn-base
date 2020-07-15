@@ -1,0 +1,184 @@
+package cn.com.eju.pmls.performswitch.service;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.linkage.model.City;
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.DateUtil;
+import cn.com.eju.pmls.performswitch.dao.PerformSwitchMapper;
+import cn.com.eju.pmls.performswitch.dao.PmlsPerformSwitchWeekLogMapper;
+import cn.com.eju.pmls.performswitch.dao.PmlsPerformSwitchWeekMapper;
+import cn.com.eju.pmls.performswitch.dao.PmlsWeekInfoMapper;
+import cn.com.eju.pmls.performswitch.dto.CheckRoughDate;
+import cn.com.eju.pmls.performswitch.dto.PerformSwitchDto;
+import cn.com.eju.pmls.performswitch.dto.PmlsPerformSwitchWeekDto;
+import cn.com.eju.pmls.performswitch.dto.ZTree;
+
+import cn.com.eju.pmls.performswitch.model.PerformSwitch;
+import cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeekLog;
+import cn.com.eju.pmls.performswitch.model.PmlsWeekInfo;
+import com.alibaba.fastjson.JSON;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.*;
+
+/**
+ * 开关账service层
+ */
+@Service("pmlsPerformSwitchWeekService")
+public class PmlsPerformSwitchWeekService extends BaseService<Object> {
+
+    @Resource
+    private PmlsPerformSwitchWeekMapper pmlsPerformSwitchWeekMapper;
+
+    @Resource
+    private PmlsWeekInfoMapper pmlsWeekInfoMapper;
+
+
+    @Resource
+    private PmlsPerformSwitchWeekLogMapper pmlsPerformSwitchWeekLogMapper;
+
+    @Resource
+    private CityUseService cityUseService;
+
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    /**
+     * 根据  pmls新房联动   查询开关账全部
+     * @param param
+     * @return
+     */
+    public ResultData<ZTree> queryListDto(Map<?, ?> param) throws Exception
+    {
+
+        //构建返回
+        ResultData<ZTree> resultData = new ResultData<ZTree>();
+        //定义字体颜色
+        Map<String, Object> map=new HashMap<String, Object>();
+        map.put("color", "red");
+        Map<String, Object> mapweight=new HashMap<String, Object>();
+        mapweight.put("font-weight", "bold");
+        List<ZTree> listsum=new ArrayList<ZTree>();
+        //查询 OMS 新房联动   开关账全部
+        List<PmlsPerformSwitchWeekDto> moList = pmlsPerformSwitchWeekMapper.queryLisDto(param);
+        for (PmlsPerformSwitchWeekDto performSwitchDto : moList) {
+            ZTree zTree=new ZTree();
+            zTree.setCityNo(performSwitchDto.getCityNo());
+            zTree.setName(performSwitchDto.getCityName());
+            //判断是否关账，如果关账，就设置红色
+            if(27502==performSwitchDto.getSwitchState().intValue()){
+                zTree.setFont(map);
+            }
+            listsum.add(zTree);
+
+        }
+        //最后设置一份全国数据
+        ZTree sum=new ZTree();
+        sum.setName("全国");
+        sum.setId(1);
+        sum.setFont(mapweight);
+        sum.setChildren(listsum);
+        resultData.setReturnData(sum);
+        return resultData;
+    }
+
+
+    /**
+     * 创建
+     * @param dtolist
+     * @return
+     */
+    public ResultData<PmlsPerformSwitchWeekDto> create(List<PmlsPerformSwitchWeekDto> dtolist) throws Exception {
+        //构建返回
+        ResultData<PmlsPerformSwitchWeekDto> resultData = new ResultData<PmlsPerformSwitchWeekDto>();
+        try{
+            StringBuilder returnInfoStr = new StringBuilder("");
+            for (PmlsPerformSwitchWeekDto pmlsPerformSwitchWeekDto : dtolist) {
+                    boolean uptFlag = false;
+                    String userCode = pmlsPerformSwitchWeekDto.getCreateUserCode();
+
+                    ResultData<City> data =cityUseService.getByCityNo(pmlsPerformSwitchWeekDto.getCityNo());
+                    Map<String,Object> reqMap = new HashMap<>();
+                    reqMap.put("cityNo",pmlsPerformSwitchWeekDto.getCityNo());
+                    reqMap.put("relateSystem",pmlsPerformSwitchWeekDto.getRelateSystem());
+                    PmlsPerformSwitchWeekDto hisDto = pmlsPerformSwitchWeekMapper.getPmlsPerformSwitchWeekSelective(reqMap);
+
+                    Integer operateYear = Integer.parseInt(pmlsPerformSwitchWeekDto.getYear());
+                    if(operateYear.intValue()<2020){
+                        returnInfoStr.append(data.getReturnData().getCityName()+"2019年不允许开关账，请联系系统管理员!!!");
+                        break;
+                    }
+                    if(hisDto==null){
+                        returnInfoStr.append(data.getReturnData().getCityName()+"该城市不存在历史关账，请联系系统管理员!!!");
+                        continue;
+                    }
+
+                    if(27502==pmlsPerformSwitchWeekDto.getSwitchState().intValue()){
+                        if(pmlsPerformSwitchWeekDto.getSortNo().intValue() <= hisDto.getSortNo().intValue()){
+                            returnInfoStr.append(data.getReturnData().getCityName()+"该城市当前周已关账，无需关账!!!");
+                            continue;
+                        }
+                        if(pmlsPerformSwitchWeekDto.getSortNo().intValue() == (hisDto.getSortNo().intValue()+1) ){
+                            uptFlag = true;
+                        }
+                        if(pmlsPerformSwitchWeekDto.getSortNo().intValue() > (hisDto.getSortNo().intValue()+1) ){
+                            returnInfoStr.append(data.getReturnData().getCityName()+"该城市目前已关账至："+hisDto.getYear()+"年"+hisDto.getMonth()+"月第"+hisDto.getWeekNo()+"周,请逐周关账!!!");
+                            continue;
+                        }
+                    }else{
+                        if(pmlsPerformSwitchWeekDto.getSortNo().intValue() < hisDto.getSortNo().intValue()){
+                            returnInfoStr.append(data.getReturnData().getCityName()+"该城市目前已关账至："+hisDto.getYear()+"年"+hisDto.getMonth()+"月第"+hisDto.getWeekNo()+"周,请逐周开账!!!");
+                            continue;
+                        }
+                        if(pmlsPerformSwitchWeekDto.getSortNo().intValue() == hisDto.getSortNo().intValue()){
+                            uptFlag = true;
+                        }
+                        if(pmlsPerformSwitchWeekDto.getSortNo().intValue() > hisDto.getSortNo().intValue()){
+                            returnInfoStr.append(data.getReturnData().getCityName()+"该城市当前周未关账，无需开账!!!");
+                            continue;
+                        }
+                    }
+
+                    if(uptFlag){
+                        Map<String,Object> weekReqMap = new HashMap<>();
+                        if(27502==pmlsPerformSwitchWeekDto.getSwitchState().intValue()){
+                            weekReqMap.put("year",pmlsPerformSwitchWeekDto.getYear());
+                            weekReqMap.put("month",pmlsPerformSwitchWeekDto.getMonth());
+                            weekReqMap.put("weekNo",pmlsPerformSwitchWeekDto.getWeekNo());
+                        }else {
+                            weekReqMap.put("sortNo",(pmlsPerformSwitchWeekDto.getSortNo().intValue()-1));
+                        }
+                        PmlsWeekInfo pmlsWeekInfo = pmlsWeekInfoMapper.getWeekInfoBySelective(weekReqMap);
+                        hisDto.setYear(pmlsWeekInfo.getYear());
+                        hisDto.setMonth(pmlsWeekInfo.getMonth());
+                        hisDto.setWeekNo(pmlsWeekInfo.getWeekNo());
+                        hisDto.setWeekEndDate(pmlsWeekInfo.getWeekEndDate());
+                        hisDto.setWeekStartDate(pmlsWeekInfo.getWeekStartDate());
+                        hisDto.setUpdateDate(new Date());
+                        hisDto.setUpdateUserCode(userCode);
+                        pmlsPerformSwitchWeekMapper.updateByPrimaryKeySelective(hisDto);
+
+                        PmlsPerformSwitchWeekLog addLog = new PmlsPerformSwitchWeekLog();
+                        BeanUtils.copyProperties(pmlsPerformSwitchWeekDto, addLog);
+                        addLog.setDelFlag(false);
+                        addLog.setCreateDate(new Date());
+                        addLog.setCreateUserCode(userCode);
+                        addLog.setId(null);
+                        addLog.setSwitchState(pmlsPerformSwitchWeekDto.getSwitchState());
+                        pmlsPerformSwitchWeekLogMapper.insertSelective(addLog);
+                    }
+            }
+            resultData.setSuccess(returnInfoStr.toString());
+        }
+        catch (Exception e){
+            logger.error("pmlsPerformSwitchWeekService", "PmlsPerformSwitchWeekService", "create", "input param dtolist"+ JSON.toJSONString(dtolist), 0, "", "", e);
+            resultData.setFail();
+        }
+        return resultData;
+    }
+}

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.GroupMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.Group" >
+    <id column="groupId" property="groupId" jdbcType="INTEGER" />
+    <result column="groupName" property="groupName" jdbcType="NVARCHAR" />
+    <result column="managerId" property="managerId" jdbcType="INTEGER" />
+    <result column="typeId" property="typeId" jdbcType="INTEGER" />
+    <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+    <result column="groupManagerId" property="groupManagerId" jdbcType="NVARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="cn.com.eju.deal.user.model.Group" extends="BaseResultMap" >
+    <result column="orgId" property="orgIdStr" jdbcType="VARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    groupId, groupName, managerId, typeId, parentId, dateCreate, userIdCreate, 
+    delFlag, orgId.ToString() as orgIdStr ,groupManagerId
+  </sql>
+  
+  <select id="selectAllGroupByTypeId"  resultType="cn.com.eju.deal.user.model.Group" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    where typeId ='2'
+  </select>
+  <select id="selectByPrimaryKey"  resultType="cn.com.eju.deal.user.model.Group" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    where groupId = #{groupId,jdbcType=INTEGER}
+  </select>
+  <select id="list" resultType="cn.com.eju.deal.user.model.Group">
+     select     groupId, groupName, managerId, t.typeId, parentId, t.dateCreate, t.userIdCreate, 
+    t.delFlag, orgId.ToString() as orgIdStr,typeName   from USR_Group t ,USR_GroupType t2 where t.typeId=t2.typeId
+  </select>
+  
+  <select id="selectByGroupId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.user.model.Group">
+     select 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    where groupId = #{parentId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByParentId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.user.model.Group">
+     select 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    where parentId = #{parentId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByGroupName" parameterType="java.lang.String" resultType="cn.com.eju.deal.user.model.Group">
+     select top 1 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    where groupName = #{groupName}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from USR_Group
+    where groupId = #{groupId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="groupId" parameterType="cn.com.eju.deal.user.model.Group" >
+    insert into USR_Group (
+    groupName, managerId, 
+      typeId, parentId,
+      dateCreate, userIdCreate, delFlag, 
+      orgId)
+    values ( #{groupName,jdbcType=NVARCHAR}, #{managerId,jdbcType=INTEGER}, 
+      #{typeId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER},
+      #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, #{delFlag,jdbcType=NVARCHAR}, 
+      #{orgIdStr,jdbcType=VARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.user.model.Group" >
+    insert into USR_Group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="groupId != null" >
+        groupId,
+      </if>
+      <if test="groupName != null" >
+        groupName,
+      </if>
+      <if test="managerId != null" >
+        managerId,
+      </if>
+      <if test="typeId != null" >
+        typeId,
+      </if>
+      <if test="parentId != null" >
+        parentId,
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="orgIdStr != null" >
+        orgIdStr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="groupName != null" >
+        #{groupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="managerId != null" >
+        #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null" >
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgIdStr != null" >
+        #{orgIdStr,jdbcType=VARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.user.model.Group" >
+    update USR_Group
+    <set >
+      <if test="groupName != null" >
+        groupName = #{groupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="managerId != null" >
+        managerId = #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        typeId = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parentId = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgIdStr != null" >
+        orgId = #{orgIdStr,jdbcType=VARBINARY},
+      </if>
+    </set>
+    where groupId = #{groupId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.com.eju.deal.user.model.Group" >
+    update USR_Group
+    set groupName = #{groupName,jdbcType=NVARCHAR},
+      managerId = #{managerId,jdbcType=INTEGER},
+      typeId = #{typeId,jdbcType=INTEGER},
+      parentId = #{parentId,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=NVARCHAR},
+      orgIdStr = #{orgIdStr,jdbcType=VARBINARY}
+    where groupId = #{groupId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.user.model.Group" >
+    update USR_Group
+    set groupName = #{groupName,jdbcType=NVARCHAR},
+      managerId = #{managerId,jdbcType=INTEGER},
+      typeId = #{typeId,jdbcType=INTEGER},
+      parentId = #{parentId,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=NVARCHAR}
+    where groupId = #{groupId,jdbcType=INTEGER}
+  </update>
+  <select id="selectAllParentByPostId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.user.model.Group">
+  	 DECLARE @orgId hierarchyid
+ 	 SELECT @orgId=orgId FROM USR_Group inner join usr_post on USR_Group.groupId = usr_post.groupId  WHERE usr_post.postId=#{postId}
+ 		SELECT * FROM USR_Group WHERE @orgId.IsDescendantOf(orgId)=1 
+  </select>
+   <select id="selectAllParentByGroupId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.user.model.Group">
+  	 DECLARE @orgId hierarchyid
+ 	 SELECT @orgId=orgId FROM USR_Group  WHERE groupId= #{groupId}
+ 		SELECT * FROM USR_Group WHERE @orgId.IsDescendantOf(orgId)=1 
+  </select>
+  <select id="selectAllChildrenByGroupId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.user.model.Group">
+  	 DECLARE @orgId hierarchyid
+ 	 SELECT @orgId=orgId FROM USR_Group  WHERE groupId= #{groupId}
+ 		SELECT * FROM USR_Group WHERE orgId.IsDescendantOf(@orgId)=1
+  </select>
+  <select id="selectGroupByTypeId"  resultType="cn.com.eju.deal.user.model.Group" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    where typeId =#{typeId}
+  </select>
+  <!-- 根据用户Code查询用户-->
+  <select id="selectByUserCode"  resultType="cn.com.eju.deal.user.model.Group" parameterType="java.lang.String" >
+    SELECT  T2.groupId, T2.groupName, T2.managerId, T2.typeId, T2.parentId, T2.dateCreate, T2.userIdCreate, 
+    T2.delFlag, T2.orgId.ToString() as orgIdStr 
+    FROM    dbo.USR_User T1
+            LEFT JOIN dbo.USR_Group T2 ON T1.groupId = T2.groupId
+    WHERE   T1.delFlag='N' AND T1.userCode = #{userCode,jdbcType=VARCHAR}
+  </select>
+    <!-- 查询-根据postId查询orgId-->
+    <select id="getOrgIdByPostId" resultType="cn.com.eju.deal.user.model.Group" parameterType="java.lang.Integer">
+        SELECT  g.orgId.ToString() AS orgIdStr
+        FROM    dbo.USR_Group g
+        WHERE   g.groupId = ( SELECT  p.groupId
+                            FROM    dbo.USR_Post p
+                            WHERE   p.postId = #{postId,jdbcType=INTEGER}
+                          )
+    </select>
+
+	<!-- 根据�?找中�?-->
+	<select id="getCenterByUser" parameterType="string" resultType="int">
+		DECLARE @orgId HIERARCHYID
+		SELECT  @orgId = orgId
+		FROM    USR_Group
+		        INNER JOIN crm.dbo.usr_user ON USR_Group.groupId = usr_user.groupId
+		WHERE   usr_user.userCode = #{userCode}
+		        AND USR_Group.delFlag = 'N'
+		SELECT  TOP 1 groupId
+		FROM    USR_Group g
+		        INNER JOIN dbo.USR_GroupType gt ON g.typeId = gt.typeId
+		                                           AND gt.delFlag = 'N'
+		                                           AND gt.typeCode = #{typeCode}
+		WHERE   @orgId.IsDescendantOf(orgId) = 1
+		ORDER BY orgId.ToString() DESC
+
+	</select>
+	
+	<!-- 根据�?找中�?-->
+	<select id="getCenterNameByUser" parameterType="string" resultType="string">
+		DECLARE @orgId HIERARCHYID
+		SELECT  @orgId = orgId
+		FROM    USR_Group
+		        INNER JOIN crm.dbo.usr_user ON USR_Group.groupId = usr_user.groupId
+		WHERE   crm.dbo.usr_user.userCode = #{userCode}
+		        AND USR_Group.delFlag = 'N'
+		SELECT  TOP 1 groupName
+		FROM    USR_Group g
+		        INNER JOIN dbo.USR_GroupType gt ON g.typeId = gt.typeId
+		                                           AND gt.delFlag = 'N'
+		                                           AND gt.typeCode = #{typeCode}
+		WHERE   @orgId.IsDescendantOf(orgId) = 1
+		ORDER BY orgId.ToString() DESC
+
+	</select>
+	
+	<!-- 业绩归属-联动的组信息 -->
+	<select id="getAchieveLinkGroupInfo" parameterType="map" resultType="map">
+		DECLARE @orgId HIERARCHYID
+		SELECT  @orgId = orgId
+		FROM    USR_Group
+		        INNER JOIN crm.dbo.usr_user ON USR_Group.groupId = usr_user.groupId
+		WHERE   usr_user.userCode = #{userCode}
+		        AND USR_Group.delFlag = 'N'
+		SELECT TOP 1
+		        g.groupId ,
+		        g.groupName ,
+		        g.groupManagerId ,
+		        u.userCode groupLeaderCode ,
+		        u.userName groupLeaderName
+		FROM    USR_Group g
+		        INNER JOIN dbo.USR_GroupType gt ON g.typeId = gt.typeId
+		                                           AND gt.delFlag = 'N'
+		                                           AND gt.typeCode = #{typeCode}
+		        LEFT JOIN USR_User u ON g.groupManagerId = u.userId
+		WHERE   @orgId.IsDescendantOf(orgId) = 1
+		ORDER BY orgId.ToString() DESC
+	</select>
+    <!-- Add By tong 2017/04/07 Start -->
+    <select id="selectAllGroupByTypeIdAndCityId"  resultType="cn.com.eju.deal.user.model.Group" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    where typeId =#{typeId}  
+    <if test="list != null">
+     AND cityId in 
+     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+       #{item}
+    </foreach>
+    </if>
+    <if test="organization==2016">
+    	And(timeTag=1081 or timeTag is null) 
+    </if>
+    <if test="organization==2017">
+    	And(timeTag=1082) 
+    </if>
+    
+    AND delflag='N'
+  </select>
+  
+    <select id="selectAllGroupByOrgIdAndTypeId"  resultType="cn.com.eju.deal.user.model.Group" parameterType="Map" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from USR_Group
+	    WHERE delflag='N' 
+	     <if test="list != null">
+	     AND (
+	     <foreach collection="list" item="item" index="index"  separator="or" >
+	       (orgId.ToString()  LIKE  '${item}%' AND  typeId=#{typeId})
+	    </foreach>
+	       )
+	     </if>
+	     <if test="organization == 2016">
+				AND (timeTag = 1081 or timeTag is null)
+		</if>
+		<if test="organization == 2017">
+			AND (timeTag = 1082)
+		</if>
+    </select>
+    
+   <select id="selectGroupByOrgId"  resultType="cn.com.eju.deal.user.model.Group" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Group
+    WHERE  delflag='N' 
+     <if test="list != null">
+     AND orgId.ToString() in 
+     <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+      
+     </if>
+  </select>
+    <!-- Add By tong 2017/04/07 End -->
+	<select id="getCityNoByGroupId" parameterType="java.lang.Integer" resultType="java.lang.String">
+		select b.cityNo from usr_group u,bas_city b
+		where u.cityId=b.id
+		and u.groupId=#{groupId}
+	</select>
+</mapper>

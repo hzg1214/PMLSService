@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.followMap.StoreStopAuditMapper">
+
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.model.followMap.StoreStopAuditDto">
+		<id column="stopId" property="stopId"/>
+		<result column="storeId" property="storeId"/>
+		<result column="storeNo" property="storeNo"/>
+		<result column="storeName" property="storeName"/>
+		<result column="storeAddress" property="storeAddress"/>
+		<result column="stopReason" property="stopReason"/>
+		<result column="stopReasonName" property="stopReasonName"/>
+		<result column="followDetail" property="followDetail"/>
+		<result column="auditStatus" property="auditStatus"/>
+		<result column="auditStatusName" property="auditStatusName"/>
+		<result column="userCreate" property="userCreate"/>
+		<result column="userCreateCode" property="userCreateCode"/>
+		<result column="userCreateName" property="userCreateName"/>
+		<result column="dateCreate" property="dateCreate"/>
+		<result column="auditUserId" property="auditUserId"/>
+		<result column="auditDetail" property="auditDetail"/>
+		<collection property="stopPicList" column="stopPicId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+	</resultMap>
+
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.model.sweepStreets.WXPictureDto"></resultMap>
+
+	<!-- 根据中心ID  查询中心负责人信息 -->
+	<select id="getCentralDirectorByCenterId" resultType="Map" parameterType="Integer">
+		SELECT DISTINCT
+				s1.centerGroupId AS centerId,
+				s1.centerGroupName AS centerName,
+				s2.userId,
+				s1.centerLeaderCode AS userCode,
+				s1.centerLeaderName AS userName
+			 FROM  dbo.Achiv_AchievementLevel_Setting s1
+			 INNER JOIN crm.dbo.USR_User s2 ON s1.centerLeaderCode=s2.userCode
+			 AND s1.centerLeaderName=s2.userName AND s2.inStatus=1073
+		where s1.centerGroupId = #{centerId}
+
+	</select>
+
+	<!-- 根据门店ID 获取门店停业上报变更审批记录 并且在审批中的 注：一个门店只能有一条待审批的位置变更审批，可以有多条变更审批记录 -->
+	<select id="getStoreStopAuditByStoreId" resultMap="BaseResultMap" parameterType="Integer">
+		 SELECT t1.stopId,
+			t1.storeId,
+			t2.StoreNo,
+			t2.name AS storeName,
+			t2.AddressDetail AS storeAddress,
+			t1.STATUS AS auditStatus,
+			t5.dicValue AS auditStatusName,
+			t1.stopReason,
+			isnull(t3.dicValue,'') AS stopReasonName,
+			t1.userCreate,
+			t4.userCode AS userCreateCode,
+			t1.userCreateName,
+			t1.followDetail,
+			t1.auditDetail,
+			CONVERT(VARCHAR,t1.dateCreate,20) as dateCreate,
+			t1.stopPicId
+		 FROM StoreBizStop t1 INNER JOIN Store t2 ON t1.storeId=t2.id
+		 left  JOIN dbo.BAS_DictionaryValue t3 ON t1.stopReason=t3.dicCode
+		 INNER JOIN dbo.BAS_DictionaryValue t5 ON t1.STATUS=t5.dicCode
+		 LEFT JOIN USR_User t4 ON t1.userCreate=t4.userId
+		 WHERE t1.STATUS!=21003
+		 and t2.businessStatus!=20901
+		 AND t1.storeId=#{storeId}
+	</select>
+
+	<select id="selectPicture" parameterType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" resultMap="pictureDtoMap">
+		select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+		from Pic_Picture_Ref where pictureRefId=#{pictureRefId} and pictureStatus=0
+	</select>
+
+	<!-- 根据ID 获取门店停业上报审批记录  -->
+	<select id="getStoreStopAuditById" resultMap="BaseResultMap" parameterType="Integer">
+		SELECT t1.stopId,
+			t1.storeId,
+			t2.StoreNo,
+			t2.name AS storeName,
+			t2.AddressDetail AS storeAddress,
+			t1.STATUS AS auditStatus,
+			t5.dicValue AS auditStatusName,
+			t1.stopReason,
+			isnull(t3.dicValue,'') AS stopReasonName,
+			t1.userCreate,
+			t4.userCode AS userCreateCode,
+			t1.userCreateName,
+			t1.followDetail,
+			t1.auditDetail,
+			CONVERT(VARCHAR,t1.dateCreate,20) as dateCreate,
+			t1.stopPicId
+		 FROM StoreBizStop t1 INNER JOIN Store t2 ON t1.storeId=t2.id
+		 left JOIN dbo.BAS_DictionaryValue t3 ON t1.stopReason=t3.dicCode
+		 INNER JOIN dbo.BAS_DictionaryValue t5 ON t1.STATUS=t5.dicCode
+		 LEFT JOIN USR_User t4 ON t1.userCreate=t4.userId
+		 WHERE  t1.stopId=#{stopId}
+	</select>
+
+  	<!-- 插入门店停业上报审批数据 -->
+  	<insert id="addStoreStopAudit"  parameterType="cn.com.eju.deal.model.followMap.StoreStopAuditDto"
+  		useGeneratedKeys="true" keyProperty="stopId">
+	     INSERT INTO StoreBizStop (
+			storeId,
+			status,
+			followDetail,
+			stopReason,
+			stopPicId,
+			userCreate,
+			userCreateName,
+			dateCreate,
+			delFlag
+		 ) VALUES(
+		 	#{storeId},
+		 	#{auditStatus},
+		 	#{followDetail},
+		 	#{stopReason},
+		 	#{stopPicId},
+		 	#{userCreate},
+		 	#{userCreateName},
+		 	getdate(),
+		 	'N'
+		 )
+	</insert>
+
+	<!-- 审批通过 门店停业上报审批 -->
+	<update id="updateStoreStopAudit" parameterType="cn.com.eju.deal.model.followMap.StoreStopAuditDto">
+        UPDATE StoreBizStop
+		<set>
+			auditTime = GETDATE(),
+	        <if test="auditStatus != null and  auditStatus != ''">
+				status = #{auditStatus},
+	        </if>
+	        <if test="auditUserId != null and auditUserId != ''">
+				auditUserId = #{auditUserId},
+	        </if>
+			<if test="auditDetail != null and auditDetail != ''">
+				auditDetail = #{auditDetail},
+			</if>
+        </set>
+        where stopId = #{stopId}
+    </update>
+
+	<!-- 审批通过 修改门店位置信息 -->
+	<update id="updateStoreStopStatus" parameterType="cn.com.eju.deal.model.followMap.StoreStopAuditDto">
+		UPDATE Store
+		<set>
+			dateUpdate = GETDATE(),
+			<if test="businessStatus != null and  businessStatus != ''">
+				businessStatus = #{businessStatus},
+			</if>
+			<if test="updateUserId != null and updateUserId != ''">
+				userUpdate = #{updateUserId},
+			</if>
+		</set>
+		where id = #{storeId}
+	</update>
+
+	<!--获取门店信息，合同信息，翻牌信息-->
+	<select id="getStoreInfoById" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.model.followMap.StoreStopAuditDto">
+		SELECT t1.id storeId,
+			t1.storeNo,
+			t1.name AS storeName,
+			t2.ContractStatus,
+			t3.decorationStatus,
+			t4.isCancel as approveState
+		  FROM Store t1
+		 LEFT  JOIN v_crm_StoreContract_last t2 ON t1.id=t2.StoreId
+		 LEFT JOIN (
+			SELECT sd.storeId,MIN(decorationStatus) AS decorationStatus
+									FROM dbo.Store_Decoration sd
+									WHERE sd.delFlag = 0
+									GROUP BY storeId
+		 ) t3 ON t1.id=t3.storeId
+		 left join ContractStore t4 on t2.contractId=t4.contractId and t1.id=t4.storeId
+		 WHERE t1.id=#{storeId}
+
+	</select>
+
+	<select id="getNotStoreStopAuditList" resultType="cn.com.eju.deal.model.followMap.StoreStopAuditDto">
+		 SELECT
+		 	t1.stopId,
+			t2.storeNo,
+			t2.name AS storeName,
+			t2.addressDetail as storeAddress,
+			t3.userCode,
+			t3.userName,
+			t3.cityUserCode,
+			t3.cityUserName,
+			DATEDIFF ( DAY, t1.dateCreate, GETDATE() ) AS dayNum
+		  FROM dbo.StoreBizStop t1
+		 INNER JOIN Store t2 ON t1.storeId=t2.Id
+		 LEFT JOIN (
+			SELECT DISTINCT
+				centerGroupId AS centerId,
+				centerGroupName AS centerName,
+				centerLeaderCode AS userCode,
+				centerLeaderName AS userName,
+				s1.cityLeaderCode AS cityUserCode,
+				s1.cityLeaderName AS cityUserName
+				FROM  dbo.Achiv_AchievementLevel_Setting s1
+				INNER JOIN crm.dbo.USR_User s2 ON s1.centerLeaderCode=s2.userCode
+				AND s1.centerLeaderName=s2.userName
+		 ) t3 ON t2.centerId=t3.centerId
+		 WHERE t1.STATUS=21001 and DATEDIFF ( DAY, t1.dateCreate, GETDATE() ) >0  AND t1.delFlag='N'
+	</select>
+
+</mapper>

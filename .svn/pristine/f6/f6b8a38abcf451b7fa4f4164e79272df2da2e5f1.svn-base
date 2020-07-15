@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.maintainStore.MaintainStoreMapper" >
+
+	<resultMap id="storeNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="Longitude" property="longitude" />
+		<result column="Latitude" property="latitude" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="StoreManager" property="storeManager" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" />
+		<result column="LinkageSituation" property="linkageSituation" />
+		<result column="ChainBrand" property="chainBrand" />
+		<result column="ChainBrandName" property="chainBrandName" />
+		<result column="StoreDueTime" property="storeDueTime" />
+		<result column="StorePersonNum" property="storePersonNum" />
+		<result column="StorePersonNumName" property="storePersonNumName" />
+		<result column="NowUserSystem" property="nowUserSystem" />
+		<result column="NowUserSystemName" property="nowUserSystemName" />
+		<result column="MainBusiness" property="mainBusiness" />
+		<result column="MainBusinessName" property="mainBusinessName" />
+		<result column="TransactionMode" property="transactionMode" />
+		<result column="TransactionModeName" property="transactionModeName" />
+		<result column="Address" property="address" />
+		<result column="AddressDetail" property="addressDetail" />
+		<result column="AuditStatus" property="auditStatus" />
+		<result column="AuditStatusName" property="auditStatusName" />
+		<result column="companyId" property="companyId" />
+		<result column="maintainer" property="maintainer" />
+		<result column="maintainerName" property="maintainerName" />
+
+		<result column="fpStatus" property="fpStatus" />
+		<result column="contractTypeName" property="contractTypeName" />
+		<result column="contractStatus" property="contractStatus" />
+		<result column="yqDateNum" property="yqDateNum" />
+		<result column="storePicUrl" property="storePicUrl" />
+		<result column="dataCount" property="dataCount" />
+		<result column="searchStoreStatus" property="searchStoreStatus"/>
+		<result column="decorationState" property="decorationState"/>
+	</resultMap>
+
+	<resultMap id="maintainerInfoDtoMap" type="cn.com.eju.deal.model.sweepStreets.MaintainerInfoDto"></resultMap>
+
+	<select id="getStoreListData" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		select t.* from (
+			select
+			ROW_NUMBER() OVER (ORDER BY
+		<if test="storeStatus!=null and (storeStatus==0 or storeStatus==30)">
+			x.fllowDate desc,x.yqDateNum desc,x.dateCreate desc
+		</if>
+		<if test="storeStatus!=null and storeStatus==10">
+			x.yqDateNum desc
+		</if>
+		<if test="storeStatus!=null and storeStatus==20">
+			x.dateCreate desc
+		</if>
+		) rowNum,
+			COUNT(1) OVER()  AS dataCount,
+			x.* from (
+			SELECT
+			t1.id,
+			t1.StoreNo,
+			t1.Name,
+			t1.AddressDetail,
+			t1.dateCreate,
+			t6.decorationStatus decorationState,
+			t4.dateCreate as fllowDate,
+			t3.ContractType,
+			CASE WHEN t3.ContractType=10301 THEN 'A'
+			WHEN t3.ContractType=10302 THEN 'B'
+			WHEN t3.ContractType=10303 THEN 'C'
+			WHEN t3.ContractType=10304 THEN 'A转B'
+			WHEN t3.ContractType=10306 THEN 'D'
+			WHEN t3.ContractType=10307 THEN '授牌'
+			ELSE ''
+			END contractTypeName,
+			t3.ContractStatus contractStatu,
+			CASE WHEN t3.ContractStatus=10401 THEN '草签'
+			WHEN t3.ContractStatus=10402 THEN '审核中'
+			WHEN t3.ContractStatus=10403 THEN '审核通过'
+			WHEN t3.ContractStatus=10404 THEN '审核未通过'
+			WHEN t3.ContractStatus=10405 THEN '作废'
+			WHEN t3.ContractStatus=10406 THEN '终止'
+			ELSE ''
+			END contractStatus,
+			CASE WHEN t3.ContractType=10307 and (t1.authCheckStatus is null or t1.authCheckStatus =23300) then '未验收'
+	        WHEN t3.ContractType=10307 and t1.authCheckStatus=23301 then '验收中'
+	        WHEN t3.ContractType=10307 and t1.authCheckStatus=23302 then '验收通过'
+	        WHEN t3.ContractType=10307 and t1.authCheckStatus=23303 then '验收不通过'
+	        WHEN t6.decorationStatus=16301 THEN '未装修'
+			WHEN t6.decorationStatus=16302 THEN '装修中'
+			WHEN t6.decorationStatus=16303 THEN '翻牌完成'
+			WHEN t6.decorationStatus=16304 THEN '翻牌验收完成'
+			ELSE ''
+			END fpStatus,
+			CASE WHEN t5.dateCreate>ISNULL(t4.DateCreate,'1900-01-01') THEN 20
+			WHEN DATEDIFF(day,t4.DateCreate,GETDATE())>7 THEN 10
+			ELSE 0
+			END storeStatus,
+			#{storeStatus} as searchStoreStatus,
+			CASE WHEN (t1.authCheckStatus IS NULL or t1.authCheckStatus = 23300) AND t3.ContractType = 10307 AND t3.ContractStatus = 10403
+				 THEN 23300
+				WHEN t1.authCheckStatus = 23303 AND t3.ContractType = 10307 AND t3.ContractStatus = 10403
+				 THEN 23303
+				 ELSE 0
+			END authCheckStatus ,
+			DATEDIFF(day,t4.DateCreate,GETDATE()) yqDateNum,
+			t7.smallPictureUrl AS storePicUrl,
+			t1.maintainer, t1.maintainerName
+			FROM Store t1
+			LEFT JOIN v_crm_StoreContract_last t3 ON t1.id=t3.StoreId
+			LEFT JOIN (
+			SELECT s.* FROM(SELECT storeId,dateCreate,ROW_NUMBER() over(PARTITION by storeId order by dateCreate DESC) as w FROM Follow WHERE isDelete=0) s WHERE s.w=1
+			) t4 ON t1.id=t4.StoreId
+			LEFT JOIN (
+			SELECT s.* FROM(SELECT storeId,dateCreate,ROW_NUMBER() over(PARTITION by storeId order by dateCreate DESC) as w FROM StoreMaintainer WHERE delFlag='N') s WHERE s.w=1
+			) t5 ON t1.id=t5.storeId
+			LEFT JOIN (
+			SELECT sd.storeId,MIN(decorationStatus) AS decorationStatus
+			FROM dbo.Store_Decoration sd
+			WHERE sd.delFlag = 0
+			GROUP BY storeId
+			) t6 ON t1.id=t6.storeId
+			LEFT JOIN (
+			SELECT s.* FROM(SELECT pictureRefId,createTime,smallPictureUrl,ROW_NUMBER() over(PARTITION by pictureRefId order by createTime DESC) as w FROM dbo.Pic_Picture_Ref WHERE  pictureStatus=0) s WHERE s.w=1
+			) t7 ON t1.PictureRefId=t7.pictureRefId
+
+			WHERE t1.IsDelete=0 AND t1.AuditStatus=20
+			<if test="centerId!=null and centerId!=''">
+				AND t1.centerId = #{centerId}
+			</if>
+		    AND t1.businessStatus = 20901
+			AND (t1.Maintainer='${userCode}'
+		      or t1.centerId in (
+				SELECT centerGroupId FROM dbo.F_WX_UserCenterAuth(#{userCode}, 'CRM')
+				WHERE 1 = 1
+				<if test="centerId!=null and centerId!=''">
+					AND centerGroupId = #{centerId}
+				</if>
+				<if test="cityNo!=null and cityNo!=''">
+					and cityNo=#{cityNo}
+				</if>
+			  )
+			)
+			<if test="storeName!=null and storeName!=''">
+				and (t1.name like '%${storeName}%' or t1.storeNo like '%${storeName}%' or t1.addressDetail like  '%${storeName}%')
+			</if>
+			) x where 1=1
+			<if test="storeStatus!=null and storeStatus!=0 and storeStatus!=30">
+				and x.ContractType in (10302,10304)
+				and x.contractStatu=10403 
+				and x.decorationState=16304 
+				and x.StoreNo not in (
+					SELECT kws.StoreNo FROM dbo.Kefu_Wj_Satisfaction kws
+					WHERE   kws.delFlag=0 and (kws.storeStatus!='24801' OR (
+							kws.storeStatus='24801' AND kws.wjdcStatus='25002'))
+ 							AND DateDiff(yy, wjdcdate, GetDate())=0 
+ 							AND cast(datepart(q,wjdcdate) as varchar(2))=DATEPART(QUARTER,GETDATE())
+   					GROUP BY kws.StoreNo)
+			</if>
+			<if test="authCheckStatus!=null">
+				and x.authCheckStatus in (23300,23303)
+			</if>
+
+		) t where t.rowNum &gt; ((#{pageIndex}-1) * #{pageSize}) AND t.rowNum  &lt;= (#{pageIndex}*#{pageSize})
+
+
+	</select>
+
+	<select id="getOverdueNotFollowStore" resultType="Map">
+
+		SELECT  s1.storeCount ,
+				ISNULL(s2.centerId,0) centerId,
+				ISNULL(s2.centerName,'') centerName,
+				ISNULL(s2.userCode,'') userCode,
+				ISNULL(s2.userName,'') userName
+		FROM    ( SELECT    x.centerId ,
+							COUNT(x.id) storeCount
+				  FROM      ( SELECT    t1.id ,
+										CASE WHEN t5.dateCreate > ISNULL(t4.DateCreate,
+																	  '1900-01-01')
+											 THEN 20
+											 WHEN DATEDIFF(day, t4.DateCreate,
+														   GETDATE()) > 7 THEN 10
+											 ELSE 0
+										END storeStatus ,
+										t1.centerId
+							  FROM      Store t1
+										LEFT JOIN v_crm_StoreContract_last t3 ON t1.id = t3.StoreId
+										LEFT JOIN ( SELECT  s.*
+													FROM    ( SELECT  storeId ,
+																	  dateCreate ,
+																	  ROW_NUMBER() OVER ( PARTITION BY storeId ORDER BY dateCreate DESC ) AS w
+															  FROM    Follow
+															  WHERE   isDelete = 0
+															) s
+													WHERE   s.w = 1
+												  ) t4 ON t1.id = t4.StoreId
+										LEFT JOIN ( SELECT  s.*
+													FROM    ( SELECT  storeId ,
+																	  dateCreate ,
+																	  ROW_NUMBER() OVER ( PARTITION BY storeId ORDER BY dateCreate DESC ) AS w
+															  FROM    StoreMaintainer
+															  WHERE   delFlag = 'N'
+															) s
+													WHERE   s.w = 1
+												  ) t5 ON t1.id = t5.storeId
+										LEFT JOIN ( SELECT  sd.storeId ,
+															MIN(decorationStatus) AS decorationStatus
+													FROM    dbo.Store_Decoration sd
+													WHERE   sd.delFlag = 0
+													GROUP BY storeId
+												  ) t6 ON t1.id = t6.storeId
+										LEFT JOIN ( SELECT  s.*
+													FROM    ( SELECT  pictureRefId ,
+																	  createTime ,
+																	  smallPictureUrl ,
+																	  ROW_NUMBER() OVER ( PARTITION BY pictureRefId ORDER BY createTime DESC ) AS w
+															  FROM    dbo.Pic_Picture_Ref
+															  WHERE   pictureStatus = 0
+															) s
+													WHERE   s.w = 1
+												  ) t7 ON t1.PictureRefId = t7.pictureRefId
+							  WHERE     t1.IsDelete = 0
+										AND t1.AuditStatus = 20
+										AND t1.businessStatus != 20903
+							) x
+				  WHERE     1 = 1
+							AND x.storeStatus = 20
+				  GROUP BY  x.centerId
+				) s1
+				LEFT JOIN ( SELECT DISTINCT
+									centerGroupId AS centerId ,
+									centerGroupName AS centerName ,
+									centerLeaderCode AS userCode ,
+									centerLeaderName AS userName
+							FROM    dbo.Achiv_AchievementLevel_Setting s1
+									INNER JOIN dbo.USR_User s2 ON s1.centerLeaderCode = s2.userCode
+																  AND s1.centerLeaderName = s2.userName
+						  ) s2 ON s1.centerId = s2.centerId
+
+	</select>
+
+
+
+	<select id="checkMaintainerStatus" resultMap="maintainerInfoDtoMap">
+		SELECT distinct
+			s1.Maintainer,s1.maintainerName,
+			s3.*
+		 FROM Store s1
+		LEFT JOIN (
+			SELECT DISTINCT  userCode FROM dbo.USR_User WHERE delFlag='N' AND  inStatus !='1075'
+		) s2 ON s1.Maintainer=s2.userCode
+		LEFT JOIN (
+			SELECT DISTINCT
+				centerGroupId AS centerId,
+				centerGroupName AS centerName,
+				centerLeaderCode AS userCode,
+				centerLeaderName AS userName
+			 FROM  dbo.Achiv_AchievementLevel_Setting s1
+			 INNER JOIN dbo.USR_User s2 ON s1.centerLeaderCode=s2.userCode
+			 AND s1.centerLeaderName=s2.userName
+		) s3 ON s1.centerId=s3.centerId
+		WHERE ISNULL(s1.Maintainer,'')!='' AND s2.userCode IS NULL
+		AND s1.IsDelete=0 AND s1.AuditStatus=20
+		AND s1.centerId IS NOT NULL AND s3.userCode IS NOT NULL
+		ORDER BY s3.userCode
+	</select>
+
+	<select id="addPushInfo" parameterType="cn.com.eju.deal.model.sweepStreets.WXPushInfoDto">
+		INSERT INTO WX_Push_Info VALUES(
+			#{pushWechatUserId},
+			#{pushContent},
+			#{pushResult},
+			#{pushType},
+			GETDATE()
+		)
+	</select>
+
+	<select id="updateMaintainerCenterData">
+		delete WX_Maintainer_Center;
+
+		insert into WX_Maintainer_Center(
+			userCode,centerName,createDate
+		)
+		SELECT DISTINCT t3.userCode,t1.centername,getdate()
+		FROM (
+			SELECT s2.groupId
+				,STUFF((
+						SELECT ',' + ltrim(s.centername)
+						FROM V_CRM_Group_Center_All s
+						WHERE s.groupId = s2.groupId
+						FOR XML PATH('')
+						), 1, 1, '') AS centername
+			FROM dbo.V_CRM_Group_Center_All s2
+			) t1
+		INNER JOIN dbo.USR_Group t2 ON t1.groupId = t2.groupId
+			AND t2.delFlag = 'N'
+		INNER JOIN dbo.USR_User t3 ON t1.groupId = t3.groupId
+			AND t3.delFlag = 'N'
+	</select>
+</mapper>

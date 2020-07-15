@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.cypay.CYPayMapper">
+    <insert id="addPayResponseLog" parameterType="cn.com.eju.deal.model.cypay.PayLogDto">
+        INSERT INTO [dbo].[payResponseLog]([logContent])VALUES(#{logContent,jdbcType=NVARCHAR})
+    </insert>
+    <insert id="addPayResponse" parameterType="cn.com.eju.deal.model.cypay.CYPayResponseDto" useGeneratedKeys="true" keyProperty="resId">
+        INSERT INTO [dbo].[PayResponse]([responseCode],[traceNO],[amount],[receiptId],[businessId],[toolCode],[totalFee],[paySeq])
+        VALUES(#{responseCode,jdbcType=NVARCHAR},#{traceNO,jdbcType=NVARCHAR},#{amount,jdbcType=DECIMAL},#{receiptId,jdbcType=DECIMAL},
+        #{businessId,jdbcType=DECIMAL},#{toolCode,jdbcType=NVARCHAR},#{totalFee,jdbcType=DECIMAL},#{paySeq,jdbcType=NVARCHAR})
+    </insert>
+    <insert id="saveMerchantInfo" parameterType="cn.com.eju.deal.model.cypay.CYMerchantDto" useGeneratedKeys="true" keyProperty="merchantId">
+        INSERT INTO [dbo].[MerchantInfo]
+        ([memberName],[mp],[email],[certType],[certName],[certNumber],[payPassword],[bankCode],[cardNum],[cardBranchBankName],[cardBranchBankProvince],[cardBranchBankCity],CityNo)
+        VALUES(#{memberName,jdbcType=NVARCHAR},#{mp,jdbcType=NVARCHAR},#{email,jdbcType=NVARCHAR},#{certType,jdbcType=DECIMAL},
+        #{certName,jdbcType=NVARCHAR},#{certNumber,jdbcType=NVARCHAR},#{payPassword,jdbcType=NVARCHAR},#{bankCode,jdbcType=NVARCHAR},
+        #{cardNum,jdbcType=NVARCHAR},#{cardBranchBankName,jdbcType=NVARCHAR},#{cardBranchBankProvince,jdbcType=NVARCHAR},#{cardBranchBankCity,jdbcType=NVARCHAR},#{cityNo,jdbcType=NVARCHAR})
+    </insert>
+    <update id="updateMerchant" parameterType="cn.com.eju.deal.model.cypay.CYMerchantDto" >
+        UPDATE dbo.MerchantInfo
+        SET memberId = #{memberId,jdbcType=NVARCHAR},cardId=#{cardId,jdbcType=NVARCHAR}
+        WHERE merchantId=#{memberFlag,jdbcType=DECIMAL}
+    </update>
+    <select id="getMecharantId" parameterType="cn.com.eju.deal.model.cypay.CYMerchantDto"  resultType="cn.com.eju.deal.model.cypay.CYMerchantDto" >
+        select top 1 * from dbo.MerchantInfo
+        WHERE cityNo=#{cityNo,jdbcType=NVARCHAR}
+    </select>
+</mapper>

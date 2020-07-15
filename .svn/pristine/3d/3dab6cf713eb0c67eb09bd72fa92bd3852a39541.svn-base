@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.channelBusiness.dao.BusinessManagerMapper">
+
+  <!--获取商户列表-->
+  <select id="getBusinessManagerList"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+    SELECT t1.Id ,
+           t1.CompanyNo ,
+           t1.CompanyName ,
+           t1.brandId,
+           t4.brandName,
+           t2.CityName+t3.DistrictName+Address AS address,
+           CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate ,
+           u.userName as userCreateName
+    FROM Company t1
+    INNER JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo AND t2.FlagDeleted=0
+    INNER JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo AND t3.FlagDeleted=0
+    INNER JOIN dbo.USR_User u ON t1.userCreate=u.userId AND u.delFlag='N'
+    INNER JOIN dbo.PMLS_ChannelBrand t4 ON t1.brandId=t4.id AND t4.delFlag=0
+    <if test="cooperationSelect!=null and cooperationSelect!=''">
+        INNER JOIN dbo.LNK_FrameContract t5 ON t1.CompanyNo=t5.companyNo AND t5.approveState='10403'
+    </if>
+    WHERE t1.IsDelete=0
+    <if test="companyNo!=null and companyNo!=''">
+      and t1.companyNo like '%'+#{companyNo}+'%'
+    </if>
+    <if test="companyName!=null and companyName!=''">
+      and t1.companyName like '%'+#{companyName}+'%'
+    </if>
+    <if test="acCityNo!=null and acCityNo!=''">
+      and (t1.acCityNo=#{acCityNo} or t1.id in(SELECT CompanyId FROM dbo.Company_Release_City WHERE IsDelete=0 and ReleaseCityNo=#{acCityNo}))
+    </if>
+    order by t1.dateCreate desc
+  </select>
+    <!--获取商户信息用于查重校验-->
+    <select id="getBusinessInfo2"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        select top 1 t1.*
+        from Company t1
+        where t1.isDelete=0
+          AND arteryType=29501
+        <if test="id!=null and id!=0">
+            and t1.id!=#{id}
+        </if>
+        <if test="(businessLicenseNo!=null and businessLicenseNo!='') or (companyName!=null and companyName!='')">
+            and (t1.businessLicenseNo=#{businessLicenseNo} or t1.companyName=#{companyName})
+        </if>
+    </select>
+  <!--获取商户信息-->
+  <select id="getBusinessInfo"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+    SELECT top 1 t1.*
+           ,t4.brandName,t2.cityName,t3.districtName
+           ,t5.dicValue AS channelTypeName
+           ,t6.dicValue AS channelLevelName
+           ,t7.contractNo as frameContractNo
+           ,t7.approveState as approveState
+           ,t8.groupName as centerName
+           ,t2.CityName+t3.DistrictName+t1.Address AS addressDetail
+           ,CONVERT(VARCHAR(50),FLOOR(ISNULL(t1.taxRate,0) * 100)) + '%' AS taxRateName
+           ,u.userName as userCreateName
+      FROM Company t1
+      LEFT JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo AND t2.FlagDeleted=0
+      LEFT JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo AND t3.FlagDeleted=0
+      LEFT JOIN dbo.PMLS_ChannelBrand t4 ON t1.brandId=t4.id AND t4.delFlag=0
+      LEFT JOIN dbo.BAS_DictionaryValue t5 ON t1.channelType=t5.dicCode AND t5.delFlag='N'
+      LEFT JOIN dbo.BAS_DictionaryValue t6 ON t1.channelLevel=t6.dicCode AND t6.delFlag='N'
+      LEFT JOIN dbo.LNK_FrameContract t7 ON t1.CompanyNo=t7.companyNo AND t7.delFlag=0 AND t7.approveState!='10405'
+      LEFT JOIN dbo.USR_Group t8 ON t1.pmlsCenterId=t8.groupId AND t8.delFlag='N'
+      LEFT JOIN dbo.USR_User u ON t1.userCreate=u.userId AND u.delFlag='N'
+    WHERE t1.isDelete=0
+    <if test="id!=null and id!=0">
+      AND t1.id=#{id}
+    </if>
+  </select>
+  <!--新增商户-->
+  <insert id="addBusiness" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+        INSERT INTO Company (
+          companyNo,
+          companyName,
+          cityNo,
+          districtNo,
+          address,
+          businessLicenseNo,
+          legalPerson,
+          contactNumber,
+          acCityNo,
+          brandId,
+          remark,
+          channelLevel,
+          channelType,
+          dockingPeo ,
+          dockingPeoTel ,
+          userCreate,
+          dateCreate,
+          isDelete,
+          isFyCompany,
+          maintainer,
+          maintainerName,
+          centerId,
+          taxRate
+          ,brandType
+          ,pmlsCenterId
+          ,isProcuration
+          ,arteryType
+        ) VALUES(
+          #{companyNo},
+          #{companyName},
+          #{cityNo},
+          #{districtNo},
+          #{address},
+          #{businessLicenseNo},
+          #{legalPerson},
+          #{contactNumber},
+          #{acCityNo},
+          #{brandId},
+          #{remark},
+          #{channelLevel},
+          #{channelType},
+          #{dockingPeo},
+          #{dockingPeoTel},
+          #{userCreate},
+          getdate(),
+          0,
+          #{isFyCompany},
+          #{maintainer},
+          #{maintainerName},
+          #{centerId},
+          #{taxRate}
+          ,#{brandType}
+          ,#{pmlsCenterId}
+          ,#{isProcuration}
+          ,#{arteryType}
+        )
+    </insert>
+
+  <!--修改商户-->
+  <update id="updateBusiness"  parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+    update Company
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="companyName!=null and companyName!=''">
+        companyName=#{companyName},
+      </if>
+      <if test="remark!=null and remark!=''">
+        remark=#{remark},
+      </if>
+      <if test="cityNo!=null and cityNo!=''">
+        cityNo=#{cityNo},
+      </if>
+      <if test="districtNo!=null and districtNo!=''">
+        districtNo=#{districtNo},
+      </if>
+      <if test="address!=null and address!=''">
+        address=#{address},
+      </if>
+
+      <if test="legalPerson!=null and legalPerson!=''">
+        legalPerson=#{legalPerson},
+      </if>
+      <if test="contactNumber!=null and contactNumber!=''">
+        contactNumber=#{contactNumber},
+      </if>
+
+      <if test="dockingPeo!=null and dockingPeo!=''">
+        dockingPeo=#{dockingPeo},
+      </if>
+      <if test="dockingPeoTel!=null and dockingPeoTel!=''">
+        dockingPeoTel=#{dockingPeoTel},
+      </if>
+      <if test="channelLevel!=null and channelLevel!=''">
+        channelLevel=#{channelLevel},
+      </if>
+      <if test="channelType!=null and channelType!=''">
+        channelType=#{channelType},
+      </if>
+      <if test="brandId!=null and brandId!=''">
+        brandId=#{brandId},
+      </if>
+        <if test="isFyCompany!=null and isFyCompany!=''">
+            isFyCompany=#{isFyCompany},
+        </if>
+        <if test="maintainer!=null and maintainer!=''">
+            maintainer=#{maintainer},
+        </if>
+        <if test="maintainerName!=null and maintainerName!=''">
+            maintainerName=#{maintainerName},
+        </if>
+        <if test="centerId!=null and centerId!=''">
+            centerId=#{centerId},
+        </if>
+        <if test="taxRate!=null and taxRate!=''">
+            taxRate=#{taxRate},
+        </if>
+
+        <if test="brandType!=null">
+            brandType=#{brandType},
+        </if>
+        <if test="pmlsCenterId!=null">
+            pmlsCenterId=#{pmlsCenterId},
+        </if>
+        <if test="isProcuration!=null">
+            isProcuration=#{isProcuration},
+        </if>
+        <if test="arteryType!=null">
+            arteryType=#{arteryType},
+        </if>
+      userUpdate=#{userCreate},
+      dateUpdate=getdate()
+    </trim>
+    where id=#{id}
+  </update>
+  <!--删除商户-->
+  <update id="deleteBusiness" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto" >
+    update Company set isDelete=1,userUpdate=#{userUpdate},dateUpdate=getdate() where id=#{id}
+  </update>
+
+  <insert id="addStore" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+    <!--新增门店-->
+    INSERT INTO Store (
+      storeNo,
+      name,
+      IsDelete,
+      cityNo,
+      DistrictNo,
+      address,
+      UserCreate,
+      DateCreate
+      ,acCityNo,centerId,Maintainer,maintainerName,pmlsCenterId,pmlsMaintainCode,pmlsMaintainName,brandType
+    ) VALUES(
+      #{storeNo},
+      #{companyName},
+      0,
+      #{cityNo},
+      #{districtNo},
+      #{address},
+      #{userCreate},
+      getdate()
+      ,#{acCityNo},#{centerId},#{maintainer},#{maintainerName},#{centerId},#{maintainer},#{maintainerName},#{brandType}
+    );
+    <!--更新详细地址-->
+    update t1 set t1.addressDetail=t2.CityName+t3.DistrictName+t1.Address
+    FROM Store t1
+    INNER JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo AND t2.FlagDeleted=0
+    INNER JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo AND t3.FlagDeleted=0
+    WHERE t1.StoreNo=#{storeNo};
+
+    <!--添加公司门店关系-->
+    INSERT INTO CompanyStore(
+      CompanyId,StoreId,IsDelete,flag,userCreate,dateCreate
+    )
+    SELECT companyId= (
+        SELECT id FROM Company WHERE companyNo=#{companyNo} AND IsDelete=0
+    ),storeId=(
+        SELECT id FROM dbo.Store WHERE storeNo=#{storeNo} AND IsDelete=0
+    ),0 isDelete,0 flag, '${userCreate}' userCreate,GETDATE() dateCreate
+      <!--添加门店维护中心历史表-->
+      INSERT INTO dbo.StoreCenterHis( storeid ,centerid ,createrUser ,status ,createDate )
+      SELECT storeId =( SELECT id FROM dbo.Store WHERE storeNo=#{storeNo} AND IsDelete=0)
+             ,#{centerId},#{userCreate},0,GETDATE()
+
+      <!--添加门店维护人历史表-->
+      INSERT INTO dbo.StoreMaintainer( storeId ,userCode ,userIdCreate ,delFlag ,dateCreate ,setUserName ,setUserCode ,dateMtcStart )
+      SELECT storeId =( SELECT id FROM dbo.Store WHERE storeNo=#{storeNo} AND IsDelete=0)
+      ,#{maintainer},#{userCreate},'N',GETDATE()
+      ,setUserName = (SELECT userName FROM dbo.USR_User WHERE userId = #{userCreate} AND delFlag = 'N' )
+      ,setUserCode = (SELECT userCode FROM dbo.USR_User WHERE userId = #{userCreate} AND delFlag = 'N' )
+      ,GETDATE()
+      <!--添加PMLS门店维护中心历史表-->
+      INSERT INTO dbo.PMLS_StoreCenterHis( storeid ,centerid ,createrUser ,status ,createDate )
+      SELECT storeId =( SELECT id FROM dbo.Store WHERE storeNo=#{storeNo} AND IsDelete=0)
+            ,#{centerId},#{userCreate},0,GETDATE()
+
+      <!--添加PMLS门店维护人历史表-->
+      INSERT INTO dbo.PMLS_StoreMaintainer( storeId ,userCode ,userIdCreate ,delFlag ,dateCreate ,setUserName ,setUserCode ,dateMtcStart )
+      SELECT storeId =( SELECT id FROM dbo.Store WHERE storeNo=#{storeNo} AND IsDelete=0)
+      ,#{maintainer},#{userCreate},'N',GETDATE()
+      ,setUserName = (SELECT userName FROM dbo.USR_User WHERE userId = #{userCreate} AND delFlag = 'N' )
+      ,setUserCode = (SELECT userCode FROM dbo.USR_User WHERE userId = #{userCreate} AND delFlag = 'N' )
+      ,GETDATE()
+
+
+
+
+
+  </insert>
+
+  <!--新增联系人-->
+  <insert id="addContacts" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    INSERT INTO CompanyContacts(
+      companyNo,
+      contactName,
+      contactTel,
+      userCreate,
+      dateCreate,
+      delFlag
+    ) VALUES(
+      '${companyNo}',
+      '${dockingPeo}',
+      '${dockingPeoTel}',
+      '${userCreate}',
+      getdate(),
+      0
+    )
+  </insert>
+  <!--修改联系人-->
+  <update id="updateContacts" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+    update CompanyContacts
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="dockingPeo!=null and dockingPeo!=''">
+        contactName=#{dockingPeo,jdbcType=VARCHAR},
+      </if>
+      <if test="dockingPeoTel!=null and dockingPeoTel!=''">
+        contactTel=#{dockingPeoTel,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete!=null and isDelete!=''">
+        delFlag=#{isDelete},
+      </if>
+    </trim>
+    where id=#{id}
+  </update>
+
+  <!--获取联系人列表-->
+  <select id="getContactsList"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+      SELECT
+        ROW_NUMBER() OVER(ORDER BY dateCreate desc) rowNum,
+        t1.Id ,
+        t1.contactName as dockingPeo,
+        t1.contactTel as dockingPeoTel
+      FROM CompanyContacts t1
+      WHERE t1.delFlag=0 and t1.companyNo =#{companyNo}
+      order by t1.dateCreate desc
+  </select>
+
+    <select id="getContactsCount" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto" resultType="int">
+        select count(1) from CompanyContacts where delFlag=0 and companyNo=#{companyNo}
+    </select>
+
+  <!--获取联系人信息-->
+  <select id="getContactsInfo"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+      select top 1 t1.Id ,
+        t1.companyNo,
+        t1.contactName as dockingPeo,
+        t1.contactTel as dockingPeoTel
+      from CompanyContacts t1 where t1.delFlag=0
+      <if test="id!=null and id!=0">
+        and t1.id=#{id}
+      </if>
+  </select>
+    <!--校验管理员信息是否存在-->
+    <select id="getContactsInfoByTel"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        select top 1 t1.Id ,
+        t1.companyNo,
+        t1.contactName as dockingPeo,
+        t1.contactTel as dockingPeoTel
+        from CompanyContacts t1 where t1.delFlag=0
+        <if test="id!=null and id!=0">
+            and t1.id!=#{id}
+        </if>
+        <if test="dockingPeoTel!=null and dockingPeoTel!=''">
+            and t1.contactTel=#{dockingPeoTel}
+        </if>
+    </select>
+  <!--新增日志-->
+  <insert id="addOperationLog"  parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+    insert into CompanyOperationLog (
+      companyNo,operationContent,userCreate,dateCreate
+    ) values(
+      #{companyNo},#{operationContent},#{userCreate},getdate()
+    )
+  </insert>
+  <!--获取日志列表-->
+  <select id="getOperationLogList"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+       SELECT
+        ROW_NUMBER() OVER(ORDER BY t1.dateCreate desc) rowNum,
+        t1.companyNo,
+        REPLACE(t1.operationContent,'；','&lt;br/&gt;') as operationContent,
+        CONVERT(VARCHAR(20),t1.dateCreate,120) dateCreate ,
+        u.userName as userCreateName
+       FROM CompanyOperationLog t1
+       INNER JOIN dbo.USR_User u ON t1.userCreate=u.userId AND u.delFlag='N'
+       WHERE t1.companyNo=#{companyNo}
+       order by t1.dateCreate desc
+  </select>
+
+  <insert id="addCompanyReleaseCity" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+      MERGE Company_Release_City t
+      USING (SELECT '${id}' AS companyId,'${acCityNo}' AS releaseCityNo) s
+      ON t.CompanyId=s.companyId AND t.ReleaseCityNo=s.releaseCityNo
+      WHEN MATCHED THEN UPDATE SET t.IsDelete=0
+      WHEN NOT MATCHED THEN INSERT(
+          companyId,
+          ReleaseCityNo,
+          IsDelete,
+          DateCreate,
+          UserCreate) VALUES(
+          #{id},
+          #{acCityNo},
+          0,
+          getdate(),
+          #{userCreate}
+      );
+  </insert>
+
+  <!--新增修改删除管理员之后执行存储过程同步友房通数据-->
+  <select id="execCompanyAdmin" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+      <!--id、公司no、姓名、手机、状态、1新增 2修改 3删除-->
+      <if test="operationType==1"><!--新增管理员-->
+        EXEC dbo.p_app_company_admin '${id}','${companyNo}','${dockingPeo}','${dockingPeoTel}','0','1';
+      </if>
+      <if test="operationType==2"><!--修改管理员-->
+        EXEC dbo.p_app_company_admin '${id}','${companyNo}','${dockingPeo}','${dockingPeoTel}','0','2';
+      </if>
+      <if test="operationType==3"><!--删除管理员-->
+        EXEC dbo.p_app_company_admin '${id}',null,null,null,'1','3';
+      </if>
+  </select>
+
+  <!--新增修改商户之后执行存储过程同步友房通数据-->
+  <select id="execCompany" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+    <!--公司ID,公司CODE，公司名，城市code，品牌ID，品牌名，状态，1新增公司2修改公司3修改品牌，门店ID，门店编码，门店名，门店地址，是否我司-->
+    <if test="operationType==1"><!--新增商户-->
+        DECLARE @storeId VARCHAR(50),@storeNo VARCHAR(200),@storeName VARCHAR(500),@storeAddress VARCHAR(5000),@govCityCode VARCHAR(50);
+        SELECT @storeId=id,@storeNo=storeNo,@storeName=name,@storeAddress=AddressDetail FROM Store WHERE isDelete=0 and storeNo='${storeNo}';
+        select @govCityCode=govCityCode from BAS_City where cityNo='${acCityNo}' and FlagDeleted=0;
+        EXEC dbo.p_app_company '${id}','${companyNo}','${companyName}',@govCityCode,'${brandId}','${brandName}','0','1',@storeId,@storeNo,@storeName,@storeAddress,'${isFyCompany}';
+    </if>
+    <if test="operationType==2"><!--修改商户-->
+        EXEC dbo.p_app_company '${id}',null,'${companyName}',null,'${brandId}','${brandName}','0','2',null,null,null,null,'${isFyCompany}';
+    </if>
+    <if test="operationType==3"><!--修改渠道品牌-->
+        EXEC dbo.p_app_company null,null,null,null,'${brandId}','${brandName}',null,'3',null,null,null,null,null;
+    </if>
+
+  </select>
+    <!--获取未生成附件的结算书列表-->
+    <select id="getNotFileJssList" resultType="cn.com.eju.pmls.channelBusiness.model.JsStatementDto">
+        SELECT TOP 5 t1.id,t1.projectName FROM PMLS_JsStatement t1
+        LEFT JOIN PMLS_JsStatement_File t2 ON t1.id=t2.jssId AND t2.delFlag=0
+        WHERE t1.delFlag=0 AND t2.id IS NULL
+    </select>
+    <!--获取结算书明细列表-->
+    <select id="getJssDetailList" parameterType="int" resultType="cn.com.eju.pmls.channelBusiness.model.JsStatementDto">
+        SELECT ROW_NUMBER() OVER(ORDER BY t1.dateCreate desc) rowNum,t1.*,
+         t2.companyName,t2.projectName,0 as contractYdAmount, 0 as yjsAmount
+        FROM PMLS_JsStatement_Dtl t1
+        INNER JOIN PMLS_JY_APPLY t2 ON t1.jssId=t2.id AND t2.delFlag=0
+        WHERE t1.jssId=#{jssId} AND t1.delFlag=0
+    </select>
+    <!--新增结算书附件-->
+    <insert id="insertJsStatementFile" parameterType="Map" >
+        INSERT INTO PMLS_JsStatement_File(jssId,fileName,fileUrl,delFlag,dateCreate,userIdCreate,dateUpdate,userIdUpdate) VALUES(
+          #{jssId},#{fileName},#{fileUrl},0,getdate(),'2221',getdate(),'2221'
+        )
+    </insert>
+    <!--获取维护人列表-->
+    <select id="getMaintainerList" parameterType="Map" resultType="cn.com.eju.deal.model.sweepStreets.MaintainerInfoDto">
+        SELECT t1.cityNo,t1.userCode as maintainer,t1.userName as maintainerName,t1.centerId,t2.groupName AS centerName FROM dbo.BAS_PMLS_UserCenterCitySetting t1
+        INNER JOIN dbo.USR_Group t2 ON t1.centerId=t2.groupId AND t2.delFlag='N'
+        WHERE t1.delFlag=0
+        <if test="cityNo != null and cityNo != ''">
+            AND t1.cityNo = #{cityNo,jdbcType=VARCHAR}
+        </if>
+        <if test="maintainerName!=null and maintainerName!=''">
+            and (t1.userName like '%'+#{maintainerName}+'%' or t1.userCode like '%'+#{maintainerName}+'%')
+        </if>
+        <if test="projectCityNoLists!=null">
+            and t1.cityNo in
+            <foreach collection="projectCityNoLists" item="list" index="index"
+                     open="(" close=")" separator=",">
+                #{list, jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        order by t1.dateCreate desc
+    </select>
+
+    <!--获取房友中心列表-->
+    <select id="getFyCenterList" parameterType="Map" resultType="cn.com.eju.deal.model.sweepStreets.MaintainerInfoDto">
+        SELECT t1.centerId,t2.groupName AS centerName FROM dbo.BAS_PMLS_UserCenterCitySetting t1
+        INNER JOIN dbo.USR_Group t2 ON t1.centerId=t2.groupId AND t2.delFlag='N'
+        WHERE t1.delFlag=0
+        <if test="centerName!=null and centerName!=''">
+            and t2.groupName like '%'+#{centerName}+'%'
+        </if>
+        <if test="projectCityNoLists!=null">
+            and t1.cityNo in
+            <foreach collection="projectCityNoLists" item="list" index="index"
+                     open="(" close=")" separator=",">
+                #{list, jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        GROUP BY t1.centerId,t2.groupName
+		ORDER BY t2.groupName DESC
+    </select>
+    <!--添加公司维护人信息-->
+    <insert id="addCompanyMaintainer" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        INSERT INTO CompanyMaintainer (
+          companyId,
+          userCode,
+          userName,
+          centerId,
+          userIdCreate,
+          delFlag,
+          dateCreate,
+          setUserName,
+          setUserCode,
+          dateMtcStart )
+        select '${id}' as companyId,
+        '${maintainer}' as userCode,
+        '${maintainerName}' as userName,
+        '${pmlsCenterId}' as centerId,
+        '${userCreate}' as userIdCreate,
+        0 as delFlag,
+        getdate() as dateCreate,
+        userName as setUserName,
+        userCode as setUserCode,
+        convert(varchar(10),getdate(),120) as dateMtcStart
+        from USR_User where userId='${userCreate}'
+    </insert>
+    <!--修改公司维护人信息-->
+    <update id="updateCompanyMaintainer" parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        update CompanyMaintainer set dateMtcEnd=CASE WHEN dateMtcStart &lt;=CONVERT(VARCHAR(10), GETDATE() ,120)
+        THEN CONVERT(VARCHAR(10), GETDATE() ,120)  ELSE CONVERT(VARCHAR(10), dateadd(day, -1, getdate()) ,120) END
+        where companyId=#{id} and dateMtcEnd is null
+    </update>
+
+    <!--获取公司维护人记录列表信息-->
+    <select id="getCompanyMaintainerList" parameterType="Map" resultType="cn.com.eju.deal.model.sweepStreets.MaintainerInfoDto">
+        SELECT ROW_NUMBER() OVER(ORDER BY t1.dateCreate desc) rowNum,
+            t1.companyId ,
+            t1.userCode as maintainer,
+            t1.userName as maintainerName,
+            t1.centerId ,
+            t1.userIdCreate ,
+            CONVERT(VARCHAR(19),t1.dateCreate,120) as dateCreate ,
+            t1.setUserName ,
+            t1.setUserCode ,
+            CONVERT(VARCHAR(10),t1.dateMtcStart,120) as dateMtcStart ,
+            CONVERT(VARCHAR(10),t1.dateMtcEnd,120)as dateMtcEnd ,
+            t2.groupName AS centerName
+            FROM CompanyMaintainer t1
+        INNER JOIN USR_GRoup t2 ON t1.centerId=t2.groupId AND t2.delFlag='N'
+        WHERE companyId=#{companyId}
+        order by t1.dateCreate desc
+    </select>
+
+    <!--获取未生成附件的三方协议列表-->
+    <select id="getNotFileSfxyList" resultType="cn.com.eju.pmls.channelBusiness.model.JsStatementDto">
+        SELECT TOP 5 t1.id,t1.projectName FROM PMLS_Triple t1
+        LEFT JOIN PMLS_Triple_File t2 ON t1.id=t2.qyId AND t2.delFlag=0
+        WHERE t1.delFlag=0 AND t2.id IS NULL
+    </select>
+
+    <!--新增三方协议附件-->
+    <insert id="insertSfxyFile" parameterType="Map" >
+        INSERT INTO PMLS_Triple_File(qyId,fileName,fileUrl,delFlag,dateCreate,userIdCreate,dateUpdate,userIdUpdate) VALUES(
+          #{qyId},#{fileName},#{fileUrl},0,getdate(),'2221',getdate(),'2221'
+        )
+    </insert>
+
+
+    <select id="getNewBusinessManagerList" parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        SELECT t1.Id
+               ,t1.CompanyNo
+               ,t1.CompanyName
+               ,t1.brandId
+               ,t4.brandName
+               ,t1.brandType
+               ,t1.isProcuration
+               ,t1.arteryType
+               ,ISNULL(t2.CityName,'')+ISNULL(t3.DistrictName,'')+ISNULL(Address,'') AS address
+               ,CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate
+               ,u.userName as userCreateName
+               ,t1.userCreate
+        FROM Company t1
+        INNER JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo AND t2.FlagDeleted=0
+        INNER JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo AND t3.FlagDeleted=0
+        INNER JOIN dbo.USR_User u ON t1.userCreate=u.userId AND u.delFlag='N'
+        LEFT JOIN dbo.PMLS_ChannelBrand t4 ON t1.brandId=t4.id AND t4.delFlag=0
+        WHERE t1.IsDelete=0
+        <if test="companyNo!=null and companyNo!=''">
+            and (t1.companyNo LIKE CONCAT('%', #{companyNo},'%')
+              OR t1.CompanyName LIKE CONCAT('%', #{companyNo},'%')
+            )
+        </if>
+        <if test="brandName!=null and brandName!=''">
+            and t4.brandName LIKE CONCAT('%', #{brandName},'%')
+        </if>
+        <if test="brandType!=null and brandType!=''">
+            and t1.brandType = #{brandType}
+        </if>
+        <if test="isProcuration!=null and isProcuration!=''">
+            and t1.isProcuration =  #{isProcuration}
+        </if>
+        <if test="acCityNo!=null and acCityNo!=''">
+            and (t1.acCityNo=#{acCityNo} or t1.id in(SELECT CompanyId FROM dbo.Company_Release_City WHERE IsDelete=0 and ReleaseCityNo=#{acCityNo}))
+        </if>
+        order by t1.dateCreate desc
+    </select>
+
+
+</mapper>

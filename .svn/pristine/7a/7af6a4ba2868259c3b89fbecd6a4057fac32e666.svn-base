@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.NoSigned.dao.NoSignDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.NoSigned.model.NosignDetail" >
+	<result column="yearly" property="yearly" jdbcType="VARCHAR" />
+	<result column="regionCode" property="regionCode" jdbcType="VARCHAR" />
+	<result column="regionName" property="regionName" jdbcType="VARCHAR" />
+	<result column="areaCityCode" property="areaCityCode" jdbcType="VARCHAR" />
+	<result column="areaCityName" property="areaCityName" jdbcType="VARCHAR" />
+	<result column="centerGroupId" property="centerGroupId" jdbcType="VARCHAR" />
+	<result column="centerGroupName" property="centerGroupName" jdbcType="VARCHAR" />
+	<result column="cityGroupId" property="cityGroupId" jdbcType="VARCHAR" />
+	<result column="cityGroupName" property="cityGroupName" jdbcType="VARCHAR" />
+    <result column="storeId" property="storeId" jdbcType="VARCHAR"/>
+    <result column="storeNo" property="storeNo" jdbcType="VARCHAR" />
+    <result column="storeName" property="storeName" jdbcType="VARCHAR" />
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="districtName" property="districtName" jdbcType="VARCHAR" />
+    <result column="addressDetail" property="addressDetail" jdbcType="VARCHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="mobilePhone" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="storeScale" property="storeScale" jdbcType="VARCHAR" />
+    <result column="chainBrand" property="chainBrand" jdbcType="VARCHAR" />
+    <result column="mowUserSystem" property="nowUserSystem" jdbcType="VARCHAR" />
+    <result column="storeLeaseDueTime" property="storeLeaseDueTime" jdbcType="VARCHAR" />
+    <result column="mainBusiness" property="mainBusiness" jdbcType="VARCHAR" />
+    <result column="hisDueDate" property="hisDueDate" jdbcType="VARCHAR" />
+    <result column="dueCause" property="dueCause" jdbcType="VARCHAR" />
+    <result column="createName" property="createName" jdbcType="VARCHAR" />
+    <result column="createNameNo" property="createNameNo" jdbcType="VARCHAR" />
+    <result column="maintainerName" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="maintainerCode" property="maintainerCode" jdbcType="VARCHAR" />
+    <result column="centerName" property="centerName" jdbcType="VARCHAR" />
+    <result column="dateFollowUpNew" property="dateFollowUpNew" jdbcType="VARCHAR" />
+    <result column="storeStatus" property="storeStatus" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+	<select id="getById" parameterType="Map" resultMap="BaseResultMap">
+		SELECT
+			org.yearly, org.regionCode, org.regionName, org.areaCityCode, org.areaCityName,
+			org.cityGroupId, org.cityGroupName, org.centerGroupId, org.centerGroupName,
+			rpt.centerId, rpt.storeId, rpt.storeNo, rpt.storeName, rpt.dateCreate,
+			rpt.cityNo, rpt.cityId, rpt.cityName, rpt.acCityNo, rpt.acCityId, rpt.acCityName, rpt.districtName, rpt.addressDetail,
+			rpt.contacts, rpt.mobilePhone, rpt.storeScale, rpt.storeStatus, rpt.chainBrand, rpt.nowUserSystem,
+			rpt.storeLeaseDueTime, rpt.mainBusiness, rpt.dueCause, rpt.hisDueDate,
+			rpt.createName, rpt.createNameNo, rpt.maintainerName, rpt.maintainerCode, rpt.centerName, rpt.dateFollowUpNew
+		  FROM V_CRM_NoSignedStore_Detail rpt
+			inner join (SELECT distinct cityId FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM')) acCity on rpt.acCityId=acCity.cityId
+			LEFT JOIN (
+				SELECT
+					yearly, regionCode, regionName, areaCityCode, areaCityName,
+					cityGroupId, cityGroupName, centerGroupId, centerGroupName
+				  FROM dbo.V_USR_OrgHis
+				<if test="organization != null and organization != ''">
+					WHERE yearly = '${organization}'
+				</if>
+			) org ON rpt.centerId = org.centerGroupId
+			WHERE 1 = 1
+		<if test="userId != null and userId != ''">
+			AND (
+				(
+					rpt.centerId is null AND rpt.cityId in (SELECT cityId FROM dbo.F_USR_UserCityAuthForNullCenter('${userId}', 'CRM'))
+				) OR (
+					rpt.centerId in (SELECT centerGroupId FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM'))
+				)
+			)
+		</if>
+		<if test="searchKey != null and searchKey != ''">
+			    <![CDATA[AND (rpt.storeNo LIKE '%' + RTrim(LTrim('${searchKey}')) + '%' OR rpt.storeName LIKE '%' + RTrim(LTrim('${searchKey}')) + '%'
+			    OR rpt.addressDetail LIKE '%' + RTrim(LTrim('${searchKey}')) + '%' OR rpt.maintainerName  LIKE '%' + RTrim(LTrim('${searchKey}')) + '%')]]>
+	   </if>
+	   <if test="dateCreateStart != null and dateCreateStart != ''">
+				<![CDATA[
+						AND rpt.dateCreate is not null
+						AND Convert(varchar(10), rpt.dateCreate,120) >= #{dateCreateStart,jdbcType=NVARCHAR}
+				]]>
+		</if>
+		<if test="dateCreateEnd != null and dateCreateEnd != ''">
+			    <![CDATA[
+				       AND rpt.dateCreate is not null
+				       AND Convert(varchar(10), rpt.dateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+			   ]]>
+		</if>
+		<if test="regionCodeList != null">
+			AND org.regionCode IN
+			<foreach collection="regionCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				'${item}'
+			</foreach>
+		</if>
+		<if test="areaCityCodeList != null">
+			AND org.areaCityCode IN
+			<foreach collection="areaCityCodeList" item="item" index="index"
+					 open="(" separator="," close=")">
+				'${item}'
+			</foreach>
+		</if>
+		<if test="cityIdList != null">
+			AND rpt.cityId IN
+			<foreach collection="cityIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				'${item}'
+			</foreach>
+		</if>
+		<if test="centerIdList != null">
+			AND rpt.centerGroupId IN
+			<foreach collection="centerIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				'${item}'
+			</foreach>
+		</if>
+		<!--门店所属城市-->
+		<if test="cityNoList != null">
+			AND rpt.cityNo IN
+			<foreach collection="cityNoList" item="item" index="index"
+					 open="(" separator="," close=")">
+				'${item}'
+			</foreach>
+		</if>
+
+		<!--<if test="allCityIdList != null">
+			AND rpt.acCityId IN
+			<foreach collection="allCityIdList" item="item" index="index"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>-->
+
+		<!--合同结束原因-->
+		<if test="dueCauseList != null">
+			AND rpt.dueCause IN
+			<foreach collection="dueCauseList" item="item" index="index"
+					 open="(" separator="," close=")">
+				'${item}'
+			</foreach>
+		</if>
+		ORDER BY org.regionCode, org.areaCityCode, rpt.cityId, rpt.storeNo
+	</select>
+
+</mapper>

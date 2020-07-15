@@ -1,0 +1,58 @@
+package cn.com.eju.pmls.jsStatement.dto;
+
+import java.util.List;
+
+import cn.com.eju.deal.cashbill.model.CashBillCompany;
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatement;
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl;
+
+public class PmlsJsStatementDto extends PmlsJsStatement {
+
+    private String approveStatusNm;
+    private String userCreateName;
+    private String userCreateCode;
+    
+    private List<CashBillCompany> cashBillList;//结算书下对应得请款单
+    
+    private List<PmlsJsStatementDtl> jsStatementDtlList;//结算订单
+
+    public List<PmlsJsStatementDtl> getJsStatementDtlList() {
+		return jsStatementDtlList;
+	}
+
+	public void setJsStatementDtlList(List<PmlsJsStatementDtl> jsStatementDtlList) {
+		this.jsStatementDtlList = jsStatementDtlList;
+	}
+
+	public List<CashBillCompany> getCashBillList() {
+		return cashBillList;
+	}
+
+	public void setCashBillList(List<CashBillCompany> cashBillList) {
+		this.cashBillList = cashBillList;
+	}
+
+	public String getUserCreateCode() {
+		return userCreateCode;
+	}
+
+	public void setUserCreateCode(String userCreateCode) {
+		this.userCreateCode = userCreateCode;
+	}
+
+	public String getApproveStatusNm() {
+        return approveStatusNm;
+    }
+
+    public void setApproveStatusNm(String approveStatusNm) {
+        this.approveStatusNm = approveStatusNm;
+    }
+
+    public String getUserCreateName() {
+        return userCreateName;
+    }
+
+    public void setUserCreateName(String userCreateName) {
+        this.userCreateName = userCreateName;
+    }
+}

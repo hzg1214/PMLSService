@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.inCommission.dao.SceneInCommissionMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.dto.scene.inCommission.InCommissionResultDto" >
+      <result column="estateId" property="estateId" jdbcType="VARCHAR"/>
+      <result column="reportId" property="reportId" jdbcType="VARCHAR"/>
+      <result column="estateNm" property="estateNm" jdbcType="VARCHAR"/>
+      <result column="buildingNo" property="buildingNo" jdbcType="VARCHAR"/>
+      <result column="dealAmount" property="dealAmount" jdbcType="VARCHAR"/>
+      <result column="dealDate" property="dealDate" jdbcType="TIMESTAMP"/>
+      <result column="templateType" property="templateType" jdbcType="INTEGER"/>
+      <result column="projectNo" property="projectNo" jdbcType="VARCHAR"/>
+      
+      <result column="subTotalPreTax01" property="subTotalPreTax01" jdbcType="DECIMAL"/>
+      <result column="subtotalAfterTax01" property="subtotalAfterTax01" jdbcType="DECIMAL"/>
+      <result column="beforeAmountPreTax01" property="beforeAmountPreTax01" jdbcType="DECIMAL"/>
+      <result column="beforeAmountAfterTax01" property="beforeAmountAfterTax01" jdbcType="DECIMAL"/>
+      <result column="janPreTax01" property="janPreTax01" jdbcType="DECIMAL"/>
+      <result column="janAfterTax01" property="janAfterTax01" jdbcType="DECIMAL"/>
+      <result column="febPreTax01" property="febPreTax01" jdbcType="DECIMAL"/>
+      <result column="febAfterTax01" property="febAfterTax01" jdbcType="DECIMAL"/>
+      <result column="marPreTax01" property="marPreTax01" jdbcType="DECIMAL"/>
+      <result column="marAfterTax01" property="marAfterTax01" jdbcType="DECIMAL"/>
+      <result column="aprPreTax01" property="aprPreTax01" jdbcType="DECIMAL"/>
+      <result column="aprAfterTax01" property="aprAfterTax01" jdbcType="DECIMAL"/>
+      <result column="mayPreTax01" property="mayPreTax01" jdbcType="DECIMAL"/>
+      <result column="mayAfterTax01" property="mayAfterTax01" jdbcType="DECIMAL"/>
+      <result column="junPreTax01" property="junPreTax01" jdbcType="DECIMAL"/>
+      <result column="junAfterTax01" property="junAfterTax01" jdbcType="DECIMAL"/>
+      <result column="julPreTax01" property="julPreTax01" jdbcType="DECIMAL"/>
+      <result column="julAfterTax01" property="julAfterTax01" jdbcType="DECIMAL"/>
+      <result column="augPreTax01" property="augPreTax01" jdbcType="DECIMAL"/>
+      <result column="augAfterTax01" property="augAfterTax01" jdbcType="DECIMAL"/>
+      <result column="sepPreTax01" property="sepPreTax01" jdbcType="DECIMAL"/>
+      <result column="sepAfterTax01" property="sepAfterTax01" jdbcType="DECIMAL"/>
+      <result column="octPreTax01" property="octPreTax01" jdbcType="DECIMAL"/>
+      <result column="octAfterTax01" property="octAfterTax01" jdbcType="DECIMAL"/>
+      <result column="novPreTax01" property="novPreTax01" jdbcType="DECIMAL"/>
+      <result column="novAfterTax01" property="novAfterTax01" jdbcType="DECIMAL"/>
+      <result column="decPreTax01" property="decPreTax01" jdbcType="DECIMAL"/>
+      <result column="decAfterTax01" property="decAfterTax01" jdbcType="DECIMAL"/>
+      
+      <result column="subTotalPreTax02" property="subTotalPreTax02" jdbcType="DECIMAL"/>
+      <result column="subtotalAfterTax02" property="subtotalAfterTax02" jdbcType="DECIMAL"/>
+       <result column="beforeAmountPreTax02" property="beforeAmountPreTax02" jdbcType="DECIMAL"/>
+      <result column="beforeAmountAfterTax02" property="beforeAmountAfterTax02" jdbcType="DECIMAL"/>
+       <result column="janPreTax02" property="janPreTax02" jdbcType="DECIMAL"/>
+      <result column="janAfterTax02" property="janAfterTax02" jdbcType="DECIMAL"/>
+       <result column="febPreTax02" property="febPreTax02" jdbcType="DECIMAL"/>
+      <result column="febAfterTax02" property="febAfterTax02" jdbcType="DECIMAL"/>
+       <result column="marPreTax02" property="marPreTax02" jdbcType="DECIMAL"/>
+      <result column="marAfterTax02" property="marAfterTax02" jdbcType="DECIMAL"/>
+       <result column="aprPreTax02" property="aprPreTax02" jdbcType="DECIMAL"/>
+      <result column="aprAfterTax02" property="aprAfterTax02" jdbcType="DECIMAL"/>
+       <result column="mayPreTax02" property="mayPreTax02" jdbcType="DECIMAL"/>
+      <result column="mayAfterTax02" property="mayAfterTax02" jdbcType="DECIMAL"/>
+       <result column="junPreTax02" property="junPreTax02" jdbcType="DECIMAL"/>
+      <result column="junAfterTax02" property="junAfterTax02" jdbcType="DECIMAL"/>
+       <result column="julPreTax02" property="julPreTax02" jdbcType="DECIMAL"/>
+      <result column="julAfterTax02" property="julAfterTax02" jdbcType="DECIMAL"/>
+       <result column="augPreTax02" property="augPreTax02" jdbcType="DECIMAL"/>
+      <result column="augAfterTax02" property="augAfterTax02" jdbcType="DECIMAL"/>
+       <result column="sepPreTax02" property="sepPreTax02" jdbcType="DECIMAL"/>
+      <result column="sepAfterTax02" property="sepAfterTax02" jdbcType="DECIMAL"/>
+       <result column="octPreTax02" property="octPreTax02" jdbcType="DECIMAL"/>
+      <result column="octAfterTax02" property="octAfterTax02" jdbcType="DECIMAL"/>
+       <result column="novPreTax02" property="novPreTax02" jdbcType="DECIMAL"/>
+      <result column="novAfterTax02" property="novAfterTax02" jdbcType="DECIMAL"/>
+       <result column="decPreTax02" property="decPreTax02" jdbcType="DECIMAL"/>
+      <result column="decAfterTax02" property="decAfterTax02" jdbcType="DECIMAL"/>
+  </resultMap>
+  
+  
+  <select id="getInCommissionList" parameterType="Map" resultMap="BaseResultMap">
+ SELECT  
+	 report.estateId                                            
+	,report.estateNm                                           
+	,report.reportId  
+	,Estate.projectNo                                          
+	,reportDetail.buildingNo                                    
+	,cast(round(reportDetail.dealAmount,2)         AS numeric(20,2)) dealAmount                                    
+	,convert(char(10),reportDetail.dealDate,120)   AS dealDate                                          
+	,reportDetail.tsnum                            AS num                                      
+	,reportDetail.id                               AS detailId
+	,V_Import.templateType                                     
+   ,ISNULL(V_Import_bf.subTotalPreTax01,0.00)         
+   + ISNULL(V_Import.janPreTax01,0.00)               
+   + ISNULL(V_Import.febPreTax01,0.00)               
+   + ISNULL(V_Import.marPreTax01,0.00)              
+   + ISNULL(V_Import.aprPreTax01,0.00)                
+   + ISNULL(V_Import.mayPreTax01,0.00)              
+   + ISNULL(V_Import.junPreTax01,0.00)               
+   + ISNULL(V_Import.julPreTax01,0.00)                
+   + ISNULL(V_Import.augPreTax01,0.00)                
+   + ISNULL(V_Import.sepPreTax01,0.00)                
+   + ISNULL(V_Import.octPreTax01,0.00)                
+   + ISNULL(V_Import.novPreTax01,0.00)                
+   + ISNULL(V_Import.decPreTax01,0.00)              AS subTotalPreTax01
+   ,ISNULL(V_Import_bf.subTotalAfterTax01,0.00)        
+   + ISNULL(V_Import.janAfterTax01,0.00)              
+   + ISNULL(V_Import.febAfterTax01,0.00)             
+   + ISNULL(V_Import.marAfterTax01,0.00)              
+   + ISNULL(V_Import.aprAfterTax01,0.00)             
+   + ISNULL(V_Import.mayAfterTax01,0.00)              
+   + ISNULL(V_Import.junAfterTax01,0.00)              
+   + ISNULL(V_Import.julAfterTax01,0.00)              
+   + ISNULL(V_Import.augAfterTax01,0.00)              
+   + ISNULL(V_Import.sepAfterTax01,0.00)              
+   + ISNULL(V_Import.octAfterTax01,0.00)              
+   + ISNULL(V_Import.novAfterTax01,0.00)              
+   + ISNULL(V_Import.decAfterTax01,0.00) AS subTotalAfterTax01
+	,ISNULL(V_Import_bf.subTotalPreTax01,0.00) AS beforeAmountPreTax01
+	,ISNULL(V_Import_bf.subTotalAfterTax01,0.00) AS beforeAmountAfterTax01
+	,cast(round(V_Import.janPreTax01,2)            AS numeric(20,2)) janPreTax01
+	,cast(round(V_Import.janAfterTax01,2)          AS numeric(20,2)) janAfterTax01            
+	,cast(round(V_Import.febPreTax01,2)           AS  numeric(20,2)) febPreTax01
+	,cast(round(V_Import.febAfterTax01,2)          AS numeric(20,2)) febAfterTax01            
+	,cast(round(V_Import.marPreTax01,2)            AS numeric(20,2)) marPreTax01 
+	,cast(round(V_Import.marAfterTax01,2)          AS numeric(20,2)) marAfterTax01           
+	,cast(round(V_Import.aprPreTax01,2)            AS numeric(20,2)) aprPreTax01
+	,cast(round(V_Import.aprAfterTax01,2)          AS numeric(20,2)) aprAfterTax01             
+	,cast(round(V_Import.mayPreTax01,2)            AS numeric(20,2)) mayPreTax01
+	,cast(round(V_Import.mayAfterTax01,2)          AS numeric(20,2)) mayAfterTax01            
+	,cast(round(V_Import.junPreTax01,2)            AS numeric(20,2)) junPreTax01
+	,cast(round(V_Import.junAfterTax01 ,2)         AS numeric(20,2)) junAfterTax01            
+	,cast(round(V_Import.julPreTax01,2)            AS numeric(20,2)) julPreTax01
+	,cast(round(V_Import.julAfterTax01,2)          AS numeric(20,2)) julAfterTax01            
+	,cast(round(V_Import.augPreTax01,2)            AS numeric(20,2)) augPreTax01
+	,cast(round(V_Import.augAfterTax01,2)          AS numeric(20,2)) augAfterTax01          
+	,cast(round(V_Import.sepPreTax01,2)            AS numeric(20,2)) sepPreTax01
+	,cast(round(V_Import.sepAfterTax01,2)          AS numeric(20,2)) sepAfterTax01            
+	,cast(round(V_Import.octPreTax01,2)            AS numeric(20,2)) octPreTax01
+	,cast(round(V_Import.octAfterTax01,2)          AS numeric(20,2)) octAfterTax01           
+	,cast(round(V_Import.novPreTax01,2)            AS numeric(20,2)) novPreTax01
+	,cast(round(V_Import.novAfterTax01,2)          AS numeric(20,2)) novAfterTax01           
+	,cast(round(V_Import.decPreTax01,2)            AS numeric(20,2)) decPreTax01
+	,cast(round(V_Import.decAfterTax01,2)          AS numeric(20,2)) decAfterTax01                  
+	,ISNULL(V_Import_bf.subTotalPreTax02,0.00)          
+   + ISNULL(V_Import.janPreTax02,0.00)                
+   + ISNULL(V_Import.febPreTax02,0.00)               
+   + ISNULL(V_Import.marPreTax02,0.00)               
+   + ISNULL(V_Import.aprPreTax02,0.00)                
+   + ISNULL(V_Import.mayPreTax02,0.00)               
+   + ISNULL(V_Import.junPreTax02,0.00)                
+   + ISNULL(V_Import.julPreTax02,0.00)                
+   + ISNULL(V_Import.augPreTax02,0.00)                
+   + ISNULL(V_Import.sepPreTax02,0.00)               
+   + ISNULL(V_Import.octPreTax02,0.00)                
+   + ISNULL(V_Import.novPreTax02,0.00)               
+   + ISNULL(V_Import.decPreTax02,0.00) AS subTotalPreTax02
+   ,ISNULL(V_Import_bf.subTotalAfterTax02,0.00)        
+   + ISNULL(V_Import.janAfterTax02,0.00)              
+   + ISNULL(V_Import.febAfterTax02,0.00)              
+   + ISNULL(V_Import.marAfterTax02,0.00)              
+   + ISNULL(V_Import.aprAfterTax02,0.00)              
+   + ISNULL(V_Import.mayAfterTax02,0.00)              
+   + ISNULL(V_Import.junAfterTax02,0.00)             
+   + ISNULL(V_Import.julAfterTax02,0.00)              
+   + ISNULL(V_Import.augAfterTax02,0.00)              
+   + ISNULL(V_Import.sepAfterTax02,0.00)              
+   + ISNULL(V_Import.octAfterTax02,0.00)              
+   + ISNULL(V_Import.novAfterTax02,0.00)             
+   + ISNULL(V_Import.decAfterTax02,0.00) AS subTotalAfterTax02
+	,ISNULL(V_Import_bf.subTotalPreTax02,0.00) AS beforeAmountPreTax02
+	,ISNULL(V_Import_bf.subTotalAfterTax02,0.00) AS beforeAmountAfterTax02
+	,cast(round(V_Import.janPreTax02,2)            AS numeric(20,2)) janPreTax02 
+	,cast(round(V_Import.janAfterTax02,2)          AS numeric(20,2)) janAfterTax02          
+	,cast(round(V_Import.febPreTax02,2)            AS numeric(20,2)) febPreTax02
+	,cast(round(V_Import.febAfterTax02,2)          AS numeric(20,2)) febAfterTax02            
+	,cast(round(V_Import.marPreTax02,2)            AS numeric(20,2)) marPreTax02 
+	,cast(round(V_Import.marAfterTax02,2)          AS numeric(20,2)) marAfterTax02          
+	,cast(round(V_Import.aprPreTax02,2)            AS numeric(20,2)) aprPreTax02
+	,cast(round(V_Import.aprAfterTax02,2)          AS numeric(20,2)) aprAfterTax02            
+	,cast(round(V_Import.mayPreTax02,2)            AS numeric(20,2)) mayPreTax02
+	,cast(round(V_Import.mayAfterTax02,2)          AS numeric(20,2)) mayAfterTax02            
+	,cast(round(V_Import.junPreTax02 ,2)           AS numeric(20,2)) junPreTax02
+	,cast(round(V_Import.junAfterTax02,2)          AS numeric(20,2)) junAfterTax02           
+	,cast(round(V_Import.julPreTax02,2)            AS numeric(20,2)) julPreTax02
+	,cast(round(V_Import.julAfterTax02,2)          AS numeric(20,2)) julAfterTax02            
+	,cast(round(V_Import.augPreTax02,2)            AS numeric(20,2)) augPreTax02
+	,cast(round(V_Import.augAfterTax02,2)          AS numeric(20,2)) augAfterTax02           
+	,cast(round(V_Import.sepPreTax02,2)            AS numeric(20,2)) sepPreTax02
+	,cast(round(V_Import.sepAfterTax02,2)          AS numeric(20,2)) sepAfterTax02           
+	,cast(round(V_Import.octPreTax02 ,2)           AS numeric(20,2)) octPreTax02
+	,cast(round(V_Import.octAfterTax02 ,2)         AS numeric(20,2)) octAfterTax02             
+	,cast(round(V_Import.novPreTax02 ,2)           AS numeric(20,2)) novPreTax02
+	,cast(round(V_Import.novAfterTax02 ,2)         AS numeric(20,2)) novAfterTax02            
+	,cast(round(V_Import.decPreTax02  ,2)          AS numeric(20,2)) decPreTax02            	          
+	,cast(round(V_Import.decAfterTax02 ,2)         AS numeric(20,2)) decAfterTax02       
+FROM dbo.LNK_Report report
+INNER JOIN ( SELECT  * FROM    dbo.V_CRM_LNK_DD
+			UNION ALL
+			SELECT  * FROM    dbo.V_CRM_LNK_TD
+) reportDetail 	ON report.ReportId = reportDetail.reportId	AND reportDetail.dealDate > '1999-01-01'
+INNER JOIN  LNK_Estate Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+LEFT JOIN V_CRM_LNK_Import V_Import
+  ON reportDetail.ReportId = V_Import.ReportId      --报备ID
+	   AND reportDetail.tsnum = V_Import.num
+	   AND reportDetail.id = V_Import.detailId
+	   AND V_Import.year = #{year, jdbcType=INTEGER}
+       AND V_Import.templateType = #{estateType,jdbcType=INTEGER}
+LEFT JOIN V_CRM_LNK_Import V_Import_bf
+ON V_Import.estateId = V_Import_bf.estateId
+	   AND V_Import.reportId = V_Import_bf.reportId
+	   AND V_Import.templateType = V_Import_bf.templateType
+	   AND V_Import.num = V_Import_bf.num
+	   AND V_Import.detailId = V_Import_bf.detailId
+	   AND V_Import.year = V_Import_bf.year  + 1
+WHERE 
+	  report.DelFlg = 0
+	  AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR} 
+	  <if test="projectDepartmentId != null and projectDepartmentId != ''">
+	  AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+	  </if> 
+	  <if test="reportId != null and reportId != ''">
+	  <![CDATA[AND report.reportId LIKE '%' + RTrim(LTrim('${reportId}')) + '%']]>
+	  </if>
+	  <if test="countDateStart != null and countDateStart != ''">
+                    <![CDATA[
+	  		  			AND reportDetail.dealDate is not null
+	    				AND Convert(varchar(10),reportDetail.dealDate,120) >= #{countDateStart,jdbcType=NVARCHAR}
+	    			]]>
+	  </if>
+	  <if test="countDateEnd != null and countDateEnd != ''">
+                    <![CDATA[
+	  		  			AND reportDetail.dealDate is not null
+	    				AND Convert(varchar(10),reportDetail.dealDate,120) <= #{countDateEnd,jdbcType=NVARCHAR}
+	    			]]>
+	  </if>
+	  <if test="searchKey != null and searchKey != ''">
+	  <![CDATA[
+	   AND (Estate.projectNo LIKE '%${searchKey}%' 
+	   OR report.estateId LIKE '%${searchKey}%' 
+	   OR report.CustomerNm LIKE '%${searchKey}%'
+	   OR report.CustomerTel LIKE '%${searchKey}%'
+-- 	   OR Estate.recordName LIKE '%${searchKey}%'
+-- 	   OR Estate.promotionName LIKE '%${searchKey}%'
+-- 	   OR Estate.signName LIKE '%${searchKey}%'
+	   OR Estate.DevCompany LIKE '%${searchKey}%' 
+	   OR reportDetail.buildingNo LIKE '%${searchKey}%')
+	  ]]>
+	  </if>
+      <if test="estateNmKey != null and estateNmKey != ''">
+          AND report.estateNm IN (${estateNmKey})
+      </if>
+	  ORDER BY report.estateId,report.Reportid,reportDetail.id,reportDetail.tsnum desc
+  </select>
+
+  <select id="getInCommissionSwitchMonth" parameterType="Map" resultType="Map">
+	SELECT switch.cityNo,switch.switchYear,switch.switchMonth
+		FROM
+		oms.dbo.CRM_Perform_Switch switch
+		INNER JOIN(
+		             SELECT  max(id) AS closeId
+	                 FROM oms.dbo.CRM_Perform_Switch 
+	                 WHERE switchState = 17502 
+	                 AND relateSystem = 17402
+					 GROUP BY cityNo
+		            ) maxSwitch
+		ON switch.id = maxSwitch.closeId
+		WHERE switch.cityNo = #{cityNo, jdbcType=VARCHAR}
+	</select>
+    
+</mapper>

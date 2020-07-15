@@ -1,0 +1,97 @@
+package cn.com.eju.deal.houseLinkage.linkDetail.service;
+
+import cn.com.eju.deal.accountproject.dao.AccountProjectMapper;
+import cn.com.eju.deal.accountproject.model.AccountProject;
+import cn.com.eju.deal.base.service.BaseService;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.dto.common.CityDto;
+import cn.com.eju.deal.dto.houseLinkage.linkDetail.LinkDetailDto;
+import cn.com.eju.deal.dto.houseLinkage.linkProjectDetail.LinkProjectDetailDto;
+import cn.com.eju.deal.dto.houseLinkage.linkProjectTrace.LinkProjectTraceDto;
+import cn.com.eju.deal.houseLinkage.linkDetail.dao.LinkDetailMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Service层
+ *
+ * @author tanlang
+ */
+@Service("linkDetailService")
+public class LinkDetailService extends BaseService<LinkDetailDto> {
+
+    @Autowired
+    private LinkDetailMapper linkDetailMapper;
+    @Resource
+    private AccountProjectMapper accountProjectMapper;
+
+    /**
+     * 查询-list
+     */
+    public ResultData queryLinkDetailList(Map<?, ?> param) throws Exception {
+        //构建返回
+        ResultData resultData = new ResultData();
+        //查询
+        List<LinkDetailDto> moList = linkDetailMapper.queryLinkDetailList(param);
+        // 转换
+        resultData.setTotalCount((String) param.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(moList);
+
+        return resultData;
+
+    }
+
+    /**
+     * 查询-list
+     */
+    public List<LinkProjectDetailDto> queryLinkProjectDetailList(Map<?, ?> param) throws Exception {
+        //查询
+        List<LinkProjectDetailDto> moList = null;
+
+        try {
+            String searchType = (String) param.get("searchType");
+            if("1".equals(searchType)){//按项目
+                moList = linkDetailMapper.queryLinkProjectDetailListByProject(param);
+            }else{
+                moList = linkDetailMapper.queryLinkProjectDetailList(param);
+            }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return moList;
+
+    }
+
+    /**
+     * 查询-list
+     */
+    public List<LinkProjectTraceDto> queryLinkProjectTraceList(Map<?, ?> param) throws Exception {
+        //查询
+        //return new ArrayList<LinkProjectTraceDto>();
+        return linkDetailMapper.queryLinkProjectTraceList(param);
+    }
+
+    public List<CityDto> queryCityList(Map<String, Object> queryParam) throws Exception {
+        return linkDetailMapper.queryCityList(queryParam);
+    }
+
+    public ResultData getAccountProject() throws Exception {
+        ResultData resultData = new ResultData();
+        Map<String, Object> queryParam = new HashMap<>();
+        List<AccountProject> accountProjectList = accountProjectMapper.selBasAPBycondition(queryParam);
+        resultData.setReturnData(accountProjectList);
+        return resultData;
+    }
+}

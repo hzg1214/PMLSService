@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.performanceSum.dao.PerformanceSumMapper">
+
+	<resultMap id="performanceSumContentDtoMap" type="cn.com.eju.deal.dto.performanceSum.PerformanceSumContentDto"/>
+	<resultMap id="performanceSumColumnDtoMap" type="cn.com.eju.deal.dto.performanceSum.PerformanceSumColumnDto"/>
+	<resultMap id="performanceSumDtoMap" type="cn.com.eju.deal.dto.performanceSum.PerformanceSumDto"/>
+
+	<select id="queryColumn" parameterType="java.util.Map" resultMap="performanceSumColumnDtoMap">
+		SELECT * FROM dbo.F_CRM_RPT_FieldMappingForPerformanceSumByCenter('${dateStart}', '${dateEnd}', '${type}', ${startDay}) order by colSort
+	</select>
+
+	<select id="queryList" parameterType="java.util.Map" resultMap="performanceSumContentDtoMap">
+		EXEC dbo.P_CRM_RPT_PerformanceSumByCenter #{organization}, #{regionCodeStr}, #{areaCityCodeStr}, #{cityIdStr}, #{centerIdStr}, #{dateStart}, #{dateEnd}, #{userId}, #{type}, #{startDay}, #{groupType}
+	</select>
+
+	<select id="queryCityList" parameterType="java.util.Map" resultMap="performanceSumDtoMap">
+		SELECT  ID cityId, CityName cityName
+		FROM    Exchange.dbo.BAS_City city
+		WHERE   city.isService = 1
+				AND city.FlagDeleted = 0
+				AND city.ID IN (
+				SELECT DISTINCT
+						center.cityId
+				FROM    Exchange.dbo.USR_ExchangeCenter center
+						INNER JOIN exchange.dbo.USR_UserExchangeCenterMapping map
+						ON center.exchangeCenterId = map.exchangeCenterId AND map.delFlag = 'N'
+				WHERE   map.userId = #{userId, jdbcType=INTEGER} )
+	</select>
+
+	<select id="queryCenterList" parameterType="java.util.Map" resultMap="performanceSumDtoMap">
+		SELECT grp.groupId centerId, grp.groupName centerName
+		FROM Exchange.dbo.USR_Group grp
+		LEFT JOIN Exchange.dbo.USR_DictionaryValue dic ON grp.timeTag = dic.dicCode AND dic.delFlag = 'N'
+		WHERE grp.delflag = 'N'
+		AND grp.typeId = 8
+		<if test = "cityIdStr != null">
+			AND cityId in ('${cityIdStr}')
+		</if>
+		<if test="org == 2016">
+			AND (dic.dicValue = '2016' or dic.dicValue is null)
+		</if>
+		<if test="org == 2017">
+			AND (dic.dicValue = '2017')
+		</if>
+	</select>
+
+</mapper>

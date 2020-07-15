@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.store.dao.StoreDepositMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.StoreDeposit">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="storeNo" jdbcType="VARCHAR" property="storeNo" />
+    <result column="totalAmount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="tmpAmount" jdbcType="DECIMAL" property="tmpAmount" />
+    <result column="receiveAmount" jdbcType="DECIMAL" property="receiveAmount" />
+    <result column="paymentAmount" jdbcType="DECIMAL" property="paymentAmount" />
+    <result column="receiveLockAmt" jdbcType="DECIMAL" property="receiveLockAmt" />
+    <result column="paymentLockAmt" jdbcType="DECIMAL" property="paymentLockAmt" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="dateUpt" jdbcType="TIMESTAMP" property="dateUpt" />
+    <result column="userIdUpt" jdbcType="INTEGER" property="userIdUpt" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, storeNo, totalAmount,tmpAmount, receiveAmount, paymentAmount, receiveLockAmt, paymentLockAmt, 
+    dateCreate, userIdCreate, dateUpt, userIdUpt, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from store_deposit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from store_deposit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.store.model.StoreDeposit">
+    insert into store_deposit (id, storeNo, totalAmount, tmpAmount,
+      receiveAmount, paymentAmount, receiveLockAmt, 
+      paymentLockAmt, dateCreate, userIdCreate, 
+      dateUpt, userIdUpt, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{storeNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{tmpAmount,jdbcType=DECIMAL},
+      #{receiveAmount,jdbcType=DECIMAL}, #{paymentAmount,jdbcType=DECIMAL}, #{receiveLockAmt,jdbcType=DECIMAL}, 
+      #{paymentLockAmt,jdbcType=DECIMAL}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{dateUpt,jdbcType=TIMESTAMP}, #{userIdUpt,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.store.model.StoreDeposit">
+    insert into store_deposit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="storeNo != null">
+        storeNo,
+      </if>
+      <if test="totalAmount != null">
+        totalAmount,
+      </if>
+      <if test="tmpAmount != null">
+        tmpAmount,
+      </if>
+      <if test="receiveAmount != null">
+        receiveAmount,
+      </if>
+      <if test="paymentAmount != null">
+        paymentAmount,
+      </if>
+      <if test="receiveLockAmt != null">
+        receiveLockAmt,
+      </if>
+      <if test="paymentLockAmt != null">
+        paymentLockAmt,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="dateUpt != null">
+        dateUpt,
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="storeNo != null">
+        #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="tmpAmount != null">
+        #{tmpAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveAmount != null">
+        #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentAmount != null">
+        #{paymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveLockAmt != null">
+        #{receiveLockAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentLockAmt != null">
+        #{paymentLockAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.store.model.StoreDeposit">
+    update store_deposit
+    <set>
+      <if test="storeNo != null">
+        storeNo = #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        totalAmount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="tmpAmount != null">
+        tmpAmount = #{tmpAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveAmount != null">
+        receiveAmount = #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentAmount != null">
+        paymentAmount = #{paymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveLockAmt != null">
+        receiveLockAmt = #{receiveLockAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentLockAmt != null">
+        paymentLockAmt = #{paymentLockAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.store.model.StoreDeposit">
+    update store_deposit
+    set storeNo = #{storeNo,jdbcType=VARCHAR},
+      totalAmount = #{totalAmount,jdbcType=DECIMAL},
+      tmpAmount = #{tmpAmount,jdbcType=DECIMAL},
+      receiveAmount = #{receiveAmount,jdbcType=DECIMAL},
+      paymentAmount = #{paymentAmount,jdbcType=DECIMAL},
+      receiveLockAmt = #{receiveLockAmt,jdbcType=DECIMAL},
+      paymentLockAmt = #{paymentLockAmt,jdbcType=DECIMAL},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findByCondition" parameterType="cn.com.eju.deal.store.model.StoreDeposit" resultType="cn.com.eju.deal.store.model.StoreDeposit">
+    select 
+    <include refid="Base_Column_List" />
+    from store_deposit
+    where  delFlag = '0'
+    <if test="id != null">
+        and id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="storeNo != null">
+        and storeNo = #{storeNo,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <select id="getTopOneContract" resultType="cn.com.eju.deal.contract.model.Contract" parameterType="java.util.Map">
+        SELECT  TOP 1 C.*,S.StoreNo,cs.storeId
+        FROM    dbo.ContractStore CS
+                JOIN dbo.Contract C ON CS.ContractId = C.Id
+                JOIN dbo.Store S ON S.Id =CS.StoreId
+        WHERE   C.ContractStatus NOT IN ( 10405 )
+            <if test="storeId != null">
+                and CS.StoreId = #{storeId, jdbcType=INTEGER}
+            </if>
+            <if test="thisContractNo != null">
+                and c.contractNo != #{thisContractNo,jdbcType=VARCHAR}
+            </if>
+            <if test="contractNo != null">
+                and c.contractNo = #{contractNo,jdbcType=VARCHAR}
+            </if>
+                and cs.isDelete = 0
+                ORDER BY C.DateLifeStart ASC 
+    </select>
+    
+    <select id="getNewDepositOpenFlagByCityNo" parameterType="string" resultType="string">
+        SELECT  newDepositOpenFlag
+		FROM    dbo.Bas_CitySetting
+		WHERE   cityNo = #{cityNo,jdbcType=VARCHAR}
+		        AND delFlag = 'N'
+    </select>
+    <select id="getNewDepositOpenFlagByCenterId" parameterType="integer" resultType="string">
+        SELECT  cs.newDepositOpenFlag
+		FROM    dbo.Bas_CitySetting cs
+		        JOIN dbo.Achiv_AchievementLevel_Setting als ON cs.cityNo = als.cityNo
+		WHERE   achieveType = 17901
+		        AND als.centerGroupId = #{centerId,jdbcType=INTEGER}
+    </select>
+
+  <update id="updateByStoreNo" parameterType="cn.com.eju.deal.store.model.StoreDeposit">
+    update store_deposit
+    <set>
+      <if test="receiveAmount != null">
+        receiveAmount = receiveAmount + #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentAmount != null">
+        paymentAmount = paymentAmount + #{paymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveLockAmt != null">
+        receiveLockAmt = receiveLockAmt + #{receiveLockAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentLockAmt != null">
+        paymentLockAmt = paymentLockAmt + #{paymentLockAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="dateUpt != null">
+        dateUpt = #{dateUpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdUpt != null">
+        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where storeNo = #{storeNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

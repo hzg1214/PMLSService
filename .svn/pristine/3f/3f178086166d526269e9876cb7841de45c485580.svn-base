@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.developer.dao.DeveloperMapper">
+
+  <!--获取开发商列表-->
+  <select id="getDeveloperList"  parameterType="Map" resultType="cn.com.eju.pmls.developer.dto.DeveloperDto">
+    	SELECT 
+    	  		ROW_NUMBER() OVER(ORDER BY t1.dateCreate DESC) AS rowNum,
+		     	t1.ID id ,
+		        t1.developerCode ,
+		        t1.developerName ,
+		        t1.developerBrandId ,
+		        t1.businessLicenseNo ,
+		        t1.cityNo ,
+		        t1.districtNo ,
+		        t1.address ,
+		        t1.legalPerson ,
+		        t1.contactNumber ,
+		        t1.dockingPeo ,
+		        t1.dockingPeoTel ,
+		        t1.isYjDy ,
+		        t1.acCityNo,
+		        t1.bigCustomerFlag ,
+		        t1.remark ,
+		        CONVERT(VARCHAR(10), t1.dateCreate, 120) dateCreate ,
+		        CONVERT(VARCHAR(10), t1.dateUpdate, 120) dateUpdate ,
+		        t1.userIdCreate ,
+		        t1.delFlag ,
+		        t4.developerBrandName ,
+		        t2.CityName + t3.DistrictName + t1.address AS addressDetail ,
+		        u.userCode AS userCreateCode,
+		        u.userName AS userCreateName,
+		        uu.userCode AS userUpdateCode,
+		        uu.userName AS userUpdateName
+		        ,t1.partner
+		        ,t1.partnerAbbreviationNm
+		        ,bd.dicValue partnerStr 
+		FROM    dbo.PMLS_Developer t1
+		        LEFT JOIN dbo.BAS_City t2 ON t1.CityNo = t2.CityNo
+		                                      AND t2.FlagDeleted = 0
+		        LEFT JOIN dbo.BAS_District t3 ON t1.DistrictNo = t3.DistrictNo
+		                                          AND t3.FlagDeleted = 0
+		        LEFT JOIN dbo.USR_User u ON t1.userIdCreate = u.userId
+		                                     AND u.delFlag = 'N'
+		        LEFT JOIN dbo.USR_User uu ON t1.userIdUpdate = uu.userId
+		                                     AND uu.delFlag = 'N'
+		        LEFT JOIN dbo.PMLS_DeveloperBrand t4 ON t1.developerBrandId = t4.Id
+		                                                 AND t4.delFlag = 0
+		        LEFT JOIN dbo.BAS_DictionaryValue bd ON bd.dicCode=t1.partner and bd.delFlag='N'
+		WHERE   t1.delFlag = 0
+	    <if test="developerCode != null and developerCode != ''">
+            AND t1.developerCode like '%'+#{developerCode}+'%'
+        </if>
+	    <if test="developerName != null and developerName != ''">
+            AND t1.developerName like '%'+#{developerName}+'%'
+        </if>
+        <if test="acCityNo!=null and acCityNo!=''">
+	      and (t1.acCityNo=#{acCityNo} or t1.id in(SELECT developerId FROM dbo.PMLS_Developer_Release_City WHERE delFlag=0 and releaseCityNo=#{acCityNo}))
+	    </if>
+	    <!--     权限 -->
+	    <if test="cityNo!=null and cityNo!=''">
+	      and t2.cityNo=#{cityNo}
+	    </if>
+        <if test="partner!=null and partner!=''">
+	      <![CDATA[
+  				and t1.partner=#{partner}
+  				]]>
+	    </if>
+<!-- 	    当前人所有城市 -->
+	    <if test="cityNos != null and cityNos != ''">
+            AND t2.cityNo in (${cityNos})
+        </if>
+<!--         合作方品牌 -->
+	    <if test="developerBrandCode != null and developerBrandCode != ''">
+            and (t4.developerBrandCode=#{developerBrandCode} or t4.developerBrandName=#{developerBrandCode})
+        </if>
+        <if test="developerId!=null">
+	      and t1.id=#{developerId}
+	    </if>
+	    ORDER BY t1.dateCreate DESC
+  </select>
+  
+  <!--获取开发商信息-->
+  <select id="getDeveloperInfo"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto" resultType="cn.com.eju.pmls.developer.dto.DeveloperDto">
+    select  TOP 1
+    		t1.ID id ,
+	        t1.developerCode ,
+	        t1.developerName ,
+	        t1.developerBrandId ,
+	        t1.businessLicenseNo ,
+	        t1.cityNo ,
+	        t1.districtNo ,
+	        t1.address ,
+	        t1.legalPerson ,
+	        t1.contactNumber ,
+	        t1.dockingPeo ,
+	        t1.dockingPeoTel ,
+	        t1.isYjDy ,
+	        t1.bigCustomerFlag ,
+	        t1.remark ,
+	        CONVERT(VARCHAR(10), t1.dateCreate, 120) dateCreate ,
+	        CONVERT(VARCHAR(10), t1.dateUpdate, 120) dateUpdate ,
+	        t1.userIdCreate ,
+	        t1.delFlag ,
+	        t4.developerBrandName ,
+	        t4.developerBrandCode ,
+	        t2.CityName + t3.DistrictName + t1.address AS addressDetail ,
+	        u.userCode AS userCreateCode,
+	        u.userName AS userCreateName,
+	        uu.userCode AS userUpdateCode,
+	        uu.userName AS userUpdateName
+	        ,t7.developerName eatateDeveloperName
+	        ,t7.devCompanyId 
+	        ,t4.partner
+	        ,bd.dicValue partnerStr 
+    from dbo.PMLS_Developer t1
+    	LEFT JOIN dbo.BAS_City t2 ON t1.CityNo = t2.CityNo
+		                             AND t2.FlagDeleted = 0
+        LEFT JOIN dbo.BAS_District t3 ON t1.DistrictNo = t3.DistrictNo
+                                     AND t3.FlagDeleted = 0
+        LEFT JOIN dbo.USR_User u ON t1.userIdCreate = u.userId
+                                     AND u.delFlag = 'N'
+        LEFT JOIN dbo.USR_User uu ON t1.userIdUpdate = uu.userId
+                                     AND uu.delFlag = 'N'
+        LEFT JOIN dbo.PMLS_DeveloperBrand t4 ON t1.developerBrandId = t4.Id
+		                                                 AND t4.delFlag = 0
+		LEFT JOIN dbo.LNK_Estate t7 ON t1.id=t7.devCompanyId AND t7.DelFlg=0
+		
+		LEFT JOIN dbo.BAS_DictionaryValue bd ON bd.dicCode=t1.partner and bd.delFlag='N'
+     where t1.delFlag=0
+    <if test="id!=null and id!=0">
+      and t1.id=#{id}
+    </if>
+
+  </select>
+  
+  <!--获取开发商信息-->
+  <select id="getDeveloperInfo2"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto" resultType="cn.com.eju.pmls.developer.dto.DeveloperDto">
+    select  TOP 1
+    		t1.ID id ,
+	        t1.developerCode ,
+	        t1.developerName ,
+	        t1.developerBrandId ,
+	        t1.businessLicenseNo ,
+	        t1.cityNo ,
+	        t1.districtNo ,
+	        t1.address ,
+	        t1.legalPerson ,
+	        t1.contactNumber ,
+	        t1.dockingPeo ,
+	        t1.dockingPeoTel ,
+	        t1.isYjDy ,
+	        t1.bigCustomerFlag ,
+	        t1.remark ,
+	        CONVERT(VARCHAR(10), t1.dateCreate, 120) dateCreate ,
+	        CONVERT(VARCHAR(10), t1.dateUpdate, 120) dateUpdate ,
+	        t1.userIdCreate ,
+	        t1.delFlag ,
+	        t4.developerBrandName ,
+	        t2.CityName + t3.DistrictName + t1.address AS addressDetail ,
+	        u.userCode AS userCreateCode,
+	        u.userName AS userCreateName,
+	        uu.userCode AS userUpdateCode,
+	        uu.userName AS userUpdateName
+    from dbo.PMLS_Developer t1
+    	LEFT JOIN dbo.BAS_City t2 ON t1.CityNo = t2.CityNo
+		                             AND t2.FlagDeleted = 0
+        LEFT JOIN dbo.BAS_District t3 ON t1.DistrictNo = t3.DistrictNo
+                                     AND t3.FlagDeleted = 0
+        LEFT JOIN dbo.USR_User u ON t1.userIdCreate = u.userId
+                                     AND u.delFlag = 'N'
+        LEFT JOIN dbo.USR_User uu ON t1.userIdUpdate = uu.userId
+                                     AND uu.delFlag = 'N'
+        LEFT JOIN dbo.PMLS_DeveloperBrand t4 ON t1.developerBrandId = t4.Id
+		                                                 AND t4.delFlag = 0
+     where t1.delFlag=0
+    <if test="id!=null and id!=0">
+      and t1.id!=#{id}
+    </if>
+    <if test="updateId!=null and updateId!=0">
+      and t1.id!=#{updateId}
+    </if>
+    <if test="(businessLicenseNo!=null and businessLicenseNo!='') or (developerName!=null and developerName!='')">
+      and (t1.businessLicenseNo=#{businessLicenseNo} or t1.developerName=#{developerName})
+    </if>
+
+  </select>
+  
+  <!--获取开发商信息-->
+  <select id="getDeveloperCountByName"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto" resultType="int">
+    select  count(*)
+    from dbo.PMLS_Developer t1
+     where t1.delFlag=0
+    <if test="businessLicenseNo!=null and businessLicenseNo!=''">
+      and t1.businessLicenseNo=#{businessLicenseNo}
+    </if>
+    <if test="developerName!=null and developerName!=''">
+      and t1.developerName=#{developerName}
+    </if>
+    <if test="id!=null and id!=0">
+      and t1.id!=#{id}
+    </if>
+
+  </select>
+  
+  <!--新增开发商-->
+  <insert id="addDeveloper" parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+        INSERT INTO dbo.PMLS_Developer (
+			developerCode,
+			developerName,
+			developerBrandId,
+			businessLicenseNo,
+			cityNo,
+			districtNo,
+			address,
+			legalPerson,
+			contactNumber,
+			dockingPeo,
+			dockingPeoTel,
+			isYjDy,
+			bigCustomerFlag,
+			acCityNo,
+			remark,
+			dateCreate,
+			dateUpdate,
+			userIdCreate,
+			userIdUpdate,
+			bigCustomerId,
+			mattressNailId,
+			delFlag,
+			partner,
+			partnerAbbreviationNm
+        ) VALUES(
+			#{developerCode},
+			#{developerName},
+			#{developerBrandId},
+			#{businessLicenseNo},
+			#{cityNo},
+			#{districtNo},
+			#{address},
+			#{legalPerson},
+			#{contactNumber},
+			#{dockingPeo},
+			#{dockingPeoTel},
+			#{isYjDy},
+			#{bigCustomerFlag},
+			#{acCityNo},
+			#{remark},
+          	getdate(),
+          	null,
+			#{userIdCreate},
+			#{userIdUpdate},
+			#{bigCustomerId},
+			#{mattressNailId},
+          	0,
+          	#{partner},
+			#{partnerAbbreviationNm}
+        )
+    </insert>
+    
+  <!--修改开发商-->
+  <update id="updateDeveloper"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto">
+    update dbo.PMLS_Developer
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="developerName!=null and developerName!=''">
+        developerName=#{developerName},
+      </if>
+      <if test="developerBrandId!=null and developerBrandId!=''">
+        developerBrandId=#{developerBrandId},
+      </if>
+      <if test="businessLicenseNo!=null and businessLicenseNo!=''">
+        businessLicenseNo=#{businessLicenseNo},
+      </if>
+      <if test="cityNo!=null and cityNo!=''">
+        cityNo=#{cityNo},
+      </if>
+      <if test="districtNo!=null and districtNo!=''">
+        districtNo=#{districtNo},
+      </if>
+      <if test="address!=null and address!=''">
+        address=#{address},
+      </if>
+      <if test="legalPerson!=null and legalPerson!=''">
+        legalPerson=#{legalPerson},
+      </if>
+      <if test="contactNumber!=null and contactNumber!=''">
+        contactNumber=#{contactNumber},
+      </if>
+      <if test="dockingPeo!=null and dockingPeo!=''">
+        dockingPeo=#{dockingPeo},
+      </if>
+      <if test="dockingPeoTel!=null and dockingPeoTel!=''">
+        dockingPeoTel=#{dockingPeoTel},
+      </if>
+      <if test="isYjDy!=null">
+        isYjDy=#{isYjDy},
+      </if>
+      <if test="bigCustomerFlag!=null and bigCustomerFlag!=''">
+        bigCustomerFlag=#{bigCustomerFlag},
+      </if>
+      <if test="userIdUpdate!=null and userIdUpdate!=''">
+        userIdUpdate=#{userIdUpdate},
+      </if>
+      <if test="remark!=null">
+        remark=#{remark},
+      </if>
+      <if test="bigCustomerId!=null">
+        bigCustomerId=#{bigCustomerId},
+      </if>
+      <if test="mattressNailId!=null">
+        mattressNailId=#{mattressNailId},
+      </if>
+      <if test="partner!=null">
+        partner=#{partner},
+      </if>
+      <if test="partnerAbbreviationNm!=null">
+        partnerAbbreviationNm=#{partnerAbbreviationNm},
+      </if>
+        dateUpdate=getdate()
+    </trim>
+    where id=#{id}
+  </update>
+  
+  <!--删除开发商-->
+  <update id="deleteDeveloper" parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto" >
+    update dbo.PMLS_Developer set delFlag=1,userIdUpdate=#{userIdUpdate},dateUpdate=getdate() where id=#{id}
+  </update>
+  
+<!--   添加开发商城市关系 -->
+   <insert id="addDeveloperReleaseCity" parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto">
+      MERGE PMLS_Developer_Release_City t
+      USING (SELECT '${id}' AS developerId,'${acCityNo}' AS releaseCityNo) s
+      ON t.developerId=s.developerId AND t.releaseCityNo=s.releaseCityNo
+      WHEN MATCHED THEN UPDATE SET t.delFlag=0
+      WHEN NOT MATCHED THEN INSERT(
+          developerId,
+          releaseCityNo,
+          delFlag,
+          dateCreate,
+          userIdCreate) VALUES(
+          #{id},
+          #{acCityNo},
+          0,
+          getdate(),
+          #{userIdCreate}
+      );
+  </insert>
+  
+  <!--是否大客户-->
+  <select id="selBigCustomerByName"  parameterType="Map" resultType="Map">
+    select  TOP 1 * from
+    dbo.LNK_BigCustomer WHERE vaild=1 AND delFlag=0 
+    <if test="developerBrandName!=null and developerBrandName!=''">
+     and  CHARINDEX (name,#{developerBrandName})>0 
+    </if>
+    ORDER BY bigCustomerId asc
+  </select>
+  
+  <!--是否垫佣-->
+  <select id="selMattressNailByName"  parameterType="Map" resultType="Map">
+    select  TOP 1 *  from
+    dbo.LNK_MattressNail WHERE vaild=1 AND delFlag=0 
+    <if test="developerBrandName!=null and developerBrandName!=''">
+     and CHARINDEX (name,#{developerBrandName})>0 
+    </if>
+    ORDER BY mattressNailId asc
+  </select>
+
+
+    <!--获取开发商信息-->
+    <select id="getDeveloperInfoById"  parameterType="cn.com.eju.pmls.developer.dto.DeveloperDto" resultType="cn.com.eju.pmls.developer.dto.DeveloperDto">
+        select
+                t1.ID id ,
+                t1.bigCustomerFlag ,
+                t1.bigCustomerId
+        from dbo.PMLS_Developer t1
+         where t1.delFlag=0
+          and t1.id=#{id}
+  </select>
+</mapper>

@@ -1,0 +1,186 @@
+package cn.com.eju.pmls.skStatement.model;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class PmlsSkStatementDtl {
+    private Integer id;
+
+    private Integer parentId;
+
+    private String skSerialNo;
+
+    private String khCode;
+
+    private String khName;
+
+    private String cityNo;
+
+    private String projectNo;
+
+    private String projectName;
+
+    private BigDecimal skAmount_bef;
+
+    private BigDecimal skAmount_aft;
+
+    private BigDecimal allocatedAmount_bef;
+
+    private BigDecimal allocatedAmount_aft;
+
+    private Integer allocatedFlag;
+
+    private Boolean delFlag;
+
+    private Date dateCreate;
+
+    private Integer userIdCreate;
+
+    private Date dateUpdate;
+
+    private Integer userIdUpdate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getSkSerialNo() {
+        return skSerialNo;
+    }
+
+    public void setSkSerialNo(String skSerialNo) {
+        this.skSerialNo = skSerialNo == null ? null : skSerialNo.trim();
+    }
+
+    public String getKhCode() {
+        return khCode;
+    }
+
+    public void setKhCode(String khCode) {
+        this.khCode = khCode == null ? null : khCode.trim();
+    }
+
+    public String getKhName() {
+        return khName;
+    }
+
+    public void setKhName(String khName) {
+        this.khName = khName == null ? null : khName.trim();
+    }
+
+    public String getCityNo() {
+        return cityNo;
+    }
+
+    public void setCityNo(String cityNo) {
+        this.cityNo = cityNo == null ? null : cityNo.trim();
+    }
+
+    public String getProjectNo() {
+        return projectNo;
+    }
+
+    public void setProjectNo(String projectNo) {
+        this.projectNo = projectNo == null ? null : projectNo.trim();
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName == null ? null : projectName.trim();
+    }
+
+    public BigDecimal getSkAmount_bef() {
+        return skAmount_bef;
+    }
+
+    public void setSkAmount_bef(BigDecimal skAmount_bef) {
+        this.skAmount_bef = skAmount_bef;
+    }
+
+    public BigDecimal getSkAmount_aft() {
+        return skAmount_aft;
+    }
+
+    public void setSkAmount_aft(BigDecimal skAmount_aft) {
+        this.skAmount_aft = skAmount_aft;
+    }
+
+    public BigDecimal getAllocatedAmount_bef() {
+        return allocatedAmount_bef;
+    }
+
+    public void setAllocatedAmount_bef(BigDecimal allocatedAmount_bef) {
+        this.allocatedAmount_bef = allocatedAmount_bef;
+    }
+
+    public BigDecimal getAllocatedAmount_aft() {
+        return allocatedAmount_aft;
+    }
+
+    public void setAllocatedAmount_aft(BigDecimal allocatedAmount_aft) {
+        this.allocatedAmount_aft = allocatedAmount_aft;
+    }
+
+    public Integer getAllocatedFlag() {
+        return allocatedFlag;
+    }
+
+    public void setAllocatedFlag(Integer allocatedFlag) {
+        this.allocatedFlag = allocatedFlag;
+    }
+
+    public Boolean getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+    public Integer getUserIdCreate() {
+        return userIdCreate;
+    }
+
+    public void setUserIdCreate(Integer userIdCreate) {
+        this.userIdCreate = userIdCreate;
+    }
+
+    public Date getDateUpdate() {
+        return dateUpdate;
+    }
+
+    public void setDateUpdate(Date dateUpdate) {
+        this.dateUpdate = dateUpdate;
+    }
+
+    public Integer getUserIdUpdate() {
+        return userIdUpdate;
+    }
+
+    public void setUserIdUpdate(Integer userIdUpdate) {
+        this.userIdUpdate = userIdUpdate;
+    }
+}

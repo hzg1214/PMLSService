@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.StoreStopCancelMapper">
+	<insert id="create" parameterType="cn.com.eju.deal.store.model.StoreStopCancel" useGeneratedKeys="true"  keyProperty="id">
+		INSERT INTO [dbo].[Store_Stop_Cancel]
+           ([storeId]
+           ,[cancelNo]
+           ,[cancelReason]
+           ,[approveStatus]
+           ,[dateCreate]
+           ,[userCreate]
+           ,[delFlag])
+     VALUES
+           (
+           #{storeId}
+           ,#{cancelNo}
+           ,#{cancelReason}
+           ,21001
+           ,getDate()
+           ,#{userCreate}
+           ,0
+           )
+	</insert>
+
+	<update id="update" parameterType="cn.com.eju.deal.store.model.StoreStopCancel">
+		update Store_Stop_Cancel
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="approveStatus != null">
+				approveStatus = #{approveStatus},
+			</if>
+			approveDate = getDate(),
+			<if test="approveId != null">
+			approveId = #{approveId},
+			</if>
+			<if test="approveDesc != null">
+			approveDesc = #{approveDesc},
+			</if>
+			dateUpdate = getDate(),
+			<if test="userUpdate != null">
+			userUpdate = #{userUpdate},
+			</if>
+			<if test="delFlag != null">
+			delFlag = #{delFlag}
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<select id="getById" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.store.model.StoreStopCancel">
+		SELECT  s.StoreNo ,
+				s.Name AS storeName ,
+				s.AddressDetail ,
+				s.maintainerName ,
+				cs.centerName ,
+				( SELECT    userName
+				  FROM      dbo.USR_User
+				  WHERE     userId = ssc.userCreate
+				) AS userCreateNm ,
+				( SELECT    dicValue
+				  FROM      dbo.BAS_DictionaryValue
+				  WHERE     dicCode = ssc.approveStatus
+				) AS approveStatusNm ,
+				ssc.*
+		FROM    Store_Stop_Cancel ssc
+				JOIN dbo.Store s ON ssc.storeId = s.Id
+				LEFT JOIN dbo.BAS_CenterSetting cs ON cs.centerId = s.centerId
+		WHERE   ssc.Id = #{id}
+	</select>
+
+	<select id="queryList" parameterType="java.util.Map" resultType="cn.com.eju.deal.store.model.StoreStopCancel">
+		SELECT  ssc.Id ,
+				ssc.cancelNo,
+				s.StoreNo ,
+				s.Name AS storeName ,
+				s.AddressDetail ,
+				u.userName ,
+				u.userCode ,
+				ssc.DateCreate ,
+				( SELECT    dicValue
+				  FROM      dbo.BAS_DictionaryValue
+				  WHERE     dicCode = ssc.approveStatus
+				) AS approveStatusNm
+		FROM    Store_Stop_Cancel ssc
+				JOIN dbo.Store s ON s.Id = ssc.storeId
+				JOIN dbo.USR_User u ON u.userId = ssc.UserCreate
+		WHERE   ssc.delFlag = 0
+		<if test="cityNo != null and cityNo != ''">
+			AND s.cityNo IN ('${cityNo}')
+		</if>
+		<if test="centerIdStr != null and centerIdStr != ''">
+			AND s.centerId IN (${centerIdStr})
+		</if>
+		<if test="storeNo != null and storeNo != ''">
+            <![CDATA[AND (s.StoreNo LIKE '%${storeNo}%' OR s.Name LIKE '%${storeNo}%')]]>
+        </if>
+		<if test="userCode != null and userCode != ''">
+            <![CDATA[AND (u.userCode LIKE '%${userCode}%' OR u.userName LIKE '%${userCode}%')]]>
+        </if>
+		<if test="dateCreateBegin != null and dateCreateBegin != ''">
+            <![CDATA[
+              and Convert(varchar(10),ssc.dateCreate,120) >= #{dateCreateBegin,jdbcType=NVARCHAR}
+              ]]>
+        </if>
+        <if test="dateCreateEnd != null and dateCreateEnd != ''">
+            <![CDATA[
+              and Convert(varchar(10),ssc.dateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+              ]]>
+        </if>
+		<if test="approveStatus != null and approveStatus != ''">
+            and ssc.approveStatus = #{approveStatus,jdbcType=INTEGER}
+        </if>
+		order by ssc.dateCreate desc
+	</select>
+
+	<select id="queryFileList" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.dto.common.FileRecordMainDto">
+		SELECT fm.*,fs.FileSourceName,ft.FileTypeName
+        FROM dbo.FIL_FileRecordMain fm
+        LEFT JOIN dbo.FIL_FileType ft ON ft.FileTypeCode = fm.FileTypeId
+        LEFT JOIN dbo.FIL_FileSource fs ON fs.FileSourceCode = fm.FileSourceId
+        where fm.IsDelete=0 and fm.FileSourceId=14 AND RefId = #{id,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+	</select>
+
+	<select id="getLastestContract" parameterType="java.lang.Integer" resultType="java.util.Map">
+		SELECT * FROM dbo.v_crm_StoreContract_last WHERE StoreId = #{storeId}
+	</select>
+
+	<update id="deleteStoreBizStop" parameterType="java.lang.Integer">
+		UPDATE sbs
+		 SET    sbs.delFlag = 'Y'
+		 FROM   dbo.StoreBizStop sbs ,
+				Store s
+		 WHERE  sbs.storeId = s.Id
+		  AND s.Id = #{storeId}
+	</update>
+
+	<select id="getAchievementCancel" parameterType="Map" resultType="cn.com.eju.deal.contract.model.AchievementCancel">
+        SELECT sa.* FROM Store_AchievementCancel sa,dbo.Store_AchievementCancelMapping sam
+        WHERE sa.id=sam.achievementCancelId
+        AND sa.isDelete=0
+        AND sam.delFlag=0 AND sa.stopKbn='1'
+        AND sa.contractId=#{contractId}
+        AND sam.storeId=#{storeId}
+	</select>
+
+	<update id="deleteAchievementCancel" parameterType="java.lang.Integer">
+		UPDATE  sac
+		SET     sac.isDelete = 1
+		FROM    dbo.Store_AchievementCancel sac
+		WHERE   id = #{id}
+	</update>
+
+	<insert id="insertLog" parameterType="cn.com.eju.deal.store.model.StoreStopCancelLog" useGeneratedKeys="true"  keyProperty="id">
+		insert into Store_Stop_Cancel_Log(
+			contractId,
+			storeId,
+			statDate,
+			calcFlag,
+			new_calcFlag,
+			sortFlag,
+			signStatus,
+			remark,
+			cancelId,
+			dateCreate,
+			userCreate
+		) values (
+			#{contractId},
+			#{storeId},
+			#{statDate},
+			#{calcFlag},
+			#{new_calcFlag},
+			#{sortFlag},
+			#{signStatus},
+			#{remark},
+			#{cancelId},
+			getDate(),
+			#{userCreate}
+		)
+	</insert>
+</mapper>
+

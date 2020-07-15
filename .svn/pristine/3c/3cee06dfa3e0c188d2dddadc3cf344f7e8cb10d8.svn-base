@@ -1,0 +1,1512 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.report.dao.ReportMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.report.model.Report">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="EstateId" property="estateId" jdbcType="VARCHAR"/>
+        <result column="ReportId" property="reportId" jdbcType="VARCHAR"/>
+        <result column="EstateNm" property="estateNm" jdbcType="NVARCHAR"/>
+        <result column="CompanyNm" property="companyNm" jdbcType="NVARCHAR"/>
+        <result column="CompanyId" property="companyId" jdbcType="VARCHAR"/>
+        <result column="CustomerId" property="customerId" jdbcType="VARCHAR"/>
+        <result column="CustomerFrom" property="customerFrom" jdbcType="INTEGER"/>
+        <result column="CustomerNm" property="customerNm" jdbcType="NVARCHAR"/>
+        <result column="CustomerTel" property="customerTel" jdbcType="VARCHAR"/>
+        <result column="CustomerParty" property="customerParty" jdbcType="VARCHAR"/>
+        <result column="PartyNm" property="partyNm" jdbcType="NVARCHAR"/>
+        <result column="PartyTel" property="partyTel" jdbcType="VARCHAR"/>
+        <result column="StoreNm" property="storeNm" jdbcType="NVARCHAR"/>
+        <result column="StoreId" property="storeId" jdbcType="VARCHAR"/>
+        <result column="DeptNm" property="deptNm" jdbcType="NVARCHAR"/>
+        <result column="DeptId" property="deptId" jdbcType="VARCHAR"/>
+        <result column="EmpNm" property="empNm" jdbcType="NVARCHAR"/>
+        <result column="EmpId" property="empId" jdbcType="VARCHAR"/>
+        <result column="CityNo" property="cityNo" jdbcType="NVARCHAR"/>
+        <result column="EstateType" property="estateType" jdbcType="VARCHAR"/>
+        <result column="LatestProgress" property="latestProgress" jdbcType="VARCHAR"/>
+        <result column="ConfirmStatus" property="confirmStatus" jdbcType="VARCHAR"/>
+        <result column="ReportDate" property="reportDate" jdbcType="TIMESTAMP"/>
+        <result column="FollowDate" property="followDate" jdbcType="TIMESTAMP"/>
+        <result column="ValidDate" property="validDate" jdbcType="TIMESTAMP"/>
+        <result column="ValidRelationDate" property="validRelationDate" jdbcType="TIMESTAMP"/>
+        <result column="CrtEmpId" property="crtEmpId" jdbcType="INTEGER"/>
+        <result column="UptEmpId" property="uptEmpId" jdbcType="INTEGER"/>
+        <result column="DelFlg" property="delFlg" jdbcType="BIT"/>
+        <result column="CrtDt" property="crtDt" jdbcType="TIMESTAMP"/>
+        <result column="UptDt" property="uptDt" jdbcType="TIMESTAMP"/>
+        <result column="CustomerNum" property="customerNum" jdbcType="INTEGER"/>
+        <result column="CustomerRequire" property="customerRequire" jdbcType="NVARCHAR"/>
+        <result column="Memo" property="memo" jdbcType="NVARCHAR"/>
+        <result column="contactId" property="contactId" jdbcType="INTEGER"/>
+        <result column="contactNm" property="contactNm" jdbcType="VARCHAR"/>
+        <result column="roughDate" property="roughDate" jdbcType="TIMESTAMP"/>
+        <result column="dealDate" property="dealDate" jdbcType="TIMESTAMP"/>
+        <result column="seeDate" property="seeDate" jdbcType="TIMESTAMP"/>
+        <result column="pledgedDate" property="pledgedDate" jdbcType="TIMESTAMP"/>
+        <result column="pledgedBackDate" property="pledgedBackDate" jdbcType="TIMESTAMP"/>
+        <result column="roughBackDate" property="roughBackDate" jdbcType="TIMESTAMP"/>
+        <result column="dealBackDate" property="dealBackDate" jdbcType="TIMESTAMP"/>
+        <result column="contractType" property="contractType" jdbcType="INTEGER"/>
+        <result column="centerId" property="centerId" jdbcType="INTEGER"/>
+        <result column="fyReportId" property="fyReportId" jdbcType="VARCHAR"/>
+        <result column="reportAgent" property="reportAgent" jdbcType="VARCHAR"/>
+        <result column="reportAgentTel" property="reportAgentTel" jdbcType="VARCHAR"/>
+        <result column="customerIdTwo" property="customerIdTwo" jdbcType="VARCHAR"/>
+        <result column="customerNmTwo" property="customerNmTwo" jdbcType="VARCHAR"/>
+        <result column="customerTelTwo" property="customerTelTwo" jdbcType="VARCHAR"/>
+        <result column="brokerageStatus" property="brokerageStatus" jdbcType="VARCHAR"/>
+        <result column="brokerageUptEmpId" property="brokerageUptEmpId" jdbcType="INTEGER"/>
+        <result column="brokerageUptDt" property="brokerageUptDt" jdbcType="TIMESTAMP"/>
+        <result column="brokerageYm" property="brokerageYm" jdbcType="VARCHAR"/>
+        <result column="brokerageSendStatus" property="brokerageSendStatus" jdbcType="VARCHAR"/>
+        <result column="roughAuditStatus" property="roughAuditStatus" jdbcType="VARCHAR"/>
+        <result column="brokerageSendCount" property="brokerageSendCount" jdbcType="INTEGER"/>
+        <result column="roughInputDate" property="roughInputDate" jdbcType="TIMESTAMP"/>
+        <result column="orderNumber" property="orderNumber" jdbcType="VARCHAR"/>
+        <result column="orderNumber" property="orderNumber" jdbcType="VARCHAR"/>
+        <result column="isWrap" property="isWrap" jdbcType="INTEGER"/>
+        <result column="contractNo" property="contractNo" jdbcType="VARCHAR"/>
+        <result column="rebackFlag" property="rebackFlag" jdbcType="VARCHAR"/>
+        <result column="wyTypeCode" property="wyTypeCode" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    Id,EstateId,ReportId,EstateNm,CompanyNm,CompanyId,CustomerId,CustomerFrom,CustomerNm,CustomerTel,CustomerParty,PartyNm,PartyTel,StoreNm,StoreId,DeptNm,DeptId,EmpNm,EmpId,CityNo,EstateType,
+LatestProgress,ConfirmStatus,ReportDate,FollowDate,ValidDate,ValidRelationDate,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,CustomerNum,CustomerRequire,Memo,contactId,contactNm
+	,roughDate,dealDate,seeDate,pledgedDate,pledgedBackDate,roughBackDate,dealBackDate,contractType
+	,fyReportId,reportAgent,reportAgentTel
+	,customerIdTwo,customerNmTwo,customerTelTwo
+	,brokerageStatus,brokerageUptEmpId,brokerageUptDt,brokerageYm,brokerageSendStatus
+	,roughAuditStatus,brokerageSendCount
+	,isWrap,contractNo ,rebackFlag,wyTypeCode
+  </sql>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Report
+        <where>
+            Id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <resultMap id="ReportInfoMap" type="cn.com.eju.deal.houseLinkage.report.model.ReportSearchResult"/>
+    <!-- 查询 list -->
+    <select id="selectReportList" parameterType="Map" resultMap="ReportInfoMap">
+        select
+        p.Id,
+        p.EstateId,
+        p.ReportId,
+        e.CityNo,
+        e.DistrictId,
+        e.AreaId,
+        e.EstateNm,
+        p.EstateType,
+        c1.CityName+''+d1.DistrictName+''+e.Address AS Address,
+        p.CustomerId,
+        p.CustomerFrom,
+        p.CustomerNm,
+        p.CustomerTel,
+        p.CompanyNm,
+        s.AddressDetail as storeAddress,
+        p.LatestProgress,
+        p.ConfirmStatus,
+        p.DeptNm,
+        p.EmpNm,
+        p.ReportDate,
+        p.FollowDate,
+        p.ValidDate,
+        p.ValidRelationDate,
+        p.CompanyId,
+        c.CityName,
+        er.HideNumberFlg,
+        rd.buildingNo ,
+        rd.area ,
+        rd.roughAmount ,
+        rd.dealAmount,
+        p.contactId,
+        p.contactNm,
+        w.centerGroupName AS centerName,
+        p.seeDate,
+        p.pledgedDate,
+        rd.roughArea,
+        p.roughDate,
+        p.dealDate,
+        p.pledgedBackDate,
+        p.roughBackDate,
+        p.dealBackDate,
+        e.realityCityNo as realityCityNo,
+        p.roughAuditStatus,
+        p.roughAuditTime,
+        p.roughAuditId,
+        roughAuditName=u.userName,
+        p.roughAuditDesc
+        ,p.brokerageStatus
+        ,rd.Id as reportDetailId
+        ,p.roughInputDate
+        ,avc.cityNo as acCityNo
+        ,eug.groupName as projectDepartmentName
+        ,p.brokerageUptDt
+        ,p.rebackFlag
+        FROM LNK_Report (NOLOCK) p
+        INNER JOIN LNK_Estate (NOLOCK) e ON p.EstateId = e.EstateId
+        LEFT JOIN USR_Group eug (NOLOCK) on eug.groupId = e.projectDepartmentId
+        INNER JOIN BAS_City (NOLOCK) c ON p.CityNo = c.CityNo
+        INNER JOIN LNK_EstateRule (NOLOCK) er ON er.EstateId = e.EstateId
+        INNER JOIN LNK_ReportDetail (NOLOCK) rd ON p.EstateId = rd.EstateId
+        AND p.reportId = rd.reportNo
+        AND p.CompanyId = rd.CompanyId
+        AND p.CustomerId = rd.CustomerId
+        AND p.LatestProgress = rd.Progress
+        AND rd.DelFlg = 0
+        AND rd.isValid = 0
+        INNER JOIN BAS_City  c1  WITH (NOLOCK,INDEX(IX_CityNo))  ON c1.CityNo = e.realityCityNo
+        INNER JOIN BAS_District (NOLOCK) d1 ON d1.DistrictNo = e.DistrictId
+        LEFT JOIN dbo.Store (NOLOCK) s ON s.Id = p.StoreId AND s.IsDelete=0
+        INNER join Achiv_Achievement (NOLOCK) w on w.relateId = p.id and w.delFlag=0 and w.achieveType = 17902
+        left join dbo.USR_Group aug on w.cityGroupId =aug.groupId
+        LEFT JOIN dbo.BAS_City avc  WITH (NOLOCK,INDEX(PK_City_1)) ON aug.cityId = avc.id
+
+        LEFT JOIN crm.dbo.USR_User (NOLOCK) u ON p.roughAuditId = u.userId
+        INNER join usr_group (NOLOCK) ug on w.citygroupId=ug.groupId
+        INNER join bas_city c2 WITH (NOLOCK,INDEX(PK_City_1))  on ug.cityId=c2.id
+        <where>
+            1=1
+            AND p.DelFlg = 0
+
+            <if test="roughAuditStatus != null and roughAuditStatus != ''">
+                AND p.roughAuditStatus in ( ${roughAuditStatus})
+            </if>
+            <if test="customerFrom != null and customerFrom != ''">
+                AND p.customerFrom = #{customerFrom,jdbcType=INTEGER}
+            </if>
+            <if test="brokerageStatus != null and brokerageStatus != ''">
+                AND p.brokerageStatus in ( ${brokerageStatus})
+            </if>
+            <if test="webFlg != null  and  empId != null and empId != ''"><!-- 微信web和房友调用 -->
+                AND p.EmpId = #{empId, jdbcType=INTEGER}
+            </if>
+            <if test="cityNo != null and cityNo != ''"><!-- 楼盘归属城市或报备业绩归属都查询 -->
+                and (p.cityNo='${cityNo}' OR c2.CityNo = '${cityNo}')
+            </if>
+            <if test="realityCityNo != null and realityCityNo !=''"><!-- 楼盘地址 -->
+                AND e.realityCityNo = #{realityCityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="districtId != null and districtId != ''"><!-- 查询条件是否有区域 -->
+                <![CDATA[
+  				AND e.DistrictId  = #{districtId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="areaId != null and areaId != ''"><!-- 查询条件是否有板块 -->
+                <![CDATA[
+  				AND e.AreaId  = #{areaId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="estateType != null and estateType !=''"><!-- 查询条件是否有楼盘类型 -->
+                <![CDATA[
+  				AND p.EstateType LIKE '%${estateType}%'
+  				]]>
+            </if>
+            <if test="latestProgress != null and latestProgress !=''"><!-- 查询条件是否有最新进度 -->
+                <![CDATA[
+  				AND p.LatestProgress = #{latestProgress,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="confirmStatus != null and confirmStatus !=''"><!-- 查询条件是否有确认状态 -->
+                <![CDATA[
+  				AND p.ConfirmStatus = #{confirmStatus,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="companyId != null and companyId !=''"><!-- 查询条件是否有公司编号 -->
+                <![CDATA[
+  				AND p.CompanyId = #{companyId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="webFlg != null and webFlg ==2"><!-- 微信web调用 -->
+                <if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+                    <![CDATA[
+	  				AND p.EstateNm like '%${estateNm}%'
+	  				]]>
+                </if>
+                <if test="customerNmWeiXin != null and customerNmWeiXin !=''"><!-- 查询条件是否有录入客户名 -->
+                    <![CDATA[
+	  				AND p.CustomerNm like '%${customerNmWeiXin}%'
+	  				]]>
+                </if>
+            </if>
+
+            <if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名/公司名 -->
+                <if test="webFlg != null and webFlg ==1"><!-- 房友web调用 -->
+                    <![CDATA[
+	  				AND (p.EstateNm like '%${estateNm}%' or p.CustomerNm like '%${estateNm}%' or p.CustomerTel like '%${estateNm}%' or p.ReportId like '%${estateNm}%' or e.DistrictId like '%${estateNm}%' )
+	  				]]>
+                </if>
+                <if test="webFlg == null or webFlg ==''">
+                    <![CDATA[
+	  				AND (p.EstateNm like '%${estateNm}%' or p.CompanyNm like '%${estateNm}%' or p.ReportId like '%${estateNm}%' or p.CustomerNm like '%${estateNm}%' or p.CustomerTel like '%${estateNm}%')
+	  				]]>
+                </if>
+            </if>
+            <!--<if test="customerNm != null and customerNm !=''">&lt;!&ndash; 查询条件是否有录入客户编号/客户名/客户手机 &ndash;&gt;-->
+            <!--<![CDATA[-->
+            <!--AND (p.CustomerId like '%${customerNm}%' or p.CustomerNm like '%${customerNm}%' or p.CustomerTel like '%${customerNm}%' )-->
+            <!--]]>-->
+            <!--</if>-->
+
+            <if test="estateId != null and estateId != ''"><!-- 查询条件是否有板块 -->
+                <![CDATA[
+  				AND e.EstateId  = #{estateId,jdbcType=VARCHAR}
+  				]]>
+            </if>
+            <if test="stroreAddressDetail != null and stroreAddressDetail != ''">
+                AND s.AddressDetail LIKE CONCAT('%', #{stroreAddressDetail},'%')
+            </if>
+            <if test="projectDepartmentId != null and projectDepartmentId !=''"><!-- 归属项目组 -->
+                <![CDATA[
+  				AND e.projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER}
+  				]]>
+            </if>
+            <if test="reportId != null and reportId !=''"><!-- 订单编号 -->
+                <![CDATA[
+                  AND p.reportId LIKE CONCAT('%', #{reportId},'%')
+                ]]>
+            </if>
+            <if test="companyNm != null and companyNm != ''"><!-- 渠道公司 -->
+                AND rd.companyNm LIKE CONCAT('%', #{companyNm},'%')
+            </if>
+            <if test="buildingNo != null and buildingNo != ''"><!-- 楼室号 -->
+                AND rd.buildingNo  LIKE CONCAT('%', #{buildingNo},'%')
+            </if>
+            <if test="customerNm != null and customerNm != ''"><!-- 客户 -->
+                AND (p.CustomerNm LIKE CONCAT('%', #{customerNm},'%')
+                or p.CustomerTel LIKE CONCAT('%', #{customerNm},'%')
+                )
+            </if>
+
+            <if test="centerId != null and centerId != ''">
+                AND w.centerGroupId = #{centerId,jdbcType=INTEGER}
+            </if>
+
+            <if test="dateTypeKbn != null and dateTypeKbn == 13701"><!-- 报备日场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND p.ReportDate is not null
+		    				AND Convert(varchar(10),p.ReportDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND p.ReportDate is not null
+		    				AND Convert(varchar(10),p.ReportDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn ==13702"><!-- 带看日场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND p.seeDate is not null
+		    				AND Convert(varchar(10),p.seeDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND p.seeDate is not null
+		    				AND Convert(varchar(10),p.seeDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn ==13703"><!-- 大定日场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND p.roughInputDate is not null
+		    				AND Convert(varchar(10),p.roughInputDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND p.roughInputDate is not null
+		    				AND Convert(varchar(10),p.roughInputDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn ==13704"><!-- 成销时间场合 -->
+                <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                    <![CDATA[
+		  		  			AND p.dealDate is not null
+		    				AND Convert(varchar(10),p.dealDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                    <![CDATA[
+		  		  			AND p.dealDate is not null
+		    				AND Convert(varchar(10),p.dealDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+            <if test="dateTypeKbn != null and dateTypeKbn == 13707"><!-- 结佣 -->
+                <if test="dateStart != null and dateStart != ''">
+                    <![CDATA[
+		  		  			AND p.brokerageUptDt is not null
+		    				AND Convert(varchar(10),p.brokerageUptDt,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+                <if test="dateEnd != null and dateEnd != ''">
+                    <![CDATA[
+		  		  			AND p.brokerageUptDt is not null
+		    				AND Convert(varchar(10),p.brokerageUptDt,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+                </if>
+            </if>
+
+            <if test="keyTypeKbn != null and keyTypeKbn !='' and keyword != null and keyword != '' "><!-- 关键字 -->
+                <if test="keyTypeKbn ==0">
+                    AND (
+                        e.EstateNm LIKE CONCAT('%', #{keyword},'%')
+                        or e.projectNo LIKE CONCAT('%', #{keyword},'%')
+                    )
+                </if>
+                <if test="keyTypeKbn ==1">
+                    AND p.reportId LIKE CONCAT('%', #{keyword},'%')
+                </if>
+                <if test="keyTypeKbn ==2">
+                    AND rd.companyNm LIKE CONCAT('%', #{keyword},'%')
+                </if>
+                <if test="keyTypeKbn ==3">
+                    AND rd.buildingNo LIKE CONCAT('%', #{keyword},'%')
+                </if>
+                <if test="keyTypeKbn ==4">
+                    AND (
+                       p.CustomerNm LIKE CONCAT('%', #{keyword},'%')
+                    or p.CustomerTel LIKE CONCAT('%', #{keyword},'%')
+                    )
+                </if>
+                <if test="keyTypeKbn ==5">
+                    AND p.contactNm LIKE CONCAT('%', #{keyword},'%')
+                </if>
+            </if>
+        </where>
+        ORDER BY p.ReportId DESC
+    </select>
+
+    <select id="getReport" resultType="cn.com.eju.deal.houseLinkage.report.model.Report" parameterType="Map">
+        SELECT
+        r.*,e.projectNo ,avc.cityNo as acCityNo
+        ,t1.centerGroupName as centerGroupName,t1.centerGroupId,
+        d1.dicValue AS brokerageStatusNm
+        ,u.userName AS brokerageUptEmpNm,s.storeNo,s.contractType
+        ,rdv.incomeStatus
+        ,rdv.dicValue
+        ,(select sum(befTaxAmount) from LNK_YJ_SJFY GROUP BY reportId HAVING reportId = r.reportId) sjFyAmount
+        ,wy.wyTypName
+        ,r.xbuildingNo  buildingNo
+        ,r.isGlobalControl
+        ,r.dyRatio
+
+        FROM LNK_Report r WITH(NOLOCK)
+        JOIN LNK_Estate e WITH(NOLOCK) ON r.EstateId = e.EstateId
+        LEFT JOIN  dbo.Achiv_Achievement t1 WITH ( NOLOCK )  ON t1.relateId = r.id AND t1.achieveType = 17902  AND t1.delFlag = 0
+        LEFT JOIN (SELECT ROW_NUMBER() OVER ( PARTITION BY rd.reportNo ORDER BY rd.CrtDt DESC ) row_num
+        ,rd.reportNo
+        ,rd.incomeStatus
+        ,dv.dicValue
+        FROM LNK_ReportDetail rd WITH(NOLOCK)
+        LEFT JOIN BAS_DictionaryValue dv WITH(NOLOCK)
+        ON dicCode = rd.incomeStatus AND dv.delFlag = 'N'
+        WHERE rd.DelFlg = 0
+
+        <if test="estateId != null and estateId != ''"><!-- 楼盘id -->
+            <![CDATA[
+  		  			AND rd.EstateId = #{estateId,jdbcType=VARCHAR}
+    			]]>
+        </if>
+        <if test="companyId != null and companyId != ''"><!-- 公司id-->
+            <![CDATA[
+  		  			AND rd.CompanyId = #{companyId,jdbcType=VARCHAR}
+    			]]>
+        </if>
+        <if test="customerId != null and customerId != ''"><!-- 客户id -->
+            <![CDATA[
+  		  			AND rd.CustomerId = #{customerId,jdbcType=VARCHAR}
+    			]]>
+        </if>
+        <if test="reportId != null and reportId != ''"><!-- 报备id -->
+            <![CDATA[
+  		  			AND rd.ReportNo = #{reportId,jdbcType=VARCHAR}
+    			]]>
+        </if>
+
+        ) rdv ON r.ReportId=rdv.reportNo AND rdv.row_num = 1
+
+
+        LEFT JOIN dbo.BAS_DictionaryValue d1 WITH(NOLOCK) ON d1.dicCode = r.brokerageStatus
+        AND d1.delFlag = 'N'
+        LEFT JOIN crm.dbo.usr_user u WITH(NOLOCK) ON r.brokerageUptEmpId = u.userId and u.delFlag = 'N'
+        LEFT JOIN Store s WITH(NOLOCK) on s.id=r.storeId and s.IsDelete=0
+
+        left join dbo.USR_Group aug  WITH(NOLOCK) on t1.cityGroupId =aug.groupId
+        LEFT JOIN dbo.BAS_City avc WITH(NOLOCK) ON aug.cityId = avc.id
+        LEFT JOIN dbo.LNK_Yj_Wy_Info wy WITH(NOLOCK) ON wy.wyTypeCode = r.wyTypeCode AND wy.delFlag = '0'
+        <where>
+            1 = 1 and r.DelFlg=0
+            <if test="estateId != null and estateId != ''"><!-- 楼盘id -->
+                <![CDATA[
+  		  			AND r.EstateId = #{estateId,jdbcType=VARCHAR}
+    			]]>
+            </if>
+            <if test="companyId != null and companyId != ''"><!-- 公司id-->
+                <![CDATA[
+  		  			AND r.CompanyId = #{companyId,jdbcType=VARCHAR}
+    			]]>
+            </if>
+            <if test="customerId != null and customerId != ''"><!-- 客户id -->
+                <![CDATA[
+  		  			AND r.CustomerId = #{customerId,jdbcType=VARCHAR}
+    			]]>
+            </if>
+            <if test="reportId != null and reportId != ''"><!-- 报备id -->
+                <![CDATA[
+  		  			AND r.ReportId = #{reportId,jdbcType=VARCHAR}
+    			]]>
+            </if>
+            <if test="orderNumber != null and orderNumber != ''"><!-- 交易编号 -->
+                <![CDATA[
+  		  			AND r.orderNumber = #{orderNumber,jdbcType=VARCHAR}
+    			]]>
+            </if>
+            <if test="projectNo != null and projectNo != ''"><!-- 楼盘编号 -->
+                <![CDATA[
+  		  			AND e.projectNo = #{projectNo,jdbcType=VARCHAR}
+    			]]>
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="StatisticCompanyInfoMap"
+               type="cn.com.eju.deal.houseLinkage.report.model.StatisticCompanySearchResult"/>
+    <select id="getStatisticForCompany" parameterType="Map" resultMap="StatisticCompanyInfoMap">
+        select p.CompanyId,p.EstateId,p.CompanyNm
+        from LNK_Report p
+        where p.EstateId = #{estateId,jdbcType=VARCHAR}
+        and p.CityNo = #{cityNo,jdbcType=NVARCHAR}
+        and p.ConfirmStatus != 13602
+        <if test="companyNm != null and companyNm !=''"><!-- 查询条件是否有公司名 -->
+            <![CDATA[
+			  				and p.CompanyNm like '%${companyNm}%' 
+			  				]]>
+        </if>
+        <if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+            <![CDATA[
+			  		  			AND p.FollowDate is not null
+			    				AND Convert(varchar(10),p.FollowDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+			    			]]>
+        </if>
+        <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+            <![CDATA[
+			  		  			AND p.FollowDate is not null
+			    				AND Convert(varchar(10),p.FollowDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+			    			]]>
+        </if>
+        group by p.CompanyId,p.EstateId,p.CompanyNm
+        order by p.CompanyId
+    </select>
+
+    <select id="checkExistReport" resultMap="BaseResultMap" parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Report
+        <where>
+            EstateId = #{estateId,jdbcType=VARCHAR}
+            and CustomerTel = #{customerTel,jdbcType=VARCHAR}
+            and Convert(varchar(10),ValidDate,120) >= Convert(varchar(10),getdate(),120)
+        </where>
+    </select>
+
+    <select id="getByReportId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT top 1
+        <include refid="Base_Column_List"/>
+        FROM LNK_Report
+        <where>
+            DelFlg = 0
+            AND ReportId = #{reportId,jdbcType=VARCHAR}
+        </where>
+        order by id desc
+    </select>
+
+    <select id="getMaxReportId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Report
+        <where>
+            ReportId like '${reportId}%'
+        </where>
+        order by ReportId desc
+    </select>
+
+    <resultMap id="RecognitionInfoMap" type="cn.com.eju.deal.scene.estate.model.SceneRecognitionSearchResult"/>
+    <!-- 查询 list -->
+    <select id="selectSceneRecognitionList" parameterType="Map" resultMap="RecognitionInfoMap">
+        SELECT
+        s.maintainerName,s.Address as address,s.AddressDetail as addressDetail,
+        w.centerGroupName as centerName,
+        s.Name,
+        p.StoreId,
+        p.StoreNm,
+        p.Id,
+        p.EstateId,
+        p.ReportId,
+        e.CityNo,
+        e.DistrictId,
+        e.AreaId,
+        e.EstateNm,
+        e.signDate,
+        e.isSpecialProject,
+        e.MgtKbn AS EstateType,
+        p.CustomerId,
+        p.CustomerNm,
+        p.CustomerTel,
+        p.CompanyNm,
+        rd.Id as reportDetailId,
+        p.LatestProgress,
+        p.ConfirmStatus,
+        p.DeptNm,
+        p.EmpNm,
+        p.ReportDate,
+        p.FollowDate,
+        p.ValidDate,
+        r.HideNumberFlg,
+        p.ValidRelationDate,
+        r.RelationProtectPeriod,
+        p.CompanyId,
+        rd.buildingNo,
+        rd.area,
+        rd.roughAmount,
+        rd.dealAmount,
+        p.seeDate,
+        p.pledgedDate,
+        rd.roughArea,
+        p.roughDate,
+        p.dealDate,
+        p.pledgedBackDate,
+        p.roughBackDate,
+        p.dealBackDate,
+        p.contactNm
+        ,p.customerFrom
+        ,p.fyReportId
+        ,p.reportAgent
+        ,p.reportAgentTel
+        ,p.roughAuditStatus
+        ,p.brokerageStatus
+        ,p.roughInputDate
+        ,avc.cityNo as acCityNo
+        ,p.brokerageUptDt
+        ,p.rebackFlag
+        FROM LNK_Report p WITH(NOLOCK)
+        INNER JOIN LNK_Estate e WITH(NOLOCK) ON p.EstateId = e.EstateId
+        INNER JOIN LNK_EstateRule r WITH(NOLOCK) ON r.EstateId = e.EstateId
+
+        <!--INNER JOIN LNK_ReportDetail rd WITH(NOLOCK) ON rd.EstateId = p.EstateId AND rd.CompanyId = p.CompanyId-->
+        <!--AND rd.CustomerId = p.CustomerId AND rd.DelFlg = 0 AND rd.isValid = 0-->
+        <!--INNER JOIN ( SELECT MAX(x1.Id) id FROM dbo.LNK_ReportDetail x1 WITH(NOLOCK) ,dbo.LNK_Report x2 WITH(NOLOCK) WHERE x1.DelFlg = 0 AND-->
+<!--&lt;!&ndash;         SUBSTRING(CountId, 0, 16) = x2.ReportId GROUP BY ReportId ) temp ON temp.id = rd.Id &ndash;&gt;-->
+        <!--x1.reportNo = x2.ReportId GROUP BY ReportId ) temp ON temp.id = rd.Id-->
+        INNER JOIN LNK_ReportDetail rd WITH ( NOLOCK ) ON rd.reportNo = p.reportId
+        AND p.LatestProgress = rd.Progress
+        AND rd.DelFlg = 0
+        AND rd.isValid = 0
+
+        LEFT JOIN Store s WITH(NOLOCK) ON s.Id = p.StoreId AND s.Name = p.StoreNm AND s.IsDelete = '0'
+
+        join Achiv_Achievement w WITH(NOLOCK) on w.relateId = p.id and w.delFlag=0 and w.achieveType = 17902
+        left join dbo.USR_Group aug WITH(NOLOCK) on w.cityGroupId =aug.groupId
+        LEFT JOIN dbo.BAS_City avc WITH(NOLOCK) ON aug.cityId = avc.id
+
+        LEFT JOIN crm.dbo.USR_User u WITH(NOLOCK) ON p.roughAuditId = u.userId
+        join usr_group ug WITH(NOLOCK) on w.citygroupId=ug.groupId
+        join bas_city c2 WITH(NOLOCK) on ug.cityId=c2.id
+        where p.DelFlg = 0 AND p.EstateId = #{estateId,jdbcType=VARCHAR}
+        <if test="proMapList != null and proMapList != ''">
+            AND(
+            ${proMapList}
+            )
+        </if>
+        <if test="userIdList != null and userIdList != ''">
+            <foreach collection="userIdList" item="item" index="index" open="AND (" close=")" separator="OR">
+                <![CDATA[e.SceneEmpId = #{item, jdbcType=INTEGER} ]]>
+            </foreach>
+        </if>
+        <if test="cityNo != null and cityNo != ''">
+            AND ( p.cityNo = '${cityNo}' OR c2.CityNo = '${cityNo}')
+        </if>
+        <if test="estateNm != null and estateNm !=''">
+            <![CDATA[
+  				and (p.ReportId like '%${estateNm}%' or p.CustomerNm like '%${estateNm}%' or p.EmpNm like '%${estateNm}%'
+  				 or p.CustomerTel like '%${estateNm}%' or p.historyCustomerNm like '%${estateNm}%' or p.historyCustomerTel like '%${estateNm}%' )
+  				]]>
+        </if>
+
+        <if test="stroreAddressDetail != null and stroreAddressDetail != ''">
+            AND s.AddressDetail LIKE CONCAT('%', #{stroreAddressDetail},'%')
+        </if>
+        <if test="customerFrom != null and customerFrom != ''">
+            AND p.customerFrom = #{customerFrom,jdbcType=INTEGER}
+        </if>
+
+
+        <if test="projectDepartmentId != null and projectDepartmentId !=''"><!-- 归属项目组 -->
+            <![CDATA[
+			AND e.projectDepartmentId = #{projectDepartmentId,jdbcType=INTEGER}
+			]]>
+        </if>
+        <if test="reportId != null and reportId !=''"><!-- 订单编号 -->
+            <![CDATA[
+			AND p.reportId  LIKE CONCAT('%', #{reportId},'%')
+			]]>
+        </if>
+        <if test="buildingNo != null and buildingNo != ''"><!-- 楼室号 -->
+            AND rd.buildingNo LIKE CONCAT('%', #{buildingNo},'%')
+        </if>
+
+        <if test="companyNm != null and companyNm != ''"><!-- 渠道公司 -->
+            AND rd.companyNm LIKE CONCAT('%', #{companyNm},'%')
+        </if>
+
+        <if test="customerNm != null and customerNm != ''"><!-- 客户 -->
+            AND (p.CustomerNm LIKE CONCAT('%', #{customerNm},'%')
+              OR p.CustomerTel LIKE CONCAT('%', #{customerNm},'%')
+            )
+        </if>
+
+        <if test="centerId != null and centerId != ''">
+            AND w.centerGroupId =  #{centerId,jdbcType=INTEGER}
+        </if>
+
+        <if test="dateTypeKbn != null and dateTypeKbn == 13701"><!-- 报备 -->
+            <if test="dateStart != null and dateStart != ''">
+                <![CDATA[
+		  		  			AND p.ReportDate is not null
+		    				AND Convert(varchar(10),p.ReportDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                <![CDATA[
+		  		  			AND p.ReportDate is not null
+		    				AND Convert(varchar(10),p.ReportDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+        </if>
+        <if test="dateTypeKbn != null and dateTypeKbn == 13702"><!-- 带看 -->
+            <if test="dateStart != null and dateStart != ''">
+                <![CDATA[
+		  		  			AND p.seeDate is not null
+		    				AND Convert(varchar(10),p.seeDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                <![CDATA[
+		  		  			AND p.seeDate is not null
+		    				AND Convert(varchar(10),p.seeDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+        </if>
+        <if test="dateTypeKbn != null and dateTypeKbn == 13703"><!-- 大定 -->
+            <if test="dateStart != null and dateStart != ''">
+                <![CDATA[
+		  		  			AND p.roughInputDate is not null
+		    				AND Convert(varchar(10),p.roughInputDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                <![CDATA[
+		  		  			AND p.roughInputDate is not null
+		    				AND Convert(varchar(10),p.roughInputDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+        </if>
+        <if test="dateTypeKbn != null and dateTypeKbn == 13704"><!-- 成销 -->
+            <if test="dateStart != null and dateStart != ''">
+                <![CDATA[
+		  		  			AND p.dealDate is not null
+		    				AND Convert(varchar(10),p.dealDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                <![CDATA[
+		  		  			AND p.dealDate is not null
+		    				AND Convert(varchar(10),p.dealDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+        </if>
+        <if test="dateTypeKbn != null and dateTypeKbn == 13707"><!-- 结佣 -->
+            <if test="dateStart != null and dateStart != ''">
+                <![CDATA[
+		  		  			AND p.brokerageUptDt is not null
+		    				AND Convert(varchar(10),p.brokerageUptDt,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                <![CDATA[
+		  		  			AND p.brokerageUptDt is not null
+		    				AND Convert(varchar(10),p.brokerageUptDt,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+            </if>
+        </if>
+        <if test="keyTypeKbn != null and keyTypeKbn !='' and keyword != null and keyword != '' "><!-- 关键字 -->
+            <if test="keyTypeKbn ==0">
+                AND (
+                e.EstateNm LIKE CONCAT('%', #{keyword},'%')
+                or e.projectNo LIKE CONCAT('%', #{keyword},'%')
+                )
+            </if>
+            <if test="keyTypeKbn ==1">
+                AND p.reportId LIKE CONCAT('%', #{keyword},'%')
+            </if>
+            <if test="keyTypeKbn ==2">
+                AND rd.companyNm LIKE CONCAT('%', #{keyword},'%')
+            </if>
+            <if test="keyTypeKbn ==3">
+                AND rd.buildingNo LIKE CONCAT('%', #{keyword},'%')
+            </if>
+            <if test="keyTypeKbn ==4">
+                AND (
+                p.CustomerNm LIKE CONCAT('%', #{keyword},'%')
+                or p.CustomerTel LIKE CONCAT('%', #{keyword},'%')
+                )
+            </if>
+            <if test="keyTypeKbn ==5">
+                AND p.contactNm LIKE CONCAT('%', #{keyword},'%')
+            </if>
+        </if>
+        ORDER BY p.reportId DESC
+    </select>
+
+
+    <resultMap id="CompanyInfoMap" type="cn.com.eju.deal.scene.statistic.model.SceneStatisticCompanySearchResult"/>
+    <!-- 查询 list -->
+    <select id="selectSceneStatisticCompanyList" parameterType="Map" resultMap="CompanyInfoMap">
+        select p.CompanyId,p.EstateId,p.CompanyNm
+        from LNK_Report p
+        where p.EstateId = #{estateId,jdbcType=VARCHAR}
+        and p.ConfirmStatus != 13602
+        <if test="companyNm != null and companyNm !=''"><!-- 查询条件是否有公司名 -->
+            <![CDATA[
+			  				and p.CompanyNm like '%${companyNm}%' 
+			  				]]>
+        </if>
+        group by p.CompanyId,p.EstateId,p.CompanyNm
+        order by p.CompanyId
+    </select>
+
+
+    <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.report.model.Report"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_Report (EstateId,ReportId,EstateNm,CompanyNm,CompanyId,CustomerId,CustomerFrom,CustomerNm,CustomerTel,CustomerParty,PartyNm,PartyTel,StoreNm,StoreId,DeptNm,DeptId,EmpNm,EmpId,CityNo,EstateType,
+LatestProgress,ConfirmStatus,ReportDate,FollowDate,ValidDate,ValidRelationDate,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,CustomerNum,CustomerRequire,Memo,contactId,contactNm
+      ,contractType,centerId,fyReportId,reportAgent,reportAgentTel,customerIdTwo,customerNmTwo,customerTelTwo,
+      seeDate,roughDate,dealDate,orderNumber,RoughAuditStatus,roughInputDate,RoughAuditId,RoughAuditTime,accountProject,accountProjectNo)
+    values (#{estateId, jdbcType=VARCHAR},#{reportId, jdbcType=VARCHAR},#{estateNm, jdbcType=NVARCHAR},#{companyNm, jdbcType=NVARCHAR},#{companyId, jdbcType=VARCHAR},#{customerId, jdbcType=VARCHAR},#{customerFrom, jdbcType=INTEGER},
+#{customerNm, jdbcType=NVARCHAR},#{customerTel, jdbcType=VARCHAR},#{customerParty, jdbcType=VARCHAR},#{partyNm, jdbcType=NVARCHAR},#{partyTel, jdbcType=VARCHAR},#{storeNm, jdbcType=NVARCHAR},
+#{storeId, jdbcType=VARCHAR},#{deptNm, jdbcType=NVARCHAR},#{deptId, jdbcType=VARCHAR},#{empNm, jdbcType=NVARCHAR},#{empId, jdbcType=VARCHAR},#{cityNo, jdbcType=NVARCHAR},#{estateType, jdbcType=VARCHAR},
+#{latestProgress, jdbcType=VARCHAR},#{confirmStatus, jdbcType=VARCHAR},#{reportDate, jdbcType=TIMESTAMP},#{followDate, jdbcType=TIMESTAMP},#{validDate, jdbcType=TIMESTAMP},#{validRelationDate, jdbcType=TIMESTAMP},
+#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg, jdbcType=BIT},#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP},#{customerNum, jdbcType=INTEGER},#{customerRequire, jdbcType=NVARCHAR},
+#{memo, jdbcType=NVARCHAR},#{contactId, jdbcType=INTEGER},#{contactNm, jdbcType=VARCHAR},#{contractType,jdbcType=INTEGER}
+      ,#{centerId, jdbcType=INTEGER},#{fyReportId, jdbcType=VARCHAR},#{reportAgent, jdbcType=VARCHAR},#{reportAgentTel, jdbcType=VARCHAR}
+      ,#{customerIdTwo, jdbcType=VARCHAR},#{customerNmTwo, jdbcType=VARCHAR},#{customerTelTwo, jdbcType=VARCHAR},
+      #{seeDate, jdbcType=TIMESTAMP},#{roughDate, jdbcType=TIMESTAMP},#{dealDate, jdbcType=TIMESTAMP},#{orderNumber, jdbcType=VARCHAR}
+      ,#{roughAuditStatus, jdbcType=VARCHAR},#{roughInputDate, jdbcType=TIMESTAMP},#{roughAuditId,jdbcType=INTEGER},#{roughAuditTime, jdbcType=TIMESTAMP}
+      ,#{accountProject, jdbcType=VARCHAR},#{accountProjectNo, jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="createReport" parameterType="Map"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_Report (EstateId,ReportId,EstateNm,CompanyNm,CompanyId,CustomerId,CustomerFrom,CustomerNm,CustomerTel,CustomerParty,PartyNm,PartyTel,StoreNm,StoreId,DeptNm,DeptId,EmpNm,EmpId,CityNo,EstateType,
+LatestProgress,ConfirmStatus,ReportDate,FollowDate,ValidDate,ValidRelationDate,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,CustomerNum,CustomerRequire,Memo,contactId,contactNm
+      ,contractType,centerId,fyReportId,reportAgent,reportAgentTel,customerIdTwo,customerNmTwo,customerTelTwo,
+      seeDate,roughDate,dealDate,branchId)
+    values (#{estateId, jdbcType=VARCHAR},#{reportId, jdbcType=VARCHAR},#{estateNm, jdbcType=NVARCHAR},#{companyNm, jdbcType=NVARCHAR},#{companyId, jdbcType=VARCHAR},#{customerId, jdbcType=VARCHAR},#{customerFrom, jdbcType=INTEGER},
+#{customerNm, jdbcType=NVARCHAR},#{customerTel, jdbcType=VARCHAR},#{customerParty, jdbcType=VARCHAR},#{partyNm, jdbcType=NVARCHAR},#{partyTel, jdbcType=VARCHAR},#{storeNm, jdbcType=NVARCHAR},
+#{storeId, jdbcType=VARCHAR},#{deptNm, jdbcType=NVARCHAR},#{deptId, jdbcType=VARCHAR},#{empNm, jdbcType=NVARCHAR},#{empId, jdbcType=VARCHAR},#{cityNo, jdbcType=NVARCHAR},#{estateType, jdbcType=VARCHAR},
+#{latestProgress, jdbcType=VARCHAR},#{confirmStatus, jdbcType=VARCHAR},#{reportDate, jdbcType=TIMESTAMP},#{followDate, jdbcType=TIMESTAMP},#{validDate, jdbcType=TIMESTAMP},#{validRelationDate, jdbcType=TIMESTAMP},
+#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg, jdbcType=BIT},#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP},#{customerNum, jdbcType=INTEGER},#{customerRequire, jdbcType=NVARCHAR},
+#{memo, jdbcType=NVARCHAR},#{contactId, jdbcType=INTEGER},#{contactNm, jdbcType=VARCHAR},#{contractType,jdbcType=INTEGER}
+      ,#{centerId, jdbcType=INTEGER},#{fyReportId, jdbcType=VARCHAR},#{reportAgent, jdbcType=VARCHAR},#{reportAgentTel, jdbcType=VARCHAR}
+      ,#{customerIdTwo, jdbcType=VARCHAR},#{customerNmTwo, jdbcType=VARCHAR},#{customerTelTwo, jdbcType=VARCHAR},
+      #{seeDate, jdbcType=TIMESTAMP},#{roughDate, jdbcType=TIMESTAMP},#{dealDate, jdbcType=TIMESTAMP} ,#{branchId,jdbcType=INTEGER}
+      )
+  </insert>
+
+    <update id="update" parameterType="cn.com.eju.deal.houseLinkage.report.model.Report">
+        update LNK_Report
+        <set>
+            <if test="estateId != null">
+                EstateId = #{estateId, jdbcType=VARCHAR},
+            </if>
+            <if test="reportId != null">
+                ReportId = #{reportId, jdbcType=VARCHAR},
+            </if>
+            <if test="estateNm != null">
+                EstateNm = #{estateNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="companyNm != null">
+                CompanyNm = #{companyNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="companyId != null">
+                CompanyId = #{companyId, jdbcType=VARCHAR},
+            </if>
+            <if test="customerId != null">
+                CustomerId = #{customerId, jdbcType=VARCHAR},
+            </if>
+            <if test="customerNm != null">
+                CustomerNm = #{customerNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="customerTel != null">
+                CustomerTel = #{customerTel, jdbcType=VARCHAR},
+            </if>
+            <if test="customerParty != null">
+                CustomerParty = #{customerParty, jdbcType=VARCHAR},
+            </if>
+            <if test="partyNm != null">
+                PartyNm = #{partyNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="partyTel != null">
+                PartyTel = #{partyTel, jdbcType=VARCHAR},
+            </if>
+            <if test="storeNm != null">
+                StoreNm = #{storeNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="storeId != null">
+                StoreId = #{storeId, jdbcType=VARCHAR},
+            </if>
+            <if test="deptNm != null">
+                DeptNm = #{deptNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="deptId != null">
+                DeptId = #{deptId, jdbcType=VARCHAR},
+            </if>
+            <if test="empNm != null">
+                EmpNm = #{empNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="empId != null">
+                EmpId = #{empId, jdbcType=VARCHAR},
+            </if>
+            <if test="cityNo != null">
+                CityNo = #{cityNo, jdbcType=NVARCHAR},
+            </if>
+            <if test="estateType != null">
+                EstateType = #{estateType, jdbcType=VARCHAR},
+            </if>
+            <if test="latestProgress != null">
+                LatestProgress = #{latestProgress, jdbcType=VARCHAR},
+            </if>
+            <if test="confirmStatus != null">
+                ConfirmStatus = #{confirmStatus, jdbcType=VARCHAR},
+            </if>
+            <if test="reportDate != null">
+                ReportDate = #{reportDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="followDate != null">
+                FollowDate = #{followDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="validDate != null">
+                ValidDate = #{validDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="roughInputDate != null">
+                roughInputDate = #{roughInputDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="validRelationDate != null">
+                ValidRelationDate = #{validRelationDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="crtEmpId != null">
+                crtEmpId = #{crtEmpId, jdbcType=INTEGER},
+            </if>
+            <if test="uptEmpId != null">
+                uptEmpId = #{uptEmpId, jdbcType=INTEGER},
+            </if>
+            <if test="delFlg != null">
+                delFlg = #{delFlg, jdbcType=BIT},
+            </if>
+            <if test="crtDt != null">
+                crtDt = #{crtDt, jdbcType=TIMESTAMP},
+            </if>
+            <if test="customerNum != null">
+                CustomerNum = #{customerNum, jdbcType=INTEGER},
+            </if>
+            <if test="customerRequire != null">
+                CustomerRequire = #{customerRequire, jdbcType=NVARCHAR},
+            </if>
+            <if test="memo != null">
+                Memo = #{memo, jdbcType=NVARCHAR},
+            </if>
+            <if test="contactId != null">
+                contactId = #{contactId, jdbcType=INTEGER},
+            </if>
+            <if test="contactNm != null">
+                contactNm = #{contactNm, jdbcType=VARCHAR},
+            </if>
+            <if test="roughDate != null">
+                roughDate = #{roughDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealDate != null">
+                dealDate = #{dealDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="seeDate != null">
+                seeDate = #{seeDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="pledgedDate != null">
+                pledgedDate = #{pledgedDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="pledgedBackDate != null">
+                pledgedBackDate = #{pledgedBackDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="roughBackDate != null">
+                roughBackDate = #{roughBackDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealBackDate != null">
+                dealBackDate = #{dealBackDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="roughAuditStatus != null and roughAuditStatus != ''">
+                roughAuditStatus = #{roughAuditStatus,jdbcType=NVARCHAR},
+            </if>
+            <if test="roughAuditStatus != null and roughAuditStatus == ''">
+                roughAuditStatus = '0',roughAuditTime = null,roughAuditId = null,roughAuditDesc = null,
+            </if>
+            <if test="roughAuditTime != null">
+                roughAuditTime = #{roughAuditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="roughAuditId != null">
+                roughAuditId = #{roughAuditId,jdbcType=INTEGER},
+            </if>
+            <if test="roughAuditDesc != null">
+                roughAuditDesc = #{roughAuditDesc,jdbcType=NVARCHAR},
+            </if>
+            <if test="customerIdTwo != null">
+                customerIdTwo = #{customerIdTwo, jdbcType=NVARCHAR},
+            </if>
+            <if test="customerNmTwo != null">
+                customerNmTwo = #{customerNmTwo, jdbcType=NVARCHAR},
+            </if>
+            <if test="customerTelTwo != null">
+                customerTelTwo = #{customerTelTwo, jdbcType=VARCHAR},
+            </if>
+            <if test="accountProjectNo != null">
+                accountProjectNo = #{accountProjectNo, jdbcType=VARCHAR},
+                accountProject = (select DISTINCT accountProject from BAS_Account_Project where accountProjectNo =
+                #{accountProjectNo} and delFlag = 0),
+            </if>
+            <if test="customerTwoFlag == '1'.toString()">
+                customerNmTwo = null,
+                customerTelTwo = null,
+            </if>
+            <if test="centerId != null">
+                centerId = #{centerId,jdbcType=INTEGER},
+            </if>
+            <if test="buildingNo != null">
+                xbuildingNo = #{buildingNo, jdbcType=VARCHAR},
+            </if>
+            <if test="buildingNoId != null">
+                buildingNoId = #{buildingNoId, jdbcType=VARCHAR},
+            </if>
+            <if test="isWrap != null">
+                isWrap = #{isWrap, jdbcType=INTEGER},
+            </if>
+            <if test="planId != null">
+                planId = #{planId, jdbcType=INTEGER},
+            </if>
+            <if test="htedition != null">
+                htedition = #{htedition, jdbcType=INTEGER},
+            </if>
+            <if test="fyCenterId != null">
+                fyCenterId = #{fyCenterId, jdbcType=INTEGER},
+            </if>
+            <if test="fyCenterName != null">
+                fyCenterName = #{fyCenterName, jdbcType=INTEGER},
+            </if>
+            <if test="wyTypeCode != null">
+                wyTypeCode = #{wyTypeCode, jdbcType=INTEGER},
+            </if>
+            <if test="partnerAbbreviationNm != null">
+                partnerAbbreviationNm = #{partnerAbbreviationNm, jdbcType=VARCHAR},
+            </if>
+            <if test="partnerNm != null">
+                partnerNm = #{partnerNm, jdbcType=VARCHAR},
+            </if>
+            <if test="developerName != null">
+                developerName = #{developerName, jdbcType=VARCHAR},
+            </if>
+            <if test="devCompany != null">
+                devCompany = #{devCompany, jdbcType=VARCHAR},
+            </if>
+            uptDt = getDate()
+        </set>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateHistoryCustomer" parameterType="Map">
+        update LNK_Report
+        SET uptDt = getDate()
+        <if test="customerNm != null">
+            ,historyCustomerNm = isNull(historyCustomerNm,'') + ',' + #{customerNm,jdbcType=VARCHAR}
+        </if>
+        <if test="customerTel != null">
+            , historyCustomerTel = isNull(historyCustomerTel,'') + ',' + #{customerTel,jdbcType=VARCHAR}
+        </if>
+        WHERE Id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateBackProgress" parameterType="Map">
+        update LNK_Report
+        SET LatestProgress= #{latestProgress, jdbcType=VARCHAR}, FollowDate = #{followDate, jdbcType=TIMESTAMP}, ConfirmStatus = 13603,uptDt = getDate()
+        where EstateId = #{estateId,jdbcType=VARCHAR}
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	and CustomerId = #{customerId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateReback" parameterType="cn.com.eju.deal.houseLinkage.report.model.Report">
+        UPDATE LNK_Report
+        SET LatestProgress = 13503,ConfirmStatus = 13603 ,uptDt = getDate(),brokerageStatus = 22001,
+        roughAuditStatus = '0',roughAuditTime = null,roughAuditId = null,roughAuditDesc = null
+        <if test="dealBackDate != null">
+            ,dealBackDate = #{dealBackDate, jdbcType=TIMESTAMP}
+        </if>
+        WHERE EstateId = #{estateId,jdbcType=VARCHAR}
+        AND ReportId = #{reportId,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="getByFyReportId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_Report
+        where fyReportId = #{fyReportId,jdbcType=VARCHAR}
+        and DelFlg = 0
+    </select>
+
+    <select id="getRoughReportById" resultType="cn.com.eju.deal.houseLinkage.report.model.Report"
+            parameterType="java.lang.Integer" useCache="false">
+        SELECT  dv1.dicValue AS CustomerNum ,
+                w.centerGroupName,
+                e.projectNo ,
+                rd.buildingNo ,
+                rd.roughArea ,
+                rd.roughAmount,
+                rd.CrtDt,
+				rd.id detailId,
+		        u.userName AS empNm,
+		        e.cityNo as estateCityNo,
+		        r.*
+<!-- 	       ,CASE WHEN (select count(1) FROM V_OA_ProjectInfoSign WHERE projectNo = e.projectNo) > 0 THEN 0 ELSE 1 END isApproval -->
+               ,CASE WHEN (e.projectStatus IN ('20302','20303','20306') AND e.DelFlg = 0 AND e.AuditStatus = '12903' ) THEN 0 ELSE 1 END isApproval
+           FROM    dbo.LNK_Report r WITH(NOLOCK)
+                   JOIN dbo.LNK_Estate e WITH(NOLOCK) ON e.EstateId = r.EstateId
+                   LEFT JOIN dbo.BAS_DictionaryValue dv1 WITH(NOLOCK) ON dv1.dicCode = r.CustomerNum
+                   JOIN dbo.LNK_ReportDetail rd WITH(NOLOCK) ON r.EstateId = rd.EstateId
+                                                   AND r.CompanyId = rd.CompanyId
+<!--                                                 AND r.ReportId = SUBSTRING(CountId, 0,16) -->
+                                                AND r.ReportId = rd.reportNo
+                                                AND rd.Progress = 13504
+                                                AND r.ConfirmStatus = 13603
+                                                AND isValid = 0
+                LEFT JOIN crm.dbo.USR_User u WITH(NOLOCK) ON u.userId = rd.CrtEmpId
+                JOIN (
+                        SELECT  relateId ,
+                        MAX(centerGroupName) AS centerGroupName
+                        FROM    dbo.Achiv_Achievement
+                        WHERE   achieveType = 17902
+                        AND delFlag = 0
+                        GROUP BY relateId
+                        ) w ON w.relateId = r.id
+        WHERE   r.Id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getBrokerageSend" parameterType="java.lang.String"
+            resultType="cn.com.eju.deal.Report.model.CommissionInfoDto">
+        SELECT
+        	top 100
+	        CASE WHEN brokerageStatus = '22001' THEN 0
+				 WHEN brokerageStatus = '22002' THEN 1
+				 WHEN brokerageStatus = '22003' THEN 2
+				 END type
+			,CASE WHEN brokerageUptEmpId IS NOT NULL THEN brokerageUptEmpId
+				  ELSE 2221 END crmUserId
+			,fyReportId AS registerId
+        FROM LNK_Report
+        where brokerageSendStatus = '1' 
+          and brokerageStatus IS NOT NULL
+          and customerFrom = 17403
+          and DelFlg = 0
+          and ISNULL(brokerageSendCount,0) &lt; 5
+    </select>
+
+    <update id="updateBrokerage" parameterType="map">
+    	UPDATE LNK_Report
+    	SET brokerageSendStatus = #{brokerageSendStatus,jdbcType=VARCHAR}
+    		 ,uptDt = getDate()
+    		, brokerageSendCount = ISNULL(brokerageSendCount,0)+1
+    	WHERE fyReportId = #{fyReportId,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="getBrokerageInfo" parameterType="map" resultType="cn.com.eju.deal.Report.model.BrokerageDto">
+          
+	 SELECT t1.* ,u.userName FROM
+	 ( 
+	      SELECT   ISNULL(janPreTax, 0) preamount,  ISNULL(janAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'01' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(febPreTax, 0) preamount,  ISNULL(febAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'02' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR} 
+			UNION ALL SELECT   ISNULL(marPreTax, 0) preamount,  ISNULL(marAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'03' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR} 
+			UNION ALL SELECT   ISNULL(aprPreTax, 0) preamount,  ISNULL(aprAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'04' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}  
+			UNION ALL SELECT   ISNULL(mayPreTax, 0) preamount,  ISNULL(mayAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'05' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(junPreTax, 0) preamount,  ISNULL(junAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'06' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(julPreTax, 0) preamount,  ISNULL(julAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'07' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(augPreTax, 0) preamount,  ISNULL(augAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'08' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(sepPreTax, 0) preamount,  ISNULL(sepAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'09' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(octPreTax, 0) preamount,  ISNULL(octAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'10' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(novPreTax, 0) preamount,  ISNULL(novAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'11' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(decPreTax, 0) preamount,  ISNULL(decAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'12' ym,   'yj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20702 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(janPreTax, 0) preamount,  ISNULL(janAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'01' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(febPreTax, 0) preamount,  ISNULL(febAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'02' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR} 
+			UNION ALL SELECT   ISNULL(marPreTax, 0) preamount,  ISNULL(marAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'03' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR} 
+			UNION ALL SELECT   ISNULL(aprPreTax, 0) preamount,  ISNULL(aprAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'04' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}  
+			UNION ALL SELECT   ISNULL(mayPreTax, 0) preamount,  ISNULL(mayAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'05' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(junPreTax, 0) preamount,  ISNULL(junAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'06' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(julPreTax, 0) preamount,  ISNULL(julAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'07' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(augPreTax, 0) preamount,  ISNULL(augAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'08' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(sepPreTax, 0) preamount,  ISNULL(sepAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'09' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(octPreTax, 0) preamount,  ISNULL(octAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'10' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(novPreTax, 0) preamount,  ISNULL(novAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'11' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			UNION ALL SELECT   ISNULL(decPreTax, 0) preamount,  ISNULL(decAfterTax, 0) afteramount,  CONVERT(VARCHAR(4),year)+'12' ym,   'sj' amountType , CASE WHEN UptEmpId IS NOT NULL THEN UptEmpId ELSE CrtEmpId END opEmpId,  CASE WHEN UptDt IS NOT NULL THEN UptDt ELSE CrtDt END opDt   FROM dbo.LNK_Import  WHERE DelFlg=0 AND amountType=20705 AND reportId= #{reportId,jdbcType=VARCHAR}
+			) T1 
+			LEFT JOIN  crm.dbo.usr_user u
+			ON t1.opEmpId=u.userId and u.delFlag = 'N'
+			
+			where t1.preamount &lt;&gt;0 
+			ORDER BY t1.amountType ,t1.ym DESC 
+	</select>
+
+    <select id="getYHCompanyInfo" parameterType="java.lang.String" resultType="map">
+         SELECT    companyNo = c.companyNo ,
+                      companyName = c.companyName ,
+                      contractType = s.ContractType ,
+                      contactId = s.Maintainer ,
+                      contactNm = s.maintainerName ,
+                      centerId = s.centerId
+                      ,c.brandType
+                      ,c.pmlsCenterId
+                      ,c.isProcuration
+                      ,c.arteryType
+            FROM      store s
+                      LEFT  JOIN dbo.CompanyStore cs ON s.id = cs.StoreId
+                                                        AND cs.flag = 0
+                                                        AND cs.IsDelete = 0
+                      LEFT JOIN dbo.Company c ON c.id = cs.CompanyId
+                                                 AND c.IsDelete = 0
+            WHERE     s.id = #{StoreId,jdbcType=INTEGER}
+                      AND s.AuditStatus = 20
+                      AND s.IsDelete = 0
+
+	</select>
+
+    <update id="updateYHCompanyInfo" parameterType="map">
+    		  UPDATE  dbo.LNK_Report WITH(ROWLOCK)
+                SET     CompanyNm = #{companyName}
+                        ,CompanyId = #{companyNo}
+                        ,contractType = #{contractType}
+                        ,contactId = #{contactId}
+                        ,contactNm = #{contactNm}
+                WHERE   ReportId = #{reportId} ;
+
+                UPDATE  dbo.LNK_ReportDetail WITH(ROWLOCK)
+                SET     CompanyNm = #{companyName}
+                        ,CompanyId = #{companyNo}
+<!--                 WHERE   LEFT(CountId, 15) = #{reportId} -->
+                WHERE   reportNo = #{reportId}
+                        AND DelFlg = 0
+    </update>
+
+
+    <select id="checkRebackBrokerage" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(reportId) as countNum FROM (
+			        	SELECT    SUM(ISNULL(BefTaxYjAmount,0)) amount ,
+			                    'dyyjsq' amountType ,
+			                    ReportId
+			            FROM      lnk_reportdy
+			            WHERE     DelFlg = 0
+			            GROUP BY  ReportId
+			
+			            UNION ALL
+			
+			            SELECT    SUM(ISNULL(AftTaxYjAmount,0)) amount ,
+			                    'dyyjsh' amountType ,
+			                    ReportId
+			            FROM      lnk_reportdy
+			            WHERE     DelFlg = 0
+			            GROUP BY  ReportId
+			
+			            UNION ALL
+			
+			            SELECT    SUM(ISNULL(BefTaxSjAmount,0)) amount ,
+			                    'dysjsq' amountType ,
+			                    ReportId
+			            FROM      lnk_reportdy
+			            WHERE     DelFlg = 0
+			            GROUP BY  ReportId
+			
+			            UNION ALL
+			
+			            SELECT    SUM(ISNULL(AftTaxSjAmount,0)) amount ,
+			                    'dysjsh' amountType ,
+			                    ReportId
+			            FROM      lnk_reportdy
+			            WHERE     DelFlg = 0
+						 
+			            GROUP BY  ReportId
+
+			) AS a 
+			WHERE a.amount!=0
+			  AND a.ReportId = #{reportId}
+	</select>
+
+    <select id="getReportDetailIdList" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+          SELECT    rd.Id
+		  FROM      LNK_Report p
+		            JOIN LNK_ReportDetail rd WITH(NOLOCK) ON p.EstateId = rd.EstateId
+		                                        AND p.CompanyId = rd.CompanyId
+		                                        AND p.CustomerId = rd.CustomerId
+		                                        AND rd.DelFlg = 0
+		                                        AND rd.isValid = 0
+		  WHERE     1 = 1
+		            AND p.DelFlg = 0
+		            AND p.Id = #{id}
+	</select>
+
+    <select id="insertYjReport" parameterType="cn.com.eju.deal.dto.houseLinkage.report.ReportDto">
+        MERGE INTO dbo.Lnk_Yj_Report s1
+        USING (SELECT #{reportId} AS reportId,#{companyId} AS companyNo) AS s2
+        ON s1.ReportId=s2.reportId AND s1.companyNo=s2.companyNo
+        WHEN MATCHED THEN
+        UPDATE SET s1.UptEmpId=#{roughAuditId},s1.UptDt=getdate(),s1.DelFlg=0,s1.defaultFlag=0
+        WHEN NOT MATCHED THEN
+        INSERT (reportId,companyNo,defaultFlag,crtEmpId,crtDt,uptEmpId,uptDt,delFlg)
+        VALUES(#{reportId},#{companyId},0,#{roughAuditId},getdate(),null,null,0);
+    </select>
+
+    <select id="getReportFYInfo" parameterType="map" resultType="cn.com.eju.deal.dto.houseLinkage.report.ReportFYDto">
+        SELECT fy.companyNo,CompanyName 'companyNm' FROM LNK_YJ_REPORT fy
+        LEFT JOIN dbo.Company c ON c.CompanyNo = fy.companyNo
+        WHERE delFlg=0 AND reportId=#{reportId} ORDER BY defaultFlag
+    </select>
+
+
+    <select id="getAccountProject" parameterType="java.lang.String" resultType="map">
+        select * from Account_Project where cityNo = #{cityNo} and delFlag = 0
+    </select>
+
+    <update id="updateAccountProject" parameterType="cn.com.eju.deal.scene.batchSale.dto.BatchSaleDetail">
+        UPDATE LNK_Report
+        <set>
+            <if test="accountProject!=null">
+                accountProject=#{accountProject},
+                accountProjectNo = (SELECT DISTINCT accountProjectNo from BAS_Account_Project where accountProject =
+                #{accountProject} and delFlag = 0),
+            </if>
+            uptDt = getDate()
+        </set>
+        WHERE reportId=#{reportId,jdbcType=INTEGER}
+    </update>
+
+    <!--   结佣-返佣对象 -->
+    <select id="getJyFyData" parameterType="Map" resultType="cn.com.eju.deal.dto.houseLinkage.report.ReportFYDto">
+    SELECT t1.reportId ,
+        t1.companyNo ,
+        c.companyName ,--返佣对象
+		ISNULL(t1.befTaxAmount, 0) AS sjfyBefTaxAmount ,--实际返佣税前
+        ISNULL(t1.aftTaxAmount, 0) AS sjfyAftTaxAmount ,--实际返佣税后
+		t1.recordDate fyDate,--返佣日期
+		u.userName  AS operateName,--操作人
+		u.userCode ,
+		(CASE WHEN t2.uptDt IS NOT  NULL THEN t2.uptDt
+		ELSE t2.crtDt END ) operateDate --操作时间
+ 	FROM   LNK_YJ_SJFY t1
+	    LEFT JOIN  LNK_YJ_REPORT t2 ON t1.reportId = t2.reportId AND t1.companyNo = t2.companyNo AND t2.delFlg=0
+		LEFT JOIN dbo.Company c ON c.CompanyNo=t1.companyNo AND c.IsDelete=0
+		LEFT JOIN  crm.dbo.usr_user u ON t1.uptEmpId = u.userId and u.delFlag = 'N'
+		WHERE t1.delFlg=0 and t1.reportId=#{reportCode,jdbcType=VARCHAR}
+  </select>
+
+    <!--   成销-返佣对象 -->
+    <select id="getCxFyData" parameterType="Map" resultType="cn.com.eju.deal.dto.houseLinkage.report.ReportFYDto">
+    SELECT t1.reportId ,
+        t1.companyNo ,
+        c.companyName ,--返佣对象
+		ISNULL(t1.befTaxAmount, 0) AS yjfyBefTaxAmount ,--应计返佣税前
+        ISNULL(t1.aftTaxAmount, 0) AS yjfyAftTaxAmount ,--应计返佣税后
+		t1.recordDate fyDate,--返佣日期
+		u.userName  AS operateName,--操作人
+		u.userCode ,
+		(CASE WHEN t2.uptDt IS NOT  NULL THEN t2.uptDt
+		ELSE t2.crtDt END ) operateDate --操作时间
+ 	FROM   LNK_YJ_YJFY t1
+	    LEFT JOIN  LNK_YJ_REPORT t2 ON t1.reportId = t2.reportId AND t1.companyNo = t2.companyNo AND t2.delFlg=0
+		LEFT JOIN dbo.Company c ON c.CompanyNo=t1.companyNo AND c.IsDelete=0
+		LEFT JOIN  crm.dbo.usr_user u ON t1.uptEmpId = u.userId and u.delFlag = 'N'
+		WHERE t1.delFlg=0 and t1.reportId=#{reportCode,jdbcType=VARCHAR}
+  </select>
+
+    <select id="getBrokerageJyData" parameterType="Map" resultType="cn.com.eju.deal.Report.model.BrokerageDto">
+		
+		SELECT  reportId ,
+			ISNULL(SUM(fy.befTaxAmount), 0) AS yjfyBeforeAmount ,--应计返佣税前金额
+			ISNULL(SUM(fy.aftTaxAmount), 0) AS yjfyAfterAmount --应计返佣税后金额
+		FROM    LNK_YJ_YJFY fy WHERE delFlg=0 AND fy.reportId=#{reportId,jdbcType=VARCHAR}
+            GROUP BY reportId 
+    </select>
+
+    <select id="getBrokerageCxData" parameterType="Map" resultType="cn.com.eju.deal.Report.model.BrokerageDto">
+		SELECT  reportId ,
+			ISNULL(SUM(sr.befTaxAmount), 0) AS yjsrBeforeAmount ,--应计收入税前金额
+			ISNULL(SUM(sr.aftTaxAmount), 0) AS yjsrAfterAmount --应计收入税后金额
+		FROM    LNK_YJ_YJSR sr WHERE delFlg=0 AND sr.reportId=#{reportId,jdbcType=VARCHAR}
+            GROUP BY reportId 
+    </select>
+
+    <update id="unlockReback" parameterType="map">
+        UPDATE LNK_Report set rebackFlag = #{rebackFlag} where Id=#{reportId}
+    </update>
+
+    <select id="getOffsetInfoList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        r.id reportId,
+        rd.id reportDetailId,
+        e.projectNo,
+        e.EstateNm,
+        r.companyId,
+        r.reportId reportNo,
+        rd.buildingNo,
+        r.customerNm,
+        ( CASE WHEN r.ConfirmStatus = 13601 THEN rd.area ELSE rd.roughArea END ) AS area,
+        rd.Progress progress,
+        rd.ConfirmStatus confirmStatus,
+        rd.roughAmount,
+        rd.dealAmount,
+        lj.yjsrBefTaxAmount sqYjsrAmount,
+        lj.yjfyBefTaxAmount sqYjfyAmount,
+        lj.yjdyBefTaxAmount sqYjdyAmount,
+        lj.sssrBefTaxAmount sqSjsrAmount,
+        lj.sjfyBefTaxAmount sqSjfyAmount,
+        lj.sjdyBefTaxAmount sqSjdyAmount,
+        r.accountProjectNo,
+        r.accountProject
+        FROM
+        LNK_Report r
+        LEFT JOIN (
+        SELECT  a.*
+        FROM    LNK_ReportDetail AS a
+        WHERE   a.DelFlg=0
+        AND a.CompanyId=#{companyNo}
+        AND   a.Progress=13505
+        AND  a.ConfirmStatus !=13602
+        AND NOT EXISTS
+        ( SELECT 1
+        FROM   LNK_ReportDetail AS b
+        WHERE  a.reportNo = b.reportNo
+        AND b.CompanyId=#{companyNo}
+        AND b.DelFlg=0
+        AND b.Progress='13505'
+        AND  b.ConfirmStatus !=13602
+        AND SUBSTRING(b.CountId, 17,19) > SUBSTRING(a.CountId,17, 19)
+        )
+        ) rd ON rd.reportNo = r.reportId
+        LEFT JOIN V_CRM_CASHBILL_LJ_DATA_TWO lj ON r.reportId = lj.reportId
+        LEFT JOIN LNK_Estate e ON r.EstateId = e.EstateId
+        where lj.companyId = #{companyNo}
+        AND r.DelFlg = 0
+        AND lj.sjfyBefTaxAmount > 0
+        AND r.reportId NOT IN
+        <foreach item="item" index="index" collection="reportNoList" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="searchKey != null and searchKey !=''">
+            AND (r.reportId LIKE '%${searchKey}%'
+            OR rd.buildingNo LIKE '%${searchKey}%'
+            OR r.customerNm LIKE '%${searchKey}%'
+            OR e.EstateNm LIKE '%${searchKey}%')
+        </if>
+        Order by r.reportId desc
+    </select>
+
+    <insert id="createUnlockRebackLog" parameterType="Map">
+        INSERT INTO dbo.LNK_Report_Reback_Unlock_log
+        ( reportId ,unlockReason ,crtUser ,crtDt)
+    VALUES  ( #{reportId},#{unlockReason},#{crtUser},getdate())
+    </insert>
+
+
+
+    <update id="updateContractNo" parameterType="cn.com.eju.deal.houseLinkage.report.model.Report">
+        update LNK_Report
+        SET
+        contractNo = #{contractNo,jdbcType=VARCHAR}
+        ,htedition = #{htedition,jdbcType=VARCHAR}
+        WHERE Id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateFyCenter" parameterType="cn.com.eju.deal.houseLinkage.report.model.Report">
+        update LNK_Report
+        SET
+        fyCenterId = #{fyCenterId}
+        ,fyCenterName = #{fyCenterName}
+        WHERE Id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateEstateCenter" parameterType="map">
+        update LNK_Report
+        SET
+        estateCenterId = #{estateCenterId}
+        WHERE reportId = #{reportId,jdbcType=VARCHAR}
+    </update>
+
+
+     <update id="uptPreBack" parameterType="map">
+        UPDATE LNK_Report set preBack = #{preBack},preBackDate = #{preBackDate},preBackUserCode = #{preBackUserCode},UptDt=#{preBackDate} where Id=#{id};
+        UPDATE LNK_ReportDetail set preBack = #{preBack},preBackDate = #{preBackDate},preBackUserCode = #{preBackUserCode},UptDt=#{preBackDate} where Id=#{detailId}
+    </update>
+
+    <select id="getTopReportDetail" parameterType="map" resultType="java.lang.Integer">
+            SELECT TOP 1 id FROM dbo.LNK_ReportDetail WHERE reportNo = #{reportId} and DelFlg = 0 ORDER BY id DESC;
+    </select>
+    
+<!--     大定审核-获取垫佣控制规则-比例 -->
+    <select id="getNewDyRatioToRule" parameterType="map" resultType="map">
+            SELECT TOP 1 * FROM dbo.PMLS_Mattress_control_rule
+            WHERE delFlag = 0 
+	              and projectNo = #{projectNo} 
+	              and CONVERT(VARCHAR(10),#{roughInputDate},120) &gt;=CONVERT(VARCHAR(10),gCStartDate,120) 
+<!-- 	              AND CONVERT(VARCHAR(10),#{roughInputDate},120) &lt;=CONVERT(VARCHAR(10),gCEndDate,120)) -->
+	              ORDER BY dateCreate DESC
+    </select>
+    
+<!--     大定审核-获取垫佣控制规则-是否总控 -->
+    <select id="getNewDyRatioToRuleDetail" parameterType="map" resultType="map">
+            SELECT TOP 1 * FROM dbo.PMLS_Mattress_control_rule_detail
+            WHERE delFlag = 0 
+	              and projectNo = #{projectNo} 
+	              and CONVERT(VARCHAR(10),#{roughInputDate},120) &gt;=CONVERT(VARCHAR(10),gCStartDate,120) 
+	              ORDER BY dateCreate DESC
+    </select>
+
+	<update id="updateByReportId" parameterType="map">
+        update LNK_Report
+        <set>
+            <if test="dyRatio != null">
+                dyRatio = #{dyRatio, jdbcType=DECIMAL},
+            </if>
+            <if test="isGlobalControl != null">
+                isGlobalControl = #{isGlobalControl, jdbcType=VARCHAR},
+            </if>
+        </set>
+        where DelFlg=0 and  ReportId = #{reportId,jdbcType=VARCHAR}
+    </update>
+    
+    <select id="getAccountProjectByProjectNo" parameterType="java.lang.String" resultType="map">
+        select DISTINCT hsCode accountProjectNo,hsName accountProject,projectNo from LNK_Estate_Srlht where projectNo = #{projectNo} and delFlag = 0
+    </select>
+</mapper>

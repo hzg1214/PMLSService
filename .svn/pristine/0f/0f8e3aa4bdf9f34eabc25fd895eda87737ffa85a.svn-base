@@ -1,0 +1,17 @@
+package cn.com.eju.pmls.performswitch.dao;
+
+import cn.com.eju.pmls.performswitch.model.PmlsPerformSwitchWeek;
+
+public interface PmlsPerformSwitchWeekMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(PmlsPerformSwitchWeek record);
+
+    int insertSelective(PmlsPerformSwitchWeek record);
+
+    PmlsPerformSwitchWeek selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(PmlsPerformSwitchWeek record);
+
+    int updateByPrimaryKey(PmlsPerformSwitchWeek record);
+}

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.StoreBizStopMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.store.model.StoreBizStop">
+		<id column="stopId" property="stopId" jdbcType="INTEGER" />
+		<result column="storeId" property="storeId" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="followDetail" property="followDetail" jdbcType="NVARCHAR" />
+		<result column="stopReason" property="stopReason" jdbcType="INTEGER" />
+		<result column="stopPicId" property="stopPicId" jdbcType="NVARCHAR" />
+		<result column="userCreate" property="userCreate" jdbcType="INTEGER" />
+		<result column="userCreateName" property="userCreateName" jdbcType="NVARCHAR" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="delFlag" property="delFlag" jdbcType="VARCHAR" />
+		<result column="auditUserId" property="auditUserId" jdbcType="INTEGER" />
+		<result column="auditDetail" property="auditDetail" jdbcType="NVARCHAR" />
+		<result column="auditTime" property="auditTime" jdbcType="TIMESTAMP" />
+		<collection property="storePicList" column="stopPicId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+	</resultMap>
+	
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.model.sweepStreets.WXPictureDto"></resultMap>
+	
+	<sql id="Base_Column_List">
+		stopId, storeId, status, followDetail, stopReason,stopPicId,userCreate,
+		userCreateName,dateCreate,delFlag,auditUserId,auditDetail
+	</sql>
+	
+	<select id="queryList" parameterType="java.util.Map" resultMap="BaseResultMap">
+	   SELECT   t.stopId,
+	            t1.StoreNo ,
+		        t1.name ,
+		        CONCAT(t2.CityName, t3.DistrictName, t1.Address) AS ADDRESS ,
+		        t1.maintainerName ,
+		        ( SELECT    dicValue
+		          FROM      dbo.BAS_DictionaryValue
+		          WHERE     dicCode = c1.contractType
+		                    and delFlag = 'N'
+		        ) AS contractTypeName ,
+		        ( SELECT    dicValue
+		          FROM      dbo.BAS_DictionaryValue
+		          WHERE     dicCode = c1.contractStatus
+		                    and delFlag = 'N'
+		        ) AS contractStatusName ,
+		        ( SELECT    dicValue
+		          FROM      dbo.BAS_DictionaryValue
+		          WHERE     dicCode = t1.businessStatus
+		                    and delFlag = 'N'
+		        ) AS bussinessStatusName ,
+		        t.dateCreate ,
+		        t.auditTime
+		FROM    StoreBizStop t
+		        JOIN Store t1 ON t.storeId = t1.Id
+		        JOIN dbo.BAS_City t2 ON t2.CityNo = t1.CityNo
+		        JOIN dbo.BAS_District t3 ON t3.DistrictNo = t1.DistrictNo
+		        <!-- 取最近审核通过的合同，否则取id最大的合同 -->
+		        LEFT JOIN dbo.v_crm_StoreContract_last c1 ON t1.id = c1.storeId
+		        <if test="contractStatus != null and contractStatus != ''">
+		          and c1.contractStatus = #{contractStatus,jdbcType=INTEGER}
+		        </if>
+		WHERE   t.delFlag = 'N'
+		<!-- <if test="cityNo != null and cityNo != ''">
+		  and t1.cityNo = #{cityNo,jdbcType=NVARCHAR}
+		</if> -->
+		<if test="districtNo != null and districtNo != ''">
+          and t1.districtNo = #{districtNo,jdbcType=NVARCHAR}
+        </if>
+        <if test="dateCreateBegin != null and dateCreateBegin != ''">
+	        <![CDATA[
+	          and Convert(varchar(10),t.DateCreate,120) >= #{dateCreateBegin,jdbcType=NVARCHAR}
+	          ]]>
+        </if>
+        <if test="dateCreateEnd != null and dateCreateEnd != ''">
+            <![CDATA[
+              and Convert(varchar(10),t.DateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+              ]]>
+        </if>
+        <if test="auditTimeBegin != null and auditTimeBegin != ''">
+            <![CDATA[
+              and Convert(varchar(10),t.auditTime,120) >= #{auditTimeBegin,jdbcType=NVARCHAR}
+              ]]>
+        </if>
+        <if test="auditTimeEnd != null and auditTimeEnd != ''">
+            <![CDATA[
+              and Convert(varchar(10),t.auditTime,120) <= #{auditTimeEnd,jdbcType=NVARCHAR}
+              ]]>
+        </if>
+        <if test="searchKey != null and searchKey != ''">
+            <![CDATA[AND (t1.StoreNo LIKE '%${searchKey}%' OR t1.Name LIKE '%${searchKey}%' OR patindex('%${searchKey}%',t1.AddressDetail)>0)]]>
+        </if>
+        <if test="cityNo != null and cityNo != ''">
+			AND t1.cityNo IN ('${cityNo}')
+		</if>
+		<if test="centerIdStr != null and centerIdStr != ''">
+			AND t1.centerId IN (${centerIdStr})
+		</if>
+        <if test="businessStatus != null and businessStatus != ''">
+            and t1.businessStatus = #{businessStatus,jdbcType=INTEGER}
+        </if>
+        order by t.stopId desc
+	</select>
+	
+	<select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+       SELECT   t.* ,
+		        t1.StoreNo ,
+		        t1.Name ,
+		        t1.AddressDetail as address,
+		        t1.StoreManager ,
+		        t1.StoreManagerPhone ,
+		        g.groupName ,
+		        ISNULL(t9.dicValue, '') AS StorePersonNumName ,
+		        t7.dicValue AS abTypeStoreName ,
+		        (case t1.abTypeStore when 19901 then null else dbo.F_CRM_SplitCodeToName(2, t1.BTypeStore) end) AS bTypeStoreName ,
+		        c.CompanyName ,
+		        t6.dicValue AS contractTypeName ,
+		        Convert(varchar(10),contract.DateLifeStart,120) AS DateLifeStart,
+		        Convert(varchar(10),contract.DateLifeEnd,120) AS DateLifeEnd,
+		        t5.dicValue AS decorationStatusName,
+		        t1.maintainerName,
+		        (select d.dicValue from dbo.BAS_DictionaryValue d where d.dicCode = t1.businessStatus and d.delFlag = 'N') AS bussinessStatusName,
+		        (select d.dicValue from dbo.BAS_DictionaryValue d where d.dicCode = t.stopReason and d.delFlag = 'N') AS stopReasonName,
+		        u.userName AS auditUserName
+		FROM    dbo.StoreBizStop t
+		        LEFT JOIN crm.dbo.USR_User u on t.auditUserId = u.userId
+		        JOIN dbo.Store t1 ON t.storeId = t1.id
+		                             AND t1.IsDelete = 0
+		        LEFT JOIN USR_Group g ON g.groupId = t1.centerId
+		                                 AND g.delFlag = 'N'
+		        LEFT JOIN dbo.BAS_DictionaryValue t7 ON t1.ABTypeStore = t7.dicCode
+		                                                AND t7.delFlag = 'N'
+		        LEFT JOIN dbo.BAS_DictionaryValue t9 ON t1.StorePersonNum = t9.dicCode
+		                                                AND t9.delFlag = 'N'
+		        LEFT JOIN dbo.CompanyStore cs ON cs.StoreId = t1.id
+		                                         AND cs.IsDelete = 0
+		                                         and cs.flag=0
+		        LEFT JOIN dbo.Company c ON c.Id = cs.CompanyId
+		                                   AND c.IsDelete = 0
+		        <!-- 取最近审核通过的合同，否则取id最大的合同 -->
+		        LEFT JOIN dbo.v_crm_StoreContract_last c1 ON t1.id = c1.storeId
+		        LEFT JOIN dbo.contract contract on contract.id = c1.contractId
+		        LEFT JOIN dbo.BAS_DictionaryValue t6 ON t6.dicCode = c1.ContractType
+                                                        AND t6.delFlag = 'N'
+		        LEFT JOIN dbo.Store_Decoration sd ON sd.id = ( SELECT TOP 1
+		                                                              sd.id
+		                                                       FROM   dbo.Store_Decoration sd
+		                                                       WHERE  sd.storeId = t1.id
+		                                                              AND sd.delFlag = 0
+		                                                       ORDER BY sd.id DESC
+		                                                     )
+		        LEFT JOIN dbo.BAS_DictionaryValue t5 ON t5.dicCode = sd.decorationStatus
+		                                                AND t5.delFlag = 'N'
+		WHERE   t1.IsDelete = 0
+		        AND t.stopId = #{stopId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectPicture" parameterType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" resultMap="pictureDtoMap">
+        select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+        from Pic_Picture_Ref where pictureRefId=#{stopPicId} and pictureStatus=0
+    </select>
+    
+    <update id="updateStoreBusinessStatus" parameterType="java.util.Map">
+        update crm.dbo.store set businessStatus = #{businessStatus,jdbcType=INTEGER} where id = #{storeId,jdbcType=INTEGER}
+    </update>
+    
+    <update id="update" parameterType="cn.com.eju.deal.store.model.StoreBizStop">
+        update crm.dbo.storebizstop
+        <set>
+            <if test="auditUserId != null and auditUserId != ''">
+                auditUserId = #{auditUserId,jdbcType=INTEGER},
+            </if>
+            auditTime = getdate(),
+            <if test="auditDetail != null and auditDetail != ''">
+                auditDetail = #{auditDetail,jdbcType=NVARCHAR},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status,jdbcType=INTEGER}
+            </if>
+        </set> 
+         WHERE
+            stopId = #{stopId,jdbcType=INTEGER}
+    </update>
+    
+    <select id="getContractStatusInfo" parameterType="cn.com.eju.deal.store.model.StoreBizStop" resultType="cn.com.eju.deal.store.model.StoreBizStop">
+        SELECT  c1.ContractStatus ,
+		        c1.ContractId AS contractId ,
+		        t.storeNo ,
+		        cc.approveState AS changeStatus
+		        ,t.AcCityNo AS acCityNo
+		FROM    store t
+		        LEFT JOIN dbo.v_crm_StoreContract_last c1 ON t.id = c1.storeId
+		        LEFT JOIN dbo.contractChange cc ON cc.id = ( SELECT MAX(id) AS id
+		                                                     FROM   dbo.contractChange
+		                                                     WHERE  contractId = c1.ContractId
+		                                                   )
+		WHERE   t.id = #{storeId,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getDecorationStatusInfo" parameterType="cn.com.eju.deal.store.model.StoreBizStop" resultType="cn.com.eju.deal.store.model.StoreBizStop">
+        SELECT  de.decorateId ,
+		        oaMdfpStatus = CASE WHEN sf.oaMdfpStatus IS NULL THEN '16501'
+		                            ELSE sf.oaMdfpStatus
+		                       END ,
+		        oaMdysStatus = CASE WHEN sa.oaMdysStatus IS NULL THEN '16601'
+		                            ELSE sa.oaMdysStatus
+		                       END
+		FROM    oms.dbo.CRM_Decoration de
+		        LEFT JOIN oms.dbo.CRM_oaStoreFlop sf ON de.decorateId = sf.decorateId
+		                                                AND sf.delFlag = 0
+		        LEFT JOIN oms.dbo.CRM_oaStoreAcceptance sa ON de.decorateId = sa.decorateId
+		                                                      AND sa.delFlag = 0
+		WHERE   de.storeNo = #{storeNo,jdbcType=NVARCHAR} and de.decorationType = 17002
+    </select>
+    
+    <select id="queryCancelList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT  c.id
+		FROM    dbo.Store_AchievementCancel c
+		        JOIN dbo.Store_AchievementCancelMapping c1 ON c.id = c1.achievementCancelId
+		WHERE   c.isDelete = 0
+		        AND c1.delFlag = 0
+		        AND c.approveState!=17303
+		        AND c1.storeId = #{storeId,jdbcType=INTEGER}
+		        AND c1.contractId = #{contractId,jdbcType=INTEGER}
+    </select>
+</mapper>

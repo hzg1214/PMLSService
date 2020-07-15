@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.cashbill.dao.QkContractFileMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.cashbill.model.QkContractFile">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="oaFileId" jdbcType="VARCHAR" property="oaFileId" />
+    <result column="comId" jdbcType="INTEGER" property="comId" />
+    <result column="fileName" jdbcType="VARCHAR" property="fileName" />
+    <result column="oaCode" jdbcType="VARCHAR" property="oaCode" />
+    <result column="flowId" jdbcType="TIMESTAMP" property="flowId" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, oaFileId,comId, fileName, oaCode, flowId, dateCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from PMLS_QkContractFile
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from PMLS_QkContractFile
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.cashbill.model.QkContractFile">
+    insert into PMLS_QkContractFile (
+    	id, comId,oaFileId, fileName, 
+      oaCode, flowId, dateCreate, delFlag
+      )
+    values (#{id,jdbcType=INTEGER},#{comId,jdbcType=INTEGER}, #{oaFileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{oaCode,jdbcType=VARCHAR}, #{flowId,jdbcType=VARCHAR}, #{dateCreate,jdbcType=TIMESTAMP},
+       #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.cashbill.model.QkContractFile" useGeneratedKeys="true" keyProperty="id">
+    insert into PMLS_QkContractFile
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="comId != null">
+        comId,
+      </if>
+      <if test="oaFileId != null">
+        oaFileId,
+      </if>
+      <if test="fileName != null">
+        fileName,
+      </if>
+      <if test="oaCode != null">
+        oaCode,
+      </if>
+      <if test="flowId != null">
+        flowId,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="comId != null">
+        #{comId,jdbcType=INTEGER},
+      </if>
+      <if test="oaFileId != null">
+        #{oaFileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="oaCode != null">
+        #{oaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  
+<!--   	根据frameOaNo查询V_FCJY_LDKJ_File 联动框架-->
+  <select id="selLDKJFileByFrameOaNo" parameterType="Map" resultType="cn.com.eju.deal.cashbill.model.QkContractFile">
+    SELECT * FROM [10.0.3.21].v4x.dbo.V_FCJY_LDKJ_File 
+    WHERE   oacode = #{frameOaNo,jdbcType=VARCHAR}
+  </select>
+  
+<!--   	根据flowId查询V_FCJY_ZJHZ_File _File 中介合作-->
+  <select id="selZJHZFileByFlowId" parameterType="Map" resultType="cn.com.eju.deal.cashbill.model.QkContractFile">
+    SELECT * FROM [10.0.3.21].v4x.dbo.V_FCJY_ZJHZ_File
+    WHERE   flowid = #{flowId,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

@@ -1,0 +1,356 @@
+package cn.com.eju.pmls.borrowMoneyFrameContract.service;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.common.dao.FileRecordMainMapper;
+import cn.com.eju.deal.common.model.FileRecordMain;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.deal.core.util.StringUtil;
+import cn.com.eju.deal.dto.company.CompanyDto;
+import cn.com.eju.deal.dto.contract.ContractFileDto;
+import cn.com.eju.pmls.borrowMoneyFrameContract.dao.BorrowMoneyFrameContractMapper;
+import cn.com.eju.pmls.borrowMoneyFrameContract.model.BorrowMoneyCompany;
+import cn.com.eju.pmls.borrowMoneyFrameContract.model.BorrowMoneyCompanyDto;
+import cn.com.eju.pmls.borrowMoneyFrameContract.model.BorrowMoneyFrameContractDto;
+
+@Service("borrowMoneyFrameContractService")
+public class BorrowMoneyFrameContractService {
+
+	/**
+     * 日志
+     */
+     private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+     @Resource(name = "borrowMoneyFrameContractMapper")
+	 private BorrowMoneyFrameContractMapper borrowMoneyFrameContractMapper;
+     
+     @Resource
+	 private FileRecordMainMapper fileRecordMainMapper;
+
+	 /**
+     * 借佣框架协议列表
+     * @param reqMap
+     * @return
+     */
+     public ResultData getBorrowMoneyFrameContractList(Map<String,Object> reqMap)throws Exception{
+         ResultData resultData = new ResultData();
+         resultData.setFail();
+         List<BorrowMoneyFrameContractDto> frameContractList =  borrowMoneyFrameContractMapper.getBorrowMoneyFrameContractList(reqMap);
+         if(frameContractList !=null && frameContractList.size()>0){
+        	 for (BorrowMoneyFrameContractDto frameContractDto : frameContractList) {
+				Date dateCreate = frameContractDto.getDateCreate();
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				String format2 = format.format(dateCreate);
+				frameContractDto.setFormat2(format2);
+
+//				if(reqMap.get("oaFile")!=null && reqMap.get("oaFile").equals("1")){//查询盖章合同附件
+//					List<OaLnkFrameContractFileReturnDto> oaFileList= frameContractMapper.getOaFileList(frameContractDto);
+//					frameContractDto.setOaFileList(oaFileList);
+//				}
+			}
+         	 resultData.setReturnData(frameContractList);
+ 	         resultData.setTotalCount((String)reqMap.get(QueryConst.TOTAL_COUNT));
+ 	         resultData.setSuccess();
+         }else{
+			 resultData.setSuccess();
+		 }
+         return resultData;
+     }
+     
+     /**
+	  * 框架合同详情
+	  * @param id
+	  * @return
+	  * @throws Exception
+	  */
+    public ResultData<BorrowMoneyFrameContractDto> getBriefById(int id) throws Exception {
+        //构建返回
+    	ResultData resultData = new ResultData();
+        resultData.setFail();
+        //根据框架合同id获取其详细信息
+        BorrowMoneyFrameContractDto frameContractDto =borrowMoneyFrameContractMapper.getBriefById(id);
+        if(frameContractDto != null){
+        	/**
+        	 *  获取文件信息
+        	 */
+        	String fileRecordMainIds = "";
+        	FileRecordMain attachmentFile = new FileRecordMain();
+        	attachmentFile.setRefId(id);
+        	attachmentFile.setIsDelete(false);
+        	//营业证
+        	List<ContractFileDto> fileBusinessList = new ArrayList<ContractFileDto>();
+        	List<FileRecordMain> fileMdlList1 = fileRecordMainMapper.getJYBusinessByFrameContractId(attachmentFile);
+        	fileRecordMainIds = pushFileRecord(fileMdlList1, fileRecordMainIds, fileBusinessList);
+        	//合同照片
+        	List<ContractFileDto> fileContractList = new ArrayList<ContractFileDto>();
+        	List<FileRecordMain> fileMdlList2 = fileRecordMainMapper.getJYContractFileByFrameContractId(attachmentFile);
+        	fileRecordMainIds = pushFileRecord(fileMdlList2, fileRecordMainIds, fileContractList);
+        	//附件其他文件信息
+        	List<ContractFileDto> attachmentFileList = new ArrayList<ContractFileDto>();
+        	List<FileRecordMain> fileMdlList3 = fileRecordMainMapper.getJYAttachmentFileByFrameContractId(attachmentFile);
+        	fileRecordMainIds = pushFileRecord(fileMdlList3, fileRecordMainIds, attachmentFileList);
+
+        	if (StringUtil.isNotEmpty(fileRecordMainIds) && fileRecordMainIds.length() > 0){
+        		fileRecordMainIds = fileRecordMainIds.substring(0, fileRecordMainIds.length() - 1);
+        	}
+
+        	frameContractDto.setFileBusinessList(fileBusinessList);
+        	frameContractDto.setFileContractList(fileContractList);
+        	frameContractDto.setAttachmentFileList(attachmentFileList);
+        	frameContractDto.setFileRecordMainIds(fileRecordMainIds);
+        	//返回
+    		resultData.setReturnData(frameContractDto);
+    		resultData.setSuccess();
+        }
+		return resultData;
+    }
+    
+    /**
+     * 图片信息
+     *
+     * @param
+     * @return
+     */
+    private String pushFileRecord(List<FileRecordMain> fileMdlList, String fileRecordMainIds, List<ContractFileDto> fileList)
+        throws Exception {
+        if (null != fileMdlList && fileMdlList.size() > 0) {
+            for (int i = 0; i < fileMdlList.size(); i++) {
+                ContractFileDto contractFileDto = new ContractFileDto();
+                FileRecordMain fileRecordMain = fileMdlList.get(i);
+                //对文件数据进行组装处理
+                handleFileRecordMain(contractFileDto, fileRecordMain);
+
+                //重新组装返回list
+                fileList.add(contractFileDto);
+                fileRecordMainIds = fileRecordMainIds + contractFileDto.getFileRecordMainId() + ",";
+
+            }
+        }
+        return fileRecordMainIds;
+    }
+    
+    /**
+     * 对文件数据进行组装处理
+     * @param contractFileDto
+     * @param fileRecordMain
+     * @throws Exception
+     */
+     private void handleFileRecordMain(ContractFileDto contractFileDto, FileRecordMain fileRecordMain)
+         throws Exception {
+         //获取图片路径
+          contractFileDto.setFileAbbrUrl(fileRecordMain.getFileAbbrUrl());
+          contractFileDto.setFileName(fileRecordMain.getFileFullName());
+          contractFileDto.setFileSuffix(fileRecordMain.getFileSuffix());
+          contractFileDto.setFileRecordMainId(fileRecordMain.getFileRecordMainId().toString());
+          contractFileDto.setFileUrl(fileRecordMain.getFileUrl());
+          contractFileDto.setUrl50(fileRecordMain.getUrl50());
+     }
+     
+     
+     /**
+      * 根据公司编号获取最新审核通过的框架合同的银行相关信息
+      * @return
+      */
+     public ResultData<?> getOldBMFCBankInfo(Map<?, ?> param) {
+ 		ResultData resultData = new ResultData();
+ 		BorrowMoneyFrameContractDto oldFtBankInfo = borrowMoneyFrameContractMapper.getOldBMFCBankInfo(param);
+ 		if(null != oldFtBankInfo){
+ 			resultData.setReturnData(oldFtBankInfo);
+ 			resultData.setSuccess();
+ 			return resultData;
+ 		}
+ 		resultData.setReturnData(null);
+ 		return resultData;
+ 	}
+     
+     /**
+      * desc:查询新增框架合同时候选择公司列表
+      * 2020年4月28日
+      */
+     public ResultData<List<CompanyDto>> getBorrowMoneyFrameContractCompanyList(Map<?, ?> param) throws Exception {
+     	ResultData<List<CompanyDto>> resultData = new ResultData<List<CompanyDto>>();
+     	List<CompanyDto> comanyDtoList = borrowMoneyFrameContractMapper.getBorrowMoneyFrameContractCompanyList(param);
+     	resultData.setReturnData(comanyDtoList);
+     	resultData.setTotalCount((String)param.get(QueryConst.TOTAL_COUNT));
+     	return resultData;
+     }
+     
+     
+ 	/**
+ 	 * 
+ 	 * desc:开户行信息列表
+ 	 * 2020年4月28日
+ 	 */
+ 	public ResultData getBankInfoList(Map<String,Object> reqMap)throws Exception{
+ 		ResultData resultData = new ResultData();
+ 		resultData.setFail();
+ 		List<BorrowMoneyFrameContractDto> frameContractList =  borrowMoneyFrameContractMapper.getBankInfoList(reqMap);
+ 		if(frameContractList !=null && frameContractList.size()>0){
+ 			resultData.setReturnData(frameContractList);
+ 			resultData.setTotalCount((String)reqMap.get(QueryConst.TOTAL_COUNT));
+ 			resultData.setSuccess();
+ 		}else{
+ 			resultData.setSuccess();
+ 		}
+ 		return resultData;
+ 	}
+ 	
+ 	/**
+ 	 * desc:新增借佣框架协议
+ 	 * 2020年4月28日
+ 	 */
+    public int create(BorrowMoneyFrameContractDto borrowMoneyFrameContractDto) throws ParseException{
+     	String userCityNo = borrowMoneyFrameContractDto.getCityNo();
+     	String fileRecordMainIds = borrowMoneyFrameContractDto.getFileRecordMainIds().toString();
+     	borrowMoneyFrameContractDto.setApproveState(10401);
+     	borrowMoneyFrameContractDto.setValidStatus(18401);
+     	borrowMoneyFrameContractDto.setDelFlag("0");
+
+     	//  OA提交相关
+     	borrowMoneyFrameContractDto.setSubmitOAStatus(21201);
+     	borrowMoneyFrameContractDto.setFyNoticeStatus("1");
+
+		//根据登录人的城市编号查询其核算主体
+		List<BorrowMoneyFrameContractDto> accountProjectList = borrowMoneyFrameContractMapper.getLnkAccountProjectByCityNo(userCityNo);
+		if(accountProjectList.size() > 0 && null != accountProjectList){
+			String accountProject = accountProjectList.get(0).getAccountProject();
+			String accountProjectCode = accountProjectList.get(0).getAccountProjectCode();
+			//合同新增时候保存其核算主体及其编号，核算主体及其编号
+			if(accountProject != ""){
+				borrowMoneyFrameContractDto.setAccountProject(accountProject);
+			}
+			if (accountProjectCode != "") {
+				borrowMoneyFrameContractDto.setAccountProjectCode(accountProjectCode);
+			}
+		}
+     	//主表插入数据
+        int count = borrowMoneyFrameContractMapper.createBorrowMoneyFrameContract(borrowMoneyFrameContractDto);
+        logger.info("借佣框架协议，新增标识:"+count+",协议编号:"+borrowMoneyFrameContractDto.getContractNo());
+         //返回id
+        if(count>0) {
+        	Integer frameContractId = borrowMoneyFrameContractDto.getId();
+        	if (fileRecordMainIds != null && StringUtil.isNotEmpty(fileRecordMainIds)) {
+        		String[] arrays = fileRecordMainIds.split(",");
+        		// 关联相关文件(RefId)
+        		for (int i = 0; i < arrays.length; i++){
+        			if (StringUtil.isNotEmpty(arrays[i])){
+        				FileRecordMain fileRecordMain = new FileRecordMain();
+        				fileRecordMain.setFileRecordMainId(Integer.valueOf(arrays[i]));
+        				fileRecordMain.setRefId(frameContractId);
+        				fileRecordMain.setIsDelete(false);
+        				fileRecordMainMapper.update(fileRecordMain);
+        			}
+        		}
+        	}
+        	
+        	String relationContractNo = borrowMoneyFrameContractDto.getContractNo();
+        	//插入借佣框架协议关联公司表
+        	logger.info("借佣框架协议，新增-关联借佣公司开始。协议编号:"+relationContractNo);
+        	List<BorrowMoneyCompanyDto> jyComList = borrowMoneyFrameContractDto.getJyComList();
+        	if(!CollectionUtils.isEmpty(jyComList)) {
+        		for (BorrowMoneyCompany relationCompany : jyComList) {
+        			BorrowMoneyCompany borrowMoneyCompany = relationCompany;
+        			borrowMoneyCompany.setContractNo(relationContractNo);
+        			borrowMoneyCompany.setUserIdCreate(borrowMoneyFrameContractDto.getUserIdCreate()+"");
+        			borrowMoneyCompany.setDelFlag(0);
+        			borrowMoneyFrameContractMapper.insertBorrowMoneyCompany(borrowMoneyCompany);
+        		}
+        		logger.info("借佣框架协议，新增-关联借佣公司结束。协议编号:"+relationContractNo);
+        	}
+        }
+  		return count;
+  	}
+    
+    /**
+     * 
+     * desc:更新
+     * 2020年4月29日
+     */
+    public void updateBorrowMoneyFrameContract(BorrowMoneyFrameContractDto borrowMoneyFrameContractDto)throws Exception {
+
+    	Map<String,Object>  param = new HashMap<>();
+    	Integer userIdUpt = borrowMoneyFrameContractDto.getUserIdUpt();
+ 		Integer	resultRow = borrowMoneyFrameContractMapper.updateBorrowMoneyFrameContract(borrowMoneyFrameContractDto);
+
+ 		//更新图片信息
+// 		if(queryParam.containsKey("frameContractId")) {
+//			String frameContractDtoId = queryParam.get("frameContractId").toString();
+			String fileRecordMainIds = borrowMoneyFrameContractDto.getFileRecordMainIds();
+			String oldfileRecordMainIds = borrowMoneyFrameContractDto.getOldFileRecordMainIds();
+//			if (!queryParam.containsKey("delFlag")) {
+				// 关联相关文件并设置RefId为空
+				if (oldfileRecordMainIds != null && StringUtil.isNotEmpty(oldfileRecordMainIds)) {
+					String[] oldfileRecordMainIdsArray = oldfileRecordMainIds.split(",");
+					for (int i = 0; i < oldfileRecordMainIdsArray.length; i++) {
+						if (StringUtil.isNotEmpty(oldfileRecordMainIdsArray[i])) {
+							FileRecordMain fileRecordMain = new FileRecordMain();
+							fileRecordMain.setFileRecordMainId(Integer.valueOf(oldfileRecordMainIdsArray[i]));
+							fileRecordMain.setRefId(null);
+							fileRecordMain.setIsDelete(true);
+							fileRecordMainMapper.update(fileRecordMain);
+						}
+					}
+				}
+				// 关联相关文件(RefId)
+				if (fileRecordMainIds != null && StringUtil.isNotEmpty(fileRecordMainIds)) {
+					String[] arrays = fileRecordMainIds.split(",");
+					for (int i = 0; i < arrays.length; i++) {
+						if (StringUtil.isNotEmpty(arrays[i])) {
+							FileRecordMain fileRecordMain = new FileRecordMain();
+							fileRecordMain.setFileRecordMainId(Integer.valueOf(arrays[i]));
+							fileRecordMain.setRefId(Integer.valueOf(borrowMoneyFrameContractDto.getId()));
+							fileRecordMain.setIsDelete(false);
+							fileRecordMainMapper.update(fileRecordMain);
+						}
+					}
+				}
+//			}
+//		}
+		//删除之前的关联公司，然后新增
+		List<BorrowMoneyCompanyDto> jyComList = borrowMoneyFrameContractDto.getJyComList();
+		if(!CollectionUtils.isEmpty(jyComList)) {
+			String contractNo = borrowMoneyFrameContractDto.getContractNo();
+			param.put("contractNo", contractNo);
+			//删除之前借佣关联的公司
+			int count = borrowMoneyFrameContractMapper.updateBorrowMoneyCompany(param);
+			if(count > 0) {
+				for (BorrowMoneyCompanyDto borrowMoneyCompanyDto : jyComList) {
+					BorrowMoneyCompany borrowMoneyCompany = getBorrowMoneyCompany(borrowMoneyCompanyDto,contractNo,userIdUpt);
+					borrowMoneyFrameContractMapper.insertBorrowMoneyCompany(borrowMoneyCompany);
+				}
+			}
+		}
+   }
+
+    /**
+     * 
+     * desc:重新组装
+     * 2020年4月30日
+     */
+	private BorrowMoneyCompany getBorrowMoneyCompany(BorrowMoneyCompanyDto borrowMoneyCompanyDto,String contractNo,Integer userIdUpt) {
+		BorrowMoneyCompany borrowMoneyCompany = new BorrowMoneyCompany();
+		borrowMoneyCompany.setContractNo(contractNo);
+		borrowMoneyCompany.setCompanyNo(borrowMoneyCompanyDto.getCompanyNo());
+		borrowMoneyCompany.setCompanyName(borrowMoneyCompanyDto.getCompanyName());
+		borrowMoneyCompany.setAddress(borrowMoneyCompanyDto.getAddress());
+		borrowMoneyCompany.setUserIdCreate(userIdUpt+"");
+		return borrowMoneyCompany;
+	}
+}

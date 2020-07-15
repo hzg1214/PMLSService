@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.scene.commission.dao.LnkYjNyMapper" >
+
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.scene.commission.model.LnkYjNy" />
+  
+  
+    <select id="queryList" parameterType="Map" resultType="Map">
+        SELECT * INTO #reportDetail FROM (
+        SELECT  x1.Id,report.reportId,x1.buildingNo,x1.roughAmount,x1.roughArea,x1.roughDate,
+        CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE x1.dealAmount END dealAmount,
+        CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE x1.area END dealArea,
+        CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE x1.dealDate END dealDate,
+        1 tsnum,x1.pledgedDate,d.dicValue incomeStatusStr
+        FROM dbo.LNK_ReportDetail(NOLOCK) x1
+<!--         inner join dbo.LNK_Report(nolock) report on LEFT(x1.CountId,15)=report.reportId -->
+        inner join dbo.LNK_Report(nolock) report on x1.reportNo=report.reportId
+        INNER JOIN LNK_Estate(nolock) Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+        LEFT JOIN dbo.BAS_DictionaryValue(nolock) d ON d.dicCode=x1.incomeStatus
+        WHERE x1.Progress = 13505
+        AND x1.DelFlg =0
+        AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+        <if test="projectDepartmentId != null and projectDepartmentId != ''">
+            AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="estateNmKey != null and estateNmKey != ''">
+            AND Estate.estateNm IN (${estateNmKey})
+        </if>
+        <if test="reportId != null and reportId != ''">
+            <![CDATA[AND report.reportId LIKE '%' + RTrim(LTrim('${reportId}')) + '%']]>
+        </if>
+        UNION ALL
+<!--         SELECT  x1.Id,LEFT(x1.CountId,15) reportId,x1.buildingNo,-x1.roughAmount roughAmount,-x1.roughArea roughArea,ISNULL(ISNULL(x1.roughBackDate,x1.dealBackDate),x1.roughDate) roughDate, -->
+        SELECT  x1.Id,x1.reportNo reportId,x1.buildingNo,-x1.roughAmount roughAmount,-x1.roughArea roughArea,ISNULL(ISNULL(x1.roughBackDate,x1.dealBackDate),x1.roughDate) roughDate,
+        CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE -x1.dealAmount END dealAmount,
+        CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE -x1.area END dealArea,
+        CASE WHEN x1.ConfirmStatus = 13603 THEN NULL ELSE ISNULL(ISNULL(x1.dealBackDate,x1.roughBackDate),x1.dealDate) END dealDate,
+        -1 tsnum,x1.pledgedDate,d.dicValue incomeStatusStr
+        FROM dbo.LNK_ReportDetail(NOLOCK) x1
+<!--         inner join dbo.LNK_Report(nolock) report on LEFT(x1.CountId,15)=report.reportId -->
+        inner join dbo.LNK_Report(nolock) report on x1.reportNo=report.reportId
+        INNER JOIN LNK_Estate(nolock) Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+        LEFT JOIN dbo.BAS_DictionaryValue(nolock) d ON d.dicCode=x1.incomeStatus
+        WHERE x1.Progress = 13505
+        AND (x1.ConfirmStatus IN(13602) OR x1.isValid =1)
+        AND x1.DelFlg =0
+        AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+        <if test="projectDepartmentId != null and projectDepartmentId != ''">
+            AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="estateNmKey != null and estateNmKey != ''">
+            AND Estate.estateNm IN (${estateNmKey})
+        </if>
+        <if test="reportId != null and reportId != ''">
+            <![CDATA[AND report.reportId LIKE '%' + RTrim(LTrim('${reportId}')) + '%']]>
+        </if>
+        )t
+
+        select * into #q from(
+        SELECT  t.detailId,t.reportId ,t.rowNo / 8 AS rowNo ,t.num,
+        SUM(CASE WHEN t.postAmount IS NOT NULL THEN t.postAmount ELSE 0 END) postAmountTotal ,
+        SUM(CASE WHEN t.totalAmount IS NOT NULL THEN t.totalAmount ELSE 0 END) totalAmountTotal ,
+        MAX(CASE t.rowNo % 7 WHEN 1 THEN t.postAmount ELSE NULL END) postAmount ,
+        MAX(CASE t.rowNo % 7 WHEN 1 THEN t.totalAmount ELSE NULL END) totalAmount ,
+        MAX(CASE t.rowNo % 7 WHEN 1 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) RecordDate ,
+        MAX(CASE t.rowNo % 7 WHEN 1 THEN switchFlag ELSE NULL END) switchFlag ,
+        MAX(CASE t.rowNo % 7 WHEN 2 THEN t.postAmount ELSE NULL END) postAmount1 ,
+        MAX(CASE t.rowNo % 7 WHEN 2 THEN t.totalAmount ELSE NULL END) totalAmount1 ,
+        MAX(CASE t.rowNo % 7 WHEN 2 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) RecordDate1 ,
+        MAX(CASE t.rowNo % 7 WHEN 2 THEN switchFlag ELSE NULL END) switchFlag1 ,
+        MAX(CASE t.rowNo % 7 WHEN 3 THEN t.postAmount ELSE NULL END) postAmount2 ,
+        MAX(CASE t.rowNo % 7 WHEN 3 THEN t.totalAmount ELSE NULL END) totalAmount2 ,
+        MAX(CASE t.rowNo % 7 WHEN 3 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) RecordDate2 ,
+        MAX(CASE t.rowNo % 7 WHEN 3 THEN switchFlag ELSE NULL END) switchFlag2 ,
+        MAX(CASE t.rowNo % 7 WHEN 4 THEN t.postAmount ELSE NULL END) postAmount3 ,
+        MAX(CASE t.rowNo % 7 WHEN 4 THEN t.totalAmount ELSE NULL END) totalAmount3 ,
+        MAX(CASE t.rowNo % 7 WHEN 4 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) RecordDate3 ,
+        MAX(CASE t.rowNo % 7 WHEN 4 THEN switchFlag ELSE NULL END) switchFlag3 ,
+        MAX(CASE t.rowNo % 7 WHEN 5 THEN t.postAmount ELSE NULL END) postAmount4 ,
+        MAX(CASE t.rowNo % 7 WHEN 5 THEN t.totalAmount ELSE NULL END) totalAmount4 ,
+        MAX(CASE t.rowNo % 7 WHEN 5 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) RecordDate4 ,
+        MAX(CASE t.rowNo % 7 WHEN 5 THEN switchFlag ELSE NULL END) switchFlag4 ,
+        MAX(CASE t.rowNo % 7 WHEN 6 THEN t.postAmount ELSE NULL END) postAmount5 ,
+        MAX(CASE t.rowNo % 7 WHEN 6 THEN t.totalAmount ELSE NULL END) totalAmount5 ,
+        MAX(CASE t.rowNo % 7 WHEN 6 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) RecordDate5 ,
+        MAX(CASE t.rowNo % 7 WHEN 6 THEN switchFlag ELSE NULL END) switchFlag5 ,
+        MAX(CASE t.rowNo % 7 WHEN 0 THEN t.postAmount ELSE NULL END) postAmount6 ,
+        MAX(CASE t.rowNo % 7 WHEN 0 THEN t.totalAmount ELSE NULL END) totalAmount6 ,
+        MAX(CASE t.rowNo % 7 WHEN 0 THEN CONVERT(VARCHAR(50), t.RecordDate, 23) ELSE NULL END) RecordDate6,
+        MAX(CASE t.rowNo % 7 WHEN 0 THEN switchFlag ELSE NULL END) switchFlag6
+        FROM    (
+        select * from (
+        SELECT ROW_NUMBER() OVER ( PARTITION BY detailId,ny.reportId,num ORDER BY ny.reportId, recordDate ) rowNo ,ny.*,COUNT(s.id) switchFlag
+        FROM dbo.LNK_YJ_NY(nolock) ny
+        INNER JOIN dbo.LNK_Report(NOLOCK) re ON ny.reportId = re.reportId
+        INNER JOIN LNK_Estate Estate (NOLOCK) ON re.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+        LEFT JOIN Pmls_Perform_Switch(NOLOCK) s ON s.delFlag=0 AND s.switchState = 27502 AND s.relateSystem = 27601
+        AND switchYear=YEAR(ny.recordDate) AND switchMonth=MONTH(ny.recordDate)
+        AND s.cityNo= #{cityNo,jdbcType=VARCHAR}
+        WHERE ny.DelFlg = 0 AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+        <if test="projectDepartmentId != null and projectDepartmentId != ''">
+            AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="estateNmKey != null and estateNmKey != ''">
+            AND Estate.estateNm IN (${estateNmKey})
+        </if>
+        GROUP BY ny.id,ny.reportId,ny.companyNo,ny.num,ny.postAmount,ny.totalAmount,ny.recordDate,ny.detailId,ny.delFlg,ny.crtDt,ny.crtEmpId,ny.uptEmpId,ny.uptDt,ny.syncFlag
+        ) r where r.rowNo &lt; 8
+        ) t
+        GROUP BY t.detailId,t.ReportId ,t.rowNo / 8,t.num
+        )t1
+
+        SELECT
+        ROW_NUMBER() OVER (ORDER BY report.EstateId desc,reportDetail.buildingNo desc, reportDetail.id desc,num desc) rowNo ,
+        report.estateId ,
+        report.estateNm ,
+        report.reportId ,
+        Estate.projectNo ,
+        reportDetail.buildingNo ,
+        dbo.F_ClearNullMoney(reportDetail.roughAmount) roughAmount,
+        CONVERT(CHAR(10), reportDetail.roughDate, 120) AS roughDate ,
+        dbo.F_ClearNullMoney(reportDetail.dealAmount) dealAmount,
+        CONVERT(CHAR(10), reportDetail.dealDate, 120) AS dealDate ,
+        reportDetail.tsnum AS num ,
+        reportDetail.Id AS detailId ,
+        reportDetail.incomeStatusStr,
+        c.companyNo ,
+        c.companyName,
+        q.postAmountTotal ,
+        q.totalAmountTotal ,
+        q.postAmount ,
+        q.totalAmount ,
+        q.recordDate ,
+        q.switchFlag,
+        q.postAmount1 ,
+        q.totalAmount1 ,
+        q.recordDate1 ,
+        q.switchFlag1,
+        q.postAmount2 ,
+        q.totalAmount2 ,
+        q.recordDate2 ,
+        q.switchFlag2,
+        q.postAmount3 ,
+        q.totalAmount3 ,
+        q.recordDate3,
+        q.switchFlag3,
+        q.postAmount4 ,
+        q.totalAmount4 ,
+        q.recordDate4,
+        q.switchFlag4,
+        q.postAmount5 ,
+        q.totalAmount5 ,
+        q.recordDate5,
+        q.switchFlag5,
+        q.postAmount6 ,
+        q.totalAmount6 ,
+        q.recordDate6,
+        q.switchFlag6
+        FROM    dbo.LNK_Report(nolock) report
+        LEFT JOIN dbo.Company(nolock) c ON c.companyNo = report.CompanyId AND c.IsDelete = 0
+        INNER JOIN #reportDetail reportDetail ON report.ReportId = reportDetail.reportId AND reportDetail.dealDate > '1999-01-01'
+        INNER JOIN LNK_Estate(nolock) Estate ON report.EstateId = Estate.EstateId AND Estate.DelFlg = 0
+        LEFT JOIN #q q ON q.reportId = report.ReportId AND q.num=reportDetail.tsnum AND q.detailId = reportDetail.id
+        where 1=1
+        AND Estate.CityNo = #{cityNo,jdbcType=VARCHAR}
+        <if test="projectDepartmentId != null and projectDepartmentId != ''">
+            AND Estate.projectDepartmentId = #{projectDepartmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="reportId != null and reportId != ''">
+            <![CDATA[AND report.reportId LIKE '%' + RTrim(LTrim('${reportId}')) + '%']]>
+        </if>
+        <if test="searchKey != null and searchKey != ''">
+            <![CDATA[
+	   AND (Estate.projectNo LIKE '%${searchKey}%'
+	   OR report.CustomerNm LIKE '%${searchKey}%'
+	   OR report.CustomerTel LIKE '%${searchKey}%'
+	   OR Estate.DevCompany LIKE '%${searchKey}%'
+	   OR reportDetail.buildingNo LIKE  '%${searchKey}%' )
+	  ]]>
+        </if>
+        <if test="estateNmKey != null and estateNmKey != ''">
+            AND Estate.estateNm IN (${estateNmKey})
+        </if>
+        and  reportDetail.dealDate>=#{countDateStart} and reportDetail.dealDate &lt;=#{countDateEnd}
+        ORDER BY report.EstateId desc,reportDetail.buildingNo desc, reportDetail.id desc,num desc
+        drop table #reportDetail
+        drop table #q
+    </select>
+
+    <select id="mergeInsert" parameterType="Map" >
+        MERGE INTO dbo.Lnk_Yj_Ny s1
+        USING (SELECT #{reportId} AS reportId,#{recordDate} AS recordDate,#{num} as num,#{detailId} as detailId) AS s2
+        ON s1.ReportId=s2.reportId AND s1.RecordDate=s2.recordDate AND s1.num = s2.num AND s1.detailId = s2.detailId
+        WHEN MATCHED THEN
+        UPDATE SET s1.postAmount=#{postAmount},s1.totalAmount=#{totalAmount},s1.UptEmpId=#{uptEmpId},s1.UptDt=getdate(),s1.DelFlg=0,s1.syncFlag = 0
+        WHEN NOT MATCHED THEN
+        INSERT (reportId,companyNo,num,postAmount,totalAmount,recordDate,detailId,crtEmpId,crtDt,uptEmpId,uptDt,delFlg)
+        VALUES(#{reportId},#{companyNo},#{num},#{postAmount},#{totalAmount},#{recordDate},#{detailId},#{crtEmpId},getdate(),#{uptEmpId},getdate(),#{delFlg});
+    </select>
+
+    <select id="syncLnkImport" parameterType="java.util.Map">
+		EXEC P_CRM_LNK_IMPORT_SYNC #{tabName},#{empId}
+	</select>
+</mapper>

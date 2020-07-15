@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.cashbill.dao.CashBillReportMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.cashbill.model.CashBillReport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="proParentId" jdbcType="INTEGER" property="proParentId" />
+    <result column="comParentId" jdbcType="INTEGER" property="comParentId" />
+    <result column="reportId" jdbcType="INTEGER" property="reportId" />
+    <result column="reportNo" jdbcType="VARCHAR" property="reportNo" />
+    <result column="buildingNo" jdbcType="VARCHAR" property="buildingNo" />
+    <result column="customerNm" jdbcType="VARCHAR" property="customerNm" />
+    <result column="area" jdbcType="DECIMAL" property="area" />
+    <result column="roughAmount" jdbcType="DECIMAL" property="roughAmount" />
+    <result column="dealAmount" jdbcType="DECIMAL" property="dealAmount" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+
+    <result column="sqYjsrAmount" jdbcType="DECIMAL" property="sqYjsrAmount" />
+    <result column="sqYjfyAmount" jdbcType="DECIMAL" property="sqYjfyAmount" />
+    <result column="sqYjdyAmount" jdbcType="DECIMAL" property="sqYjdyAmount" />
+    <result column="sqSjsrAmount" jdbcType="DECIMAL" property="sqSjsrAmount" />
+    <result column="sqSjfyAmount" jdbcType="DECIMAL" property="sqSjfyAmount" />
+    <result column="sqSjdyAmount" jdbcType="DECIMAL" property="sqSjdyAmount" />
+    <result column="requestAmount" jdbcType="DECIMAL" property="requestAmount" />
+    <result column="taxAmount" jdbcType="DECIMAL" property="taxAmount" />
+    <result column="requestType" jdbcType="INTEGER" property="requestType" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+
+    <result column="offSetFlag" jdbcType="BIT" property="offSetFlag" />
+    <result column="accountProject" jdbcType="VARCHAR" property="accountProject" />
+    <result column="accountProjectNo" jdbcType="VARCHAR" property="accountProjectNo" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, proParentId, comParentId, reportId, reportNo, buildingNo, customerNm, area, roughAmount, 
+    dealAmount, dateCreate, userIdCreate, delFlag,offSetFlag,accountProject,accountProjectNo
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Cash_Bill_Report
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    UPDATE Cash_Bill_Report SET delFlag = 1
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.cashbill.model.CashBillReport">
+    insert into Cash_Bill_Report (id, proParentId, comParentId, 
+      reportId, reportNo, buildingNo, 
+      customerNm, area, roughAmount, 
+      dealAmount, dateCreate, userIdCreate, 
+      delFlag,offSetFlag,accountProject,accountProjectNo)
+    values (#{id,jdbcType=INTEGER}, #{proParentId,jdbcType=INTEGER}, #{comParentId,jdbcType=INTEGER}, 
+      #{reportId,jdbcType=INTEGER}, #{reportNo,jdbcType=VARCHAR}, #{buildingNo,jdbcType=VARCHAR}, 
+      #{customerNm,jdbcType=VARCHAR}, #{area,jdbcType=DECIMAL}, #{roughAmount,jdbcType=DECIMAL}, 
+      #{dealAmount,jdbcType=DECIMAL}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=BIT},#{offSetFlag,jdbcType=BIT}, #{accountProject,jdbcType=VARCHAR}, #{accountProjectNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillReport" useGeneratedKeys="true" keyProperty="id">
+    insert into Cash_Bill_Report
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="proParentId != null">
+        proParentId,
+      </if>
+      <if test="comParentId != null">
+        comParentId,
+      </if>
+      <if test="reportId != null">
+        reportId,
+      </if>
+      <if test="reportNo != null">
+        reportNo,
+      </if>
+      <if test="buildingNo != null">
+        buildingNo,
+      </if>
+      <if test="customerNm != null">
+        customerNm,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="roughAmount != null">
+        roughAmount,
+      </if>
+      <if test="dealAmount != null">
+        dealAmount,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+
+    <if test="sqYjsrAmount != null">
+        sqYjsrAmount,
+    </if>
+    <if test="sqYjfyAmount != null">
+        sqYjfyAmount,
+    </if>
+    <if test="sqYjdyAmount != null">
+        sqYjdyAmount,
+    </if>
+    <if test="sqSjsrAmount != null">
+        sqSjsrAmount,
+    </if>
+    <if test="sqSjfyAmount != null">
+        sqSjfyAmount,
+    </if>
+    <if test="sqSjdyAmount != null">
+        sqSjdyAmount,
+    </if>
+    <if test="requestAmount != null">
+        requestAmount,
+    </if>
+    <if test="taxAmount != null">
+        taxAmount,
+    </if>
+    <if test="requestType != null">
+        requestType,
+    </if>
+    <if test="memo != null">
+        memo,
+    </if>
+      <if test="reportDetailId != null">
+        reportDetailId,
+      </if>
+      <if test="offSetFlag != null">
+        offSetFlag,
+      </if>
+      <if test="accountProject != null">
+        accountProject,
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo,
+      </if>
+      <if test="checkBodyId != null">
+        checkBodyId,
+      </if>
+      <if test="checkBodyName != null">
+        checkBodyName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="proParentId != null">
+        #{proParentId,jdbcType=INTEGER},
+      </if>
+      <if test="comParentId != null">
+        #{comParentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null">
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null">
+        #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null">
+        #{buildingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNm != null">
+        #{customerNm,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=DECIMAL},
+      </if>
+      <if test="roughAmount != null">
+        #{roughAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealAmount != null">
+        #{dealAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="sqYjsrAmount != null">
+        #{sqYjsrAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="sqYjfyAmount != null">
+	        #{sqYjfyAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="sqYjdyAmount != null">
+	        #{sqYjdyAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="sqSjsrAmount != null">
+	        #{sqSjsrAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="sqSjfyAmount != null">
+	        #{sqSjfyAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="sqSjdyAmount != null">
+	        #{sqSjdyAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="requestAmount != null">
+	        #{requestAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="taxAmount != null">
+	        #{taxAmount,jdbcType=DECIMAL},
+	    </if>
+	    <if test="requestType != null">
+	         #{requestType,jdbcType=INTEGER},
+	    </if>
+	    <if test="memo != null">
+	        #{memo,jdbcType=VARCHAR},
+	    </if>
+      <if test="reportDetailId != null">
+           #{reportDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="offSetFlag != null">
+        #{offSetFlag,jdbcType=BIT},
+      </if>
+      <if test="accountProject != null">
+        #{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        #{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="checkBodyId != null">
+        #{checkBodyId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkBodyName != null">
+        #{checkBodyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.cashbill.model.CashBillReport">
+    update Cash_Bill_Report
+    <set>
+      <if test="proParentId != null">
+        proParentId = #{proParentId,jdbcType=INTEGER},
+      </if>
+      <if test="comParentId != null">
+        comParentId = #{comParentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null">
+        reportId = #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportNo != null">
+        reportNo = #{reportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null">
+        buildingNo = #{buildingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNm != null">
+        customerNm = #{customerNm,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=DECIMAL},
+      </if>
+      <if test="roughAmount != null">
+        roughAmount = #{roughAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealAmount != null">
+        dealAmount = #{dealAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+
+      <if test="sqYjsrAmount != null">
+        sqYjsrAmount = #{sqYjsrAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjfyAmount != null">
+        sqYjfyAmount = #{sqYjfyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sqYjdyAmount != null">
+        sqYjdyAmount = #{sqYjdyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjsrAmount != null">
+        sqSjsrAmount = #{sqSjsrAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjfyAmount != null">
+        sqSjfyAmount = #{sqSjfyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sqSjdyAmount != null">
+        sqSjdyAmount = #{sqSjdyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="requestAmount != null">
+        requestAmount = #{requestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxAmount != null">
+        taxAmount = #{taxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="requestType != null">
+        requestType = #{requestType,jdbcType=INTEGER},
+      </if>
+      <if test="checkBodyId != null">
+        checkBodyId = #{checkBodyId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkBodyName != null">
+        checkBodyName = #{checkBodyName,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDetailId != null">
+        reportDetailId = #{reportDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="offSetFlag != null">
+        offSetFlag = #{offSetFlag,jdbcType=BIT},
+      </if>
+      <if test="accountProject != null">
+        accountProject = #{accountProject,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.cashbill.model.CashBillReport">
+    update Cash_Bill_Report
+    set proParentId = #{proParentId,jdbcType=INTEGER},
+      comParentId = #{comParentId,jdbcType=INTEGER},
+      reportId = #{reportId,jdbcType=INTEGER},
+      reportNo = #{reportNo,jdbcType=VARCHAR},
+      buildingNo = #{buildingNo,jdbcType=VARCHAR},
+      customerNm = #{customerNm,jdbcType=VARCHAR},
+      area = #{area,jdbcType=DECIMAL},
+      roughAmount = #{roughAmount,jdbcType=DECIMAL},
+      dealAmount = #{dealAmount,jdbcType=DECIMAL},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=BIT},
+      offSetFlag = #{offSetFlag,jdbcType=BIT},
+      accountProject = #{accountProject,jdbcType=VARCHAR},
+      accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="checkReportUnique" parameterType="cn.com.eju.deal.cashbill.model.CashBillReport" resultType="cn.com.eju.deal.cashbill.model.CashBillReport">
+    SELECT  r.*
+    FROM    Cash_Bill_Project p
+            JOIN dbo.Cash_Bill_Company c ON p.id = c.proParentId
+            JOIN dbo.Cash_Bill_Report r ON c.id = r.comParentId
+    WHERE   p.id = #{proParentId,jdbcType=INTEGER}
+            AND c.id = #{comParentId,jdbcType=INTEGER}
+            AND r.reportId = #{reportId,jdbcType=INTEGER}
+            AND c.delFlag = 0
+            AND r.delFlag = 0
+  </select>
+
+  <select id="queryByParentId" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.cashbill.model.CashBillReport">
+    SELECT  cbr.id ,
+    		rd.id reportDetailId,
+                cbr.proParentId ,
+                cbr.comParentId ,
+                cbr.reportId ,
+                cbr.reportNo ,
+                rd.buildingNo ,
+                r.customerNm ,
+				(CASE WHEN r.ConfirmStatus = 13601 THEN rd.area ELSE rd.roughArea END) AS area,
+                rd.Progress progress,
+                rd.ConfirmStatus confirmStatus,
+                rd.roughAmount ,
+                rd.dealAmount ,
+                 lj.yjsrBefTaxAmount sqYjsrAmount,
+			     lj.yjfyBefTaxAmount sqYjfyAmount,
+			     lj.yjdyBefTaxAmount sqYjdyAmount,
+			     lj.sssrBefTaxAmount sqSjsrAmount,
+			     lj.sjfyBefTaxAmount sqSjfyAmount,
+			     lj.sjdyBefTaxAmount sqSjdyAmount,
+			     cbr.requestAmount,
+			     cbr.taxAmount,
+			     cbr.requestType,
+			     cbr.checkBodyId,
+                 cbr.checkBodyName,
+			     cbr.memo,cbr.offSetFlag,cbr.accountProject,cbr.accountProjectNo
+        FROM    dbo.Cash_Bill_Report cbr
+                JOIN dbo.LNK_Report r WITH(NOLOCK) ON cbr.reportId = r.Id
+<!--                 left JOIN dbo.LNK_ReportDetail rd ON SUBSTRING(rd.CountId, 0, 16) = r.ReportId -->
+                left JOIN dbo.LNK_ReportDetail rd ON rd.reportNo = r.ReportId
+                AND rd.Progress = 13505
+                and rd.ConfirmStatus in (13601,13603)
+				AND rd.isValid = 0
+				LEFT JOIN V_CRM_CASHBILL_LJ_DATA lj ON cbr.reportNo = lj.reportId
+
+        WHERE   cbr.comParentId = #{comParentId,jdbcType=INTEGER}
+                AND cbr.delFlag = 0
+
+  </select>
+
+  <select id="findUnreasonableReport" resultType="cn.com.eju.deal.cashbill.model.CashBillReport" parameterType="java.util.Map">
+    SELECT  ReportId AS reportNo
+    FROM    dbo.LNK_Report
+    WHERE   1 = 1
+            AND Id IN
+              <foreach item="item" index="index" collection="reportIdList" open="("
+                       separator="," close=")">
+                #{item}
+              </foreach>
+            AND (( LatestProgress = 13505
+                  AND ConfirmStatus = 13602
+                )
+            OR LatestProgress != 13505
+            OR roughAuditStatus = '0'
+            OR brokerageStatus = 22003)
+  </select>
+
+  <select id="findUnOffsetReport" resultType="cn.com.eju.deal.cashbill.model.CashBillReport" parameterType="java.util.Map">
+    SELECT  ReportId AS reportNo
+    FROM    dbo.LNK_Report
+    WHERE   1 = 1
+    AND Id IN
+    <foreach item="item" index="index" collection="reportIdList" open="("
+             separator="," close=")">
+      #{item}
+    </foreach>
+    AND (( LatestProgress = 13505
+    AND ConfirmStatus = 13602
+    )
+    OR LatestProgress != 13505
+    OR roughAuditStatus = '0')
+  </select>
+
+  <delete id="updateByComparentId" parameterType="java.lang.Integer">
+    UPDATE Cash_Bill_Report SET delFlag = 1
+    where comParentId = #{comParentId,jdbcType=INTEGER}
+  </delete>
+
+  <select id="getTotalInfo" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.cashbill.model.CashBillCompany">
+      SELECT cbr.comParentId
+            , SUM(requestAmount) requestAmountTotal
+            , SUM(taxAmount) taxAmountTotal
+        FROM dbo.Cash_Bill_Report cbr
+       WHERE cbr.comParentId = #{comParentId,jdbcType=INTEGER}
+         AND cbr.delFlag = 0
+      GROUP BY cbr.comParentId
+  </select>
+
+  <select id="getProjectNoByReportId" parameterType="java.lang.Integer" resultType="string">
+     SELECT top 1 projectNo FROM dbo.LNK_Estate e
+     INNER JOIN dbo.LNK_Report r ON r.DelFlg=0 AND r.EstateId=e.EstateId
+     WHERE r.Id=#{id}
+  </select>
+
+  <select id="getReportForDeductDetail" parameterType="Map" resultType="Map">
+    SELECT r.accountProject accountProject_detail,r.accountProjectNo accountProjectNo_detail,e.projectNo projectNo_detail,e.EstateNm estateNm_detail,r.reportNo,r.buildingNo,
+    c.accountProject,c.accountProjectNo,p.projectNo,p.estateNm,
+    r.requestAmount sq_fy,r.requestAmount-r.taxAmount sh_fy,
+    CASE WHEN requestType=1 THEN CONVERT(DECIMAL(18,2),0) WHEN requestType=2 THEN r.requestAmount END sq_dy,
+    CASE WHEN requestType=1 THEN CONVERT(DECIMAL(18,2),0) WHEN requestType=2 THEN r.requestAmount-r.taxAmount END sh_dy,
+    p.recordTime
+    INTO #tbl
+    FROM dbo.Cash_Bill_Report r
+    LEFT JOIN dbo.Cash_Bill_Company c ON c.delFlag=0 AND r.comParentId=c.id AND r.proParentId=c.proParentId
+    LEFT JOIN dbo.Cash_Bill_Project p ON p.delFlag=0 AND c.proParentId=p.id AND r.proParentId=p.id
+    LEFT JOIN dbo.LNK_Report (NOLOCK) rpt ON rpt.DelFlg=0 AND rpt.Id=r.reportId
+    LEFT JOIN dbo.LNK_Estate (NOLOCK) e ON rpt.EstateId=e.EstateId
+    WHERE r.delFlag=0 AND r.offSetFlag=1
+    <if test="searchKey != null and searchKey != ''">
+      AND (vendorCode LIKE CONCAT('%', #{searchKey},'%') OR vendorName LIKE CONCAT('%', #{searchKey},'%'))
+    </if>
+    <if test="dateStart != null and dateEnd != null">
+      AND recordTime BETWEEN #{dateStart,jdbcType=NVARCHAR} AND #{dateEnd,jdbcType=NVARCHAR}
+    </if>
+
+    INSERT INTO #tbl (accountProject_detail,accountProjectNo_detail,projectNo_detail,estateNm_detail,reportNo,buildingNo,accountProject,
+    accountProjectNo,projectNo,estateNm,sq_fy,sh_fy,sq_dy,sh_dy,recordTime)
+    SELECT '','','','','','','','','','',SUM(sq_fy),SUM(sh_fy),SUM(sq_dy),SUM(sh_dy),''
+    FROM #tbl
+
+    SELECT * FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY CASE WHEN reportNo='' THEN 1 ELSE 2 END, recordTime DESC) rowNum,
+        accountProject_detail,projectNo_detail,estateNm_detail,reportNo,buildingNo,
+        accountProject,projectNo,estateNm,
+        dbo.F_ClearNullMoney(sq_fy) sq_fy,
+        dbo.F_ClearNullMoney(sh_fy) sh_fy,
+        dbo.F_ClearNullMoney(sq_dy) sq_dy,
+        dbo.F_ClearNullMoney(sh_dy) sh_dy,
+        CONVERT(varchar(100), recordTime, 23) recordTime,
+        CASE WHEN accountProjectNo_detail =  accountProjectNo THEN 0
+        ELSE 1
+        END isAccountProject,
+        CASE WHEN projectNo_detail =  projectNo THEN 0
+        ELSE 1
+        END isProjectNo
+        FROM #tbl
+    ) tbl order BY rowNum
+
+    DROP TABLE #tbl
+
+
+  </select>
+
+  <select id="getOaProjectByProjectNo" parameterType="Integer" resultType="Map">
+    SELECT top 1 xmCode oaProjectNo , xmName oaProjectName
+      FROM V_Request_Account_Project p
+	  LEFT JOIN dbo.LNK_Estate e ON p.xmcode=e.projectNo
+	  LEFT JOIN dbo.LNK_Report r ON r.EstateId=e.EstateId
+     WHERE r.Id = #{id}
+  </select>
+
+    <select id="selectByProParentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from Cash_Bill_Report cbr
+        WHERE   cbr.proParentId = #{proParentId,jdbcType=INTEGER}
+        AND cbr.delFlag = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.accountproject.dao.AccountProjectMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.accountproject.model.AccountProject">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="cityNo" property="cityNo" jdbcType="VARCHAR"/>
+        <result column="accountProjectNo" property="accountProjectNo" jdbcType="VARCHAR"/>
+        <result column="accountProject" property="accountProject" jdbcType="VARCHAR"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP"/>
+        <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER"/>
+        <result column="delFlag" property="delFlag" jdbcType="BIT"/>
+    </resultMap>
+
+  <sql id="Base_Column_List">
+    id, cityNo, accountProjectNo, accountProject, dateCreate, dateUpdate,
+    userIdCreate, delFlag
+  </sql>
+
+  <insert id="insert" parameterType="cn.com.eju.deal.accountproject.model.AccountProject"
+            useGeneratedKeys="true" keyProperty="operId">
+    insert into Account_Project (cityNo, accountProjectNo, accountProject, dateCreate, dateUpdate,
+    userIdCreate, delFlag)
+    values (#{cityNo,jdbcType=VARCHAR}, #{accountProjectNo,jdbcType=VARCHAR},
+      #{accountProject,jdbcType=VARCHAR}, GETDATE(),  GETDATE(),
+      #{userIdCreate,jdbcType=INTEGER}, 0)
+  </insert>
+  
+  <!-- 批量插入 -->
+  	<insert id="insertBatch"  parameterType="java.util.List">  
+	    INSERT INTO dbo.Account_Project (cityNo, accountProjectNo, accountProject, dateCreate, dateUpdate,
+    userIdCreate, delFlag)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	        (#{item.cityNo},#{item.accountProjectNo},#{item.accountProject},GETDATE(),GETDATE(),#{item.userIdCreate},0)  
+	    </foreach>  
+	</insert> 
+
+    <update id="update" parameterType="cn.com.eju.deal.accountproject.model.AccountProject">
+        update Account_Project
+        <set>
+            dateUpdate = GETDATE(),
+            delFlag = 0,
+            <if test="cityNo != null">
+                cityNo = #{cityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="accountProjectNo != null">
+                accountProjectNo = #{accountProjectNo,jdbcType=INTEGER},
+            </if>
+            <if test="accountProject != null">
+                accountProject = #{accountProject,jdbcType=NVARCHAR},
+            </if>
+            <if test="userIdCreate != null">
+                userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        UPDATE Account_Project
+        SET delFlag = 1
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="getById" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.accountproject.model.AccountProject">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM Account_Project
+        WHERE delFlag = 0 AND id = #{id,jdbcType=INTEGER}
+    </select>
+
+<!-- 	查询核算主体基础表 -->
+    <select id="selBasAPBycondition" parameterType="Map" resultType="cn.com.eju.deal.accountproject.model.AccountProject">
+        SELECT DISTINCT
+        	id, accountProjectNo, accountProject, dateCreate,
+        	dateUpdate,userIdCreate, delFlag
+        FROM dbo.BAS_Account_Project
+        WHERE delFlag = 0 
+		<if test="accountProjectNo != null and accountProjectNo != ''">
+            AND accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+    
+<!--     查询核算主体维护表 -->
+    <select id="selAPBycondition" parameterType="Map" resultType="cn.com.eju.deal.accountproject.model.AccountProject">
+        SELECT DISTINCT
+        <include refid="Base_Column_List"/>
+        FROM Account_Project
+        WHERE delFlag = 0 
+		<if test="cityNo != null and cityNo != ''">
+            AND cityNo = #{cityNo,jdbcType=VARCHAR}
+        </if>
+		<if test="accountProjectNo != null and accountProjectNo != ''">
+            AND accountProjectNo = #{accountProjectNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+<!-- 查询列表 -->
+    <select id="queryList" parameterType="Map" resultType="Map">
+        SELECT ROW_NUMBER() OVER(ORDER BY yfc.dateCreate DESC) AS rowNum,
+        yfc.id, yfc.cityNo, bc.cityName ,
+        yfc.accountProjectNo ,
+        yfc.accountProject ,
+        yfc.dateCreate,
+        yfc.userIdCreate , us.userName AS userNameCreate
+        FROM Account_Project yfc
+        LEFT JOIN BAS_City bc ON yfc.CityNo = bc.CityNo
+        LEFT JOIN crm.dbo.USR_User us ON yfc.userIdCreate = us.userId
+        WHERE yfc.delFlag = 0
+        <if test="cityNo != null and cityNo != ''">
+            AND yfc.cityNo = #{cityNo,jdbcType=VARCHAR}
+        </if>
+        <if test="cityNoList != null ">
+            AND yfc.cityNo in
+            <foreach collection="cityNoList" item="list" index="index"
+                     open="(" close=")" separator=",">
+                #{list, jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="searchKey != null and searchKey != ''">
+            and ( yfc.accountProjectNo LIKE CONCAT('%', #{searchKey},'%')
+            OR yfc.accountProject LIKE CONCAT('%', #{searchKey},'%')
+            )
+        </if>
+        ORDER BY yfc.dateCreate DESC
+    </select>
+    
+<!--     新增、编辑核算主体下拉列表 -->
+    <select id="getAccountProjectList" parameterType="Map" resultType="cn.com.eju.deal.dto.accountproject.AccountProjectList">
+        SELECT id ,
+	        accountProjectNo ,
+	        accountProject ,
+	        CONVERT(NVARCHAR(500), accountProjectNo) + '_' + accountProject AS accountProjectStr
+		FROM    ( SELECT    ROW_NUMBER() OVER ( PARTITION BY accountProjectNo ORDER BY dateCreate ) rn
+					,id, accountProjectNo, accountProject, dateCreate, dateUpdate,userIdCreate, delFlag
+          		  FROM      dbo.BAS_Account_Project
+          			WHERE     delFlag = 0
+        		) s
+		WHERE rn=1 ORDER BY dateCreate desc
+    </select>
+
+</mapper>

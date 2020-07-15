@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.otherReport.dao.LnkQtAchivAchievementMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.otherReport.model.LnkQtAchivAchievement">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="achieveType" jdbcType="VARCHAR" property="achieveType" />
+    <result column="relateId" jdbcType="INTEGER" property="relateId" />
+    <result column="expenderCode" jdbcType="VARCHAR" property="expenderCode" />
+    <result column="expenderName" jdbcType="NVARCHAR" property="expenderName" />
+    <result column="groupId" jdbcType="INTEGER" property="groupId" />
+    <result column="groupName" jdbcType="NVARCHAR" property="groupName" />
+    <result column="groupLeaderCode" jdbcType="VARCHAR" property="groupLeaderCode" />
+    <result column="groupLeaderName" jdbcType="NVARCHAR" property="groupLeaderName" />
+    <result column="centerGroupId" jdbcType="INTEGER" property="centerGroupId" />
+    <result column="centerGroupName" jdbcType="NVARCHAR" property="centerGroupName" />
+    <result column="centerLeaderCode" jdbcType="VARCHAR" property="centerLeaderCode" />
+    <result column="centerLeaderName" jdbcType="NVARCHAR" property="centerLeaderName" />
+    <result column="areaGroupId" jdbcType="INTEGER" property="areaGroupId" />
+    <result column="areaGroupName" jdbcType="NVARCHAR" property="areaGroupName" />
+    <result column="areaLeaderCode" jdbcType="VARCHAR" property="areaLeaderCode" />
+    <result column="areaLeaderName" jdbcType="NVARCHAR" property="areaLeaderName" />
+    <result column="cityGroupId" jdbcType="INTEGER" property="cityGroupId" />
+    <result column="cityGroupName" jdbcType="NVARCHAR" property="cityGroupName" />
+    <result column="cityLeaderCode" jdbcType="VARCHAR" property="cityLeaderCode" />
+    <result column="cityLeaderName" jdbcType="NVARCHAR" property="cityLeaderName" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="accountProject" jdbcType="NVARCHAR" property="accountProject" />
+    <result column="accountProjectNo" jdbcType="NVARCHAR" property="accountProjectNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, achieveType, relateId, expenderCode, expenderName, groupId, groupName, groupLeaderCode, 
+    groupLeaderName, centerGroupId, centerGroupName, centerLeaderCode, centerLeaderName, 
+    areaGroupId, areaGroupName, areaLeaderCode, areaLeaderName, cityGroupId, cityGroupName, 
+    cityLeaderCode, cityLeaderName, delFlag, dateCreate, accountProject, accountProjectNo
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from LNK_QT_Achiv_Achievement
+    where id = #{id,jdbcType=INTEGER}
+     and DelFlg = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from LNK_QT_Achiv_Achievement
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.otherReport.model.LnkQtAchivAchievement">
+    insert into LNK_QT_Achiv_Achievement (id, achieveType, relateId, 
+      expenderCode, expenderName, groupId, 
+      groupName, groupLeaderCode, groupLeaderName, 
+      centerGroupId, centerGroupName, centerLeaderCode, 
+      centerLeaderName, areaGroupId, areaGroupName, 
+      areaLeaderCode, areaLeaderName, cityGroupId, 
+      cityGroupName, cityLeaderCode, cityLeaderName, 
+      delFlag, dateCreate, accountProject, 
+      accountProjectNo)
+    values (#{id,jdbcType=INTEGER}, #{achieveType,jdbcType=VARCHAR}, #{relateId,jdbcType=INTEGER}, 
+      #{expenderCode,jdbcType=VARCHAR}, #{expenderName,jdbcType=NVARCHAR}, #{groupId,jdbcType=INTEGER}, 
+      #{groupName,jdbcType=NVARCHAR}, #{groupLeaderCode,jdbcType=VARCHAR}, #{groupLeaderName,jdbcType=NVARCHAR}, 
+      #{centerGroupId,jdbcType=INTEGER}, #{centerGroupName,jdbcType=NVARCHAR}, #{centerLeaderCode,jdbcType=VARCHAR}, 
+      #{centerLeaderName,jdbcType=NVARCHAR}, #{areaGroupId,jdbcType=INTEGER}, #{areaGroupName,jdbcType=NVARCHAR}, 
+      #{areaLeaderCode,jdbcType=VARCHAR}, #{areaLeaderName,jdbcType=NVARCHAR}, #{cityGroupId,jdbcType=INTEGER}, 
+      #{cityGroupName,jdbcType=NVARCHAR}, #{cityLeaderCode,jdbcType=VARCHAR}, #{cityLeaderName,jdbcType=NVARCHAR}, 
+      #{delFlag,jdbcType=BIT}, #{dateCreate,jdbcType=TIMESTAMP}, #{accountProject,jdbcType=NVARCHAR}, 
+      #{accountProjectNo,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.otherReport.model.LnkQtAchivAchievement">
+    insert into LNK_QT_Achiv_Achievement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="achieveType != null">
+        achieveType,
+      </if>
+      <if test="relateId != null">
+        relateId,
+      </if>
+      <if test="expenderCode != null">
+        expenderCode,
+      </if>
+      <if test="expenderName != null">
+        expenderName,
+      </if>
+      <if test="groupId != null">
+        groupId,
+      </if>
+      <if test="groupName != null">
+        groupName,
+      </if>
+      <if test="groupLeaderCode != null">
+        groupLeaderCode,
+      </if>
+      <if test="groupLeaderName != null">
+        groupLeaderName,
+      </if>
+      <if test="centerGroupId != null">
+        centerGroupId,
+      </if>
+      <if test="centerGroupName != null">
+        centerGroupName,
+      </if>
+      <if test="centerLeaderCode != null">
+        centerLeaderCode,
+      </if>
+      <if test="centerLeaderName != null">
+        centerLeaderName,
+      </if>
+      <if test="areaGroupId != null">
+        areaGroupId,
+      </if>
+      <if test="areaGroupName != null">
+        areaGroupName,
+      </if>
+      <if test="areaLeaderCode != null">
+        areaLeaderCode,
+      </if>
+      <if test="areaLeaderName != null">
+        areaLeaderName,
+      </if>
+      <if test="cityGroupId != null">
+        cityGroupId,
+      </if>
+      <if test="cityGroupName != null">
+        cityGroupName,
+      </if>
+      <if test="cityLeaderCode != null">
+        cityLeaderCode,
+      </if>
+      <if test="cityLeaderName != null">
+        cityLeaderName,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="accountProject != null">
+        accountProject,
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="achieveType != null">
+        #{achieveType,jdbcType=VARCHAR},
+      </if>
+      <if test="relateId != null">
+        #{relateId,jdbcType=INTEGER},
+      </if>
+      <if test="expenderCode != null">
+        #{expenderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expenderName != null">
+        #{expenderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="groupLeaderCode != null">
+        #{groupLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupLeaderName != null">
+        #{groupLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="centerGroupId != null">
+        #{centerGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="centerGroupName != null">
+        #{centerGroupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="centerLeaderCode != null">
+        #{centerLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="centerLeaderName != null">
+        #{centerLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="areaGroupId != null">
+        #{areaGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="areaGroupName != null">
+        #{areaGroupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="areaLeaderCode != null">
+        #{areaLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaLeaderName != null">
+        #{areaLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="cityGroupId != null">
+        #{cityGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="cityGroupName != null">
+        #{cityGroupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="cityLeaderCode != null">
+        #{cityLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityLeaderName != null">
+        #{cityLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountProject != null">
+        #{accountProject,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        #{accountProjectNo,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.otherReport.model.LnkQtAchivAchievement">
+    update LNK_QT_Achiv_Achievement
+    <set>
+      <if test="achieveType != null">
+        achieveType = #{achieveType,jdbcType=VARCHAR},
+      </if>
+      <if test="relateId != null">
+        relateId = #{relateId,jdbcType=INTEGER},
+      </if>
+      <if test="expenderCode != null">
+        expenderCode = #{expenderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expenderName != null">
+        expenderName = #{expenderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="groupId != null">
+        groupId = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="groupName != null">
+        groupName = #{groupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="groupLeaderCode != null">
+        groupLeaderCode = #{groupLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupLeaderName != null">
+        groupLeaderName = #{groupLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="centerGroupId != null">
+        centerGroupId = #{centerGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="centerGroupName != null">
+        centerGroupName = #{centerGroupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="centerLeaderCode != null">
+        centerLeaderCode = #{centerLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="centerLeaderName != null">
+        centerLeaderName = #{centerLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="areaGroupId != null">
+        areaGroupId = #{areaGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="areaGroupName != null">
+        areaGroupName = #{areaGroupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="areaLeaderCode != null">
+        areaLeaderCode = #{areaLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaLeaderName != null">
+        areaLeaderName = #{areaLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="cityGroupId != null">
+        cityGroupId = #{cityGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="cityGroupName != null">
+        cityGroupName = #{cityGroupName,jdbcType=NVARCHAR},
+      </if>
+      <if test="cityLeaderCode != null">
+        cityLeaderCode = #{cityLeaderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityLeaderName != null">
+        cityLeaderName = #{cityLeaderName,jdbcType=NVARCHAR},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountProject != null">
+        accountProject = #{accountProject,jdbcType=NVARCHAR},
+      </if>
+      <if test="accountProjectNo != null">
+        accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.otherReport.model.LnkQtAchivAchievement">
+    update LNK_QT_Achiv_Achievement
+    set achieveType = #{achieveType,jdbcType=VARCHAR},
+      relateId = #{relateId,jdbcType=INTEGER},
+      expenderCode = #{expenderCode,jdbcType=VARCHAR},
+      expenderName = #{expenderName,jdbcType=NVARCHAR},
+      groupId = #{groupId,jdbcType=INTEGER},
+      groupName = #{groupName,jdbcType=NVARCHAR},
+      groupLeaderCode = #{groupLeaderCode,jdbcType=VARCHAR},
+      groupLeaderName = #{groupLeaderName,jdbcType=NVARCHAR},
+      centerGroupId = #{centerGroupId,jdbcType=INTEGER},
+      centerGroupName = #{centerGroupName,jdbcType=NVARCHAR},
+      centerLeaderCode = #{centerLeaderCode,jdbcType=VARCHAR},
+      centerLeaderName = #{centerLeaderName,jdbcType=NVARCHAR},
+      areaGroupId = #{areaGroupId,jdbcType=INTEGER},
+      areaGroupName = #{areaGroupName,jdbcType=NVARCHAR},
+      areaLeaderCode = #{areaLeaderCode,jdbcType=VARCHAR},
+      areaLeaderName = #{areaLeaderName,jdbcType=NVARCHAR},
+      cityGroupId = #{cityGroupId,jdbcType=INTEGER},
+      cityGroupName = #{cityGroupName,jdbcType=NVARCHAR},
+      cityLeaderCode = #{cityLeaderCode,jdbcType=VARCHAR},
+      cityLeaderName = #{cityLeaderName,jdbcType=NVARCHAR},
+      delFlag = #{delFlag,jdbcType=BIT},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      accountProject = #{accountProject,jdbcType=NVARCHAR},
+      accountProjectNo = #{accountProjectNo,jdbcType=NVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

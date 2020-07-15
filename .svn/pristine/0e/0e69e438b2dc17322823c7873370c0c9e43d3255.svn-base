@@ -1,0 +1,319 @@
+package cn.com.eju.pmls.skStatement.service;
+
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.dto.scene.commission.CommissionResultDto;
+import cn.com.eju.deal.scene.commission.dao.LnkYjNyMapper;
+import cn.com.eju.deal.scene.commission.dao.LnkYjYjssMapper;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateDtlMapper;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateLogMapper;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkAllocateMatMapper;
+import cn.com.eju.pmls.skStatement.dao.PmlsSkStatementDtlMapper;
+import cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateDtlDto;
+import cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateLogDto;
+import cn.com.eju.pmls.skStatement.dto.PmlsSkAllocateMatDto;
+import cn.com.eju.pmls.skStatement.model.PmlsSkAllocateDtl;
+import cn.com.eju.pmls.skStatement.model.PmlsSkAllocateLog;
+import cn.com.eju.pmls.skStatement.model.PmlsSkAllocateMat;
+import cn.com.eju.pmls.skStatement.model.PmlsSkStatementDtl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("skAllocateService")
+public class SkAllocateService {
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Autowired
+    PmlsSkStatementDtlMapper pmlsSkStatementDtlMapper;
+
+    @Autowired
+    PmlsSkAllocateMatMapper pmlsSkAllocateMatMapper;
+
+    @Autowired
+    PmlsSkAllocateDtlMapper pmlsSkAllocateDtlMapper;
+
+    @Autowired
+    PmlsSkAllocateLogMapper pmlsSkAllocateLogMapper;
+
+    @Autowired
+    LnkYjYjssMapper lnkYjYjssMapper;
+
+    @Autowired
+    LnkYjNyMapper lnkYjNyMapper;
+
+
+    /**
+     * 按成销日期优先
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData<List<PmlsSkAllocateDtlDto>> getAllocateListForDeal(Map<String, Object> queryParam) {
+        ResultData<List<PmlsSkAllocateDtlDto>> resultData = new ResultData<>();
+        List<PmlsSkAllocateDtlDto> dtlList = pmlsSkAllocateDtlMapper.getAllocateListForDeal(queryParam);
+        resultData.setReturnData(dtlList);
+        return resultData;
+    }
+
+    /**
+     * 按房源定义
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData<List<PmlsSkAllocateDtlDto>> getAllocateListForBuilding(Map<String, Object> queryParam) {
+        ResultData<List<PmlsSkAllocateDtlDto>> resultData = new ResultData<>();
+        List<PmlsSkAllocateDtlDto> dtlList = pmlsSkAllocateDtlMapper.getAllocateListForBuilding(queryParam);
+        resultData.setReturnData(dtlList);
+        return resultData;
+    }
+
+    /**
+     * 提交拆分
+     *
+     * @param queryParam
+     * @return
+     */
+    public ResultData<String> submitAllocate(Map<String, Object> queryParam) {
+        ResultData resultData = new ResultData();
+        String srId = (String) queryParam.get("srId");
+        String cityNo = (String) queryParam.get("cityNo");
+        String allocatAmountBefStr = (String) queryParam.get("allocatAmountBef");//本次拆分金额合计税前
+        String allocatAmountAftStr = (String) queryParam.get("allocatAmountAft");//本次拆分金额合计税后
+        String allocateType = (String) queryParam.get("allocateType");//拆分方式
+        String userId = (String) queryParam.get("userId");
+        if ("0".equals(allocateType)) {//按成销日期优先
+            List<PmlsSkAllocateDtlDto> dtlList = pmlsSkAllocateDtlMapper.getAllocateListForDeal(queryParam);
+
+        } else if ("1".equals(allocateType)) {//按房源自定义
+
+        }
+        PmlsSkStatementDtl dtl = pmlsSkStatementDtlMapper.selectByPrimaryKey(Integer.valueOf(srId));
+        List<Map<String, Object>> allocateDtlList = (List<Map<String, Object>>) queryParam.get("submitObj");
+        if (!CollectionUtils.isEmpty(allocateDtlList)) {
+            //todo check
+
+            PmlsSkAllocateMat mat = new PmlsSkAllocateMat();
+            mat.setSkSerialNo(dtl.getSkSerialNo());
+            mat.setAmount_bef(BigDecimal.valueOf(Double.valueOf(allocatAmountBefStr)));
+            mat.setAmount_aft(BigDecimal.valueOf(Double.valueOf(allocatAmountAftStr)));
+            mat.setSerialNo("");//todo PMLS_SkAllocate_mat的SerialNo编号
+            mat.setUserIdCreate(Integer.valueOf(userId));
+            pmlsSkAllocateMatMapper.insert(mat);
+            for (Map<String, Object> allocateDtl : allocateDtlList) {
+
+            }
+        }
+        return resultData;
+    }
+
+
+    public ResultData<List<PmlsSkAllocateMatDto>> recordList(Map<String, Object> queryParam) throws Exception {
+        ResultData<List<PmlsSkAllocateMatDto>> resultData = new ResultData<List<PmlsSkAllocateMatDto>>();
+        List<PmlsSkAllocateMatDto> skAllocateList = pmlsSkAllocateMatMapper.getSkAllocateListBySkSerialNo(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(skAllocateList);
+        return resultData;
+    }
+
+    public ResultData<List<PmlsSkAllocateLogDto>> logList(Map<String, Object> queryParam) throws Exception {
+        ResultData<List<PmlsSkAllocateLogDto>> resultData = new ResultData<List<PmlsSkAllocateLogDto>>();
+        List<PmlsSkAllocateLogDto> skAllocateLogList = pmlsSkAllocateLogMapper.getSkAllocateLogList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(skAllocateLogList);
+        return resultData;
+    }
+
+
+    public ResultData<String> cancelAll(Map<String, Object> queryParam) {
+
+        ResultData<String> resultData = new ResultData<String>();
+
+        String userId = queryParam.get("userId").toString();
+        // 拆分ID
+        Integer matId = Integer.parseInt(queryParam.get("id").toString());
+        // 拆分明细
+        List<PmlsSkAllocateDtl> dtlList = pmlsSkAllocateDtlMapper.getByParentId(matId);
+        // 拆分记录
+        PmlsSkAllocateMat mat = pmlsSkAllocateMatMapper.selectByPrimaryKey(matId);
+        // 收款单
+        PmlsSkStatementDtl skInfo = pmlsSkStatementDtlMapper.getBySkSerialNo(mat.getSkSerialNo());
+
+        // 撤销拆分明细报备单
+        pmlsSkAllocateDtlMapper.deleteByParentId(matId);
+        // 撤销拆分记录
+        pmlsSkAllocateMatMapper.deleteById(matId);
+        // 撤销收款单
+        cancelSkStatement(skInfo, mat.getAmount_bef(), mat.getAmount_aft());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String recordDate = sdf.format(mat.getRecordDate());
+        // 合并同步
+        for (PmlsSkAllocateDtl dtl : dtlList) {
+            mergeUpdate(dtl,userId ,recordDate);
+        }
+
+        // 添加日志
+        PmlsSkAllocateLog log = new PmlsSkAllocateLog();
+
+        log.setSkSerialNo(mat.getSkSerialNo());
+        log.setLogMsg(mat.getSerialNo() + "]已撤销,金额：" + mat.getAmount_bef().setScale(2).toString() + "元。");
+        log.setDelFlag(false);
+        log.setDateCreate(new Date());
+        log.setUserIdCreate(Integer.parseInt(userId));
+        log.setDateUpdate(new Date());
+        log.setUserIdUpdate(Integer.parseInt(userId));
+        pmlsSkAllocateLogMapper.insert(log);
+
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("tabName", "LNK_YJ_YJSR");
+        lnkYjNyMapper.syncLnkImport(map);
+
+        return resultData;
+    }
+
+    public ResultData<String> cancelDtl(Map<String, Object> queryParam) {
+
+        String userId = queryParam.get("userId").toString();
+
+
+        ResultData<String> resultData = new ResultData<String>();
+        // 拆分明细ID
+        Integer dtlId = Integer.parseInt(queryParam.get("id").toString());
+        // 拆分明细记录
+        PmlsSkAllocateDtl dtl = pmlsSkAllocateDtlMapper.selectByPrimaryKey(dtlId);
+        // 拆分记录
+        PmlsSkAllocateMat mat = pmlsSkAllocateMatMapper.selectByPrimaryKey(dtl.getParentId());
+        // 收款单
+        PmlsSkStatementDtl skInfo = pmlsSkStatementDtlMapper.getBySkSerialNo(mat.getSkSerialNo());
+
+        // 撤销拆分明细报备单
+        pmlsSkAllocateDtlMapper.deleteById(dtlId);
+
+        // 添加日志
+        PmlsSkAllocateLog log = new PmlsSkAllocateLog();
+
+        log.setSkSerialNo(mat.getSkSerialNo());
+        log.setLogMsg(mat.getSerialNo() + "中订单[" + dtl.getReportId() + "]已撤销,金额：" + dtl.getAllocatAmount_bef().setScale(2).toString() + "元。");
+        log.setDelFlag(false);
+        log.setDateCreate(new Date());
+        log.setUserIdCreate(Integer.parseInt(userId));
+        log.setDateUpdate(new Date());
+        log.setUserIdUpdate(Integer.parseInt(userId));
+        pmlsSkAllocateLogMapper.insert(log);
+
+
+        // 撤销拆分记录上的已拆金额
+        cancelSkMat(mat, dtl.getAllocatAmount_bef(), dtl.getAllocatAmount_aft(),userId);
+        // 撤销收款单上的已拆金额
+        cancelSkStatement(skInfo, dtl.getAllocatAmount_bef(), dtl.getAllocatAmount_aft());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String recordDate = sdf.format(mat.getRecordDate());
+        // 合并同步
+        mergeUpdate(dtl, userId,recordDate);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("tabName", "LNK_YJ_YJSR");
+        lnkYjNyMapper.syncLnkImport(map);
+
+
+
+
+        return resultData;
+    }
+
+    /**
+     * 撤销拆分记录
+     */
+    private void cancelSkMat(PmlsSkAllocateMat mat, BigDecimal bef, BigDecimal aft , String userId) {
+
+        BigDecimal amountBef = mat.getAmount_bef().subtract(bef);
+        BigDecimal amountAft = mat.getAmount_aft().subtract(aft);
+
+        PmlsSkAllocateMat matRecord = new PmlsSkAllocateMat();
+        matRecord.setId(mat.getId());
+        matRecord.setAmount_bef(amountBef);
+        matRecord.setAmount_bef(amountAft);
+        pmlsSkAllocateMatMapper.updateByPrimaryKeySelective(matRecord);
+
+        // 如果 拆分明细中全部撤销了，那么拆分记录就删除
+        Integer matId = mat.getId();
+        List<PmlsSkAllocateDtl> dtlList = pmlsSkAllocateDtlMapper.getByParentId(matId);
+        if (dtlList.size() == 0) {
+            pmlsSkAllocateMatMapper.deleteById(matId);
+            // 添加日志
+            PmlsSkAllocateLog log = new PmlsSkAllocateLog();
+
+            log.setSkSerialNo(mat.getSkSerialNo());
+            log.setLogMsg(mat.getSerialNo() + "已撤销！");
+            log.setDelFlag(false);
+            log.setDateCreate(new Date());
+            log.setUserIdCreate(Integer.parseInt(userId));
+            log.setDateUpdate(new Date());
+            log.setUserIdUpdate(Integer.parseInt(userId));
+            pmlsSkAllocateLogMapper.insert(log);
+        }
+
+    }
+
+    /**
+     * 撤销收款单
+     */
+    private void cancelSkStatement(PmlsSkStatementDtl skInfo, BigDecimal bef, BigDecimal aft) {
+        // 收款单（已拆分金额）
+        BigDecimal amountBef = skInfo.getAllocatedAmount_bef().subtract(bef);
+        BigDecimal amountAft = skInfo.getAllocatedAmount_aft().subtract(aft);
+
+        PmlsSkStatementDtl skRecord = new PmlsSkStatementDtl();
+        skRecord.setId(skInfo.getId());
+        skRecord.setAllocatedAmount_bef(amountBef);
+        skRecord.setAllocatedAmount_aft(amountAft);
+        if (amountBef.doubleValue() == 0) {
+            skRecord.setAllocatedFlag(0);
+        } else if (amountBef.doubleValue() == skInfo.getSkAmount_bef().doubleValue()) {
+            skRecord.setAllocatedFlag(-1);
+        } else {
+            skRecord.setAllocatedFlag(1);
+        }
+        pmlsSkStatementDtlMapper.updateByPrimaryKeySelective(skRecord);
+
+    }
+
+    private void mergeUpdate(PmlsSkAllocateDtl dtl, String userId,String recordDate) {
+
+        CommissionResultDto dto = new CommissionResultDto();
+
+        BigDecimal amountBef = dtl.getAllocatAmount_bef().multiply(new BigDecimal(-1));
+        BigDecimal amountAft = dtl.getAllocatAmount_aft().multiply(new BigDecimal(-1));
+
+        dto.setReportId(dtl.getReportId());
+        dto.setBefTaxAmount(amountBef.toString());
+        dto.setBefTaxAmount(amountAft.toString());
+        dto.setRecordDate(recordDate);
+        dto.setCompanyNo(dtl.getCompanyNo());
+        dto.setDetailId(dtl.getRptDtlId().toString());
+        dto.setNum(1);
+        dto.setCrtEmpId(userId);
+        dto.setUptEmpId(userId);
+
+        lnkYjYjssMapper.mergeUpdate(dto);
+    }
+
+    public ResultData<List<PmlsSkAllocateDtlDto>> querySkAllocateDtlList(Map<String, Object> queryParam) {
+        ResultData<List<PmlsSkAllocateDtlDto>> resultData = new ResultData<>();
+        List<PmlsSkAllocateDtlDto> dtlList = pmlsSkAllocateDtlMapper.querySkAllocateDtlList(queryParam);
+        resultData.setReturnData(dtlList);
+        return resultData;
+    }
+}

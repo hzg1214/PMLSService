@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.gpContract.dao.OaGpContractReturnMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.gpContract.model.OaGpContractReturn">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="gpContractNo" property="gpContractNo" jdbcType="NVARCHAR" />
+		<result column="flowId" property="flowId" jdbcType="NVARCHAR" />
+		<result column="contractStatus" property="contractStatus" jdbcType="INTEGER" />
+		<result column="OAPerformDate" property="OAPerformDate" jdbcType="TIMESTAMP" />
+		<result column="hasDeal" property="hasDeal" jdbcType="INTEGER" />
+		<result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, gpContractNo, flowId, contractStatus, OAPerformDate, hasDeal, dateUpdate, dateCreate
+	</sql>
+
+	<!-- 查找未处理的OA审批信息 -->
+	<select id="getOAGpContractReturn" resultMap="BaseResultMap" >
+		SELECT  * 
+		FROM   OaGpContractReturn
+   	    WHERE  hasDeal = 0 
+	</select>
+	<!-- 查找未处理的OA审批信息 -->
+	<select id="getOAGpContractChangeReturn" resultType="cn.com.eju.deal.gpContractChange.model.OaGpContractChangeReturn" >
+		SELECT  * 
+		FROM   OaGpContractStopReturn
+   	    WHERE  hasDeal = 0 
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updateOAGpContractReturn" parameterType="cn.com.eju.deal.gpContract.model.OaGpContractReturn">
+		UPDATE OaGpContractReturn
+		<set>
+			<if test="hasDeal != null">
+				hasDeal = #{hasDeal,jdbcType=INTEGER},
+			</if>
+			<if test="dateUpdate != null">
+				dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where 
+			FlowId = #{flowId,jdbcType=NVARCHAR} and
+		gpContractNo = #{gpContractNo,jdbcType=NVARCHAR}
+	</update>
+	<!-- 更新 -->
+	<update id="updateOAContractChangeReturn" parameterType="cn.com.eju.deal.gpContractChange.model.OaGpContractChangeReturn">
+		UPDATE OaGpContractStopReturn
+		<set>
+			<if test="hasDeal != null">
+				hasDeal = #{hasDeal,jdbcType=INTEGER},
+			</if>
+			<if test="dateUpdate != null">
+				dateUpdate = #{dateUpdate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where 
+			flowId = #{flowId,jdbcType=NVARCHAR} and
+		gpContractStopNo = #{gpContractStopNo,jdbcType=NVARCHAR}
+	</update>
+</mapper>

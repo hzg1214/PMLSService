@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.pmls.cooperation.dao.CooperationMapper">
+
+    <!--合作确认函 列表-->
+    <select id="getCooperationList"  parameterType="Map" resultType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+        SELECT
+        CONVERT(varchar(50), t1.dateCreate, 23) dateCreate,
+        t1.*,t2.userName userNameCreate,t3.dicValue approveStateName,
+        t4.dicValue validStatusNm,t6.dicValue signTypeNm
+        FROM PMLS_Cooperation t1
+        INNER JOIN USR_User t2 ON t1.userIdCreate = t2.userId
+        left join BAS_DictionaryValue t3 on t1.approveState = t3.dicCode
+        left join BAS_DictionaryValue t4 on t1.validStatus = t4.dicCode
+        left join USR_User t5 on t1.userIdCreate = t5.userId
+        left join BAS_DictionaryValue t6 on t1.signType = t6.dicCode
+        WHERE t1.delFlag=0
+            <if test="cityNo!=null and cityNo!=''">
+                AND t1.cityNo = #{cityNo}
+            </if>
+            <if test="contractNo!=null and contractNo!=''">
+              and t1.contractNo like '%'+#{contractNo}+'%'
+            </if>
+             <if test="oaNo!=null and oaNo!=''">
+              and t1.oaNo like '%'+#{oaNo}+'%'
+             </if>
+            <if test="contractName != null and contractName != ''">
+	            AND t1.contractName like '%'+#{contractName}+'%'
+	        </if>
+            <if test="htType != null and htType != ''">
+	            AND t1.htType = #{htType}
+	        </if>
+            <if test="createDateMin != null and createDateMin != ''">
+              <![CDATA[
+                AND Convert(varchar(10),t1.dateCreate,120) >= #{createDateMin}
+              ]]>
+            </if>
+            <if test="createDateMax != null and createDateMax != ''">
+              <![CDATA[
+                AND Convert(varchar(10),t1.dateCreate,120) <= #{createDateMax}
+              ]]>
+            </if>
+            <if test="projectNo!=null and projectNo!=''">
+                AND t1.projectNo = #{projectNo}
+            </if>
+            <if test="companyNo!=null and companyNo!=''">
+                and t1.companyNo =#{companyNo}
+            </if>
+            <if test="companyName!=null and companyName!=''">
+              and t1.companyName like '%'+#{companyName}+'%'
+            </if>
+            <if test="projectName!=null and projectName!=''">
+                and (t1.projectName like '%'+#{projectName}+'%')
+            </if>
+            <if test="companyKey!=null and companyKey!=''">
+                and (t1.companyNo like '%'+#{companyKey}+'%' OR t1.companyName like '%'+#{companyKey}+'%')
+            </if>
+            <if test="contractKey!=null and contractKey!=''">
+                and (t1.contractNo like '%'+#{contractKey}+'%' OR t1.contractName like '%'+#{contractKey}+'%')
+<!--                 and ( t1.contractNo LIKE CONCAT('%', #{contractKey},'%') OR t1.contractName LIKE CONCAT('%', #{contractKey},'%')) -->
+            </if>
+            <if test="approveState!=null and approveState!=''">
+              AND t1.approveState = #{approveState}
+            </if>
+            <if test="createUserName!=null and createUserName!=''">
+              AND (t5.userCode like '%'+#{createUserName}+'%' OR t2.userName like '%'+#{createUserName}+'%')
+            </if>
+        order by t1.dateCreate desc
+    </select>
+
+    <!--新增合作确认函-->
+    <insert id="addCooperation" parameterType="cn.com.eju.pmls.cooperation.model.CooperationDto" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO PMLS_Cooperation (
+            cityNo,
+            contractNo,
+            contractName,
+            htedition,
+            projectNo,
+            projectName,
+            companyNo,
+            companyName,
+            htOaNo,
+            contractType,
+            hsCode,
+            hsName,
+            khCode,
+            khName,
+            htDateStart,
+            htDateEnd,
+            incomeSubject,
+            commissionMemo,
+            commissionMemoRemark,
+            rtnCommission,
+            rtnCommissionMemo,
+            htoapassDate,
+            wsqyzt,
+            developersCode,
+            developersName,
+            dateLifeStart,
+            dateLifeEnd,
+            commissionAmount,
+            commissionRatio,
+            fyjstj,
+            fyjsbz,
+            remark,
+            approveState,
+            validStatus,
+            delFlag,
+            userIdCreate,
+            dateCreate
+        ) VALUES(
+            #{cityNo},
+            #{contractNo},
+            #{contractName},
+            #{htedition},
+            #{projectNo},
+            #{projectName},
+            #{companyNo},
+            #{companyName},
+            #{htOaNo},
+            #{contractType},
+            #{hsCode},
+            #{hsName},
+            #{khCode},
+            #{khName},
+            #{htDateStart},
+            #{htDateEnd},
+            #{incomeSubject},
+            #{commissionMemo},
+            #{commissionMemoRemark},
+            #{rtnCommission},
+            #{rtnCommissionMemo},
+            #{htoapassDate},
+            #{wsqyzt},
+            #{developersCode},
+            #{developersName},
+            #{dateLifeStart},
+            #{dateLifeEnd},
+            #{commissionAmount},
+            #{commissionRatio},
+            #{fyjstj},
+            #{fyjsbz},
+            #{remark},
+            10401,
+            18401,
+            0,
+            #{userIdCreate},
+            getdate()
+        )
+    </insert>
+
+    <!--修改合作确认函-->
+    <update id="updateCooperation"  parameterType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+        update PMLS_Cooperation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectNo!=null and projectNo!=''">
+                projectNo=#{projectNo},
+            </if>
+            <if test="projectName!=null and projectName!=''">
+                projectName=#{projectName},
+            </if>
+            <if test="companyNo!=null and companyNo!=''">
+                companyNo=#{companyNo},
+            </if>
+            <if test="contractName!=null and contractName!=''">
+                contractName=#{contractName},
+            </if>
+            <if test="htedition!=null and htedition!=''">
+                htedition=#{htedition},
+            </if>
+            <if test="companyName!=null and companyName!=''">
+                companyName=#{companyName},
+            </if>
+            <if test="htOaNo!=null and htOaNo!=''">
+                htOaNo=#{htOaNo},
+            </if>
+            <if test="contractType!=null and contractType!=''">
+                contractType=#{contractType},
+            </if>
+            <if test="hsCode!=null and hsCode!=''">
+                hsCode=#{hsCode},
+            </if>
+            <if test="hsName!=null and hsName!=''">
+                hsName=#{hsName},
+            </if>
+            khCode=#{khCode},
+            khName=#{khName},
+            commissionAmount=#{commissionAmount},
+            commissionRatio=#{commissionRatio},
+            <if test="htDateStart!=null and htDateStart!=''">
+                htDateStart=#{htDateStart},
+            </if>
+            <if test="htDateEnd!=null and htDateEnd!=''">
+                htDateEnd=#{htDateEnd},
+            </if>
+            <if test="incomeSubject!=null and incomeSubject!=''">
+                incomeSubject=#{incomeSubject},
+            </if>
+            <if test="commissionMemo!=null and commissionMemo!=''">
+                commissionMemo=#{commissionMemo},
+            </if>
+            <if test="commissionMemoRemark!=null and commissionMemoRemark!=''">
+                commissionMemoRemark=#{commissionMemoRemark},
+            </if>
+            <if test="rtnCommission!=null and rtnCommission!=''">
+                rtnCommission=#{rtnCommission},
+            </if>
+            <if test="rtnCommissionMemo!=null and rtnCommissionMemo!=''">
+                rtnCommissionMemo=#{rtnCommissionMemo},
+            </if>
+            <if test="htoapassDate!=null and htoapassDate!=''">
+                htoapassDate=#{htoapassDate},
+            </if>
+            <if test="wsqyzt!=null and wsqyzt!=''">
+                wsqyzt=#{wsqyzt},
+            </if>
+            <if test="developersCode!=null and developersCode!=''">
+                developersCode=#{developersCode},
+            </if>
+            <if test="developersName!=null and developersName!=''">
+                developersName=#{developersName},
+            </if>
+            <if test="dateLifeStart!=null and dateLifeStart!=''">
+                dateLifeStart=#{dateLifeStart},
+            </if>
+            <if test="dateLifeEnd!=null and dateLifeEnd!=''">
+                dateLifeEnd=#{dateLifeEnd},
+            </if>
+            <if test="fyjstj!=null and fyjstj!=''">
+                fyjstj=#{fyjstj},
+            </if>
+            <if test="fyjsbz!=null and fyjsbz!=''">
+                fyjsbz=#{fyjsbz},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="approveState!=null and approveState!=''">
+                approveState=#{approveState},
+            </if>
+            userIdUpt=#{userIdUpt},
+            dateUpt=getdate()
+        </trim>
+        where id=#{id}
+    </update>
+
+    <!--合作确认函 详情-->
+    <select id="getCooperationInfo"  parameterType="Map" resultType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+        SELECT t1.*,t3.dicValue approveStateName,t4.businessLicenseNo,t6.dicValue signTypeNm,u.userName as userCreateName
+        FROM PMLS_Cooperation t1
+        left join BAS_DictionaryValue t3 on t1.approveState = t3.dicCode
+        left join Company t4 on t1.companyNo = t4.companyNo
+        left join BAS_DictionaryValue t6 on t1.signType = t6.dicCode
+        left JOIN dbo.USR_User u ON t1.userIdCreate=u.userId AND u.delFlag='N'
+        WHERE t1.delFlag=0 and t1.id=#{id}
+    </select>
+
+
+    <!--获取经纪公司列表-->
+    <select id="getCompanyList"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        SELECT t1.Id ,
+        t1.CompanyNo ,
+        t1.CompanyName ,
+        t1.businessLicenseNo,
+        t2.CityName+t3.DistrictName+Address AS address,
+        CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate ,
+        u.userName as userCreateName
+        FROM Company t1
+        INNER JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo AND t2.FlagDeleted=0
+        INNER JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo AND t3.FlagDeleted=0
+        INNER JOIN dbo.USR_User u ON t1.userCreate=u.userId AND u.delFlag='N'
+        WHERE t1.IsDelete=0
+        AND t1.brandType = '29401'
+        <if test="companyNo!=null and companyNo!=''">
+            and t1.companyNo like '%'+#{companyNo}+'%'
+        </if>
+        <if test="companyName!=null and companyName!=''">
+            and t1.companyName like '%'+#{companyName}+'%'
+        </if>
+        <if test="acCityNo!=null and acCityNo!=''">
+            and (t1.acCityNo=#{acCityNo} or t1.id in(SELECT CompanyId FROM dbo.Company_Release_City WHERE IsDelete=0 and ReleaseCityNo=#{acCityNo}))
+        </if>
+        order by t1.dateCreate desc
+    </select>
+
+    <!--获取经纪公司详情-->
+    <select id="getCompanyInfo"  parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        SELECT t1.*,
+        t2.CityName+t3.DistrictName+Address AS address,
+        CONVERT(VARCHAR(10),t1.dateCreate,120) dateCreate ,
+        u.userName as userCreateName
+        FROM Company t1
+        INNER JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo AND t2.FlagDeleted=0
+        INNER JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo AND t3.FlagDeleted=0
+        INNER JOIN dbo.USR_User u ON t1.userCreate=u.userId AND u.delFlag='N'
+        WHERE t1.IsDelete=0
+        <if test="id!=null and id!=0">
+            and t1.id=#{id}
+        </if>
+        <if test="companyNo!=null and companyNo!=''">
+            and t1.companyNo=#{companyNo}
+        </if>
+    </select>
+
+    <!--根据公司信息 获取框架协议（生效）-->
+    <select id="getCompanyFrameContractInfo" parameterType="Map" resultType="cn.com.eju.deal.frameContract.model.FrameContract">
+        SELECT * FROM LNK_FrameContract
+        WHERE companyNo = #{companyNo} AND approveState='10403'
+    </select>
+
+    <!--根据营业执照号 获取OA供应商信息-->
+    <select id="getCompanyVendorInfo" parameterType="Map" resultType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        SELECT DISTINCT vendor_id,vendor_number,vendor_name,PERMIT_CODE businessLicenseNo
+        FROM V_OA_EJU_SUPPLIERS
+        WHERE PERMIT_CODE=#{businessLicenseNo}
+          <if test="vendor_name!=null and vendor_name!=''">
+                and vendor_name = #{vendor_name}
+          </if>
+    </select>
+
+    <!--修改合作确认函-->
+    <update id="updateCompanyVendor"  parameterType="cn.com.eju.pmls.channelBusiness.model.BusinessManagerDto">
+        update Company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vendor_id!=null and vendor_id!=''">
+                vendor_id=#{vendor_id},
+            </if>
+            <if test="vendor_number!=null and vendor_number!=''">
+                vendor_number=#{vendor_number},
+            </if>
+            <if test="vendor_name!=null and vendor_name!=''">
+                vendor_name=#{vendor_name},
+            </if>
+            UserUpdate=#{userUpdate},
+            DateUpdate=getdate()
+        </trim>
+        where companyNo=#{companyNo}
+    </update>
+
+    <select id="getCooperationNew" parameterType="Map" resultType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+        SELECT TOP 1
+                *
+        FROM    PMLS_Cooperation
+        WHERE   projectNo = #{projectNo}
+                AND companyNo = #{companyNo}
+                AND approveState = 10403
+                AND delFlag = 0
+        ORDER BY id DESC;
+    </select>
+
+    <!--发起OA申请 合作协议-->
+    <update id="updateSendOACooperation"  parameterType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+        update PMLS_Cooperation
+        <trim prefix="SET" suffixOverrides=",">
+            approveState='10402',
+            validStatus='18401',
+            <if test="oaNo!=null and oaNo!=''">
+                oaNo=#{oaNo},
+            </if>
+            formState='0',
+            flowId = NULL,
+            errmsg = null,
+            sendUserId = #{sendUserId},
+            sendUserName = #{sendUserName},
+            userIdUpt=#{userIdUpt},
+            dateUpt=getdate()
+        </trim>
+        where id=#{id}
+    </update>
+
+    <select id="queryEstateHtRecord" parameterType="Map" resultType="cn.com.eju.deal.houseLinkage.estate.model.EstateContractDto">
+        SELECT t.*,limit.htDateStart as htDateStartLimit,
+        limit.htDateEnd as htDateEndLimit FROM (
+            SELECT t1.projectNo,t1.htOaNo,t1.htDateStart,t1.htDateEnd,t1.incomeSubject
+            ,t1.commissionMemo,t1.commissionMemoRemark,t1.rtnCommission,t1.rtnCommissionMemo
+            ,t1.oaCreateDate,t1.oapassDate,t1.fileId,t1.hsCode,t1.hsName,t1.dateCreate,'进场确认函' contractType
+            ,t1.wsqyzt,t1.developersCode,t1.developersName,isnull(t2.khCode,'') khCode,isnull(t2.khName,'') khName
+            FROM LNK_Estate_JCQRH t1
+            LEFT JOIN LNK_Estate t2 on t1.projectNo = t2.projectNo AND t2.DelFlg =0
+            LEFT JOIN LNK_Estate_Srlht t3 ON t1.projectNo = t3.projectNo
+            WHERE t1.delFlag=0 AND t1.projectNo = #{projectNo} and t3.id is null
+            UNION
+            SELECT t1.projectNo,t1.htOaNo,t1.htDateStart,t1.htDateEnd,t1.incomeSubject
+                ,t1.commissionMemo,t1.commissionMemoRemark,t1.rtnCommission,t1.rtnCommissionMemo
+                ,t1.oaCreateDate,t1.oapassDate,t1.fileId,t1.hsCode,t1.hsName,t1.dateCreate,'进场确认函' contractType
+                ,t1.wsqyzt,t1.developersCode,t1.developersName,isnull(t2.khCode,'') khCode,isnull(t2.khName,'') khName
+            FROM LNK_Estate_JCQRH t1
+            LEFT JOIN LNK_Estate t2 on t1.projectNo = t2.projectNo AND t2.DelFlg =0
+            INNER JOIN LNK_Estate_Srlht t3 ON t1.projectNo = t3.projectNo
+                        AND (t1.htDateStart != t3.htDateStart or t1.htDateEnd != t3.htDateEnd)
+            WHERE t1.delFlag=0 AND t1.projectNo = #{projectNo}
+            UNION ALL
+            SELECT projectNo,srlhtOaNo,htDateStart,htDateEnd,incomeSubject
+                ,commissionMemo,commissionMemoRemark,rtnCommission,rtnCommissionMemo
+                ,oaCreateDate,oapassDate,fileId,hsCode,hsName,dateCreate,'收入合同' contractType
+                ,wsqyzt,developersCode,developersName,khCode,khName
+            FROM LNK_Estate_Srlht WHERE delFlag=0 AND projectNo = #{projectNo}
+        ) t LEFT JOIN V_PMLS_SRHT_JCQRH_MAXZQ limit ON limit.projectNo = t.projectNo AND limit.oaNo = t.htOaNo
+        where 1=1
+          AND t.htDateStart IS NOT NULL
+		  AND t.htDateEnd IS NOT NULL
+        <if test="htOaNo!=null and htOaNo!=''">
+            and htOaNo like '%'+#{htOaNo}+'%'
+        </if>
+        <if test="contractType!=null and contractType!=''">
+            and contractType = #{contractType}
+        </if>
+        order by dateCreate desc
+    </select>
+
+	<select id="queryEstateHtRecord_ByPrd" parameterType="Map"  statementType="CALLABLE" resultType="cn.com.eju.deal.houseLinkage.estate.model.EstateContractDto">
+        EXEC P_PMLS_queryEstateHtRecord #{projectNo} ,#{htOaNo},#{contractType},#{offset},#{rows},#{total,jdbcType=INTEGER,mode=OUT}
+    </select>
+
+	
+
+    <update id="updateById" parameterType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+    update PMLS_Cooperation
+    <set>
+        projectAddr = #{projectAddr,jdbcType=NVARCHAR},
+        cooperationRange = #{cooperationRange,jdbcType=NVARCHAR},
+        succeedSell = #{succeedSell,jdbcType=NVARCHAR},
+        settlePayNum = #{settlePayNum,jdbcType=INTEGER},
+        violateAmount = #{violateAmount,jdbcType=DECIMAL},
+        signType = #{signType,jdbcType=VARCHAR},
+        companyEleUser = #{companyEleUser,jdbcType=VARCHAR},
+        companyEleTel = #{companyEleTel,jdbcType=VARCHAR},
+        htCategory    = #{htCategory,jdbcType=VARCHAR},
+        htType        = #{htType,jdbcType=VARCHAR},
+        dybl          = #{dybl,jdbcType=DECIMAL},
+        contractNameType = #{contractNameType,jdbcType=NVARCHAR},
+        contractNameDesc = #{contractNameDesc,jdbcType=NVARCHAR},
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <select id="getCooperationInfoEvisa"  parameterType="Map" resultType="cn.com.eju.pmls.cooperation.model.CooperationDto">
+        SELECT t1.*
+        FROM V_PMLS_OA_Cooperation_EleUser t1
+        WHERE t1.id=#{id}
+    </select>
+
+</mapper>

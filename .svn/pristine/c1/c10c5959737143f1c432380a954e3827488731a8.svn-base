@@ -1,0 +1,179 @@
+package cn.com.eju.deal.dto.houseLinkage.linkConversionRate;
+
+import java.io.Serializable;
+
+/**
+ * Created by haidan on 2019/8/28.
+ */
+public class LinkConversionRateDto implements Serializable{
+    private static final long serialVersionUID = 477597371720895651L;
+    /**
+     * 序号
+     */
+    private String rowNum;
+    /**
+     * 归属区域
+     */
+    private String gsRegion;
+    /**
+     * 归属城市
+     */
+    private String gsCity;
+    /**
+     * 归属中心
+     */
+    private String gsCenter;
+    /**
+     * 项目编号
+     */
+    private String projectNo;
+    /**
+     * 项目名称
+     */
+    private String estateName;
+    /**
+     * 当期结转大定
+     */
+    private String dqJzdd;
+    /**
+     * 当期新增大定
+     */
+    private String dqXzdd;
+    /**
+     * 当期累计大定
+     */
+    private String dqLjdd;
+    /**
+     * 当期新增成销
+     */
+    private String dqXzcx;
+    /**
+     * 当期结转成销转化率
+     */
+    private String dqJzcxRate;
+    /**
+     * 当期新增成销转化率
+     */
+    private String dqXzcxRate;
+    /**
+     * 当期整体成销转化率
+     */
+    private String dqZtcxRate;
+
+    /**
+     * 当期大定转成销周期
+     */
+    private String dqDdzcxzq;
+
+    public String getRowNum() {
+        return rowNum;
+    }
+
+    public void setRowNum(String rowNum) {
+        this.rowNum = rowNum;
+    }
+
+    public String getGsRegion() {
+        return gsRegion;
+    }
+
+    public void setGsRegion(String gsRegion) {
+        this.gsRegion = gsRegion;
+    }
+
+    public String getGsCity() {
+        return gsCity;
+    }
+
+    public void setGsCity(String gsCity) {
+        this.gsCity = gsCity;
+    }
+
+    public String getGsCenter() {
+        return gsCenter;
+    }
+
+    public void setGsCenter(String gsCenter) {
+        this.gsCenter = gsCenter;
+    }
+
+    public String getProjectNo() {
+        return projectNo;
+    }
+
+    public void setProjectNo(String projectNo) {
+        this.projectNo = projectNo;
+    }
+
+    public String getDqJzdd() {
+        return dqJzdd;
+    }
+
+    public void setDqJzdd(String dqJzdd) {
+        this.dqJzdd = dqJzdd;
+    }
+
+    public String getDqXzdd() {
+        return dqXzdd;
+    }
+
+    public void setDqXzdd(String dqXzdd) {
+        this.dqXzdd = dqXzdd;
+    }
+
+    public String getDqLjdd() {
+        return dqLjdd;
+    }
+
+    public void setDqLjdd(String dqLjdd) {
+        this.dqLjdd = dqLjdd;
+    }
+
+    public String getDqXzcx() {
+        return dqXzcx;
+    }
+
+    public void setDqXzcx(String dqXzcx) {
+        this.dqXzcx = dqXzcx;
+    }
+
+    public String getDqJzcxRate() {
+        return dqJzcxRate;
+    }
+
+    public void setDqJzcxRate(String dqJzcxRate) {
+        this.dqJzcxRate = dqJzcxRate;
+    }
+
+    public String getDqXzcxRate() {
+        return dqXzcxRate;
+    }
+
+    public void setDqXzcxRate(String dqXzcxRate) {
+        this.dqXzcxRate = dqXzcxRate;
+    }
+
+    public String getDqZtcxRate() {
+        return dqZtcxRate;
+    }
+
+    public void setDqZtcxRate(String dqZtcxRate) {
+        this.dqZtcxRate = dqZtcxRate;
+    }
+
+    public String getEstateName() {
+        return estateName;
+    }
+
+    public void setEstateName(String estateName) {
+        this.estateName = estateName;
+    }
+
+    public String getDqDdzcxzq() {
+        return dqDdzcxzq;
+    }
+
+    public void setDqDdzcxzq(String dqDdzcxzq) {
+        this.dqDdzcxzq = dqDdzcxzq;
+    }
+}

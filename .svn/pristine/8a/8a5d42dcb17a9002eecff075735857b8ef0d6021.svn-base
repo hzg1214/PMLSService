@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjSatisfactionEvaluationMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionEvaluation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="satisfactionId" jdbcType="INTEGER" property="satisfactionId" />
+    <result column="cpTitle" jdbcType="INTEGER" property="cpTitle" />
+    <result column="cpTitleStr" jdbcType="NVARCHAR" property="cpTitleStr" />
+    <result column="cpAnswer" jdbcType="VARCHAR" property="cpAnswer" />
+    <result column="cpAnswerStr" jdbcType="NVARCHAR" property="cpAnswerStr" />
+    <result column="cpScore" jdbcType="INTEGER" property="cpScore" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, satisfactionId, cpTitle, cpTitleStr, cpAnswer, cpAnswerStr, cpScore, userCreate, 
+    dateCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_Satisfaction_Evaluation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Wj_Satisfaction_Evaluation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionEvaluation">
+    insert into Kefu_Wj_Satisfaction_Evaluation (id, satisfactionId, cpTitle, 
+      cpTitleStr, cpAnswer, cpAnswerStr, 
+      cpScore, userCreate, dateCreate, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{satisfactionId,jdbcType=INTEGER}, #{cpTitle,jdbcType=INTEGER}, 
+      #{cpTitleStr,jdbcType=NVARCHAR}, #{cpAnswer,jdbcType=VARCHAR}, #{cpAnswerStr,jdbcType=NVARCHAR}, 
+      #{cpScore,jdbcType=INTEGER}, #{userCreate,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionEvaluation">
+    insert into Kefu_Wj_Satisfaction_Evaluation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="satisfactionId != null">
+        satisfactionId,
+      </if>
+      <if test="cpTitle != null">
+        cpTitle,
+      </if>
+      <if test="cpTitleStr != null">
+        cpTitleStr,
+      </if>
+      <if test="cpAnswer != null">
+        cpAnswer,
+      </if>
+      <if test="cpAnswerStr != null">
+        cpAnswerStr,
+      </if>
+      <if test="cpScore != null">
+        cpScore,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="satisfactionId != null">
+        #{satisfactionId,jdbcType=INTEGER},
+      </if>
+      <if test="cpTitle != null">
+        #{cpTitle,jdbcType=INTEGER},
+      </if>
+      <if test="cpTitleStr != null">
+        #{cpTitleStr,jdbcType=NVARCHAR},
+      </if>
+      <if test="cpAnswer != null">
+        #{cpAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="cpAnswerStr != null">
+        #{cpAnswerStr,jdbcType=NVARCHAR},
+      </if>
+      <if test="cpScore != null">
+        #{cpScore,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionEvaluation">
+    update Kefu_Wj_Satisfaction_Evaluation
+    <set>
+      <if test="satisfactionId != null">
+        satisfactionId = #{satisfactionId,jdbcType=INTEGER},
+      </if>
+      <if test="cpTitle != null">
+        cpTitle = #{cpTitle,jdbcType=INTEGER},
+      </if>
+      <if test="cpTitleStr != null">
+        cpTitleStr = #{cpTitleStr,jdbcType=NVARCHAR},
+      </if>
+      <if test="cpAnswer != null">
+        cpAnswer = #{cpAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="cpAnswerStr != null">
+        cpAnswerStr = #{cpAnswerStr,jdbcType=NVARCHAR},
+      </if>
+      <if test="cpScore != null">
+        cpScore = #{cpScore,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionEvaluation">
+    update Kefu_Wj_Satisfaction_Evaluation
+    set satisfactionId = #{satisfactionId,jdbcType=INTEGER},
+      cpTitle = #{cpTitle,jdbcType=INTEGER},
+      cpTitleStr = #{cpTitleStr,jdbcType=NVARCHAR},
+      cpAnswer = #{cpAnswer,jdbcType=VARCHAR},
+      cpAnswerStr = #{cpAnswerStr,jdbcType=NVARCHAR},
+      cpScore = #{cpScore,jdbcType=INTEGER},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getEvaluationList" resultType="Map" parameterType="Integer">
+    SELECT
+        e.*
+    FROM
+        Kefu_Wj_Satisfaction_Evaluation e
+        LEFT JOIN BAS_DictionaryValue v ON e.cpTitle = v.dicCode
+        AND v.delFlag = 'N'
+      where satisfactionId=#{id}
+    ORDER BY
+        v.dicSortNo
+  </select>
+
+  <insert id="batchCreate" parameterType="list">
+    INSERT INTO Kefu_Wj_Satisfaction_Evaluation
+    ( satisfactionId, cpTitle,
+    cpTitleStr, cpAnswer, cpAnswerStr,
+    cpScore, userCreate, dateCreate,
+    delFlag
+    )
+    VALUES
+    <foreach collection="list" item="obj" index="index" separator=",">
+      (#{obj.satisfactionId,jdbcType=INTEGER}, #{obj.cpTitle,jdbcType=INTEGER},
+      #{obj.cpTitleStr,jdbcType=NVARCHAR}, #{obj.cpAnswer,jdbcType=VARCHAR}, #{obj.cpAnswerStr,jdbcType=NVARCHAR},
+      #{obj.cpScore,jdbcType=INTEGER}, #{obj.userCreate,jdbcType=INTEGER}, getdate(),0)
+    </foreach>
+  </insert>
+
+</mapper>

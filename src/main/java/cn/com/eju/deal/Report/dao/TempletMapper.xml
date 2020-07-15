@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.Report.dao.TempletMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.Report.model.Templet" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+     <result column="templetId" property="templetId" jdbcType="VARCHAR" />
+    <result column="templetName" property="templetName" jdbcType="NVARCHAR" />
+    <result column="templetAddress" property="templetAddress" jdbcType="NVARCHAR" />
+    <result column="templetType" property="templetType" jdbcType="INTEGER" />
+	<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+	<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+	<result column="delFlag" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+
+  <insert id="insert" parameterType="cn.com.eju.deal.Report.model.Templet" keyProperty="id" useGeneratedKeys="true">
+  		insert into REP_Templet (templetId,templetName,templetAddress,templetType)
+		values (#{templetId,jdbcType=VARCHAR},#{templetName,jdbcType=NVARCHAR},#{templetAddress,jdbcType=NVARCHAR},#{templetType,jdbcType=INTEGER})
+  </insert>  
+	
+    <!-- 查询 -->
+	<select id="queryList" parameterType="Map" resultType="cn.com.eju.deal.Report.model.Templet">
+		SELECT  * FROM REP_Templet 
+
+		<where>
+                  delFlag = 'N'
+                  <if test="templetName != null and templetName !=''">
+  		  		<![CDATA[
+    				 AND templetName LIKE '%${templetName}%'
+    			]]>
+			</if>
+
+			ORDER BY dateCreate  DESC 
+		</where>
+		
+	</select>
+	
+	<select id="getByName" resultType="cn.com.eju.deal.Report.model.Templet" parameterType="java.lang.String">
+		select * FROM dbo.REP_Templet WHERE delFlag = 'N' and templetName =#{templetName} 
+	</select>
+	
+	<update id="update" parameterType="cn.com.eju.deal.Report.model.Templet">
+  		update dbo.REP_Templet
+  		<set>
+		    <if test="delFlag != null">
+		   	 delFlag=#{delFlag}
+		    </if>
+  		</set>
+  		where templetName = #{templetName}
+	</update>
+	
+		<update id="updateTemplet" parameterType="Map">
+  		update dbo.REP_Templet
+  		<set>
+		    <if test="newTempletName != null">
+		   	 templetName=#{newTempletName}
+		    </if>
+  		</set>
+  		where templetName = #{templetName} AND delFlag ='N'
+	</update>
+	
+</mapper>

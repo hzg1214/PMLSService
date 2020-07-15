@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.linkAchieveChange.dao.LinkAchieveChangeMapper">
+
+	<resultMap id="LinkAchieveChangeDtoMap" type="cn.com.eju.deal.dto.houseLinkage.linkAchieveChange.LinkAchieveChangeDto"></resultMap>
+
+    <select id="getLinkAchieveChangeList" resultMap="LinkAchieveChangeDtoMap" parameterType="Map">
+		SELECT  lp.id,
+				lp.EstateId,
+				lp.ReportId,
+				bc.cityNo,
+				bc.cityName,
+				le.realityCityNo,
+				bc1.cityName AS realityCityName,
+				lp.EstateNm,
+				lp.CompanyId,
+				lp.CompanyNm,
+				lp.contactId,
+				lp.contactNm,
+				lp.CustomerId,
+				lp.CustomerNm,
+				lp.LatestProgress,
+				lp.ConfirmStatus,
+				dv1.dicValue AS LatestProgressName,
+				dv2.dicValue AS ConfirmStatusName
+		FROM    dbo.LNK_Report lp
+				LEFT JOIN LNK_Estate le ON lp.EstateId = le.EstateId AND le.Delflg = 0
+				LEFT JOIN dbo.BAS_City bc ON lp.CityNo = bc.CityNo AND bc.FlagDeleted = 0
+				LEFT JOIN dbo.BAS_City bc1 ON le.realityCityNo = bc1.CityNo AND bc1.FlagDeleted = 0
+				LEFT JOIN dbo.BAS_DictionaryValue dv1 ON lp.LatestProgress = dv1.dicCode
+														 AND dv1.delFlag = 'N'
+				LEFT JOIN dbo.BAS_DictionaryValue dv2 ON lp.ConfirmStatus = dv2.dicCode
+														 AND dv2.delFlag = 'N'
+		WHERE lp.DelFlg = 0
+		AND lp.cityNo = #{cityNo} AND lp.ConfirmStatus &lt;&gt; '13602'
+		<if test="latestProgress != null and latestProgress != ''">
+			<!--查报备时，查询带看未认定的和报备有效的数据-->
+			<if test="latestProgress == '13501'.toString()">
+				AND (lp.LatestProgress = '13502' AND lp.ConfirmStatus = '13603')
+				OR (lp.LatestProgress = '13501' AND lp.ConfirmStatus = '13601')
+			</if>
+			<if test="latestProgress == '13502'.toString()">
+				AND (lp.LatestProgress = '13503' AND lp.ConfirmStatus = '13603')
+				OR (lp.LatestProgress = '13502' AND lp.ConfirmStatus = '13601')
+			</if>
+			<if test="latestProgress == '13503'.toString()">
+				AND (lp.LatestProgress = '13504' AND lp.ConfirmStatus = '13603')
+				OR (lp.LatestProgress = '13503' AND lp.ConfirmStatus = '13601')
+			</if>
+			<if test="latestProgress == '13504'.toString()">
+				AND (lp.LatestProgress = '13505' AND lp.ConfirmStatus = '13603')
+				OR (lp.LatestProgress = '13504' AND lp.ConfirmStatus = '13601')
+			</if>
+			<!--成销只有成销有效-->
+			<if test="latestProgress == '13505'.toString()">
+				AND lp.LatestProgress = '13505' AND lp.ConfirmStatus = '13601'
+			</if>
+		</if>
+		<if test="dateStart != null and dateStart != ''">
+			<if test="latestProgress == '13501'.toString()">
+				AND lp.ReportDate >= #{dateStart}
+			</if>
+			<if test="latestProgress == '13502'.toString()">
+				AND lp.seeDate >= #{dateStart}
+			</if>
+			<if test="latestProgress == '13503'.toString()">
+				AND lp.pledgedDate >= #{dateStart}
+			</if>
+			<if test="latestProgress == '13504'.toString()">
+				AND lp.roughDate >= #{dateStart}
+			</if>
+			<if test="latestProgress == '13505'.toString()">
+				AND lp.dealDate >= #{dateStart}
+			</if>
+			<!--<if test="latestProgress == null or latestProgress == ''">-->
+				<!--AND (lp.ReportDate >= #{dateStart}-->
+				<!--OR lp.seeDate >= #{dateStart}-->
+				<!--OR lp.pledgedDate >= #{dateStart}-->
+				<!--OR lp.roughDate >= #{dateStart}-->
+				<!--OR lp.dealDate >= #{dateStart})-->
+			<!--</if>-->
+		</if>
+		<if test="dateEnd != null and dateEnd != ''">
+			<if test="latestProgress == '13501'.toString()">
+				AND lp.ReportDate &lt;= #{dateEnd}
+			</if>
+			<if test="latestProgress == '13502'.toString()">
+				AND lp.seeDate &lt;= #{dateEnd}
+			</if>
+			<if test="latestProgress == '13503'.toString()">
+				AND lp.pledgedDate &lt;= #{dateEnd}
+			</if>
+			<if test="latestProgress == '13504'.toString()">
+				AND lp.roughDate &lt;= #{dateEnd}
+			</if>
+			<if test="latestProgress == '13505'.toString()">
+				AND lp.dealDate &lt;= #{dateEnd}
+			</if>
+			<!--<if test="latestProgress == null or latestProgress == ''">-->
+				<!--AND (lp.ReportDate &lt;= #{dateEnd}-->
+				<!--OR lp.seeDate &lt;= #{dateEnd}-->
+				<!--OR lp.pledgedDate &lt;= #{dateEnd}-->
+				<!--OR lp.roughDate &lt;= #{dateEnd}-->
+				<!--OR lp.dealDate &lt;= #{dateEnd})-->
+			<!--</if>-->
+		</if>
+		<if test="searchValues != null and searchValues != ''">
+			AND (lp.ReportId LIKE CONCAT('%', #{searchValues})
+			OR lp.EstateNm LIKE CONCAT('%', #{searchValues},'%')
+			OR le.recordName LIKE CONCAT('%', #{searchValues},'%')
+			OR le.promotionName LIKE CONCAT('%', #{searchValues},'%')
+			OR le.signName LIKE CONCAT('%', #{searchValues},'%')
+			OR lp.CompanyNm LIKE CONCAT('%', #{searchValues},'%')
+			OR lp.contactNm LIKE CONCAT('%', #{searchValues},'%')
+			OR lp.CustomerNm LIKE CONCAT('%', #{searchValues},'%'))
+		</if>
+		ORDER BY lp.ReportDate DESC
+	</select>
+</mapper>

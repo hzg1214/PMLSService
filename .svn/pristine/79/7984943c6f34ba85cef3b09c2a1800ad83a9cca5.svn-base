@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.estate.dao.EstateSupportMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.estate.model.EstateSupport">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="EstateId" property="estateId" jdbcType="VARCHAR"/>
+        <result column="SupportId" property="supportId" jdbcType="VARCHAR"/>
+        <result column="Title" property="title" jdbcType="NVARCHAR"/>
+        <result column="Description" property="description" jdbcType="NVARCHAR"/>
+        <result column="CrtEmpId" property="crtEmpId" jdbcType="INTEGER"/>
+        <result column="UptEmpId" property="uptEmpId" jdbcType="INTEGER"/>
+        <result column="DelFlg" property="delFlg" jdbcType="BIT"/>
+        <result column="CrtDt" property="crtDt" jdbcType="TIMESTAMP"/>
+        <result column="UptDt" property="uptDt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    Id,EstateId,SupportId,Title,Description,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt
+  </sql>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_EstateSupport
+        <where>
+            Id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+    
+    <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.estate.model.EstateSupport"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_EstateSupport (EstateId,SupportId,Title,Description,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt
+      )
+    values (#{estateId, jdbcType=VARCHAR},#{supportId, jdbcType=VARCHAR},#{title, jdbcType=NVARCHAR},#{description, jdbcType=NVARCHAR},
+#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg, jdbcType=BIT},#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+	<!-- 查询 list -->
+    <select id='queryList' parameterType="Map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM LNK_EstateSupport
+        <where>
+            DelFlg=0
+            <if test="estateId != null and estateId != ''">
+                <![CDATA[AND EstateId=#{estateId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="supportId != null and supportId != ''">
+                <![CDATA[AND SupportId = #{supportId, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </select>
+    <update id="update" parameterType="cn.com.eju.deal.houseLinkage.estate.model.EstateSupport">
+        update LNK_EstateSupport
+        <set>
+            <if test="estateId != null">
+			EstateId = #{estateId, jdbcType=VARCHAR},
+			</if>
+			<if test="supportId != null">
+			SupportId = #{supportId, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+			Title = #{title, jdbcType=NVARCHAR},
+			</if>
+			<if test="description != null">
+			Description = #{description, jdbcType=NVARCHAR},
+			</if>
+			<if test="crtEmpId != null">
+			crtEmpId = #{crtEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="uptEmpId != null">
+			uptEmpId = #{uptEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="delFlg != null">
+			delFlg = #{delFlg, jdbcType=BIT},
+			</if>
+			<if test="crtDt != null">
+			crtDt = #{crtDt, jdbcType=TIMESTAMP},
+			</if>
+			<if test="uptDt != null">
+			uptDt = #{uptDt, jdbcType=TIMESTAMP},
+			</if>
+        </set>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		UPDATE dbo.LNK_EstateSupport SET DelFlg=1,UptDt=GETDATE() WHERE Id=#{id,jdbcType=INTEGER}
+	</delete>
+
+
+</mapper>

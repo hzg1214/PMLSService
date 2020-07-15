@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.PostMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.Post" >
+    <id column="postId" property="postId" jdbcType="INTEGER" />
+    <result column="postName" property="postName" jdbcType="NVARCHAR" />
+    <result column="postDesc" property="postDesc" jdbcType="NVARCHAR" />
+    <result column="groupId" property="groupId" jdbcType="INTEGER" />
+    <result column="typeId" property="typeId" jdbcType="INTEGER" />    
+    <result column="typeCode" property="typeCode" jdbcType="NVARCHAR" />
+    <result column="typeName" property="typeName" jdbcType="NVARCHAR" />
+    <result column="postLevel" property="postLevel" jdbcType="INTEGER" />
+    <result column="approveIdx" property="approveIdx" jdbcType="NVARCHAR" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    postId, postName, postDesc,groupId,typeId, approveIdx,dateCreate, userIdCreate, delFlag,postLevel
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Post
+    where postId = #{postId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="queryList" resultType="cn.com.eju.deal.user.model.Post" parameterType="Map" >
+    select 
+    t.postId, t.postName, t.postDesc,t.groupId,t.typeId,t2.typeName, t.approveIdx,t.dateCreate, t.userIdCreate, t.delFlag,t3.dicCode as postLevel,t3.dicValue as postLevelValue
+    from USR_Post t
+	left join USR_PostType t2 on t.typeId=t2.typeId
+	left join USR_DictionaryValue t3 on t.postLevel=t3.dicCode
+	where t.delFlag='N'
+      <if test="groupId != null" >
+        and groupId = #{groupId}
+      </if>
+      order by t.postId 
+  </select>
+  
+  <select id="queryPostByUserId" resultType="cn.com.eju.deal.user.model.Post" parameterType="Map" >
+	     SELECT DISTINCT
+		    p.*,up.userApproveIdx from dbo.USR_User u 
+			LEFT JOIN dbo.USR_UserPostMapping up ON u.userId = up.userId
+			LEFT JOIN dbo.USR_Post p ON p.postId = up.postId 
+			WHERE u.userId = #{userId ,jdbcType=INTEGER} AND p.groupId=#{groupId ,jdbcType=INTEGER} AND up.delFlag='N'
+			<if test="postId != null" >
+        		and p.postId = #{postId}
+     		 </if>
+  </select>
+  <select id="queryDefaultPostByUserId" resultType="cn.com.eju.deal.user.model.Post" parameterType="Integer" >
+	     SELECT  TOP 1
+		    p.*,pt.typeCode,pt.typeName from dbo.USR_UserPostMapping up 
+			LEFT JOIN dbo.USR_Post p ON p.postId = up.postId 
+			INNER JOIN dbo.USR_PostType pt ON p.typeId = pt.typeId
+			WHERE up.userId = #{userId ,jdbcType=INTEGER} AND up.delFlag='N'		
+			AND p.delFlag='N'	
+			AND up.defaultFlag ='Y'
+  </select>
+  
+  <select id="queryAllPostByUserId" resultMap="BaseResultMap" parameterType="Integer" >
+	   SELECT DISTINCT
+        p.* ,
+        pt.typeCode ,
+        pt.typeName ,
+		c.CityName
+	FROM    CRM.dbo.USR_User u
+	        INNER JOIN dbo.USR_UserPostMapping up ON u.userId = up.userId
+	                                                 AND u.delFlag = 'N'
+	        INNER JOIN dbo.USR_Post p ON p.postId = up.postId
+	                                     AND up.delFlag = 'N'
+	        INNER JOIN dbo.USR_PostType pt ON p.typeId = pt.typeId
+	        INNER JOIN USR_GROUP g ON g.groupId = p.groupId
+	                                  AND g.delFlag = 'N'
+	        INNER JOIN dbo.BAS_City c ON c.ID = g.cityId
+	                                     AND c.FlagDeleted = 0
+			WHERE u.userId = #{userId} AND u.delFlag = 'N'
+  </select>
+  <select id="queryPostList"  resultType="cn.com.eju.deal.user.model.Post"  parameterType="cn.com.eju.deal.user.model.Post">
+    select 
+    <include refid="Base_Column_List" />
+    from USR_Post where delFlag='N'
+      <if test="groupId != null" >
+         and groupId = #{groupId,jdbcType=NVARCHAR}
+      </if>
+      <if test="postName != null" >
+         and postName = #{postName,jdbcType=NVARCHAR}
+      </if>
+      <if test="typeId != null" >
+         and typeId = #{typeId,jdbcType=NVARCHAR}
+      </if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from USR_Post
+    where postId = #{postId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.user.model.Post" useGeneratedKeys="true" keyProperty="postId" >
+    insert into USR_Post (postName, postDesc, groupId,typeId,postLevel,approveIdx,
+      userIdCreate
+      )
+    values (#{postName,jdbcType=NVARCHAR}, #{postDesc,jdbcType=NVARCHAR}, #{groupId,jdbcType=INTEGER}, 
+     #{typeId,jdbcType=INTEGER}, #{postLevel,jdbcType=INTEGER},#{approveIdx,jdbcType=INTEGER},#{userIdCreate,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.user.model.Post" >
+    update USR_Post
+    <set >
+      <if test="postName != null" >
+        postName = #{postName,jdbcType=NVARCHAR},
+      </if>
+      <if test="postDesc != null" >
+        postDesc = #{postDesc,jdbcType=NVARCHAR},
+      </if>
+      <if test="postLevel != null" >
+        postLevel = #{postLevel,jdbcType=INTEGER},
+      </if>
+      <if test="approveIdx != null" >
+        approveIdx = #{approveIdx,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateCreate != null" >
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null" >
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        typeId = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where postId = #{postId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.user.model.Post" >
+    update USR_Post
+    set postName = #{postName,jdbcType=NVARCHAR},
+      postDesc = #{postDesc,jdbcType=NVARCHAR},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=NVARCHAR},
+      typeId = #{typeId,jdbcType=NVARCHAR}
+    where postId = #{postId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 逻辑删除 -->
+	<delete id="deleteUpDate" parameterType="cn.com.eju.deal.user.model.Post">
+		UPDATE USR_Post
+		SET
+		delFlag='Y'
+		<where>
+			postId = #{postId}
+		</where>
+	</delete>
+  
+  
+   <select id="selectByGroupId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    SELECT 
+	   		  <include refid="Base_Column_List" />
+	    FROM USR_Post 
+	    WHERE groupId = #{groupId,jdbcType=INTEGER}
+	    and delFlag ='N'
+  </select>
+  
+   <select id="selectApPostByGroupId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    SELECT 
+	   		  ur.postId, 
+	   		 ur.postName, 
+	   		 ur.postDesc, 
+	   		 ur.groupId,
+	   		 ur.approveIdx,
+	   		 ur.dateCreate,
+	   		 ur.userIdCreate, 
+	   		 ur.delFlag
+	    FROM USR_Post ur
+	    WHERE ur.groupId = #{groupId,jdbcType=INTEGER}
+	    and ur.delFlag ='N'
+	    and ur.approveIdx>0
+	    order by ur.approveIdx
+  </select>
+  
+    <select id="selectMainPostByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    SELECT 
+	   		  ur.*	   		
+	    FROM USR_Post ur
+	    INNER JOIN USR_User u
+	    ON ur.postId = u.postId
+	    AND u.delFlag = 'N'
+	    WHERE u.userId = #{userId,jdbcType=INTEGER}
+	    and ur.delFlag ='N'	    
+  </select>
+  <select id="selectLowPostByPostId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    SELECT 
+	   		  <include refid="Base_Column_List" />
+	    FROM USR_Post 
+	    WHERE groupId = #{groupId,jdbcType=INTEGER}
+	    and delFlag ='N'
+  </select>
+  
+  <!-- 查询拓展人员所属岗位信息 (21:拓展专员、20:拓展经理、18:区域总经理(即拓展总监)、22:事业部总经理)-->
+  <select id="getExpandPostByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	SELECT * FROM USR_Post
+	WHERE postId IN (
+					SELECT postId FROM USR_UserPostMapping 
+					WHERE delFlag = 'N' 
+					AND userId = #{userId,jdbcType=INTEGER}
+	)
+	AND typeId IN( 21, 20, 18, 22 )
+	AND delFlag = 'N' 
+  </select>
+  
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ContractChangeStoreMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.ContractChangeStore">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="contractStopId" property="contractStopId" jdbcType="INTEGER" />
+		<result column="storeId" property="storeId" jdbcType="INTEGER" />
+		<result column="delFlag" property="delFlag" jdbcType="BIT" />
+		<result column="approveState" property="approveState" jdbcType="INTEGER" />
+		<result column="contractId" property="contractId" jdbcType="INTEGER" />
+		<result column="receivedAmount" property="receivedAmount" jdbcType="DECIMAL" />
+		<result column="depositBackMoney" property="depositBackMoney" jdbcType="DECIMAL" />
+		<result column="depositBalance" property="depositBalance" jdbcType="INTEGER" />
+		<result column="StoreManager" property="storeManager" jdbcType="VARCHAR" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" jdbcType="VARCHAR" />
+		<result column="ABTypeStore" property="abTypeStore" jdbcType="INTEGER" />
+		<result column="BTypeStore" property="btypeStore" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, contractStopId, storeId, delFlag, approveState, contractId
+	</sql>
+	
+	<!-- 新增合同变更与门店关联信息 -->
+	<insert id="create" parameterType="cn.com.eju.deal.contract.model.ContractChangeStore"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ContractChangeStore 
+		(
+			contractStopId, storeId, delFlag, approveState, contractId,
+			depositBackMoney,depositBalance,receivedAmount,decorationType,decorateSituate,decorateCompany,decorateAmount
+			,StoreManager,StoreManagerPhone,ABTypeStore,BtypeStore
+		)
+		values 
+		(
+			#{contractStopId,jdbcType=INTEGER},
+			#{storeId,jdbcType=INTEGER},
+			0,
+			0,
+			#{contractId,jdbcType=INTEGER},
+			#{depositBackMoney,jdbcType=DECIMAL},
+            #{depositBalance,jdbcType=INTEGER},
+			#{receivedAmount,jdbcType=DECIMAL},
+			#{decorationType,jdbcType=INTEGER},
+			#{decorateSituate,jdbcType=INTEGER},
+			#{decorateCompany,jdbcType=NVARCHAR},
+			#{decorateAmount,jdbcType=DECIMAL},
+			#{storeManager,jdbcType=VARCHAR},
+			#{storeManagerPhone,jdbcType=VARCHAR},
+			#{abTypeStore,jdbcType=INTEGER},
+			#{btypeStore,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<!-- 编辑合同变更与门店关联信息 -->
+	<update id="update" parameterType="cn.com.eju.deal.contract.model.ContractChangeStore">
+		UPDATE ContractChangeStore
+		<set>
+			<if test="contractStopId != null">
+				contractStopId = #{contractStopId,jdbcType=INTEGER},
+			</if>
+			<if test="companyId != null">
+				storeId = #{storeId,jdbcType=INTEGER},
+			</if>
+			<if test="delFlag != null">
+				delFlag = #{delFlag,jdbcType=BIT},
+			</if>
+			<if test="approveState != null">
+				approveState = #{approveState,jdbcType=INTEGER},
+			</if>
+			<if test="contractId != null">
+				contractId = #{contractId,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 解除合同变更与门店关联信息 -->
+	<delete id="updateById" parameterType="java.lang.Integer">
+		UPDATE ContractChangeStore
+		SET delFlag = 1 
+		WHERE contractStopId = #{id,jdbcType=INTEGER}
+	</delete>
+	<!-- 解除合同变更与门店关联信息 -->
+	<!-- <update id="updateFlag" parameterType="map">
+			UPDATE   ContractChangeStore
+			SET delFlag = 1
+			WHERE  IsDelete=0 AND storeId = #{storeId,jdbcType=INTEGER}
+    </update> -->
+	
+	<!-- 根据flowID查询合同变更中的门店 -->
+	<select id="getChangeStoresByFlowId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT  T1.*
+		FROM    dbo.ContractChangeStore T1
+        LEFT JOIN dbo.ContractChange T2 ON T1.contractStopId = T2.id
+                                           AND T2.delFlag = 0
+		WHERE   T1.delFlag = 0
+                AND T2.flowId = #{flowId,jdbcType=NVARCHAR}
+	</select>
+	
+	<!-- 根据合同变更ID查询门店数 -->
+	<select id="getStopStoreNum" resultType="java.lang.Integer"  parameterType="java.lang.Integer">	
+		SELECT  COUNT(*) AS storeNumber
+		FROM    ContractChangeStore
+		WHERE   delFlag = 0
+        AND contractStopId = #{contractStopId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据合同变更ID查询门店地址 -->
+	<select id="getChgStoreAddr" resultType="java.lang.String"  parameterType="java.lang.Integer">	
+		SELECT addressDetail = STUFF((SELECT ';'+T2.AddressDetail
+		FROM    ContractChangeStore T1
+		INNER JOIN dbo.Store T2 ON T1.storeId = T2.id AND T2.IsDelete = 0
+		WHERE   T1.delFlag = 0
+        AND contractStopId = #{contractStopId,jdbcType=INTEGER}
+		for xml PATH('')),1,1,'')
+	</select>
+	
+	<!-- 根据门店ID查询变更记录 -->
+	<select id="getChgByStoreId" resultType="boolean"  parameterType="java.lang.Integer">	
+		SELECT  COUNT(storeId)
+		FROM    dbo.ContractChangeStore
+		WHERE   delFlag = 0
+		        AND storeId = #{storeId,jdbcType=INTEGER}
+	</select>
+	<select id="getContractChangeStoreById" resultType="cn.com.eju.deal.contract.model.ContractChangeStore"  parameterType="map">	
+		SELECT  *
+		FROM    dbo.ContractChangeStore
+		WHERE   delFlag = 0
+		        AND storeId = #{storeId,jdbcType=INTEGER}
+		        And contractStopId = #{contractStopId,jdbcType=INTEGER}
+	</select>
+	<update id="updateContractChangeStoreById" parameterType="map">
+		UPDATE ContractChangeStore
+		<set>
+			<if test="contractStopId != null">
+				contractStopId = #{contractStopId,jdbcType=INTEGER},
+			</if>
+			<if test="companyId != null">
+				storeId = #{storeId,jdbcType=INTEGER},
+			</if>
+			<if test="delFlag != null">
+				delFlag = #{delFlag,jdbcType=BIT},
+			</if>
+			<if test="approveState != null">
+				approveState = #{approveState,jdbcType=INTEGER},
+			</if>
+			<if test="contractId != null">
+				contractId = #{contractId,jdbcType=INTEGER},
+			</if>
+			<if test="depositBackMoney != null">
+				depositBackMoney = #{depositBackMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="depositBalance != null">
+				depositBalance = #{depositBalance,jdbcType=INTEGER},
+			</if>
+			<if test="receivedAmount != null">
+				receivedAmount = #{receivedAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据flowID查询合同变更中的门店 -->
+	<select id="getChangeStoresByFlowIdApproving" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT  T1.*
+		FROM    dbo.ContractChangeStore T1
+		LEFT JOIN dbo.ContractChange T2 ON T1.contractStopId = T2.id
+		AND T2.delFlag = 0
+		WHERE   T1.delFlag = 0 AND T2.approveState = 1
+		AND T2.flowId = #{flowId,jdbcType=NVARCHAR}
+	</select>
+	<select id="getContractChangeStoreInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT  T1.*
+		FROM    dbo.ContractChangeStore T1
+		INNER JOIN dbo.ContractChange T2 ON T1.contractStopId = T2.id
+		AND T2.delFlag = 0
+		WHERE   T1.delFlag = 0 AND T2.approveState = 1
+		AND T2.id = #{id,jdbcType=INTEGER}
+	</select>
+</mapper>

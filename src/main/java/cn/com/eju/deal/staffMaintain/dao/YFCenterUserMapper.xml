@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.staffMaintain.dao.YFCenterUserMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.staffMaintain.model.YFCenterUser">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="cityNo" property="cityNo" jdbcType="VARCHAR"/>
+        <result column="centerId" property="centerId" jdbcType="INTEGER"/>
+        <result column="centerName" property="centerName" jdbcType="NVARCHAR"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="userCode" property="userCode" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="NVARCHAR"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP"/>
+        <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER"/>
+        <result column="delFlag" property="delFlag" jdbcType="BIT"/>
+    </resultMap>
+
+    <resultMap id="DtoResultMap" type="cn.com.eju.deal.dto.staffMaintain.YFCenterUserDto">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="rowNum" property="rowNum" jdbcType="INTEGER"/>
+        <result column="cityNo" property="cityNo" jdbcType="VARCHAR"/>
+        <result column="cityName" property="cityName" jdbcType="VARCHAR"/>
+        <result column="centerId" property="centerId" jdbcType="INTEGER"/>
+        <result column="centerName" property="centerName" jdbcType="NVARCHAR"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="userCode" property="userCode" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="NVARCHAR"/>
+        <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP"/>
+        <result column="dateUpdate" property="dateUpdate" jdbcType="TIMESTAMP"/>
+        <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER"/>
+        <result column="userNameCreate" property="userNameCreate" jdbcType="VARCHAR"/>
+        <result column="delFlag" property="delFlag" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, cityNo, centerId, centerName, userId, userCode, userName, dateCreate, dateUpdate,
+    userIdCreate, delFlag
+  </sql>
+
+    <insert id="insert" parameterType="cn.com.eju.deal.staffMaintain.model.YFCenterUser"
+            useGeneratedKeys="true" keyProperty="operId">
+    insert into LNK_YF_CenterUser (cityNo, centerId,
+      centerName, userId, userCode, 
+      userName, dateCreate, dateUpdate, 
+      userIdCreate, delFlag)
+    values (#{cityNo,jdbcType=VARCHAR}, #{centerId,jdbcType=INTEGER},
+      #{centerName,jdbcType=NVARCHAR}, #{userId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR},
+      #{userName,jdbcType=NVARCHAR}, GETDATE(),  GETDATE(),
+      #{userIdCreate,jdbcType=INTEGER}, 0)
+  </insert>
+
+    <update id="update" parameterType="cn.com.eju.deal.staffMaintain.model.YFCenterUser">
+        update LNK_YF_CenterUser
+        <set>
+            dateUpdate = GETDATE(),
+            delFlag = 0,
+            <if test="cityNo != null">
+                cityNo = #{cityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="centerId != null">
+                centerId = #{centerId,jdbcType=INTEGER},
+            </if>
+            <if test="centerName != null">
+                centerName = #{centerName,jdbcType=NVARCHAR},
+            </if>
+            <if test="userId != null">
+                userId = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userCode != null">
+                userCode = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                userName = #{userName,jdbcType=NVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        UPDATE LNK_YF_CenterUser
+        SET delFlag = 1
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="getById" parameterType="java.lang.Integer" resultMap="DtoResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_YF_CenterUser
+        WHERE delFlag = 0 AND id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="getByUserCode" parameterType="Map" resultMap="DtoResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_YF_CenterUser
+        WHERE delFlag = 0 AND userCode = #{userCode,jdbcType=VARCHAR}
+    </select>
+
+    <select id="queryList" parameterType="Map" resultMap="DtoResultMap">
+        SELECT ROW_NUMBER() OVER(ORDER BY yfc.dateCreate DESC) AS rowNum,
+        yfc.id, yfc.cityNo, bc.cityName ,
+        yfc.centerId, yfc.centerName,
+        yfc.userId, yfc.userCode, yfc.userName,
+        yfc.dateCreate,
+        yfc.userIdCreate , us.userName AS userNameCreate
+        FROM LNK_YF_CenterUser yfc
+        LEFT JOIN BAS_City bc ON yfc.CityNo = bc.CityNo
+        LEFT JOIN crm.dbo.USR_User us ON yfc.userIdCreate = us.userId
+        WHERE yfc.delFlag = 0
+        <if test="authCenterIds!=null ">
+            and yfc.centerId in(${authCenterIds})
+        </if>
+        <!--<if test="authCenterIdList != null and authCenterIdList.size>0 ">-->
+            <!--AND yfc.centerId in( -->
+            <!--<foreach collection="authCenterIdList" item="obj" index="index" separator="," >-->
+                <!--#{obj.centerId}-->
+            <!--</foreach>-->
+            <!--)-->
+        <!--</if>-->
+
+        <if test="cityNo != null and cityNo != ''">
+            AND yfc.cityNo = #{cityNo,jdbcType=VARCHAR}
+        </if>
+        <if test="centerId != null and centerId != ''">
+            AND yfc.centerId = #{centerId,jdbcType=INTEGER}
+        </if>
+
+        <if test="searchKey != null and searchKey != ''">
+            and ( yfc.userCode LIKE CONCAT('%', #{searchKey},'%')
+            OR yfc.userName LIKE CONCAT('%', #{searchKey},'%')
+            )
+        </if>
+
+        ORDER BY yfc.dateCreate DESC
+    </select>
+
+    <select id="queryYfCenterUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            count(yfc.id)
+        FROM LNK_YF_CenterUser yfc
+        LEFT JOIN BAS_City bc ON yfc.CityNo = bc.CityNo
+        LEFT JOIN crm.dbo.USR_User us ON yfc.userIdCreate = us.userId
+        WHERE yfc.delFlag = 0 and  yfc.userCode=#{userCode}
+    </select>
+
+
+    <select id="getAreaCity" resultType="java.util.Map" parameterType="Map">
+
+       	SELECT DISTINCT t1.cityId,t2.cityNo,t2.cityName
+       	FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM') t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId = t2.ID
+    </select>
+
+
+    <select id="getCenterGroup" resultType="java.util.Map" parameterType="Map">
+       SELECT DISTINCT t1.centerGroupId centerId, t1.centerGroupName centerName
+        FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM') t1
+		INNER JOIN dbo.BAS_City t2 ON t1.cityId = t2.ID
+		INNER JOIN dbo.Achiv_AchievementLevel_Setting ass
+            ON ass.centerGroupId = t1.centerGroupId
+           AND ass.delFlag=0
+           AND ass.achieveType=17902
+		 WHERE t2.cityNo = #{cityNo,jdbcType=INTEGER}
+    </select>
+
+    <select id="getCenterAuth" resultType="java.util.Map" parameterType="Map">
+        SELECT DISTINCT centerGroupId centerId FROM dbo.F_USR_UserCenterAuth('${userId}', 'CRM') t1
+
+    </select>
+
+</mapper>

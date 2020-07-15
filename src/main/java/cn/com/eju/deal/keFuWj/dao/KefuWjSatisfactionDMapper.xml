@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjSatisfactionDMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionD">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="satisfactionId" jdbcType="INTEGER" property="satisfactionId" />
+    <result column="wjtmid" jdbcType="INTEGER" property="wjtmid" />
+    <result column="wjdaids" jdbcType="VARCHAR" property="wjdaids" />
+    <result column="wjdacomments" jdbcType="NVARCHAR" property="wjdacomments" />
+    <result column="tmScore" jdbcType="INTEGER" property="tmScore" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+    <result column="wjtmScore" jdbcType="NUMERIC" property="wjtmScore" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionD">
+    insert into Kefu_Wj_Satisfaction_D (satisfactionId, wjtmid,
+      wjdaids, wjdacomments, tmScore, 
+      userCreate, dateCreate, delFlag,wjtmScore
+      )
+    values (#{satisfactionId,jdbcType=INTEGER}, #{wjtmid,jdbcType=INTEGER},
+      #{wjdaids,jdbcType=VARCHAR}, #{wjdacomments,jdbcType=NVARCHAR}, #{tmScore,jdbcType=INTEGER}, 
+      #{userCreate,jdbcType=INTEGER}, getdate(), 0,#{wjtmScore,jdbcType=NUMERIC}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionD">
+    insert into Kefu_Wj_Satisfaction_D
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="satisfactionId != null">
+        satisfactionId,
+      </if>
+      <if test="wjtmid != null">
+        wjtmid,
+      </if>
+      <if test="wjdaids != null">
+        wjdaids,
+      </if>
+      <if test="wjdacomments != null">
+        wjdacomments,
+      </if>
+      <if test="tmScore != null">
+        tmScore,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+      <if test="wjtmScore != null">
+        wjtmScore,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="satisfactionId != null">
+        #{satisfactionId,jdbcType=INTEGER},
+      </if>
+      <if test="wjtmid != null">
+        #{wjtmid,jdbcType=INTEGER},
+      </if>
+      <if test="wjdaids != null">
+        #{wjdaids,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdacomments != null">
+        #{wjdacomments,jdbcType=NVARCHAR},
+      </if>
+      <if test="tmScore != null">
+        #{tmScore,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="wjtmScore != null">
+        #{wjtmScore,jdbcType=NUMERIC},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getTmList" resultType="Map" parameterType="Integer">
+    SELECT ROW_NUMBER() OVER (ORDER BY tm.wjtmSortindex) rowNo,tm.id, tm.wjtmValue,wjdaids,wjdacomments,wjtmType FROM dbo.Kefu_Wj_Satisfaction_D d
+    LEFT JOIN dbo.Kefu_Wj_D_TM tm ON d.wjtmid=tm.id
+    WHERE d.delFlag=0 AND tm.delFlag=0 AND satisfactionId=#{id,jdbcType=INTEGER}
+  </select>
+
+  <update id="updateBySatisfactionIdAndTmid" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjSatisfactionD">
+    update Kefu_Wj_Satisfaction_D
+    <set>
+      <if test="wjdaids != null">
+        wjdaids = #{wjdaids,jdbcType=VARCHAR},
+      </if>
+      <if test="wjdacomments != null">
+        wjdacomments = #{wjdacomments,jdbcType=NVARCHAR},
+      </if>
+      <if test="tmScore != null">
+        tmScore = #{tmScore,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="wjtmScore != null">
+        wjtmScore = #{wjtmScore,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where satisfactionId = #{satisfactionId,jdbcType=INTEGER} and wjtmid = #{wjtmid,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryWjAnalyseTmScores"  parameterType="Map" resultType="cn.com.eju.deal.keFuWj.dto.WjAnalyseTmScoreDto">
+        SELECT
+            tm.wjtmflType,
+            ISNULL(d.wjtmScore,0) wjtmScore
+        FROM
+            Kefu_Wj_Satisfaction_D d
+            LEFT JOIN Kefu_Wj_D_TM tm ON d.wjtmid = tm.id
+            AND tm.delFlag = 0
+        WHERE
+            d.delFlag = 0
+            AND d.satisfactionId = #{satisfactionId}
+        ORDER BY
+            tm.wjtmflType ASC,
+            d.wjtmid ASC
+  </select>
+</mapper>

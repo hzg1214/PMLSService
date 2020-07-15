@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.contract.dao.ProductMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.contract.model.Product" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="Name" property="name" jdbcType="NVARCHAR" />
+    <result column="DateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="UserCreate" property="userCreate" jdbcType="INTEGER" />
+    <result column="IsDelete" property="isDelete" jdbcType="BIT" />
+    <result column="Price" property="price" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, Name, DateCreate, UserCreate, IsDelete, Price
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Product
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectProductByContractId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    	p.Id, p.Name, p.DateCreate, p.UserCreate, p.IsDelete, p.Price
+    from Product p, ContractProduct cp
+    where cp.ContractId = #{contractId,jdbcType=INTEGER}
+    	and cp.IsDelete = '0'
+    	and cp.ProductId = p.Id
+    	and p.IsDelete = '0'
+  </select>
+  
+  <select id="selectProductInfo" resultMap="BaseResultMap" >
+    select 
+    	p.Id, p.Name, p.DateCreate, p.UserCreate, p.IsDelete, p.Price
+    from Product p
+    where p.Id in (1,2,3) and p.IsDelete = '0'
+  </select>
+  
+  <select id="selectProductByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    	p.Id, p.Name, p.DateCreate, p.UserCreate, p.IsDelete, p.Price
+    from ProductTree pt, Product p
+    where pt.ParentId = #{id,jdbcType=INTEGER}
+    	and pt.IsDelete = '0'
+    	and pt.ChildId = p.Id 
+    	and p.IsDelete = '0'
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Product
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="create" parameterType="cn.com.eju.deal.contract.model.Product"  useGeneratedKeys="true" keyProperty="id">
+    insert into Product (Name, DateCreate, 
+      UserCreate, IsDelete, Price
+      )
+    values (#{name,jdbcType=NVARCHAR}, #{dateCreate,jdbcType=TIMESTAMP}, 
+      #{userCreate,jdbcType=INTEGER}, #{isDelete,jdbcType=BIT}, #{price,jdbcType=DECIMAL}
+      )
+  </insert>
+
+</mapper>

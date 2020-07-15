@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.store.dao.AuthCheckMapper">
+    <insert id="create" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck" keyProperty="id" useGeneratedKeys="true">
+        insert into Store_Auth_Check(authCheckNo,storeId,contractId,checkDate,checkStatus,remark,userCreate) values (
+        #{authCheckNo,jdbcType=NVARCHAR},#{storeId,jdbcType=INTEGER}
+        ,#{contractId,jdbcType=INTEGER},#{checkDate,jdbcType=TIMESTAMP}
+        ,23301,#{remark,jdbcType=NVARCHAR},#{userCreate,jdbcType=INTEGER}
+        )
+    </insert>
+
+	 <insert id="Autocreate" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck" keyProperty="id" useGeneratedKeys="true">
+        insert into Store_Auth_Check(authCheckNo ,          storeId ,          contractId ,          checkDate ,
+          checkStatus ,          authTime ,          remark ,          dateCreate ,
+          userCreate ,          dateUpdate ,          userUpdate ,          delFlag ,
+          auditDesc ,          auditUserId) values (
+        #{authCheckNo,jdbcType=NVARCHAR}, #{storeId,jdbcType=INTEGER},#{contractId,jdbcType=INTEGER},#{checkDate,jdbcType=TIMESTAMP},
+        #{checkStatus,jdbcType=INTEGER},#{authTime,jdbcType=TIMESTAMP},#{remark,jdbcType=NVARCHAR},getDate(),
+        #{userCreate,jdbcType=INTEGER},getDate(),#{userUpdate,jdbcType=INTEGER},0,
+        #{auditDesc,jdbcType=NVARCHAR},#{auditUserId,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="createLog" parameterType="cn.com.eju.deal.store.model.StoreAuthCheckLog" keyProperty="id" useGeneratedKeys="true">
+        insert into Store_Auth_Check_Log(authCheckId,operDate,operDesc,userCreate) values (
+        #{authCheckId,jdbcType=INTEGER},getDate(),#{operDesc,jdbcType=NVARCHAR},#{userCreate,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="cn.com.eju.deal.store.model.StoreAuthCheck">
+        SELECT  ac.* ,
+                convert(varchar(10),ac.dateCreate,120) as dateCreateStr,
+                convert(varchar(10),ac.checkDate,120) as checkDateStr,
+                u.userName AS userCreateNm ,
+                d.dicValue AS checkStatusNm
+        FROM    Store_Auth_Check ac
+                LEFT JOIN dbo.USR_User u ON ac.userCreate = u.userId
+                LEFT JOIN dbo.BAS_DictionaryValue d ON d.dicCode = ac.checkStatus
+        WHERE   ac.delFlag = 0
+        <if test="storeId != null">
+            AND ac.storeId = #{storeId}
+        </if>
+        order by ac.dateCreate desc
+    </select>
+
+    <select id="getAuthCheckById" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck" resultType="cn.com.eju.deal.store.model.StoreAuthCheck">
+        SELECT  ac.* ,
+                s.storeNo ,
+                s.Name AS storeName ,
+                s.addressDetail ,
+                s.maintainer ,
+                s.maintainerName ,
+                u.userCode AS userCreateCode ,
+                u.userName AS userCreateNm ,
+                CONVERT(VARCHAR(10), ac.checkDate, 120) AS checkDateStr ,
+                dv.dicValue AS checkStatusNm
+        FROM    dbo.Store_Auth_Check ac
+                INNER JOIN dbo.Store s ON ac.storeId = s.Id
+                INNER JOIN dbo.USR_User u ON u.userId = ac.userCreate
+                INNER JOIN dbo.BAS_DictionaryValue dv ON ac.checkStatus = dv.dicCode
+        WHERE   ac.id = #{id,jdbcType=INTEGER}
+                AND ac.delFlag = 0
+                AND s.IsDelete = 0
+                AND u.delFlag = 'N'
+                AND dv.delFlag = 'N'
+    </select>
+
+    <select id="getAuthCheckLog" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck" resultType="cn.com.eju.deal.store.model.StoreAuthCheckLog">
+        SELECT  acl.* ,
+                u.userName AS userCreateNm ,
+                CONVERT(VARCHAR(16), acl.operDate, 120) AS operDateStr
+        FROM    dbo.Store_Auth_Check_Log acl
+                INNER JOIN dbo.USR_User u ON acl.userCreate = u.userId
+        WHERE   acl.delFlag = 0
+                AND u.delFlag = 'N'
+                AND acl.authCheckId = #{id,jdbcType=INTEGER}
+        order by acl.dateCreate desc
+    </select>
+
+    <select id="getAuthCheckImg" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck" resultType="cn.com.eju.deal.model.sweepStreets.WXPictureDto">
+        SELECT  FileRecordMainId AS id ,
+                RefId AS pictureRefId ,
+                fileAbbrUrl AS smallPictureUrl ,
+                url50 AS middlePictureUrl ,
+                fileUrl AS bigPictureUrl ,
+                0 AS pictureStatus
+        FROM    dbo.FIL_FileRecordMain
+        WHERE   RefId = #{id,jdbcType=INTEGER}
+                AND IsDelete = 0
+                AND FileTypeId = 1051
+                AND FileSourceId = 15
+    </select>
+
+    <update id="updateStore" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck">
+        update store set authCheckStatus = 23301 where id=#{storeId}
+    </update>
+
+    <select id="getLastContractId" parameterType="java.lang.Integer" resultType="java.util.Map">
+      SELECT * FROM dbo.v_crm_StoreContract_last WHERE StoreId = #{storeId}
+    </select>
+    <select id="getStoreAuthCheckList" parameterType="cn.com.eju.deal.store.model.StoreAuthCheckDto" resultType="java.util.Map">
+      SELECT  		bc.dicValue AS checkStatusNm ,
+                    s.StoreNo as storeNo,
+					s.Name AS storeName,
+					s.AddressDetail AS addressDetail,
+					s.Maintainer AS maintainer,
+					s.maintainerName AS maintainerName,
+					sc.*
+            FROM    Store_Auth_Check sc
+					INNER JOIN dbo.Store s ON s.Id = sc.storeId AND s.IsDelete = 0
+					LEFT JOIN dbo.USR_User u ON u.userId = sc.userCreate
+					LEFT JOIN dbo.BAS_DictionaryValue bc ON bc.dicCode = sc.checkStatus AND bc.typeId = 233
+					WHERE 1=1 AND  sc.delFlag = 0
+					<if test="cityNo != null and cityNo != ''">
+						AND s.cityNo IN ('${cityNo}')
+					</if>
+					<if test="centerIdStr != null and centerIdStr != ''">
+						AND s.centerId IN (${centerIdStr})
+					</if>
+					<if test="storeNo != null and storeNo != ''">
+			            <![CDATA[AND (s.StoreNo LIKE '%${storeNo}%' OR s.Name LIKE '%${storeNo}%')]]>
+			        </if>
+					<if test="userCode != null and userCode != ''">
+			            <![CDATA[AND (u.userCode LIKE '%${userCode}%' OR u.userName LIKE '%${userCode}%')]]>
+			        </if>
+					<if test="dateCreateBegin != null and dateCreateBegin != ''">
+			            <![CDATA[
+			              and Convert(varchar(10),sc.dateCreate,120) >= #{dateCreateBegin,jdbcType=NVARCHAR}
+			              ]]>
+			        </if>
+			        <if test="dateCreateEnd != null and dateCreateEnd != ''">
+			            <![CDATA[
+			              and Convert(varchar(10),sc.dateCreate,120) <= #{dateCreateEnd,jdbcType=NVARCHAR}
+			              ]]>
+			        </if>
+					<if test="approveStatus != null and approveStatus != ''">
+			            and sc.checkStatus = #{approveStatus,jdbcType=INTEGER}
+			        </if>
+			        order by sc.dateCreate desc
+    </select>
+    <select id="getStoreAuthCheckInfoById" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.store.model.StoreAuthCheckDto">
+        SELECT  ac.* ,
+                s.storeNo ,
+                s.Name AS storeName ,
+                s.addressDetail ,
+                s.maintainer ,
+                s.maintainerName ,
+                u.userCode AS userCreateCode ,
+                u.userName AS userCreateNm ,
+                CONVERT(VARCHAR(10), ac.checkDate, 120) AS checkDateStr ,
+                dv.dicValue AS checkStatusNm
+                ,ISNULL(g.groupName,'') as centerName
+        FROM    dbo.Store_Auth_Check ac
+                INNER JOIN dbo.Store s ON ac.storeId = s.Id AND s.IsDelete = 0
+                INNER JOIN dbo.USR_User u ON u.userId = ac.userCreate AND u.delFlag = 'N'
+                LEFT JOIN dbo.BAS_DictionaryValue dv ON ac.checkStatus = dv.dicCode AND dv.delFlag = 'N'
+                LEFT JOIN dbo.USR_Group g ON s.centerId = g.groupId and g.delFlag='N'
+        WHERE   ac.id = #{id,jdbcType=INTEGER}
+                AND ac.delFlag = 0
+    </select>
+    <update id="updateStoreAuthCheck" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck">
+        UPDATE dbo.Store_Auth_Check
+		   <set>
+		      <if test="checkStatus != null">
+		        checkStatus = #{checkStatus,jdbcType=INTEGER},
+		      </if>
+		      <if test="auditDesc != null">
+		        auditDesc = #{auditDesc},
+		      </if>
+		      <if test="userUpdate != null">
+		        userUpdate = #{userUpdate,jdbcType=INTEGER},
+		       	dateUpdate = getDate(),
+		      </if>
+		      <if test="authTime != null">
+		        authTime = #{authTime,jdbcType=TIMESTAMP},
+		      </if>
+		      <if test="auditUserId != null">
+		        auditUserId = #{auditUserId,jdbcType=INTEGER},
+		      </if>
+		    </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateStoreByParam" parameterType="map">
+        UPDATE
+        	store set authCheckStatus = #{checkStatus},
+        	UserUpdate= #{userUpdate},
+        	DateUpdate = getDate()
+        WHERE 	id=#{storeId}
+    </update>
+
+    <select id="getStore" parameterType="cn.com.eju.deal.store.model.StoreAuthCheck" resultType="java.util.Map">
+      SELECT ISNULL(authCheckStatus,23300) AS authCheckStatus FROM store WHERE id = #{storeId}
+    </select>
+
+    <select id="getSPCXCount" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT  SUM(spCount) spCount ,SUM(cxCount) cxCount
+        FROM ( SELECT COUNT(id) spCount ,0 cxCount FROM contract WHERE id = #{contractId} AND Valid=18403
+       UNION
+       SELECT 0 spCount ,COUNT(cs.id) cxCount
+          FROM Store_AchievementCancel cs ,dbo.Store_AchievementCancelMapping csm
+          WHERE cs.id = csm.achievementCancelId
+                    AND cs.contractId = #{contractId}
+                    AND csm.storeId = #{storeId}
+                    AND cs.approveState IN ( '17302', '17304' )
+                    AND cs.isDelete = 0
+                    AND csm.delFlag = 0
+        ) t
+    </select>   
+</mapper>

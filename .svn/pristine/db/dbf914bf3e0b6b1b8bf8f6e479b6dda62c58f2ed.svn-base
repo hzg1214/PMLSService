@@ -1,0 +1,338 @@
+package cn.com.eju.pmls.jsStatement.service;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+
+import cn.com.eju.deal.achievement.dao.CitySettingMapper;
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.base.seqNo.api.impl.SeqNoAPIImpl;
+import cn.com.eju.deal.cashbill.model.CashBillReport;
+import cn.com.eju.deal.core.support.QueryConst;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.pmls.jsStatement.dao.PmlsJsStatementDtlMapper;
+import cn.com.eju.pmls.jsStatement.dao.PmlsJsStatementMapper;
+import cn.com.eju.pmls.jsStatement.dao.PmlsStatementCashBillRelateMapper;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsCompanyDto;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsFrameOaDto;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsHSCodeDto;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsKHCodeDto;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsProjectDto;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsReportDto;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsStatementDto;
+import cn.com.eju.pmls.jsStatement.dto.PmlsJsStatementVto;
+import cn.com.eju.pmls.jsStatement.dto.zkVaildAmount;
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatement;
+import cn.com.eju.pmls.jsStatement.model.PmlsJsStatementDtl;
+import cn.com.eju.pmls.jsStatement.model.PmlsStatementCashBillRelate;
+
+@Service("jsStatementService")
+public class JsStatementService {
+
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+    @Autowired
+    PmlsJsStatementMapper pmlsJsStatementMapper;
+
+    @Autowired
+    PmlsJsStatementDtlMapper pmlsJsStatementDtlMapper;
+
+    @Autowired
+    PmlsStatementCashBillRelateMapper pmlsStatementCashBillRelateMapper;
+
+    @Resource
+    private SeqNoAPIImpl seqNoAPI;
+
+    @Autowired
+    private CitySettingMapper citySettingMapper;
+
+
+    /**
+     * 查询
+     */
+    public ResultData<List<PmlsJsStatementDto>> queryList(Map<String, Object> queryParam) {
+        ResultData<List<PmlsJsStatementDto>> resultData = new ResultData<List<PmlsJsStatementDto>>();
+        List<PmlsJsStatementDto> list = pmlsJsStatementMapper.queryList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /**
+     * 作废
+     */
+    public ResultData toInvalid(PmlsJsStatement statement) throws Exception {
+        ResultData resultData = new ResultData();
+        Integer id = statement.getId();
+        PmlsJsStatement record = pmlsJsStatementMapper.selectByPrimaryKey(id);
+        // 10401:草稿的场合 or 10404:审核不通过的场合 可以修改为作废
+        if ("10401".equals(record.getApproveStatus()) || "10404".equals(record.getApproveStatus())) {
+            pmlsJsStatementMapper.updateByPrimaryKeySelective(statement);
+        } else {
+            resultData.setReturnCode("201");
+            resultData.setReturnMsg("本结算单当前状态已变更！");
+        }
+        return resultData;
+    }
+
+    /**
+     * 终止
+     */
+    public ResultData toTermination(PmlsJsStatement statement) throws Exception {
+        ResultData resultData = new ResultData();
+        Integer id = statement.getId();
+        PmlsJsStatement record = pmlsJsStatementMapper.selectByPrimaryKey(id);
+        // 10403: 审核通过 且 结算书没有被请款过 才可以修改为终止
+        if ("10403".equals(record.getApproveStatus())) {
+            PmlsStatementCashBillRelate relate = pmlsStatementCashBillRelateMapper.getTopByStatementId(id);
+            if (relate == null) {
+                pmlsJsStatementMapper.updateByPrimaryKeySelective(statement);
+            } else {
+                resultData.setReturnCode("202");
+                resultData.setReturnMsg("本结算单已请款！");
+            }
+        } else {
+            resultData.setReturnCode("201");
+            resultData.setReturnMsg("本结算单当前状态已变更！");
+        }
+        return resultData;
+    }
+
+
+    public ResultData<List<PmlsJsCompanyDto>> queryJsCompanyList(Map<String, Object> queryParam) {
+
+        ResultData<List<PmlsJsCompanyDto>> resultData = new ResultData<List<PmlsJsCompanyDto>>();
+        List<PmlsJsCompanyDto> list = pmlsJsStatementDtlMapper.queryJsCompanyList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    public ResultData<List<PmlsJsProjectDto>> queryJsProjectList(Map<String, Object> queryParam) {
+
+        ResultData<List<PmlsJsProjectDto>> resultData = new ResultData<List<PmlsJsProjectDto>>();
+        List<PmlsJsProjectDto> list = pmlsJsStatementDtlMapper.queryJsProjectList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    public ResultData<List<PmlsJsHSCodeDto>> queryJsHSCodeList(Map<String, Object> queryParam) {
+
+        ResultData<List<PmlsJsHSCodeDto>> resultData = new ResultData<List<PmlsJsHSCodeDto>>();
+        List<PmlsJsHSCodeDto> list = pmlsJsStatementDtlMapper.queryJsHSCodeList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    public ResultData<List<PmlsJsKHCodeDto>> queryJsKHCodeList(Map<String, Object> queryParam) {
+
+        ResultData<List<PmlsJsKHCodeDto>> resultData = new ResultData<List<PmlsJsKHCodeDto>>();
+        List<PmlsJsKHCodeDto> list = pmlsJsStatementDtlMapper.queryJsKHCodeList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    public ResultData<List<PmlsJsFrameOaDto>> queryJsFrameOaList(Map<String, Object> queryParam) {
+
+        ResultData<List<PmlsJsFrameOaDto>> resultData = new ResultData<List<PmlsJsFrameOaDto>>();
+        List<PmlsJsFrameOaDto> list = pmlsJsStatementDtlMapper.queryJsFrameOaList(queryParam);
+        resultData.setTotalCount((String) queryParam.get(QueryConst.TOTAL_COUNT));
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    public ResultData<List<PmlsJsReportDto>> queryJsNormalReportList(Map<String, Object> queryParam) {
+
+        this.overridePageMap(queryParam);
+        ResultData<List<PmlsJsReportDto>> resultData = new ResultData<List<PmlsJsReportDto>>();
+        List<PmlsJsReportDto> list = pmlsJsStatementDtlMapper.queryJsNormalReportList(queryParam);
+        resultData.setTotalCount(queryParam.get(QueryConst.TOTAL_COUNT).toString());
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    public ResultData<List<PmlsJsReportDto>> queryJsOffsetReportList(Map<String, Object> queryParam) {
+
+        this.overridePageMap(queryParam);
+        ResultData<List<PmlsJsReportDto>> resultData = new ResultData<List<PmlsJsReportDto>>();
+        List<PmlsJsReportDto> list = pmlsJsStatementDtlMapper.queryJsOffsetReportList(queryParam);
+        resultData.setTotalCount(queryParam.get(QueryConst.TOTAL_COUNT).toString());
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    private Map<String, Object> overridePageMap(Map<String, Object> queryParam) {
+
+        int pageIndex = 1;
+        int pageSize = 10;
+        if (queryParam.get("pageIndex") != null)
+            pageIndex = Integer.parseInt(queryParam.get("pageIndex").toString());
+        if (queryParam.get("pageSize") != null)
+            pageSize = Integer.parseInt(queryParam.get("pageSize").toString());
+        queryParam.remove("pageIndex");
+        queryParam.remove("pageSize");
+
+        queryParam.put("offset", (pageIndex - 1) * pageSize);
+        queryParam.put("rows", pageSize);
+        queryParam.put("totalCount", 0);
+
+        return queryParam;
+    }
+
+    /**
+     * desc:结算书详情
+     * 2020年5月28日
+     */
+    public ResultData getJsStatementDetail(Map<String, Object> queryParam) {
+        ResultData resultData = new ResultData<>();
+        PmlsJsStatementDto pmlsJsStatementDto = pmlsJsStatementMapper.getJsStatementDetail(queryParam);
+        List<PmlsJsStatementDtl> jsStatementDtlList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pmlsJsStatementDto)) {
+        	jsStatementDtlList = pmlsJsStatementDto.getJsStatementDtlList();
+        	
+        	BigDecimal jsCxAreaTotal = new BigDecimal(0.00);//面积总计
+            BigDecimal jsCxAmountTotal = new BigDecimal(0.00);//签约总价合计
+            BigDecimal jsContractYdAmountTotal = new BigDecimal(0.00);//合同约定金额合计
+            BigDecimal jsJsAmountTotal = new BigDecimal(0.00);//本次结算金额合计
+            BigDecimal jsKpAmountTotal = new BigDecimal(0.00);//实际开票金额合计
+        	if(!CollectionUtils.isEmpty(jsStatementDtlList)) {
+        		for (PmlsJsStatementDtl pmlsJsStatementDtl : jsStatementDtlList) {
+        			jsCxAreaTotal = jsCxAreaTotal.add(pmlsJsStatementDtl.getCxArea()==null?new BigDecimal(0.00):pmlsJsStatementDtl.getCxArea());
+        			jsCxAmountTotal = jsCxAmountTotal.add(pmlsJsStatementDtl.getCxAmount()==null?new BigDecimal(0.00):pmlsJsStatementDtl.getCxAmount());
+        			jsContractYdAmountTotal = jsContractYdAmountTotal.add(pmlsJsStatementDtl.getContractYdAmount()==null?new BigDecimal(0.00):pmlsJsStatementDtl.getContractYdAmount());
+        			jsJsAmountTotal = jsJsAmountTotal.add(pmlsJsStatementDtl.getJsAmount()==null?new BigDecimal(0.00):pmlsJsStatementDtl.getJsAmount());
+        			jsKpAmountTotal = jsKpAmountTotal.add(pmlsJsStatementDtl.getKpAmount()==null?new BigDecimal(0.00):pmlsJsStatementDtl.getKpAmount());
+				}
+        		PmlsJsStatementDtl pmlsJsStatementDtlTotal = new PmlsJsStatementDtl();//合计列
+        		pmlsJsStatementDtlTotal.setCxArea(jsCxAreaTotal);
+        		pmlsJsStatementDtlTotal.setCxAmount(jsCxAmountTotal);
+        		pmlsJsStatementDtlTotal.setContractYdAmount(jsContractYdAmountTotal);
+        		pmlsJsStatementDtlTotal.setJsAmount(jsJsAmountTotal);
+        		pmlsJsStatementDtlTotal.setKpAmount(jsKpAmountTotal);
+        		jsStatementDtlList.add(pmlsJsStatementDtlTotal);
+        		pmlsJsStatementDto.setJsStatementDtlList(jsStatementDtlList);
+        	}
+        }
+        resultData.setReturnData(pmlsJsStatementDto);
+        return resultData;
+    }
+
+    /**
+     * desc:获取详情中得请款单对应得数据
+     * 2020年6月1日
+     */
+    public ResultData<Map<String, Object>> getCashBillDeatilByCashBillNo(Map<String, Object> map) throws Exception {
+        ResultData resultData = new ResultData();
+        Map<String, Object> list = pmlsJsStatementMapper.getCashBillDeatilByCashBillNo(map);
+        resultData.setReturnData(list);
+        return resultData;
+    }
+
+    /* 取得总控数据信息*/
+    public ResultData<zkVaildAmount> getZkInfo(Map<String, Object> queryParam) {
+        ResultData<zkVaildAmount> resultData = new ResultData<>();
+        zkVaildAmount info = pmlsJsStatementDtlMapper.getZkInfo(queryParam);
+        resultData.setReturnData(info);
+        return resultData;
+
+    }
+
+    public ResultData save(PmlsJsStatementVto statement) {
+        ResultData resultData = new ResultData();
+
+        // 1.保存校验
+        if (checkSave(statement, resultData) == false) {
+            return resultData;
+        }
+
+        // 2.补充信息
+        improveSaveInfo(statement);
+
+        // 3.新增结算主表信息
+        PmlsJsStatement record = new PmlsJsStatement();
+        BeanUtils.copyProperties(statement, record);
+        pmlsJsStatementMapper.insertSelective(record);
+
+        // 4.新增结算详细信息
+        List<PmlsJsStatementDtl> list = statement.getReportList();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (PmlsJsStatementDtl dtl : list) {
+                dtl.setJssId(record.getId());
+                dtl.setUserIdCreate(statement.getUserId());
+                dtl.setUserIdUpdate(statement.getUserId());
+                dtl.setDateCreate(new Date());
+                dtl.setDateUpdate(new Date());
+                dtl.setDelFlag(false);
+                pmlsJsStatementDtlMapper.insertSelective(dtl);
+            }
+        }
+        return resultData;
+
+    }
+
+    // 保存校验
+    private boolean checkSave(PmlsJsStatementVto statement, ResultData resultData) {
+
+
+        if (1 == statement.getSubmitStatus()) {
+
+        }
+
+
+        return true;
+    }
+
+    // 补充相关信息
+    private void improveSaveInfo(PmlsJsStatementVto statement) {
+        // 结算书模板
+        Map<String, Object> citySetting = citySettingMapper.getCitySettingByCityNo(statement.getCityNo());
+        String jssTemplate = "";
+        String jssTemplateName = "";
+        if (citySetting != null) {
+            if (citySetting.containsKey("jssTemplate") && citySetting.get("jssTemplate") != null) {
+                jssTemplate = citySetting.get("jssTemplate").toString();
+            }
+            if (citySetting.containsKey("jssTemplateName") && citySetting.get("jssTemplateName") != null) {
+                jssTemplateName = citySetting.get("jssTemplateName").toString();
+            }
+        }
+        statement.setTemplateCode(jssTemplate);
+        statement.setTemplateName(jssTemplateName);
+
+        statement.setJssNo(seqNoAPI.getSeqNoByTypeCode("PMLS_JSS_NO").getReturnData());         // 结算书编号
+        statement.setPlate("FCJY");      // 版块
+        statement.setApproveStatus("10401");
+        statement.setJyTotalAmount(new BigDecimal("0"));
+        statement.setUserIdCreate(statement.getUserId());
+        statement.setUserIdUpdate(statement.getUserId());
+        statement.setDateCreate(new Date());
+        statement.setDateUpdate(new Date());
+        statement.setDelFlag(false);
+        // 提交的场合
+        if (statement.getSubmitStatus() == 1) {
+
+            statement.setOaNo(seqNoAPI.getSeqNoByTypeCode("PMLS_JSS_OANO").getReturnData());    // 结算书OA 编号
+            statement.setFormState(0);
+            statement.setOaStartDate(new Date());
+            statement.setApproveStatus("10402");
+
+            statement.setSendUserCode(statement.getUserCode());
+            statement.setSendUserName(statement.getUserName());
+            statement.setSqdate(new Date());
+        }
+    }
+}

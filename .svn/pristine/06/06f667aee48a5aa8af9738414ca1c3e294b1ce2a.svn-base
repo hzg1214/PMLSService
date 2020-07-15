@@ -1,0 +1,161 @@
+package cn.com.eju.pmls.jsStatement.dto;
+
+import java.math.BigDecimal;
+
+public class PmlsJsReportDto {
+
+    private String reportId;
+    private String buildingNo;
+    private String customerNm;
+    private String customerTel;
+    private String projectNo;
+    private String projectName;
+    private Integer dyzkgz;
+    private BigDecimal cxArea;
+    private BigDecimal cxAmount;
+    private BigDecimal vaildDYAmount;
+    private BigDecimal vaildFYAmount;
+    private BigDecimal oldJsTotalAmount;
+
+    private Integer isSpecialProject;
+    private String accountProject;
+    private String accountProjectNo;
+    private String progress;
+    private String confirmStatus;
+
+    public String getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
+    }
+
+    public String getBuildingNo() {
+        return buildingNo;
+    }
+
+    public void setBuildingNo(String buildingNo) {
+        this.buildingNo = buildingNo;
+    }
+
+    public String getCustomerNm() {
+        return customerNm;
+    }
+
+    public void setCustomerNm(String customerNm) {
+        this.customerNm = customerNm;
+    }
+
+    public String getCustomerTel() {
+        return customerTel;
+    }
+
+    public void setCustomerTel(String customerTel) {
+        this.customerTel = customerTel;
+    }
+
+    public String getProjectNo() {
+        return projectNo;
+    }
+
+    public void setProjectNo(String projectNo) {
+        this.projectNo = projectNo;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Integer getDyzkgz() {
+        return dyzkgz;
+    }
+
+    public void setDyzkgz(Integer dyzkgz) {
+        this.dyzkgz = dyzkgz;
+    }
+
+    public BigDecimal getCxArea() {
+        return cxArea;
+    }
+
+    public void setCxArea(BigDecimal cxArea) {
+        this.cxArea = cxArea;
+    }
+
+    public BigDecimal getCxAmount() {
+        return cxAmount;
+    }
+
+    public void setCxAmount(BigDecimal cxAmount) {
+        this.cxAmount = cxAmount;
+    }
+
+    public BigDecimal getVaildDYAmount() {
+        return vaildDYAmount;
+    }
+
+    public void setVaildDYAmount(BigDecimal vaildDYAmount) {
+        this.vaildDYAmount = vaildDYAmount;
+    }
+
+    public BigDecimal getVaildFYAmount() {
+        return vaildFYAmount;
+    }
+
+    public void setVaildFYAmount(BigDecimal vaildFYAmount) {
+        this.vaildFYAmount = vaildFYAmount;
+    }
+
+    public Integer getIsSpecialProject() {
+        return isSpecialProject;
+    }
+
+    public void setIsSpecialProject(Integer isSpecialProject) {
+        this.isSpecialProject = isSpecialProject;
+    }
+
+    public String getAccountProject() {
+        return accountProject;
+    }
+
+    public void setAccountProject(String accountProject) {
+        this.accountProject = accountProject;
+    }
+
+    public String getAccountProjectNo() {
+        return accountProjectNo;
+    }
+
+    public void setAccountProjectNo(String accountProjectNo) {
+        this.accountProjectNo = accountProjectNo;
+    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
+    public String getConfirmStatus() {
+        return confirmStatus;
+    }
+
+    public void setConfirmStatus(String confirmStatus) {
+        this.confirmStatus = confirmStatus;
+    }
+
+    public BigDecimal getOldJsTotalAmount() {
+        return oldJsTotalAmount;
+    }
+
+    public void setOldJsTotalAmount(BigDecimal oldJsTotalAmount) {
+        this.oldJsTotalAmount = oldJsTotalAmount;
+    }
+}

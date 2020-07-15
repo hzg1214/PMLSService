@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.keFuWj.dao.KefuWjDDaMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.keFuWj.model.KefuWjDDa">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="wjhid" jdbcType="INTEGER" property="wjhid" />
+    <result column="wjdid" jdbcType="INTEGER" property="wjdid" />
+    <result column="wjxx" jdbcType="NVARCHAR" property="wjxx" />
+    <result column="sortIndex" jdbcType="INTEGER" property="sortIndex" />
+    <result column="directScore" jdbcType="INTEGER" property="directScore" />
+    <result column="userCreate" jdbcType="INTEGER" property="userCreate" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, wjhid, wjdid, wjxx, sortIndex, directScore, userCreate, dateCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_D_DA
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Kefu_Wj_D_DA
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDDa">
+    insert into Kefu_Wj_D_DA (id, wjhid, wjdid, 
+      wjxx, sortIndex, directScore, 
+      userCreate, dateCreate, delFlag
+      )
+    values (#{id,jdbcType=INTEGER}, #{wjhid,jdbcType=INTEGER}, #{wjdid,jdbcType=INTEGER}, 
+      #{wjxx,jdbcType=NVARCHAR}, #{sortIndex,jdbcType=INTEGER}, #{directScore,jdbcType=INTEGER}, 
+      #{userCreate,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDDa">
+    insert into Kefu_Wj_D_DA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="wjhid != null">
+        wjhid,
+      </if>
+      <if test="wjdid != null">
+        wjdid,
+      </if>
+      <if test="wjxx != null">
+        wjxx,
+      </if>
+      <if test="sortIndex != null">
+        sortIndex,
+      </if>
+      <if test="directScore != null">
+        directScore,
+      </if>
+      <if test="userCreate != null">
+        userCreate,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="wjhid != null">
+        #{wjhid,jdbcType=INTEGER},
+      </if>
+      <if test="wjdid != null">
+        #{wjdid,jdbcType=INTEGER},
+      </if>
+      <if test="wjxx != null">
+        #{wjxx,jdbcType=NVARCHAR},
+      </if>
+      <if test="sortIndex != null">
+        #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="directScore != null">
+        #{directScore,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDDa">
+    update Kefu_Wj_D_DA
+    <set>
+      <if test="wjhid != null">
+        wjhid = #{wjhid,jdbcType=INTEGER},
+      </if>
+      <if test="wjdid != null">
+        wjdid = #{wjdid,jdbcType=INTEGER},
+      </if>
+      <if test="wjxx != null">
+        wjxx = #{wjxx,jdbcType=NVARCHAR},
+      </if>
+      <if test="sortIndex != null">
+        sortIndex = #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="directScore != null">
+        directScore = #{directScore,jdbcType=INTEGER},
+      </if>
+      <if test="userCreate != null">
+        userCreate = #{userCreate,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.keFuWj.model.KefuWjDDa">
+    update Kefu_Wj_D_DA
+    set wjhid = #{wjhid,jdbcType=INTEGER},
+      wjdid = #{wjdid,jdbcType=INTEGER},
+      wjxx = #{wjxx,jdbcType=NVARCHAR},
+      sortIndex = #{sortIndex,jdbcType=INTEGER},
+      directScore = #{directScore,jdbcType=INTEGER},
+      userCreate = #{userCreate,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      delFlag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getListByWjHIdAndWjDId" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Kefu_Wj_D_DA
+    where wjhid = #{wjhid,jdbcType=INTEGER} and wjdid = #{wjdid,jdbcType=INTEGER} AND delFlag = 0
+    ORDER BY sortIndex ASC
+  </select>
+
+  <select id="getDaByTmId" parameterType="Integer" resultType="Map">
+    SELECT id, wjxx,0 checked FROM dbo.Kefu_Wj_D_DA
+    WHERE delFlag=0 AND wjdid=#{wjdid,jdbcType=INTEGER}
+    ORDER BY sortIndex
+  </select>
+
+</mapper>

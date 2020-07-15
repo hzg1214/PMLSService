@@ -1,0 +1,46 @@
+package cn.com.eju.pmls.developer.dto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.com.eju.pmls.developer.model.DeveloperBrand;
+
+public class DeveloperBrandDto extends DeveloperBrand{
+
+    private String createUserName;//创建人姓名
+    private String updateUserName;//更新人姓名
+    private boolean spread=true;//默认展开
+    private String name;
+    private List<DeveloperBrandDto> children=new ArrayList<DeveloperBrandDto>();
+    
+	public String getUpdateUserName() {
+		return updateUserName;
+	}
+	public void setUpdateUserName(String updateUserName) {
+		this.updateUserName = updateUserName;
+	}
+	public String getCreateUserName() {
+		return createUserName;
+	}
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+	public boolean isSpread() {
+		return spread;
+	}
+	public void setSpread(boolean spread) {
+		this.spread = spread;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public List<DeveloperBrandDto> getChildren() {
+		return children;
+	}
+	public void setChildren(List<DeveloperBrandDto> children) {
+		this.children = children;
+	}
+}

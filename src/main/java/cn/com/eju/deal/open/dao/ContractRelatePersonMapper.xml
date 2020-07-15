@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.open.dao.ContractRelatePersonMapper">
+	<resultMap id="BaseResultMap" type="cn.com.eju.deal.open.model.ContractRelatePerson">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="expandingPersonnelId" property="expandingPersonnelId" jdbcType="NVARCHAR" />
+		<result column="expandingPersonnel" property="expandingPersonnel" jdbcType="NVARCHAR" />
+		<result column="performTeam4" property="performTeam4" jdbcType="NVARCHAR" />
+		<result column="postTypeName4" property="postTypeName4" jdbcType="NVARCHAR" />
+		
+		<result column="expandLeaderId" property="expandLeaderId" jdbcType="NVARCHAR" />
+		<result column="expandLeader" property="expandLeader" jdbcType="NVARCHAR" />
+		<result column="performTeam3" property="performTeam3" jdbcType="NVARCHAR" />
+		<result column="postTypeName3" property="postTypeName3" jdbcType="NVARCHAR" />
+		
+		<result column="regionalDirectorId" property="regionalDirectorId" jdbcType="NVARCHAR" />
+		<result column="regionalDirector" property="regionalDirector" jdbcType="NVARCHAR" />
+		<result column="performTeam2" property="performTeam2" jdbcType="NVARCHAR" />
+		<result column="postTypeName2" property="postTypeName2" jdbcType="NVARCHAR" />
+		
+		<result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+		<result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+		<result column="updateCreate" property="updateCreate" jdbcType="INTEGER" />
+		<result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+		<result column="delFlag" property="delFlag" jdbcType="BIT" />
+		<result column="contractId" property="contractId" jdbcType="INTEGER" />
+		<result column="performTeam1" property="performTeam1" jdbcType="NVARCHAR" />
+		
+		<result column="expandingPersonnelGroupId" property="expandingPersonnelGroupId" jdbcType="INTEGER" />
+		<result column="expandingPersonnelPostId" property="expandingPersonnelPostId" jdbcType="INTEGER" />
+		<result column="expandLeaderGroupId" property="expandLeaderGroupId" jdbcType="INTEGER" />
+		<result column="expandLeaderPostId" property="expandLeaderPostId" jdbcType="INTEGER" />
+		<result column="regionalDirectorGroupId" property="regionalDirectorGroupId" jdbcType="INTEGER" />
+		<result column="regionalDirectorPostId" property="regionalDirectorPostId" jdbcType="INTEGER" />
+		
+		<result column="businessManagerId" property="businessManagerId" jdbcType="NVARCHAR" />
+		<result column="businessManager" property="businessManager" jdbcType="NVARCHAR" />
+		<result column="postTypeName1" property="postTypeName1" jdbcType="NVARCHAR" />
+		<result column="businessManagerGroupId" property="businessManagerGroupId" jdbcType="INTEGER" />
+		<result column="businessManagerPostId" property="businessManagerPostId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, expandingPersonnelId, expandingPersonnel, performTeam4, postTypeName4, 
+		expandLeaderId, expandLeader, performTeam3, postTypeName3, 
+		regionalDirectorId, regionalDirector, performTeam2, postTypeName2, 
+		userIdCreate, dateCreate, delFlag, contractId, updateCreate, updateDate, performTeam1,
+		expandingPersonnelGroupId, expandingPersonnelPostId, 
+		expandLeaderGroupId, expandLeaderPostId, 
+		regionalDirectorGroupId, regionalDirectorPostId,
+		businessManagerId, businessManager, postTypeName1, 
+		businessManagerGroupId, businessManagerPostId
+	</sql>
+	
+	<!-- 新增-业绩关联人员信息 -->
+	<insert id="create" parameterType="cn.com.eju.deal.open.model.ContractRelatePerson"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ContractRelatePerson 
+		(
+			expandingPersonnelId, expandingPersonnel, performTeam4, postTypeName4, 
+			expandLeaderId, expandLeader, performTeam3, postTypeName3, 
+			regionalDirectorId, regionalDirector, performTeam2, postTypeName2, 
+			userIdCreate, dateCreate, delFlag, contractId, updateCreate, updateDate, performTeam1, 
+			expandingPersonnelGroupId, expandingPersonnelPostId, 
+			expandLeaderGroupId, expandLeaderPostId, 
+			regionalDirectorGroupId, regionalDirectorPostId, 
+			businessManagerId, businessManager, postTypeName1, 
+			businessManagerGroupId, businessManagerPostId
+		)
+		values 
+		(
+			#{expandingPersonnelId,jdbcType=NVARCHAR},
+			#{expandingPersonnel,jdbcType=NVARCHAR},
+			#{performTeam4,jdbcType=NVARCHAR},
+			#{postTypeName4,jdbcType=NVARCHAR},
+			#{expandLeaderId,jdbcType=NVARCHAR},
+			#{expandLeader,jdbcType=NVARCHAR},
+			#{performTeam3,jdbcType=NVARCHAR},
+			#{postTypeName3,jdbcType=NVARCHAR},
+			#{regionalDirectorId,jdbcType=NVARCHAR},
+			#{regionalDirector,jdbcType=NVARCHAR},
+			#{performTeam2,jdbcType=NVARCHAR},
+			#{postTypeName2,jdbcType=NVARCHAR},
+			#{userIdCreate,jdbcType=INTEGER},
+			#{dateCreate,jdbcType=TIMESTAMP},
+			0,
+			#{contractId,jdbcType=INTEGER},
+			#{updateCreate,jdbcType=INTEGER},
+			#{updateDate,jdbcType=TIMESTAMP},
+			#{performTeam1,jdbcType=NVARCHAR},
+			#{expandingPersonnelGroupId,jdbcType=INTEGER},
+			#{expandingPersonnelPostId,jdbcType=INTEGER},
+			#{expandLeaderGroupId,jdbcType=INTEGER},
+			#{expandLeaderPostId,jdbcType=INTEGER},
+			#{regionalDirectorGroupId,jdbcType=INTEGER},
+			#{regionalDirectorPostId,jdbcType=INTEGER},
+			#{businessManagerId,jdbcType=NVARCHAR},
+			#{businessManager,jdbcType=NVARCHAR},
+			#{postTypeName1,jdbcType=NVARCHAR},
+			#{businessManagerGroupId,jdbcType=INTEGER},
+			#{businessManagerPostId,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<!-- 更新-业绩关联人员信息 -->
+	<update id="update" parameterType="cn.com.eju.deal.open.model.ContractRelatePerson">
+		UPDATE ContractRelatePerson
+		<set>
+			<if test="expandingPersonnelId != null">
+				expandingPersonnelId = #{expandingPersonnelId,jdbcType=NVARCHAR},
+			</if>
+			<if test="expandingPersonnel != null">
+				expandingPersonnel = #{expandingPersonnel,jdbcType=NVARCHAR},
+			</if>
+			<if test="performTeam4 != null">
+				performTeam4 = #{performTeam4,jdbcType=NVARCHAR},
+			</if>
+			<if test="postTypeName4 != null">
+				postTypeName4 = #{postTypeName4,jdbcType=NVARCHAR},
+			</if>
+			<if test="expandLeaderId != null">
+				expandLeaderId = #{expandLeaderId,jdbcType=NVARCHAR},
+			</if>
+			<if test="expandLeader != null">
+				expandLeader = #{expandLeader,jdbcType=NVARCHAR},
+			</if>
+			<if test="performTeam3 != null">
+				performTeam3 = #{performTeam3,jdbcType=NVARCHAR},
+			</if>
+			<if test="postTypeName3 != null">
+				postTypeName3 = #{postTypeName3,jdbcType=NVARCHAR},
+			</if>
+			<if test="regionalDirectorId != null">
+				regionalDirectorId = #{regionalDirectorId,jdbcType=NVARCHAR},
+			</if>
+			<if test="regionalDirector != null">
+				regionalDirector = #{regionalDirector,jdbcType=NVARCHAR},
+			</if>
+			<if test="performTeam2 != null">
+				performTeam2 = #{performTeam2,jdbcType=NVARCHAR},
+			</if>
+			<if test="postTypeName2 != null">
+				postTypeName2 = #{postTypeName2,jdbcType=NVARCHAR},
+			</if>
+			<if test="userIdCreate != null">
+				userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+			</if>
+			<if test="dateCreate != null">
+				dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				delFlag = #{delFlag,jdbcType=BIT},
+			</if>
+			<if test="updateCreate != null">
+				updateCreate = #{updateCreate,jdbcType=INTEGER},
+			</if>
+			<if test="updateDate != null">
+				updateDate = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="performTeam1 != null">
+				performTeam1 = #{performTeam1,jdbcType=NVARCHAR},
+			</if>
+			<if test="expandingPersonnelGroupId != null">
+				expandingPersonnelGroupId = #{expandingPersonnelGroupId,jdbcType=INTEGER},
+			</if>
+			<if test="expandingPersonnelPostId != null">
+				expandingPersonnelPostId = #{expandingPersonnelPostId,jdbcType=INTEGER},
+			</if>
+			<if test="expandLeaderGroupId != null">
+				expandLeaderGroupId = #{expandLeaderGroupId,jdbcType=INTEGER},
+			</if>
+			<if test="expandLeaderPostId != null">
+				expandLeaderPostId = #{expandLeaderPostId,jdbcType=INTEGER},
+			</if>
+			<if test="regionalDirectorGroupId != null">
+				regionalDirectorGroupId = #{regionalDirectorGroupId,jdbcType=INTEGER},
+			</if>
+			<if test="regionalDirectorPostId != null">
+				regionalDirectorPostId = #{regionalDirectorPostId,jdbcType=INTEGER},
+			</if>
+			
+			<if test="businessManagerId != null">
+				businessManagerId = #{businessManagerId,jdbcType=NVARCHAR},
+			</if>
+			<if test="businessManager != null">
+				businessManager = #{businessManager,jdbcType=NVARCHAR},
+			</if>
+			<if test="postTypeName1 != null">
+				postTypeName1 = #{postTypeName1,jdbcType=NVARCHAR},
+			</if>
+			<if test="businessManagerGroupId != null">
+				businessManagerGroupId = #{businessManagerGroupId,jdbcType=INTEGER},
+			</if>
+			<if test="businessManagerPostId != null">
+				businessManagerPostId = #{businessManagerPostId,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE delFlag = 0
+			AND contractId = #{contractId,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据合同ID查询业绩关联人员信息 -->
+	<select id="getByNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT  *
+	FROM    ContractRelatePerson
+	WHERE   delFlag = 0
+	        AND contractId = ( SELECT   Id
+				                           FROM     Contract
+				                           WHERE    ContractNo = #{contractNo,jdbcType=NVARCHAR}
+	                         			)
+	</select>
+
+</mapper>

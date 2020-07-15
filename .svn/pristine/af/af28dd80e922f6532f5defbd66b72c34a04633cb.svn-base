@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.sweepStreets.StoreLocationAuditMapper">
+
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.model.sweepStreets.StoreLocationAuditDto">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="storeId" property="storeId"/>
+		<result column="centerId" property="centerId"/>
+		<result column="centerUserId" property="centerUserId"/>
+		<result column="centerUserCode" property="centerUserCode"/>
+		<result column="oldLongitude" property="oldLongitude"/>
+		<result column="oldLatitude" property="oldLatitude"/>
+		<result column="newLongitude" property="newLongitude"/>
+		<result column="newLatitude" property="newLatitude"/>
+		<result column="auditStatus" property="auditStatus"/>
+		<result column="auditRemark" property="auditRemark"/>
+		<result column="createUserId" property="createUserId"/>
+		<result column="createDate" property="createDate"/>
+		<result column="updateUserId" property="updateUserId"/>
+		<result column="updateDate" property="updateDate"/>
+    </resultMap>
+
+	<!---->
+	<resultMap id="storeLocationAuditMap" type="cn.com.eju.deal.model.sweepStreets.StoreLocationAuditDto" extends="BaseResultMap">
+		<association property="storeNewDto" column="storeId" javaType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+			<result column="StoreNo" property="storeNo" />
+			<result column="Name" property="storeName" />
+			<result column="Longitude" property="longitude" />
+			<result column="Latitude" property="latitude" />
+			<result column="CityNo" property="cityNo" />
+			<result column="CityName" property="cityName" />
+			<result column="DistrictNo" property="districtNo" />
+			<result column="DistrictName" property="districtName" />
+			<result column="StoreManager" property="storeManager" />
+			<result column="StoreManagerPhone" property="storeManagerPhone" />
+			<result column="LinkageSituation" property="linkageSituation" />
+			<result column="ChainBrand" property="chainBrand" />
+			<result column="ChainBrandName" property="chainBrandName" />
+			<result column="StoreDueTime" property="storeDueTime" />
+			<result column="StoreLeaseDueTime" property="storeLeaseDueTime" />
+			<result column="StorePersonNum" property="storePersonNum" />
+			<result column="StorePersonNumName" property="storePersonNumName" />
+			<result column="NowUserSystem" property="nowUserSystem" />
+			<result column="NowUserSystemName" property="nowUserSystemName" />
+			<result column="MainBusiness" property="mainBusiness" />
+			<result column="MainBusinessName" property="mainBusinessName" />
+			<result column="TransactionMode" property="transactionMode" />
+			<result column="TransactionModeName" property="transactionModeName" />
+			<result column="Address" property="address" />
+			<result column="AddressDetail" property="addressDetail" />
+			<result column="AuditStatus" property="auditStatus" />
+			<result column="AuditStatusName" property="auditStatusName" />
+			<result column="companyId" property="companyId" />
+			<result column="maintainer" property="maintainer" />
+			<result column="maintainerName" property="maintainerName" />
+			<result column="centerName" property="centerName" />
+		</association>
+	</resultMap>
+
+
+	<!-- 根据中心ID  查询中心负责人信息 -->
+	<select id="getCentralDirectorByCenterId" resultType="Map" parameterType="Integer">
+		SELECT DISTINCT
+				s1.centerGroupId AS centerId,
+				s1.centerGroupName AS centerName,
+				s2.userId,
+				s1.centerLeaderCode AS userCode,
+				s1.centerLeaderName AS userName
+			 FROM  dbo.Achiv_AchievementLevel_Setting s1
+			 INNER JOIN dbo.USR_User s2 ON s1.centerLeaderCode=s2.userCode
+			 AND s1.centerLeaderName=s2.userName AND s2.inStatus=1073
+		where s1.centerGroupId = #{centerId}
+
+	</select>
+
+	<!-- 根据门店ID 获取门口位置变更审批记录 并且在审批中的 注：一个门店只能有一条待审批的位置变更审批，可以有多条变更审批记录 -->
+	<select id="getStoreLocationAuditByStoreIdAndAudit" resultMap="BaseResultMap" parameterType="Integer">
+		SELECT * FROM Store_LocationAudit
+		WHERE auditStatus=0 and storeId = #{storeId}
+	</select>
+
+	<!-- 根据ID 获取门口位置变更审批记录  -->
+	<select id="getStoreLocationAuditById" resultMap="storeLocationAuditMap" parameterType="Integer">
+		SELECT * FROM Store_LocationAudit sa
+		inner join store s on s.id=sa.storeid
+		WHERE sa.id = #{Id}
+	</select>
+
+  	<!-- 插入新门店位置变更审批数据 -->
+  	<insert id="addStoreLocationAudit"  parameterType="cn.com.eju.deal.model.sweepStreets.StoreLocationAuditDto"
+  		useGeneratedKeys="true" keyProperty="id">
+	    INSERT INTO dbo.Store_LocationAudit (
+	    storeId,
+	    centerId,
+	    centerUserId,
+	    centerUserCode,
+	    oldLongitude,
+	    oldLatitude,
+	    newLongitude,
+	    newLatitude,
+	    auditStatus,
+	    auditRemark,
+	    createUserId,
+	    createDate
+	    )
+	    values
+	        (
+	        #{storeId},
+	        #{centerId},
+	        #{centerUserId},
+	        #{centerUserCode},
+	        #{oldLongitude},
+	        #{oldLatitude},
+	        #{newLongitude},
+	        #{newLatitude},
+	        #{auditStatus},
+	        #{auditRemark},
+	        #{createUserId},
+			GETDATE()
+	        )
+	</insert>
+
+	<!-- 审批通过 门店位置变更审批 -->
+	<update id="updateStoreLocationAuditAndAudit" parameterType="cn.com.eju.deal.model.sweepStreets.StoreLocationAuditDto">
+        UPDATE Store_LocationAudit
+		<set>
+			updateDate = GETDATE(),
+	        <if test="auditStatus != null and  auditStatus != ''">
+				auditStatus = #{auditStatus},
+	        </if>
+	        <if test="updateUserId != null and updateUserId != ''">
+				updateUserId = #{updateUserId},
+	        </if>
+			<if test="auditRemark != null and auditRemark != ''">
+				auditRemark = #{auditRemark},
+			</if>
+        </set>
+        where id = #{id}
+    </update>
+
+	<!-- 审批通过 修改门店位置信息 -->
+	<update id="updateStoreLocation" parameterType="cn.com.eju.deal.model.sweepStreets.StoreLocationAuditDto">
+		UPDATE Store
+		<set>
+			dateUpdate = GETDATE(),
+			<if test="newLongitude != null and  newLongitude != ''">
+				Longitude = #{newLongitude},
+			</if>
+			<if test="newLatitude != null and  newLatitude != ''">
+				Latitude = #{newLatitude},
+			</if>
+			<if test="updateUserId != null and updateUserId != ''">
+				userUpdate = #{updateUserId},
+			</if>
+		</set>
+		where id = #{storeId}
+	</update>
+
+</mapper>

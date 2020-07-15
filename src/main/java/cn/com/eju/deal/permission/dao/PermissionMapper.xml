@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.permission.dao.PermissionMapper" >
+    <select id="getPermissionList" resultType="cn.com.eju.deal.permission.model.PermissionDto" parameterType="java.util.Map">
+SELECT id ,
+       userCode ,
+       userName ,
+       functionCode ,
+       functionName ,
+       isShow ,
+       isClick ,
+       status ,
+       createDate FROM dbo.cloud_user_function_authority WHERE 1=1
+        <if test="userCode!=null and userCode!=''">
+            and userCode=#{userCode}
+        </if>
+        <if test="functionName!=null and functionName!=''">
+            and functionName=#{functionName}
+        </if>
+
+       ORDER by userCode,createDate
+     </select>
+
+
+
+    <update id="deletePermission" parameterType="java.util.Map">
+        update  dbo.cloud_user_function_authority
+        SET status=1
+        where id IN
+        <foreach collection="idList"  index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+
+
+    </update>
+
+    <select id="searchList" resultType="cn.com.eju.deal.permission.model.PermissionDto" parameterType="java.util.Map">
+     SELECT DISTINCT functionCode,functionName FROM dbo.cloud_user_function_authority
+    </select>
+<!--查看要添加的人是否已经存在模块-->
+    <select id="searchNewList" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT  functionCode FROM dbo.cloud_user_function_authority WHERE userCode=#{userCode}
+    </select>
+
+    <insert id="savePermission" parameterType="java.util.Map">
+        INSERT INTO
+        dbo.cloud_user_function_authority
+        SELECT DISTINCT
+        #{userCode} userCode ,
+        #{userName} userName ,
+        functionCode ,
+        functionName ,
+        '10'  isShow ,
+        '10'  isClick ,
+        '0' status ,
+        getdate() createDate FROM dbo.cloud_user_function_authority WHERE functionCode IN
+        <foreach collection="functionCodeList"  index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+
+
+    </insert>
+
+</mapper>

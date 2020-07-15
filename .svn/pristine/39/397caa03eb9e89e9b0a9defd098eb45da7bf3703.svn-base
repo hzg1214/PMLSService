@@ -1,0 +1,1421 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.houseLinkage.report.dao.ReportDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="EstateId" property="estateId" jdbcType="VARCHAR"/>
+        <result column="EstateNm" property="estateNm" jdbcType="NVARCHAR"/>
+        <result column="CompanyId" property="companyId" jdbcType="VARCHAR"/>
+        <result column="CompanyNm" property="companyNm" jdbcType="NVARCHAR"/>
+        <result column="CountId" property="countId" jdbcType="VARCHAR"/>
+        <result column="Progress" property="progress" jdbcType="INTEGER"/>
+        <result column="ConfirmStatus" property="confirmStatus" jdbcType="INTEGER"/>
+        <result column="ReportMemo" property="reportMemo" jdbcType="NVARCHAR"/>
+        <result column="FollowDate" property="followDate" jdbcType="TIMESTAMP"/>
+        <result column="CustomerId" property="customerId" jdbcType="VARCHAR"/>
+        <result column="CustomerFrom" property="customerFrom" jdbcType="INTEGER"/>
+        <result column="CustomerNm" property="customerNm" jdbcType="NVARCHAR"/>
+        <result column="CustomerTel" property="customerTel" jdbcType="VARCHAR"/>
+        <result column="AccountFlg" property="accountFlg" jdbcType="INTEGER"/>
+        <result column="AccountStatus" property="accountStatus" jdbcType="INTEGER"/>
+        <result column="CommissionAccountStatus" property="commissionAccountStatus" jdbcType="INTEGER"/>
+        <result column="RecognitionDay" property="recognitionDay" jdbcType="TIMESTAMP"/>
+        <result column="RelationReward" property="relationReward" jdbcType="DECIMAL"/>
+        <result column="AccountRelationReward" property="accountRelationReward" jdbcType="DECIMAL"/>
+        <result column="PledgedReward" property="pledgedReward" jdbcType="DECIMAL"/>
+        <result column="AccountPledgedReward" property="accountPledgedReward" jdbcType="DECIMAL"/>
+        <result column="SubscribedReward" property="subscribedReward" jdbcType="DECIMAL"/>
+        <result column="AccountSubscribedReward" property="accountSubscribedReward" jdbcType="DECIMAL"/>
+        <result column="BargainReward" property="bargainReward" jdbcType="DECIMAL"/>
+        <result column="AccountBargainReward" property="accountBargainReward" jdbcType="DECIMAL"/>
+        <result column="Commission" property="commission" jdbcType="DECIMAL"/>
+        <result column="AccountCommission" property="accountCommission" jdbcType="DECIMAL"/>
+        <result column="DeptNm" property="deptNm" jdbcType="NVARCHAR"/>
+        <result column="EmpNm" property="empNm" jdbcType="NVARCHAR"/>
+        <result column="ReportDate" property="reportDate" jdbcType="TIMESTAMP"/>
+        <result column="CrtEmpId" property="crtEmpId" jdbcType="INTEGER"/>
+        <result column="UptEmpId" property="uptEmpId" jdbcType="INTEGER"/>
+        <result column="DelFlg" property="delFlg" jdbcType="BIT"/>
+        <result column="CrtDt" property="crtDt" jdbcType="TIMESTAMP"/>
+        <result column="UptDt" property="uptDt" jdbcType="TIMESTAMP"/>
+
+        <result column="buildingNo" property="buildingNo" jdbcType="NVARCHAR"/>
+		<result column="buildingNoId" property="buildingNoId" jdbcType="NVARCHAR"/>
+        <result column="area" property="area" jdbcType="DECIMAL"/>
+        <result column="roughAmount" property="roughAmount" jdbcType="DECIMAL"/>
+        <result column="dealAmount" property="dealAmount" jdbcType="DECIMAL"/>
+
+        <result column="seeDate" 	 property="seeDate" jdbcType="TIMESTAMP"/>
+        <result column="pledgedDate" property="pledgedDate" jdbcType="TIMESTAMP"/>
+        <result column="roughDate" 	 property="roughDate" jdbcType="TIMESTAMP"/>
+        <result column="dealDate" 	 property="dealDate" jdbcType="TIMESTAMP"/>
+        <result column="pledgedBackDate" 	 property="pledgedBackDate" jdbcType="TIMESTAMP"/>
+        <result column="roughBackDate" 	 	 property="roughBackDate" jdbcType="TIMESTAMP"/>
+        <result column="dealBackDate"        property="dealBackDate" jdbcType="TIMESTAMP"/>
+        <result column="crtEmpName" property="crtEmpName" jdbcType="NVARCHAR"/>
+        <result column="uptEmpName" property="uptEmpName" jdbcType="NVARCHAR"/>
+        <result column="customerIdTwo" property="customerIdTwo" jdbcType="VARCHAR"/>
+        <result column="customerNmTwo" property="customerNmTwo" jdbcType="VARCHAR"/>
+        <result column="customerTelTwo" property="customerTelTwo" jdbcType="VARCHAR"/>
+		<result column="roughInputDate"        property="roughInputDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    Id,EstateId,EstateNm,CompanyId,CompanyNm,CountId,Progress,ConfirmStatus,ReportMemo,FollowDate,CustomerId,CustomerFrom,CustomerNm,CustomerTel,AccountFlg,AccountStatus,CommissionAccountStatus,RecognitionDay,
+RelationReward,AccountRelationReward,PledgedReward,AccountPledgedReward,SubscribedReward,AccountSubscribedReward,BargainReward,AccountBargainReward,Commission,AccountCommission,
+DeptNm,EmpNm,ReportDate,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,buildingNo,area,roughAmount,dealAmount,roughArea
+  ,seeDate,pledgedDate,roughDate,dealDate,pledgedBackDate,roughBackDate,dealBackDate, dbuildingNoId buildingNoId
+  ,customerIdTwo,customerNmTwo,customerTelTwo,roughInputDate
+  </sql>
+
+  <!-- 克隆用 -->
+   <sql id="Base_Column_List_Copy">
+	    Id,EstateId,EstateNm,CompanyId,CompanyNm,CountId,Progress,ConfirmStatus,ReportMemo,FollowDate,CustomerId,CustomerFrom,CustomerNm,CustomerTel,AccountFlg,AccountStatus,CommissionAccountStatus,RecognitionDay,
+	RelationReward,AccountRelationReward,PledgedReward,AccountPledgedReward,SubscribedReward,AccountSubscribedReward,BargainReward,AccountBargainReward,Commission,AccountCommission,
+	DeptNm,EmpNm,ReportDate,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,seeDate,roughArea,roughDate,roughAmount,buildingNo,area,dealAmount,dealDate,roughInputDate,dbuildingNoId buildingNoId
+   </sql>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        <where>
+            Id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="getReportDetail" resultMap="BaseResultMap"  parameterType="Map">
+        SELECT
+            u.userName as crtEmpName,u1.userName as UptEmpName,
+			<include refid="Base_Column_List"/>
+        	<if test="progress != null and progress == 13501"><!--  报备 -->
+				, RelationReward as reward, AccountRelationReward as accountReward, AccountStatus	as accountStatus
+			</if>
+			<if test="progress != null and progress == 13502"><!--  带看 -->
+				, RelationReward as reward, AccountRelationReward as accountReward, AccountStatus	as accountStatus
+			</if>
+			<if test="progress != null and progress == 13503"><!--  认筹 -->
+				, PledgedReward as reward, AccountPledgedReward as accountReward, AccountStatus	as accountStatus
+			</if>
+			<if test="progress != null and progress == 13504"><!--  大定 -->
+				, SubscribedReward as reward, AccountSubscribedReward as accountReward, AccountStatus	as accountStatus
+			</if>
+			<if test="progress != null and progress == 13505"><!--  成销 -->
+				, BargainReward as reward, AccountBargainReward as accountReward, AccountStatus	as accountStatus
+			</if>
+			<if test="progress != null and progress == 13507"><!--  结佣 -->
+				, Commission as reward, AccountCommission as accountReward, CommissionAccountStatus as accountStatus
+			</if>
+        FROM LNK_ReportDetail t WITH(NOLOCK)
+        LEFT JOIN crm.dbo.USR_User u  WITH(NOLOCK) on t.crtEmpId = u.userId
+		LEFT JOIN crm.dbo.USR_User u1 WITH(NOLOCK) on t.UptEmpId = u1.userId
+		<where>
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and isValid = 0
+        	and DelFlg=0
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	and CustomerId = #{customerId,jdbcType=VARCHAR}
+        	<if test="progress != null and progress != ''"><!--  进度 -->
+	        	<if test="progress == 13507"><!--  结佣 -->
+					and Progress = 13505
+				</if>
+				<if test="progress != 13507"><!--  报备 -->
+					and Progress = #{progress, jdbcType=INTEGER}
+				</if>
+			</if>
+        </where>
+        order by Progress ASC
+    </select>
+
+	<select id="checkAccountOk" resultMap="BaseResultMap"  parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        <where>
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and isValid = 0
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	and CustomerId = #{customerId,jdbcType=VARCHAR}
+        	and ConfirmStatus =13601
+        	and Progress != 13501
+        </where>
+        order by FollowDate,Progress
+    </select>
+
+    <select id="getReward" resultMap="BaseResultMap"  parameterType="Map">
+        SELECT
+        	<if test="status != null and status== 13501"><!--  报备 -->
+				relationReward as reward
+			</if>
+			<if test="status != null and status== 13502"><!--  带看 -->
+				relationReward as reward
+			</if>
+			<if test="status != null and status== 13503"><!--  认筹 -->
+				pledgedReward as reward
+			</if>
+			<if test="status != null and status== 13504"><!--  大定 -->
+				subscribedReward as reward
+			</if>
+			<if test="status != null and status== 13505">
+				<if test="commissionFlg != null and commissionFlg== 1"><!--  结佣 -->
+					commission as reward
+				</if>
+				<if test="commissionFlg != null and commissionFlg != 1"><!--  成交 -->
+					bargainReward as reward
+				</if>
+			</if>
+			<if test="status != null and status== 13506"><!--  退筹 -->
+				subscribedReward as reward
+			</if>
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        <where>
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and isValid = 0
+        	and DelFlg = 0
+        	and Progress = #{status,jdbcType=INTEGER}
+        	and ConfirmStatus = #{confirmStatus,jdbcType=INTEGER}
+        	<if test="companyId != null and companyId != ''">
+				and CompanyId = #{companyId,jdbcType=VARCHAR}
+			</if>
+			<if test="countDateStart != null and countDateStart != '' and  countDateStart != 'null'"><!-- 开始日场合 -->
+                <![CDATA[
+  		  			AND RecognitionDay is not null
+    				AND Convert(varchar(10),RecognitionDay,120) >= #{countDateStart,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+            <if test="countDateEnd != null and countDateEnd != ''  and  countDateEnd != 'null' "><!-- 结束日场合 -->
+                <![CDATA[
+  		  			AND RecognitionDay is not null
+    				AND Convert(varchar(10),RecognitionDay,120) <= #{countDateEnd,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="getCountRewardConfirmStatusValid" resultMap="BaseResultMap"  parameterType="Map">
+        SELECT
+        	<if test="status != null and status== 13501"><!--  报备 -->
+				lrd.relationReward as reward
+			</if>
+			<if test="status != null and status== 13502"><!--  带看 -->
+				lrd.relationReward as reward
+			</if>
+			<if test="status != null and status== 13503"><!--  认筹 -->
+				lrd.pledgedReward as reward
+			</if>
+			<if test="status != null and status== 13504"><!--  大定 -->
+				lrd.subscribedReward as reward
+			</if>
+			<if test="status != null and status== 13505">
+				<if test="commissionFlg != null and commissionFlg== 1"><!--  结佣 -->
+					lrd.commission as reward
+				</if>
+				<if test="commissionFlg != null and commissionFlg != 1"><!--  成交 -->
+					lrd.bargainReward as reward
+				</if>
+			</if>
+			<if test="status != null and status== 13506"><!--  退筹 -->
+				lrd.subscribedReward as reward
+			</if>
+        FROM LNK_ReportDetail lrd WITH(NOLOCK)
+<!-- 		INNER join LNK_Report lr WITH(NOLOCK) ON SUBSTRING(lrd.CountId, 0, 16) = lr.ReportId -->
+		INNER join LNK_Report lr WITH(NOLOCK) ON lrd.reportNo = lr.ReportId
+        <where>
+        	lrd.EstateId = #{estateId,jdbcType=VARCHAR}
+        	and lrd.isValid = 0
+        	and lrd.DelFlg = 0
+        	and lrd.Progress = #{status,jdbcType=INTEGER}
+        	and lrd.ConfirmStatus = #{confirmStatus,jdbcType=INTEGER}
+        	and lr.ConfirmStatus != 13602
+        	<if test="companyId != null and companyId != ''">
+				and lrd.CompanyId = #{companyId,jdbcType=VARCHAR}
+			</if>
+			<if test="countDateStart != null and countDateStart != '' and  countDateStart != 'null'"><!-- 开始日场合 -->
+                <![CDATA[
+  		  			AND lrd.RecognitionDay is not null
+    				AND Convert(varchar(10),lrd.RecognitionDay,120) >= #{countDateStart,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+            <if test="countDateEnd != null and countDateEnd != ''  and  countDateEnd != 'null' "><!-- 结束日场合 -->
+                <![CDATA[
+  		  			AND lrd.RecognitionDay is not null
+    				AND Convert(varchar(10),lrd.RecognitionDay,120) <= #{countDateEnd,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+
+        </where>
+    </select>
+
+    <resultMap id="StatisticDetailInfoMap" type="cn.com.eju.deal.houseLinkage.report.model.StatisticDetailSearchResult"/>
+    <!-- 查询 list -->
+    <select id="getStatisticDetail" resultMap="StatisticDetailInfoMap"  parameterType="Map">
+        SELECT
+        	 e.estateId,p.countId,e.cityNo,e.districtId,e.mgtKbn as estateType,e.estateNm,p.customerNm,p.customerTel,p.companyNm,r.deptNm,r.empNm,p.progress as rewardType,p.accountFlg as accountType,
+        	 p.accountStatus,p.recognitionDay,p.relationReward,p.accountRelationReward,p.pledgedReward,p.accountPledgedReward,p.subscribedReward,
+        	 p.accountSubscribedReward,p.bargainReward,p.accountBargainReward,p.commission,p.accountCommission,p.commissionAccountStatus
+        FROM LNK_ReportDetail p WITH(NOLOCK), LNK_Estate e WITH(NOLOCK) ,LNK_Report r WITH(NOLOCK)
+        <where>
+        	p.EstateId = #{estateId,jdbcType=VARCHAR}
+        	AND p.isValid = 0
+        	<if test="companyId != null and companyId !=''">
+                 <![CDATA[
+  				AND p.CompanyId = #{companyId,jdbcType=VARCHAR}
+  				]]>
+			</if>
+        	AND p.EstateId = e.EstateId
+        	AND p.EstateId = r.EstateId
+        	AND p.CompanyNm = r.CompanyNm
+        	AND p.ConfirmStatus = 13601
+        	AND e.ReleaseStatus = 13001
+        	AND p.Progress !=13501
+  			AND e.CityNo = #{cityNo,jdbcType=NVARCHAR}
+  			<!-- 数据权限控制 -->
+             <if test="userIdList != null and userIdList != ''">
+				<foreach collection="userIdList" item="item" index="index"
+					open="AND (" close=")" separator="OR">
+				<![CDATA[
+	    			 e.CrtEmpId = #{item, jdbcType=INTEGER}
+	    		]]>
+				</foreach>
+			</if>
+			<if test="districtId != null and districtId !=''"><!-- 查询条件是否有区域 -->
+                 <![CDATA[
+  				AND e.DistrictId = #{districtId,jdbcType=VARCHAR}
+  				]]>
+			</if>
+			<if test="estateType != null and estateType !=''"><!-- 查询条件是否有楼盘类型 -->
+                 <![CDATA[
+  				AND e.MgtKbn like '%${estateType}%'
+  				]]>
+			</if>
+			<if test="rewardType != null and rewardType !=''"><!-- 查询条件是否有奖励类型 -->
+				<if test="rewardType == 14105"><!-- 结佣 -->
+					AND p.Progress = 13505
+				</if>
+                 <if test="rewardType == 14101"><!-- 带看 -->
+					AND p.Progress = 13502
+				</if>
+				<if test="rewardType == 14102"><!-- 认筹 -->
+					AND p.Progress = 13503
+				</if>
+				<if test="rewardType == 14103"><!-- 认购 -->
+					AND p.Progress = 13504
+				</if>
+				<if test="rewardType == 14104"><!-- 成交 -->
+					AND p.Progress = 13505
+				</if>
+			</if>
+			<if test="accountType != null and accountType !=''"><!-- 查询条件是否有可否结算 -->
+                 <![CDATA[
+  				AND p.AccountFlg = #{accountType,jdbcType=INTEGER}
+  				]]>
+			</if>
+			<if test="accountStatus != null and accountStatus !=''"><!-- 查询条件是否有结算状态 -->
+                 <if test="rewardType == 14105"><!-- 结佣 -->
+					AND p.CommissionAccountStatus = #{accountStatus,jdbcType=INTEGER}
+				</if>
+                 <if test="rewardType != 14105">
+					AND p.AccountStatus = #{accountStatus,jdbcType=INTEGER}
+				</if>
+			</if>
+			<if test="estateNm != null and estateNm !=''"><!-- 查询条件是否有录入楼盘名 -->
+                 <![CDATA[
+  				AND (e.EstateNm like '%${estateNm}%' or p.CompanyNm like '%${estateNm}%')
+  				]]>
+			</if>
+			<if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+                <![CDATA[
+  		  			AND p.RecognitionDay is not null
+    				AND Convert(varchar(10),p.RecognitionDay,120) >= #{dateStart,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+            <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+                <![CDATA[
+  		  			AND p.RecognitionDay is not null
+    				AND Convert(varchar(10),p.RecognitionDay,120) <= #{dateEnd,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+        </where>
+        order by p.CustomerId, p.Progress desc, p.RecognitionDay desc
+    </select>
+
+
+	<resultMap id="SceneStatisticDetailInfoMap" type="cn.com.eju.deal.scene.statistic.model.SceneStatisticDetailSearchResult"/>
+    <!-- 查询 list -->
+    <select id="getSceneStatisticDetail" resultMap="SceneStatisticDetailInfoMap"  parameterType="Map">
+        SELECT
+        	 d.CountId,e.DistrictId,d.EstateNm,d.CustomerNm,d.CustomerTel,d.CompanyNm,d.EmpNm,d.Progress as rewardType,d.AccountFlg as accountType,d.AccountStatus,d.RecognitionDay,d.RelationReward,
+        	 d.AccountRelationReward,d.PledgedReward,d.AccountPledgedReward,d.SubscribedReward,d.AccountSubscribedReward,d.BargainReward,d.AccountBargainReward,
+        	 d.Commission,d.AccountCommission,d.EstateId,t.DistrictName,r.HideNumberFlg,d.CommissionAccountStatus
+       	FROM LNK_ReportDetail d WITH(NOLOCK), LNK_Estate e WITH(NOLOCK), BAS_District t WITH(NOLOCK), LNK_EstateRule r WITH(NOLOCK)
+        <where>
+        	e.EstateId = d.EstateId
+        	and d.isValid = 0
+        	and e.EstateId = r.EstateId
+        	and t.DistrictNo = e.DistrictId
+        	and d.ConfirmStatus= 13601
+        	and d.Progress !=13501
+        	AND d.EstateId = #{estateId,jdbcType=VARCHAR}
+        	AND d.CompanyId = #{companyId,jdbcType=VARCHAR}
+        	<if test="companyNm != null and companyNm !=''"><!-- 查询条件是否有客户名/手机/经纪人 -->
+                 <![CDATA[
+  				and (d.CustomerNm like '%${companyNm}%' or d.EmpNm like '%${companyNm}%' or d.CustomerTel like '%${companyNm}%')
+  				]]>
+			</if>
+        	<if test="countDateStart != null and countDateStart != ''  and  countDateStart != 'null'   "><!-- 开始日场合 -->
+                <![CDATA[
+  		  			AND d.RecognitionDay is not null
+    				AND Convert(varchar(10),d.RecognitionDay,120) >= #{countDateStart,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+            <if test="countDateEnd != null and countDateEnd != ''  and  countDateEnd != 'null'   "><!-- 结束日场合 -->
+                <![CDATA[
+  		  			AND d.RecognitionDay is not null
+    				AND Convert(varchar(10),d.RecognitionDay,120) <= #{countDateEnd,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+        </where>
+        order by d.RecognitionDay,d.Progress
+    </select>
+
+    <resultMap id="SceneCommissionDetailInfoMap" type="cn.com.eju.deal.scene.commission.model.SceneCommissionDetailSearchResult"/>
+    <select id="selectSceneCommissionDetailList" resultMap="SceneCommissionDetailInfoMap"  parameterType="Map">
+    select
+        	p.EstateId,
+        	re.ReportId,
+        	e.EstateNm,
+        	e.CityNo,
+        	p.CustomerId,
+        	p.CustomerNm,
+        	p.CustomerTel,
+        	p.CompanyId,
+        	p.CompanyNm,
+        	p.DeptNm,
+        	p.EmpNm,
+        	p.ReportDate,
+        	p.RecognitionDay,
+        	r.HideNumberFlg,
+        	p.progress,
+			<if test="status != null and status== 13502"><!--  带看 -->
+				p.RelationReward as reward , p.AccountRelationReward as accountReward, p.AccountStatus as accountStatus
+			</if>
+			<if test="status != null and status== 13503"><!--  认筹 -->
+				p.PledgedReward as reward, p.AccountPledgedReward as accountReward, p.AccountStatus as accountStatus
+			</if>
+			<if test="status != null and status== 13504"><!--  认购 -->
+				p.SubscribedReward as reward , p.AccountSubscribedReward as accountReward, p.AccountStatus as accountStatus
+			</if>
+			<if test="status != null and status== 13505"><!--  成交 -->
+				p.BargainReward as reward , p.AccountBargainReward as accountReward, p.AccountStatus as accountStatus
+			</if>
+			<if test="status != null and status== 13507"><!--  结佣 -->
+				p.Commission as reward , p.AccountCommission as accountReward, p.CommissionAccountStatus as accountStatus
+			</if>
+        FROM LNK_ReportDetail p WITH(NOLOCK), LNK_Estate e WITH(NOLOCK), LNK_EstateRule r WITH(NOLOCK), LNK_Report re WITH(NOLOCK)
+        <where>
+        	p.ConfirmStatus = '13601'
+        	and p.isValid = 0
+        	and p.DelFlg = 0
+        	and p.EstateId = #{estateId,jdbcType=VARCHAR}
+        	and p.EstateId = e.EstateId
+        	and r.EstateId = e.EstateId
+        	and p.CustomerId = re.CustomerId
+        	and p.CompanyId = re.CompanyId
+        	and p.EstateId = re.EstateId
+        	<!-- 数据权限控制 -->
+             <if test="userIdList != null and userIdList != ''">
+				<foreach collection="userIdList" item="item" index="index"
+					open="AND (" close=")" separator="OR">
+				<![CDATA[
+	    			 e.SceneEmpId = #{item, jdbcType=INTEGER}
+	    		]]>
+				</foreach>
+			</if>
+        	<if test="companyNm != null and companyNm != ''"><!--  查询条件是否有录入公司名 -->
+				<![CDATA[
+  				AND p.CompanyNm like '%${companyNm}%' 
+  				]]>
+			</if>
+        	<if test="status != null and status != ''"><!--  查询条件是否有奖励类型(最新进度) -->
+        		<if test="status != null and status == 13507"><!--  结佣 -->
+        			AND p.Progress = 13505
+        		</if>
+        		<if test="status != null and status != 13507"><!--  结佣以外 -->
+       				<![CDATA[
+	  				AND p.Progress = #{status,jdbcType=INTEGER}
+	  				]]>
+        		</if>
+			</if>
+			<if test="accountStatus != null and accountStatus != ''"><!--  查询条件是否有结算状态 -->
+        		<if test="status != null and status == 13507"><!--  结佣 -->
+        			AND p.CommissionAccountStatus = #{accountStatus,jdbcType=INTEGER}
+        		</if>
+        		<if test="status != null and status != 13507"><!--  结佣以外 -->
+       				<![CDATA[
+	  				AND p.AccountStatus = #{accountStatus,jdbcType=INTEGER}
+	  				]]>
+        		</if>
+			</if>
+        	<if test="dateTypeKbn != null and dateTypeKbn == 14301"><!-- 报备日场合 -->
+					<if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+		                <![CDATA[
+		  		  			AND p.ReportDate is not null
+		    				AND Convert(varchar(10),p.ReportDate,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+		            </if>
+		            <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+		                <![CDATA[
+		  		  			AND p.ReportDate is not null
+		    				AND Convert(varchar(10),p.ReportDate,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+		            </if>
+			</if>
+			<if test="dateTypeKbn != null and dateTypeKbn ==14302"><!-- 认定日场合 -->
+					<if test="dateStart != null and dateStart != ''"><!-- 开始日场合 -->
+		                <![CDATA[
+		  		  			AND p.RecognitionDay is not null
+		    				AND Convert(varchar(10),p.RecognitionDay,120) >= #{dateStart,jdbcType=NVARCHAR}
+		    			]]>
+		            </if>
+		            <if test="dateEnd != null and dateEnd != ''"><!-- 结束日场合 -->
+		                <![CDATA[
+		  		  			AND p.RecognitionDay is not null
+		    				AND Convert(varchar(10),p.RecognitionDay,120) <= #{dateEnd,jdbcType=NVARCHAR}
+		    			]]>
+		            </if>
+			</if>
+			<if test="empNm != null and empNm != ''"><!--  查询条件是否有录入经纪人 -->
+				<![CDATA[
+  				AND p.EmpNm like '%${empNm}%' 
+  				]]>
+			</if>
+			<if test="customerNm != null and customerNm != ''"><!--  查询条件是否有录入客户 -->
+				<![CDATA[
+  				AND p.CustomerNm like '%${customerNm}%' 
+  				]]>
+			</if>
+
+        </where>
+		order by p.EstateId, p.CompanyId
+    </select>
+
+    <insert id="create"
+	parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail"
+	useGeneratedKeys="true" keyProperty="id">
+	insert into LNK_ReportDetail
+	(EstateId,EstateNm,CompanyId,CompanyNm,CountId,Progress,ConfirmStatus,ReportMemo,FollowDate,CustomerId,CustomerFrom,CustomerNm,CustomerTel,AccountFlg,AccountStatus,CommissionAccountStatus,RecognitionDay,
+	RelationReward,AccountRelationReward,PledgedReward,AccountPledgedReward,SubscribedReward,AccountSubscribedReward,BargainReward,AccountBargainReward,Commission,AccountCommission,
+	DeptNm,EmpNm,ReportDate,CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,buildingNo,area,roughAmount,dealAmount,roughArea
+	,customerIdTwo,customerNmTwo,customerTelTwo,seeDate,roughDate,dealDate,pledgedDate,roughInputDate,reportNo,dbuildingNoId,wyTypeCode
+	)
+	values (#{estateId, jdbcType=VARCHAR},#{estateNm,
+	jdbcType=NVARCHAR},#{companyId, jdbcType=VARCHAR},#{companyNm,
+	jdbcType=NVARCHAR},#{countId, jdbcType=VARCHAR},#{progress,
+	jdbcType=INTEGER},
+	#{confirmStatus, jdbcType=INTEGER},#{reportMemo, jdbcType=NVARCHAR},#{followDate,
+	jdbcType=TIMESTAMP},#{customerId, jdbcType=VARCHAR},#{customerFrom, jdbcType=INTEGER},#{customerNm,
+	jdbcType=NVARCHAR},
+	#{customerTel, jdbcType=VARCHAR},#{accountFlg, jdbcType=INTEGER},#{accountStatus,
+	jdbcType=INTEGER},#{commissionAccountStatus,
+	jdbcType=INTEGER},#{recognitionDay, jdbcType=TIMESTAMP},
+	#{relationReward, jdbcType=DECIMAL},#{accountRelationReward,
+	jdbcType=DECIMAL},#{pledgedReward,
+	jdbcType=DECIMAL},#{accountPledgedReward, jdbcType=DECIMAL},
+	#{subscribedReward, jdbcType=DECIMAL},#{accountSubscribedReward,
+	jdbcType=DECIMAL},#{bargainReward,
+	jdbcType=DECIMAL},#{accountBargainReward, jdbcType=DECIMAL},
+	#{commission, jdbcType=DECIMAL},#{accountCommission,
+	jdbcType=DECIMAL},#{deptNm, jdbcType=NVARCHAR},#{empNm,
+	jdbcType=NVARCHAR},#{reportDate, jdbcType=TIMESTAMP},
+	#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg,
+	jdbcType=BIT},#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP},
+	#{buildingNo, jdbcType=NVARCHAR},
+	#{area, jdbcType=DECIMAL},
+	#{roughAmount, jdbcType=DECIMAL},
+	#{dealAmount, jdbcType=DECIMAL},
+	#{roughArea, jdbcType=DECIMAL}
+	,#{customerIdTwo, jdbcType=VARCHAR},#{customerNmTwo, jdbcType=VARCHAR},#{customerTelTwo, jdbcType=VARCHAR}
+	,#{seeDate, jdbcType=TIMESTAMP},#{roughDate, jdbcType=TIMESTAMP},#{dealDate, jdbcType=TIMESTAMP}
+	,#{pledgedDate, jdbcType=TIMESTAMP},#{roughInputDate, jdbcType=TIMESTAMP},#{reportNo, jdbcType=VARCHAR}
+	,#{buildingNoId, jdbcType=NVARCHAR},#{wyTypeCode, jdbcType=NVARCHAR}
+	)
+</insert>
+
+      <insert id="createReportDetail" parameterType="Map"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into LNK_ReportDetail (EstateId,EstateNm,CompanyId,CompanyNm,CountId,Progress,
+    ConfirmStatus,ReportMemo,FollowDate,CustomerId,CustomerFrom,CustomerNm,
+    CustomerTel,AccountFlg,AccountStatus,CommissionAccountStatus,RecognitionDay,
+	RelationReward,AccountRelationReward,PledgedReward,AccountPledgedReward,
+	SubscribedReward,AccountSubscribedReward,BargainReward,AccountBargainReward,
+	Commission,AccountCommission,DeptNm,EmpNm,ReportDate,
+	CrtEmpId,UptEmpId,DelFlg,CrtDt,UptDt,
+	customerIdTwo,customerNmTwo,customerTelTwo,
+	buildingNo,seeDate,roughDate,dealDate,
+	roughAmount,dealAmount,reportNo,dbuildingNoId
+    )
+    values (#{estateId, jdbcType=VARCHAR},#{estateNm, jdbcType=NVARCHAR},#{companyId, jdbcType=VARCHAR},#{companyNm, jdbcType=NVARCHAR},#{countId, jdbcType=VARCHAR},#{progress, jdbcType=INTEGER},
+	#{confirmStatus, jdbcType=INTEGER},#{reportMemo, jdbcType=NVARCHAR},#{followDate, jdbcType=TIMESTAMP},#{customerId, jdbcType=VARCHAR},#{customerFrom, jdbcType=INTEGER},#{customerNm, jdbcType=NVARCHAR},
+	#{customerTel, jdbcType=VARCHAR},#{accountFlg, jdbcType=INTEGER},#{accountStatus, jdbcType=INTEGER},#{commissionAccountStatus, jdbcType=INTEGER},#{recognitionDay, jdbcType=TIMESTAMP},
+	#{relationReward, jdbcType=DECIMAL},#{accountRelationReward, jdbcType=DECIMAL},#{pledgedReward, jdbcType=DECIMAL},#{accountPledgedReward, jdbcType=DECIMAL},
+	#{subscribedReward, jdbcType=DECIMAL},#{accountSubscribedReward, jdbcType=DECIMAL},#{bargainReward, jdbcType=DECIMAL},#{accountBargainReward, jdbcType=DECIMAL},
+	#{commission, jdbcType=DECIMAL},#{accountCommission, jdbcType=DECIMAL},#{deptNm, jdbcType=NVARCHAR},#{empNm, jdbcType=NVARCHAR},#{reportDate, jdbcType=TIMESTAMP},
+	#{crtEmpId, jdbcType=INTEGER},#{uptEmpId, jdbcType=INTEGER},#{delFlg, jdbcType=BIT},#{crtDt, jdbcType=TIMESTAMP},#{uptDt, jdbcType=TIMESTAMP},
+	#{customerIdTwo, jdbcType=VARCHAR},#{customerNmTwo, jdbcType=VARCHAR},#{customerTelTwo, jdbcType=VARCHAR},
+	#{buildingNo, jdbcType=NVARCHAR},#{seeDate, jdbcType=TIMESTAMP},#{roughDate, jdbcType=TIMESTAMP},#{dealDate, jdbcType=TIMESTAMP},
+	#{roughAmount, jdbcType=DECIMAL},#{dealAmount, jdbcType=DECIMAL},#{reportNo, jdbcType=VARCHAR},#{buildingNoId, jdbcType=NVARCHAR}
+	)
+  </insert>
+
+    <update id="update" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+        update LNK_ReportDetail WITH(ROWLOCK)
+		<set>
+            <if test="estateId != null">
+			EstateId = #{estateId, jdbcType=VARCHAR},
+			</if>
+			<if test="estateNm != null">
+			EstateNm = #{estateNm, jdbcType=NVARCHAR},
+			</if>
+			<if test="companyId != null">
+			CompanyId = #{companyId, jdbcType=VARCHAR},
+			</if>
+			<if test="companyNm != null">
+			CompanyNm = #{companyNm, jdbcType=NVARCHAR},
+			</if>
+			<if test="countId != null">
+			CountId = #{countId, jdbcType=VARCHAR},
+			</if>
+			<if test="progress != null">
+			Progress = #{progress, jdbcType=INTEGER},
+			</if>
+			<if test="confirmStatus != null">
+			ConfirmStatus = #{confirmStatus, jdbcType=INTEGER},
+			</if>
+			<if test="reportMemo != null">
+			ReportMemo = #{reportMemo, jdbcType=NVARCHAR},
+			</if>
+			<if test="followDate != null">
+			FollowDate = #{followDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="customerId != null">
+			CustomerId = #{customerId, jdbcType=VARCHAR},
+			</if>
+			<if test="customerNm != null">
+			CustomerNm = #{customerNm, jdbcType=NVARCHAR},
+			</if>
+			<if test="customerTel != null">
+			CustomerTel = #{customerTel, jdbcType=VARCHAR},
+			</if>
+			<if test="customerNmTwo != null">
+			customerNmTwo = #{customerNmTwo, jdbcType=NVARCHAR},
+			</if>
+			<if test="customerTelTwo != null">
+			customerTelTwo = #{customerTelTwo, jdbcType=VARCHAR},
+			</if>
+			<if test="customerTwoFlag == '1'.toString()">
+				customerNmTwo  = null,
+				customerTelTwo = null,
+			</if>
+			<if test="accountFlg != null">
+			AccountFlg = #{accountFlg, jdbcType=INTEGER},
+			</if>
+			<if test="accountStatus != null">
+			AccountStatus = #{accountStatus, jdbcType=INTEGER},
+			</if>
+			<if test="commissionAccountStatus != null">
+			CommissionAccountStatus = #{commissionAccountStatus, jdbcType=INTEGER},
+			</if>
+			<if test="recognitionDay != null">
+			RecognitionDay = #{recognitionDay, jdbcType=TIMESTAMP},
+			</if>
+			<if test="relationReward != null">
+			RelationReward = #{relationReward, jdbcType=DECIMAL},
+			</if>
+			<if test="accountRelationReward != null">
+			AccountRelationReward = #{accountRelationReward, jdbcType=DECIMAL},
+			</if>
+			<if test="pledgedReward != null">
+			PledgedReward = #{pledgedReward, jdbcType=DECIMAL},
+			</if>
+			<if test="accountPledgedReward != null">
+			AccountPledgedReward = #{accountPledgedReward, jdbcType=DECIMAL},
+			</if>
+			<if test="subscribedReward != null">
+			SubscribedReward = #{subscribedReward, jdbcType=DECIMAL},
+			</if>
+			<if test="accountSubscribedReward != null">
+			AccountSubscribedReward = #{accountSubscribedReward, jdbcType=DECIMAL},
+			</if>
+			<if test="bargainReward != null">
+			BargainReward = #{bargainReward, jdbcType=DECIMAL},
+			</if>
+			<if test="accountBargainReward != null">
+			AccountBargainReward = #{accountBargainReward, jdbcType=DECIMAL},
+			</if>
+			<if test="commission != null">
+			Commission = #{commission, jdbcType=DECIMAL},
+			</if>
+			<if test="accountCommission != null">
+			AccountCommission = #{accountCommission, jdbcType=DECIMAL},
+			</if>
+			<if test="deptNm != null">
+			DeptNm = #{deptNm, jdbcType=NVARCHAR},
+			</if>
+			<if test="empNm != null">
+			EmpNm = #{empNm, jdbcType=NVARCHAR},
+			</if>
+			<if test="reportDate != null">
+			ReportDate = #{reportDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="crtEmpId != null">
+			crtEmpId = #{crtEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="uptEmpId != null">
+			uptEmpId = #{uptEmpId, jdbcType=INTEGER},
+			</if>
+			<if test="delFlg != null">
+			delFlg = #{delFlg, jdbcType=BIT},
+			</if>
+			<if test="crtDt != null">
+			crtDt = #{crtDt, jdbcType=TIMESTAMP},
+			</if>
+			<if test="uptDt != null">
+			uptDt = getDate(),
+			</if>
+			<if test="buildingNo != null">
+			buildingNo = #{buildingNo, jdbcType=NVARCHAR},
+			</if>
+			<if test="buildingNoId != null">
+				dbuildingNoId = #{buildingNoId, jdbcType=NVARCHAR},
+			</if>
+			<if test="area != null">
+			area = #{area, jdbcType=DECIMAL},
+			</if>
+			<if test="roughAmount != null">
+			roughAmount = #{roughAmount, jdbcType=DECIMAL},
+			</if>
+			<if test="roughArea != null">
+			roughArea = #{roughArea, jdbcType=DECIMAL},
+			</if>
+			<if test="dealAmount != null">
+			dealAmount = #{dealAmount, jdbcType=DECIMAL},
+			</if>
+
+			<if test="seeDate != null">
+			seeDate = #{seeDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="pledgedDate != null">
+			pledgedDate = #{pledgedDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="roughDate != null">
+			roughDate = #{roughDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="roughInputDate != null">
+				roughInputDate = #{roughInputDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="dealDate != null">
+			dealDate = #{dealDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="pledgedBackDate != null">
+			pledgedBackDate = #{pledgedBackDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="roughBackDate != null">
+			roughBackDate = #{roughBackDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="dealBackDate != null">
+			dealBackDate = #{dealBackDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="settleConfirmDate != null">
+				settleConfirmDate = #{settleConfirmDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="customerIdTwo != null">
+				customerIdTwo = #{customerIdTwo, jdbcType=NVARCHAR},
+			</if>
+			<if test="inComeStatus != null">
+				inComeStatus = #{inComeStatus, jdbcType=INTEGER},
+			</if>
+			<if test="wyTypeCode != null">
+				wyTypeCode = #{wyTypeCode, jdbcType=INTEGER},
+			</if>
+        </set>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+
+	<update id="updateForInCome"  parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+			UPDATE LNK_ReportDetail WITH(ROWLOCK)
+			SET inComeStatus = #{inComeStatus, jdbcType=INTEGER}
+			WHERE
+				id IN (
+			SELECT TOP 2 id
+			FROM
+				LNK_ReportDetail WITH(NOLOCK)
+			WHERE
+<!-- 				LEFT ( CountId, 15 ) = ( SELECT reportId FROM LNK_Report WHERE id = #{reportId,jdbcType=INTEGER} ) -->
+				reportNo = ( SELECT reportId FROM LNK_Report WHERE id = #{reportId,jdbcType=INTEGER} )
+			ORDER BY
+				CrtDt DESC)
+	</update>
+
+	<!--   修改佣金 -->
+	<update id="updateReportDetailReward" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+        update LNK_ReportDetail WITH(ROWLOCK)
+		<set>
+            <if test="progress != null">
+            	<if test="progress == 13502"><!--   带看 -->
+            		RelationReward = #{reward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13503"><!--   认筹 -->
+            		PledgedReward = #{reward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13504"><!--   认购 -->
+            		SubscribedReward = #{reward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13505"><!--   成交 -->
+					BargainReward = #{reward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13507"><!--   结佣 -->
+            		Commission = #{reward, jdbcType=DECIMAL},
+				</if>
+			</if>
+			uptDt = getDate()
+        </set>
+        where
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	and CustomerId = #{customerId,jdbcType=VARCHAR}
+        	<if test="progress == 13507"><!--   结佣 -->
+        		and Progress = 13505
+        	</if>
+        	<if test="progress != 13507"><!--   结佣之外 -->
+        		and Progress = #{progress,jdbcType=INTEGER}
+        	</if>
+        	and ConfirmStatus='13601'
+        	and isValid = 0
+    </update>
+
+    <!--   更新结算金额和结算状态 -->
+	<update id="updateReportDetailAccountReward" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+        update LNK_ReportDetail WITH(ROWLOCK)
+		<set>
+            <if test="progress != null">
+            	<if test="progress == 13502"><!--   带看 -->
+            		AccountStatus = #{accountStatus, jdbcType=INTEGER}, AccountRelationReward = #{accountReward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13503"><!--   认筹 -->
+            		AccountStatus = #{accountStatus, jdbcType=INTEGER}, AccountPledgedReward = #{accountReward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13504"><!--   认购 -->
+            		AccountStatus = #{accountStatus, jdbcType=INTEGER}, AccountSubscribedReward = #{accountReward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13505"><!--   成交 -->
+					AccountStatus = #{accountStatus, jdbcType=INTEGER} , AccountBargainReward = #{accountReward, jdbcType=DECIMAL},
+				</if>
+				<if test="progress == 13507"><!--   结佣 -->
+            		CommissionAccountStatus = #{accountStatus, jdbcType=INTEGER}, AccountCommission = #{accountReward, jdbcType=DECIMAL},
+				</if>
+			</if>
+			uptDt = getDate()
+        </set>
+        where
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	and CustomerId = #{customerId,jdbcType=VARCHAR}
+        	<if test="progress == 13507"><!--   结佣 -->
+        		and Progress = 13505
+        	</if>
+        	<if test="progress != 13507"><!--   结佣之外 -->
+        		and Progress = #{progress,jdbcType=INTEGER}
+        	</if>
+        	and ConfirmStatus='13601'
+        	and isValid = 0
+    </update>
+    <!--   更新认筹，未认定 -->
+    <update id="updateBackProgress" parameterType="Map">
+        update LNK_ReportDetail WITH(ROWLOCK)
+        SET Progress= #{latestProgress, jdbcType=VARCHAR}, FollowDate = #{followDate, jdbcType=TIMESTAMP},uptDt = getDate()
+        where EstateId = #{estateId,jdbcType=VARCHAR}
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	and CustomerId = #{customerId,jdbcType=VARCHAR}
+        	and ConfirmStatus = 13603
+        	and Progress = 13504
+        	and isValid = 0
+    </update>
+
+    <select id="getSceneHouseInfo" resultMap="BaseResultMap"  parameterType="Map">
+        SELECT
+        	<include refid="Base_Column_List"/>
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        <where>
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and isValid = 0
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	and CustomerId = #{customerId,jdbcType=VARCHAR}
+        	<if test="progress != null and progress != ''"><!--  进度 -->
+	        	<if test="progress == 13507"><!--  结佣 -->
+					and Progress = 13505
+				</if>
+				<if test="progress != 13507"><!--  报备 -->
+					and Progress = #{progress, jdbcType=INTEGER}
+				</if>
+			</if>
+			<if test="reportId != null and reportId != ''">
+			   and CountId like '${reportId}%'
+			</if>
+        </where>
+        order by Progress
+    </select>
+
+    <!-- 点击大定带出客户数据查询 -->
+    <select id="getSceneHouseInfoDaDing" resultMap="BaseResultMap"  parameterType="Map">
+        SELECT
+        	<include refid="Base_Column_List"/>
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        <where>
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and isValid = 0
+        	and CompanyId = #{companyId,jdbcType=VARCHAR}
+        	<if test="progress != null and progress != ''"><!--  进度 -->
+	        	<if test="progress == 13504"><!--  大定 -->
+					and progress=13503 and confirmStatus=13601
+				</if>
+			</if>
+			<if test="reportId != null and reportId != ''">
+			   and CountId like '${reportId}%'
+			</if>
+        </where>
+        order by Id desc
+    </select>
+
+    <resultMap id="SceneStatisticEstateSearchResultDto" type="cn.com.eju.deal.dto.scene.statistic.SceneStatisticEstateSearchResultDto"/>
+    <select id="getCountAreaAndAmount" resultMap="SceneStatisticEstateSearchResultDto"  parameterType="Map">
+        SELECT
+			 SUM(COALESCE(case WHEN Progress = 13505  THEN roughArea END,0)) AS roughAreaSum,
+			 SUM(COALESCE(case WHEN Progress = 13505  THEN roughAmount END,0)) AS roughAmountSum,
+			 SUM(COALESCE(case WHEN Progress = 13505 AND ConfirmStatus = 13601 THEN area END,0)) AS dealAreaSum,
+			 SUM(COALESCE(case WHEN Progress = 13505 AND ConfirmStatus = 13601 THEN dealAmount END,0)) AS dealAmountSum
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        <where>
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and isValid = 0
+        	and DelFlg = 0
+        	<if test="companyId != null and companyId != ''">
+				and CompanyId = #{companyId,jdbcType=VARCHAR}
+			</if>
+			<if test="countDateStart != null and countDateStart != '' and  countDateStart != 'null'"><!-- 开始日场合 -->
+                <![CDATA[
+  		  			AND RecognitionDay is not null
+    				AND Convert(varchar(10),RecognitionDay,120) >= #{countDateStart,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+            <if test="countDateEnd != null and countDateEnd != ''  and  countDateEnd != 'null' "><!-- 结束日场合 -->
+                <![CDATA[
+  		  			AND RecognitionDay is not null
+    				AND Convert(varchar(10),RecognitionDay,120) <= #{countDateEnd,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+        </where>
+        GROUP BY EstateId
+    </select>
+
+    <select id="getCountAreaAndAmountGroupByTwoId" resultMap="SceneStatisticEstateSearchResultDto"  parameterType="Map">
+        SELECT	CompanyId as companyId,
+			 SUM(COALESCE(case WHEN Progress = 13505  THEN area END,0)) AS roughAreaSum,
+			 SUM(COALESCE(case WHEN Progress = 13505  THEN roughAmount END,0)) AS roughAmountSum,
+			 SUM(COALESCE(case WHEN Progress = 13505 AND ConfirmStatus = 13601 THEN area END,0)) AS dealAreaSum,
+			 SUM(COALESCE(case WHEN Progress = 13505 AND ConfirmStatus = 13601 THEN dealAmount END,0)) AS dealAmountSum
+        FROM LNK_ReportDetail WITH(NOLOCK)
+        <where>
+        	EstateId = #{estateId,jdbcType=VARCHAR}
+        	and isValid = 0
+        	and DelFlg = 0
+        	<if test="companyId != null and companyId != ''">
+				and CompanyId = #{companyId,jdbcType=VARCHAR}
+			</if>
+			<if test="countDateStart != null and countDateStart != '' and  countDateStart != 'null'"><!-- 开始日场合 -->
+                <![CDATA[
+  		  			AND RecognitionDay is not null
+    				AND Convert(varchar(10),RecognitionDay,120) >= #{countDateStart,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+            <if test="countDateEnd != null and countDateEnd != ''  and  countDateEnd != 'null' "><!-- 结束日场合 -->
+                <![CDATA[
+  		  			AND RecognitionDay is not null
+    				AND Convert(varchar(10),RecognitionDay,120) <= #{countDateEnd,jdbcType=NVARCHAR}
+    			]]>
+            </if>
+        </where>
+        GROUP BY EstateId,CompanyId
+    </select>
+
+    <!-- 将带看之后的标识状态全部改为1 -->
+    <update id="updateOtherStatus" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+    	UPDATE LNK_ReportDetail WITH(ROWLOCK)
+		SET isValid = 1 ,uptDt = getDate()
+    	WHERE progress > 13502
+<!--     	AND subString(CountId,0,16) = #{countId,jdbcType=NVARCHAR}  -->
+    	AND reportNo = #{countId,jdbcType=NVARCHAR}
+    	AND EstateId = #{estateId,jdbcType=NVARCHAR}
+    	and isValid = 0
+    	and DelFlg  = 0
+    </update>
+
+    <!-- 将带看的状态改为未认定  作废-->
+    <update id="updateReback" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+    	UPDATE LNK_ReportDetail WITH(ROWLOCK)
+		SET ConfirmStatus = 13603 ,uptDt = getDate()
+    	WHERE Progress = 13503
+<!--     	AND subString(CountId,0,16) = #{countId,jdbcType=NVARCHAR} -->
+    	AND reportNo = #{countId,jdbcType=NVARCHAR}
+    	AND EstateId = #{estateId,jdbcType=NVARCHAR}
+    	and isValid = 0
+    	and DelFlg  = 0
+    </update>
+
+
+    <update id="updateOperateDate" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+        update LNK_ReportDetail WITH(ROWLOCK)
+		<set>
+            uptDt = getDate(),
+			<if test="seeDate != null">
+			seeDate = #{seeDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="pledgedDate != null">
+			pledgedDate = #{pledgedDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="roughDate != null">
+			roughDate = #{roughDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="roughInputDate != null">
+				roughInputDate = #{roughInputDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="dealDate != null">
+			dealDate = #{dealDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="pledgedBackDate != null">
+			pledgedBackDate = #{pledgedBackDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="roughBackDate != null">
+			roughBackDate = #{roughBackDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="dealBackDate != null">
+			dealBackDate = #{dealBackDate, jdbcType=TIMESTAMP},
+			</if>
+        </set>
+<!--         	where subString(CountId,0,16) = #{countId,jdbcType=NVARCHAR} -->
+        	where reportNo = #{countId,jdbcType=NVARCHAR}
+	    	AND EstateId = #{estateId,jdbcType=NVARCHAR}
+	        and isValid = 0
+	        and DelFlg  = 0
+    </update>
+
+    <select id="getCopyByPledged" resultMap="BaseResultMap" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail" useCache="false">
+        SELECT
+        <include refid="Base_Column_List_Copy"/>
+        FROM LNK_ReportDetail WITH(NOLOCK)
+<!--        		where subString(CountId,0,16) = #{countId,jdbcType=NVARCHAR} -->
+       		where reportNo = #{countId,jdbcType=NVARCHAR}
+	    	AND EstateId = #{estateId,jdbcType=NVARCHAR}
+	    	and progress = #{progress,jdbcType=INTEGER}
+	        and isValid = 0
+	        and DelFlg  = 0
+    </select>
+
+   <select id="getMaxCountId" resultType="java.lang.String" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail" useCache="false">
+        SELECT
+       		max(countId)
+        FROM LNK_ReportDetail WITH(NOLOCK)
+<!--        		where subString(CountId,0,16) = #{countId,jdbcType=NVARCHAR} -->
+       		where reportNo = #{countId,jdbcType=NVARCHAR}
+	    	AND EstateId = #{estateId,jdbcType=NVARCHAR}
+    </select>
+
+	<resultMap id="operDetailMap" type="cn.com.eju.deal.dto.houseLinkage.report.ReportSearchResultDto">
+		<result column="id" property="id" jdbcType="INTEGER"></result>
+		<result column="EstateNm" property="estateNm" jdbcType="NVARCHAR"></result>
+		<result column="CompanyNm" property="companyNm" jdbcType="NVARCHAR"></result>
+		<result column="StoreNm" property="storeNm" jdbcType="NVARCHAR"></result>
+		<result column="contactNm" property="contactNm" jdbcType="NVARCHAR"></result>
+		<result column="CustomerId" property="customerId" jdbcType="NVARCHAR"></result>
+		<result column="CustomerNm" property="customerNm" jdbcType="NVARCHAR"></result>
+		<result column="CustomerTel" property="customerTel" jdbcType="NVARCHAR"></result>
+		<result column="customerNumNm" property="customerNumNm" jdbcType="NVARCHAR"></result>
+		<result column="customerFrom" property="customerFrom" jdbcType="INTEGER"/>
+		<result column="confirmStatusNm" property="confirmStatusNm" jdbcType="NVARCHAR"></result>
+		<result column="empNm" property="empNm" jdbcType="NVARCHAR"></result>
+		<result column="RecognitionDay" property="recognitionDay" jdbcType="TIMESTAMP"></result>
+		<result column="Progress" property="progress" jdbcType="INTEGER"></result>
+		<result column="buildingNo" property="buildingNo" jdbcType="NVARCHAR"></result>
+		<result column="roughArea" property="roughArea" jdbcType="NVARCHAR"></result>
+		<result column="roughAmount" property="roughAmount" jdbcType="DECIMAL"></result>
+		<result column="dealAmount" property="dealAmount" jdbcType="DECIMAL"></result>
+		<result column="area" property="area" jdbcType="NVARCHAR"></result>
+		<result column="pledgedDate" property="pledgedDate" jdbcType="TIMESTAMP"></result>
+		<result column="roughDate" property="roughDate" jdbcType="TIMESTAMP"></result>
+		<result column="seeDate" property="seeDate" jdbcType="TIMESTAMP"></result>
+		<result column="cityNo" property="cityNo" jdbcType="NVARCHAR"></result>
+		<result column="progressNm" property="progressNm" jdbcType="NVARCHAR"></result>
+		<result column="bizOperDate" property="bizOperDate" jdbcType="TIMESTAMP"></result>
+		<result column="projectNo" property="projectNo" jdbcType="NVARCHAR"></result>
+		<result column="fyReportId" property="fyReportId" jdbcType="VARCHAR"/>
+        <result column="reportAgent" property="reportAgent" jdbcType="VARCHAR"/>
+        <result column="reportAgentTel" property="reportAgentTel" jdbcType="VARCHAR"/>
+        <result column="customerIdTwo" property="customerIdTwo" jdbcType="VARCHAR"/>
+        <result column="customerNmTwo" property="customerNmTwo" jdbcType="VARCHAR"/>
+        <result column="customerTelTwo" property="customerTelTwo" jdbcType="VARCHAR"/>
+		<result column="settleConfirmDate" property="settleConfirmDate" jdbcType="TIMESTAMP"></result>
+
+		<result column="reportId" property="reportId" jdbcType="VARCHAR"/>
+		<result column="customerFromNm" property="customerFromNm" jdbcType="VARCHAR"/>
+		<result column="roughAuditId" property="roughAuditId" jdbcType="BIGINT"/>
+        <result column="roughAuditUserCode" property="roughAuditUserCode" jdbcType="VARCHAR"/>
+        <result column="roughAuditUserName" property="roughAuditUserName" jdbcType="VARCHAR"/>
+        <result column="roughAuditStatusNm" property="roughAuditStatusNm" jdbcType="VARCHAR"/>
+        <result column="roughAuditDesc" property="roughAuditDesc" jdbcType="VARCHAR"/>
+        <result column="roughAuditTime" property="roughAuditTime" jdbcType="TIMESTAMP"></result>
+        <result column="brokerageStatus" property="brokerageStatus" jdbcType="VARCHAR"/>
+        <result column="brokerageStatusNm" property="brokerageStatusNm" jdbcType="VARCHAR"/>
+
+        <result column="companyId" property="companyId" jdbcType="VARCHAR"/>
+        <result column="detailId" property="detailId" jdbcType="VARCHAR"/>
+
+		<result column="buildingNoId" property="buildingNoId" jdbcType="VARCHAR"/>
+		<result column="isWrap" property="isWrap" jdbcType="INTEGER"/>
+        <result column="isApproval" property="isApproval" jdbcType="INTEGER"/>
+		<result column="htedition" property="htedition" jdbcType="VARCHAR"/>
+        <result column="commissionRatio " property="commissionRatio" jdbcType="DECIMAL"></result>
+		<result column="commissionAmount " property="commissionAmount" jdbcType="DECIMAL"></result>
+
+		<result column="wyTypeCode" property="wyTypeCode" jdbcType="VARCHAR"/>
+		<result column="wyTypName" property="wyTypName" jdbcType="VARCHAR"/>
+
+        <collection property="fileList" column="id"
+					ofType="cn.com.eju.deal.dto.common.FileRecordMainDto" select="selectOperDetailPic"/>
+		<collection property="fangyouFileList" column="id"
+					select="cn.com.eju.deal.houseLinkage.report.dao.FangyouReportFileMapper.selectFangyouPic"/>
+	</resultMap>
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.dto.common.FileRecordMainDto"></resultMap>
+	<select id="selectOperDetailPic" parameterType="java.util.Map" resultMap="pictureDtoMap">
+		select
+				FileRecordMainId ,
+				CompanyId ,
+				RefId ,
+				FileId ,
+				FileTypeId ,
+				FileFullName ,
+				FileSourceId ,
+				Remark ,
+				DateCreate ,
+				UserCreate ,
+				IsDelete ,
+				fileNo ,
+				picUrl ,
+				fileSuffix ,
+				fileAbbrUrl ,
+				url50 ,
+				fileUrl ,
+				sellFileNo ,
+				sfImage
+		from  dbo.FIL_FileRecordMain
+		where RefId = #{id,jdbcType=INTEGER}
+		  AND FileSourceId = '5'
+		  AND IsDelete = '0'
+	ORDER BY  FileRecordMainId ASC
+	</select>
+
+    <select id="getOperDetail" resultMap="operDetailMap" parameterType="map">
+        SELECT r.Id ,
+		        estate.EstateId,
+        		r.EstateNm ,
+		        r.CompanyNm ,
+		        r.StoreNm ,
+		        r.contactNm ,
+				r.CustomerId ,
+		        r.CustomerNm ,
+		        r.CustomerTel ,
+		        d1.dicValue AS customerNumNm ,
+		        d2.dicValue AS confirmStatusNm ,
+		        u.userName AS empNm ,
+		        d.RecognitionDay ,
+		        d.Progress ,
+		        d.buildingNo ,
+		        d.roughArea ,
+		        d.roughAmount ,
+		        d.dealAmount ,
+		        d.area ,
+		        r.pledgedDate,
+                r.roughDate,
+                r.seeDate,
+                r.cityNo,
+		        ( CASE d.Progress
+		            WHEN 13501 THEN '报备'
+		            WHEN 13502 THEN '带看'
+		            WHEN 13503 THEN '认筹'
+		            WHEN 13504 THEN '大定'
+		            WHEN 13505 THEN '成销'
+		            WHEN 13506 THEN '退筹'
+		          END ) AS progressNm ,
+		        ( CASE d.Progress
+		            WHEN 13501 THEN r.ReportDate
+		            WHEN 13502 THEN r.seeDate
+		            WHEN 13503 THEN r.pledgedDate
+		            WHEN 13504 THEN r.roughInputDate
+		            WHEN 13505 THEN r.dealDate
+		            WHEN 13506 THEN r.pledgedBackDate
+		          END ) AS bizOperDate,
+		          estate.projectNo
+		           ,r.customerFrom
+			       ,r.fyReportId
+			       ,r.reportAgent
+			       ,r.reportAgentTel
+			       ,r.customerIdTwo
+			       ,r.customerNmTwo
+			       ,r.customerTelTwo
+				   ,d.settleConfirmDate
+				   ,r.roughInputDate
+				   ,r.ReportId
+				   ,d3.dicValue AS customerFromNm
+				   ,r.roughAuditId,u2.userCode as roughAuditUserCode,u2.userName AS roughAuditUserName
+				   ,r.roughAuditStatus
+				   ,case when roughAuditStatus = 1 then '审核通过'
+				   	    when roughAuditStatus = 2 then '审核驳回'
+				   	    else '待审核' end as roughAuditStatusNm
+				   ,r.roughAuditDesc,r.roughAuditTime
+				   ,r.brokerageStatus
+				   ,d4.dicValue AS brokerageStatusNm
+				   ,estate.cityNo as estateCityNo,
+					r.accountProjectNo,
+	  				r.accountProject,
+                    d.id as detailId,
+                    r.companyId,
+		            g.groupName centerName
+		            ,r.buildingNoId
+		            ,r.isWrap
+		            ,r.htedition
+		            ,pc.commissionRatio
+		            ,pc.commissionAmount
+        <!--                , CASE WHEN (select count(1) FROM V_OA_ProjectInfoSign WHERE projectNo = estate.projectNo) > 0 THEN 0 ELSE 1 END isApproval -->
+		            ,CASE WHEN (estate.projectStatus IN ('20302','20303','20306') AND estate.DelFlg = 0 AND estate.AuditStatus = '12903' ) THEN 0 ELSE 1 END isApproval
+               		,r.wyTypeCode
+		            ,wy.wyTypName
+                FROM    dbo.LNK_Report r WITH(NOLOCK)
+                        JOIN LNK_Estate estate WITH(NOLOCK) ON estate.EstateId = r.EstateId
+                        JOIN dbo.LNK_ReportDetail d WITH(NOLOCK) ON r.EstateId = d.EstateId
+                                                       AND r.CompanyId = d.CompanyId
+                                                       AND r.CustomerId = d.CustomerId
+                        LEFT JOIN dbo.BAS_DictionaryValue d1 WITH(NOLOCK) ON d1.dicCode = r.CustomerNum
+                                                                AND d1.delFlag = 'N'
+                        LEFT JOIN dbo.BAS_DictionaryValue d2 WITH(NOLOCK) ON d2.dicCode = d.ConfirmStatus
+                                                                AND d2.delFlag = 'N'
+                        LEFT JOIN dbo.BAS_DictionaryValue d3 WITH(NOLOCK) ON d3.dicCode = r.customerFrom
+                                                                AND d3.delFlag = 'N'
+                        LEFT JOIN crm.dbo.USR_User u WITH(NOLOCK) ON u.userId = d.CrtEmpId
+                                                    AND u.delFlag = 'N'
+                        LEFT JOIN crm.dbo.USR_User u2 WITH(NOLOCK) ON u2.userId = r.roughAuditId
+                                                    AND u2.delFlag = 'N'
+                        LEFT JOIN dbo.BAS_DictionaryValue d4 WITH(NOLOCK) ON d4.dicCode = r.brokerageStatus
+                                                AND d4.delFlag = 'N'
+                        LEFT JOIN dbo.USR_Group g WITH(NOLOCK) ON g.groupId = r.centerId AND g.delFlag ='N'
+		                LEFT JOIN dbo.PMLS_Cooperation pc WITH(NOLOCK) ON pc.contractNo = r.contractNo  AND pc.delFlag = '0'
+
+						LEFT JOIN dbo.LNK_Yj_Wy_Info wy WITH(NOLOCK) ON wy.wyTypeCode = r.wyTypeCode AND wy.delFlag = '0'
+
+                WHERE   d.isValid = 0 AND r.DelFlg=0
+                  <if test="reportId != null and reportId != ''">
+                      AND r.Id = #{reportId}
+                  </if>
+                  <if test="reportDetailId != null and reportDetailId != ''">
+                      AND   d.Id = #{reportDetailId}
+                  </if>
+                  <if test="progress != null and progress != '' and progress == 13504">
+                      AND (d.Progress = 13504 OR (d.progress = 13503 AND r.LatestProgress = 13503))
+                  </if>
+                  <if test="progress != null and progress != '' and progress != 13504">
+                      AND d.Progress = #{progress,jdbcType=INTEGER}
+                  </if>
+                  <if test="reportNo != null and reportNo != ''">
+                      AND r.ReportId = #{reportNo,jdbcType=NVARCHAR}
+                  </if>
+                  <if test="confirmStatus != null and confirmStatus != ''">
+                      AND d.ConfirmStatus = #{confirmStatus,jdbcType=INTEGER}
+                  </if>
+            </select>
+
+            <update id="updateNextDetail" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+                update LNK_ReportDetail WITH(ROWLOCK)
+				<set>
+                    uptDt = getDate(),
+                    uptEmpId = #{uptEmpId},
+                    <if test="customerNm != null">
+                        customerNm = #{customerNm, jdbcType=NVARCHAR},
+                    </if>
+                    <if test="customerTel != null">
+                        customerTel = #{customerTel, jdbcType=NVARCHAR},
+                    </if>
+                    <if test="buildingNo != null">
+                        buildingNo = #{buildingNo, jdbcType=NVARCHAR},
+                    </if>
+                    <if test="buildingNoId != null">
+                        dbuildingNoId = #{buildingNoId, jdbcType=NVARCHAR},
+                    </if>
+                    <if test="roughArea != null">
+                        roughArea = #{roughArea, jdbcType=DECIMAL},
+                    </if>
+                    <if test="roughAmount != null">
+                        roughAmount = #{roughAmount, jdbcType=DECIMAL},
+                    </if>
+                    <if test="roughDate != null">
+                        roughDate = #{roughDate, jdbcType=TIMESTAMP},
+                    </if>
+
+                     <if test="customerIdTwo != null">
+                        customerIdTwo = #{customerIdTwo, jdbcType=NVARCHAR},
+                    </if>
+                    <if test="customerNmTwo != null">
+                        customerNmTwo = #{customerNmTwo, jdbcType=NVARCHAR},
+                    </if>
+                    <if test="customerTelTwo != null">
+                        customerTelTwo = #{customerTelTwo, jdbcType=VARCHAR},
+                    </if>
+					<if test="wyTypeCode != null">
+						wyTypeCode = #{wyTypeCode, jdbcType=INTEGER},
+					</if>
+                </set>
+        <!--             where subString(CountId,0,16) = subString(#{countId,jdbcType=NVARCHAR},0,16) -->
+            where reportNo = subString(#{countId,jdbcType=NVARCHAR},0,16)
+            AND EstateId = #{estateId,jdbcType=NVARCHAR}
+            and progress = #{progress,jdbcType=INTEGER}
+            and isValid = 0
+            and DelFlg  = 0
+    </update>
+
+    <update id="updateFangYouDetail" parameterType="cn.com.eju.deal.houseLinkage.report.model.ReportDetail">
+        update LNK_ReportDetail WITH(ROWLOCK)
+		<set>
+            uptDt = getDate(),
+            <if test="customerNmTwo != null">
+                customerNmTwo = #{customerNmTwo, jdbcType=NVARCHAR},
+            </if>
+            <if test="customerTelTwo != null">
+                customerTelTwo = #{customerTelTwo, jdbcType=NVARCHAR},
+            </if>
+            <if test="customerNm != null">
+                customerNm = #{customerNm, jdbcType=NVARCHAR},
+            </if>
+            <if test="customerTel != null">
+                customerTel = #{customerTel, jdbcType=NVARCHAR},
+            </if>
+            <if test="buildingNo != null">
+                buildingNo = #{buildingNo, jdbcType=NVARCHAR},
+            </if>
+			<if test="buildingNoId != null">
+				dbuildingNoId = #{buildingNoId, jdbcType=NVARCHAR},
+			</if>
+            <if test="roughArea != null">
+                roughArea = #{roughArea, jdbcType=DECIMAL},
+            </if>
+            <if test="roughAmount != null">
+                roughAmount = #{roughAmount, jdbcType=DECIMAL},
+            </if>
+            <if test="roughDate != null">
+                roughDate = #{roughDate, jdbcType=TIMESTAMP},
+            </if>
+			<if test="roughInputDate != null">
+				roughInputDate = #{roughInputDate, jdbcType=TIMESTAMP},
+			</if>
+        </set>
+<!--             where subString(CountId,0,16) = #{countId,jdbcType=NVARCHAR} -->
+            where reportNo = #{countId,jdbcType=NVARCHAR}
+            and progress in (13504,13505)
+            and isValid = 0
+            and DelFlg  = 0
+    </update>
+
+	<update id="updateDetailRoughDate" parameterType="cn.com.eju.deal.dto.houseLinkage.report.ReportDto">
+		UPDATE  rd WITH(ROWLOCK)
+		SET     rd.roughDate = #{roughDate,jdbcType=TIMESTAMP}
+		FROM    dbo.LNK_ReportDetail rd
+				JOIN dbo.LNK_Report r ON rd.EstateId = r.EstateId
+										and rd.reportNo = r.reportId
+										 AND r.id = #{id,jdbcType=INTEGER}
+										 AND rd.roughDate IS NULL
+										 AND rd.isValid = 0
+	</update>
+
+	<select id="selectReportDetailByDeal" parameterType="java.lang.String" resultMap="BaseResultMap" >
+		SELECT
+			top 1
+			<include refid="Base_Column_List"/>
+			FROM    dbo.LNK_ReportDetail WITH(NOLOCK)
+<!-- 			WHERE   SUBSTRING(CountId, 0, 16) = #{reportId,jdbcType=NVARCHAR} -->
+			WHERE   reportNo = #{reportId,jdbcType=NVARCHAR}
+			        AND Progress = '13505'
+			        AND ConfirmStatus = '13601'
+			        AND isValid = 0
+			        AND DelFlg = 0
+	</select>
+
+	<select id="selectBuildingNoRepeatCount" parameterType="map" resultType="java.lang.String">
+				SELECT
+				    STUFF(( SELECT  ',' + ReportId
+				            FROM    ( SELECT    lrd.buildingNo ,
+				                                lr.ReportId
+				                        FROM      dbo.LNK_Report lr
+				                                INNER JOIN dbo.LNK_ReportDetail lrd WITH(NOLOCK) ON lrd.reportNo = lr.ReportId
+				                        WHERE     lr.LatestProgress = '13505'
+				                                AND lr.confirmStatus in (13601,13603)
+				                                AND lrd.Progress = '13504'
+				                                AND lrd.isValid = 0
+				                                AND lrd.DelFlg = 0
+				                                AND lr.DelFlg = 0
+				                                AND lrd.buildingNo = #{buildingNo,jdbcType=VARCHAR}
+												AND lrd.EstateId = #{estateId,jdbcType=VARCHAR}
+												and lr.reportId &lt;&gt; #{reportId,jdbcType=VARCHAR}
+				                    ) t
+				            WHERE   buildingNo = t1.buildingNo
+				            FOR
+				            XML PATH('')
+				            ), 1, 1, '') AS reportIdStr
+				FROM    ( SELECT    lrd.buildingNo ,
+				                lr.ReportId
+				        FROM      dbo.LNK_Report lr
+				                INNER JOIN dbo.LNK_ReportDetail lrd WITH(NOLOCK) ON lrd.reportNo = lr.ReportId
+				        WHERE     lr.LatestProgress = '13505'
+				                AND lr.confirmStatus in (13601,13603)
+				                AND lrd.Progress = '13504'
+				                AND lrd.isValid = 0
+				                AND lrd.DelFlg = 0
+				                AND lr.DelFlg = 0
+				                AND lrd.buildingNo = #{buildingNo,jdbcType=VARCHAR}
+							    AND lrd.EstateId = #{estateId,jdbcType=VARCHAR}
+							    and lr.reportId &lt;&gt; #{reportId,jdbcType=VARCHAR}
+				    ) AS t1
+				GROUP BY buildingNo
+	</select>
+
+	<select id="getTotalPackageReport" resultMap="BaseResultMap" parameterType="java.util.Map">
+			SELECT rd.* FROM  dbo.LNK_Report r WITH(NOLOCK), dbo.LNK_ReportDetail rd WITH(NOLOCK) ,dbo.LNK_Estate e WITH(NOLOCK)
+					WHERE r.ReportId=rd.reportNo
+					AND r.EstateId=e.EstateId
+					AND  orderNumber= #{orderNumber,jdbcType=VARCHAR}
+					AND e.projectNo=#{projectNo,jdbcType=VARCHAR}
+					AND rd.DelFlg =0 AND rd.Progress=13505 AND rd.ConfirmStatus=13601 
+					--AND  rd.isValid=0
+	</select>
+
+	<select id="quertInComeStatusByReportId" resultType="cn.com.eju.deal.dto.houseLinkage.report.ReportDetailDto" parameterType="java.lang.String">
+			SELECT
+				top 1 rd.incomeStatus,
+				b.dicValue incomeName
+			FROM
+				LNK_ReportDetail rd WITH(NOLOCK)
+				LEFT JOIN BAS_DictionaryValue b ON b.dicCode = rd.incomeStatus
+				AND delFlag = 'N'
+			WHERE
+<!-- 				LEFT ( rd.CountId, 15 ) = #{reportId,jdbcType=VARCHAR} -->
+				rd.reportNo = #{reportId,jdbcType=VARCHAR}
+			ORDER BY
+				rd.CrtDt DESC
+	</select>
+
+</mapper>

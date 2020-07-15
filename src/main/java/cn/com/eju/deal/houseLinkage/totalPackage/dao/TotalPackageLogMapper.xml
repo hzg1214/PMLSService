@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.houseLinkage.totalPackage.dao.TotalPackageLogMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="referId" jdbcType="INTEGER" property="referId" />
+    <result column="referTable" jdbcType="VARCHAR" property="referTable" />
+    <result column="reqParamJson" jdbcType="NVARCHAR" property="reqParamJson" />
+    <result column="rspParamJson" jdbcType="NVARCHAR" property="rspParamJson" />
+    <result column="sourceSys" jdbcType="NVARCHAR" property="sourceSys" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, referId, referTable, reqParamJson, rspParamJson, sourceSys, dateCreate, delFlag
+  </sql>
+  <insert id="create" parameterType="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageLog" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO LOG_LNK_TotalPackage
+        ( referId ,
+          referTable ,
+          reqParamJson ,
+          rspParamJson ,
+          sourceSys ,
+          dateCreate ,
+          delFlag
+        )
+    VALUES  (#{referId,jdbcType=INTEGER} ,
+              #{referTable,jdbcType=VARCHAR} ,
+              #{reqParamJson,jdbcType=NVARCHAR} ,
+              #{rspParamJson,jdbcType=NVARCHAR} ,
+              #{sourceSys,jdbcType=NVARCHAR} ,
+              #{dateCreate,jdbcType=TIMESTAMP} ,
+              'N'
+            )
+  </insert>
+  <update id="update" parameterType="cn.com.eju.deal.houseLinkage.totalPackage.model.TotalPackageLog">
+    update LOG_LNK_TotalPackage
+    <set>
+      <if test="referId != null">
+        referId = #{referId,jdbcType=INTEGER},
+      </if>
+      <if test="referTable != null">
+        referTable = #{referTable,jdbcType=VARCHAR},
+      </if>
+      <if test="reqParamJson != null">
+        reqParamJson = #{reqParamJson,jdbcType=NVARCHAR},
+      </if>
+      <if test="rspParamJson != null">
+        rspParamJson = #{rspParamJson,jdbcType=NVARCHAR},
+      </if>
+      <if test="sourceSys != null">
+        sourceSys = #{sourceSys,jdbcType=NVARCHAR},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

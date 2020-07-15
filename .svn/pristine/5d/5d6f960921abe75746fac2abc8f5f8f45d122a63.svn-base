@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.user.dao.PostRoleMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.user.model.PostRoleMapping" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="postId" property="postId" jdbcType="INTEGER" />
+    <result column="roleId" property="roleId" jdbcType="INTEGER" />
+    <result column="dateCreate" property="dateCreate" jdbcType="TIMESTAMP" />
+    <result column="userIdCreate" property="userIdCreate" jdbcType="INTEGER" />
+    <result column="delFlag" property="delFlag" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, postId,roleId, dateCreate, userIdCreate, delFlag
+  </sql>
+   <insert id="insertPostRole" parameterType="cn.com.eju.deal.user.model.PostRoleMapping" >
+	    insert into USR_PostRoleMapping ( postId, roleId, userIdCreate
+	      )
+	    values ( #{postId,jdbcType=INTEGER},#{roleId,jdbcType=INTEGER}, 
+	        #{userIdCreate,jdbcType=INTEGER}
+	      ) 
+  </insert>
+   <select id="selectByPostRole" resultType="cn.com.eju.deal.user.model.PostRoleMapping"  parameterType="cn.com.eju.deal.user.model.PostRoleMapping" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_PostRoleMapping
+    where roleId = #{roleId,jdbcType=INTEGER} 
+    and postId = #{postId,jdbcType=INTEGER} 
+  </select>
+  <select id="queryList" resultType="cn.com.eju.deal.user.model.PostRoleMapping" parameterType="cn.com.eju.deal.user.model.PostRoleMapping" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_PostRoleMapping where delFlag = 'N' 
+    <if test="postId != null" >
+        and postId=#{postId}
+      </if>
+    <if test="roleId != null" >
+        and roleId=#{roleId}
+      </if>
+  </select>
+  <select id="queryByPostIdList" resultType="cn.com.eju.deal.user.model.PostRoleMapping" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from USR_PostRoleMapping where delFlag = 'N' 
+        and postId=#{postId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPostId" parameterType="java.lang.Integer" >
+      UPDATE USR_PostRoleMapping
+		SET
+		delFlag='Y'
+		<where>
+			postId = #{postId,jdbcType=INTEGER}
+		</where>
+  </update>
+  <update id="updateByPostRole"  parameterType="cn.com.eju.deal.user.model.PostRoleMapping" >
+      UPDATE USR_PostRoleMapping
+		SET
+		delFlag=#{delFlag,jdbcType=NVARCHAR}
+		<where>
+			postId = #{postId,jdbcType=INTEGER}
+			and roleId = #{roleId,jdbcType=INTEGER}
+		</where>
+  </update>
+  
+</mapper>

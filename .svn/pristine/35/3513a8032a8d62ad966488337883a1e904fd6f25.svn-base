@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.Report.dao.ReportQueueTotalMapper">
+  <resultMap id="BaseResultMap" type="cn.com.eju.deal.Report.model.ReportQueueTotal">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reportKey" jdbcType="VARCHAR" property="reportKey" />
+    <result column="positiveSize" jdbcType="INTEGER" property="positiveSize" />
+    <result column="minusSize" jdbcType="INTEGER" property="minusSize" />
+    <result column="dateCreate" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="userIdCreate" jdbcType="INTEGER" property="userIdCreate" />
+    <result column="delFlag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, reportKey, positiveSize, minusSize, dateCreate, userIdCreate, delFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Report_Queue_Total
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Report_Queue_Total
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.eju.deal.Report.model.ReportQueueTotal">
+    insert into Report_Queue_Total (id, reportKey, positiveSize, 
+      minusSize, dateCreate, userIdCreate, 
+      delFlag)
+    values (#{id,jdbcType=INTEGER}, #{reportKey,jdbcType=VARCHAR}, #{positiveSize,jdbcType=INTEGER}, 
+      #{minusSize,jdbcType=INTEGER}, #{dateCreate,jdbcType=TIMESTAMP}, #{userIdCreate,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.eju.deal.Report.model.ReportQueueTotal">
+    insert into Report_Queue_Total
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="reportKey != null">
+        reportKey,
+      </if>
+      <if test="positiveSize != null">
+        positiveSize,
+      </if>
+      <if test="minusSize != null">
+        minusSize,
+      </if>
+      <if test="dateCreate != null">
+        dateCreate,
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate,
+      </if>
+      <if test="delFlag != null">
+        delFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="reportKey != null">
+        #{reportKey,jdbcType=VARCHAR},
+      </if>
+      <if test="positiveSize != null">
+        #{positiveSize,jdbcType=INTEGER},
+      </if>
+      <if test="minusSize != null">
+        #{minusSize,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.eju.deal.Report.model.ReportQueueTotal">
+    update Report_Queue_Total
+    <set>
+      <if test="reportKey != null">
+        reportKey = #{reportKey,jdbcType=VARCHAR},
+      </if>
+      <if test="positiveSize != null">
+        positiveSize = #{positiveSize,jdbcType=INTEGER},
+      </if>
+      <if test="minusSize != null">
+        minusSize = #{minusSize,jdbcType=INTEGER},
+      </if>
+      <if test="dateCreate != null">
+        dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIdCreate != null">
+        userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        delFlag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.eju.deal.Report.model.ReportQueueTotal">
+    update Report_Queue_Total
+    set reportKey = #{reportKey,jdbcType=VARCHAR},
+      positiveSize = #{positiveSize,jdbcType=INTEGER},
+      minusSize = #{minusSize,jdbcType=INTEGER},
+      dateCreate = #{dateCreate,jdbcType=TIMESTAMP},
+      userIdCreate = #{userIdCreate,jdbcType=INTEGER},
+      delFlag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="selectTopOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    top 1
+    <include refid="Base_Column_List" />
+    from Report_Queue_Total
+    where delFlag = 'N'
+      and reportKey = #{reportKey,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <update id="uptByReportKeySelective" parameterType="cn.com.eju.deal.Report.model.ReportQueueTotal" >
+    update Report_Queue_Total
+    <set>
+      <if test="positiveSize != null and positiveSize==1 ">
+          positiveSize = ( ISNULL(positiveSize,0) + 1),
+      </if>
+       <if test="minusSize != null and minusSize==1 ">
+          minusSize = ( ISNULL(minusSize,0) + 1),
+      </if>
+    </set>
+    where reportKey = #{reportKey,jdbcType=VARCHAR}
+  </update>
+</mapper>

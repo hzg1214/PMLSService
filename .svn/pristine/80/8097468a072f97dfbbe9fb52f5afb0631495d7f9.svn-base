@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.student.dao.StudentTestMapper">
+
+	<insert id="oaFrameContract" parameterType="Map">
+		INSERT INTO dbo.OaLnkFrameContractReturn
+		( ContractNo ,
+		FlowId ,
+		approveStatus ,
+		approveDate ,
+		hasDeal ,
+		dateUpdate ,
+		dateCreate
+		)
+		SELECT ContractNo ,
+          flowId ,
+          #{approveStatus},
+          GETDATE() ,
+	  	  0,
+          GETDATE() ,
+          GETDATE()  FROM dbo.LNK_FrameContract WHERE ContractNo = #{contractNo};
+
+
+        INSERT INTO dbo.OaLnkFrameContractFileReturn
+		( ContractNo ,
+		FlowId ,
+		fileId ,
+		fileCreateDay ,
+		fileName ,
+		dateCreate
+		)
+		SELECT ContractNo ,
+          flowId ,
+          '6633313951907925974',
+          '2019-05-23' ,
+		  'LDHT201900014.pdf',
+          GETDATE()  FROM dbo.LNK_FrameContract WHERE ContractNo = #{contractNo};
+	</insert>
+
+	<insert id="oaProject" parameterType="Map">
+		INSERT INTO dbo.OaLnkReturn
+		( oaId ,
+		projectNo ,
+		oaReturnType ,
+		oaEndDate ,
+		oaStates ,
+		hasDeal ,
+		crtDt,
+		hsCode,
+		hsName,
+		isHbPadding,
+		khCode,
+		khName,
+		oaEstateNm,
+		yjDyAmount,
+		dykbn,
+		subscribedThisYear,
+		subscribedNextYear,
+		dyDateStart,
+		dyDateEnd,
+		dyAmount,
+		oaStartDate
+		)
+		SELECT #{oaId} ,
+          #{projectNo} ,
+          20802,
+          GETDATE() ,
+					1,
+          0,
+          GETDATE(),
+		  #{hsCode},
+		  #{hsName},
+		  0,
+		  #{khCode},
+		  #{khName},
+		  estateNm,
+		  #{yjDyAmount},
+		  #{dykbn},
+		  #{subscribedThisYear},
+		  #{subscribedNextYear},
+		  #{dyDateStart},
+		  #{dyDateEnd},
+		  #{dyAmount},
+		  getDate()
+		FROM dbo.LNK_Estate WHERE projectNo = #{projectNo};
+
+		EXEC sp_UpdateLNK_Estate;
+	</insert>
+
+	<insert id="oaSign" parameterType="Map">
+			INSERT INTO dbo.OaLnkReturn
+		( oaId ,
+		projectNo ,
+		oaReturnType ,
+		oaEndDate ,
+		oaStates ,
+		hasDeal ,
+		crtDt,
+		rtnCommissionMemo,
+		rtnCommission,
+		commissionMemo,
+		commissionConditionVal,
+		incomeSubject,
+		cooperationDtStart,
+		cooperationDtEnd,
+		signKbn,
+		hsCode,
+		hsName,
+		khCode,
+		khName,
+		oaStartDate,
+		wsqyzt,
+		developersCode,
+		developersName,
+		fileNewId
+		)
+		VALUES(
+		#{oaId},
+		#{projectNo},
+		20803,
+		getDate(),
+		1,
+		0,
+		getDate(),
+		#{rtnCommissionMemo},
+		#{rtnCommission},
+		#{commissionMemo},
+		#{commissionConditionVal},
+		#{incomeSubject},
+		#{cooperationDtStart},
+		#{cooperationDtEnd},
+		#{signKbn},
+		#{hsCode},
+		#{hsName},
+		#{khCode},
+		#{khName},
+		getDate(),
+		#{wsqyzt},
+		#{developersCode},
+		#{developersName},
+		#{newId}
+		);
+
+		INSERT INTO dbo.OaLnkFileReturn
+		( oaNo ,
+		flowId ,
+		fileId ,
+		fileCreateDay ,
+		fileName ,
+		dateCreate,
+		fileNewId
+		)
+		VALUES (
+			#{oaId},
+			#{oaId},
+			'6633313951907925974',
+			'2019-05-23',
+			'LDHT201900014.pdf',
+			getDate(),
+			#{newId}
+		);
+
+        EXEC sp_UpdateLNK_Estate;
+	</insert>
+
+	<insert id="oaApproach" parameterType="Map">
+		INSERT INTO dbo.OaLnkReturn
+		( oaId ,
+		projectNo ,
+		oaReturnType ,
+		oaEndDate ,
+		oaStates ,
+		hasDeal ,
+		crtDt,
+		rtnCommissionMemo,
+		rtnCommission,
+		commissionMemo,
+		commissionConditionVal,
+		incomeSubject,
+		cooperationDtStart,
+		cooperationDtEnd,
+		hsCode,
+		hsName,
+		oaStartDate,
+		wsqyzt,
+		developersCode,
+		developersName,
+		fileNewId
+		)
+		VALUES(
+		#{oaId},
+		#{projectNo},
+		#{oaReturnType},
+		GETDATE(),
+		1,
+		0,
+		GETDATE(),
+		#{rtnCommissionMemo},
+		#{rtnCommission},
+		#{commissionMemo},
+		#{commissionConditionVal},
+		#{incomeSubject},
+		#{cooperationDtStart},
+		#{cooperationDtEnd},
+		#{hsCode},
+		#{hsName},
+		getdate(),
+		#{wsqyzt},
+		#{developersCode},
+		#{developersName},
+		#{newId}
+		);
+
+		INSERT INTO dbo.OaLnkFileReturn
+		( oaNo ,
+		flowId ,
+		fileId ,
+		fileCreateDay ,
+		fileName ,
+		dateCreate,
+		fileNewId
+		)
+		VALUES (
+			#{oaId},
+			#{oaId},
+			'6633313951907925974',
+			'2019-05-23',
+			'LDHT201900014.pdf',
+			getDate(),
+			#{newId}
+		);
+
+        EXEC sp_UpdateLNK_Estate;
+	</insert>
+
+	<insert id="oaDistribution" parameterType="Map">
+		INSERT INTO dbo.OaPmlsCooperationReturn
+          ( flowId ,
+            oaNo ,
+            approveStatus ,
+            approveDate ,
+            hasDeal ,
+            dateCreate ,
+            htType ,
+            htCategory ,
+            riskWarning ,
+            khCode ,
+            khName
+          )
+		SELECT  flowId ,
+				oaNo ,
+				#{approveStatus},
+				GETDATE(),
+				0,
+				GETDATE(),
+				#{htType} ,
+				#{htCategory} ,
+				#{riskWarning} ,
+				#{khCode} ,
+				#{khName}
+		FROM  dbo.PMLS_Cooperation where oaNo = #{oaNo} and delFlag = 0;
+
+		EXEC PMLS_OA_Cooperation_deal;
+	</insert>
+
+	<insert id="oaStatement" parameterType="Map">
+		INSERT INTO dbo.OaPmlsJsStatementReturn
+          ( flowId ,
+            oaNo ,
+            approveStatus ,
+            approveDate ,
+            hasDeal ,
+            dateCreate 
+            ,fileId
+          )
+		SELECT  flowId ,
+				oaNo ,
+				#{approveStatus} ,
+				GETDATE(),
+				0,
+				GETDATE() 
+				,#{newId}
+		FROM dbo.PMLS_JsStatement where delFlag = 0 and oaNo = #{jyNo};
+		
+		
+		INSERT  INTO dbo.OaPmlsJssStatementGzjFileReturn
+	        ( FlowId ,
+	          fileId ,
+	          fileCreateDay ,
+	          fileName ,
+	          dateUpdate ,
+	          dateCreate
+	        )
+		VALUES  ( #{jyNo},
+          '6633313951907925974' , --暂时写死,用于测试
+          '2019-05-23' , --暂时写死
+          'LDHT201900014.pdf' , --暂时写死
+          GETDATE() , 
+          GETDATE()  
+        );
+        
+        EXEC  dbo.PMLS_OA_JssStatementReturn;
+		
+<!-- 		SELECT  flowId , -->
+<!-- 				oaNo , -->
+<!-- 				#{approveStatus} , -->
+<!-- 				GETDATE(), -->
+<!-- 				0, -->
+<!-- 				GETDATE() , -->
+<!-- 				#{newId} -->
+<!-- 		FROM dbo.PMLS_JsStatement where oaNo = (select t.oaNo from PMLS_JY_Apply a, -->
+<!-- 										PMLS_JsStatement t -->
+<!-- 										where a.jssid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0; -->
+
+<!-- 		INSERT INTO  dbo.OaPmlsJsStatementFileReturn -->
+<!-- 				( fileId, fileUrl ) -->
+<!-- 		VALUES  ( #{newId}, -->
+<!-- 				  'http://dmimg.5054399.com/allimg/pkm/pk/22.jpg' -->
+<!-- 				  ); -->
+
+<!-- 		EXEC PMLS_OA_CretateTripe; -->
+	</insert>
+
+	<insert id="oaAgreement" parameterType="Map">
+		INSERT INTO dbo.OaPmlsTripeReturn
+          ( flowId ,
+            oaNo ,
+            approveStatus ,
+            approveDate ,
+            hasDeal ,
+            dateCreate ,
+            fileId
+          )
+		SELECT  flowId ,
+				oaNo ,
+				#{approveStatus} ,
+				GETDATE(),
+				0,
+				GETDATE() ,
+				#{newId}
+		FROM dbo.PMLS_Triple where oaNo = (select t.oaNo from PMLS_JY_Apply a,
+										PMLS_Triple t
+										where a.qyid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0;
+
+		INSERT INTO  dbo.OaPmlsTripeFileReturn
+				( fileId, fileUrl )
+		VALUES  ( #{newId},
+				  'http://dmimg.5054399.com/allimg/pkm/pk/22.jpg'
+				  );
+
+		EXEC PMLS_OA_CretateQkBill;
+	</insert>
+
+	<insert id="oaReceivables" parameterType="Map">
+		INSERT INTO dbo.OaPmlsJyQkBillReturn
+          ( flowId ,
+            oaNo ,
+            approveStatus ,
+            approveDate ,
+            hasDeal ,
+            dateCreate ,
+            fileId ,
+            receiveBankName ,
+            receiveBankAccountCardCode ,
+            receiveBankAccountName ,
+            receiveBankProvinceName ,
+            receiveBankCityName ,
+            receiveBankSerialNo ,
+            recordDate ,
+            lastpayDate
+          )
+		select
+			flowId ,
+            oaNo ,
+            #{approveStatus} ,
+            GETDATE() ,
+            0 ,
+            GETDATE() ,
+            #{newId} ,
+            #{receiveBankName} ,
+            #{receiveBankAccountCardCode} ,
+            #{receiveBankAccountName} ,
+            #{receiveBankProvinceName} ,
+            #{receiveBankCityName} ,
+            #{receiveBankSerialNo} ,
+            #{recordDate} ,
+            #{lastpayDate}
+		from PMLS_JY_QkBill where oaNo = (select t.oaNo from PMLS_JY_Apply a,
+										PMLS_JY_QkBill t
+										where a.qkdid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0;
+
+		INSERT INTO dbo.OaPmlsJyQkBillFileReturn
+		( oaNo ,
+		flowId ,
+		fileId,
+		fileCreateDay ,
+		fileName ,
+		dateCreate,
+		refId
+		)
+		VALUES (
+			(select t.oaNo from PMLS_JY_Apply a,
+										PMLS_JY_QkBill t
+										where a.qkdid=t.id and a.jyapplyNo = #{jyNo}),
+			(select t.oaNo from PMLS_JY_Apply a,
+										PMLS_JY_QkBill t
+										where a.qkdid=t.id and a.jyapplyNo = #{jyNo}),
+			'6633313951907925974',
+			'2019-05-23',
+			'LDHT201900014.pdf',
+			getDate(),
+			#{newId}
+		);
+
+		EXEC PMLS_OA_CretateZCBill;
+	</insert>
+
+	<insert id="oaExpenditure" parameterType="Map">
+		INSERT INTO dbo.OaPmlsJyZcBillReturn
+          ( flowId ,
+            oaNo ,
+            approveStatus ,
+            approveDate ,
+            hasDeal ,
+            recordDate ,
+            dateCreate ,
+            fileId
+          )
+		select
+			flowId ,
+            oaNo ,
+            #{approveStatus} ,
+            GETDATE() ,
+            0 ,
+            #{recordDate} ,
+            GETDATE() ,
+            #{newId}
+		from PMLS_JY_ZCBill where oaNo = (select t.oaNo from PMLS_JY_Apply a,
+										PMLS_JY_ZCBill t
+										where a.zcdid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0;
+
+		EXEC PMLS_OA_ZCBill_deal;
+	</insert>
+
+	<update id="update" parameterType="Map">
+		UPDATE ${tableName} set formState=10 ,
+		<if test="tableName=='PMLS_JsStatement'">
+<!-- 			flowId=(select t.oaNo from PMLS_JY_Apply a, -->
+<!-- 			PMLS_JsStatement t -->
+<!-- 			where a.jssid=t.id and a.jyapplyNo = #{jyNo}), -->
+			flowId=#{jyNo},
+		</if>
+		<if test="tableName=='PMLS_Triple'">
+			flowId=(select t.oaNo from PMLS_JY_Apply a,
+			PMLS_Triple t
+			where a.qyid=t.id and a.jyapplyNo = #{jyNo}),
+		</if>
+		<if test="tableName=='PMLS_JY_QkBill'">
+			flowId=(select t.oaNo from PMLS_JY_Apply a,
+			PMLS_JY_QkBill t
+			where a.qkdid=t.id and a.jyapplyNo = #{jyNo}),
+		</if>
+		<if test="tableName=='PMLS_JY_ZCBill'">
+			flowId=(select t.oaNo from PMLS_JY_Apply a,
+			PMLS_JY_ZCBill t
+			where a.zcdid=t.id and a.jyapplyNo = #{jyNo}),
+		</if>
+		<if test="tableName=='PMLS_Cooperation'">
+			flowId=#{oaNo},
+		</if>
+		oaStartDate=GETDATE()
+		<if test="tableName=='PMLS_JsStatement'">
+<!-- 			where oaNo = (select t.oaNo from PMLS_JY_Apply a, -->
+<!-- 			PMLS_JsStatement t -->
+<!-- 			where a.jssid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0 -->
+			where delFlag = 0 and oaNo = #{jyNo}
+		</if>
+		<if test="tableName=='PMLS_Triple'">
+			where oaNo = (select t.oaNo from PMLS_JY_Apply a,
+			PMLS_Triple t
+			where a.qyid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0
+		</if>
+		<if test="tableName=='PMLS_JY_QkBill'">
+			where oaNo = (select t.oaNo from PMLS_JY_Apply a,
+			PMLS_JY_QkBill t
+			where a.qkdid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0
+		</if>
+		<if test="tableName=='PMLS_JY_ZCBill'">
+			where oaNo = (select t.oaNo from PMLS_JY_Apply a,
+			PMLS_JY_ZCBill t
+			where a.zcdid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0
+		</if>
+		<if test="tableName=='PMLS_Cooperation'">
+			where oaNo = #{oaNo} and delFlag = 0
+		</if>
+	</update>
+
+
+	<update id="updateNext" parameterType="Map">
+		UPDATE ${nextTableName} set oaStartDate=GETDATE() where oaNo = (select t.oaNo from PMLS_JY_Apply a,
+		${nextTableName} t
+		<if test="nextTableName=='PMLS_Triple'">
+			where a.qyid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0
+		</if>
+		<if test="nextTableName=='PMLS_JY_QkBill'">
+			where a.qkdid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0
+		</if>
+		<if test="nextTableName=='PMLS_JY_ZCBill'">
+			where a.zcdid=t.id and a.jyapplyNo = #{jyNo}) and delFlag = 0
+		</if>
+	</update>
+
+	<update id="updateQk" parameterType="Map">
+		UPDATE Cash_Bill_Company set oaStartDate=GETDATE(),submitOaStatus=#{submitOaStatus},approveStatus=#{approveStatus},formState=10,flowId=#{oaNo}
+		where oaNo = #{oaNo}
+	</update>
+
+	<insert id="oaCashBill" parameterType="Map">
+		INSERT INTO dbo.OaCashBillReturn
+		( cashBillNo ,
+		flowId,
+		oaNo ,
+		approveStatus,
+		approveDate ,
+		recordDate ,
+		hasDeal ,
+		dateUpdate,
+		dateCreate
+		)
+		select cashBillNo,
+		flowId,
+		oaNo,
+		#{approveStatusTwo},
+		getDate(),
+		recordDate,
+		0,
+		getDate(),
+		getDate() from Cash_Bill_Company where oaNo = #{oaNo} and delFlag = 0
+	</insert>
+
+	<select id="queryCashBillReturnId" parameterType="Map" resultType="java.lang.Integer">
+		select Top 1 id from OaCashBillReturn where oaNo = #{oaNo} order by dateCreate desc
+	</select>
+
+	<insert id="oaCashBillProject" parameterType="Map">
+		INSERT INTO dbo.OaCashBillReportReturn
+		( oaRetId ,
+		oaNo ,
+		reportNo,
+		befTaxAmount ,
+		taxAmount ,
+		dateCreate,
+		dateUpdate
+		)
+		select #{oaRetId},
+		#{oaNo},
+		reportNo,
+		requestAmount,
+		taxAmount,
+		getDate(),
+		getDate() from Cash_Bill_Report where comparentId = (select id from cash_bill_company where oaNo= #{oaNo} and delFlag = 0) and delFlag = 0
+	</insert>
+
+	<select id="getNewId" resultType="java.lang.String">
+		select newId();
+	</select>
+	
+	<select id="selCashBillCompanyByOaNo" parameterType="Map" resultType="java.lang.Integer">
+		select COUNT(*) from dbo.Cash_Bill_Company where submitOaStatus!=21202 AND oaNo = #{oaNo} 
+	</select>
+</mapper>

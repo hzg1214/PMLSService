@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.eju.deal.companyInfoDetail.dao.CompanyInfoDetailMapper">
+  <!-- 查询公司信息明细列表 -->
+  <select id="queryCompanyInfoDetailList" resultType="cn.com.eju.deal.companyInfoDetail.model.CompanyInfoDetailDto" parameterType="Map">
+  	 EXEC P_CRM_RPT_CompanyInfoDetail #{dateCreateStart}, #{dateCreateEnd},#{cityNoStr}, #{companyNo},#{companyName},#{switchType},#{address}
+  </select>
+</mapper>

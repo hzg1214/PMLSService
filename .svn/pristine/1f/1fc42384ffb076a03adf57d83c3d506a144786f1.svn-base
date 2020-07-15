@@ -1,0 +1,7 @@
+package cn.com.eju.pmls.remittanceTrack.dto;
+
+import cn.com.eju.pmls.remittanceTrack.model.RemittanceTrack;
+
+public class RemittanceTrackDto extends RemittanceTrack{
+	
+}

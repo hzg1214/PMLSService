@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.mapper.storeAudit.StoreAuditMapper" >
+
+	<resultMap id="storeNewDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="Longitude" property="longitude" />
+		<result column="Latitude" property="latitude" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="StoreManager" property="storeManager" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" />
+		<result column="LinkageSituation" property="linkageSituation" />
+		<result column="ChainBrand" property="chainBrand" />
+		<result column="ChainBrandName" property="chainBrandName" />
+		<result column="StoreDueTime" property="storeDueTime" />
+		<result column="StoreLeaseDueTime" property="storeLeaseDueTime" />
+		<result column="StorePersonNum" property="storePersonNum" />
+		<result column="StorePersonNumName" property="storePersonNumName" />
+		<result column="agentNum" property="agentNum" />
+		<result column="NowUserSystem" property="nowUserSystem" />
+		<result column="MainBusiness" property="mainBusiness" />
+		<result column="MainBusinessName" property="mainBusinessName" />
+		<result column="TransactionMode" property="transactionMode" />
+		<result column="TransactionModeName" property="transactionModeName" />
+		<result column="businessPlaceType" property="businessPlaceType" />
+		<result column="businessPlaceTypeName" property="businessPlaceTypeName" />
+		<result column="Address" property="address" />
+		<result column="AddressDetail" property="addressDetail" />
+		<result column="AuditStatus" property="auditStatus" />
+		<result column="AuditStatusName" property="auditStatusName" />
+		<result column="UserCreate" property="userCreate" />
+		<result column="UserCode" property="userCode" />
+		<result column="UserNameCreate" property="userNameCreate" />
+		<result column="distance" property="distance"/>
+		<result column="storeSizeScale" property="storeSizeScale" />
+		<result column="storeSizeScaleName" property="storeSizeScaleName" />
+		<result column="storeType" property="storeType" />
+		<result column="storeTypeName" property="storeTypeName" />
+		<collection property="auditRecordList" column="id" ofType="cn.com.eju.deal.model.sweepStreets.StoreAuditRecordDto" select="selectAuditRecord"/>
+		<collection property="storePicList" column="pictureRefId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectPicture"/>
+	</resultMap>
+
+	<resultMap id="storeNewDtoMap2" type="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		<result column="Id" property="storeId" />
+		<result column="StoreNo" property="storeNo" />
+		<result column="Name" property="storeName" />
+		<result column="Longitude" property="longitude" />
+		<result column="Latitude" property="latitude" />
+		<result column="CityNo" property="cityNo" />
+		<result column="CityName" property="cityName" />
+		<result column="DistrictNo" property="districtNo" />
+		<result column="DistrictName" property="districtName" />
+		<result column="StoreManager" property="storeManager" />
+		<result column="StoreManagerPhone" property="storeManagerPhone" />
+		<result column="LinkageSituation" property="linkageSituation" />
+		<result column="ChainBrand" property="chainBrand" />
+		<result column="ChainBrandName" property="chainBrandName" />
+		<result column="StoreDueTime" property="storeDueTime" />
+		<result column="StoreLeaseDueTime" property="storeLeaseDueTime" />
+		<result column="StorePersonNum" property="storePersonNum" />
+		<result column="StorePersonNumName" property="storePersonNumName" />
+		<result column="agentNum" property="agentNum" />
+		<result column="NowUserSystem" property="nowUserSystem" />
+		<result column="MainBusiness" property="mainBusiness" />
+		<result column="MainBusinessName" property="mainBusinessName" />
+		<result column="TransactionMode" property="transactionMode" />
+		<result column="TransactionModeName" property="transactionModeName" />
+		<result column="Address" property="address" />
+		<result column="AddressDetail" property="addressDetail" />
+		<result column="AuditStatus" property="auditStatus" />
+		<result column="AuditStatusName" property="auditStatusName" />
+		<result column="UserCreate" property="userCreate" />
+		<result column="UserCode" property="userCode" />
+		<result column="UserNameCreate" property="userNameCreate" />
+		<result column="distance" property="distance"/>
+		<result column="authId" property="authId"/>
+	</resultMap>
+
+	<resultMap id="storeAuditRecordDtoMap" type="cn.com.eju.deal.model.sweepStreets.StoreAuditRecordDto">
+		<result column="id" property="id" />
+		<result column="storeId" property="storeId" />
+		<result column="auditDesc" property="auditDesc" />
+		<result column="auditUser" property="auditUser" />
+		<result column="auditUserName" property="auditUserName" />
+		<result column="auditTime" property="auditTime" />
+	</resultMap>
+
+
+	<resultMap id="pictureDtoMap" type="cn.com.eju.deal.model.sweepStreets.WXPictureDto"></resultMap>
+
+	<select id="getStoreList" parameterType="Map" resultMap="storeNewDtoMap2">
+		select
+			t1.Id,
+			t1.StoreNo,
+			t1.Name,
+			t1.Longitude,
+			t1.Latitude,
+			t1.AddressDetail,
+			t1.AuditStatus,
+			case when t1.AuditStatus=0 then '未提交'
+			when t1.AuditStatus=10 then '审核中'
+			when t1.AuditStatus=20 then '审核通过'
+			when t1.AuditStatus=30 then '驳回'
+			end AuditStatusName,
+			t1.UserCreate,
+			t2.userCode,
+			t2.userName as UserNameCreate,
+			CONVERT(VARCHAR,t3.auditTime,120) as auditDate,
+			CONVERT(VARCHAR,t1.dateCreate,120) as dateCreate,
+		    t1.maintainer, t1.maintainerName,
+			t1.centerId, center.groupName centerName
+		from Store t1 INNER JOIN crm.dbo.USR_User t2
+		ON t1.UserCreate=t2.userId
+		LEFT JOIN (SELECT storeId,MAX(auditTime) auditTime FROM dbo.Store_AuditRecord WHERE auditDesc = '审核通过' GROUP BY storeId) t3
+		ON t1.Id = t3.storeId
+		LEFT JOIN usr_group center ON t1.centerId = center.groupId AND center.delFlag = 'N'
+		where t1.isDelete=0
+		and t1.auditStatus!=0
+		<!--去掉实惠门店-->
+		and (t1.dataFromType not in ('1002') or t1.dataFromType is null)
+		AND t1.centerId IN
+		<foreach collection="centerIdList" index="index" item="item" open="(" separator="," close=")">
+			#{item,jdbcType=INTEGER}
+		</foreach>
+		<!--AND t1.centerId IN (-->
+			<!--&lt;!&ndash;SELECT DISTINCT centerId FROM dbo.V_CRM_Group_Center_All WHERE groupId = #{groupId}&ndash;&gt;-->
+			<!--SELECT DISTINCT centerId FROM  crm.dbo.USR_User u , crm.dbo.USR_UserPostMapping up,dbo.USR_Post p,dbo.V_CRM_Group_Center_All v-->
+				<!--WHERE u.userId=up.userId-->
+				<!--AND up.postId=p.postId-->
+				<!--AND p.groupId=v.groupId-->
+				<!--AND u.delFlag='N'-->
+				<!--AND up.delFlag='N'-->
+				<!--AND p.delFlag='N'-->
+				<!--AND u.userCode=#{userCode}-->
+		<!--)-->
+
+		<if test="storeName!=null and storeName!=''">
+			and (t1.Name like '%'+'${storeName}'+'%'
+				or t1.storeNo like  '%'+'${storeName}'+'%'
+				or t1.addressDetail like '%'+'${storeName}'+'%'
+			)
+		</if>
+		<if test="storeNameAddress!=null and storeNameAddress!=''">
+			and (t1.Name like '%'+'${storeNameAddress}'+'%'
+				or t1.addressDetail like '%'+'${storeNameAddress}'+'%'
+			)
+		</if>
+		<if test="auditStatus!=null and auditStatus!='-1'">
+			and t1.auditStatus =#{auditStatus}
+		</if>
+
+		<if test="cityNo != null and cityNo != ''">
+			AND t1.acCityNo IN ('${cityNo}')
+		</if>
+		<if test="centerIdStr != null and centerIdStr != ''">
+			AND t1.centerId IN (${centerIdStr})
+		</if>
+
+		<if test="createDateStart!=null and createDateStart!=''">
+			and CONVERT(VARCHAR(10),t1.dateCreate,120) >= #{createDateStart}
+		</if>
+		<if test="createDateEnd!=null and createDateEnd!=''">
+			and CONVERT(VARCHAR(10),t1.dateCreate,120) &lt;= #{createDateEnd}
+		</if>
+
+		<if test="auditDateStart!=null and auditDateStart!=''">
+			and CONVERT(VARCHAR(10),t3.auditTime,120) >= #{auditDateStart}
+		</if>
+		<if test="auditDateEnd!=null and auditDateEnd!=''">
+			and CONVERT(VARCHAR(10),t3.auditTime,120) &lt;= #{auditDateEnd}
+		</if>
+		order by t1.DateCreate desc
+
+	</select>
+
+	<select id="getStoreAuthCheckListData" parameterType="Map" resultMap="storeNewDtoMap2">
+		SELECT  t1.Id ,
+				t1.StoreNo ,
+				t1.Name ,
+				t1.AddressDetail ,
+				CASE WHEN sac.checkStatus = 23300 THEN -1
+					 WHEN sac.checkStatus = 23301 THEN 10
+					 WHEN sac.checkStatus = 23302 THEN 20
+					 WHEN sac.checkStatus = 23303 THEN 30
+				END AuditStatus ,
+				CASE WHEN sac.checkStatus = 23300 THEN '未提交'
+					 WHEN sac.checkStatus = 23301 THEN '审核中'
+					 WHEN sac.checkStatus = 23302 THEN '审核通过'
+					 WHEN sac.checkStatus = 23303 THEN '驳回'
+				END AuditStatusName ,
+				t1.UserCreate ,
+				t2.userCode ,
+				t2.userName AS UserNameCreate ,
+				CONVERT(VARCHAR, t1.DateCreate, 120) AS dateCreate ,
+				t1.Maintainer ,
+				t1.maintainerName ,
+				t1.centerId ,
+				center.groupName centerName,
+				sac.id authId
+		FROM    Store t1
+				INNER JOIN crm.dbo.USR_User t2 ON t1.UserCreate = t2.userId
+				INNER JOIN dbo.v_crm_StoreContract_last lst ON lst.StoreId = t1.Id
+				INNER JOIN dbo.Contract c ON c.Id = lst.ContractId
+				INNER JOIN ( SELECT MAX(id) id ,
+									storeId
+							 FROM   dbo.Store_Auth_Check
+							 WHERE  delFlag = 0
+							 GROUP BY storeId
+						   ) t3 ON t1.Id = t3.storeId
+				INNER JOIN Store_Auth_Check sac ON t3.id = sac.id
+				LEFT JOIN USR_Group center ON t1.centerId = center.groupId
+											  AND center.delFlag = 'N'
+		WHERE   t1.IsDelete = 0
+				AND c.ContractType = 10307
+		<!--去掉实惠门店-->
+		and (t1.dataFromType not in ('1002') or t1.dataFromType is null)
+		AND t1.centerId IN
+		<foreach collection="centerIdList" index="index" item="item" open="(" separator="," close=")">
+			#{item,jdbcType=INTEGER}
+		</foreach>
+
+		<if test="storeNameAddress!=null and storeNameAddress!=''">
+			and (t1.Name like '%'+'${storeNameAddress}'+'%'
+				or t1.addressDetail like '%'+'${storeNameAddress}'+'%'
+			)
+		</if>
+		<if test="auditStatus!=null and auditStatus!='-1'">
+			and sac.checkStatus =#{auditStatus}
+		</if>
+		order by t1.DateCreate desc
+
+	</select>
+
+	<select id="getStoreBizStopListData" parameterType="Map" resultMap="storeNewDtoMap2">
+		SELECT  t1.Id ,
+				t1.StoreNo ,
+				t1.Name ,
+				t1.AddressDetail ,
+				CASE WHEN sbs.STATUS = NULL THEN -1
+					 WHEN sbs.STATUS = 21001 THEN 10
+					 WHEN sbs.STATUS = 21002 THEN 20
+					 WHEN sbs.STATUS = 21003 THEN 30
+				END AuditStatus ,
+				CASE WHEN sbs.STATUS = NULL THEN '未提交'
+					 WHEN sbs.STATUS = 21001 THEN '审核中'
+					 WHEN sbs.STATUS = 21002 THEN '审核通过'
+					 WHEN sbs.STATUS = 21003 THEN '驳回'
+				END AuditStatusName ,
+				t1.UserCreate ,
+				t2.userCode ,
+				t2.userName AS UserNameCreate ,
+				CONVERT(VARCHAR, t1.DateCreate, 120) AS dateCreate ,
+				t1.Maintainer ,
+				t1.maintainerName ,
+				t1.centerId ,
+				center.groupName centerName ,
+				sbs.stopId authId
+		FROM    Store t1
+				INNER JOIN crm.dbo.USR_User t2 ON t1.UserCreate = t2.userId
+				INNER JOIN ( SELECT MAX(stopId) id ,
+									storeId
+							 FROM   dbo.StoreBizStop
+							 WHERE  delFlag = 'N'
+							 GROUP BY storeId
+						   ) t3 ON t1.Id = t3.storeId
+				INNER JOIN StoreBizStop sbs ON t3.id = sbs.stopId
+				LEFT JOIN USR_Group center ON t1.centerId = center.groupId
+											  AND center.delFlag = 'N'
+		WHERE   t1.IsDelete = 0
+				and (t1.dataFromType not in ('1002') or t1.dataFromType is null)
+				AND t1.centerId IN
+				<foreach collection="centerIdList" index="index" item="item" open="(" separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+
+				<if test="storeNameAddress!=null and storeNameAddress!=''">
+					and (t1.Name like '%'+'${storeNameAddress}'+'%'
+						or t1.addressDetail like '%'+'${storeNameAddress}'+'%'
+					)
+				</if>
+				<if test="auditStatus!=null and auditStatus!='-1'">
+					and sbs.status =#{auditStatus}
+				</if>
+		order by t1.DateCreate desc
+	</select>
+
+	<select id="getStoreStopCancelListData" parameterType="Map" resultMap="storeNewDtoMap2">
+		SELECT  t1.Id ,
+				t1.StoreNo ,
+				t1.Name ,
+				t1.AddressDetail ,
+				CASE WHEN ssc.approveStatus = NULL THEN -1
+					 WHEN ssc.approveStatus = 21001 THEN 10
+					 WHEN ssc.approveStatus = 21002 THEN 20
+					 WHEN ssc.approveStatus = 21003 THEN 30
+				END AuditStatus ,
+				CASE WHEN ssc.approveStatus = NULL THEN '未提交'
+					 WHEN ssc.approveStatus = 21001 THEN '审核中'
+					 WHEN ssc.approveStatus = 21002 THEN '审核通过'
+					 WHEN ssc.approveStatus = 21003 THEN '驳回'
+				END AuditStatusName ,
+				t1.UserCreate ,
+				t2.userCode ,
+				t2.userName AS UserNameCreate ,
+				CONVERT(VARCHAR, t1.DateCreate, 120) AS dateCreate ,
+				t1.Maintainer ,
+				t1.maintainerName ,
+				t1.centerId ,
+				center.groupName centerName ,
+				ssc.id authId
+		FROM    Store t1
+				INNER JOIN crm.dbo.USR_User t2 ON t1.UserCreate = t2.userId
+				INNER JOIN ( SELECT MAX(id) id ,
+									storeId
+							 FROM   dbo.Store_Stop_Cancel
+							 WHERE  delFlag = 0
+							 GROUP BY storeId
+						   ) t3 ON t1.Id = t3.storeId
+				INNER JOIN Store_Stop_Cancel ssc ON t3.id = ssc.id
+				LEFT JOIN USR_Group center ON t1.centerId = center.groupId
+											  AND center.delFlag = 'N'
+		WHERE   t1.IsDelete = 0
+				and (t1.dataFromType not in ('1002') or t1.dataFromType is null)
+				AND t1.centerId IN
+				<foreach collection="centerIdList" index="index" item="item" open="(" separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+
+				<if test="storeNameAddress!=null and storeNameAddress!=''">
+					and (t1.Name like '%'+'${storeNameAddress}'+'%'
+						or t1.addressDetail like '%'+'${storeNameAddress}'+'%'
+					)
+				</if>
+				<if test="auditStatus!=null and auditStatus!='-1'">
+					and ssc.approveStatus =#{auditStatus}
+				</if>
+		order by t1.DateCreate desc
+	</select>
+
+	<select id="selectAuditRecord" parameterType="cn.com.eju.deal.model.sweepStreets.StoreAuditRecordDto" resultMap="storeAuditRecordDtoMap">
+		select t1.id,t1.auditDesc,t1.auditUser,CONVERT(VARCHAR(16),t1.auditTime,120) as auditTime,t2.userName as auditUserName ,
+		ROW_NUMBER() over( order by t1.auditTime desc) as orderNo
+		from Store_AuditRecord t1
+		inner join USR_User t2 on t1.auditUser=t2.userId where t1.storeId=#{storeId} order by t1.auditTime desc
+	</select>
+
+	<select id="getStoreAuditRecordList" parameterType="Map" resultMap="storeAuditRecordDtoMap">
+		select t1.id,t1.auditDesc,t1.auditUser,CONVERT(VARCHAR(16),t1.auditTime,120) as auditTime,t2.userName as auditUserName ,
+		ROW_NUMBER() over( order by t1.auditTime desc) as orderNo
+		from Store_AuditRecord t1
+		inner join USR_User t2 on t1.auditUser=t2.userId where t1.storeId=#{storeId} order by t1.auditTime desc
+	</select>
+
+	<update id="updateStore" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update Store
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="storeManager != null">
+				StoreManager = #{storeManager,jdbcType=NVARCHAR},
+			</if>
+			<if test="storeManagerPhone != null">
+				StoreManagerPhone = #{storeManagerPhone,jdbcType=NVARCHAR},
+			</if>
+			<if test="linkageSituation != null">
+				LinkageSituation = #{linkageSituation,jdbcType=NVARCHAR},
+			</if>
+			<if test="chainBrand != null">
+				ChainBrand = #{chainBrand,jdbcType=INTEGER},
+			</if>
+			<if test="storePersonNum != null" >
+				StorePersonNum = #{storePersonNum,jdbcType=INTEGER},
+			</if>
+			<if test="agentNum != null" >
+				agentNum = #{agentNum,jdbcType=INTEGER},
+			</if>
+			<if test="mainBusiness != null">
+				MainBusiness = #{mainBusiness,jdbcType=INTEGER},
+			</if>
+			<if test="transactionMode != null">
+				TransactionMode = #{transactionMode,jdbcType=INTEGER},
+			</if>
+			<if test="nowUserSystem != null">
+				NowUserSystem = #{nowUserSystem,jdbcType=INTEGER},
+			</if>
+			<if test="storeDueTime != null">
+				StoreDueTime = #{storeDueTime,jdbcType=NVARCHAR},
+			</if>
+			<if test="userUpdate != null">
+				UserUpdate = #{userUpdate,jdbcType=NVARCHAR},
+			</if>
+			DateUpdate=GETDATE()
+		</trim>
+		where Id=#{storeId}
+	</update>
+
+	<update id="updateStoreAuditStatus" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto">
+		update Store set AuditStatus=#{auditStatus} where Id=#{storeId}
+	</update>
+
+	<select id="getStoreById" parameterType="cn.com.eju.deal.model.sweepStreets.StoreNewDto" resultMap="storeNewDtoMap">
+		SELECT
+		t1.Id,
+		t1.StoreNo,
+		t1.Name,
+		t1.Longitude,
+		t1.Latitude,
+		t1.CityNo,
+		t2.CityName,
+		t1.DistrictNo,
+		t3.DistrictName,
+		t1.Address,
+		t1.AddressDetail,
+		t1.StoreManager,
+		t1.StoreManagerPhone,
+		t1.LinkageSituation,
+		t1.ChainBrand,
+		t1.pictureRefId,
+		isnull(t4.brandName,'') AS ChainBrandName,
+		CONVERT(VARCHAR,t1.StoreDueTime,23) as StoreDueTime,
+		CONVERT(VARCHAR,t1.StoreLeaseDueTime,23) as StoreLeaseDueTime,
+		t1.StorePersonNum,
+		isnull(t9.dicValue,'') AS StorePersonNumName,
+		t1.agentNum,
+		t1.NowUserSystem,
+		t1.MainBusiness,
+		mainBusinessName= STUFF(( SELECT ',' + bd.dicValue
+                         FROM   dbo.BAS_DictionaryValue bd
+                         where   PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.mainBusiness + ',')>0
+                         ORDER BY PATINDEX('%,' + RTRIM(bd.dicCode) + ',%',',' + t1.mainBusiness + ',')
+                          FOR XML PATH('')), 1, 1,''),
+		t1.TransactionMode,
+		isnull(t7.dicValue,'') AS TransactionModeName,
+		t1.businessPlaceType,
+		isnull(t10.dicValue,'') AS businessPlaceTypeName,
+		t1.storeSizeScale,
+		isnull(t11.dicValue,'') AS storeSizeScaleName,
+		t1.AuditStatus,
+		t1.userCreate,
+		t8.userCode,
+		t1.createLongitude,
+		t1.createLatitude,
+		Convert(numeric(18, 0),t1.distance) AS distance,
+		t8.userName as userNameCreate,
+		CONVERT(VARCHAR,t1.dateCreate,120) as dateCreate,
+		case when t1.AuditStatus=0 then '未提交'
+		     when t1.AuditStatus=10 then '审核中'
+		     when t1.AuditStatus=20 then '审核通过'
+		     when t1.AuditStatus=30 then '驳回'
+		end AuditStatusName,
+		t1.maintainer, t1.maintainerName,
+		t1.centerId, center.groupName centerName
+		,t1.businessPlaceType
+		,t1.storeType
+		,(SELECT dicValue FROM dbo.BAS_DictionaryValue WHERE dicCode = t1.storeType AND typeId = 234 AND delFlag ='N') as storeTypeName
+		,(SELECT dicValue FROM dbo.BAS_DictionaryValue WHERE dicCode = t1.businessPlaceType AND typeId = 224 AND delFlag ='N') AS businessPlaceTypeName
+		FROM dbo.Store t1
+		LEFT JOIN dbo.BAS_City t2 ON t1.CityNo=t2.CityNo
+		LEFT JOIN dbo.BAS_District t3 ON t1.DistrictNo=t3.DistrictNo
+		LEFT JOIN dbo.BAS_CityBrand t4 ON t1.ChainBrand=t4.brandNo
+		LEFT JOIN dbo.BAS_DictionaryValue t7 ON t1.TransactionMode=t7.dicCode
+		LEFT JOIN dbo.BAS_DictionaryValue t9 ON t1.StorePersonNum=t9.dicCode
+		LEFT JOIN dbo.BAS_DictionaryValue t10 ON t1.businessPlaceType=t10.dicCode
+		LEFT JOIN dbo.BAS_DictionaryValue t11 ON t1.storeSizeScale=t11.dicCode
+		LEFT JOIN  crm.dbo.USR_User t8 on t1.userCreate=t8.userId
+		LEFT JOIN usr_group center ON t1.centerId = center.groupId AND center.delFlag = 'N'
+		WHERE t1.Id=#{storeId}
+		<!--去掉实惠门店-->
+		and (t1.dataFromType not in ('1002') or t1.dataFromType is null)
+		AND t1.IsDelete=0
+	</select>
+
+	<select id="selectPicture" parameterType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" resultMap="pictureDtoMap">
+		select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+		from Pic_Picture_Ref where pictureRefId=#{pictureRefId} and pictureStatus=0
+	</select>
+	
+	<insert id="addAuditRecord" parameterType="Map">
+		insert into Store_AuditRecord (
+			storeId,
+			auditDesc,
+			auditUser,
+			auditTime
+		) values(
+			#{storeId},
+			#{auditDesc},
+			#{auditUser},
+			GETDATE()
+		)
+	</insert>
+
+	<!--查询授牌验收明细-->
+	<resultMap id="storeAuthCheckMap" type="cn.com.eju.deal.store.model.StoreAuthCheckDto">
+		<result column="id" property="id" />
+		<collection property="logList" column="id" ofType="cn.com.eju.deal.store.model.StoreAuthCheckLog" select="selectStoreAuthCheckLog"/>
+		<collection property="fileRecordMainDtoList" column="id" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectStoreAuthCheckPicture"/>
+	</resultMap>
+	<select id="getStoreAuthCheckById" parameterType="java.util.Map" resultMap="storeAuthCheckMap">
+		SELECT  ac.* ,
+                s.storeNo ,
+                s.Name AS storeName ,
+                s.addressDetail ,
+                s.maintainer ,
+                s.maintainerName ,
+                u.userCode AS userCreateCode ,
+                u.userName AS userCreateNm ,
+                CONVERT(VARCHAR(10), ac.checkDate, 120) AS checkDateStr ,
+                dv.dicValue AS checkStatusNm,
+                cs.centerName
+        FROM    dbo.Store_Auth_Check ac
+                INNER JOIN dbo.Store s ON ac.storeId = s.Id
+                inner join BAS_CenterSetting cs on cs.centerId = s.centerId
+                INNER JOIN crm.dbo.USR_User u ON u.userId = ac.userCreate
+                INNER JOIN dbo.BAS_DictionaryValue dv ON ac.checkStatus = dv.dicCode
+        WHERE   ac.id = #{authId,jdbcType=INTEGER}
+                AND ac.delFlag = 0
+                AND s.IsDelete = 0
+                AND u.delFlag = 'N'
+                AND dv.delFlag = 'N'
+	</select>
+	<select id="selectStoreAuthCheckLog" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.store.model.StoreAuthCheckLog">
+        SELECT  acl.* ,
+                u.userName AS userCreateNm ,
+                CONVERT(VARCHAR(16), acl.operDate, 120) AS operDateStr
+        FROM    dbo.Store_Auth_Check_Log acl
+                INNER JOIN crm.dbo.USR_User u ON acl.userCreate = u.userId
+        WHERE   acl.delFlag = 0
+                AND u.delFlag = 'N'
+                AND acl.authCheckId = #{id,jdbcType=INTEGER}
+        order by acl.dateCreate asc
+    </select>
+	<select id="selectStoreAuthCheckPicture" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.model.sweepStreets.WXPictureDto">
+        SELECT  FileRecordMainId AS id ,
+                RefId AS pictureRefId ,
+                fileAbbrUrl AS smallPictureUrl ,
+                url50 AS middlePictureUrl ,
+                fileUrl AS bigPictureUrl ,
+                0 AS pictureStatus
+        FROM    dbo.FIL_FileRecordMain
+        WHERE   RefId = #{id,jdbcType=INTEGER}
+                AND IsDelete = 0
+                AND FileTypeId = 1051
+                AND FileSourceId = 15
+    </select>
+
+	<!--查询停业上报明细-->
+	<resultMap id="storeBizStopMap" type="cn.com.eju.deal.store.model.StoreBizStop">
+		<collection property="storePicList" column="stopPicId" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectStoreBizStopPicture"/>
+	</resultMap>
+	<select id="getStoreBizStopById" parameterType="java.util.Map" resultMap="storeBizStopMap">
+       SELECT   t.* ,
+		        t1.StoreNo ,
+		        t1.Name ,
+		        t1.AddressDetail as address,
+		        t1.StoreManager ,
+		        t1.StoreManagerPhone ,
+		        g.groupName ,
+		        ISNULL(t9.dicValue, '') AS StorePersonNumName ,
+		        t7.dicValue AS abTypeStoreName ,
+		        (case t1.abTypeStore when 19901 then null else dbo.F_CRM_SplitCodeToName(2, t1.BTypeStore) end) AS bTypeStoreName ,
+		        c.CompanyName ,
+		        t6.dicValue AS contractTypeName ,
+		        Convert(varchar(16),t.dateCreate,120) AS dateLifeStart,
+		        Convert(varchar(16),t.auditTime,120) AS dateLifeEnd,
+		        t5.dicValue AS decorationStatusName,
+		        t1.maintainerName,
+		        (select d.dicValue from dbo.BAS_DictionaryValue d where d.dicCode = t1.businessStatus and d.delFlag = 'N') AS bussinessStatusName,
+		        (select d.dicValue from dbo.BAS_DictionaryValue d where d.dicCode = t.stopReason and d.delFlag = 'N') AS stopReasonName,
+		        u.userName AS auditUserName,
+				bcs.centerName as centerIdStr
+		FROM    dbo.StoreBizStop t
+		        LEFT JOIN crm.dbo.USR_User u on t.auditUserId = u.userId
+		        JOIN dbo.Store t1 ON t.storeId = t1.id
+		                             AND t1.IsDelete = 0
+				INNER join dbo.BAS_CenterSetting bcs on bcs.centerId = t1.centerId
+		        LEFT JOIN USR_Group g ON g.groupId = t1.centerId
+		                                 AND g.delFlag = 'N'
+		        LEFT JOIN dbo.BAS_DictionaryValue t7 ON t1.ABTypeStore = t7.dicCode
+		                                                AND t7.delFlag = 'N'
+		        LEFT JOIN dbo.BAS_DictionaryValue t9 ON t1.StorePersonNum = t9.dicCode
+		                                                AND t9.delFlag = 'N'
+		        LEFT JOIN dbo.CompanyStore cs ON cs.StoreId = t1.id
+		                                         AND cs.IsDelete = 0
+		                                         and cs.flag=0
+		        LEFT JOIN dbo.Company c ON c.Id = cs.CompanyId
+		                                   AND c.IsDelete = 0
+		<!-- 取最近审核通过的合同，否则取id最大的合同 -->
+		LEFT JOIN dbo.v_crm_StoreContract_last c1 ON t1.id = c1.storeId
+		        LEFT JOIN dbo.contract contract on contract.id = c1.contractId
+		        LEFT JOIN dbo.BAS_DictionaryValue t6 ON t6.dicCode = c1.ContractType
+                                                        AND t6.delFlag = 'N'
+		        LEFT JOIN dbo.Store_Decoration sd ON sd.id = ( SELECT TOP 1
+		                                                              sd.id
+		                                                       FROM   dbo.Store_Decoration sd
+		                                                       WHERE  sd.storeId = t1.id
+		                                                              AND sd.delFlag = 0
+		                                                       ORDER BY sd.id DESC
+		                                                     )
+		        LEFT JOIN dbo.BAS_DictionaryValue t5 ON t5.dicCode = sd.decorationStatus
+		                                                AND t5.delFlag = 'N'
+		WHERE   t1.IsDelete = 0
+		        AND t.stopId = #{authId,jdbcType=INTEGER}
+    </select>
+	<select id="selectStoreBizStopPicture" parameterType="java.lang.String" resultType="cn.com.eju.deal.model.sweepStreets.WXPictureDto">
+        select id,pictureRefId,smallPictureUrl,middlePictureUrl,bigPictureUrl
+        from Pic_Picture_Ref where pictureRefId=#{stopPicId} and pictureStatus=0
+    </select>
+
+	<!--查询停业撤销明细-->
+	<resultMap id="storeStopCancelMap" type="cn.com.eju.deal.store.model.StoreStopCancel">
+		<result column="id" property="id" />
+		<collection property="pictureDtoList1" column="id" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectStoreStopCancelPicture1"/>
+		<collection property="pictureDtoList2" column="id" ofType="cn.com.eju.deal.model.sweepStreets.WXPictureDto" select="selectStoreStopCancelPicture2"/>
+	</resultMap>
+	<select id="getStoreStopCancelById" parameterType="java.util.Map" resultMap="storeStopCancelMap">
+		SELECT  s.StoreNo ,
+				s.Name AS storeName ,
+				s.AddressDetail ,
+				s.maintainerName ,
+				cs.centerName ,
+				( SELECT    userName
+				  FROM      crm.dbo.USR_User
+				  WHERE     userId = ssc.userCreate
+				) AS userCreateNm ,
+				( SELECT    userName
+				  FROM      crm.dbo.USR_User
+				  WHERE     userId = ssc.approveId
+				) AS userName ,
+				( SELECT    dicValue
+				  FROM      dbo.BAS_DictionaryValue
+				  WHERE     dicCode = ssc.approveStatus
+				) AS approveStatusNm ,
+				ssc.*,
+				CONVERT(VARCHAR(16), ssc.dateCreate, 120) AS dateCreateStr ,
+				CONVERT(VARCHAR(16), ssc.approveDate, 120) AS approveDateStr
+		FROM    Store_Stop_Cancel ssc
+				JOIN dbo.Store s ON ssc.storeId = s.Id
+				LEFT JOIN dbo.BAS_CenterSetting cs ON cs.centerId = s.centerId
+		WHERE   ssc.Id = #{authId}
+	</select>
+	<select id="selectStoreStopCancelPicture1" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.model.sweepStreets.WXPictureDto">
+		SELECT FileRecordMainId AS id ,
+                RefId AS pictureRefId ,
+                fileAbbrUrl AS smallPictureUrl ,
+                url50 AS middlePictureUrl ,
+                fileUrl AS bigPictureUrl ,
+                0 AS pictureStatus
+        FROM dbo.FIL_FileRecordMain fm
+        where fm.IsDelete=0 and fm.FileSourceId=14 and fm.fileTypeId = 1049 AND RefId = #{id,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+	</select>
+	<select id="selectStoreStopCancelPicture2" parameterType="java.lang.Integer" resultType="cn.com.eju.deal.model.sweepStreets.WXPictureDto">
+		SELECT FileRecordMainId AS id ,
+                RefId AS pictureRefId ,
+                fileAbbrUrl AS smallPictureUrl ,
+                url50 AS middlePictureUrl ,
+                fileUrl AS bigPictureUrl ,
+                0 AS pictureStatus
+        FROM dbo.FIL_FileRecordMain fm
+        where fm.IsDelete=0 and fm.FileSourceId=14 and fm.fileTypeId = 1050 AND RefId = #{id,jdbcType=INTEGER}
+        ORDER BY fm.FileRecordMainId ASC
+	</select>
+</mapper>

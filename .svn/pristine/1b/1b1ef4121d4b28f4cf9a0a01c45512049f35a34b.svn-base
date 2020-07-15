@@ -1,0 +1,76 @@
+package cn.com.eju.pmls.performswitch.controller;
+
+import cn.com.eju.deal.base.controller.BaseController;
+import cn.com.eju.deal.base.helper.LogHelper;
+import cn.com.eju.deal.core.support.ResultData;
+import cn.com.eju.deal.core.util.JsonUtil;
+import cn.com.eju.pmls.performswitch.dto.PmlsPerformSwitchWeekDto;
+import cn.com.eju.pmls.performswitch.service.PmlsPerformSwitchWeekService;
+import com.alibaba.fastjson.JSON;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.*;
+
+/**
+ * 开关账 controller
+ */
+
+@RestController
+@RequestMapping(value = "pmlsPerformSwitchWeek")
+public class PmlsPerformSwitchWeekController extends BaseController {
+
+	@Resource
+	private PmlsPerformSwitchWeekService pmlsPerformSwitchWeekService;
+
+    /**
+     * 日志
+     */
+    private final LogHelper logger = LogHelper.getLogger(this.getClass());
+
+	/**
+	 * 查询开关账全部
+	 * @param param 查询条件
+	 * @return
+	 */
+	@RequestMapping(value = "/getList/{param}", method = RequestMethod.GET)
+	public String queryMap(@PathVariable String param){
+		//构建返回
+		ResultData<?> resultData = new ResultData<>();
+		try{
+			Map<String, Object> queryParam = JsonUtil.parseToObject(param, Map.class);
+			resultData = pmlsPerformSwitchWeekService.queryListDto(queryParam);
+		}
+		catch (Exception e){
+			logger.error("pmlsPerformSwitchWeek", "PmlsPerformSwitchWeekController", "getList"
+					, "input param: param=" + param, 0, "", "查询列表异常", e);
+			resultData.setFail();
+		}
+		return resultData.toString();
+	}
+
+
+
+
+
+
+	/**
+	 * PMLS 回款跟踪 开关账的业务逻辑
+	 * @param jsonDto 对象字符串
+	 * @return
+	 */
+	@RequestMapping(value = "create", method = RequestMethod.POST)
+	public String create(@RequestBody List<PmlsPerformSwitchWeekDto> dtolist){
+		//构建返回
+		ResultData<PmlsPerformSwitchWeekDto> resultData = new ResultData<>();
+		try{
+			resultData = pmlsPerformSwitchWeekService.create(dtolist);
+		}
+		catch (Exception e){
+			logger.error("pmlsPerformSwitchWeek", "PmlsPerformSwitchWeekController", "create"
+					, "input param: param=" + JSON.toJSONString(dtolist), 0, "", "开关账异常", e);
+			resultData.setFail();
+		}
+		return resultData.toString();
+	}
+}

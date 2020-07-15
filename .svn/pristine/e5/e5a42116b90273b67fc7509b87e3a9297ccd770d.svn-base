@@ -1,0 +1,27 @@
+package cn.com.eju.deal.houseLinkage.linkZjcbDetail.dao;
+
+import cn.com.eju.deal.dto.houseLinkage.linkZjcbDetail.LinkZjcbDetailDto;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * desc:联动明细(资金成本)
+ * @author :zhenggang.Huang
+ * @date   :2019年7月18日
+ */
+public interface LinkZjcbDetailMapper {
+
+    List<LinkZjcbDetailDto> queryLinkZjcbDetailList(Map<String, Object> param);
+    
+    List<LinkZjcbDetailDto> selLinkZjcbDetailList(Map<String, Object> param);
+    
+    List<String> getCrmUserAuthCity(Map<String, Object> param);
+    
+    List<String> getCrmUserAuthCenterGroup(Map<String, Object> param);
+
+    List<LinkZjcbDetailDto> execLinkZjcbDetailTable(Map<String, Object> param);
+
+    List<LinkZjcbDetailDto> queryLinkZjcb2019List(Map<String, Object> param);
+    List<LinkZjcbDetailDto> queryLinkZjcb2020List(Map<String, Object> param);
+}

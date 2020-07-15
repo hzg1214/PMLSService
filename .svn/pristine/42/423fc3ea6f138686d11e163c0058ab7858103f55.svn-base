@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.linkageWechat.dao.WechatMessageMapper">
+<!-- WechatMessage 开始 新增记录微信消息记录 -->
+  <insert id="saveWechatMessage" parameterType="cn.com.eju.deal.linkageWechat.model.WechatMessage" useGeneratedKeys="true" keyProperty="id" >
+    insert into WX_WechatMsg (
+		type,
+		toUserName,
+		fromUserName,
+		createTime,
+		msgType,
+		content,
+		picUrl,
+		mediaId,
+		format,
+		thumbMediaId,
+		
+		location_X,
+		location_Y,
+		scale,
+		label,
+		title,
+		description,
+		musicUrl,
+		hqMusicUrl,
+		articleCount,
+		articles,
+		
+		url,
+		msgId,
+		event,
+		eventKey,
+		scanCodeInfo,
+		scanType,
+		scanResult,
+		sendPicsInfo,
+		count,
+		picList,
+		
+		picMd5Sum,
+		sendLocationInfo,
+		poiname,
+		recognition,
+		userIdCreate)
+    values (
+    	#{Type,jdbcType=VARCHAR},
+    	#{ToUserName,jdbcType=VARCHAR},
+    	#{FromUserName,jdbcType=VARCHAR},
+    	#{CreateTime,jdbcType=INTEGER},
+		#{MsgType,jdbcType=VARCHAR},
+		#{Content,jdbcType=VARCHAR},
+		#{PicUrl,jdbcType=VARCHAR},
+		#{MediaId,jdbcType=VARCHAR},
+		#{Format,jdbcType=VARCHAR},
+		#{ThumbMediaId,jdbcType=VARCHAR},
+		
+		#{Location_X,jdbcType=VARCHAR},
+		#{Location_Y,jdbcType=VARCHAR},
+		#{Scale,jdbcType=VARCHAR},
+		#{label,jdbcType=VARCHAR},
+		#{Title,jdbcType=VARCHAR},
+		#{Description,jdbcType=VARCHAR},
+		#{MusicUrl,jdbcType=VARCHAR},
+		#{HqMusicUrl,jdbcType=VARCHAR},
+		#{ArticleCount,jdbcType=VARCHAR},
+		#{Articles,jdbcType=VARCHAR},
+		
+		#{Url,jdbcType=VARCHAR},
+		#{MsgId,jdbcType=VARCHAR},
+		#{Event,jdbcType=VARCHAR},
+		#{EventKey,jdbcType=VARCHAR},
+		#{ScanCodeInfo,jdbcType=VARCHAR},
+		#{ScanType,jdbcType=VARCHAR},
+		#{ScanResult,jdbcType=VARCHAR},
+		#{SendPicsInfo,jdbcType=VARCHAR},
+		#{Count,jdbcType=VARCHAR},
+		#{PicList,jdbcType=VARCHAR},
+		
+		#{PicMd5Sum,jdbcType=VARCHAR},
+		#{SendLocationInfo,jdbcType=VARCHAR},
+		#{Poiname,jdbcType=VARCHAR},
+		#{Recognition,jdbcType=VARCHAR},
+		#{userIdCreate,jdbcType=INTEGER})
+ </insert>
+<!-- WechatMessage 结束  -->
+<!-- WechatUser开始 查询微信用户 -->
+  <select id="getWechatUserByWechatId" resultType="cn.com.eju.deal.linkageWechat.model.WechatUser" parameterType="java.lang.String" >
+	  SELECT  TOP 1 Id
+	      ,wechatId
+	      ,subscribe
+	      ,mobile
+	      ,nickName
+	      ,sex
+	      ,language
+	      ,city
+	      ,province
+	      ,country
+	      ,headImgUrl
+	      ,subscribeTime
+	      ,unionId
+	      ,remark
+	      ,unsubscribeTime
+	      ,isBindMobile
+	      ,mobile
+	      ,dateCreate
+	      ,userIdCreate
+	      ,delFlag
+	  FROM WX_WechatUser
+	     where wechatId=#{wechatId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getWechatIdByMobile" resultType="java.lang.String" parameterType="java.lang.String" >
+	  SELECT wechatId
+	  FROM WX_WechatUser
+	     where mobile=#{mobile,jdbcType=VARCHAR}
+	     and delFlag='N' and isBindMobile=1
+  </select>
+  
+  <update id="updateWechatUser" parameterType="cn.com.eju.deal.linkageWechat.model.WechatUser" >
+    update WX_WechatUser
+    <set >
+      <if test="subscribe != null" >
+        subscribe = #{subscribe,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null" >
+        nickName = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="language != null" >
+        language = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="headImgUrl != null" >
+        headImgUrl = #{headImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="unsubscribeTime != null" >
+        unsubscribeTime = #{unsubscribeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="isBindMobile != null" >
+        isBindMobile = #{isBindMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where wechatId = #{wechatId,jdbcType=VARCHAR}
+  </update>
+    <insert id="saveWechatUser" parameterType="cn.com.eju.deal.linkageWechat.model.WechatUser" useGeneratedKeys="true" keyProperty="wechatId" >
+    insert into WX_WechatUser (
+       wechatId
+      ,subscribe
+      ,nickName
+      ,sex
+      ,language
+      ,city
+      ,province
+      ,country
+      ,headImgUrl
+      ,subscribeTime
+      ,unionId
+      ,remark
+      ,unsubscribeTime)
+    values (#{wechatId,jdbcType=VARCHAR},#{subscribe,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR},
+    			#{sex,jdbcType=INTEGER},#{language,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+    		   #{province,jdbcType=VARCHAR},#{country,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR},
+    		   #{subscribeTime,jdbcType=INTEGER},#{unionId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+    		   #{unsubscribeTime,jdbcType=TIMESTAMP})
+  </insert>
+  <!-- WechatUser 结束 -->
+  
+<!-- WechatAccessToken开始 查询token -->
+  <!-- <select id="getWechatAccessTokenByCode" resultType="com.eju.deal.wechat.model.WechatAccessToken" parameterType="java.lang.String" >
+	     SELECT id, accessToken, expiresIn, dateCreate, delFlag from WX_WechatAccessToken where tokenCode=#{tokenCode,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateWechatAccessToken" parameterType="com.eju.deal.wechat.model.WechatAccessToken" >
+    update WX_WechatAccessToken
+    <set >
+      <if test="accessToken != null" >
+        accessToken = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null" >
+        expiresIn = #{expiresIn,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        delFlag = #{delFlag,jdbcType=NVARCHAR},
+      </if>
+      dateCreate = getdate()
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <insert id="saveWechatAccessToken" parameterType="com.eju.deal.wechat.model.WechatAccessToken" useGeneratedKeys="true" keyProperty="id" >
+    insert into WX_WechatAccessToken (tokenCode,accessToken, expiresIn)
+    values (#{tokenCode,jdbcType=VARCHAR},#{accessToken,jdbcType=VARCHAR}, #{expiresIn,jdbcType=INTEGER})
+  </insert> -->
+  <!-- WechatAccessToken 结束 -->
+</mapper>

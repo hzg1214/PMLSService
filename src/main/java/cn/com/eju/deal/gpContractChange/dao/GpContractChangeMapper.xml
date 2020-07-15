@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.eju.deal.gpContractChange.dao.GpContractChangeMapper">
+	
+	<resultMap id="GpContractChangeDtoMap" type="cn.com.eju.deal.gpContractChange.model.GpContractChangeDto" />
+	<resultMap id="StoreInfoMap" type="cn.com.eju.deal.dto.store.StoreDto" />
+	<!-- 根据公盘合同ID查询门店信息 -->
+	<select id="queryStoreInfoOfGpContract" resultMap="StoreInfoMap" parameterType="java.lang.Integer">
+		SELECT  
+			gs.storeId ,
+	        gs.storeState ,
+	        s.*
+		FROM    Store s
+		        JOIN dbo.GP_ContractStore gs ON s.Id = gs.storeId
+		                                        AND gs.isDelete = 0
+		WHERE   gs.gpContractId =  #{gpContractId,jdbcType=INTEGER}
+		        AND s.IsDelete = 0;
+	</select>
+	<select id="queryStoreInfoOfGpContractStopEdit" resultMap="StoreInfoMap" parameterType="map">
+			SELECT  
+				gs.storeId ,
+		        gs.storeState ,
+		        s.*,
+		        k.approveState,
+		        k.gpContractStopId as contractStopId,
+		        k.gpContractStopNo as contractStopNo,
+		        k.id as gpContractStoreStopId
+			FROM    Store s
+			        JOIN dbo.GP_ContractStore gs ON s.Id = gs.storeId
+			                                        AND gs.isDelete = 0
+					LEFT JOIN ( SELECT  gtc.approveState ,gts.gpContractStopId,gtc.gpContractStopNo,gtc.gpContractId,gts.id,gts.storeId
+	                                    FROM    dbo.GP_ContractChange gtc
+	                                            JOIN dbo.GP_ContractChangeStore gts ON gts.gpContractStopId = gtc.id
+	                                                              AND gts.delFlag = 0
+	                                                              AND gts.cancelStatus = 0
+	                                    WHERE   gtc.delFlag = 0 
+												AND gts.gpContractStopId = #{id,jdbcType=INTEGER}
+												AND gtc.gpContractId = #{gpContractId,jdbcType=INTEGER}
+			                  ) k ON k.gpContractId = gs.gpContractId AND k.storeId = gs.StoreId
+		WHERE   gs.gpContractId =  #{gpContractId,jdbcType=INTEGER}
+		        AND s.IsDelete = 0
+	</select>
+	
+	<select id="queryLockingStoreForStop" resultMap="StoreInfoMap" parameterType="java.lang.Integer">
+		SELECT  
+			ccs.storeId
+		FROM    Gp_ContractChange cc
+		        JOIN Gp_ContractChangeStore ccs ON cc.id = ccs.gpContractStopId  
+		WHERE   cc.delFlag = 0
+		        AND ccs.delFlag = 0
+		        AND cc.approveState != 2
+		        AND ccs.cancelStatus = 0
+				AND cc.gpContractId = #{gpContractId,jdbcType=INTEGER}
+	</select>
+	
+	
+	<!-- 新增公盘合同终止申请 -->
+	<insert id="create" parameterType="cn.com.eju.deal.gpContractChange.model.GpContractChange"
+		useGeneratedKeys="true" keyProperty="id">
+		 insert into GP_ContractChange (
+		 	gpContractStopNo, gpContractNo,gpContractId, 
+		 	companyId, companyName, gpAgreementNo, changeType, stopType, 
+      		stopReason, stopDescribe, remarks, 
+     		stopDate, ptBackAmount, approveState, 
+      		approvePassDate, submitOAStatus, flowId, 
+     		flowEndDate, dateCreate, userIdCreate, 
+      		dateUpt, userIdUpt, delFlag,gpContractCityNo)
+	    values ( 
+	    	#{gpContractStopNo,jdbcType=VARCHAR},
+	     	#{gpContractNo,jdbcType=VARCHAR}, 
+	        #{gpContractId,jdbcType=INTEGER},
+	        #{companyId,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR}, 
+	        #{gpAgreementNo,jdbcType=VARCHAR}, #{changeType,jdbcType=INTEGER}, 
+	        #{stopType,jdbcType=INTEGER},
+	        #{stopReason,jdbcType=VARCHAR},
+	        #{stopDescribe,jdbcType=VARCHAR},
+	        #{remarks,jdbcType=VARCHAR},
+	        #{stopDate,jdbcType=TIMESTAMP},
+	        #{ptBackAmount},
+	        #{approveState,jdbcType=INTEGER},
+	        #{approvePassDate,jdbcType=TIMESTAMP},
+	        #{submitOAStatus,jdbcType=INTEGER},
+	        #{flowId,jdbcType=VARCHAR},
+	        #{flowEndDate,jdbcType=TIMESTAMP},
+	        getDate(), #{userIdCreate,jdbcType=INTEGER}, 
+	      	#{dateUpt,jdbcType=TIMESTAMP}, #{userIdUpt,jdbcType=INTEGER},
+	      	#{delFlag,jdbcType=CHAR},#{gpContractCityNo,jdbcType=VARCHAR})
+	</insert>
+	<!-- 根据id更新公盘合同终止信息 -->
+	<update id="updateStr" parameterType="cn.com.eju.deal.gpContractChange.model.GpContractChange">
+		UPDATE dbo.GP_ContractChange
+		   <set>
+		      <if test="gpContractStopNo != null">
+		        gpContractStopNo = #{gpContractStopNo,jdbcType=VARCHAR},
+		      </if>
+		      <if test="gpContractNo != null">
+		        gpContractNo = #{gpContractNo,jdbcType=VARCHAR},
+		      </if>
+		      <if test="gpContractId != null">
+		        gpContractId = #{gpContractId,jdbcType=INTEGER},
+		      </if>
+		      <if test="companyId != null">
+		        companyId = #{companyId,jdbcType=INTEGER},
+		      </if>
+		      <if test="companyName != null">
+		        companyName = #{companyName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="gpAgreementNo != null">
+		        gpAgreementNo = #{gpAgreementNo,jdbcType=VARCHAR},
+		      </if>
+		      <if test="changeType != null">
+		        changeType = #{changeType,jdbcType=INTEGER},
+		      </if>
+		      <if test="stopType != null">
+		        stopType = #{stopType,jdbcType=INTEGER},
+		      </if>
+		      <if test="stopReason != null">
+		        stopReason = #{stopReason,jdbcType=VARCHAR},
+		      </if>
+		      <if test="stopDescribe != null">
+		        stopDescribe = #{stopDescribe,jdbcType=VARCHAR},
+		      </if>
+		      <if test="remarks != null">
+		        remarks = #{remarks},
+		      </if>
+		      <if test="stopDate != null">
+		        stopDate = #{stopDate,jdbcType=TIMESTAMP},
+		      </if>
+		      <if test="ptBackAmount != null">
+		        ptBackAmount = #{ptBackAmount},
+		      </if>
+		      <if test="approveState != null">
+		        approveState = #{approveState},
+		      </if>
+		      <if test="approvePassDate != null">
+		        approvePassDate = #{approvePassDate},
+		      </if>
+		      <if test="flowId != null">
+		        flowId = #{flowId},
+		      </if>
+		      <if test="flowEndDate != null">
+		        flowEndDate = #{flowEndDate},
+		      </if>
+		      <if test="submitOAStatus != null">
+		        submitOAStatus = #{submitOAStatus},
+		      </if>
+		      <if test="userIdUpt != null">
+		        userIdUpt = #{userIdUpt,jdbcType=INTEGER},
+		       	dateUpt = getDate(),
+		      </if>
+		      <if test="delFlag != null">
+		        delFlag = #{delFlag,jdbcType=CHAR},
+		      </if>
+		      <if test="gpContractCityNo != null">
+		        gpContractCityNo = #{gpContractCityNo,jdbcType=VARCHAR},
+		      </if>
+		      <if test="submitTime != null">
+		        submitTime = #{submitTime,jdbcType=TIMESTAMP},
+		      </if>
+		      <if test="submitOAUserId != null">
+		        submitOAUserId = #{submitOAUserId,jdbcType=INTEGER},
+		      </if>
+		    </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 根据id查询详情 -->
+	<select id="getGpContractStopInfoById" resultType="cn.com.eju.deal.gpContractChange.model.GpContractChangeDto" parameterType="java.lang.Integer">
+		SELECT  us.userName,
+                bs.dicValue as stopTypeNm,
+                bs2.dicValue as submitOAStatusNm,
+                gtc.*,
+	        	approveStatusNm = ( CASE WHEN gtc.approveState IS NULL THEN '-'
+	                                 WHEN gtc.approveState = 0 THEN '-'
+	                                 WHEN gtc.approveState = 1 THEN '审核中'
+	                                 WHEN gtc.approveState = 2 THEN '审核通过'
+	                                 WHEN gtc.approveState = 3 THEN '审核不通过'
+	                                 WHEN gtc.approveState = 4 THEN '作废'
+	                                 ELSE '-'
+	                            END )
+        FROM    GP_ContractChange gtc
+                LEFT JOIN dbo.BAS_DictionaryValue bs ON bs.typeId = 231
+                                                        AND bs.dicCode = gtc.stopType
+                                                        AND bs.delFlag = 'N'
+                LEFT JOIN dbo.BAS_DictionaryValue bs2 ON bs2.typeId = 212
+                                                        AND bs2.dicCode = gtc.submitOAStatus
+                                                        AND bs2.delFlag = 'N'
+                LEFT JOIN crm.dbo.USR_User us ON us.userId = gtc.userIdCreate
+                                             AND us.delFlag = 'N'
+	  	WHERE gtc.delFlag=0  
+	  		and gtc.id=#{id,jdbcType=INTEGER}
+	</select>
+	<select id="getGpContractStopList" parameterType="map" resultType="cn.com.eju.deal.gpContractChange.model.GpContractChangeDto">
+		 SELECT  
+		 	gct.id,
+		 	gct.gpContractId,
+		 	gct.gpContractStopNo,
+	        gct.gpAgreementNo ,
+	        gct.companyName ,
+	        gct.companyId ,
+	        gct.dateCreate ,
+	        gct.approveState ,
+	        us.userName ,
+	        gct.userIdCreate ,
+	        gct.submitOAStatus,
+	        approveStatusNm = ( CASE WHEN gct.approveState IS NULL THEN '-'
+	                                 WHEN gct.approveState = 0 THEN '待提交'
+	                                 WHEN gct.approveState = 1 THEN '审核中'
+	                                 WHEN gct.approveState = 2 THEN '审核通过'
+	                                 WHEN gct.approveState = 3 THEN '审核不通过'
+	                                 WHEN gct.approveState = 4 THEN '作废'
+	                                 ELSE '-'
+	                            END )
+		FROM    GP_ContractChange gct
+		        LEFT JOIN crm.dbo.USR_User us ON us.userId = gct.userIdCreate
+		                                     AND us.delFlag = 'N'
+		        LEFT JOIN dbo.Company cy on cy.id = gct.companyId and cy.IsDelete = 0
+		WHERE   gct.delFlag = 0 AND gct.dateCreate is not null
+			<if test="cityNo != null and cityNo != ''">
+				   and gct.gpContractCityNo= #{cityNo}
+			</if> 
+		<!-- 公盘合同编号、公盘终止编号、协议书编号 -->
+            <if test="searchKey != null and searchKey != ''">
+	    		AND (gct.gpContractNo LIKE  CONCAT('%', #{searchKey},'%')
+	    		 OR gct.gpAgreementNo LIKE  CONCAT('%', #{searchKey},'%') 
+	    		 OR gct.gpContractStopNo LIKE  CONCAT('%', #{searchKey},'%')
+	    		 )
+            </if>
+            <if test="dateCreateStart != null and dateCreateStart != ''">
+	    		AND Convert(varchar(10),gct.dateCreate,120) &gt;= #{dateCreateStart,jdbcType=NVARCHAR}
+            </if>
+            <if test="dateCreateEnd != null and dateCreateEnd != ''">
+    				AND Convert(varchar(10),gct.dateCreate,120) &lt;= #{dateCreateEnd,jdbcType=NVARCHAR}
+            </if>
+            <!-- 公司名称 -->
+            <!-- <if test="companyName != null and companyName != '' ">
+		         AND gct.companyName LIKE CONCAT('%', #{companyName},'%')
+		    </if> -->
+            <if test="contractStatus != null and contractStatus != ''"><!-- 审核态筛选 -->
+                AND gct.approveState = #{contractStatus,jdbcType=INTEGER}
+            </if>
+            <if test="userName != null and userName != '' ">
+                AND us.userName  LIKE CONCAT('%', #{userName},'%')
+            </if>
+            <if test="companyName != null and companyName != '' ">
+                AND( cy.companyNo  LIKE CONCAT('%', #{companyName},'%') OR cy.CompanyName LIKE CONCAT('%', #{companyName},'%'))
+            </if>
+	 ORDER BY gct.dateCreate desc
+  </select>
+  <select id="getGpStopInfoById" resultMap="GpContractChangeDtoMap" parameterType="java.lang.Integer">
+		    SELECT  gch.*,gc.ourFullName,gc.dateLifeStart,gc.dateLifeEnd,bs.dicValue as stopTypeNm,gc.registerId
+            FROM    dbo.GP_ContractChange gch
+                    JOIN dbo.GP_Contract gc ON gch.gpContractId = gc.id
+                                               AND gc.delFlag = 0
+                    LEFT JOIN dbo.BAS_DictionaryValue bs ON bs.typeId = 231
+                                                        AND bs.dicCode = gch.stopType
+                                                        AND bs.delFlag = 'N'
+            WHERE   gch.delFlag = 0 
+				AND gch.id = #{id,jdbcType=INTEGER}
+	</select>
+  <select id="getContractChangeByFlowId" resultMap="GpContractChangeDtoMap" parameterType="string">
+		    SELECT  gch.*
+            FROM    dbo.GP_ContractChange gch
+            WHERE   gch.delFlag = 0 
+				AND gch.flowId = #{flowId}
+				and gch.approveState=1
+	</select>
+	<update id="updateGpContractStoreByStoreId" parameterType="map">
+		UPDATE dbo.GP_ContractStore
+		   <set>
+		      <if test="storeState != null">
+		        storeState = #{storeState},
+		      </if>
+		      <if test="contractStopDate != null">
+		        contractStopDate = #{contractStopDate}
+		      </if>
+		    </set>
+        WHERE isDelete=0 and storeId = #{storeId}
+        and gpContractId = #{gpContractId}
+	</update>
+	<select id="getNoStopStoreSum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		    SELECT  COUNT(1)
+			FROM    dbo.GP_Contract gc
+			        JOIN dbo.GP_ContractStore gs ON gs.gpContractId = gc.id
+			                                        AND gs.isDelete = 0
+			                                        AND gs.storeState != 2
+			WHERE   gc.delFlag = 0
+			        AND gc.id = #{id}
+	</select>
+	<update id="updateGpContractStatus" parameterType="java.lang.Integer">
+		UPDATE  dbo.GP_Contract
+			SET     contractStatus = 10406,dateUpdate=getDate()
+		WHERE   id = #{gpContractId}
+
+	</update>
+	<!-- 根据id作废公盘合同终止信息 -->
+	<update id="updateStatus" parameterType="map">
+		UPDATE  GP_ContractChange
+		SET     approveState = #{approveState}
+		        ,userIdUpt = #{userIdUpt},
+		       	dateUpt = GETDATE()
+		WHERE   id  = #{id}
+	</update>
+	<!-- 查询门店id集合 -->
+	<select id="getStopedStoreIdlist" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		    SELECT  gs.storeId
+			FROM    dbo.GP_Contract gc
+			        JOIN dbo.GP_ContractStore gs ON gs.gpContractId = gc.id
+			                                        AND gs.isDelete = 0
+			WHERE   gc.delFlag = 0
+			        AND gc.id = #{id}
+	</select>
+	<!-- 查询门店id集合 -->
+	<select id="getPassStopStoreIdlistByGpContractId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		    SELECT  gs.storeId
+                    FROM    dbo.GP_ContractChange gc
+                            JOIN dbo.GP_ContractChangeStore gs ON gs.gpContractStopId = gc.id
+                                                              AND gs.delFlag = 0
+                    WHERE   gc.gpContractId = #{gpContractId}
+                            AND gc.approveState = 2
+                            AND gc.delFlag = 0
+	</select>
+	<!-- 公盘合同终止后更新门店的签约状态 -->
+	<update id="updateStoreIsGpSign" parameterType="java.lang.Integer">
+		UPDATE  Store
+		SET isGpSign = 12502,DateUpdate=getDate()
+		WHERE  IsDelete=0 
+				 and Id = #{storeId}
+	</update>
+
+	<insert id="insertGpContractChangeReturn" parameterType="java.lang.Integer">
+		INSERT  INTO dbo.OaGpContractStopReturn
+		( gpContractStopNo ,
+		FlowId ,
+		approveDate ,
+		hasDeal ,
+		dateUpdate ,
+		dateCreate ,
+		approveStatus,
+		gpContractStopOaNo
+		)
+		SELECT  gpContractStopNo ,
+		flowId ,
+		GETDATE() ,
+		0 ,
+		GETDATE() ,
+		GETDATE() ,
+		3,
+		'运营维护'
+		FROM    dbo.GP_ContractChange
+		WHERE   id = #{id,jdbcType=INTEGER}
+	</insert>
+
+	<select id="getTodoList" resultType="Map" parameterType="Map">
+		SELECT  c.id ,gpContractStopNo ,c.companyName ,cm.CompanyNo,gc.id 'gpContractId',
+		approveStateName = ( CASE WHEN c.approveState IS NULL THEN '-'
+		WHEN c.approveState = 0 THEN '待提交'
+		WHEN c.approveState = 1 THEN '审核中'
+		WHEN c.approveState = 2 THEN '审核通过'
+		WHEN c.approveState = 3 THEN '审核不通过'
+		WHEN c.approveState = 4 THEN '作废'
+		ELSE '-'
+		END )
+		FROM    GP_ContractChange c
+		LEFT JOIN dbo.GP_Contract gc ON gc.delFlag=0 AND c.gpContractId=gc.id
+		LEFT JOIN dbo.Company cm ON cm.IsDelete=0 AND cm.Id=c.companyId
+		LEFT JOIN dbo.GP_ContractChangeStore ccs ON ccs.delFlag='N' AND gpContractStopId=c.id
+		LEFT JOIN dbo.Store s ON s.Id=ccs.storeId
+		WHERE   c.delFlag = 0 AND c.dateCreate IS NOT NULL AND c.approveState = 0
+		<if test="userCreate!=null and userCreate!=0">
+			AND ( gc.centerId IN ( SELECT  centerGroupId FROM dbo.F_WX_UserCenterAuth('${userCode}', 'CRM') )
+			OR gc.UserCreate = ${userCreate} OR s.Maintainer = '${userCode}' OR gc.exPersonId=${userCreate})
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			AND (gpContractStopNo LIKE '%${keyWord}%' OR cm.CompanyNo = '${keyWord}' OR cm.companyName LIKE '%${keyWord}%' )
+		</if>
+		ORDER BY c.id DESC
+	</select>
+
+	<resultMap id="gpToDetailMap"  type="cn.com.eju.deal.api.gpContract.dto.GPContractWXDto">
+		<result column="gpContractId" property="gpContractId" />
+		<result column="gpContractNo" property="gpContractNo" />
+		<result column="gpAgreementNo" property="gpAgreementNo" />
+		<result column="companyId" property="companyId" />
+		<result column="companyName" property="companyName" />
+		<result column="companyNo" property="companyNo" />
+		<result column="registerId" property="registerId" />
+		<result column="legalPerson" property="legalPerson" />
+
+		<result column="partyBCityNo" property="partyBCityNo" />
+		<result column="partyBDistrictNo" property="partyBDistrictNo" />
+		<result column="partyBAddress" property="partyBAddress" />
+		<result column="contractTypeStr" property="contractTypeStr" />
+		<result column="acCityNo" property="acCityNo" />
+		<!-- 终止扩展字段 -->
+		<result column="gpContractStopId" property="gpContractStopId"/>
+		<result column="gpContractStopNo" property="gpContractStopNo"/>
+		<result column="stopType" property="stopType"/>
+		<result column="stopDate" property="stopDate" jdbcType="TIMESTAMP"/>
+		<result column="stopAmount" property="stopAmount"/>
+		<result column="stopReason" property="stopReason"/>
+		<result column="remarks" property="remarks"/>
+		<result column="stopDescribe" property="stopDescribe"/>
+		<result column="flowId" property="flowId"/>
+		<result column="ctEndApproveState" property="ctEndApproveState"/>
+		<result column="approveStateName" property="approveStateName"/>
+
+		<collection property="contractChangeList" javaType="ArrayList" ofType="cn.com.eju.deal.api.gpContract.dto.GPStoreChangeDto">
+			<result column="storeId" property="storeId" />
+			<result column="storeNo" property="storeNo" />
+			<result column="name" property="storeName" />
+			<result column="address" property="address" />
+			<result column="addressDetail" property="addressDetail" />
+			<result column="centerId" property="centerId" />
+			<result column="centerName" property="centerName" />
+			<result column="maintainer" property="maintainer" />
+			<result column="maintainerName" property="maintainerName" />
+			<result column="storeManager" property="storeManager" />
+			<result column="storeManagerPhone" property="storeManagerPhone" />
+			<result column="businessStatus" property="businessStatus" />
+			<result column="isCancel" property="isCancel" />
+			<result column="storeState" property="storeState" />
+			<result column="gpContractStopNo" property="gpContractStopNo" />
+			<result column="changeCompany" property="changeCompany" />
+			<result column="approveState" property="approveState" />
+		</collection>
+	</resultMap>
+
+	<select id="getTodoGpDetail" parameterType="Map" resultMap="gpToDetailMap">
+		SELECT
+			c.gpContractNo ,
+			c.Id AS gpContractId ,
+			c.registerId ,
+			c.legalPerson ,
+			c.gpAgreementNo,
+			c.CompanyId as companyId,
+			c.partyBCityNo,
+			c.partyBDistrictNo,
+			c.partyBAddress,
+			cm.CompanyName AS companyName ,
+			cm.CompanyNo AS companyNo ,
+			s.Id AS storeId ,
+			s.StoreNo AS storeNo ,
+			s.AddressDetail AS addressDetail ,
+			s.Name AS name ,
+			s.Maintainer as maintainer,
+			ISNULL(s.maintainerName, '-') as maintainerName,
+			s.businessStatus,s.storeManager,
+			ISNULL(s.storeManagerPhone, '-') as storeManagerPhone,
+			ch.id AS gpContractStopId ,
+			ch.gpContractStopNo ,
+			ch.stopType ,
+			ch.stopDate ,
+			ch.ptBackAmount AS stopAmount,
+			ch.stopReason ,
+			ch.stopDescribe ,
+			ch.remarks ,
+			ch.flowId,
+			ISNULL(s2.centername, '') AS centerName
+		FROM    GP_Contract c
+				LEFT JOIN Company cm ON cm.Id = c.CompanyId
+				LEFT JOIN dbo.GP_ContractChange ch ON ch.delFlag=0 AND ch.gpContractId=c.id AND ch.id = #{gpContractStopId}
+				LEFT JOIN GP_ContractChangeStore ccs ON ccs.delFlag = 0 AND ccs.gpContractStopId=ch.id
+				LEFT JOIN dbo.Store s ON s.Id=ccs.storeId
+				LEFT JOIN crm.dbo.USR_User s1 ON s.Maintainer=s1.userCode AND s1.delFlag='N'
+				LEFT JOIN [V_CRM_Center_Group_ref] s2 ON s1.groupId=s2.groupId
+				WHERE  c.Id = #{gpContractId}
+	</select>
+
+	<select id="getGpZZList" parameterType="map" resultType="Map">
+		SELECT  c.id ,gpContractStopNo ,c.companyName ,cm.CompanyNo,gc.id 'gpContractId',
+		approveStateName = ( CASE WHEN c.approveState IS NULL THEN '-'
+		WHEN c.approveState = 0 THEN '待提交'
+		WHEN c.approveState = 1 THEN '审核中'
+		WHEN c.approveState = 2 THEN '审核通过'
+		WHEN c.approveState = 3 THEN '审核不通过'
+		WHEN c.approveState = 4 THEN '作废'
+		ELSE '-'
+		END )
+		FROM    GP_ContractChange c
+		LEFT JOIN dbo.GP_Contract gc ON gc.delFlag=0 AND c.gpContractId=gc.id
+		LEFT JOIN dbo.Company cm ON cm.IsDelete=0 AND cm.Id=c.companyId
+		LEFT JOIN dbo.GP_ContractChangeStore ccs ON ccs.delFlag='N' AND gpContractStopId=c.id
+		LEFT JOIN dbo.Store s ON s.Id=ccs.storeId
+		WHERE   c.delFlag = 0 AND c.dateCreate IS NOT NULL
+		<if test="approveStatus != null and approveStatus != ''"><!-- 审核态筛选 -->
+			AND c.approveState IN (${approveStatus})
+		</if>
+		<if test="userCreate!=null and userCreate!=0">
+			AND ( gc.centerId IN ( SELECT  centerGroupId FROM dbo.F_WX_UserCenterAuth('${userCode}', 'CRM') )
+			OR gc.UserCreate = ${userCreate} OR s.Maintainer = '${userCode}' OR gc.exPersonId=${userCreate})
+		</if>
+		<if test="searchTxt != null and searchTxt != ''"><!-- 查询条件:联系人姓名、联系电话、门店名 -->
+			AND (gpContractStopNo LIKE '%${searchTxt}%' OR cm.CompanyNo = '${searchTxt}' OR cm.companyName LIKE '%${searchTxt}%' )
+		</if>
+		ORDER BY c.id DESC
+	</select>
+</mapper>
